@@ -114,7 +114,7 @@ To clone the Workspace Repo
 ### Command Syntax
 
 ```bash
-git clone https://github.com/GSA/Sf_WorkSpace.git
+git clone https://github.com/GSA/SF_WorkSpace.git
 ```
 
 ### Command Overview
