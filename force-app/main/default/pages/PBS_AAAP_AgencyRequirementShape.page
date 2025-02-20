@@ -1,0 +1,258 @@
+<apex:page StandardController="PBS_AAAP_Agency_Requirement__c" extensions="PBS_AAAP_AgencyRequirementShape" lightningStylesheets="true">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
+
+    <!--Todd Brown 06/07/2022 Replaced old JQuery library references with latest version in static resource files
+    <apex:includeScript value="{!URLFOR($Resource.jQueryFiles, 'js/jquery-1.7.1.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.jQueryFiles, 'js/jquery-ui-1.8.18.custom.min.js')}"/> -->
+    <apex:includeScript value="{!URLFOR($Resource.JQueryLibs, 'JQueryLibs/' + $Label.JQueryCurrentVersion + '/scripts.js')}"/>    
+
+    <!-- Load JQuery Overlay plug-in library from https://gasparesganga.com/labs/jquery-loading-overlay -->
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_JQueryOverlay,'/JQueryOverlay/loadingoverlay.min.js')}" />
+
+    <!-- Load BluebirdJS required by IE11 -->
+    <apex:includescript value="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.5.5/bluebird.core.min.js" />
+    
+    <!-- Todd Brown 06/07/2022 Replaced ESRI ArcGIS JS API v3.29 library references with supported v4.23 libraries
+    <apex:stylesheet value="https://js.arcgis.com/3.29/esri/css/esri.css" /> 
+    <script src="https://js.arcgis.com/3.29/" />
+    <apex:stylesheet value="{!URLFOR($Resource.PBS_AAAP_AgencyRequirementShape, 'PBS_AAAP_AgencyRequirementShape/PBS_AAAP_AgencyRequirementShape.css')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_AgencyRequirementShape, 'PBS_AAAP_AgencyRequirementShape/PBS_AAAP_AgencyRequirementShape.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_AgencyRequirementShape, 'PBS_AAAP_AgencyRequirementShape/PBS_AAAP_AgencyRequirementShape_Drawing.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_AgencyRequirementShape, 'PBS_AAAP_AgencyRequirementShape/PBS_AAAP_AgencyRequirementShape_Polygon.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_AgencyRequirementShape, 'PBS_AAAP_AgencyRequirementShape/PBS_AAAP_AgencyRequirementShape_Circle.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_AgencyRequirementShape, 'PBS_AAAP_AgencyRequirementShape/PBS_AAAP_AgencyRequirementShape_Map_Layers.js')}" /> -->
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.23/esri/themes/light/main.css"/>
+    <script src="https://js.arcgis.com/4.23/"></script>
+
+    <apex:stylesheet value="{!URLFOR($Resource.PBS_AAAP_AgencyRequirementShape, 'PBS_AAAP_AgencyRequirementShape423/PBS_AAAP_AgencyRequirementShape.css')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_AgencyRequirementShape, 'PBS_AAAP_AgencyRequirementShape423/PBS_AAAP_AgencyRequirementShape.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_AgencyRequirementShape, 'PBS_AAAP_AgencyRequirementShape423/PBS_AAAP_AgencyRequirementShape_Polygon.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_AgencyRequirementShape, 'PBS_AAAP_AgencyRequirementShape423/PBS_AAAP_AgencyRequirementShape_Drawing.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_AgencyRequirementShape, 'PBS_AAAP_AgencyRequirementShape423/PBS_AAAP_AgencyRequirementShape_Layers.js')}" />
+    
+<style>
+.bPageBlock .requiredInput .requiredBlock {
+    background-color: #c00;
+    position: absolute;
+    left: -4px;
+    width: 3px;
+    top: 1px;
+    bottom: 1px;
+}   
+</style>
+
+    <script type="text/javascript">
+   
+        var currentUserContext = '{!$User.UIThemeDisplayed}'; 
+            
+        var SF = {
+            Shape: {!shape},
+            agncyID: '{!JSENCODE(agncyID)}',
+            polyID: '{!JSENCODE(polyId)}',
+            fPoly: '{!JSENCODE(favPoly)}'
+        }
+        
+        var SF_Label = {
+            urlPrefix: '{!$Label.AAAP_ESRI_URL_Prefix}',
+            proxyUrl: '{!$Label.AAAP_ESRI_Internal_Proxy_URL}',
+            locator: {
+                CBD: "{!JSENCODE($Label.AAAP_ESRI_CBD_Layer)}"   
+            }
+        }
+        
+        var PBS_AAAP_AgencyRequirementShape = PBS_AAAP_AgencyRequirementShape;
+
+        function selectFav(){
+            console.log('VF function selectFav executing...');
+            var opt = $('[id*=val_usr_del_area_favOpts]').children('option:selected').val();
+            console.log('Changing to option: ' + opt);
+            gotofavAF(opt);
+        }
+        
+        function tableInputKeyPress(e){
+            $("#location-search-btn").click();
+            
+            e=e||window.event;            
+            var key = e.keyCode;
+            if(key==13) 
+            {        
+                return false;              
+            }
+        }
+        
+    </script>
+
+    <apex:form id="form_agncy_req_shape">
+ 
+        <apex:actionFunction name="gotofavAF" action="{!gotoFav}" reRender="map_canvas" immediate="true">
+            <apex:param value="" name="firstParam" assignTo="{!pId}"/>
+        </apex:actionFunction>
+        
+        <apex:actionFunction name="cancelBackToAgncy" action="{!cancelBackToAgncyReq}" immediate="true"/>            
+        
+        <apex:outputText value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_Region__c}" rendered="false"></apex:outputText>
+        <span id="txt_region_value" hidden="true">{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_Region__c}</span>
+        <apex:PageBlock id="pgblck1" title="Agency Requirement" mode="edit">
+            <apex:messages styleClass="errMessage"/>
+            <apex:pageBlockSection id="pgblck_usr_del_area" title="User Delineated Area Information" />
+
+            <table>
+                <tr>
+                    <td style="width: 165px; text-align: right; padding-right: 5px;">
+                        <apex:outputLabel id="lbl_usr_del_area_favOpts" value="Select from AAAP Favorites"></apex:outputLabel>
+                    </td>
+                    <td style="width: 80px; text-align: left;">
+                        <apex:selectList size="1" value="{!selectedFavPoly}" id="val_usr_del_area_favOpts" onChange="selectFav();">
+                            <apex:selectOptions value="{!FavoritePolys}"/>
+                        </apex:selectList>
+                    </td>
+                    <td style="width: 10px;"/>
+                    <td style="width: 320px;">
+                        <apex:outputtext style="font-weight: bold;" value="Instructions for drawing from scratch " />
+                        <a href="" onclick="drawing.showDrawInstr()" ><img src="{!$Resource.Info_Icon}" /></a>
+                    </td>
+                    <td id="instr_td" rowspan="5" style="max-width: 40%;">
+                        <div id="draw_instr_div" style="display: none; margin-left: 15px; margin-top: -5px; float: right; float: top; background:#ffffff; border:1px solid #666; border-radius:5px; padding:5px; height: 65px; overflow: auto;">
+                            Instructions for drawing from scratch<br/>
+                            1. Input a custom name for your drawing in the 'User Delineated Area Name' field.<br/>
+                            2. Adjust the map location and zoom level so that entire delineated area is clear on the screen.<br/>
+                            3. Within the map, click the 'Polygon' button so that it is highlighted.<br/>
+                            4. Single click on the map to start your first point. Single click on subsequent points to sketch the outline.<br/>
+                            5. Double click on the last point to complete the shape.<br/>
+                            6. Click 'Save Delineated Area' button to save the shape and return to main Agency Requirements project page.
+                        </div>
+                        <div id="edit_instr_div" style="display: none; margin-left: 15px; margin-top: -5px; float: right; float: top; background:#ffffff; border:1px solid #666; border-radius:5px; padding:5px; height: 65px; overflow: auto;">
+                            Instructions for editing shape<br/>
+                            1. Within the map, click on the 'Edit Shape' button if it is not already highlighted.<br/>
+                            2. Click on the existing delineated area shape object so that it is highlighted and circle edit points appear along the shape boundary.<br/>
+                            3. Click and drag the edit circles on the boundary to refine the shape.<br/>
+                            4. Click the 'Save Delineated Area' button to save the modified shape.
+                        </div>
+                        <div id="fav_instr_div" style="display: none; margin-left: 15px; margin-top: -5px; float: right; float: top; background:#ffffff; border:1px solid #666; border-radius:5px; padding:5px; height: 65px; overflow: auto;">
+                            Instructions for saving and loading AAAP Favorites<br/>
+                            Saving 1. Follow steps #1-5 from the instructions for drawing a delineated area from scratch.<br/>
+                            Saving 2. Make sure the 'User Delineated Area Name' is applicable for multiple projects. Ex: 'Akron, OH CBD' <br/>
+                            Saving 3. Check the box next to 'Save to AAAP favorites', then click 'Save Delineated Area'.<br/>
+                            Loading 1. Select a shape from the 'Select from AAAP Favorites' picklist. <br/>
+                            Loading 2. Rename the loaded shape in the 'User Delineated Area Name' and make sure the 'Save to AAAP favorites' checkbox is not checked. <br/>
+                            Loading 3. Click 'Save Delineated Area'.  Failure to follow the previous step will permanently take the shape out of favorites.
+                        </div>
+                    </td>
+                    <td rowspan="1" style="position: relative; margin-top: -5px;">
+                        <div id="close_instr_div" style="display: none; float: top; margin-left: -39px; background: #ffffff; border: 1px solid #666; padding-left: 3px; padding-right: 3px; vertical-align: top; position: absolute; z-index: 9;">
+                            <a href="" onclick="drawing.closeInstrDiv()" style="font-size: 14px; cursor: default; text-decoration: none;">x</a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 165px; text-align: right; padding-right: 5px;">
+                        <apex:outputLabel id="lbl_usr_del_area_name" value="User Delineated Area Name"></apex:outputLabel>
+                    </td>
+                    <td style="width: 80px; text-align: left;">
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                            <apex:inputText id="val_usr_del_area_name" value="{!polyName}" required="true" ></apex:inputText>
+                        </apex:outputPanel>
+                    </td>
+                    <td style="width: 10px;"/>
+                    <td style="width: 320px;">
+                        <apex:outputtext style="font-weight: bold;" value="Instructions for editing shape " />
+                        <a href="" onclick="drawing.showEditInstr()"><img src="{!$Resource.Info_Icon}" /></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 165px; text-align: right; padding-right: 5px;">
+                        <apex:outputLabel style="width: 30px; text-align: right;" id="lbl_usr_del_area_fav" value="Save to AAAP favorites"></apex:outputLabel>
+                    </td>
+                    <td style="width: 80px; text-align: left;">
+                        <apex:inputCheckbox value="{!favPoly}" id="val_usr_del_area_fav" onChange="drawing.toggleFav();"/>
+                    </td>
+                    <td style="width: 10px;"/>
+                    <td style="width: 320px;">
+                        <apex:outputtext style="font-weight: bold;" value="Instructions for saving and loading AAAP Favorites " />
+                        <a href="" onclick="drawing.showFavInstr()"><img src="{!$Resource.Info_Icon}" /></a>
+                    </td>
+                </tr>
+                <tr style="height: 10px;"/>
+                <tr style="height: 15px;"/>
+             </table>
+             
+             <table style="position: relative; margin-top: -25px; margin-left: 5px;">
+                 <tr>
+                    <td>
+                        <div id="draw_instr_div_mobile" style="display: none; margin-left: 10px; float: right; float: top; background:#ffffff; border:1px solid #666; border-radius:5px; padding:5px; height: 75px; width: auto; overflow: auto; white-space: nowrap;">
+                            Instructions for drawing from scratch<br/>
+                            1. Input a custom name for your drawing in the 'User Delineated Area Name' field.<br/>
+                            2. Adjust the map location and zoom level so that entire delineated area is clear on the screen.<br/>
+                            3. Within the map, click the 'Polygon' button so that it is highlighted.<br/>
+                            4. Single click on the map to start your first point. Single click on subsequent points to sketch the outline.<br/>
+                            5. Double click on the last point to complete the shape.<br/>
+                            6. Click 'Save Delineated Area' button to save the shape and return to main Agency Requirements project page.
+                        </div>
+                        <div id="edit_instr_div_mobile" style="display: none; margin-left: 10px; float: right; float: top; background:#ffffff; border:1px solid #666; border-radius:5px; padding:5px; height: 75px; width: auto; overflow: auto; white-space: nowrap;">
+                            Instructions for editing shape<br/>
+                            1. Within the map, click on the 'Edit Shape' button if it is not already highlighted.<br/>
+                            2. Click on the existing delineated area shape object so that it is highlighted and circle edit points appear along the shape boundary.<br/>
+                            3. Click and drag the edit circles on the boundary to refine the shape.<br/>
+                            4. Click the 'Save Delineated Area' button to save the modified shape.
+                        </div>
+                        <div id="fav_instr_div_mobile" style="display: none; margin-left: 10px; float: right; float: top; background: #ffffff; border: 1px solid #666; border-radius: 5px; padding: 5px; height: 75px; width: auto; overflow: auto; white-space: nowrap;">
+                            Instructions for saving and loading AAAP Favorites<br/>
+                            Saving 1. Follow steps #1-5 from the instructions for drawing a delineated area from scratch.<br/>
+                            Saving 2. Make sure the 'User Delineated Area Name' is applicable for multiple projects. Ex: 'Akron, OH CBD' <br/>
+                            Saving 3. Check the box next to 'Save to AAAP favorites', then click 'Save Delineated Area'.<br/>
+                            Loading 1. Select a shape from the 'Select from AAAP Favorites' picklist. <br/>
+                            Loading 2. Rename the loaded shape in the 'User Delineated Area Name' and make sure the 'Save to AAAP favorites' checkbox is not checked. <br/>
+                            Loading 3. Click 'Save Delineated Area'.  Failure to follow the previous step will permanently take the shape out of favorites.
+                        </div>
+                    </td>
+                    <td rowspan="1">
+                        <div id="close_instr_div_mobile" style="display: none; float: top; margin-left: -38px; margin-top: 3px; background: #ffffff; border: 1px solid #666; padding-left: 3px; padding-right: 3px; vertical-align: top; position: absolute; z-index: 9;">
+                            <a href="" onclick="drawing.closeInstrDiv()" style="font-size: 14px; cursor: default; text-decoration: none;">x</a>
+                        </div>
+                    </td>
+                </tr>
+            </table>                 
+ 
+            <!-- button section -->
+            <div style="margin-top: 7px;">                
+                <input type="text" id="location-search-input" placeholder="Search" onkeyup="return tableInputKeyPress(event); "/>&nbsp;
+                <input type="button" id="location-search-btn" value="Search" />&nbsp;
+                <input type="button" id="btn_clear_shape" value="Clear Shape" onclick="drawing.clear()" />&nbsp;
+                <input type="button" id="btn_reset_shape" value="Reset Shape" onclick="drawing.reset()" />&nbsp;
+                <input type="button" id="btn_save_usr_del_area" value="Save Delineated Area" onclick="drawing.save()" />&nbsp;
+                <input type="button" id="btn_cncl_usr_del_area" value="Cancel / Return to Agency Requirement" onclick="cancelBackToAgncy();" />&nbsp;
+            </div>
+            
+            <apex:outputPanel id="map_canvas" layout="block" styleClass="map">
+                <table class="map--view-menu" id="BasemapToggle">
+                    <tr>
+                        <td id="streetTab" onclick="streetViewToggle()" style="font-weight:bold; background: silver; cursor: default;">
+                            Street
+                        </td>
+                        <td id="satTab" onclick="satelliteViewToggle()" style="cursor: default;">
+                            Satellite
+                        </td>
+                    </tr>
+                </table>
+                <table class="map--draw-menu" id="draw_icons_table">
+                    <tr>
+                        <td id="editTd" onclick="drawing.edit()">Edit Shape</td>
+                        <td id="polyTd" onclick="shape.polygon.draw()">Polygon</td>
+                        <td id="undoTd" onclick="drawing.undo()">Undo</td>
+                    </tr>
+                </table>
+                <table class="map--layer-menu" id="layers">
+                    <tr>
+                        <!-- <td id="layer-seismic">Seismic</td> -->
+                        <td id="layer-seismic"><span1>Seismic</span1></td>
+                        <td id="layer-flood"><span2>Flood</span2></td>
+                        <!-- <td id="layer-cbd">CBD</td> -->
+                        <td id="layer-cbd"><span1>CBD</span1></td>
+                    </tr>
+                </table>
+            </apex:outputPanel>
+        </apex:PageBlock>
+    </apex:form>
+</apex:page>

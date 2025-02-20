@@ -1,0 +1,21 @@
+<apex:page StandardController="NCMT_Project__c" recordSetVar="proj">
+    <apex:includeLightning />
+        <div id='project'></div>
+
+    <script>
+    $Lightning.use('c:NCMT_ReportsLandingPage_App', function(){
+        $Lightning.createComponent('c:NCMT_ReportsLandingPage_LC', 
+                                   {
+                                       // "projectId" : "a1I350000024sBp"
+                                      "projectId" : "{!$CurrentPage.parameters.id}"
+                                   },
+        'project',
+            function(cmp){
+                //nothing to see here
+            });
+    
+    });
+    </script>
+    
+    
+</apex:page>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Historic_Status_Description__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(TEXT( Historic_Landmark_Status__c )= &apos;Class 1&apos;, &apos;A National Historic Landmark&apos;,
+IF(TEXT( Historic_Landmark_Status__c )= &apos;Class 2&apos;, &apos;On or eligible for the National Register at the National significance level.&apos;,
+IF(TEXT( Historic_Landmark_Status__c )= &apos;Class 3&apos;, &apos;On or eligible for the National Register at the State or Local significance level.&apos;,
+IF(TEXT( Historic_Landmark_Status__c )= &apos;Class 4&apos;, &apos;Potentially eligible for the National Register based on evaluation&apos;,
+IF(TEXT( Historic_Landmark_Status__c )= &apos;Class 5&apos;, &apos;Likely eligible for the National Register: Not yet evaluated&apos;,
+IF(TEXT( Historic_Landmark_Status__c )= &apos;Class 6&apos;, &apos;Not Historic, but significant&apos;,
+IF(TEXT( Historic_Landmark_Status__c )= &apos;Class 7&apos;, &apos;Not Historic, but significant&apos;,&apos;&apos;)))))))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Historic Status Description</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Publish_RLP</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Publish RLP</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/23.0/connection.js&quot;)}
+var url = parent.location.href; //string for the URL of the current page
+var myObj = new sforce.SObject(&quot;PBS_AAAP_RLP__c&quot;); 
+myObj.Id = &quot;{!PBS_AAAP_RLP__c.Id}&quot;; 
+myObj.PBS_AAAP_STATUS__c = &quot;{!PBS_AAAP_RLP__c.PBS_AAAP_STATUS__c}&quot;; 
+
+var rlpattactments = sforce.connection.query(&quot;Select Id from PBS_AAAP_RLP_Attachments__c where PBS_AAAP_RLP__c = &apos;{!PBS_AAAP_RLP__c.Id}&apos;  &quot;);
+//alert(&apos;size: &apos;+rlpattactments.size);
+if( myObj.PBS_AAAP_STATUS__c == &apos;Replaced&apos;){
+alert(&apos;Replaced RLP can not be published&apos;);
+}else
+{ 
+if( myObj.PBS_AAAP_STATUS__c == &apos;Posted/Active&apos;){
+alert(&apos;Only RLP with status DRAFT can be published&apos;);
+}
+if(rlpattactments.size &gt; 0)
+{
+myObj.PBS_AAAP_STATUS__c = &apos;Posted/Active&apos;;
+myObj.PBS_AAAP_isActive__c = true;
+myObj.PBS_AAAP_Canceled_Date__c = null;
+myObj.PBS_AAAP_Canceled_Reason__c = null;
+sforce.connection.update([myObj]);
+parent.location.href = url; //refresh the page
+}
+else{
+alert(&apos;Please upload the RLP attachments to publish an RLP&apos;);
+}
+}</url>
+</WebLink>

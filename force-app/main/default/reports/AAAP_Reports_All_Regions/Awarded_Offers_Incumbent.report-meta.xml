@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>PBS_AAAP_Offer__c$Name</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Offer__c$PBS_AAAP_RLP_Region__c</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Offer__c$Formula_RLP_Num__c</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Offer__c$PBS_AAAP_Is_Offer_Valid__c</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Offer__c.Spaces__r$PBS_AAAP_NEW_SUCCEED_LEASE_IND__c</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Offer__c.Spaces__r$PBS_AAAP_GSA_EXPIRE_LEASE_NUMBER__c</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Offer__c$PBS_AAAP_Offer_Status__c</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Offer__c.Spaces__r$Name</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Offer__c.Spaces__r.Offer_Select_Award_Info__r$PBS_AAAP_CONTRACT_AWARD_DATE__c</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Offer__c.Spaces__r.Offer_Select_Award_Info__r$PBS_AAAP_Total_Contract_Amount__c</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Offer__c.Spaces__r.Offer_Select_Award_Info__r$PBS_AAAP_IsAwarded__c</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Offer__c.Spaces__r.Offer_Select_Award_Info__r$PBS_AAAP_AWARDED_USF__c</field>
+    </columns>
+    <description>Report to look at awarded offers and see how many were awarded to incumbent lessors</description>
+    <format>Tabular</format>
+    <name>Awarded Offers - Incumbent</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Awarded_Offers__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>PBS_AAAP_Offer__c.Spaces__r.Offer_Select_Award_Info__r$PBS_AAAP_CONTRACT_AWARD_DATE__c</dateColumn>
+        <endDate>2018-09-30</endDate>
+        <interval>INTERVAL_CUSTOM</interval>
+        <startDate>2017-10-01</startDate>
+    </timeFrameFilter>
+</Report>

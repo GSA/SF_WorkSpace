@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Arch_Eng_Fee_UOM_Validation</fullName>
+    <active>true</active>
+    <description>If an architectural and engineering fee is given, then a corresponding UOM must also be given.</description>
+    <errorConditionFormula>AND(PBS_AAAP_ARCH_ENG_FEES__c &gt;0, 
+        IF(OR(CONTAINS(TEXT(PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c), &apos;%&apos;), 
+                  CONTAINS(TEXT(PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c), &apos;$&apos;)), false, true)
+       )</errorConditionFormula>
+    <errorDisplayField>PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c</errorDisplayField>
+    <errorMessage>You must select a unit of measure for the Architectural and Engineering fees value if you specify a value for the fees.</errorMessage>
+</ValidationRule>

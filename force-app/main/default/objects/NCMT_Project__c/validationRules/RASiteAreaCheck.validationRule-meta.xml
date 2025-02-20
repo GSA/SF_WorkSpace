@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RASiteAreaCheck</fullName>
+    <active>false</active>
+    <description>Check if TotalSiteArea is less than Gross Area SF</description>
+    <errorConditionFormula>(TEXT(Project_type__c) ==&apos;Repair &amp; Alteration - Parametric Entry&apos; || TEXT(Project_type__c) ==&apos;Repair &amp; Alteration - Work Item Detail&apos;) &amp;&amp; if ( BLANKVALUE(Total_Site_Area_Building_Footprint_SF__c, 0) &gt; 0, 
+if ( BLANKVALUE(Total_Site_Area_Building_Footprint_SF__c, 0) &lt;= BLANKVALUE(Gross_Area_Including_Parking__c, 0) , true , false) 
+,false)</errorConditionFormula>
+    <errorMessage>Total Site Area cannot be smaller than Gross Area.</errorMessage>
+</ValidationRule>

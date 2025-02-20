@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Custom_Housing_Plan_Per_Project</fullName>
+    <active>true</active>
+    <description>For a Project of Type Gross Area or Useable Area, User cannot add user defined housing plan.</description>
+    <errorConditionFormula>OR(Project__r.Gross_Area__c, Project__r.Useable_Area__c ) &amp;&amp;  (RecordType.Name  == &apos;User Defined&apos;)</errorConditionFormula>
+    <errorMessage>For a Project of Type Gross Area or Useable Area, User cannot add user defined housing plan.</errorMessage>
+</ValidationRule>

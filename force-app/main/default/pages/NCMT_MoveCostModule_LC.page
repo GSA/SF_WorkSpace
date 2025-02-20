@@ -1,0 +1,19 @@
+<apex:page standardController="NCMT_Housing_Plan__c" lightningStylesheets="true">
+    <apex:slds />
+    <apex:includeLightning />
+    <div id="lightningPage"></div>
+     <script>
+    $Lightning.use("c:NCMT_MoveCostModule_App", function(){
+            $Lightning.createComponent("c:NCMT_MoveCostModule_LC", {
+                //"recordId" : "{!$CurrentPage.parameters.id}"
+				
+            },
+            'lightningPage',
+                function(cmp){
+     
+                });
+        
+        });
+        </script> 
+   
+</apex:page>

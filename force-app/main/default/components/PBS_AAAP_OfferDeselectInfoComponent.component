@@ -1,0 +1,26 @@
+<apex:component controller="PBS_AAAP_OfferDeselectComponentContr" >
+<apex:attribute name="targetObjId" description="Target Object Record Id"
+        type="String" required="true" assignTo="{!targetObjId}"/>
+
+    <apex:attribute name="sectionTitle" description="Section Title"
+        type="String" required="true"/>
+ 
+    <apex:pageBlock title="{!sectionTitle}">
+        <apex:pageBlockSection columns="1" id="DeSelectOfferSpaceSection">
+        
+            <apex:pageBlockTable value="{!deselectList}" var="aph" width="100%">
+                <!-- <apex:column headerValue="Offer Select Award"  >
+                    <apex:commandLink action="{!actionShowOfferSelectAwardInfo}" value="{!aph.Name}" >
+                        <apex:param name="q" value="{!aph.id}" assignTo="{!offerSelectAwardID}"/>
+                    </apex:commandLink>
+                </apex:column> -->
+                <apex:column headerValue="Agency" value="{!aph.PBS_AAAP_Agency_Requirement__c}" />
+                <apex:column headerValue="Offer" value="{!aph.PBS_AAAP_Offer_Number__r.PBS_AAAP_Building_Name__c}" />
+                <apex:column headerValue="Reason" value="{!aph.PBS_AAAP_Action_Reason__c}" />
+                <apex:column headerValue="Comments" value="{!aph.PBS_AAAP_Action_Comments__c}" />
+                <apex:column headerValue="Deselected Date" value="{!aph.CreatedDate}" />
+                
+            </apex:pageBlockTable> 
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:component>

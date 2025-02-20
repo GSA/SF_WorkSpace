@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_NCMT_Subcontractor</fullName>
+    <active>true</active>
+    <description>If NCMT Subcontractor is blank, user cannot edit subcontractor markups</description>
+    <errorConditionFormula>IF( (SubContractor_Overhead__c &gt;0 ||  SubContractor_Profit__c &gt;0 ||  SubContractor_Bond__c &gt;0) &amp;&amp; ISBLANK(NCMT_Contractor_ID__c), true, false)</errorConditionFormula>
+    <errorDisplayField>NCMT_Contractor_ID__c</errorDisplayField>
+    <errorMessage>NCMT Subcontractor for this line item is blank, Please enter Subcontractor before applying markups.</errorMessage>
+</ValidationRule>

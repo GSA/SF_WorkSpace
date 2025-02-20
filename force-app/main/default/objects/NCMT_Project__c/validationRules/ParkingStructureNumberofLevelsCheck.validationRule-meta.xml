@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ParkingStructureNumberofLevelsCheck</fullName>
+    <active>true</active>
+    <description>For parking structure, number of levels must be 2 or more</description>
+    <errorConditionFormula>RecordType.Name == &apos;Parking Garage&apos; &amp;&amp; 
+ IF( Parking_Structure__c , 1, 0) == 1 &amp;&amp;
+ (At_and_above_grade__c == 0 ||  ISNULL(At_and_above_grade__c) ) &amp;&amp;
+  At_and_above_grade__c &lt; 2</errorConditionFormula>
+    <errorMessage>If Parking Structure is checked, Number of Parking Levels must be 2 or more</errorMessage>
+</ValidationRule>

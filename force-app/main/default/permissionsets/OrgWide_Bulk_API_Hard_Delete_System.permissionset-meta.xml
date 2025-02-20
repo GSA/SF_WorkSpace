@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Enables Bulk API Hard Delete. Delete records in the Bulk API without storing them 
+in the Recycle Bin. Enable Admins to perform hard deletes(using Data Loader) without having to assign this as 
+an Admin Perm at the profile. Used by Admin ONLY</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>OrgWide - Bulk API Hard Delete - System</label>
+    <userPermissions>
+        <enabled>true</enabled>
+        <name>BulkApiHardDelete</name>
+    </userPermissions>
+</PermissionSet>

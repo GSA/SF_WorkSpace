@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BuildingHeightAboveAndBelowGroundCheck</fullName>
+    <active>false</active>
+    <description>Check for Building Height for user input in Above ground and Below Ground</description>
+    <errorConditionFormula>IF((AND(NCMT_Project__r.RecordType.Name &lt;&gt;&apos;Utility&apos;,NCMT_Project__r.RecordType.Name &lt;&gt;&apos;Parking Garage&apos;)), 
+((IF(ISPICKVAL( NCMT_Project__r.Building_Heigtht__c , &apos;Single Story&apos;), (if(AND(Above_Ground__c = 1,Below_Ground__c=0),False,True)), False)) || 
+(IF(ISPICKVAL( NCMT_Project__r.Building_Heigtht__c , &apos;Lowrise (2 - 3 stories)&apos;), (if(AND(OR(Above_Ground__c = 2, Above_Ground__c = 3),OR(Below_Ground__c&gt;=0,Below_Ground__c&lt;=2)),False,True)), False))|| 
+(IF(ISPICKVAL( NCMT_Project__r.Building_Heigtht__c , &apos;Midrise (4 - 9 stories)&apos;), (if(AND(OR(Above_Ground__c &gt;= 4, Above_Ground__c &lt;= 9),OR(Below_Ground__c&gt;=0,Below_Ground__c&lt;=2)),False,True)), False))||
+(IF(ISPICKVAL( NCMT_Project__r.Building_Heigtht__c , &apos;Highrise (10 + stories)&apos;), (if(AND(Above_Ground__c &gt;= 10,OR(Below_Ground__c&gt;=0,Below_Ground__c&lt;=2)),False,True)), False))) ,False)</errorConditionFormula>
+    <errorMessage>Single Story Above Ground 1 and Below Ground 0
+Lowrise (2 - 3 stories), Above Ground 2 or 3 Below Ground 0-2
+Midrise (4 - 9 stories), Above Ground 4 to 9 Below Ground  0-2
+Hightrise 10+ Stories, Above Ground 10+ Below Ground  0-2</errorMessage>
+</ValidationRule>

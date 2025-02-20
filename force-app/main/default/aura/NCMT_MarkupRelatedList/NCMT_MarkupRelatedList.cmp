@@ -1,0 +1,19 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId" access="global" controller="NCMT_MarkupRelatedListCtrl_LC">
+	<aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="mpdata" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="loadingComplete" type="boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div style="slds-col slds-size_2-of-7">
+        <aura:if isTrue="{!v.loadingComplete}">
+        <lightning:datatable
+                             keyField="Id"
+                             columns="{!v.columns}"
+                             data="{!v.mpdata}"
+                             hideCheckboxColumn="true"
+                             resizeColumnDisabled= 'true'
+                             aura:id = "markupTable"/>
+            </aura:if>
+    	</div> 
+</aura:component>

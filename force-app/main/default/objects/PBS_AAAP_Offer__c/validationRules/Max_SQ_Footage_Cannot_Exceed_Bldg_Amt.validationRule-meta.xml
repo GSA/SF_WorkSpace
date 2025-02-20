@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Max_SQ_Footage_Cannot_Exceed_Bldg_Amt</fullName>
+    <active>true</active>
+    <description>The max square footage offered for all spaces cannot exceed the amount in the building.</description>
+    <errorConditionFormula>( PBS_AAAP_OFFICE_SF_OFFERED_MAX__c &gt;  PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c )</errorConditionFormula>
+    <errorDisplayField>PBS_AAAP_OFFICE_SF_OFFERED_MAX__c</errorDisplayField>
+    <errorMessage>The value for the total ANSI/BOMA Office SF available for lease to the government (question 1 on Space and Rates Summary) cannot exceed the total ANSI/BOMA USF offered for the building (question 8 on building tab).</errorMessage>
+</ValidationRule>

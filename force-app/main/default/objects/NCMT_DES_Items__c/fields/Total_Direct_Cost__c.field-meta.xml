@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Direct_Cost__c</fullName>
+    <formula>IF(
+(RecordType.Name == &apos;NCMT DES Item Master O&amp;P&apos;||
+RecordType.Name == &apos;NCMT DES Item Uniformat O&amp;P&apos;) ||
+(Material_Unit_Cost__c + Equipment_Rental_Day__c + Hourly_Rate__c == 0), In_house_Unit_Total_Adj__c,
+Total_Material_Cost_w_Sales_Tax__c + Total_Equipment_Cost_w_Sales_Tax__c + Total_Labor_Premium__c  )</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Total Direct Cost</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

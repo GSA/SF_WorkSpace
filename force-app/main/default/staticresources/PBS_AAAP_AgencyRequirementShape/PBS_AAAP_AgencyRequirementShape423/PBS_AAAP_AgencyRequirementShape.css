@@ -1,0 +1,99 @@
+.errMessage {
+    color: red;
+    font-weight: bold;
+}
+
+#draw_icons_table{
+    left: 300px;
+}
+
+#layers{
+    right: 20px;
+}
+
+#BasemapToggle {
+    left: 57px;
+}
+
+#undoTd {
+    display: none;
+}
+
+.map {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    padding: 0;
+    margin: 20px 0 0 0;
+}
+
+.map--view-menu,
+.map--draw-menu,
+.map--layer-menu {
+    position: absolute;
+    background-color: #ffffff;
+    top: 20px;
+    z-index: 5;
+}
+
+.map--view-menu td,
+.map--draw-menu td,
+.map--layer-menu td {
+    border: 1px solid #C0C0C0;
+    border-collapse: collapse;
+    height: 12px;
+    padding: 2px 3px 2px 3px;
+    font-size: 12px;
+    cursor: default;
+    //color: #000000;
+    //font-weight: normal;
+}
+
+.map--layer-menu span1 {
+    color: #808080;
+    font-weight: 300;
+}
+
+.map--layer-menu span2 {
+    color: #000000;
+    font-weight: normal;
+}
+
+.map--layer-menu span1:hover {
+    cursor: default;
+}
+
+.map--layer-menu span2:hover {
+    //cursor: pointer;
+}
+
+.map--view-menu td.active {
+    background: silver;
+    font-weight: bold;
+}
+.map--draw-menu td.active {
+    background: silver;
+    font-weight: bold;
+}
+.map--layer-menu td.active {
+    background: silver;
+    font-weight: bold;
+}
+
+
+.popupModal {
+    display: none;
+    background: #eee;
+    border: 1px solid #666;
+    border-radius: 5px;
+    padding: 15px;
+    width: 75%;
+}
+
+.popupModal ul {
+    list-style: disc
+}
+
+.popupModal li {
+    margin-left: 1.5em
+}

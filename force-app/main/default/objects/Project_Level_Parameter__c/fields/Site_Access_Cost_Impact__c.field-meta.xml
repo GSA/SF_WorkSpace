@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Site_Access_Cost_Impact__c</fullName>
+    <formula>IF(Text(Site_Access__c) == &apos;Highly Congested&apos;, 0.04,IF(Text(Site_Access__c) == &apos;Limited&apos;, 0.01,
+IF(Text(Site_Access__c) == &apos;Fair&apos;, 0,IF(Text(Site_Access__c) == &apos;Good&apos;, -0.02,0))))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Site Access Cost Impact Percent</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

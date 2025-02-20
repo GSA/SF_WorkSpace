@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Location__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>NCMT Location</description>
+    <inlineHelpText>User identifies the indexed city at or nearest the actual project location</inlineHelpText>
+    <label>Index Location</label>
+    <lookupFilter>
+        <active>true</active>
+        <booleanFilter>1 AND 2</booleanFilter>
+        <filterItems>
+            <field>NCMT_Location_Parameters__c.State__c</field>
+            <operation>equals</operation>
+            <valueField>$Source.State__c</valueField>
+        </filterItems>
+        <filterItems>
+            <field>NCMT_Location_Parameters__c.Fiscal_Year__c</field>
+            <operation>equals</operation>
+            <value>&apos;2017&apos;</value>
+        </filterItems>
+        <infoMessage>Please type in the State and click &apos;Go&apos; button to see the list of available index locations.</infoMessage>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>NCMT_Location_Parameters__c</referenceTo>
+    <relationshipLabel>NCMT Projects</relationshipLabel>
+    <relationshipName>NCMT_Projects</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

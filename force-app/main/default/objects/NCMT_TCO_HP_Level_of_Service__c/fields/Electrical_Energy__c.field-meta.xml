@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Electrical_Energy__c</fullName>
+    <externalId>false</externalId>
+    <formula>Cooling_Kbtu_SF__c + ( TCO_Performance_Input__r.Cooling_Pump_Energy_kBtu_SF_Yr__c  +  TCO_Performance_Input__r.Heating_Pump_Energy_kBtu_SF_Yr__c +  TCO_Performance_Input__r.Fan_Efficiency_Perf__c ) + ( Round(Plug_Heat_Generation__c,2) +  Round(Lightning_Heat_Generation__c,2) )/1000</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Electrical Energy</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

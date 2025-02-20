@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LEED_USR_Mod_LT_Point_Chk_2</fullName>
+    <active>true</active>
+    <description>Location and Transportation - Sensitive Land Protection - Point Check</description>
+    <errorConditionFormula>NOT( LEED_USR_Mod_LT_2__c = 0 || LEED_USR_Mod_LT_2__c  = 1 )</errorConditionFormula>
+    <errorDisplayField>LEED_USR_Mod_LT_2__c</errorDisplayField>
+    <errorMessage>This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 1.</errorMessage>
+</ValidationRule>

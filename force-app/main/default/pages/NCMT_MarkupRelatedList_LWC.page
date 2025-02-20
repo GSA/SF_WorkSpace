@@ -1,0 +1,20 @@
+<apex:page standardController="NCMT_Project__c" extensions="NCMT_MarkupRelatedListCtrl_LC" lightningStylesheets="true">
+    <apex:slds />
+    <apex:includeLightning />
+    <div id="lightningPage"></div>
+     <script>
+        $Lightning.use("c:NCMT_MarkupRelatedList_App", function(){
+            $Lightning.createComponent("c:NCMT_MarkupRelatedList", {
+                "recordId" : "{!$CurrentPage.parameters.id}",
+                //"recordId" : "a1I35000002JS0L",
+
+            },
+            'lightningPage',
+                function(cmp){
+     
+                });
+        
+        });
+        </script> 
+   
+</apex:page>

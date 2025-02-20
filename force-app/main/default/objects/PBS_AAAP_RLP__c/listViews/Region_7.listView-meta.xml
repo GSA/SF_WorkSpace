@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Region_7</fullName>
+    <columns>NAME</columns>
+    <columns>PBS_AAAP_RLP_Number__c</columns>
+    <columns>PBS_AAAP_Region__c</columns>
+    <columns>PBS_AAAP_isActive__c</columns>
+    <columns>PBS_AAAP_STATUS__c</columns>
+    <columns>PBS_AAAP_DEFAULT_MONTH_BEGIN__c</columns>
+    <columns>PBS_AAAP_DEFAULT_MONTH_END__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>PBS_AAAP_Region__c</field>
+        <operation>equals</operation>
+        <value>Region 7</value>
+    </filters>
+    <filters>
+        <field>PBS_AAAP_Year__c</field>
+        <operation>greaterThan</operation>
+        <value>2021</value>
+    </filters>
+    <label>Shared - Region 7 Active RLPs</label>
+    <sharedTo>
+        <group>AAAP_Region_7</group>
+        <role>AAAP_Manager_Region_7</role>
+        <role>AAAP_Supervisor</role>
+    </sharedTo>
+</ListView>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Direct_Security_Cost__c</fullName>
+    <label>Direct Security Cost</label>
+    <summarizedField>NCMT_DES_Items__c.Total_Cost__c</summarizedField>
+    <summaryFilterItems>
+        <field>NCMT_DES_Items__c.Cost_Type__c</field>
+        <operation>equals</operation>
+        <value>Security</value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>NCMT_DES_Items__c.Include_In_Estimate__c</field>
+        <operation>equals</operation>
+        <value>True</value>
+    </summaryFilterItems>
+    <summaryForeignKey>NCMT_DES_Items__c.Project_Cost_Summary_ID__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

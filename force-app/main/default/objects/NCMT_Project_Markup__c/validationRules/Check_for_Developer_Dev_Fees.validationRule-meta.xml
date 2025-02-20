@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_Developer_Dev_Fees</fullName>
+    <active>false</active>
+    <description>Based on project delivery method, need to allow user to change field</description>
+    <errorConditionFormula>IF( (text(Project_Name__r.Project_Delivery_Method__c)==&apos;Design Build - Bridging&apos; || text(Project_Name__r.Project_Delivery_Method__c)==&apos;Design Build - Owned&apos; || text(Project_Name__r.Project_Delivery_Method__c)==&apos;Build to Suit Lease&apos;) &amp;&amp; ( Developer_Fee__c !=0),true,false)</errorConditionFormula>
+    <errorDisplayField>Developer_Fee__c</errorDisplayField>
+    <errorMessage>For the selected project delivery method, it cannot apply.</errorMessage>
+</ValidationRule>

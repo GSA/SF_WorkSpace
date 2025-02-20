@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_UitilityImpact_Changes</fullName>
+    <active>true</active>
+    <errorConditionFormula>(NOT(ISBLANK(Electricity_Grid__c)) ||
+NOT(ISBLANK(Other_Heating__c)) ||
+NOT(ISBLANK(Gas__c))) &amp;&amp;  ISBLANK(Comments_UitlityImpact_Changes__c)</errorConditionFormula>
+    <errorDisplayField>Comments_UitlityImpact_Changes__c</errorDisplayField>
+    <errorMessage>Please enter Comments.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_Purpose_of_Est_Off_Leasing</fullName>
+    <active>true</active>
+    <description>For Purpose of Estimate FRV (Functional Replacement Value), Office of leasing user can&apos;t create a project</description>
+    <errorConditionFormula>(text(Purpose_of_Estimate__c)==&apos;FRV (Functional Replacement Value)&apos; )&amp;&amp;   text($User.NCMT_User_Level__c) == &apos;Office of Leasing - Realty Specialist&apos;</errorConditionFormula>
+    <errorDisplayField>Purpose_of_Estimate__c</errorDisplayField>
+    <errorMessage>For the selected Purpose of Estimate, NCMT Project can not be created. Please choose another Purpose of Estimate.</errorMessage>
+</ValidationRule>

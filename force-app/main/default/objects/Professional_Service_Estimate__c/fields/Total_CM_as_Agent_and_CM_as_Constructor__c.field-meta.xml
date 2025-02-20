@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_CM_as_Agent_and_CM_as_Constructor__c</fullName>
+    <formula>if 
+( text (CM_Role__c) =&apos;CM as Constructor&apos; ,  (Design_CMc__c +  Construction_CMc__c +  Total_Cx__c ) , 
+(
+  (if (text (CM_Role__c) =&apos;CM as agent and CM as Constructor&apos;,  (Construction_CMa_and_CMc__c +  Design_CMa_and_CMc__c +  Total_Cx__c ), 
+   (Construction_Cma__c +  Design_Cma__c +  Total_Cx__c ))) 
+)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Total CM Fee</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

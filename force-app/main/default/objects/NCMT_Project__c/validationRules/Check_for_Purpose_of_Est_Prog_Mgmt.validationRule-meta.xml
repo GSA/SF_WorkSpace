@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_Purpose_of_Est_Prog_Mgmt</fullName>
+    <active>true</active>
+    <description>For Purpose of Estimate Portfolio Planning, Office of Design and Construction - Program Management can create project</description>
+    <errorConditionFormula>(text(Purpose_of_Estimate__c)!= &apos;Portfolio Planning&apos;) &amp;&amp;
+ text($User.NCMT_User_Level__c) == &apos;Office of Design and Construction - Program Management&apos;</errorConditionFormula>
+    <errorDisplayField>Purpose_of_Estimate__c</errorDisplayField>
+    <errorMessage>For the selected Purpose of Estimate, NCMT Project cannot be created. Please choose another Purpose of Estimate.</errorMessage>
+</ValidationRule>

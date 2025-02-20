@@ -1,0 +1,274 @@
+<aura:component controller="NCMT_ReportsLandingPageCtrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+<aura:attribute name="projectId" type="String" />
+<aura:attribute name="project" type="sObject" default="{}" />
+<aura:attribute name="divVal" type="String" />
+
+<aura:attribute name="projectName" type="String" />
+<aura:attribute name="projectType" type="string" />
+<aura:attribute name="projectReports" type="object" />
+<aura:attribute name="lookupReports" type="object" />
+<aura:attribute name="regionReports" type="object" />
+<aura:attribute name='levelFiveUser' type='boolean'/>
+<aura:attribute name='fiscalYears' type='List[]' />
+<aura:attribute name='currentYear' type='string' />
+<aura:attribute name="selectedYear" type="String" access="PRIVATE"/>
+<aura:registerEvent name="oSelectedRecordEvent" type="c:NCMT_selectListEvent"/>
+
+<!-- Code Added for SFWS-2239 #Block1 -->    
+<aura:attribute name="isLightning" type="Boolean" />    
+
+<!--End of  Code modified for SFWS-2239 #Block1 --> 
+    
+
+<aura:handler name="init" value="{!this}" action="{!c.init}" />
+<aura:handler name="change" value="{!v.project}" action="{!c.getSelectedProject}"/>
+
+    
+    
+    
+<!-- NCMT REPORTS HEADER -->
+<div class="slds-page-header slds-grid slds-size_12-of-12">
+<div class="slds-page-header__row">
+  <div class="slds-page-header__col-title">
+      <div class="slds-media">
+          <div class="slds-media__figure">
+              <span class="slds-icon_container slds-icon-standard-report" aria-hidden="true" title="NCMT Reports">
+                  <lightning:icon class="slds-icon slds-page-header__icon" iconName="standard:report"/>
+                  <span class="slds-assistive-text">report</span>
+              </span>
+          </div>
+          <div class="slds-media__body">
+              <div class="slds-page-header__name">
+                  <div class="slds-page-header__name-title">
+                      <h1>
+                        <span class="slds-page-header__title slds-truncate" title="NCMT Reports">NCMT Reports</span>
+                      </h1>
+                  </div>
+              </div>
+              <p class="slds-page-header__name-meta">Complete your parameters for report search</p>
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+
+
+
+<div class="slds-size_6-of-12 slds-container_x-large slds-var-p-around_xx-small slds-col slds-float_right">
+
+<article class="slds-card">
+  <div class="slds-card__header slds-grid">
+    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+        <h2 class="slds-card__header-title">
+          <b> Cost Database</b>
+        </h2>
+    </header>
+  </div>
+
+
+  <div class="slds-card__body slds-card__body_inner">
+<!--
+    <aura:If  isTrue ="{!v.levelFiveUser}">
+      
+      
+          <lightning:select  aura:id="fiscalYearSelect" value='{!v.selectedYear}' label='Fiscal Year'>
+              <aura:iteration items="{!v.fiscalYears}" var="f">
+                <option text="{!f}" value="{!f}" selected="{!f.selected}"/>
+              </aura:iteration>
+            </lightning:select>
+      <br/>
+    </aura:If>
+
+    <aura:iteration items="{!v.lookupReports}" var="lReport">
+      <a><div id='{!lReport.Id}' onclick='{!c.redirectToFYReport}'>{!lReport.Name}</div></a><br/>
+    </aura:iteration>
+
+    <b>Tree Views</b>-->
+    <div><a href="/apex/NCMT_TreeView_Launcher?fileType=RSM%20FCC&amp;estFormat=Uniformat">RSM FCC Unit Cost</a>
+      
+    </div><br/>
+    <div><a href="/apex/NCMT_TreeView_Launcher?fileType=GSA_%202020%20FAC_ASMDES.xlsx&amp;estFormat=Uniformat">RSM FCC Assembly Data</a>
+      
+    </div><br/>
+    <div><a href="/apex/NCMT_TreeView_Launcher?fileType=GSA_%202020%20ASMDESC.xlsx&amp;estFormat=Uniformat">RSM Assemblies Cost Data</a>
+      
+    </div><br/>
+    <div><a href="/apex/NCMT_TreeView_Launcher?fileType=GSA_%202020%20MR%20Assembly%20Data.xlsx&amp;estFormat=Uniformat">RSM FMRD Maintenence and Repair Data</a>
+      
+    </div><br/>
+    <div><a href="/apex/NCMT_TreeView_Launcher?fileType=GSA_%202020%20PM_SEQ.xlsx&amp;estFormat=Uniformat">RSM Preventative Maintenence Data</a>
+      
+    </div><br/>
+    <div><a href="/apex/NCMT_TreeView_Launcher?fileType=GSAAssemblies&amp;estFormat=Uniformat">GSA Express Menu</a>
+      
+    </div>
+</div>
+</article>
+
+<!-- <article class="slds-card">
+  <div class="slds-card__header slds-grid">
+    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+      <div class="slds-media__figure"> </div>
+      <div class="slds-media__body">
+        <h2 class="slds-card__header-title">
+          <b> Region Reports <br/><br/></b>
+        </h2>
+      </div>
+    </header>
+</div><br></br>
+
+  <aura:iteration items="{!v.regionReports}" var="rReport">
+    <a><div id='{!rReport.Id}' onclick='redirectToReport'>  {!rReport.Name}</div>  </a><br> </br>
+  </aura:iteration>
+  <footer class="slds-card__footer">
+  </footer>
+</article> -->
+<aura:If  isTrue ="{!v.levelFiveUser}">
+<article class="slds-card">
+  <div class="slds-card__header slds-grid">   
+    <h2 class="slds-card__header-title">
+          <b>NCMT Users List</b>
+    </h2>
+  </div>    
+
+  <div class="slds-card__body slds-card__body_inner">
+    <a><div id='userList' onclick='{!c.redirectToUsersReport}'  data-href='NCMT_List_of_Users'>HTML</div></a>
+    <a><div id='userList' onclick='{!c.redirectToUsersReport}' data-href='NCMT_List_of_Users_Excel'>Excel Download</div></a>
+  </div>
+
+  <footer class="slds-card__footer">
+  </footer>
+
+</article>
+<article class="slds-card">
+  <div class="slds-card__header slds-grid">   
+    <h2 class="slds-card__header-title">
+          <b>NCMT Users Log</b>
+    </h2>
+  </div>    
+
+  <div class="slds-card__body slds-card__body_inner">
+      <label class="slds-form-element__label">
+          Number of Days<abbr class="slds-required" title="required">*</abbr>
+      </label>
+      <label class="slds-form-element__label " >
+          <lightning:helptext title="Number of Days:0 gives today's log" iconName="utility:info_alt"/>
+      </label> 
+      <div class="slds-size_1-of-5">
+     	<lightning:input type="number" aura:id="numday" value="0" placeholder="Enter days..." maxlength="3"/>
+      </div>
+      <a><div id='userLog' onclick='{!c.redirectToUsersLogReport}' data-href='NCMT_LoginHistory_Launcher'>NCMT User Log Report(HTML/EXCEL)</div></a>
+  </div>
+
+  <footer class="slds-card__footer">
+  </footer>
+
+</article>    
+
+
+
+ </aura:If>
+</div>
+
+<div class="slds-col slds-size_6-of-12 slds-var-p-around_xx-small slds-float_left">
+  <article class="slds-card">
+    <div class="slds-card__header slds-grid">
+      <header class="slds-media slds-media_center slds-has-flexi-truncate">
+          <h2 class="slds-card__header-title">
+            <b>Projects</b>
+          </h2>
+      </header>
+      </div>
+      <div class="slds-card__header slds-grid">
+        <a onclick='{!c.redirectToProject}'> <h1>
+            <span class="slds-page-header__title slds-truncate" title="Project Name" style="font-size: small;"><b style="font-size: small;">Project Name: </b>{!v.projectName}</span>
+        </h1></a>
+    </div>
+
+<div class="slds-card__body slds-card__body_inner" aura:id='lookupDiv'>   
+    <c:NCMT_TreeView_Item_Lookup label="Project"  hoverMessage="Search Project" currentValue='{!v.projectName}' objectAPIName='NCMT_Project__c'   IconName="standard:contract_line_item" selectedRecord="{!v.project}"/>  
+</div>
+
+<aura:If  isTrue="{!v.projectType !='Work Item - Repair &amp; Alteration'}">
+
+<!-- COMMENT OUT -->
+<!-- <div class="slds-card__body slds-card__body_inner">
+  <h2>Project Type: {!v.projectType}</h2>
+</div> -->
+
+<article class="slds-card">
+  <div class="slds-card__header slds-grid">
+    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+      <div class="slds-media__body">
+        <h2 class="slds-card__header-title">
+          <b>{!v.projectType}</b>
+        </h2>
+      </div>
+    </header>
+  </div>
+
+  <div class="slds-card__body slds-card__body_inner">
+    <aura:iteration items="{!v.projectReports}" var="pReport">                     
+        <a><div id='{!pReport.Id}' onclick='{!c.redirectToReport}'>{!pReport.Name}</div></a><br/> 
+    </aura:iteration>
+  </div>
+
+  <footer class="slds-card__footer">
+  </footer>
+
+</article>
+</aura:If >
+
+<aura:renderIf  isTrue="{!or(v.projectType == 'Parametric', v.projectType == 'Parametric - Repair &amp; Alteration')}">
+<article class="slds-card">
+  <div class="slds-card__header slds-grid">
+    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+      <div class="slds-media__body">
+        <h2 class="slds-card__header-title">
+          <b>Parametric - UNIFORMAT</b>
+        </h2>
+      </div>
+    </header>
+  </div>
+
+  <div class="slds-card__body slds-card__body_inner">
+    <a><div onclick="{!c.redirectToCustomReport}" data-rpt="repv1" data-href="ncmt_uniformatcostoutput?Rep=V1">UNIFORMAT COST OUTPUT - TOTAL PROJECT ETPC</div></a><br/>
+    <a><div onclick="{!c.redirectToCustomReport}" data-rpt='repv1' data-href="ncmt_uniformatcostoutput?Rep=V2">UNIFORMAT COST OUTPUT - TOTAL PROJECT ECC</div></a><br/>
+    <a><div onclick="{!c.redirectToCustomReport}" data-rpt='repv1' data-href="ncmt_uniformatcostoutput?Rep=V3">UNIFORMAT COST OUTPUT - TOTAL PROJECT ECCA</div></a><br/>
+    <a><div onclick="{!c.redirectToCustomReport}" data-rpt='repv2' data-href="ncmt_buildingcostsummary">BUILDING COST SUMMARY</div></a><br/>
+    <!-- Commented "PROJECT SUMMARY REPORT" link as part of this story SFWS-3697-->
+    <!-- <a><div onclick="{!c.redirectToCustomReport}" data-rpt='repv2' data-href="NCMT_Lease_Scoring_Report">PROJECT SUMMARY REPORT</div></a><br/>--> 
+  </div>
+  <footer class="slds-card__footer">
+  </footer>
+</article>
+</aura:renderIf>
+
+<aura:renderIf  isTrue="{!v.projectType =='Work Item - Repair &amp; Alteration'}">
+<article class="slds-card">
+  <div class="slds-card__header slds-grid">
+    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+      <div class="slds-media__body">
+        <h2 class="slds-card__header-title">
+          <b>Repair And Alteration - Work Item</b>
+        </h2>
+      </div>
+    </header>
+  </div>
+
+  <div class="slds-card__body slds-card__body_inner">
+    <a><div onclick="{!c.redirectToCustomReport}" data-rpt="repv1" data-href="ncmt_raworkitem_uniformatcostoutput?Rep=V1">IRIS COST OUTPUT - TOTAL PROJECT ETPC</div></a><br/>
+    <a><div onclick="{!c.redirectToCustomReport}"  data-rpt='repv1' data-href="ncmt_raworkitem_uniformatcostoutput?Rep=V2">IRIS COST OUTPUT - TOTAL PROJECT ECC</div></a><br/>
+    <a><div onclick="{!c.redirectToCustomReport}"  data-rpt='repv1' data-href="ncmt_uniformatcostoutput?Rep=V3">IRIS COST OUTPUT - TOTAL PROJECT ECCA</div></a><br/>
+    <a><div onclick="{!c.redirectToCustomReport}"  data-rpt='repv2' data-href="NCMT_Housing_Plan_Report">HOUSING PLAN REPORT</div></a><br/>
+  </div>
+
+  <footer class="slds-card__footer">
+  </footer>
+
+</article>
+
+</aura:renderIf >
+</article>
+</div>
+</aura:component>

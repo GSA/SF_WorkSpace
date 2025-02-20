@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Submit_for_Approval</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Submit for Approval</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/24.0/connection.js&quot;)} 
+{!REQUIRESCRIPT(&quot;/soap/ajax/10.0/apex.js&quot;)} 
+var criteria1 = &quot;{!NCMT_Project__c.Purpose_of_Estimate__c }&quot;;
+var totalprojcost = &quot;{!NCMT_Project__c.Total_Project_Cost__c }&quot;;
+var ratotprojcost = &quot;{!NCMT_Project__c.RA_Total_Project_Costs__c}&quot;;
+var lpoetotprojcost = &quot;{!NCMT_Project__c.LPOE_Total_Proj_Cost__c}&quot;;
+var cewtotprojcost = &quot;{!NCMT_Project__c.CEW_Total_Cost_W_O_Markup__c}&quot;;
+var criteria2 = parseFloat(totalprojcost.replace(&apos;$&apos;,&apos;&apos;).split(&apos;,&apos;).join(&quot;&quot;));
+var criteria3 = parseFloat(ratotprojcost.replace(&apos;$&apos;,&apos;&apos;).split(&apos;,&apos;).join(&quot;&quot;));
+var criteria4 = parseFloat(lpoetotprojcost.replace(&apos;$&apos;,&apos;&apos;).split(&apos;,&apos;).join(&quot;&quot;));
+var criteria5 = parseFloat(cewtotprojcost.replace(&apos;$&apos;,&apos;&apos;).split(&apos;,&apos;).join(&quot;&quot;));
+var regpt = &quot;{!NCMT_Project__c.Regional_Portfolio__c}&quot;;
+var copt = &quot;{!NCMT_Project__c.Central_Office_Portfolio__c}&quot;;
+var coqa = &quot;{!NCMT_Project__c.Central_Office_Cost_Mgt_QA__c}&quot;;
+var regqc = &quot;{!NCMT_Project__c.Regional_Office_Cost_Mgt_QC__c}&quot;;
+//if(criteria1==&quot;Lease Scoring - Regional Office&quot;){
+//	if(regpt != &apos;&apos; &amp;&amp; copt != &apos;&apos; &amp;&amp; coqa ==&apos;&apos; &amp;&amp; regqc ==&apos;&apos;){
+//		var approval = new sforce.ProcessSubmitRequest();
+//			approval.objectId = &quot;{!NCMT_Project__c.Id}&quot;;
+//		var processRes = sforce.connection.process([approval]);
+//			if(processRes[0].getBoolean(&quot;success&quot;)) {
+//			alert(&apos;NCMT Project is submitted for approval&apos;);
+//			location.reload();
+//			}else if(processRes[0].errors.message.indexOf(&quot;A record can be //in only one approval process at a time&quot;) &gt;-1){
+//			 alert(&apos;Approval process is already submitted&apos;);
+//			}else{
+//			 alert(&apos;Approval process is completed for this project&apos;);
+//			}
+//		}else{
+//		alert(&apos;Please enter approvers only for Regional Portfolio and Central Office Portfolio&apos;);
+//		}
+//}else if(criteria1==&quot;Lease Scoring - Central Office&quot;){
+//	if(copt != &apos;&apos; &amp;&amp; coqa ==&apos;&apos; &amp;&amp; regqc ==&apos;&apos; &amp;&amp; regpt == &apos;&apos;){
+//		var approval = new sforce.ProcessSubmitRequest();
+//			approval.objectId = &quot;{!NCMT_Project__c.Id}&quot;;
+//		var processRes = sforce.connection.process([approval]);
+//			if(processRes[0].getBoolean(&quot;success&quot;)) {
+//			alert(&apos;NCMT Project is submitted for approval&apos;);
+//			location.reload();
+//			}else if(processRes[0].errors.message.indexOf(&quot;A record can be in only one approval process at a time&quot;) &gt;-1){
+//			 alert(&apos;Approval process is already submitted&apos;);
+//			}else{
+//			 alert(&apos;Approval process is completed for this project&apos;);
+//			}
+//		}else{
+//			alert(&apos;Please enter approvers only for Central Office Portfolio&apos;);
+//		}			
+//}else
+ if(criteria1==&quot;TAPS (Automated Prospectus System) Analysis&quot;){
+	if(regpt != &apos;&apos; &amp;&amp; regqc != &apos;&apos; &amp;&amp; copt == &apos;&apos; &amp;&amp; coqa ==&apos;&apos;){
+		var approval = new sforce.ProcessSubmitRequest();
+			approval.objectId = &quot;{!NCMT_Project__c.Id}&quot;;
+		var processRes = sforce.connection.process([approval]);
+			if(processRes[0].getBoolean(&quot;success&quot;)) {
+			alert(&apos;NCMT Project is submitted for approval&apos;);
+			location.reload();
+			}else if(processRes[0].errors.message.indexOf(&quot;A record can be in only one approval process at a time&quot;) &gt;-1){
+			 alert(&apos;Approval process is already submitted&apos;);
+			}else{
+			 alert(&apos;Approval process is completed for this project&apos;);
+			}
+		}else{
+			alert(&apos;Please enter approvers only for Regional Office Cost Mgt QC and Regional PT&apos;);
+		}	
+}else if(criteria1==&quot;Project Planning / Budgeting&quot; &amp;&amp; ((criteria2 &gt; 250000 &amp;&amp; criteria2 &lt; 3080000) || (criteria3 &gt; 250000 &amp;&amp; criteria3 &lt; 3080000) || (criteria4 &gt; 250000 &amp;&amp; criteria4 &lt; 3080000) || (criteria5 &gt; 250000 &amp;&amp; criteria5 &lt; 3080000))){
+	if(regqc != &apos;&apos; &amp;&amp; copt == &apos;&apos; &amp;&amp; coqa ==&apos;&apos; &amp;&amp; regpt == &apos;&apos;){
+		var approval = new sforce.ProcessSubmitRequest();
+			approval.objectId = &quot;{!NCMT_Project__c.Id}&quot;;
+		var processRes = sforce.connection.process([approval]);
+			if(processRes[0].getBoolean(&quot;success&quot;)) {
+			alert(&apos;NCMT Project is submitted for approval&apos;);
+			location.reload();
+			}else if(processRes[0].errors.message.indexOf(&quot;A record can be in only one approval process at a time&quot;) &gt;-1){
+			 alert(&apos;Approval process is already submitted&apos;);
+			}else{
+			 alert(&apos;Approval process is completed for this project&apos;);
+			}
+		}else{
+			alert(&apos;Please enter approvers only for Regional Office Cost Mgt QC&apos;);
+		}	
+}else if(criteria1==&quot;Project Planning / Budgeting&quot; &amp;&amp; (criteria2 &gt;= 3080000 || criteria3 &gt;= 3080000 || criteria4 &gt;= 3080000 || criteria5 &gt;= 3080000)){
+	if(coqa != &apos;&apos; &amp;&amp; regqc != &apos;&apos; &amp;&amp; copt == &apos;&apos; &amp;&amp; regpt == &apos;&apos;){
+		var approval = new sforce.ProcessSubmitRequest();
+			approval.objectId = &quot;{!NCMT_Project__c.Id}&quot;;
+		var processRes = sforce.connection.process([approval]);
+			if(processRes[0].getBoolean(&quot;success&quot;)) {
+			alert(&apos;NCMT Project is submitted for approval&apos;);
+			location.reload();
+			}else if(processRes[0].errors.message.indexOf(&quot;A record can be in only one approval process at a time&quot;) &gt;-1){
+			 alert(&apos;Approval process is already submitted&apos;);
+			}else{
+			 alert(&apos;Approval process is completed for this project&apos;);
+			}
+		}else{
+			alert(&apos;Please enter approvers only for Regional Office Cost Mgt QC and Central Office Cost Mgt QA&apos;);
+		}	
+}else if(criteria1==&quot;Fair &amp; Reasonable Review&quot; &amp;&amp; (criteria2 &lt;= 250000 || criteria3 &lt;= 250000 || criteria4 &lt;= 250000)){
+	if(coqa == &apos;&apos; &amp;&amp; regqc != &apos;&apos; &amp;&amp; copt == &apos;&apos; &amp;&amp; regpt == &apos;&apos;){
+		var approval = new sforce.ProcessSubmitRequest();
+			approval.objectId = &quot;{!NCMT_Project__c.Id}&quot;;
+		var processRes = sforce.connection.process([approval]);
+			if(processRes[0].getBoolean(&quot;success&quot;)) {
+			alert(&apos;NCMT Project is submitted for approval&apos;);
+			location.reload();
+			}else if(processRes[0].errors.message.indexOf(&quot;A record can be in only one approval process at a time&quot;) &gt;-1){
+			 alert(&apos;Approval process is already submitted&apos;);
+			}else{
+			 alert(&apos;Approval process is completed for this project&apos;);
+			}
+		}else{
+			alert(&apos;Please enter approvers only for Regional Office Cost Mgt QC&apos;);
+		}	
+}
+
+else {
+if(coqa == &apos;&apos; &amp;&amp; regqc == &apos;&apos; &amp;&amp; copt == &apos;&apos; &amp;&amp; regpt == &apos;&apos;){
+	alert(&apos;Project approval is not required for the selected Purpose of Estimate - &apos; + criteria1 );
+	}else{
+	alert(&apos;Approvers are not required for the selected Purpose of Estimate. Please do not enter approvers&apos;);
+	}
+}</url>
+</WebLink>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SPHDSharedWithMe</fullName>
+    <columns>NAME</columns>
+    <columns>PBS_Project_Name__c</columns>
+    <columns>PBSBuilding_Number__c</columns>
+    <columns>Building_Name__c</columns>
+    <columns>Project_Manager__c</columns>
+    <columns>Total_Project_Cost__c</columns>
+    <columns>Region__c</columns>
+    <columns>Construction_Funding_FY__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>IsOwner__c</field>
+        <operation>equals</operation>
+        <value>0</value>
+    </filters>
+    <label>SPHD Shared With Me</label>
+</ListView>

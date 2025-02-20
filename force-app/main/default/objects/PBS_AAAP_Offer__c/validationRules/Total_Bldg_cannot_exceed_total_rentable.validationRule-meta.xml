@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Bldg_cannot_exceed_total_rentable</fullName>
+    <active>true</active>
+    <description># 13 Total ANSI/BOMA Office Area in the building can&apos;t exceed #12  Total amount of rentable square feet (RSF) in the building</description>
+    <errorConditionFormula>( PBS_AAAP_GEN_PURPOSE_RENTABLE__c   &lt;= PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c )</errorConditionFormula>
+    <errorMessage>Building Page: #4 Total amount of rentable square feet (RSF) in the building  should always be greater than # 5 Total ANSI/BOMA Office Area (ABOA) square feet (SF) in the building.</errorMessage>
+</ValidationRule>

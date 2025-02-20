@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Offers_No_RLP</fullName>
+    <columns>PBS_AAAP_LEGACY_OFFER_NUMBER__c</columns>
+    <columns>PBS_AAAP_Is_Offer_Valid__c</columns>
+    <columns>Property__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>PBS_AAAP_RLP_Number__c</field>
+        <operation>equals</operation>
+    </filters>
+    <label>Offers No RLP</label>
+    <sharedTo>
+        <role>GSA_Enterprise</role>
+    </sharedTo>
+</ListView>

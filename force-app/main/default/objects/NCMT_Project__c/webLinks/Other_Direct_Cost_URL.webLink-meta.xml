@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Other_Direct_Cost_URL</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <encodingKey>UTF-8</encodingKey>
+    <hasMenubar>false</hasMenubar>
+    <hasScrollbars>true</hasScrollbars>
+    <hasToolbar>false</hasToolbar>
+    <height>600</height>
+    <isResizable>true</isResizable>
+    <linkType>url</linkType>
+    <masterLabel>Other Direct Cost</masterLabel>
+    <openType>newWindow</openType>
+    <position>none</position>
+    <protected>false</protected>
+    <showsLocation>false</showsLocation>
+    <showsStatus>false</showsStatus>
+    <url>/lightning/o/NCMT_Other_Cost__c/new?
+recordTypeId={!$Setup.NCMT_RedirectCustomObjectpage__c.Other_Direct_Cost_RType__c}&amp;defaultFieldValues=
+NCMT_Project__c={!CASESAFEID( NCMT_Project__c.Id )}</url>
+</WebLink>

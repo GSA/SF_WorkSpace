@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Triage_Budget__c</fullName>
+    <externalId>false</externalId>
+    <formula>If ( IsBlank(Total_ECC__c), null,
+if ( Total_ECC__c &lt;= 25000, &quot;$25k and Under&quot;, 
+if ( And(Total_ECC__c &gt; 25000, Total_ECC__c &lt;= 250000), &quot;$25k to Simplified Acqusition Threshold&quot;,
+if ( And(Total_ECC__c &gt; 250000, Total_ECC__c &lt;= 3080000) , &quot;Simplified Acquisition Threshold to Prospectus&quot;,
+if ( And(Total_ECC__c &gt; 3080000, Total_ECC__c &lt;= 5000000), &quot;Prospectus &lt;&gt; $5M&quot;,
+if ( And(Total_ECC__c &gt; 5000000, Total_ECC__c &lt;= 25000000), &quot;$5M &lt;&gt; $25M&quot;,
+if ( And(Total_ECC__c &gt; 25000000, Total_ECC__c &lt;= 50000000), &quot;$25M &lt;&gt; $50M&quot;,
+if ( And(Total_ECC__c &gt; 50000000, Total_ECC__c &lt;= 100000000), &quot;$50M&lt;&gt;$100M&quot;,
+&quot;&gt;$100M&quot;
+))))))))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Triage Budget</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

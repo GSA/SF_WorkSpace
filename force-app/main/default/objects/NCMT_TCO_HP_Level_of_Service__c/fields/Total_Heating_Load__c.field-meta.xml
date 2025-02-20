@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Heating_Load__c</fullName>
+    <externalId>false</externalId>
+    <formula>(8760 * TCO_Performance_Input__r.Total_HDD_Btu_GSF_per_hour__c) +  (Total_Btu_SF_Yr_WF__c* TCO_Performance_Input__r.Total_HDD_Btu_CF__c) + (( MIN((8760 * TCO_Performance_Input__r.Total_HDD_Btu_GSF_per_hour__c)*0.5,Total_Btu_SF_Yr_WF__c) *-1))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Total Heating Load*</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

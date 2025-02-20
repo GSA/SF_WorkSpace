@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>49.0</apiVersion>
+    <formulas>
+        <name>EDRCImpactFormula</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+{!$Record.RecordType.Name}  != &apos;DES O&amp;P Project Markup&apos;,
+({!$Record.ECC__c}*{!$Record.EDRC_Estimated_Design_and_Review_Cost__c}),
+0
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>EMICImpactFormula</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+{!$Record.RecordType.Name} != &apos;DES O&amp;P Project Markup&apos;,
+{!$Record.ETPC__c} - ( {!$Record.ECC__c} + {!EDRCImpactFormula} ), 
+0)</expression>
+        <scale>2</scale>
+    </formulas>
+    <interviewLabel>Update EDRCEMIC Impact {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update EDRCEMIC Impact</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_EDRC_Impact</name>
+        <label>Update EDRC Impact</label>
+        <locationX>482</locationX>
+        <locationY>392</locationY>
+        <inputAssignments>
+            <field>EDRC_Impact__c</field>
+            <value>
+                <elementReference>EDRCImpactFormula</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>EMIC_Impact__c</field>
+            <value>
+                <elementReference>EMICImpactFormula</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>330</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>Update_EDRC_Impact</targetReference>
+        </connector>
+        <object>NCMT_Project_Markup__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

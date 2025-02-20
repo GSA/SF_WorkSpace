@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LPOE_SPACE_PLAN</fullName>
+    <active>true</active>
+    <description>Validates the field values for LPOE SPACE PLAN cannot be a negative  number.</description>
+    <errorConditionFormula>OR(((PRIORVALUE(Inbound_Auto_Inspection__c) != Inbound_Auto_Inspection__c ) &amp;&amp; Inbound_Auto_Inspection__c &lt; 0),((PRIORVALUE(Main_Building__c)!= Main_Building__c )&amp;&amp; Number_of_Lanes__c &gt;0 &amp;&amp; Main_Building__c&lt;0),((PRIORVALUE(Number_of_Lanes__c)!= Number_of_Lanes__c )&amp;&amp; Number_of_Lanes__c &lt; 0),((PRIORVALUE(Comm_Number_of_Lanes__c)!= Comm_Number_of_Lanes__c )&amp;&amp; Comm_Number_of_Lanes__c &lt; 0),((PRIORVALUE(Comm_Acreage__c)!= Comm_Acreage__c )&amp;&amp; Comm_Acreage__c &lt; 0))</errorConditionFormula>
+    <errorMessage>POV/Comm Number of Lanes,Main Building , Inbound Auto Inspection and 	
+Comm. Acreage cannot be less than zero</errorMessage>
+</ValidationRule>

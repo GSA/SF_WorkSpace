@@ -1,0 +1,26 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                access="global" controller="PBS_AAAP_RelatedContentController" >
+    
+    <!-- attributes -->
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="isCreateNote" type="Boolean" default="false" />
+    <aura:attribute name="isUpdateNote" type="Boolean" default="false" />
+    <aura:attribute name="noteId" type="String"/>
+        
+    <div style="text-align:center">
+        <lightning:button variant="brand" label="Create Note" onclick="{!c.createNote}" />
+    </div>
+    <br/>    
+    
+    <aura:if isTrue="{!v.isCreateNote}">
+        <c:PBS_AAAP_CreateNote recordId="{!v.recordId}" isCreateNote="{!v.isCreateNote}" />
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isUpdateNote}">
+        <c:PBS_AAAP_CreateNote recordId="{!v.recordId}" isUpdateNote="{!v.isUpdateNote}" noteId="{!v.noteId}" />
+    </aura:if>
+    
+    <!-- LWC -->
+    <c:pBS_AAAP_AgencyRequirementContentNotes recordId="{!v.recordId}" onupdatenote="{!c.updateNote}" />
+    
+</aura:component>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Central_Office_Portfolio_Manager__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>CO Portfolio Manager</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>User.NCMT_User_Level__c</field>
+            <operation>equals</operation>
+            <value>Central Office Portfolio Manager</value>
+        </filterItems>
+        <filterItems>
+            <field>User.IsActive</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </filterItems>
+        <filterItems>
+            <field>User.Id</field>
+            <operation>notEqual</operation>
+            <value>Current User: User ID</value>
+        </filterItems>
+        <isOptional>true</isOptional>
+    </lookupFilter>
+    <referenceTo>User</referenceTo>
+    <relationshipName>NCMT_LevelCO</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

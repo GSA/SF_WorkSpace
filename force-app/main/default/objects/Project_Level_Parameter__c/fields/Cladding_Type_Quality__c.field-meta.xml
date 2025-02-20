@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cladding_Type_Quality__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( NCMT_Project__r.Utilitarian__c == True, 1, IF( NCMT_Project__r.Medium__c == True, 2, IF( NCMT_Project__r.High__c == True, 3,0)))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Cladding Type/Quality</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

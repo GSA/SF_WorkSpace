@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>One_LEED_Per_Project</fullName>
+    <active>true</active>
+    <description>A project cannot have more than one LEED record.</description>
+    <errorConditionFormula>AND(ISNEW(), Project__r.LEED_Record_Count__c &gt; 0)</errorConditionFormula>
+    <errorMessage>A Project can have only one LEED data record.</errorMessage>
+</ValidationRule>

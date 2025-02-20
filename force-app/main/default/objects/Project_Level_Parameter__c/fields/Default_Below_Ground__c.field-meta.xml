@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Default_Below_Ground__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( NCMT_Project__r.RecordType.Name &lt;&gt; &apos;Parking Garage&apos;, CEILING(NCMT_Project__r.Building_Height_Parameter__r.Bast_Ratio__c), NCMT_Project__r.Below_grade__c)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Default Below Ground Each</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

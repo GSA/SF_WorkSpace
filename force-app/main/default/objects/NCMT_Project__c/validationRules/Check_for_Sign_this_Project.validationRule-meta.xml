@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_Sign_this_Project</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISCHANGED( Sign_this_Project__c ) &amp;&amp;  OwnerId &lt;&gt; $User.Id</errorConditionFormula>
+    <errorDisplayField>Sign_this_Project__c</errorDisplayField>
+    <errorMessage>Only Owner can sign a project.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Other_Direct_Cost_Core_Shell__c</fullName>
+    <label>OtherDirect Cost - Core Shell</label>
+    <summarizedField>NCMT_Other_Cost__c.Total_Other_Core_Shell_Cost__c</summarizedField>
+    <summaryFilterItems>
+        <field>NCMT_Other_Cost__c.Cost_Type__c</field>
+        <operation>equals</operation>
+        <value>Direct Costs</value>
+    </summaryFilterItems>
+    <summaryForeignKey>NCMT_Other_Cost__c.NCMT_Project__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

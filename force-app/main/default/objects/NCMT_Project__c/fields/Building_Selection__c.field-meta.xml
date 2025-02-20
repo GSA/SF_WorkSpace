@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Building_Selection__c</fullName>
+    <inlineHelpText>Applies to Parametric New and Parametric Repair and Alteration models and addresses the requirement for tenant fit out. Is it in a new building or existing building?</inlineHelpText>
+    <label>Building Selection</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Project_type__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>New</fullName>
+                <default>true</default>
+                <label>New</label>
+            </value>
+            <value>
+                <fullName>Existing</fullName>
+                <default>false</default>
+                <label>Existing</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>New Construction</controllingFieldValue>
+            <valueName>New</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>New Construction</controllingFieldValue>
+            <controllingFieldValue>Repair &amp; Alteration - Parametric Entry</controllingFieldValue>
+            <controllingFieldValue>Repair &amp; Alteration - Work Item Detail</controllingFieldValue>
+            <valueName>Existing</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

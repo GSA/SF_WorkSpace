@@ -1,0 +1,24 @@
+<apex:page StandardController="NCMT_Project__c" lightningStylesheets="true">
+    
+    <apex:slds />
+
+    
+    <apex:includeLightning />
+        <div id='tcoClone'></div>
+
+    <script>
+    $Lightning.use('c:NCMT_TCOClone_App_LC', function(){
+        $Lightning.createComponent('c:NCMT_TCOClone_LC', 
+                                   {
+                                       //"recordId" : "a1I35000002GC8P"},
+                                       "recordId" : "{!$CurrentPage.parameters.id}"},
+        'tcoClone',
+            function(cmp){
+                //nothing to see here
+            });
+    
+    });
+    </script>
+    
+    
+</apex:page>

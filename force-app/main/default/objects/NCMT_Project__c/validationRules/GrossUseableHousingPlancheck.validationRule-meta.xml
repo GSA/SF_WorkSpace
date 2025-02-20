@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>GrossUseableHousingPlancheck</fullName>
+    <active>true</active>
+    <description>Only one of the Gross Area or Useable Area or HousingPlan fields can be checked.</description>
+    <errorConditionFormula>RecordType.Name &lt;&gt; &apos;Parking Garage&apos; &amp;&amp; RecordType.Name &lt;&gt; &apos;LPOE&apos; &amp;&amp; Text(Project_type__c) &lt;&gt; &apos;Repair &amp; Alteration - Parametric Entry&apos; &amp;&amp; Text(Project_type__c) &lt;&gt; &apos;Repair &amp; Alteration - Work Item Detail&apos; &amp;&amp; Text(Estimate_Type_Proj__c) &lt;&gt; &apos;Definitive Estimating&apos; &amp;&amp; Text(Estimate_Type_Proj__c) &lt;&gt; &apos;Cost Estimating Workbook&apos; &amp;&amp;
+( IF( Gross_Area__c , 1, 0) + IF(  Useable_Area__c , 1, 0) + IF(  Housing_Plan__c , 1, 0) )
+&lt;&gt; 1</errorConditionFormula>
+    <errorDisplayField>Gross_Area__c</errorDisplayField>
+    <errorMessage>Only one of the Gross Area or Useable Area or HousingPlan fields can be checked.</errorMessage>
+</ValidationRule>

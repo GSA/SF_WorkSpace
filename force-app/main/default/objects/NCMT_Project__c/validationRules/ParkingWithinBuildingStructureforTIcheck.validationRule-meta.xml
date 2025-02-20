@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ParkingWithinBuildingStructureforTIcheck</fullName>
+    <active>true</active>
+    <description>Parking Within Building Structure must be zero for Building Cost Types starting with TI</description>
+    <errorConditionFormula>RecordType.Name &lt;&gt; &apos;Parking Garage&apos; &amp;&amp; 
+Parking_Within_Building_Structure__c &gt; 0 &amp;&amp;
+( text(Building_Cost_Type__c) == &apos;TI in Federally owned space&apos;
+ || text(Building_Cost_Type__c) == &apos;TI in non-Federally owned space&apos;
+ || text(Building_Cost_Type__c) == &apos;TI Retrofit&apos;
+)</errorConditionFormula>
+    <errorMessage>Parking Within Building Structure must be zero for Building Cost Types - TI in Federally owned space, TI in non-Federally owned space and TI Retrofit</errorMessage>
+</ValidationRule>

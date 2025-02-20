@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Projects_with_Completed_Status</fullName>
+    <columns>NAME</columns>
+    <columns>Project_type__c</columns>
+    <columns>Building_Type__c</columns>
+    <columns>Project_Status__c</columns>
+    <columns>Start_Construction__c</columns>
+    <columns>End_Construction__c</columns>
+    <columns>State__c</columns>
+    <columns>City__c</columns>
+    <columns>Location__c</columns>
+    <columns>Total_Project_Cost_Aggregate__c</columns>
+    <columns>Total_Area_Including_Parking__c</columns>
+    <columns>Gross_Area__c</columns>
+    <columns>Useable_Area__c</columns>
+    <columns>Housing_Plan__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Project_Status__c</field>
+        <operation>equals</operation>
+        <value>Completed</value>
+    </filters>
+    <filters>
+        <field>IsUserEmailMatch__c</field>
+        <operation>equals</operation>
+        <value>TRUE</value>
+    </filters>
+    <label>Projects with Completed Status</label>
+    <sharedTo>
+        <group>NCMT_Level5_Region10_Read</group>
+        <group>NCMT_Level5_Region11_Read</group>
+        <group>NCMT_Level5_Region1_Read</group>
+        <group>NCMT_Level5_Region2_Read</group>
+        <group>NCMT_Level5_Region3_Read</group>
+        <group>NCMT_Level5_Region4_Read</group>
+        <group>NCMT_Level5_Region5_Read</group>
+        <group>NCMT_Level5_Region6_Read</group>
+        <group>NCMT_Level5_Region7_Read</group>
+        <group>NCMT_Level5_Region8_Read</group>
+        <group>NCMT_Level5_Region9_Read</group>
+        <group>NCMT_Level5_RegionCO_Read</group>
+        <group>NCMT_National_Read</group>
+        <group>NCMT_National_ReadWrite</group>
+    </sharedTo>
+</ListView>

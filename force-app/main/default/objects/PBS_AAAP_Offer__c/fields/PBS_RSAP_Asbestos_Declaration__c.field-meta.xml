@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PBS_RSAP_Asbestos_Declaration__c</fullName>
+    <label>Asbestos Declaration</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Contains no Asbestos-Containing Materials (ACM), or</fullName>
+                <default>false</default>
+                <label>Contains no Asbestos-Containing Materials (ACM), or</label>
+            </value>
+            <value>
+                <fullName>Contains ACM in a stable, solid matrix that is not damaged or subject to damage</fullName>
+                <default>false</default>
+                <label>Contains ACM in a stable, solid matrix that is not damaged or subject to damage</label>
+            </value>
+            <value>
+                <fullName>Contains ACM not in a stable, solid matrix</fullName>
+                <default>false</default>
+                <label>Contains ACM not in a stable, solid matrix</label>
+            </value>
+            <value>
+                <fullName>Contains no Asbestos-Containing Materials (ACM), or Contains ACM in a stable, solid matrix that is not damaged or subject to damage</fullName>
+                <default>false</default>
+                <label>Contains no Asbestos-Containing Materials (ACM), or Contains ACM in a stable, solid matrix that is not damaged or subject to damage</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>User_creates_Project_for_own_Region</fullName>
+    <active>false</active>
+    <errorConditionFormula>NOT(
+   OR(
+    Text($User.NCMT_User_Level__c) = &apos;Level IV&apos;,
+    Text($User.NCMT_User_Level__c) = &apos;Level V&apos;,
+    Text($User.NCMT_UserRegionCode__c) = &apos;CO&apos;,
+    Text(RegionCode__c)= Text($User.NCMT_UserRegionCode__c),
+    $Profile.Name = &apos;GSA System Administrator&apos;
+   )
+)</errorConditionFormula>
+    <errorDisplayField>State__c</errorDisplayField>
+    <errorMessage>Insufficient access to create projects in other Regions.</errorMessage>
+</ValidationRule>

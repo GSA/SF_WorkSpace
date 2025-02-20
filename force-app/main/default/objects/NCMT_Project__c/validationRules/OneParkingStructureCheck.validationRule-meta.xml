@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OneParkingStructureCheck</fullName>
+    <active>true</active>
+    <description>Only one of the Parking Structure or Parking Deck or Below Grade Structure fields can be checked.</description>
+    <errorConditionFormula>RecordType.Name == &apos;Parking Garage&apos; &amp;&amp; 
+( IF(  Parking_Structure__c , 1, 0) + IF(  Parking_Deck__c , 1, 0) + IF(  Below_Grade_Structure__c , 1, 0) 
+= 0 ||
+IF(  Parking_Structure__c , 1, 0) + IF(  Parking_Deck__c , 1, 0) + IF(  Below_Grade_Structure__c , 1, 0)  
+&gt; 1
+)</errorConditionFormula>
+    <errorMessage>Only one of the Parking Structure or Parking Deck or Below Grade Structure fields can be checked.</errorMessage>
+</ValidationRule>

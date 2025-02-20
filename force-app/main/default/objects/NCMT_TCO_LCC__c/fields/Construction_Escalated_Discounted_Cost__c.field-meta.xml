@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Construction_Escalated_Discounted_Cost__c</fullName>
+    <formula>( Construction_Escalated_Cost__c * 
+((1 - TCO_Lifecycle_Input__r.Nominal_Discount_Rate_Cost_of_Capital__c )^ 
+(Year__c-1))
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Initial Escalated &amp; Discounted Cost</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

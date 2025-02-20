@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Gross_Building_Area__c</fullName>
+    <description>Parking Garage Gross Area calculated from Project.</description>
+    <externalId>false</externalId>
+    <formula>If (NCMT_Project__r.RecordType.Name == &apos;Parking Garage&apos; ,
+NCMT_Project__r.Parking_Garage_Gross_Area_SF__c
+, If (TEXT(NCMT_Project__r.Building_Type__c) == &apos;Office&apos; ,
+NCMT_Project__r.Total_Area_Including_Parking__c
+, 0 ) )</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Gross Building Area</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NumberofLevelsGTNumberofSpaceCheck</fullName>
+    <active>true</active>
+    <description>Check if Number of levels is too great for number of spaces</description>
+    <errorConditionFormula>RecordType.Name == &apos;Parking Garage&apos; &amp;&amp; 
+(BLANKVALUE ( Number_of_Spaces__c , 0) = 0 &amp;&amp; 
+BLANKVALUE ( At_and_above_grade__c , 0 ) + 
+BLANKVALUE( Below_grade__c , 0) &gt; 0 )
+||
+(
+BLANKVALUE ( Number_of_Spaces__c , 0) &gt; 0 &amp;&amp;
+
+BLANKVALUE ( At_and_above_grade__c , 0 ) + 
+BLANKVALUE( Below_grade__c , 0) &gt; 0 &amp;&amp;
+
+(BLANKVALUE ( Number_of_Spaces__c , 0 ) / 
+(BLANKVALUE(At_and_above_grade__c , 0) +     
+ BLANKVALUE(Below_grade__c , 0) ) &lt; 50 )
+)</errorConditionFormula>
+    <errorDisplayField>Parking_Within_Building_Structure__c</errorDisplayField>
+    <errorMessage>Number of levels is too great for number of spaces</errorMessage>
+</ValidationRule>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_AnnualCost_Changes</fullName>
+    <active>true</active>
+    <errorConditionFormula>(NOT(ISBLANK(Janitorial_Cleaning__c)) || NOT(ISBLANK(Building_shell_cleaning__c)) || 
+NOT(ISBLANK(Routine_Maintenance_SLA__c)) || 
+NOT(ISBLANK(Building_Management_Services__c)) ||
+NOT(ISBLANK(Building_supplies__c)) ||
+NOT(ISBLANK(Landscape_and_site_maintenance__c)) ||
+NOT(ISBLANK(Minor_repairs__c)) ) &amp;&amp;  ISBLANK(Comments_AnnualCost_Changes__c)</errorConditionFormula>
+    <errorDisplayField>Comments_AnnualCost_Changes__c</errorDisplayField>
+    <errorMessage>Please enter comments.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sq_Footage_Required_for_Succeeding</fullName>
+    <active>true</active>
+    <description>A succeeding space must also include the total number of square footage that is being offered.</description>
+    <errorConditionFormula>AND( NOT(PBS_AAAP_NEW_SUCCEED_LEASE_IND__c), 
+          OR( ISBLANK( PBS_AAAP_SF_OFFERED__c ),
+                   ISNULL(PBS_AAAP_SF_OFFERED__c ),
+                   PBS_AAAP_SF_OFFERED__c &lt;= 0
+              )
+       )</errorConditionFormula>
+    <errorMessage>You must include the square footage being offered for a succeeding space.</errorMessage>
+</ValidationRule>

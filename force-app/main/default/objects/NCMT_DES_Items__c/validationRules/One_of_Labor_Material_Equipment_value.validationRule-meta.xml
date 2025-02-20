@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>One_of_Labor_Material_Equipment_value</fullName>
+    <active>false</active>
+    <description>One of Labor Unit Cost, Material Unit Cost, Equipment Unit cost must not be 0</description>
+    <errorConditionFormula>RecordType.Name = &apos;NCMT DES Item Master Format&apos; 
+&amp;&amp;
+(Hourly_Rate__c = 0 ||   ISBLANK(Hourly_Rate__c ))
+ &amp;&amp; 
+(Material_Unit_Cost__c = 0 || ISBLANK(Material_Unit_Cost__c)) 
+&amp;&amp;
+(Equipment_Rental_Day__c =0|| ISBLANK(Equipment_Rental_Day__c ))</errorConditionFormula>
+    <errorMessage>One of Labor Unit Cost, Material Unit Cost, Equipment Unit Cost must be greater than 0.</errorMessage>
+</ValidationRule>

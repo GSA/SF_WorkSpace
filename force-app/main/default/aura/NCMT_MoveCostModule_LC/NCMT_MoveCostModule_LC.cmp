@@ -1,0 +1,67 @@
+<aura:component controller="NCMT_MoveCostModule_Ctrl_LC" implements="lightning:actionOverride,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"  access="global">
+    <!-- Code Added for Project Moving Cost report #Block1 -->    
+    <aura:attribute name="isLightning" type="Boolean"/>    
+	<!--End of  Code modified for Project Moving Cost report #Block1 --> 
+    
+    <aura:handler name='init' value='{!this}' action='{!c.doInit}'/>
+    
+    <aura:attribute name="proj" type="NCMT_Project__c" />
+    <aura:attribute name="projId" type="String" />
+    <aura:attribute name="projName" type="String" />
+    <aura:attribute name="projList" type="NCMT_Project__c[]" />
+    <aura:attribute name="reportId" type="String" />
+    
+    <aura:attribute name="isNew" type="Boolean" default="false" />
+    
+    <!--FOR DATA TABLE-->
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    
+    <!--FOR URLS-->
+    <aura:attribute name="redirectProjName" type="String"/>
+    <aura:attribute name="redirectMCM" type="String" />
+    
+    <!-- PAGE HEADER -->
+    <lightning:layout class="slds-page-header slds-page-header--object-home" >
+        <lightning:layoutItem>
+            <lightning:icon iconName="custom:custom98" size="medium" alternativeText="Move Cost Module"/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="horizontal-small">
+            <div class="page-section page-header">
+                <h4 class="slds-text-heading--small">Move Cost Module</h4>
+            </div>
+        </lightning:layoutItem>
+    </lightning:layout>
+    <aura:if isTrue="{!!v.isNew}">
+        <div class="slds-p-around_x-small">
+            <lightning:button variant="brand" label="New" onclick="{!c.handleNew}"/>
+        </div>
+        <div class="slds-card">
+            <lightning:treeGrid
+                                columns="{!v.columns}"
+                                data="{!v.data}"
+                                keyField="Id"
+                                hideCheckboxColumn="true"
+                                onrowaction="{!c.handleAction}"
+                                aura:id="moveCostTree"/>
+        </div>
+        <aura:set attribute="else">
+            <form class="slds-form--stacked">  
+                <lightning:input label="Project Name" 
+                                 name="projName" 
+                                 value="{!v.projName}" 
+                                 required="true"
+                                 style="width: 25%"/>
+                <lightning:button label="Next" 
+                                  class="slds-m-top--medium"
+                                  variant="brand"
+                                  onclick="{!c.save}"/>
+                <lightning:button label="Cancel" 
+                                  class="slds-m-top--medium"
+                                  variant="neutral"
+                                  onclick="{!c.cancel}"/>
+            </form>
+        </aura:set>
+    </aura:if>
+    
+</aura:component>

@@ -1,0 +1,90 @@
+<apex:page StandardController="NCMT_DES_Items__c" recordSetVar="items" standardStylesheets="false">
+    
+<apex:slds />
+
+    <div class="slds-page-header slds-page-header_record-home">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-work-order-item"
+                            title="Description of icon when needed">
+                            <svg class="slds-icon slds-page-header__icon" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    xlink:href="/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#work_order_item" />
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate"
+                                        title="RSMeans Assemblies">
+                                        <apex:outputText id="pageName" value="" escape="false"/></span>
+                                    <!-- <span>Use this page to add RSMeans Assemblies to the project</span> -->
+                                </h1>
+
+                            </div>
+                        </div>
+                        <!-- <div class="ptBreadcrumb">&nbsp;«&nbsp;<a onclick="window.history.back(); return false;"
+                                type="submit">Back</a></div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__col-actions">
+                <div class="slds-page-header__controls">
+
+                    <div>
+                        <ul class="slds-button-group-list">
+                            <li>
+                                <a onclick="window.history.back(); return false;" type="submit">
+                                    <button class="slds-button slds-button_neutral">Back</button>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<apex:includeLightning />
+    <div id='treeStructure'></div>
+
+    <script>
+        var fileName = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.fileName))}';
+        //set page header based on fileName
+        var pageName;
+            switch(fileName){
+                case 'GSA_ 2020 FAC_ASMDES.xlsx': 
+                    pageName = 'RSM FCC Assembly Data';
+                    break;
+                case 'GSA_ 2020 ASMDESC.xlsx':
+                    pageName = 'RSM Assemblies Cost Data';
+                    break;
+                case 'GSA_ 2020 MR Assembly Data.xlsx':
+                    pageName = 'RSM FMRD Maintinence and Repair Data';
+                    break;
+                case 'GSA_ 2020 PM_SEQ.xlsx': 
+                    pageName = 'RSM Preventative Maintinence Data'
+                    break;
+            }
+         document.getElementById("{!$Component.pageName}").textContent = pageName;
+
+        $Lightning.use('c:NCMT_AssembliesStructure_App_LC', function(){
+            $Lightning.createComponent('c:NCMT_AssembliesView_LC', 
+                                    {
+                                        //"recordId" : "a2A350000009u2S"
+                                        "recordId" : "{!$CurrentPage.parameters.id}",
+                                        "fileName" : fileName},
+            'treeStructure',
+                function(cmp){
+                    //nothing to see here
+                });
+        
+        });
+    </script>
+    
+    
+</apex:page>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_OtherCost_Record_Type</fullName>
+    <active>false</active>
+    <description>Check for correct project record type with other cost record type</description>
+    <errorConditionFormula>AND(ISNEW(), NOT(OR((TEXT(NCMT_Project__r.Building_Type__c) == &apos;LPOE&apos; &amp;&amp;  RecordType.Name == &apos;LPOE - Other Cost&apos;), (TEXT(NCMT_Project__r.Building_Type__c) != &apos;LPOE&apos; &amp;&amp;  RecordType.Name == &apos;Other Facilities - Other Direct Cost&apos;))))</errorConditionFormula>
+    <errorMessage>Choose correct Other Cost Record Type for related project</errorMessage>
+</ValidationRule>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CM_Role__c</fullName>
+    <label>CM Role</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>CM as Agent</fullName>
+                <default>true</default>
+                <label>CM as Agent</label>
+            </value>
+            <value>
+                <fullName>CM as Constructor</fullName>
+                <default>false</default>
+                <label>CM as Constructor</label>
+            </value>
+            <value>
+                <fullName>CM as Agent and CM as Constructor</fullName>
+                <default>false</default>
+                <label>CM as Agent and CM as Constructor</label>
+            </value>
+            <value>
+                <fullName>Design-Build CM</fullName>
+                <default>false</default>
+                <label>Design-Build CM</label>
+            </value>
+            <value>
+                <fullName>Developer CM</fullName>
+                <default>false</default>
+                <label>Developer CM</label>
+            </value>
+            <value>
+                <fullName>N/A</fullName>
+                <default>false</default>
+                <label>N/A</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

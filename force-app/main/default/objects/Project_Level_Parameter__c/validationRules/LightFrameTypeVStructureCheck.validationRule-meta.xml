@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LightFrameTypeVStructureCheck</fullName>
+    <active>true</active>
+    <description>Light frame(Type V) Structure not allowed above 4 Stories</description>
+    <errorConditionFormula>IF(AND(NCMT_Project__r.RecordType.Name &lt;&gt; &apos;Parking Garage&apos;,	Text(Structural_Frame__c) ==&apos;Light Frame (Type V)&apos;),(if(Above_Ground__c &lt;=4,false,true)),false)</errorConditionFormula>
+    <errorMessage>Light frame(Type V) Structure not allowed above 4 Stories</errorMessage>
+</ValidationRule>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sq_Ft_Range_validation</fullName>
+    <active>true</active>
+    <description>If the user selects a range of ABOA, then a range of ABOA must be provided and be of proper dimension (i.e. less value to larger value and at least some space to be represented as a range [no zero value high or low]).</description>
+    <errorConditionFormula>AND(  ISPICKVAL(PBS_AAAP_IDENTIFIER_TYPE__c, &apos;Range of ABOA&apos; ),
+             PBS_AAAP_NEW_SUCCEED_LEASE_IND__c,
+             OR(  PBS_AAAP_MIN_OFFERABLE_SPACE__c &gt;  PBS_AAAP_MAX_OFFERABLE_SPACE__c,
+                      OR( PBS_AAAP_MAX_OFFERABLE_SPACE__c &lt;= 0,
+                               PBS_AAAP_MIN_OFFERABLE_SPACE__c &lt; 0 )
+                    )
+          )</errorConditionFormula>
+    <errorMessage>When selected a range of space to offer, the range must be provided and be of the appropriate dimensions. The minimum value must not exceed the maximum value.</errorMessage>
+</ValidationRule>

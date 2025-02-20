@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_Space_Plans_Entered</fullName>
+    <active>false</active>
+    <description>Check for Space Plan entered for user defined housing plan</description>
+    <errorConditionFormula>(RecordType.Name == &apos;User Defined&apos;) &amp;&amp; ( Total_USF__c &lt;=0)</errorConditionFormula>
+    <errorMessage>No Space Plans are entered for User Defined Housing Plan</errorMessage>
+</ValidationRule>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Project_Cost_Aggregate__c</fullName>
+    <formula>IF(RecordType.Name == &apos;New Construction - CEW&apos;|| RecordType.Name == &apos;Repair &amp; Alteration - CEW&apos;, 
+CEW_Total_Cost_W_O_Markup__c,
+
+IF(RecordType.Name == &apos;Repair &amp; Alteration - Parametric Entry&apos; || RecordType.Name == &apos;Repair &amp; Alteration - Work Item Detail&apos;, RA_Total_Project_Costs__c ,
+
+IF(RecordType.Name == &apos;LPOE&apos;, LPOE_Total_Proj_Cost__c,
+IF(RecordType.Name == &apos;Repair &amp; Alteration - DES&apos; || RecordType.Name ==  &apos;New Construction - DES&apos; || RecordType.Name == &apos;New Construction DES O&amp;P&apos;, DES_Total_Direct_Cost__c,
+ 
+ETPC_Cost__c))))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Total ETPC</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

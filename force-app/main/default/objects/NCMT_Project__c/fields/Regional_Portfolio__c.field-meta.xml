@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Regional_Portfolio__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <inlineHelpText>For Purpose of Estimate: TAPS (Automated Prospectus System) Analysis</inlineHelpText>
+    <label>Regional Portfolio</label>
+    <lookupFilter>
+        <active>false</active>
+        <booleanFilter>(1 AND 2 AND 3 AND 4) OR (2 AND 3 AND 5)</booleanFilter>
+        <filterItems>
+            <field>User.NCMT_User_Level__c</field>
+            <operation>equals</operation>
+            <value>Office of Portfolio Management - Regular User</value>
+        </filterItems>
+        <filterItems>
+            <field>User.IsActive</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </filterItems>
+        <filterItems>
+            <field>User.Id</field>
+            <operation>notEqual</operation>
+            <valueField>$User.Id</valueField>
+        </filterItems>
+        <filterItems>
+            <field>User.NCMT_UserRegionCode__c</field>
+            <operation>equals</operation>
+            <valueField>$Source.RegionCode__c</valueField>
+        </filterItems>
+        <filterItems>
+            <field>User.NCMT_User_Level__c</field>
+            <operation>equals</operation>
+            <value>Office of Design and Construction - System Administration</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>User</referenceTo>
+    <relationshipName>NCMT_ProjectsRegionalPT</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

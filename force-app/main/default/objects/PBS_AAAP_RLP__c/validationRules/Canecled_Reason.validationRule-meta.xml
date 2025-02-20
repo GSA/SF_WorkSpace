@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Canecled_Reason</fullName>
+    <active>true</active>
+    <description>Canceled Reason is required when RLP status &quot;changed to Canceled&quot;.</description>
+    <errorConditionFormula>ISPICKVAL(PBS_AAAP_STATUS__c , &apos;Canceled&apos;) &amp;&amp;  ISBLANK(PBS_AAAP_Canceled_Reason__c)</errorConditionFormula>
+    <errorDisplayField>PBS_AAAP_Canceled_Reason__c</errorDisplayField>
+    <errorMessage>Canceled Reason is required on Canceled Status.</errorMessage>
+</ValidationRule>

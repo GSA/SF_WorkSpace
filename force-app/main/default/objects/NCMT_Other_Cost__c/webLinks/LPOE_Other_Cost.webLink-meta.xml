@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LPOE_Other_Cost</fullName>
+    <availability>online</availability>
+    <displayType>massActionButton</displayType>
+    <encodingKey>UTF-8</encodingKey>
+    <linkType>url</linkType>
+    <masterLabel>LPOE Other Cost</masterLabel>
+    <openType>replace</openType>
+    <protected>false</protected>
+    <requireRowSelection>true</requireRowSelection>
+    <url>/{!$Setup.NCMT_RedirectCustomObjectpage__c.NCMT_OthCost_UI__c}/e?{!$Setup.NCMT_RedirectCustomObjectpage__c.Project_ID__c}={!NCMT_Project__c.Name}&amp;{!$Setup.NCMT_RedirectCustomObjectpage__c.Project_ID__c}_lkid={!NCMT_Project__c.Id}&amp;retURL=/{!NCMT_Project__c.Id}&amp;RecordType={!$Setup.NCMT_RedirectCustomObjectpage__c.LPOE_Other_Cost_RType__c }&amp;ent={!$Setup.NCMT_RedirectCustomObjectpage__c.NCMT_OtherCost_ID__c}</url>
+</WebLink>

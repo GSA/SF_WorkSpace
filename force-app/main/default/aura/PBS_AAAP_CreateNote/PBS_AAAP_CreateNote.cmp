@@ -1,0 +1,67 @@
+<aura:component controller="PBS_AAAP_RelatedContentController" 
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" 
+                access="global" >
+    <!-- Define Attribute-->
+    <aura:attribute name="note" type="ContentNote" default="{'sobjectType': 'ContentNote','Title': '','Content': ''}"/>
+    <aura:attribute name="recordId" type="String"></aura:attribute>
+    <aura:attribute name="isCreateNote" type="Boolean" default="false" />
+    <aura:attribute name="isUpdateNote" type="Boolean" default="false" />
+    <aura:attribute name="noteId" type="String"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div class="slds-m-around--xx-large">
+        <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container">
+                <div class="slds-modal__header">
+                    <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.closeModel}">
+                        X
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <aura:if isTrue="{!v.isCreateNote}">
+                        <h2 id="header99" class="slds-text-heading--medium">New Note</h2>
+                    </aura:if>
+                    <aura:if isTrue="{!v.isUpdateNote}">
+                        <h2 id="header99" class="slds-text-heading--medium">Update Note</h2>
+                    </aura:if>                  
+                </div>
+                <div class="slds-modal__content slds-p-around--medium">
+                    <div class="slds-page-header">
+                        <div class="slds-media">
+                            <div class="slds-media__body">
+                                <center>
+                                    <aura:if isTrue="{!v.isCreateNote}">
+                                        <h1 class="slds-page-header__title slds-truncate slds-align-middle" title="Requests User Guides">New Note</h1>                   
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.isUpdateNote}">
+                                        <h1 class="slds-page-header__title slds-truncate slds-align-middle" title="Requests User Guides">Update Note</h1>
+                                    </aura:if>   
+                                    
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                    <b>Title:</b>
+                    <br/>
+                    <ui:inputText class="form-control" value="{!v.note.Title}"/>
+                    <br/>
+                    <b>Content:</b>
+                    <br/>
+                    <lightning:inputRichText value="{!v.note.Content}" placeholder="Type something interesting"/>
+                    
+                    <br/>
+                    <div class="slds-modal__footer">
+                        <div class="col-md-4 text-center">
+                            <aura:if isTrue="{!v.isCreateNote}">
+                                <ui:button class="btn btn-default" press="{!c.create}">Create</ui:button>
+                            </aura:if>
+                            <aura:if isTrue="{!v.isUpdateNote}">
+                                <ui:button class="btn btn-default" press="{!c.update}">Update</ui:button>
+                            </aura:if>  
+                            <ui:button class="btn btn-default" press="{!c.closeModel}">Cancel</ui:button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

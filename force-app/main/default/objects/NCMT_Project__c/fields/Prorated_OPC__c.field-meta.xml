@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prorated_OPC__c</fullName>
+    <label>Prorated OPC</label>
+    <summarizedField>NCMT_Other_Cost__c.Total1__c</summarizedField>
+    <summaryFilterItems>
+        <field>NCMT_Other_Cost__c.Cost_Type__c</field>
+        <operation>equals</operation>
+        <value>Project Costs</value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>NCMT_Other_Cost__c.Cost_Description__c</field>
+        <operation>equals</operation>
+        <value>Pro-rated</value>
+    </summaryFilterItems>
+    <summaryForeignKey>NCMT_Other_Cost__c.NCMT_Project__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

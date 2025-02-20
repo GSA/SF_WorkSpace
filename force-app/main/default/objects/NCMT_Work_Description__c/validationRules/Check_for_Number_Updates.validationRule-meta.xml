@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_Number_Updates</fullName>
+    <active>true</active>
+    <description>if Number 6, 7, 8, then no update is allowed since it needs AB Code to be populated for work item child records</description>
+    <errorConditionFormula>AND(
+TEXT(PriorValue(Number__c)) != &quot;6&quot;, TEXT(PriorValue(Number__c)) != &quot;7&quot;, TEXT(PriorValue(Number__c)) != &quot;8&quot;, 
+(OR(text(Number__c) == &quot;6&quot;, text(Number__c) == &quot;7&quot;, text(Number__c) == &quot;8&quot;)),CEW_Work_Item_Record_Count__c &gt;0)</errorConditionFormula>
+    <errorDisplayField>Number__c</errorDisplayField>
+    <errorMessage>Number cannot be changed to 6 or 7 or 8. Delete Work Items to change.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_Comment</fullName>
+    <active>true</active>
+    <description>Require comment if costs are changed</description>
+    <errorConditionFormula>AND(
+	OR( 
+	(ISBLANK(Comments__c)), 
+	(NOT(ISCHANGED(Comments__c)))
+	),
+
+    OR( 
+        ISCHANGED(Labor_Hours__c), 
+        ISCHANGED(Hourly_Rate__c), 
+        ISCHANGED(Material_Unit_Cost__c),
+        ISCHANGED(Difficulty_Factor_Percent__c),
+        ISCHANGED(Equipment_Rental_Day__c)),
+    Comments__c  &lt;&gt; &apos;cloned&apos;
+)</errorConditionFormula>
+    <errorDisplayField>Comments__c</errorDisplayField>
+    <errorMessage>Comment is required to change cost data.</errorMessage>
+</ValidationRule>

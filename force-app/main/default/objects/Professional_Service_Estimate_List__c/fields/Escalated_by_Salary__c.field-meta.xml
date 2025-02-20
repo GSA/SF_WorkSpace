@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Escalated_by_Salary__c</fullName>
+    <description>Escalated by Salary</description>
+    <externalId>false</externalId>
+    <formula>IF (  text(Type__c) == &apos;CECC&apos;,
+Current_Fee__c * (1 +  
+(
+If ( text(EDRC_EMIC_Type__c) == &apos;EDRC AE&apos; || text(EDRC_EMIC_Type__c) == &apos;EMIC AE&apos; , PS__r.AE90__c ,
+ If ( text(EDRC_EMIC_Type__c) == &apos;EDRC Cma&apos; || text(EDRC_EMIC_Type__c) == &apos;EMIC Cma&apos; , PS__r.CM90__c ,
+  If ( text(EDRC_EMIC_Type__c) == &apos;EDRC CMc&apos; || text(EDRC_EMIC_Type__c) == &apos;EMIC CMc&apos; , PS__r.CM90__c ,
+   If ( text(EDRC_EMIC_Type__c) == &apos;EDRC CMa and CMc&apos; || text(EDRC_EMIC_Type__c) == &apos;EMIC CMa and CMc&apos; , PS__r.CM90__c ,
+    If ( text(EDRC_EMIC_Type__c) == &apos;EDRC Cx&apos; || text(EDRC_EMIC_Type__c) == &apos;EMIC Cx&apos; ,  PS__r.Cx90__c ,
+  0
+)))))
+
+*    
+If ( left(text(EDRC_EMIC_Type__c),4) == &apos;EDRC&apos; ,
+ PS__r.Time_until_Midpoint_of_Design_Years__c  ,
+  PS__r.Time_until_Midpoint_of_Const_years__c 
+)
+
+)
+)
+,0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Escalated by Salary CECC</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

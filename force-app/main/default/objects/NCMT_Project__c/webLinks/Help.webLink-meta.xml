@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Help</fullName>
+    <availability>online</availability>
+    <description>User Guide Google Document</description>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Help</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/24.0/connection.js&quot;)} 
+{!REQUIRESCRIPT(&quot;/soap/ajax/10.0/apex.js&quot;)} 
+var projecttype = &quot;{!NCMT_Project__c.Project_type__c}&quot;; 
+var buildingtype= &quot;{!NCMT_Project__c.Building_Type__c}&quot;; 
+if(projecttype ==&quot;New Construction&quot; &amp;&amp; buildingtype==&quot;LPOE&quot;){
+var url = &quot;{!$Setup.NCMT_HelpContent__c.NCMT_Help_Site_New_Construction_LPOE__c}&quot;;
+window.open(url);
+}else if(projecttype==&quot;New Construction&quot; &amp;&amp; buildingtype==&quot;Parking Garage&quot;){
+var url = &quot;{!$Setup.NCMT_HelpContent__c.NCMT_Help_Site_New_Construction_PG__c}&quot;;
+window.open(url);
+}else if(projecttype==&apos;New Construction&apos; &amp;&amp; (buildingtype != &apos;LPOE&apos; || buildingtype!= &apos;Parking Garage&apos;)){
+var url = &quot;{!$Setup.NCMT_HelpContent__c.NCMT_Help_Site_New_Construction_Oth__c}&quot;;
+window.open(url);
+}else if(projecttype==&apos;Repair &amp; Alteration - Parametric Entry&apos; &amp;&amp; buildingtype!= &apos;&apos;)
+{
+var url = &quot;{!$Setup.NCMT_HelpContent__c.NCMT_Help_Site_RA_Parametric__c}&quot;;
+window.open(url);
+}else if(projecttype==&apos;Repair &amp; Alteration - Work Item Detail&apos; &amp;&amp; buildingtype!= &apos;&apos;)
+{
+var url = &quot;{!$Setup.NCMT_HelpContent__c.NCMT_Help_Site_RA_WorkItem__c}&quot;;
+window.open(url);
+}
+else{
+var url = &quot;{!$Setup.NCMT_HelpContent__c.NCMT_Help_Site__c}&quot;;
+window.open(url);
+}</url>
+</WebLink>

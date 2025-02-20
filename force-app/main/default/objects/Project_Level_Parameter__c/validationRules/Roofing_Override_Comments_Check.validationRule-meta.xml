@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Roofing_Override_Comments_Check</fullName>
+    <active>false</active>
+    <description>Control Ratios Roofing Override Comments Required</description>
+    <errorConditionFormula>IF((ISBLANK(Roofing_Override_Comments__c) ==True) &amp;&amp; 
+((PRIORVALUE(Sloped_Roof_BG__c) != Sloped_Roof_BG__c) ||
+(PRIORVALUE(Green_Roof_BG__c) != Green_Roof_BG__c) || 
+(PRIORVALUE(Roofing_Skylights__c) != Roofing_Skylights__c))&amp;&amp; 
+
+((PRIORVALUE(Default_Sloped_Roof_BG__c) == Default_Sloped_Roof_BG__c) ||
+(PRIORVALUE(Default_Green_Roof_BG__c) == Default_Green_Roof_BG__c) || 
+(PRIORVALUE(Default_Roofing_Skylights__c) == Default_Roofing_Skylights__c)) &amp;&amp; 
+
+((PRIORVALUE(Default_Sloped_Roof_BG__c) != NULL) ||
+(PRIORVALUE(Default_Green_Roof_BG__c) != NULL) || 
+(PRIORVALUE(Default_Roofing_Skylights__c) != NULL)), true, false)</errorConditionFormula>
+    <errorMessage>Control Ratios Roofing Override Comments Required</errorMessage>
+</ValidationRule>

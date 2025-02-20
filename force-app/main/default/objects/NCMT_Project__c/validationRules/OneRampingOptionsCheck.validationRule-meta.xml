@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OneRampingOptionsCheck</fullName>
+    <active>true</active>
+    <description>Only one of the Sloped Parking Deck or Speed Ramp fields can be checked.</description>
+    <errorConditionFormula>RecordType.Name == &apos;Parking Garage&apos; &amp;&amp; 
+( IF(   Sloped_Parking_Deck__c , 1, 0) + IF(   Speed_Ramp__c , 1, 0)  
+= 0 ||
+IF(   Sloped_Parking_Deck__c , 1, 0) + IF(   Speed_Ramp__c , 1, 0)  
+&gt; 1
+)</errorConditionFormula>
+    <errorMessage>Only one of the Sloped Parking Deck or Speed Ramp fields can be checked.</errorMessage>
+</ValidationRule>

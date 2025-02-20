@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_HDD_Btu_GSF_per_hour__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(Project_Level_Parameter__r.NCMT_Project__r.Total_GSF__c == 0,0,
+((Total_Btu_h_F__c * (round( HDD__c /365,4) + 3))/ Project_Level_Parameter__r.NCMT_Project__r.Total_GSF__c))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Total HDD Btu/GSF per hour</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>3</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

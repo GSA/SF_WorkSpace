@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LOP_Historic_Property_Tier__c</fullName>
+    <description>Historic Property Tier</description>
+    <inlineHelpText>Historic Property Tier</inlineHelpText>
+    <label>Historic Property Tier</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Historic property within a historic district</fullName>
+                <default>false</default>
+                <label>Historic property within a historic district</label>
+            </value>
+            <value>
+                <fullName>Non-historic property or underdeveloped site within a historic district</fullName>
+                <default>false</default>
+                <label>Non-historic property or underdeveloped site within a historic district</label>
+            </value>
+            <value>
+                <fullName>Historic properties outside of historic district</fullName>
+                <default>false</default>
+                <label>Historic properties outside of historic district</label>
+            </value>
+            <value>
+                <fullName>Non-historic property</fullName>
+                <default>false</default>
+                <label>Non-historic property</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

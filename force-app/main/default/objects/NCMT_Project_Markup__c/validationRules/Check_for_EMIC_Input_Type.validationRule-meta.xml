@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_EMIC_Input_Type</fullName>
+    <active>true</active>
+    <description>If Input Type is Percent, then sum of AE, Cm, Cx should not exceed 100%</description>
+    <errorConditionFormula>TEXT( EMIC_Input_Type__c) ==&apos;Percent&apos; &amp;&amp; ( CM_Construction__c +  Construction_AE__c +  Construction_Cx__c )/100&gt;1</errorConditionFormula>
+    <errorDisplayField>Construction_Cx__c</errorDisplayField>
+    <errorMessage>Total of AE, CM, Cx of EMIC Percent is more than 100%</errorMessage>
+</ValidationRule>

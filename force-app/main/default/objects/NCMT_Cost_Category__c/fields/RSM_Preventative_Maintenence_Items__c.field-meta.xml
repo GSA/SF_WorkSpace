@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RSM_Preventative_Maintenence_Items__c</fullName>
+    <label>RSM Preventative Maintenence Items</label>
+    <summaryFilterItems>
+        <field>NCMT_Assembly_Lookup_Detail__c.File_Type__c</field>
+        <operation>equals</operation>
+        <value>GSA_ 2020 PM_SEQ.xlsx</value>
+    </summaryFilterItems>
+    <summaryForeignKey>NCMT_Assembly_Lookup_Detail__c.Level_2__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

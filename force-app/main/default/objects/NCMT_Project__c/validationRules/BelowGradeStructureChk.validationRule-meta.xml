@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BelowGradeStructureChk</fullName>
+    <active>true</active>
+    <description>For below grade structure, number of above grade levels must equal 0</description>
+    <errorConditionFormula>RecordType.Name == &apos;Parking Garage&apos; &amp;&amp; 
+  IF( Below_Grade_Structure__c,1,0) == 1 &amp;&amp; 
+( BLANKVALUE(At_and_above_grade__c, 0) &lt;&gt; 0 || 
+ BLANKVALUE(Below_grade__c, 0) &lt; 1 )</errorConditionFormula>
+    <errorMessage>If Below Grade Structure is checked, Number of At and above grade must equal to 0 and Below grade must be 1 or more</errorMessage>
+</ValidationRule>

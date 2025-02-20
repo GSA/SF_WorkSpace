@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_Purpose_of_Estimate</fullName>
+    <active>true</active>
+    <description>Purpose of Estimate should not be changed for current project</description>
+    <errorConditionFormula>text( Purpose_of_Estimate__c) &lt;&gt;  TEXT(PRIORVALUE(Purpose_of_Estimate__c))</errorConditionFormula>
+    <errorMessage>Purpose of Estimate cannot be changed for this project. Please Clone this project to change Purpose of Estimate.</errorMessage>
+</ValidationRule>

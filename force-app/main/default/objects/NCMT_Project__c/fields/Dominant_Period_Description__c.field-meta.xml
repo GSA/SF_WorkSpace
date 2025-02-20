@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Dominant_Period_Description__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(Text(Dominant_Period__c ) = &apos;19th Century&apos;, &apos;19th Century&apos;, 
+IF(Text(Dominant_Period__c ) = &apos;1900 - 1940&apos;, &apos;Early 20th Century&apos;,
+IF(Text(Dominant_Period__c ) = &apos;1940 - 1949&apos;, &apos;War Years&apos;,
+IF(Text(Dominant_Period__c ) = &apos;1950 - 1979&apos;, &apos;Modern Era&apos;,
+IF(Text(Dominant_Period__c ) = &apos;1980 - 1993&apos;, &apos;Contemporary&apos;,
+IF(Text(Dominant_Period__c ) = &apos;1993 - present&apos;, &apos;Design Excellence&apos;,&apos;&apos;))))))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Dominant Period Description</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

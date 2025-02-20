@@ -1,0 +1,102 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId" access="global" controller="NCMT_TreeRelatedListCtrl_LC">
+
+<aura:attribute name="recordId" type="string"/>
+<aura:attribute name="projectId" type="String" />
+<aura:attribute name="treeStruc" type="NCMT_Tree_structure__c[]"/>   
+<aura:attribute name="locationMultiplier" type="Decimal" />
+    
+<aura:attribute name="hasCopy" type="Boolean" default="false"/>
+<aura:attribute name="desCopy" type="NCMT_Copy__c[]"/>
+<aura:attribute name="isOandP" type="Boolean" />
+<aura:attribute name="showError" type="Boolean" default="false"/>
+<aura:attribute name="showDelete" type="Boolean" default="false"/>
+    
+<!--FOR DATA TABLLE-->
+<aura:attribute name="data" type="Object"/>
+<aura:attribute name="columns" type="List"/>
+    
+<aura:attribute name="message" type="String" />
+<aura:attribute name="message2" type="String" />
+    
+<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+<aura:handler event="force:refreshView" action="{!c.isRefreshed}" />
+    
+    <!--<div class="input-group">
+        <lightning:buttonGroup>
+            <lightning:button label="RSM FCC Unit Cost Data" onclick="}"/>
+            <lightning:button label="RSM FCC Assembly Data" onclick=""/>
+            <lightning:button label="RSM Assemblies Cost Data" onclick=""/>
+            <lightning:button label="RSM FMRD Maintenance and Repair Data" onclick=""/>
+            <lightning:button label="RSM Preventative Maintenance Data" onclick=""/>
+            <lightning:button label="GSA Express Menu of Services" onclick=""/>
+        </lightning:buttonGroup>
+        
+    </div>-->
+    <div class="slds-grid">
+        <div class="slds-col slds-size_1-of-3 slds-p-bottom_x-small">
+            <span>
+            <lightning:buttonGroup>
+                <lightning:button variant="neutral" label="Delete" onclick="{!c.handleDelete}"/>
+                <lightning:button variant="neutral" label="Copy" onclick="{!c.copy}"/>
+                <aura:if isTrue="{!v.hasCopy}">
+                    <lightning:button variant="brand" label="Paste" onclick="{!c.paste}"/>
+                </aura:if>
+                <lightning:buttonMenu class="slds-button_last" alternativeText="Show Menu" label="Add Line Item" onselect="{!c.handleSelect}">
+                    <lightning:menuItem value="RSM FCC" label="RSM FCC Unit Cost Data" />
+                    <lightning:menuItem value="GSA_ 2020 FAC_ASMDES.xlsx" label="RSM FCC Assembly Data" />
+                    <lightning:menuItem value="GSA_ 2020 ASMDESC.xlsx" label="RSM Assemblies Cost Data" />
+                    <lightning:menuItem value="GSA_ 2020 MR Assembly Data.xlsx" label="RSM FMRD Maintenance and Repair Data" />
+                    <lightning:menuItem value="GSA_ 2020 PM_SEQ.xlsx" label="RSM Preventative Maintenance Data" />
+                    <lightning:menuItem value="GSAAssemblies" label="GSA Express Menu of Services" />
+                </lightning:buttonMenu>
+            </lightning:buttonGroup>
+            </span>
+        </div>
+        <!--<div class="slds col slds-size_2-of-3 slds-text-color_error">
+            <span><b>{!v.message}</b></span>
+        </div>-->
+    </div>
+    
+    <!-- onsave={!c.onSave} added as a soln to SFWS-1775 -->
+    <div style="height: 450px">
+        <lightning:datatable
+                             keyField="Id"
+                             data="{! v.data }"
+                             columns="{! v.columns }"
+                             selectedRows = "{! v.selectedRows}"
+                             hideCheckboxColumn="false"
+                             aura:id = "desTable"
+                             onsave="{!c.onSave}"
+                             />
+    </div>    
+    
+    <aura:if isTrue="{!v.showError}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-modal_small slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!--###### MODAL BOX BODY Part Start######-->
+                <div class="slds-modal__content slds-p-around_small" id="modal-content-id-1">
+                    <div>
+                        {!v.message}                           
+                    </div>
+                    <div>
+                        {!v.message2}                           
+                    </div>
+                </div>
+                <!--###### MODAL BOX FOOTER Part Start ######-->
+                <footer class="slds-modal__footer slds-p-around_small"> 
+                    <aura:if isTrue="{!v.showDelete}">
+                        <lightning:button label="Delete"
+                                          title="Delete"
+                                          variant="brand"
+                                          onclick="{!c.delete}"/>
+                    </aura:if>
+                    <lightning:button label="Back"
+                                      title="Back"
+                                      variant="neutral"
+                                      onclick="{!c.back}"/>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+</aura:component>

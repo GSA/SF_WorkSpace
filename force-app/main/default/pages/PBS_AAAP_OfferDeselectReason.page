@@ -1,0 +1,38 @@
+<apex:page controller="PBS_AAAP_OfferDeselectReasonContr">
+
+    <style>
+.errMessage {color:red; }
+
+    </style>
+
+
+    <apex:form title="Offer Deselection Process">
+
+        <apex:pageBlock title="Offer Deselection Information">
+            <apex:messages styleClass="errMessage"/>
+            <apex:pageBlockSection columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Offer Number"/>
+                    <apex:outputText value="{!offerspace.PBS_AAAP_Building_Name__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Agency Number"/>
+                    <apex:outputText value="{!agency.Name}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Action Reason"/>
+                    <apex:inputField value="{!offerDeselect.PBS_AAAP_Action_Reason__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Action Comment"/>
+                    <apex:inputField value="{!offerDeselect.PBS_AAAP_Action_Comments__c}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!actionSaveDeselectReason}"/>
+                <apex:commandButton value="Cancel" action="{!actionCancelDeselect}"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

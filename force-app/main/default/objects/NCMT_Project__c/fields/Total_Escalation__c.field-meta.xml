@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Escalation__c</fullName>
+    <inlineHelpText>The allowance for construction inflation (a cumulative percentage)</inlineHelpText>
+    <label>Market Escalation</label>
+    <summarizedField>NCMT_Escalation__c.Escalation_Percentage__c</summarizedField>
+    <summaryFilterItems>
+        <field>NCMT_Escalation__c.Escalation_Type__c</field>
+        <operation>equals</operation>
+        <value>Market Escalation</value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>NCMT_Escalation__c.Exclude_Market_Escalation__c</field>
+        <operation>equals</operation>
+        <value>False</value>
+    </summaryFilterItems>
+    <summaryForeignKey>NCMT_Escalation__c.Project__c</summaryForeignKey>
+    <summaryOperation>max</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

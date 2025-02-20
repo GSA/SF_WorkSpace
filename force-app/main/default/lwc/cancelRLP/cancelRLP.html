@@ -1,0 +1,24 @@
+<template>
+    <template if:true={isShowCanceledFields}>
+        <lightning-record-edit-form id="recordViewForm"
+                    record-id={recordId}
+                    object-api-name="PBS_AAAP_RLP__c"
+                    onsuccess={handleSuccess}
+                    onsubmit={handleSubmit}>
+<lightning-quick-action-panel header="Cancel RLP">
+                <lightning-messages></lightning-messages>
+                <p style="text-align: center;">Please enter Canceled Date and Canceled Reason and click on Cancel RLP button</p>
+                <br />
+                <lightning-input-field field-name="PBS_AAAP_Canceled_Date__c" required></lightning-input-field>
+                <lightning-input-field field-name="PBS_AAAP_Canceled_Reason__c" required></lightning-input-field>
+                <div style="display:none;">
+                <lightning-input-field field-name="PBS_AAAP_STATUS__c" variant="hidden" value="Canceled"></lightning-input-field>
+                </div>
+                <div slot="footer">
+                    <lightning-button label="Close" onclick={closeModal} class="slds-p-right_x-small"></lightning-button>
+                    <lightning-button variant="brand" type="submit" label="Cancel RLP"></lightning-button>
+                </div>
+            </lightning-quick-action-panel>
+</lightning-record-edit-form>
+    </template>
+</template>

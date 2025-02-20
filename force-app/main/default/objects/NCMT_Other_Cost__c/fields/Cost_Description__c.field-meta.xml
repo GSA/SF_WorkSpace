@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cost_Description__c</fullName>
+    <description>Cost Description</description>
+    <label>Cost Description</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Cost_Type__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Core/Shell Cost</fullName>
+                <default>false</default>
+                <label>Core/Shell Cost</label>
+            </value>
+            <value>
+                <fullName>Pro-rated</fullName>
+                <default>false</default>
+                <label>Pro-rated</label>
+            </value>
+            <value>
+                <fullName>Tenant Cost</fullName>
+                <default>true</default>
+                <label>Tenant Cost</label>
+            </value>
+            <value>
+                <fullName>N/A</fullName>
+                <default>false</default>
+                <label>N/A</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Moving Costs</controllingFieldValue>
+            <controllingFieldValue>Direct Costs</controllingFieldValue>
+            <controllingFieldValue>Project Costs</controllingFieldValue>
+            <controllingFieldValue>Proposed Option</controllingFieldValue>
+            <controllingFieldValue>Deduct from Base option</controllingFieldValue>
+            <controllingFieldValue>Capital Renewal</controllingFieldValue>
+            <valueName>Core/Shell Cost</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Moving Costs</controllingFieldValue>
+            <controllingFieldValue>Direct Costs</controllingFieldValue>
+            <controllingFieldValue>Project Costs</controllingFieldValue>
+            <valueName>Pro-rated</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Moving Costs</controllingFieldValue>
+            <controllingFieldValue>Direct Costs</controllingFieldValue>
+            <controllingFieldValue>Project Costs</controllingFieldValue>
+            <valueName>Tenant Cost</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Moving Costs</controllingFieldValue>
+            <controllingFieldValue>Site Acquisition Cost</controllingFieldValue>
+            <valueName>N/A</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

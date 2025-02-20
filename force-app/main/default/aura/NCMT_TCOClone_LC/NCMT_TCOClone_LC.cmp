@@ -1,0 +1,36 @@
+<aura:component controller="NCMT_TCOClone_Ctrl_LC">
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="proj" type="Object"/>
+    
+     <!-- PAGE HEADER -->
+    <lightning:layout class="slds-page-header slds-page-header--object-home">
+        <lightning:layoutItem>
+            <lightning:icon iconName="action:clone" size="small" alternativeText="Clone TCO Project"/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="horizontal-small">
+            <div class="page-section page-header">
+                <h3 class="slds-text-heading--medium">Clone TCO Project</h3>
+            </div>
+        </lightning:layoutItem>
+    </lightning:layout>
+    <!-- / PAGE HEADER -->
+    
+    <form class="slds-form--stacked">  
+        <lightning:input label="Clone Name" 
+                         name="cloneName" 
+                         value="{!v.proj.Name}" 
+                         required="true"
+                         style="width: 25%"/>
+        <lightning:button label="Save" 
+                          class="slds-m-top--medium"
+                          variant="brand"
+                          onclick="{!c.cloneProject}"/>
+        <lightning:button label="Cancel" 
+                          class="slds-m-top--medium"
+                          variant="neutral"
+                          onclick="{!c.cancel}"/>
+    </form>
+
+</aura:component>

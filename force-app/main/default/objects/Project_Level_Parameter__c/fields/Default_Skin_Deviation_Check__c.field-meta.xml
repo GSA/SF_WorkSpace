@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Default_Skin_Deviation_Check__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( NCMT_Project__r.RecordType.Name == &apos;Parking Garage&apos;, ROUND(((SQRT(PGFloors__c))*4* Default_Average_Story_Height__c )/PGFloors__c,3),0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Default Skin Deviation Check</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

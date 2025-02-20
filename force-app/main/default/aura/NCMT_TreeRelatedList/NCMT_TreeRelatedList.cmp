@@ -1,0 +1,129 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId" access="global" controller="NCMT_TreeRelatedListCtrl_LC">
+
+<aura:attribute name="recordId" type="string"/>
+<aura:attribute name="project" type="object" />
+<aura:attribute name="treeStruc" type="NCMT_Tree_structure__c[]"/>
+<aura:attribute name="treeItems" type="object"/>
+<aura:attribute name="treeLevels" type="object"/>
+<aura:attribute name="isOandP" type="Boolean"/>
+<aura:attribute name="isReports" type="Boolean"/>
+
+
+<aura:attribute name="gridColumns" type="List" />
+<aura:attribute name="gridExpandedRows" type="List" />
+    
+<aura:attribute name="allExpanded" type="Boolean" default="false" />
+<aura:attribute name="allCollapsed" type="Boolean" default="false" />
+<aura:attribute name="hasCopy" type="Boolean" default="false" />
+<aura:attribute name="treeCopy" type="NCMT_Copy__c[]"/>
+<aura:attribute name="locationMultiplier" type="Decimal" />
+    
+<aura:attribute name="showPasteModal" type="Boolean" default="false" />
+<aura:attribute name="pasteColumns" type="List" />
+<aura:attribute name="pasteLevels" type="object" />
+<aura:attribute name="isError" type="Boolean" default="false" />
+<aura:attribute name="copyError" type="String"/>
+<aura:attribute name="pasteError" type="String"/> 
+<aura:attribute name="deleteError" type="String"/> 
+<aura:attribute name="deleteError2" type="String[]"/> 
+<aura:attribute name="isDelete" type="Boolean" default="false"/>
+<aura:attribute name="toDelete" type="String[]"/>
+
+<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+<aura:handler event="force:refreshView" action="{!c.isRefreshed}" />
+
+<aura:attribute name="activeSections" type="List" default="['top']" />  
+<aura:attribute name="activeSectionsMessage" type="String" default="" />
+
+<!-- <lightning:tree items="{! v.treeLevels }" header="Nested Tree"/> -->
+<!-- <h1><b>NCMT Tree Structure</b></h1> -->
+<div class="slds-grid slds-wrap">
+    <div class="slds-p-bottom_xx-small">
+        <button class="slds-button slds-button_neutral" onclick="{!c.handleDelete}" id="expand">Delete</button>
+        <button class="slds-button slds-button_neutral" onclick="{!c.expandAllRows}" id="expand">Expand All</button>
+        <button class="slds-button slds-button_neutral" onclick="{!c.collapseAllRows}" id="collapse">Collapse All</button>
+        <button class="slds-button slds-button_neutral" onclick="{!c.copy}" id="copyButton">Copy Selected Rows</button>
+        <aura:if isTrue="{!v.hasCopy}">
+            <button class="slds-button slds-button_brand" onclick="{!c.togglePasteModal}" id="pasteButton">Paste Copied Rows</button>
+        </aura:if>
+    </div>
+<div>
+    <lightning:treeGrid
+        columns="{! v.gridColumns }"
+        data="{! v.treeLevels }"
+        keyField="Id"
+        expandedRows="{! v.gridExpandedRows }"
+        hideCheckboxColumn	="false"
+        title = "NCMT Tree Structure"
+        resizeColumnDisabled= 'true'
+		aura:id="projTree"
+    />
+</div>
+    <aura:if isTrue="{!v.showPasteModal}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-modal_small slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- ###### MODAL BOX HEADER Start ######-->
+                <aura:if isTrue="{!!v.isError}">
+                    <header class="slds-modal__header">
+                        <h2 id="modal-heading-01" class="slds-text-heading_small slds-hyphenate">Paste Tree Structure</h2>
+                        <p class="slds-m-top_xx-small"></p>
+                        {!v.pasteError}
+                    </header>
+                    
+                </aura:if>
+                <!--###### MODAL BOX BODY Part Start######-->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <aura:if isTrue="{!!v.isError}">
+                        <div>
+                            <lightning:treeGrid
+                                                columns="{! v.pasteColumns }"
+                                                data="{! v.pasteLevels }"
+                                                keyField="Id"
+                                                expandedRows="{! v.gridExpandedRows }"
+                                                hideCheckboxColumn	="false"
+                                                title = "Tree Branches"
+                                                resizeColumnDisabled= 'false'
+                                                aura:id="pasteTree"
+                                                />                            
+                        </div>
+                        <aura:set attribute="else">
+                            <aura:if isTrue="{!v.isDelete}">
+                                {!v.deleteError}<br/>
+                                <aura:iteration items="{!v.deleteError2}" var="branch">
+                                    &nbsp; <b>{!branch}</b><br/>
+                                </aura:iteration>
+                                <aura:if isTrue="{!and(v.deleteError2.length > 0 , v.toDelete.length > 0)}">
+                                All associated child branches and DES items contained in child branches will also be deleted!<br/><br/>
+                                    </aura:if>
+                            </aura:if>
+                            {!v.copyError}
+                        </aura:set>
+                    </aura:if>
+                </div>
+                <!--###### MODAL BOX FOOTER Part Start ######-->
+                <footer class="slds-modal__footer"> 
+                    <aura:if isTrue="{!!v.isError}">
+                        <lightning:button label="Paste"
+                                          title="Paste"
+                                          variant="brand"
+                                          onclick="{!c.paste2}"/>
+                    </aura:if>
+                    <lightning:button label="Back"
+                                      title="Back"
+                                      onclick="{!c.togglePasteModal}"/>
+                    <aura:if isTrue="{!and(v.isDelete, v.toDelete.length > 0)}">
+                        <lightning:button label="Delete"
+                                          title="Delete"
+                                          variant="brand"
+                                          onclick="{!c.delete}"/>
+                    </aura:if>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+</div>
+
+    
+
+</aura:component>

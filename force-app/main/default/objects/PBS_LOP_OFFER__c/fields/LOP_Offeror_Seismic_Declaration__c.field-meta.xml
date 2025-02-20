@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LOP_Offeror_Seismic_Declaration__c</fullName>
+    <description>Offeror declaration if the RLP contains seismic requirements.</description>
+    <inlineHelpText>Seismic Requirement Declaration</inlineHelpText>
+    <label>Offeror Seismic Declaration</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>The RLP does not contain seismic requirements. No documentation required The RLP contains seismic requirements.</fullName>
+                <default>false</default>
+                <label>The RLP does not contain seismic requirements. No documentation required The RLP contains seismic requirements.</label>
+            </value>
+            <value>
+                <fullName>Fully meets seismic requirements or meets an exemption under the RLP</fullName>
+                <default>false</default>
+                <label>Fully meets seismic requirements or meets an exemption under the RLP</label>
+            </value>
+            <value>
+                <fullName>Does not meet seismic requirements, but will be retrofitted to meet seismic requirements</fullName>
+                <default>false</default>
+                <label>Does not meet seismic requirements, but will be retrofitted to meet seismic requirements</label>
+            </value>
+            <value>
+                <fullName>Will be constructed to meet seismic requirements</fullName>
+                <default>false</default>
+                <label>Will be constructed to meet seismic requirements</label>
+            </value>
+            <value>
+                <fullName>Will not meet seismic requirements</fullName>
+                <default>false</default>
+                <label>Will not meet seismic requirements</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LEED_USR_Mod_LT_Point_Chk_1</fullName>
+    <active>true</active>
+    <description>Location and Transportation - LEED for Neighborhood Development Location - Point Check</description>
+    <errorConditionFormula>NOT( LEED_USR_Mod_LT_1__c = 0 || LEED_USR_Mod_LT_1__c  = 8 || LEED_USR_Mod_LT_1__c  = 10 || LEED_USR_Mod_LT_1__c  = 12 || LEED_USR_Mod_LT_1__c  = 16 )</errorConditionFormula>
+    <errorDisplayField>LEED_USR_Mod_LT_1__c</errorDisplayField>
+    <errorMessage>This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 8, 10, 12, or 16.</errorMessage>
+</ValidationRule>

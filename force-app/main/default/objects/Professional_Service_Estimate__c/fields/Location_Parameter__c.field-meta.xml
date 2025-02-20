@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Location_Parameter__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Location Parameter</description>
+    <label>Index Location</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>NCMT_Location_Parameters__c.State__c</field>
+            <operation>equals</operation>
+            <valueField>$Source.State__c</valueField>
+        </filterItems>
+        <filterItems>
+            <field>NCMT_Location_Parameters__c.Fiscal_Year__c</field>
+            <operation>equals</operation>
+            <value>&apos;2017&apos;</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>NCMT_Location_Parameters__c</referenceTo>
+    <relationshipLabel>Location Parameter</relationshipLabel>
+    <relationshipName>Professional_Service_Estimates</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

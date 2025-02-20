@@ -1,0 +1,46 @@
+<template>
+<section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+   
+        <div class="slds-modal__container">
+        <div class="slds-modal__header">
+            <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">New NCMT Tree structure: Default</h1>
+        </div> 
+        <article class="slds-card">
+            <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                    <div class="slds-media__body">
+                        <h3 class="slds-page-header__name-title">
+                        <span class="slds-page-header__title slds-truncate" title="Information">Information</span>
+                        </h3>
+                    </div>
+                </header>
+            </div>
+        </article>
+        <div class="slds-modal__content slds-p-around_medium">
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col">
+            <lightning-input disabled label="NCMT Project" value={projectName}></lightning-input>
+            <lightning-input label="Branch Name" value={branchName} onchange={handleBranchNameChange}></lightning-input>
+            <lightning-input disabled label="Parent" value={parentTree}></lightning-input>
+                </div>
+                <div class="slds-col">
+            <lightning-input disabled label="Record Type" value="Default"></lightning-input>      
+            <lightning-textarea label="Description" value={dsc} onchange={handleDscChange}></lightning-textarea>
+            <lightning-input type="checkbox" label="Include In Estimate" value={check} checked></lightning-input>
+                </div>
+            </div>
+        </div>
+        <div class="slds-modal__footer">
+            <div class="slds-grid slds-grid_align-center">
+            <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>&nbsp;
+            <lightning-button label="Save &amp; New" variant="neutral" onclick={handleSaveNew}></lightning-button>&nbsp;
+           <template if:true={saveVisible}>
+            <lightning-button label="Save" variant="brand" onclick={handleSave}></lightning-button>
+           </template>
+           
+            </div>
+        </div>
+        </div>
+    </section>
+ 
+</template>

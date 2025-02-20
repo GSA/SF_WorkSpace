@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LEED_USR_Mod_LT_Point_Chk_6</fullName>
+    <active>true</active>
+    <description>Location and Transportation - Bicycle Facilities - Point Check</description>
+    <errorConditionFormula>NOT( LEED_USR_Mod_LT_6__c = 0 || LEED_USR_Mod_LT_6__c  = 1 )</errorConditionFormula>
+    <errorDisplayField>LEED_USR_Mod_LT_6__c</errorDisplayField>
+    <errorMessage>This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 1.</errorMessage>
+</ValidationRule>

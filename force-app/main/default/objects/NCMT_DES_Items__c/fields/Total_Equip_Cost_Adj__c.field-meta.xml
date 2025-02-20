@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Equip_Cost_Adj__c</fullName>
+    <formula>IF(Item_Type__c==&apos;Assemblies&apos;, ( Equipment_Assembly_Cost__c),((Equipment_Rental_Day__c))) * Location_Multiplier_wf__c * Quantity__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Total Equip Cost Adj</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

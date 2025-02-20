@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>UTBuildingHeightAboveAndBelowGroundCheck</fullName>
+    <active>false</active>
+    <description>For Utility, Building Height Above and Below Ground Check</description>
+    <errorConditionFormula>IF((NCMT_Project__r.RecordType.Name ==&apos;Utility&apos;), 
+((IF(ISPICKVAL( NCMT_Project__r.Building_Heigtht__c , &apos;1 story, high bay, light structure&apos;), (if(AND(Above_Ground__c = 1,Below_Ground__c=0),False,True)), False)) || 
+(IF(ISPICKVAL( NCMT_Project__r.Building_Heigtht__c , &apos;1 story, high bay, industrial&apos;), (if(AND(Above_Ground__c = 1,Below_Ground__c=0),False,True)), False))|| 
+(IF(ISPICKVAL( NCMT_Project__r.Building_Heigtht__c , &apos;1 story, low bay, light structure&apos;), (if(AND(Above_Ground__c = 1,Below_Ground__c=0),False,True)), False))||
+(IF(ISPICKVAL( NCMT_Project__r.Building_Heigtht__c , &apos;1 story, low bay, conventional (office like)&apos;), (if(AND(Above_Ground__c = 1,Below_Ground__c=0),False,True)), False))||
+(IF(ISPICKVAL( NCMT_Project__r.Building_Heigtht__c , &apos;Multi-story, low bay, conventional&apos;), (if(AND(Above_Ground__c &gt;= 3,OR(Below_Ground__c&gt;=0,Below_Ground__c&lt;=2)),False,True)), False))||
+(IF(ISPICKVAL( NCMT_Project__r.Building_Heigtht__c , &apos;Multi-story, high bay, industrial&apos;), (if(AND(Above_Ground__c &gt;= 3,OR(Below_Ground__c&gt;=0,Below_Ground__c&lt;=2)),False,True)), False))) ,False)</errorConditionFormula>
+    <errorMessage>Utility Building Height For 1 Story: Above Ground 1 and Below Ground 0
+Utility Building Height For Multi Story: Above Ground 1 and Below Ground 0-2</errorMessage>
+</ValidationRule>

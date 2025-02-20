@@ -1,0 +1,65 @@
+<apex:page Controller="NCMT_ReportData" standardStylesheets="false" lightningStylesheets="true" title="CEW Help" showHeader="false">
+
+<apex:slds />
+    <!--BEGIN HEADER-->
+    <div class="slds-page-header slds-page-header_record-home">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-work-order-item"
+                            title="Description of icon when needed">
+                            <svg class="slds-icon slds-page-header__icon" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    xlink:href="/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#question_feed" />
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate"
+                                        title="CEW Help">CEW Help</span>
+                                    <!-- <span>Use this page to add Master Format items to the project</span> -->
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--END HEADER-->
+<apex:includeLightning />
+        <div id='cewHelp'></div>
+
+    <script>
+    var helpType = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.helpType))}';
+    console.log('helpTypeVF=' + helpType);
+    
+    if(helpType=='')
+    {
+        console.log('DESCRIPTION!');
+        helpType = 'workdesc';
+        //window.open('/apex/NCMT_CEW_Help_Launcher?&helpType=workdesc', '_blank');
+        //window.history.back();
+    }
+    
+    //else{
+    $Lightning.use('c:NCMT_CEW_Help_App', function(){
+        $Lightning.createComponent('c:NCMT_CEW_Help', 
+                                   {
+                                       "helpType" : helpType
+                                    },                       
+        'cewHelp',
+        function(cmp){
+                //nothing to see here
+            });
+    
+    });
+    //}
+    </script>
+    
+    
+</apex:page>

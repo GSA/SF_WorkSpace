@@ -1,0 +1,17 @@
+<aura:component description="c:NCMT_CEW_Help" >
+    <aura:attribute name="helpType" type="String" />
+    <aura:attribute name="helpText" type="string" />
+    
+    <aura:if isTrue="{!v.helpType == 'workitem'}">
+    	<ltng:require scripts="{!$Resource.NCMT_CEW_Work_Item_Help}" afterScriptsLoaded="{!c.setHelp}" />
+	</aura:if>
+    <aura:if isTrue="{!v.helpType == 'workdesc'}">
+    	<ltng:require scripts="{!$Resource.NCMT_CEW_Work_Description_Help}" afterScriptsLoaded="{!c.setHelp}" />
+	</aura:if>
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    
+   <div class="slds-m-left_x-small"> 
+    <aura:unescapedHtml value="{!v.helpText}" />
+
+    </div>
+</aura:component>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Short_Lease_Number__c</fullName>
+    <externalId>false</externalId>
+    <formula>if(NOT(ISBLANK(Lease_Number__c)),if( LEN(Lease_Number__c)&gt;5, RIGHT(Lease_Number__c, 5),Lease_Number__c ),&apos;&apos;)</formula>
+    <label>Short Lease Number</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

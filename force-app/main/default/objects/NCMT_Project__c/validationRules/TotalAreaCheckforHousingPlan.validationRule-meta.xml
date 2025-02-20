@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TotalAreaCheckforHousingPlan</fullName>
+    <active>true</active>
+    <description>Total Area (Including Parking) must not be entered for Housing Plan</description>
+    <errorConditionFormula>RecordType.Name &lt;&gt; &apos;Parking Garage&apos; &amp;&amp; TEXT(Project_type__c) &lt;&gt; &apos;Repair &amp; Alteration - Parametric Entry&apos; &amp;&amp; TEXT(Project_type__c) &lt;&gt; &apos;Repair &amp; Alteration - Work Item Detail&apos; &amp;&amp;
+( IF( Housing_Plan__c , 1, 0) ) == 1 &amp;&amp;
+Total_Area_Including_Parking__c &gt; 0</errorConditionFormula>
+    <errorMessage>Total Area (Including Parking) can not be entered for Housing Plan</errorMessage>
+</ValidationRule>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>StartEndConstructionCheck</fullName>
+    <active>true</active>
+    <description>Either Start Construction or Date of Occupancy must be entered, not both.</description>
+    <errorConditionFormula>(RecordType.Name &lt;&gt; &apos;Parking Garage&apos; &amp;&amp; TEXT(Estimate_Type_Proj__c)&lt;&gt;&apos;Definitive Estimating&apos;) &amp;&amp; ISNEW() &amp;&amp; NOT(ISBLANK (TEXT(Start_Construction__c))) &amp;&amp; 
+NOT(ISBLANK (TEXT(End_Construction__c)))&amp;&amp; ISBLANK( Project_Record_ID__c )</errorConditionFormula>
+    <errorDisplayField>Start_Construction__c</errorDisplayField>
+    <errorMessage>Enter either Start Construction or Date of Occupancy; Not both.</errorMessage>
+</ValidationRule>

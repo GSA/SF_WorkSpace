@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sq_Footage_Threshold_Check</fullName>
+    <active>false</active>
+    <description>The Square Footage being offered in a space must not exceed the total amount being offered on the Offer.</description>
+    <errorConditionFormula>AND( PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_OFFICE_SF_OFFERED_MAX__c  &lt;  PBS_AAAP_SF_OFFERED__c )</errorConditionFormula>
+    <errorMessage>The amount of space being offered in #3 below cannot be larger than the total amount of square footage being offered for lease. Question #1 on main Space and Rates page specifies the total square footage being offered.</errorMessage>
+</ValidationRule>

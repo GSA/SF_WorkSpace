@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_expiring_lease</fullName>
+    <active>true</active>
+    <description>Succeeding spaces must have an expiring lease number provided.</description>
+    <errorConditionFormula>AND( NOT(PBS_AAAP_NEW_SUCCEED_LEASE_IND__c) ,  
+          OR( ISBLANK(PBS_AAAP_GSA_EXPIRE_LEASE_NUMBER__c), 
+                   ISNULL(PBS_AAAP_GSA_EXPIRE_LEASE_NUMBER__c)
+               )
+      )</errorConditionFormula>
+    <errorMessage>1a. An expiring lease number is required if the space you are offering is currently being leased to a Government tenant.</errorMessage>
+</ValidationRule>

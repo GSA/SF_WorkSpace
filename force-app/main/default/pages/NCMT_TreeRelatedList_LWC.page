@@ -1,0 +1,20 @@
+<apex:page standardController="NCMT_Project__c" extensions="NCMT_TreeRelatedListCtrl_LC" lightningStylesheets="true">
+    <apex:slds />
+    <apex:includeLightning />
+    <div id="lightningPage"></div>
+     <script>
+        $Lightning.use("c:NCMT_TreeRelatedList_App", function(){
+            $Lightning.createComponent("c:NCMT_TreeRelatedList", {
+                "recordId" : "{!$CurrentPage.parameters.id}",
+                // "recordId" : "a1I350000025Z8U",
+
+            },
+            'lightningPage',
+                function(cmp){
+     
+                });
+        
+        });
+        </script> 
+   
+</apex:page>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_NewFitOut_for_NewConstruction_Proj</fullName>
+    <active>true</active>
+    <description>New Construction projects must only have New FIT Out selected.</description>
+    <errorConditionFormula>(RecordType.Name == &apos;User Defined&apos;) 
+&amp;&amp; (text( Project__r.Project_type__c ) == &apos;New Construction&apos; )
+&amp;&amp; (text( Housing_Plan_Type__c ) &lt;&gt; &apos;New Fit Out&apos;)</errorConditionFormula>
+    <errorMessage>Housing Plan Type selected must be New Fit Out for New Construction projects</errorMessage>
+</ValidationRule>

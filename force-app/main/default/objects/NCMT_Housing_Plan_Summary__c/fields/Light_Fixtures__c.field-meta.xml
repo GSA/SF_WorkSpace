@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Light_Fixtures__c</fullName>
+    <externalId>false</externalId>
+    <formula>ROUND(((Main_Lobby__c + Atrium_Ground_floor_plan_area__c)/40),0) + ROUND((Ground_floor_circulation__c/40),0) +
+ROUND((Elevator_lobbies__c/40),0) + 
+ROUND((Other_circulation__c/50),0) +
+ROUND((Restrooms__c/50),0) + 
+ROUND((Enclosed_Parking__c/200),0) + 
+ROUND((Mechanical_Electrical_IT__c/80),0) +
+ROUND((Loading_dock_Recycling_Trash__c/80),0) + 
+ROUND((Stair_shafts__c/60),0) + 
+IF( TEXT(Project__r.Building_Type__c) == &apos;Utility&apos;, 0 ,  ROUND((Total_USF__c/80),0))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Light Fixtures</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

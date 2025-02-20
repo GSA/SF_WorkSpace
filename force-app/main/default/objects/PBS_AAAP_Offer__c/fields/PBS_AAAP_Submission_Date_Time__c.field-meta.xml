@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PBS_AAAP_Submission_Date_Time__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(ISBLANK(PBS_AAAP_Submission_DateTime__c), &apos;&apos;, TEXT(PBS_AAAP_Submission_DateTime__c) &amp; IF( OR( VALUE( MID( TEXT( PBS_AAAP_Submission_DateTime__c - 4 ), 12, 2 ) ) = 0, VALUE( MID( TEXT( PBS_AAAP_Submission_DateTime__c - 4 ), 12, 2 ) ) = 12 ), &quot;12&quot;, TEXT( VALUE( MID( TEXT( PBS_AAAP_Submission_DateTime__c - 4 ), 12, 2 ) ) - IF( VALUE( MID( TEXT( PBS_AAAP_Submission_DateTime__c - 4 ), 12, 2 ) ) &lt; 12, 0, 12 ) ) ) &amp; &quot;:&quot; &amp; MID( TEXT( PBS_AAAP_Submission_DateTime__c - 4 ), 15, 2 ) &amp; &quot;:&quot; &amp; MID( TEXT( PBS_AAAP_Submission_DateTime__c - 4 ), 18, 2 ) &amp; &quot; &quot; &amp; IF( VALUE( MID( TEXT( PBS_AAAP_Submission_DateTime__c - 4 ), 12, 2 ) ) &lt; 12, &quot;AM&quot;, &quot;PM&quot; ))</formula>
+    <label>Offer Submission Date Time</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

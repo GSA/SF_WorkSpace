@@ -1,0 +1,78 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:lightningQuickAction,force:hasRecordId,lightning:actionOverride,lightning:hasPageReference,forceCommunity:availableForAllPageTypes" access="global" controller="NCMT_MarkupsCtrl_LC">
+	<aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="saved" type="Boolean" default="false" />
+    <aura:attribute name="showSpinner" type="Boolean" default="true" />
+    <!--<aura:attribute name="reloadForm" type="boolean" default="true" /> -->
+    <aura:attribute name="GetExclcon" type="Boolean"/>
+    <aura:attribute name="GetDesignSite" type="Boolean"/>
+    <aura:attribute name="GetComments" type="Boolean"/>
+    <aura:registerEvent name="vfEvent" type="c:NCMT_SendDataToVFPage"/>
+     <aura:attribute name="isExclconChanged" type="Boolean" default="false"/>
+    <aura:attribute name="isDesignSiteChanged" type="Boolean" default="false"/>
+    <aura:attribute name="isOandP" type="Boolean"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner alternativeText="Loading"/>
+    </aura:if>
+      
+     <lightning:notificationsLibrary aura:id="notifLib" />   
+     <lightning:recordEditForm aura:id="form"
+                               recordId="{!v.recordId}"
+                               objectApiName="NCMT_Project_Markup__c"     
+                               onload="{!c.handleOnload}"
+                               onsubmit="{!c.handleOnSubmit}"
+                               onsuccess="{!c.handleOnSuccess}"
+                               onerror="{!c.handleOnError}">
+    <lightning:messages/>
+      
+       <!-- <aura:if isTrue="{!v.reloadForm}"> -->
+            <div class="slds-grid slds-wrap">
+                <aura:if isTrue="{! v.isOandP == false }">    
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:inputField aura:id="designsite" fieldName="Design_and_Site_Contingency__c" required="true" onchange="{!c.handleOnChangeDesignSite}"/>
+                </div>
+               <div class="slds-col slds-size_1-of-2 slds-form-element__label">
+                   <lightning:inputField aura:id="inclaia" fieldName="Include_AIA__c" onchange="{!c.handleOnChangeAia}"/>
+                </div>
+                </aura:if>    
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:inputField aura:id="exclconstcontg" fieldName="Exclude_Construction_Contingency__c"  onchange="{!c.handleOnChangeExclCons}"/>
+                </div>
+                <aura:if isTrue="{! v.isOandP == false }">
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:inputField aura:id="aia" fieldName="Art_In_Architecture_new__c"  required="true"/>
+                </div> 
+                </aura:if>     
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:inputField aura:id="constcontg" fieldName="Construction_Contingency_new__c" required="true" />
+                </div>     
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:inputField aura:id="comments" fieldName="Comments__c" onchange="{!c.handleOnChangeComments}"/> 
+                    <span class="slds-text-color_error" style="{!if(v.isDesignSiteChanged, 'color:rgb(194, 57, 52)','display:none' )}">
+                        Comment required: Changed Design and Site<br/>
+                    </span>
+                    <span class="slds-text-color_error" style="{!if(v.isExclconChanged,'color:rgb(194, 57, 52)','display:none' )}">
+                        Comment required: Changed Exclude Const. Contingency<br/>
+                    </span>
+                </div>
+                <aura:if isTrue="{! v.isOandP == false }">
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:inputField aura:id="salestax" fieldName="Sales_Tax__c" required="true" />
+                </div> 
+                </aura:if>     
+            </div>
+     
+     <!--</aura:if>-->
+    <aura:if isTrue="{!and(v.recordId != null, v.recordId !='')}">  
+        <div class="slds-grid slds-p-around_large slds-grid_align-spread slds-docked-form-footer">
+            <div class="slds-col"/>
+            <div class="slds-col">
+                <lightning:button disabled="{!if(!v.isExclconChanged &amp;&amp; !v.isDesignSiteChanged,false,true)}" label="Save" variant="brand" iconName="utility:save" iconPosition="left" title="Success" type="submit"/>
+            </div>
+        </div>
+    </aura:if>
+         
+     </lightning:recordEditForm>  
+        
+</aura:component>

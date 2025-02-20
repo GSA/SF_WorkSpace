@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LOP_Offeror_Address__c</fullName>
+    <description>LOP Offeror Address</description>
+    <externalId>false</externalId>
+    <formula>SUBSTITUTE(
+  IF(ISBLANK($User.Street ),  NULL, $User.Street   + &apos;,&apos;) +
+  IF(ISBLANK($User.City),    NULL, $User.City   + &apos;,&apos;) +
+  IF(ISBLANK($User.State),   NULL, $User.State  + &apos;,&apos;) +
+  IF(ISBLANK( $User.PostalCode ), NULL,  $User.PostalCode  + &apos;,&apos;) + &apos;.&apos;,
+  &apos;,.&apos;,
+  NULL
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>LOP Offeror Address</inlineHelpText>
+    <label>LOP Offeror Address</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

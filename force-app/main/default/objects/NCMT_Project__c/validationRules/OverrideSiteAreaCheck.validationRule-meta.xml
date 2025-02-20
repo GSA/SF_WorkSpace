@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OverrideSiteAreaCheck</fullName>
+    <active>true</active>
+    <description>Check if OverrideSiteArea is greater than Footprint Area</description>
+    <errorConditionFormula>if ( BLANKVALUE(Override_Calculated_Site_Area__c , 0) &gt; 0, 
+ if ( BLANKVALUE(Override_Calculated_Site_Area__c , 0) &lt;=  BLANKVALUE(Footprint_Area__c, 0) , true , false) 
+,false)</errorConditionFormula>
+    <errorMessage>Override Site Area cannot be smaller than building Footprint Area.</errorMessage>
+</ValidationRule>

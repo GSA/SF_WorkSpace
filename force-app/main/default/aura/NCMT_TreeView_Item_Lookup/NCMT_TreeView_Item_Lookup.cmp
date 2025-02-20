@@ -1,0 +1,83 @@
+<aura:component controller="NCMT_CustomLookUpController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <!--declare attributes--> 
+    <aura:attribute name="selectedRecord" type="sObject" default="{}" description="Use,for store SELECTED sObject Record"/>
+    <aura:attribute name="listOfSearchRecords" type="List" description="Use,for store the list of search records which returns from apex class"/>
+    <aura:attribute name="searchList" type="List" description=""/>
+
+    <aura:attribute name="SearchKeyWord" type="string"/>
+    <aura:attribute name="objectAPIName" type="string" default=""/>
+    <aura:attribute name='currentWiId' type="string" default=""/>
+    <aura:attribute name="cmList" type="List" default='[]'/>
+    <aura:attribute name="fiscalYear" type="string"/>
+    <aura:attribute name="modalOpen" type="boolean" default="false"/>
+    
+    <aura:attribute name="IconName" type="string" default=""/>
+    <aura:attribute name="label" type="string" default=""/>
+    <aura:attribute name="Message" type="String" default=""/>
+    <aura:attribute name="currentValue" type="String" default=""/> 
+    <aura:attribute name="uniformatIcon" type="String" default="utility:search"/>
+    <aura:attribute name="hoverMessage" type="String" default=" "/>
+
+    
+    <!--declare events hendlers-->  
+    <aura:handler name="oSelectedRecordEvent" event="c:NCMT_selectListEvent" action="{!c.handleComponentEvent}"/>
+    
+    <!-- https://www.lightningdesignsystem.com/components/lookups/ --> 
+    <div aura:id ='testOne' onclick='{!c.showModal}' class="slds-form-element slds-lookup" title='{!v.hoverMessage}'>
+        <label class="slds-form-element__label" for="lookup-348">{!v.label}<abbr class="slds-required" title="required">*</abbr></label>
+        
+        <div class="slds-form-element__control slds-truncate" style="width:175px;">
+            
+            <div class="slds-input slds-input-has-icon slds-input-has-icon--right slds-truncate slds-has-flexi-truncate">
+                <!-- This markup is for when an record is selected -->
+                <lightning:icon class="slds-input__icon slds-show" iconName="{!v.uniformatIcon}" size="x-small" alternativeText="search" title="search"/>
+
+                <span class="slds-icon_container  slds-combobox__input-entity-icon">
+                    <lightning:icon class="slds-icon slds-icon slds-icon_small slds-icon-text-default" iconName="{!v.IconName}" size="x-small" alternativeText="icon"/>
+                    <span class="slds-assistive-text">{!v.selectedRecord.Name}</span>
+                </span>
+                <ui:outputText class="slds-lookup__search-input slds-lookup  inputPaddingLeft" value='{!v.currentValue}'/>
+            </div>
+        </div>
+    </div>
+    
+    <aura:if isTrue="{!v.modalOpen}">
+        
+        <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-2" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header slds-modal__header_empty">
+                    <h1 style='padding-top: 2%; font-size: 14px;'> Search {!v.label}</h1>
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                        <span class="slds-assistive-text" onclick='{c.closeModal}'>Close</span>
+                    </button>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                    <div class="slds-input-has-icon slds-input-has-icon--right" aura:id='resArea'> 
+                        <!-- This markup is for when an record is selected -->
+                        <div aura:id="lookupField" class="slds-show slds-truncate" style="width:100%; margin-bottom: 3%;">
+                            <lightning:icon class="slds-input__icon slds-show" iconName="utility:search" size="x-small" alternativeText="search" title="search"/>
+                            <span class="slds-icon_container  slds-combobox__input-entity-icon">
+                                <lightning:icon class="slds-icon slds-icon slds-icon_small slds-icon-text-default" iconName="{!v.IconName}" size="x-small" alternativeText="icon"/>
+                                <span class="slds-assistive-text">{!v.selectedRecord.Name}</span>
+                            </span>
+                            <ui:inputText updateOn="keyup" keyup="{!c.search}" class="slds-lookup__search-input slds-input inputPaddingLeft" value="{!v.SearchKeyWord}" placeholder="type to search..."/>
+                        </div>   
+                        
+                    </div>
+                    <ul style="min-height:40px;margin-top:0px !important" class="" role="listbox">
+                        <lightning:spinner class="slds-hide" variant="brand" size="small" aura:id="mySpinner"/>
+                        <center>{!v.Message}</center>
+                        <aura:iteration items="{!v.searchList}" var="singleRec">
+                            <c:NCMT_LookupResult oRecord="{!singleRec}" IconName="{!v.IconName}"/>
+                        </aura:iteration>
+                    </ul>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick='{!c.closeModal}' >Cancel</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        
+    </aura:if>
+</aura:component>

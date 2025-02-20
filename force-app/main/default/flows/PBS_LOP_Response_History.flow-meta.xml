@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>49.0</apiVersion>
+    <assignments>
+        <description>No change to the response.</description>
+        <name>No_change</name>
+        <label>No change</label>
+        <locationX>341</locationX>
+        <locationY>507</locationY>
+        <assignmentItems>
+            <assignToReference>responseUnchanged</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>&apos;No change to the PBS_AAAP_Response__c field&apos;</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <description>check if response changed</description>
+        <name>Check_if_Response_changed</name>
+        <label>Check if Response changed</label>
+        <locationX>235</locationX>
+        <locationY>301</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Response_Changed</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior.PBS_AAAP_Response__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record.PBS_AAAP_Response__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Response_History</targetReference>
+            </connector>
+            <label>Response Changed</label>
+        </rules>
+        <rules>
+            <name>Response_not_changed</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior.PBS_AAAP_Response__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record.PBS_AAAP_Response__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>No_change</targetReference>
+            </connector>
+            <label>Response not changed</label>
+        </rules>
+    </decisions>
+    <description>flow populates the PBS_LOP_ResponseHistory__c field based on changes to PBS_AAAP_Response__c</description>
+    <interviewLabel>PBS LOP Response History {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>PBS LOP Response History</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <description>update response history field</description>
+        <name>Update_Response_History</name>
+        <label>Update Response History</label>
+        <locationX>455</locationX>
+        <locationY>306</locationY>
+        <inputAssignments>
+            <field>PBS_AAAP_ResponseHistory__c</field>
+            <value>
+                <elementReference>$Record.PBS_AAAP_Response__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>46</locationX>
+        <locationY>61</locationY>
+        <connector>
+            <targetReference>Check_if_Response_changed</targetReference>
+        </connector>
+        <object>PBS_AAAP_Offer__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>internal flow variable that is updated if the Response is unchanged.</description>
+        <name>responseUnchanged</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

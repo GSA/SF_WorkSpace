@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Average_Roofing_Cost_del__c</fullName>
+    <label>Average Roofing Cost Rollup</label>
+    <summarizedField>NCMT_Project_Cost_Summary__c.Core_Shell_Cost_wP100__c</summarizedField>
+    <summaryFilterItems>
+        <field>NCMT_Project_Cost_Summary__c.Cost_Category__c</field>
+        <operation>equals</operation>
+        <value>B30</value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>NCMT_Project_Cost_Summary__c.RecordTypeId</field>
+        <operation>notEqual</operation>
+        <value>New Construction - DES</value>
+    </summaryFilterItems>
+    <summaryForeignKey>NCMT_Project_Cost_Summary__c.Project_Name__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

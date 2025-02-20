@@ -1,0 +1,309 @@
+<aura:component controller='NCMT_AssembliesView_Items_Ctrl_LC' >
+    <aura:attribute name='recordId' type='string' />
+    <aura:attribute name="costCat" type="String" />
+    <aura:attribute name="pcsId" type="String" />
+    <aura:attribute name="projectYear" type="String" />
+    <aura:attribute name="projectState" type="String" />
+
+    
+    <aura:attribute name="level2desc" type="String" />
+    <aura:attribute name="level3desc" type="String" />
+    <aura:attribute name="level4desc" type="String" />
+    <aura:attribute name="level5desc" type="String" />
+    <aura:attribute name="level6desc" type="String" />
+    <aura:attribute name="ESTFormat" type="String" />
+    
+    <aura:attribute name="recordTypeId" type="String" />
+    <aura:attribute name="isOandP" type="boolean"/>
+    <aura:attribute name="isLoaded" type="boolean" default="false"/>
+    
+    <aura:attribute name="treeMarkupMethod" type="String" />
+    
+    
+    <aura:handler name='init' value='{!this}' action='{!c.doInit}'/>
+    
+    <aura:attribute name="oRecord" type="sObject" />
+    <aura:registerEvent name="oSelectedRecordEvent" type="c:NCMT_selectListEvent"/>
+    
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}" description="Use,for store SELECTED sObject Record"/>
+    
+    <aura:attribute name='selectedCrewMasters' type='List' default ='[]'/>
+    <aura:attribute name='selectedUniformats' type='List' default ='[]'/>
+    <aura:attribute name='selectedContractors' type='List' default ='[]'/>
+    
+    <aura:attribute name='selectedName' type='string'/>
+    <aura:attribute name='selectedId' type='string'/>
+    
+    
+    <aura:attribute name='data' type='object' />
+    <aura:attribute name='selectedItems' type='object' />
+    <aura:attribute name='selItems' type='List'  default = '[]'/>
+    
+    <aura:attribute name="locationMultiplier" type="Integer" />
+    <aura:attribute name="salesTax" type="Integer" />
+    <aura:attribute name="laborBurden" type="Integer" />
+    
+    <!-- <aura:attribute name='phases' type='object[]' /> -->
+    <aura:attribute name='costTypes' type='List[]' />
+    
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <aura:attribute name='createdItems' type='object' />
+    
+    <aura:attribute name="activeSections" type="List" default="" />
+    <aura:attribute name="activeSectionsMessage" type="String" default="" />
+    <!-- <p>Click > Item to view more details::{! v.activeSectionsMessage }</p> -->
+    
+    <aura:attribute name='deletedIds' type='List'  default = '[]'/>
+
+    <aura:if isTrue="{! !v.isLoaded }">
+        <lightning:spinner alternativeText="Loading" />
+    </aura:if>
+
+    <aura:if isTrue="{!v.isLoaded }">
+        <lightning:accordion
+            allowMultipleSectionsOpen="true"
+            onsectiontoggle="{! c.handleSectionToggle2 }"
+            activeSectionName="{! v.activeSections }"
+        >  
+        
+        <div class="slds-grid slds-wrap">
+            <div class="slds-form slds-p-around--large slds-width-fill">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered" aria-multiselectable="true">
+                    
+                    <tbody>
+                        <aura:iteration items='{!v.data}' var='wi'>
+                            <lightning:accordionSection name="{!wi.Id}" label="{!wi.Desc__c}">
+                            <aura:if isTrue="{!wi.Level_2_Description__c  != null}">
+                            <tr class="slds-hint-parent ">
+                                <th data-label="Select" scope="row">
+                                    <div class="slds-form-element slds-form-element_stacked">
+                                        <div class="slds-form-element__control">
+                                            <label class="slds-form-element__label slds-checkbox" for="Select">Select</label>
+                                            <div style="margin-left:10px;">
+                                                <ui:inputCheckbox class="slds-checkbox" value="{!wi.selected}" text='{!wi}' change='{!c.handleSelect}'/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <td><ui:outputText aura:id="itemId" value="{!wi.Id}"/></td> -->
+                                </th>
+                                
+                                <!-- COL 2 -->
+                                <td style="width:175px;">
+                                    <div class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="itemTag">Assembly Number</label>
+                                        <div class="slds-form-element__control">
+                                            <ui:inputText class="slds-input" aura:id="lineItemNumber" value="{!wi.Name}" placeholder="" disabled="true"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="itemDescription">Description</label>
+                                        <div class="slds-form-element__control">
+                                            <aura:renderIf isTrue="{!wi.Description__c !=''}">
+                                                <ui:inputTextArea class="slds-input slds-desc slds-cell-wrap" maxlength="150" aura:id="itemDescription" value="{!wi.Description__c}" disabled="true"/>
+                                                <!-- <ui:inputText class="slds-input_bare slds-desc slds-grow slds-cell-wrap" aura:id="itemDescription" value="{!wi.Description__c}" /> -->
+                                                <aura:set attribute="else">
+                                                    <ui:inputText class="slds-input slds-grow slds-cell-wrap" aura:id="itemDescription" value="{!wi.Description__c}" placeholder="Add Description" />
+                                                </aura:set>
+                                            </aura:renderIf>                                        
+                                            <!-- <input type="text" aura:id="itemDescription" value="{!wi.Description__c}" placeholder="Add Description" class="slds-input" />  -->
+                                            <!-- <ui:inputText class="slds-input slds-grow slds-cell-wrap" aura:id="itemDescription" value="{!wi.Description__c}" placeholder="Add Description"/>  -->
+                                        </div>
+                                    </div>
+                                
+                                </td>
+                                
+                                <!-- COL 3 -->
+                                <aura:if isTrue="{!and(v.recordId != null, v.recordId !='')}"> 
+                                <td style="width:175px;">
+                                    <!-- <div style="{!if(v.ESTFormat == 'Uniformat' , 'display:none','')}" class="slds-form-element slds-form-element_stacked"> -->
+                                        <c:NCMT_TreeView_Item_Lookup label="Sub Contractor" hoverMessage="Search Sub Contractor Lookup" currentWiId='{!wi.Id}' currentValue='{!wi.NCMT_Contractor_ID__r.Name}' 
+                                                                    objectAPIName='NCMT_Contractor__c' cmList = '{!v.selectedContractors}' IconName="standard:skill_requirement"  selectedRecord="{!v.selectedLookUpRecord}" fiscalYear="{!v.projectYear}"/>
+                                   
+                                    
+                                    <div class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="itemTag">Tag</label>
+                                        <div class="slds-form-element__control">
+                                            <ui:inputText class="slds-input" aura:id="itemTag" value="{!wi.Tag__c}" placeholder="Tag Details"/>
+                                            <!-- <input type="text" aura:id="itemTag" value="{!wi.Tag__c}" placeholder="Tag Details" class="slds-input" /> -->
+                                        </div>
+                                    </div>
+                                    
+                                  
+                        
+                                </td>
+                                </aura:if>
+                                <!-- COL 4 -->
+                                <td>
+                                     <!--SFWS-1769
+                                    <div class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="costType">
+                                            Cost Type<abbr class="slds-required" title="required">*</abbr></label>
+
+                                            <label class="slds-form-element__label" style="float: right; padding: 0.1rem;">
+                                                <lightning:helptext title="User to select either Shell, TI, or Security for the line item to apply" iconName="utility:info_alt"/></label>
+
+                                        <div class="slds-form-element__control">
+                                            <ui:inputSelect aura:id="costType" class="slds-input" value="{!wi.Cost_Type__c}" required="true">
+                                                <aura:iteration items="{!v.costTypes}" var="ct">
+                                                    <ui:inputSelectOption text="{!ct}" label="{!ct}" />
+                                                </aura:iteration>
+                                            </ui:inputSelect>
+                                        </div>
+                                    </div>
+                                     -->
+                                    <div class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="itemUnit">UOM</label>
+                                        <div class="slds-form-element__control">
+                                            <ui:inputText class="slds-input" aura:id="itemUnit" value="{!wi.Unit__c}" placeholder="UOM" disabled="true"/>
+                                        </div>
+                                    </div>                                 
+                                    <div style="{!if(v.ESTFormat == 'Uniformat' , 'display:none','')}" class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="itemQuantity">Quantity</label>
+                                        <div class="slds-form-element__control">  
+                                            <ui:inputNumber class="slds-input" aura:id="itemQuantity" value="{!wi.Quantity__c}" placeholder="Enter Qty."/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="{!if(v.ESTFormat == 'Uniformat' , '','display:none')}" class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="itemQuantity">Quantity</label>
+                                        <div class="slds-form-element__control">  
+                                            <ui:inputNumber class="slds-input" aura:id="itemQuantity" value="{!wi.Quantity__c}" placeholder="Enter Qty."/>
+                                        </div>
+                                    </div>
+                                    
+                                </td>
+                                
+                                <!-- COL 5 -->
+                                <!--<td>
+                                </td>-->
+                                
+                                <!-- COL 6 -->
+                                <td>
+                                    
+                                    <div style="{!if(v.ESTFormat == 'GSA Assemblies' , '','display:none')}" class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="itemUnitCost">Material Cost</label>
+                                        <div class="slds-form-element__control">  
+                                            <ui:inputNumber class="slds-input" aura:id="itemUnitCost" value="{!wi.Material_Unit_Cost__c}" placeholder="Enter Unit Cost" disabled="true"/> 
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="{!if(v.ESTFormat == 'GSA Assemblies' , '','display:none')}" class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="iteminstallationfactor">Installation Cost</label>
+                                        <div class="slds-form-element__control">  
+                                            <ui:inputNumber class="slds-input" aura:id="itemInstallationCost" value="{!wi.Installation_Cost__c}" placeholder="Installation Cost" change="{!c.handleValueChange}" disabled="true"/> 
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="{!if(v.ESTFormat == 'GSA Assemblies' , '','display:none')}" class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="iteminstallationfactor">Minimum Cost</label>
+                                        <div class="slds-form-element__control">  
+                                            <ui:inputCurrency class="slds-input" aura:id="itemMinimumCost" value="{!wi.Minimum_Cost__c}" placeholder="Minimum Cost" change="{!c.handleValueChange}" disabled="true"/> 
+                                        </div>
+                                    </div>
+                                </td>
+                                
+                                <!-- COL 7 -->
+                                <td>
+                                    <div style="{!if(v.ESTFormat == 'GSA Assemblies' , '','display:none')}" class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="itemTotalCost">Total Cost</label>
+                                        <div class="slds-form-element__control">  
+                                            <ui:inputNumber class="slds-input" aura:id="itemTotalCost" value="{!wi.Total_Cost__c}" placeholder="Total Cost" disabled="true"/> 
+                                        </div>
+                                    </div>
+                                    <aura:if isTrue="{!and(v.recordId != null, v.recordId !='')}"> 
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label" for="itemComments">Comments</label>
+                                            <div class="slds-form-element__control">
+                                                <ui:inputTextArea class="slds-input slds-comment" aura:id="itemComments" value="{!wi.Comments__c}" placeholder="Enter Comments"/> 
+                                            </div>
+                                        </div>
+                                    </aura:if>
+                                    
+                                </td>
+                            </tr>
+                                </aura:if>
+                        </lightning:accordionSection>  
+                        </aura:iteration>
+                    </tbody>
+                </table>
+                <aura:if isTrue="{!v.isOpen}">
+                    <!--###### MODAL BOX Start######--> 
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-modal_small slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <!-- ###### MODAL BOX HEADER Start ######-->
+                            <aura:if  isTrue="{!v.createdItems.length > 0}">
+                                <header class="slds-modal__header">
+                                    <!-- <lightning:button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" variant="base" iconName="utility:close" title="Close" onclick="{!c.closeModal}"/> -->
+                                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Items Created Successfully</h2>
+                                </header>
+                                <!--###### MODAL BOX BODY Part Start######-->
+                                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                    <aura:iteration items='{!v.createdItems}' var='ci'>
+                                        <div>
+                                            <!--DES Item: <a id="{!ci.Id}" onclick='{!c.redirectToItem}'><ui:outputText class="field" value="{!ci.Description__c}" aura:unescapedHtml="true"/></a>-->
+                                            Des Item: <a id="{!ci.Id}" onclick='{!c.redirectToItem}'><lightning:formattedText value="{!ci.Description__c}"/></a>
+                                        </div>
+                                        <br/>
+                                    </aura:iteration>
+                                </div>
+                                <!--###### MODAL BOX FOOTER Part Start ######-->
+                                <footer class="slds-modal__footer">
+                                    <lightning:button label="Add More Items"
+                                    title="addMore"
+                                    onclick="{!c.addMoreItems}"/>
+                                    <a href="{!('/' +v.recordId)}" target="_parent">
+                                        <button class="slds-button slds-button_brand">Back to Tree Structure</button>
+                                    </a>
+                                    
+                                </footer>
+                                
+                                <!-- ###### MODAL NO ITEMS ######-->
+                                <aura:set attribute="else">
+                                    <div class="slds-modal__container">
+                                        <header class="slds-modal__header slds-modal__header_empty">
+                                            <lightning:button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" variant="base" iconName="utility:close" title="Close" onclick="{!c.closeModal}"/>
+                                        </header>
+                                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                                            <h2><b>No Items Selected:</b></h2><br/>
+                                            <p>Please select an item to add to the tree structure.</p><br/>
+                                        </div>
+                                        <footer class="slds-modal__footer"> 
+                                            
+                                            <lightning:button label="Cancel"
+                                                            title="Back"
+                                                            onclick="{!c.closeModal}"/>
+                                            <a href="{!('/' +v.recordId)}" target="_parent">
+                                                <button class="slds-button slds-button_brand">Back to Tree Structure</button>
+                                            </a>
+                                        
+                                        </footer>
+                                        
+                                    </div>                            
+                                </aura:set>
+                                
+                            </aura:if>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                    <!--###### MODAL BOX Part END Here ######-->
+                    
+                </aura:if>            
+                
+                <aura:if isTrue="{!and(v.recordId != null, v.recordId !='')}">
+                    <div class="slds-grid slds-p-around_large slds-grid_align-spread slds-docked-form-footer">
+                        <div class="slds-col"/>
+                        <div class="slds-col">
+                            <!-- <lightning:button class="slds-button slds-button_text-destructive" label="Remove Line Item" iconName="utility:close" iconPosition="left"/> -->
+                            <!-- <lightning:button label="Add Line Item" iconName="utility:add" iconPosition="left" title="addRow" onclick="{! c.addRow }"/> -->
+                            <lightning:button label="Back" variant="neutral" iconName="utility:back" iconPosition="left" title="Back" onclick="{!c.redirectToStructure}"/>
+                            <lightning:button label="Save" variant="brand" iconName="utility:save" iconPosition="left" title="Save" onclick="{! c.handleClick }"/>
+                        </div>
+                    </div>
+                </aura:if>
+                
+            </div>
+        </div>
+        </lightning:accordion> 
+    </aura:if>
+</aura:component>

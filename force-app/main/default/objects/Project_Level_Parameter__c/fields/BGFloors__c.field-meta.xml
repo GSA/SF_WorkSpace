@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BGFloors__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF((TEXT(NCMT_Project__r.Project_type__c)  == &apos;New Construction&apos; &amp;&amp; TEXT(NCMT_Project__r.Building_Type__c)  != &apos;Parking Garage&apos;),NCMT_Project__r.Total_GSF__c/( NCMT_Project__r.Above_Ground__c + NCMT_Project__r.Below_Ground__c),IF((TEXT(NCMT_Project__r.Project_type__c)  == &apos;Repair &amp; Alteration - Parametric Entry&apos; || TEXT(NCMT_Project__r.Project_type__c)  == &apos;Repair &amp; Alteration - Work Item Detail&apos;),NCMT_Project__r.Gross_Area_Including_Parking__c/( NCMT_Project__r.Above_Ground__c + NCMT_Project__r.Below_Ground__c),0))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>BGFloors</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

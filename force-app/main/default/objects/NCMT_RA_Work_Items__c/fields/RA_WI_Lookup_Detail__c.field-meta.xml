@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RA_WI_Lookup_Detail__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>RA WI Lookup Detail</label>
+    <lookupFilter>
+        <active>true</active>
+        <booleanFilter>((1 AND 2) OR (3 AND 4))</booleanFilter>
+        <filterItems>
+            <field>$Source.Work_Item_Type__c</field>
+            <operation>equals</operation>
+            <value>Repair</value>
+        </filterItems>
+        <filterItems>
+            <field>NCMT_RA_WI_Lookup_Details__c.Work_Item_Type__c</field>
+            <operation>equals</operation>
+            <value>Repair</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.Work_Item_Type__c</field>
+            <operation>equals</operation>
+            <value>Replace</value>
+        </filterItems>
+        <filterItems>
+            <field>NCMT_RA_WI_Lookup_Details__c.Work_Item_Type__c</field>
+            <operation>equals</operation>
+            <value>Replace</value>
+        </filterItems>
+        <infoMessage>Please enter the Work Item Cost Category and click &apos;Go&apos; button to see the list of available Lookup RA Details.</infoMessage>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>NCMT_RA_WI_Lookup_Details__c</referenceTo>
+    <relationshipLabel>RA Work Items</relationshipLabel>
+    <relationshipName>RA_Work_Items</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

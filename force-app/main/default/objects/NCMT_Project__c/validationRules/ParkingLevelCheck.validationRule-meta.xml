@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ParkingLevelCheck</fullName>
+    <active>true</active>
+    <description>For a record type of “Parking Garage”, check if the parking level above grade and parking level below grade are greater than 0</description>
+    <errorConditionFormula>RecordType.Name == &apos;Parking Garage&apos; &amp;&amp; 
+(BLANKVALUE(  Number_of_Spaces__c ,0) &lt;&gt; 0 ) &amp;&amp;
+(BLANKVALUE(At_and_above_grade__c , 0) +  BLANKVALUE(Below_grade__c , 0) = 0)</errorConditionFormula>
+    <errorMessage>Set number of parking levels</errorMessage>
+</ValidationRule>

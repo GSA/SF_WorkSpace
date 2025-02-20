@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RA_Total_Project_Costs__c</fullName>
+    <description>RA Total Project Costs</description>
+    <label>RA Total Project Costs</label>
+    <summarizedField>NCMT_Project_Cost_Summary__c.RA_Total_Cost__c</summarizedField>
+    <summaryFilterItems>
+        <field>NCMT_Project_Cost_Summary__c.RecordTypeId</field>
+        <operation>notEqual</operation>
+        <value>New Construction - DES</value>
+    </summaryFilterItems>
+    <summaryForeignKey>NCMT_Project_Cost_Summary__c.Project_Name__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

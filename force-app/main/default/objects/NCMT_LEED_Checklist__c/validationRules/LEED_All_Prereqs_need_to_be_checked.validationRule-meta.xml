@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LEED_All_Prereqs_need_to_be_checked</fullName>
+    <active>true</active>
+    <description>Leed Prereqs need to be checked</description>
+    <errorConditionFormula>Project__r.LEED_Record_Count__c ==0  &amp;&amp;
+RecordType.Name == &apos;LEED Prerequisite&apos; &amp;&amp;
+( IF( AND(Prerequisite_1__c,  Prerequisite_2__c, Prerequisite_3__c, Prerequisite_4__c, Prerequisite_5__c , Prerequisite_6__c,  Prerequisite_7__c, Prerequisite_8__c,  Prerequisite_9__c, Prerequisite_10__c, Prerequisite_11__c, Prerequisite_12__c), 1, 0))
+&lt;&gt; 1</errorConditionFormula>
+    <errorMessage>All LEED Prerequisites need to be checked</errorMessage>
+</ValidationRule>

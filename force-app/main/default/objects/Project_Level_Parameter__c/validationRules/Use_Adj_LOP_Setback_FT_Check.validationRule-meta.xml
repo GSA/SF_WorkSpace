@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Use_Adj_LOP_Setback_FT_Check</fullName>
+    <active>false</active>
+    <description>Use Adj LOP Setback FT</description>
+    <errorConditionFormula>PRIORVALUE(Adj_LOP_Setback__c)!= 0 &amp;&amp; Adj_LOP_Setback__c == 0</errorConditionFormula>
+    <errorDisplayField>Adj_LOP_Setback__c</errorDisplayField>
+    <errorMessage>Adj LOP Setback cannot be override to 0</errorMessage>
+</ValidationRule>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_Include_Location_Factor</fullName>
+    <active>true</active>
+    <errorConditionFormula>Cost_Category_Type__c == &apos;GSA Assemblies&apos; &amp;&amp;  ISCHANGED(Include_Location_Factor__c) &amp;&amp;  $Profile.Name &lt;&gt; &apos;GSA System Administrator&apos;</errorConditionFormula>
+    <errorDisplayField>Include_Location_Factor__c</errorDisplayField>
+    <errorMessage>Include Location Factor change doesn&apos;t apply for Express Menu Items</errorMessage>
+</ValidationRule>

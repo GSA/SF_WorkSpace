@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_WaterImpact_Changes</fullName>
+    <active>true</active>
+    <errorConditionFormula>(NOT(ISBLANK(Non_potable_water__c)) ||
+NOT(ISBLANK(Water__c)) ||
+NOT(ISBLANK(Sewer_kgal__c))) &amp;&amp; ISBLANK( Comments_WaterImpact_Changes__c)</errorConditionFormula>
+    <errorDisplayField>Comments_WaterImpact_Changes__c</errorDisplayField>
+    <errorMessage>Please enter Comments</errorMessage>
+</ValidationRule>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Default_Skin_Q_Modifiers__c</fullName>
+    <description>Formula for calculating Default skin ratio from skin Q modifiers</description>
+    <externalId>false</externalId>
+    <formula>IF(NCMT_Project__r.Parking_Structure__c = True , 1,   IF(NCMT_Project__r.Parking_Deck__c = True, 0.5 ,  IF( NCMT_Project__r.Below_Grade_Structure__c = True , 1 , 0 ) ) )  * IF( NCMT_Project__r.Sloped_Parking_Deck__c = True , 1,  IF( NCMT_Project__r.Speed_Ramp__c = True, 1, 0) )* IF( NCMT_Project__r.Optimized_for_Parking__c = True, 1,  IF( NCMT_Project__r.Medium_Efficiency__c = True, 1.2,  IF(NCMT_Project__r.Low_Efficiency__c = True, 1.5, 0) ) ) *  IF( NCMT_Project__r.Utilitarian__c = True, 1,  IF( NCMT_Project__r.Medium__c = True, 1,  IF( NCMT_Project__r.High__c = True, 1, 0) ) )</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Default Skin Q Modifiers</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

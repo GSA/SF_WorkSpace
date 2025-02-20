@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_Other_Cooling_Comments</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISCHANGED( Other_Cooling__c ) &amp;&amp;  ISBLANK( Other_Cooling_Comments__c )</errorConditionFormula>
+    <errorDisplayField>Other_Cooling_Comments__c</errorDisplayField>
+    <errorMessage>Please enter Other Cooling comments.</errorMessage>
+</ValidationRule>

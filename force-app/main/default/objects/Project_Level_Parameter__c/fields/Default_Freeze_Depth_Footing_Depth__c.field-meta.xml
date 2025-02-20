@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Default_Freeze_Depth_Footing_Depth__c</fullName>
+    <description>Value from Location Parameters for others excluding parking garage</description>
+    <externalId>false</externalId>
+    <formula>IF( NCMT_Project__r.RecordType.Name  &lt;&gt; &apos;Parking Garage&apos;,  NCMT_Project__r.Location__r.Freeze_Depth__c , 0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Based on statistics from ASCE and other tables recognized as norms in structural and civil engineering practices, as are water table depths.</inlineHelpText>
+    <label>Default Freeze Depth/Footing Depth Ft</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

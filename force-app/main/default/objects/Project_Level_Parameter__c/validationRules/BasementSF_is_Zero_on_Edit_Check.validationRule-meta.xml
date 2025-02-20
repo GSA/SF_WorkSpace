@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BasementSF_is_Zero_on_Edit_Check</fullName>
+    <active>true</active>
+    <errorConditionFormula>IF( Below_Ground__c == 0 &amp;&amp; ( PRIORVALUE( Basement_SF__c ) != Basement_SF__c), True, False)</errorConditionFormula>
+    <errorMessage>Below Ground SF Cannot be Override If Below Ground is 0</errorMessage>
+</ValidationRule>

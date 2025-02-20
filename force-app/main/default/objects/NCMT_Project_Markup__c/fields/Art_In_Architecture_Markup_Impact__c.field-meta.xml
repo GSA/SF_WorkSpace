@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Art_In_Architecture_Markup_Impact__c</fullName>
+    <formula>IF( RecordType.Name !=&apos;DES O&amp;P Project Markup&apos;, ((ECCA__c  + Construction_Contingency_Markup_Impact__c) * Art_In_Architecture__c), 0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Art In Architecture Markup Impact</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

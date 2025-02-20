@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LEED_USR_Mod_WE_Point_Chk_3</fullName>
+    <active>true</active>
+    <description>Water Efficiency - Cooling Tower Water Use - Point Check</description>
+    <errorConditionFormula>NOT( LEED_USR_Mod_WE_3__c = 0 || LEED_USR_Mod_WE_3__c  = 1 || LEED_USR_Mod_WE_3__c  = 2 )</errorConditionFormula>
+    <errorDisplayField>LEED_USR_Mod_WE_3__c</errorDisplayField>
+    <errorMessage>This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, or 2.</errorMessage>
+</ValidationRule>

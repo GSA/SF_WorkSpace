@@ -1,0 +1,107 @@
+<apex:page standardcontroller="NCMT_Project__c" extensions="NCMT_Project_RedirectExtension" sidebar="false" lightningStylesheets="true">
+    <style>
+    .links {
+    display: none !important;
+    }
+    </style>
+    
+    <table width="50%" style="float:right;">
+        <tr>
+            <td align="right"><a onClick="javascript:return fnAppendParametersHelpPage('HelpPage')" ID="HelpPage" href="NCMT_HelpPage" target="_blank">Help for this page</a></td>
+        </tr>
+    </table>    
+    <apex:sectionHeader title="NCMT Project Setup" 
+           description="This page gives option to select NCMT Project type of building "/> 
+    <apex:form id="frmList">
+    <apex:pageBlock id="NCMTProject" title="NCMT Project Detail">
+    <apex:pageBlockButtons location="bottom">
+        <input type="button" value="Continue" onClick="redirectpage()"/>
+    </apex:pageBlockButtons>
+    
+    <apex:pageBlockSection id="Projectdetails" title="Project Information"  columns="2" collapsible="false">
+        
+        <!-- ESTIMATE TYPE -->
+        <apex:pageBlockSectionItem helpText="{!$ObjectType.NCMT_Project__c.fields.Estimate_Type_Proj__c.InlineHelpText}">
+            <apex:outputLabel value="Estimate Type"/>
+            <apex:inputField required="true" id="cmbEstimateType" value="{!temp.Estimate_Type_Proj__c}" />
+        </apex:pageBlockSectionItem>
+        
+        <!-- PROJECT PHASES -->
+        <apex:pageBlockSectionItem helpText="Select a Project Phase">
+            <apex:outputLabel value="Project Phases"/>
+            <apex:inputField required="true" id="cmbProjectPhases" value="{!temp.Project_Phases__c}"/>
+        </apex:pageBlockSectionItem>
+        
+        <!-- PROJECT TYPE -->
+        <apex:pageBlockSectionItem helpText="{!$ObjectType.NCMT_Project__c.fields.Project_type__c.InlineHelpText}">
+            <apex:outputLabel value="Project Type"/>
+            <apex:inputField required="true" id="cmbProjectType" value="{!temp.Project_type__c}" />
+        </apex:pageBlockSectionItem>
+        
+        <!-- PROJECT SUBPHASES -->
+        <apex:pageBlockSectionItem helpText="Select a Project SubPhase">
+            <apex:outputLabel value="Project SubPhases"/>
+            <apex:inputField required="true" id="cmbProjectSubPhases" value="{!temp.Project_SubPhases__c}"/>
+        </apex:pageBlockSectionItem>
+        
+        <!-- BUILDING TYPE -->
+        <apex:pageBlockSectionItem helpText="{!$ObjectType.NCMT_Project__c.fields.Building_Type__c.InlineHelpText}">
+            <apex:outputLabel value="Building Type"/>
+            <apex:inputField required="true" id="cmbBuildingType" value="{!temp.Building_Type__c}"/>
+        </apex:pageBlockSectionItem>
+        
+        <!-- PURPOSE OF ESTIMATE -->
+        <apex:pageBlockSectionItem helpText="{!$ObjectType.NCMT_Project__c.fields.Purpose_of_Estimate__c.InlineHelpText}">
+            <apex:outputLabel value="Purpose of Estimate"/>
+            <apex:inputField required="true" id="cmbPoE" value="{!temp.Purpose_of_Estimate__c}"/>
+        </apex:pageBlockSectionItem>
+        
+        <!-- BUILDING SELECTION -->
+        <apex:pageBlockSectionItem helpText="{!$ObjectType.NCMT_Project__c.fields.Building_Selection__c.InlineHelpText}">
+            <apex:outputLabel value="Building Selection"/>
+            <apex:inputField required="true" id="cmbBuildingSelect" value="{!temp.Building_Selection__c}"/>
+        </apex:pageBlockSectionItem>
+        
+        
+    </apex:pageBlockSection>    
+    <apex:actionFunction action="{!redirect}" name="redirectpage"/>
+    </apex:pageBlock>
+    </apex:form>
+    <script language = "Javascript">
+    
+
+             function fnAppendParametersHelpPage(strURLID){
+            var ProjectType = document.getElementById('{!JSENCODE($Component.frmList.NCMTProject.Projectdetails.cmbProjectType)}').value;
+                 window.setTimeout(function(), 1000);//Part 1 SFWS-2512
+            //alert(ProjectType);
+            var BuildingType = document.getElementById('{!JSENCODE($Component.frmList.NCMTProject.Projectdetails.cmbBuildingType)}').value;
+                 window.setTimeout(function(), 1000);//Part 2 SFWS-2512
+            //alert(BuildingType );
+                 //Part 3 SFWS-2512: Sanitize user input using DOMPurify starts
+                 ProjectType=DOMPurify.sanitize(ProjectType);
+                 BuildingType=DOMPurify.sanitize(BuildingType);
+                 //Part 3 ends
+            if(ProjectType=='Repair & Alteration - Parametric Entry'){
+                    ProjectType = 'Parametric Entry';
+            }
+            else if(ProjectType == 'Repair & Alteration - Work Item Detail')
+            {
+                    ProjectType = 'Work Item Detail';
+            }
+            
+            linkHref = document.getElementById(strURLID).getAttribute('href');
+                //document.getElementById(strURLID).setAttribute('href', linkHref + '?ProjectType='+ProjectType+'&BuildingType='+BuildingType);
+         
+                 //Part 4 SFWS-2512:Encode URI Component starts
+                 var urlParams='?ProjectType='+encodeURIComponent(ProjectType)+'&BuildingType='+encodeURIComponent(BuildingType);
+                 document.getElementById(strURLID).setAttribute('href', linkHref + urlParams);
+                 // below line is commented out  
+                 //document.getElementById(strURLID).setAttribute('href', linkHref + '?ProjectType='+ProjectType+'&BuildingType='+BuildingType);
+                 //Part 4 ends
+                 
+            //setTimeout(function(){window.location.reload();},50000);
+   
+            }
+            
+    </script>
+</apex:page>

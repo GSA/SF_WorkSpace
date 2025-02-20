@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>My_DES_Projects</fullName>
+    <columns>NAME</columns>
+    <columns>Project_type__c</columns>
+    <columns>Building_Type__c</columns>
+    <columns>Total_Project_Cost_Aggregate__c</columns>
+    <columns>Project_Status__c</columns>
+    <columns>State__c</columns>
+    <columns>City__c</columns>
+    <columns>Location__c</columns>
+    <columns>Project_Delivery_Method__c</columns>
+    <columns>Mid_Point_of_Construction__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Mine</filterScope>
+    <filters>
+        <field>Project_type__c</field>
+        <operation>equals</operation>
+        <value>New Construction - DES,Repair &amp; Alteration - DES</value>
+    </filters>
+    <label>My DES Projects</label>
+</ListView>

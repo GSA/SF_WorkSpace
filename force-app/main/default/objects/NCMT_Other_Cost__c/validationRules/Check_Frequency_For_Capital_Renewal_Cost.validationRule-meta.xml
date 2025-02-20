@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_Frequency_For_Capital_Renewal_Cost</fullName>
+    <active>true</active>
+    <description>For TCO - User Option</description>
+    <errorConditionFormula>TEXT(Cost_Type__c) == &apos;Capital Renewal&apos; &amp;&amp;  Frequency_Years__c &lt;= 0</errorConditionFormula>
+    <errorDisplayField>Frequency_Years__c</errorDisplayField>
+    <errorMessage>Frequency should be greater than 0</errorMessage>
+</ValidationRule>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LPOE_Other_Cost</fullName>
+    <active>true</active>
+    <description>LPOE Other Cost</description>
+    <label>LPOE - Other Cost</label>
+    <picklistValues>
+        <picklist>Cost_Based_on__c</picklist>
+        <values>
+            <fullName>Gross Area</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Site Area</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Cost_Description__c</picklist>
+        <values>
+            <fullName>Core%2FShell Cost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>N%2FA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pro-rated</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tenant Cost</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Cost_Type__c</picklist>
+        <values>
+            <fullName>Core%2FShell</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Security</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Site Acquisition Cost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Site%2F Infrastructure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tenant</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

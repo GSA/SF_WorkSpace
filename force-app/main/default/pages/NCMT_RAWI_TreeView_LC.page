@@ -1,0 +1,18 @@
+<apex:page standardController="NCMT_RA_Work_Items__c"  recordSetVar="items"   lightningStylesheets="true">
+    <apex:slds />
+    <apex:includeLightning />
+    <div id="lightningPage"></div>
+     <script>
+        $Lightning.use("c:NCMT_RAWI_TreeView_App", function(){
+            $Lightning.createComponent("c:NCMT_RAWI_TreeView", {
+                "pcsId" : "{!$CurrentPage.parameters.id}",
+
+            },
+            'lightningPage',
+                function(cmp){
+     
+                });
+        
+        });
+        </script> 
+</apex:page>

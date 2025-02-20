@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_Approval_Process</fullName>
+    <active>true</active>
+    <description>If project record is submitted for approval, then it should be locked from editing.</description>
+    <errorConditionFormula>(NCMT_Project__r.IsApprovalProcess__c == True &amp;&amp;  TEXT(NCMT_Project__r.Project_Status__c) != &apos;Draft&apos;)</errorConditionFormula>
+    <errorMessage>The record you are trying to edit has been locked.</errorMessage>
+</ValidationRule>

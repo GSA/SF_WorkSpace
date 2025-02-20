@@ -1,0 +1,670 @@
+<apex:page controller="PBS_AAAP_AwardSelectedOfferController" tabStyle="PBS_AAAP_Agency_Requirement__c">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    
+    <script>
+        $(document).ready(function(){
+          //alert('d');
+          actionMethodFunc();
+        });
+    </script>
+    
+    <style>
+.errMessage {color:red; font-weight:bold;}
+
+    </style>
+    <apex:form id="form_offer_select_award">
+        <apex:actionFunction name="actionMethodFunc" action="{!actionMethod}" rerender="form_offer_select_award" />
+        <apex:PageBlock id="pgblck1" title="ENTER AWARD INFORMATION" mode="edit">
+            <apex:messages styleClass="errMessage"/>
+            <input type="hidden" name="currentvfpage" value="{!$CurrentPage.Name}"/>
+           <apex:pageBlockSection columns="2" title="Building Information" collapsible="false">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Recorded Owner" for="Owner"/>
+                    <apex:outputField value="{!offer.PBS_AAAP_Owner_Name__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Building Name" for="buildingName"/>
+                    <apex:outputField value="{!offer.PBS_AAAP_Building_Name__c}" id="buildingName"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Recorded Owner Address" for="RecordedOwnerAddress"/>
+                    <apex:outputField value="{!offer.PBS_AAAP_Owner_Address__c}" id="RecordedOwnerAddress"/> 
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Building Address" for="streetAddress"/>
+                    <apex:outputField value="{!offer.PBS_AAAP_Street_Address__c}" id="streetAddress"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >  
+                    <apex:outputLabel value="Recorded Owner City, State, Zip" for="RecordedOwnerCity"/>
+                    <apex:outputPanel >
+                        <apex:outputField value="{!offer.PBS_AAAP_Owner_City__c}" id="RecordedOwnerCity"/>,&nbsp;
+                        <apex:outputField value="{!offer.PBS_AAAP_Owner_State__c}" id="RecordedOwnerState"/>,&nbsp;
+                        <apex:outputField value="{!offer.PBS_AAAP_Owner_Zip__c}" id="RecordedOwnerZip"/> 
+                   </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Building City, State, Zip" for="Buildingcity"/>
+                    <apex:outputPanel >
+                        <apex:outputField value="{!offer.PBS_AAAP_City__c}" id="city"/>,&nbsp;
+                        <apex:outputField value="{!offer.PBS_AAAP_State__c}" id="state"/>,&nbsp;
+                        <apex:outputField value="{!offer.PBS_AAAP_ZipCode__c}" id="zipCode"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Recorded Owner Phone" for="RecordedOwnerPhone"/>
+                    <apex:inputField value="{!offer.PBS_AAAP_Owner_Main_Phone__c}" id="RecordedOwnerPhone"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Building Total RSF" for="BuildingTotalRSF"/>
+                    <apex:outputField value="{!offer.PBS_AAAP_GEN_PURPOSE_RENTABLE__c}" id="BuildingTotalRSF"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Recorded Owner Email" for="RecordedOwnerEmail"/>
+                    <apex:inputField value="{!currentObj.PBS_AAAP_Recorded_Owner_Email__c}" id="RecordedOwnerEmail"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Building Total ABOA" for="BuildingTotalABOA"/>
+                    <apex:outputField value="{!offer.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c}" id="BuildingTotalABOA"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection title="Award Information" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Contract Award Date" for="contractAwardDate"/>
+                    <apex:inputField value="{!currentObj.PBS_AAAP_CONTRACT_AWARD_DATE__c}" id="contractAwardDate" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Floors/Suites" for="Floors"/>
+                    <apex:outputField value="{!offer.PBS_AAAP_Number_of_floors__c}" id="Floors"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="New GSA Lease #" for="gsaLeaseNum"/>
+                    <apex:inputField value="{!currentObj.PBS_AAAP_NEW_GSA_LEASE_NUM__c}" id="gsaLeaseNum" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Awarded ABOA SF" for="awardedUSF"/>
+                  <!--  <apex:outputField value="{!currentObj.PBS_AAAP_SELECTED_USF__c}" id="awardedUSF"/> -->
+                    <apex:inputField value="{!currentObj.PBS_AAAP_SELECTED_USF__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Project #" for="projectnum"/>
+                    <apex:outputField value="{!agency.PBS_AAAP_Project_ID__c}" id="projectnum"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Awarded RSF" for="AwardedRSF"/>
+                    <apex:inputField value="{!currentObj.PBS_AAAP_Awarded_RSF__c}" id="AwardedRSF" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Lease Term" for="leaseTerm"/>
+                    <apex:outputField value="{!agency.PBS_AAAP_LEASE_TERM__c}" id="leaseTerm"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Awarded Common Area Factor as %" for="AreaFactor"/>
+                    <apex:outputPanel >
+                    <apex:outputText value="{0, number, 00.00}" id="AreaFactor">
+                        <apex:param value="{!awardedCommonAreaFactor}"/>
+                    </apex:outputText>%
+                    </apex:outputPanel>
+                    <!-- <apex:outputText value="{!awardedCommonAreaFactor}" id="AreaFactor"/> -->
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="PV Rate" for="PVRate"/>
+                    <apex:outputPanel >
+                        <table>
+                            <tr>
+                                <td>
+                                    <apex:outputText value="$" style="font-size:14px;"/>
+                                </td>
+                                <td>
+                                    <apex:inputField value="{!currentObj.PBS_AAAP_PV_RATE__c}" id="PVRate"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <!-- <apex:inputField value="{!currentObj.PBS_AAAP_PV_RATE__c}" required="true" id="PVRate"/> -->
+                        <!-- <span>$</span> -->
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Awarded Total Contract Value" for="awardedBaseRate"/>
+                    <apex:outputPanel >
+                    $<apex:outputText value="{0, number, ###,###,##0.00}" id="awardedBaseRate">
+                        <apex:param value="{!awardTotalContractValue}"/>
+                    </apex:outputText>
+                    </apex:outputPanel>
+                    <!-- <apex:outputText value="{!awardTotalContractValue}" id="awardedBaseRate"/> -->
+                </apex:pageBlockSectionItem>
+                <!-- <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="LCRM Pre-award" for="LCRM"/>
+                    <apex:outputPanel >
+                        <table>
+                            <tr>
+                                <td>
+                                    <apex:outputText value="$" style="font-size:14px;"/> 
+                                </td>
+                                <td>
+                                    <apex:inputField value="{!currentObj.PBS_AAAP_LCRM_PRE_AWARD__c}" id="LCRM"/>
+                                </td>
+                            </tr>
+                        </table> -->
+                        <!-- <apex:inputField value="{!currentObj.PBS_AAAP_LCRM_PRE_AWARD__c}" id="LCRM"/>$ -->
+                    <!-- </apex:outputPanel>
+                </apex:pageBlockSectionItem> -->
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Offer Id" for="offerId"/>
+                    <apex:outputField value="{!currentObj.PBS_AAAP_Offer_ID__c}" id="offerId"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection title="Tenant Improvements Allowance & Building Specific Amortized Capital">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="TI Allowance"/>
+                    <apex:outputPanel >
+                        <table>
+                            <tr>
+                                <td>
+                                    <apex:inputField value="{!currentObj.PBS_AAAP_TI_Allowance__c}" />
+                                </td>
+                                <td>
+                                    <apex:outputText value="/ABOA SF"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="BSAC Amount"/>
+                    <apex:outputPanel >
+                        <table>
+                            <tr>
+                                <td>
+                                    <apex:inputField value="{!currentObj.PBS_AAAP_BSAC_Placeholder__c}"/>
+                                </td>
+                                <td>
+                                    <apex:outputText value="/ABOA SF"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="TI Amortization Rate"/>
+                    <!--<apex:outputField value="{!rate.PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c}"/>-->
+                    <apex:inputField value="{!currentObj.PBS_AAAP_TI_Amortization_Rate__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="BSAC Amortization Rate"/>
+                    <!--<apex:outputField value="{!rate.PBS_AAAP_BSAC_RATE__c}"/>-->
+                    <apex:inputField value="{!currentObj.PBS_AAAP_BSAC_Amortization_Rate__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="TI Amortization Term"/>
+                    <apex:outputPanel >
+                        <apex:outputText value="{0, number, ###,###,##0}">
+                            <apex:param value="{!tiAmortizationTerm}"/>
+                        </apex:outputText>&nbsp;months
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="BSAC Amortization Term"/>
+                    <apex:outputPanel >
+                        <apex:outputText value="{0, number, ###,###,##0}">
+                            <apex:param value="{!bsacAmortizationTerm}"/>
+                        </apex:outputText>&nbsp;months
+                        <!-- <apex:outputText value="{!bsacAmortizationTerm}"/>&nbsp;months -->
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="1" collapsible="false">
+                <p>The Tenant Improvement Allowance and Building Specific Amortized Capital, if any, are amortized over the initial term of the lease as shown immediately above. The calculation has been completed for you in the Annual Rent (Firm Term or Initial Term) table shown below. These calculations can be checked using a reputable amortization calculator available online.</p>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Parking Rates Per Month">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="**Unreserved Surface"/>
+                    <apex:outputPanel >
+                        <!--<apex:outputField value="{!offer.PBS_AAAP_Monthly_cost_nonres_sur_park__c}"/>/space-->
+                        <table>
+                            <tr>
+                                <td>
+                                    <apex:inputField value="{!currentObj.PBS_AAAP_Unreserved_Surface__c}"/>
+                                </td>
+                                <td>
+                                    <apex:outputText value="/space"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <!--<apex:inputField value="{!currentObj.PBS_AAAP_Unreserved_Surface__c}" required="true"/>/space-->
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Number of spaces for GOVs"/>
+                    <!--<apex:inputField value="{!currentObj.PBS_AAAP_AGENCY_REQUIREMENT_ID__r.PBS_AAAP_TOT_RESEV_PARK_SPACES_SUR_LOT__c}"/>-->
+                    <apex:inputField value="{!currentObj.Non_reserved_surface_Spaces_for_GOVs__c}"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="**Unreserved Structured"/>
+                    <apex:outputPanel >
+                        <!--<apex:outputField value="{!offer.PBS_AAAP_Monthly_cost_nonres_gar_park__c}"/>/space-->
+                        <table>
+                            <tr>
+                                <td>
+                                    <apex:inputField value="{!currentObj.PBS_AAAP_Unreserved_Structured__c}" />
+                                </td>
+                                <td>
+                                    <apex:outputText value="/space"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <!--<apex:inputField value="{!currentObj.PBS_AAAP_Unreserved_Structured__c}" required="true"/>/space-->
+                    </apex:outputPanel>
+
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Number of spaces for GOVs"/>
+                    <!--<apex:inputField value="{!currentObj.PBS_AAAP_AGENCY_REQUIREMENT_ID__r.PBS_AAAP_TOT_NONRESV_PARK_SPACES_SURLOT__c}"/>-->
+                    <apex:inputField value="{!currentObj.Unreserved_Structured_spaces_for_GOVs__c}"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+
+                    <apex:outputLabel value="**Reserved Surface"/>
+                    <apex:outputPanel >
+                        <!--<apex:outputField value="{!offer.PBS_AAAP_Monthly_cost_res_sur_park__c}"/>/space-->
+                        <table>
+                            <tr>
+                                <td>
+                                    <apex:inputField value="{!currentObj.PBS_AAAP_Reserved_Surface__c}" />
+                                </td>
+                                <td>
+                                    <apex:outputText value="/space"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <!--<apex:inputField value="{!currentObj.PBS_AAAP_Reserved_Surface__c}" required="true"/>/space-->
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Number of spaces for GOVs"/>
+                    <!--<apex:inputField value="{!currentObj.PBS_AAAP_AGENCY_REQUIREMENT_ID__r.PBS_AAAP_TOT_RESV_PARKING_SPACES_GARAGE__c}"/>-->
+                    <apex:inputField value="{!currentObj.Reserved_Surface_Spaces_for_GOVs__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+
+                    <apex:outputLabel value="**Reserved Structured"/>
+                    <apex:outputPanel >
+                        <!--<apex:outputField value="{!offer.PBS_AAAP_Monthly_cost_res_gar_park__c}"/>/space-->
+                        <table>
+                            <tr>
+                                <td>
+                                    <apex:inputField value="{!currentObj.PBS_AAAP_Reserved_Structured__c}" />
+                                </td>
+                                <td>
+                                    <apex:outputText value="/space"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <!--<apex:inputField value="{!currentObj.PBS_AAAP_Reserved_Structured__c}" required="true"/>/space-->
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Number of spaces for GOVs"/>
+                    <!--<apex:inputField value="{!currentObj.PBS_AAAP_AGENCY_REQUIREMENT_ID__r.PBS_AAAP_TOT_NONRESV_PARK_SPACES_GARAGE__c}"/>-->
+                    <apex:inputField value="{!currentObj.Reserved_Structured_Spaces_for_GOVs__c}"/>
+                </apex:pageBlockSectionItem>
+
+
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection columns="1" title="{!title1}" collapsible="false" >
+                <apex:panelGrid columns="4" style="text-align: right;">
+                    <apex:outputLabel style="width:200px; display:inline-block; text-align: right;" styleClass="labelCol" value=""/>
+                    <apex:outputLabel style="width:200px; display:inline-block; text-align: right" styleClass="labelCol" value="$/Year"/>
+                    <apex:outputLabel style="width:200px; display:inline-block; text-align: right" styleClass="labelCol" value="$/RSF"/>
+                    <apex:outputLabel style="width:200px; display:inline-block; text-align: right" styleClass="labelCol" value="$/ABOA"/>
+
+                    <div style="width:200px; padding-right: 20px; text-align: right;" class="labelCol">Shell Rent*</div>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.00}">
+                        <apex:param value="{!shellRentperYear_FT}"/>
+                        </apex:outputText>
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.000000}">
+                        <apex:param value="{!shellRentperRSF_FT}"/>
+                        </apex:outputText>
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<!--<apex:outputText value="{0, number, ###,###,##0.00}" >
+                        <apex:param value="{!rate.PBS_AAAP_FULLY_SRVC_FIRM_TERM__c}"/>
+                        </apex:outputText>-->
+                        <apex:inputField value="{!currentObj.PBS_AAAP_Shell_Rent_Per_Year_ABOA__c}"/>
+                        
+                    </apex:outputPanel>
+                    <!-- <apex:outputField value="{!rate.PBS_AAAP_FULLY_SRVC_FIRM_TERM__c}"/> -->
+
+                    <div style="width:200px; padding-right: 20px;" class="labelCol">Operating Costs*</div>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.00}">
+                        <apex:param value="{!operatingCostsperYear_FT}"/>
+                        </apex:outputText>
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.000000}">
+                        <apex:param value="{!operatingCostsperRSF_FT}"/>
+                        </apex:outputText>
+                        
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<!--<apex:outputText value="{0, number, ###,###,##0.00}">
+                        <apex:param value="{!rate.PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c}"/>
+                        </apex:outputText>-->
+                        <apex:inputField value="{!currentObj.PBS_AAAP_Operating_Costs_Per_ABOA__c}"/>
+                        
+                    </apex:outputPanel>
+                    <!-- <apex:outputField value="{!rate.PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c}"/> -->
+
+                    <div style="width:200px; padding-right: 20px;" class="labelCol">Tenant Improvement Rent**</div>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.00}">
+                        <apex:param value="{!tenantImprovementperYear_FT}"/>
+                        </apex:outputText>
+                        
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.000000}">
+                        <apex:param value="{!tenantImprovementperRSF_FT}"/>
+                        </apex:outputText>
+                        
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.000000}">
+                        <apex:param value="{!TIRperABOA}"/>     <!--rate.PBS_AAAP_ANNUAL_AMORT_TI_COSTS__c - Nik-->
+                        </apex:outputText>
+                    </apex:outputPanel>
+                    <!-- <apex:outputField value="{!rate.PBS_AAAP_ANNUAL_AMORT_TI_COSTS__c}"/> -->
+
+                    <div style="width:200px; padding-right: 20px;" class="labelCol">BSAC**</div>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.00}">
+                        <apex:param value="{!bsacperYear_FT}"/>
+                        </apex:outputText>
+                        
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.000000}">
+                        <apex:param value="{!bsacperRSF_FT}"/>
+                        </apex:outputText>
+                        
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.00}">
+                        <apex:param value="{!BSACperABOA}"/>              <!--rate.PBS_AAAP_BSAC__c - Nik-->
+                        </apex:outputText>
+                    </apex:outputPanel>
+                    <!-- <apex:outputField value="{!rate.PBS_AAAP_BSAC__c}"/> -->
+
+                    <div style="width:200px; padding-right: 20px;" class="labelCol">Parking</div>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.00}">
+                        <apex:param value="{!parkingperYear_FT}"/>
+                        </apex:outputText>
+                        
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.000000}">
+                        <apex:param value="{!parkingperRSF_FT}"/>
+                        </apex:outputText>
+                        
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.000000}">
+                        <apex:param value="{!parkingperABOA_FT}"/>
+                        </apex:outputText>
+                        <!-- $<apex:outputText value="{!parkingperABOA_FT}"/> -->
+                    </apex:outputPanel>
+                    <div style="width:200px; padding-right: 20px;" class="labelCol">Total Annual Rent</div>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.00}">
+                        <apex:param value="{!totalAnnualRentperYear_FT}"/>
+                        </apex:outputText>
+                        <!-- $<apex:outputText value="{!totalAnnualRentperYear_FT}"/> -->
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.000000}">
+                        <apex:param value="{!totalAnnualRentperRSF_FT}"/>
+                        </apex:outputText>
+                        <!-- $<apex:outputText value="{!totalAnnualRentperRSF_FT}"/> -->
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.000000}">
+                        <apex:param value="{!totalAnnualRentperABOA_FT}"/>
+                        </apex:outputText>
+                        <!-- $<apex:outputText value="{!totalAnnualRentperABOA_FT}"/> -->
+                    </apex:outputPanel>
+                </apex:panelGrid>
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection columns="1" title="{!title2}" collapsible="false" >
+                <apex:panelGrid columns="4" style="text-align: right;">
+                    <apex:outputLabel style="width:200px; display:inline-block; text-align: right;" styleClass="labelCol" value=""/>
+                    <apex:outputLabel style="width:200px; display:inline-block; text-align: right;" styleClass="labelCol" value="$/Year"/>
+                    <apex:outputLabel style="width:200px; display:inline-block; text-align: right;" styleClass="labelCol" value="$/RSF"/>
+                    <apex:outputLabel style="width:200px; display:inline-block; text-align: right;" styleClass="labelCol" value="$/ABOA"/>
+
+                    <div style="width:200px; padding-right: 20px; text-align: right;" class="labelCol">Shell Rent*</div>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.00}">
+                        <apex:param value="{!shellRentperYear_NFT}"/>
+                        </apex:outputText>
+                        <!-- $<apex:outputText value="{!shellRentperYear_NFT}"/> -->
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.000000}">
+                        <apex:param value="{!shellRentperRSF_NFT}"/>
+                        </apex:outputText>
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<!--<apex:outputText value="{0, number, ###,###,##0.00}">
+                        <apex:param value="{!rate.PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c}"/>
+                        </apex:outputText>-->
+                        <apex:inputField value="{!currentObj.PBS_AAAP_Shell_Rent_Per_ABOA_NFT__c}"/>
+                    </apex:outputPanel>
+
+
+                    <div style="width:200px; padding-right: 20px;" class="labelCol">Operating Costs*</div>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.00}">
+                        <apex:param value="{!operatingCostsperYear_NFT}"/>
+                        </apex:outputText>
+                        <!-- $<apex:outputText value="{!operatingCostsperYear_NFT}"/> -->
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.000000}">
+                        <apex:param value="{!operatingCostsperRSF_NFT}"/>
+                        </apex:outputText>
+                        <!-- $<apex:outputText value="{!operatingCostsperRSF_NFT}"/> -->
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<!--<apex:outputText value="{0, number, ###,###,##0.00}">
+                        <apex:param value="{!rate.PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c}"/>
+                        </apex:outputText>-->
+                        <apex:inputField value="{!currentObj.PBS_AAAP_Operating_Costs_Per_ABOA_NFT__c}"/>
+                    </apex:outputPanel>
+                    <!-- <apex:outputField value="{!rate.PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c}"/> -->
+
+                    <div style="width:200px; padding-right: 20px;" class="labelCol">Parking</div>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.00}">
+                        <apex:param value="{!parkingperYear_NFT}"/>
+                        </apex:outputText>
+                        <!-- $<apex:outputText value="{!parkingperYear_NFT}"/> -->
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.000000}">
+                        <apex:param value="{!parkingperRSF_NFT}"/>
+                        </apex:outputText>
+                        <!-- $<apex:outputText value="{!parkingperRSF_NFT}"/> -->
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.000000}">
+                        <apex:param value="{!parkingperABOA_NFT}"/>
+                        </apex:outputText>
+                        <!-- $<apex:outputText value="{!parkingperABOA_NFT}"/> -->
+                    </apex:outputPanel>
+
+                    <div style="width:200px; padding-right: 20px;" class="labelCol">Total Annual Rent</div>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.00}">
+                        <apex:param value="{!totalAnnualRentperYear_NFT}"/>
+                        </apex:outputText>
+                        <!-- $<apex:outputText value="{!totalAnnualRentperYear_NFT}"/> -->
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.000000}">
+                        <apex:param value="{!totalAnnualRentperRSF_NFT}"/>
+                        </apex:outputText>
+                        <!-- $<apex:outputText value="{!totalAnnualRentperRSF_NFT}"/> -->
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        $<apex:outputText value="{0, number, ###,###,##0.000000}">
+                        <apex:param value="{!totalAnnualRentperABOA_NFT}"/>
+                        </apex:outputText>
+                        <!-- $<apex:outputText value="{!totalAnnualRentperABOA_NFT}"/> -->
+                    </apex:outputPanel>
+                </apex:panelGrid>
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection title="Space Information" columns="2">
+                 <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Space Information" for="spaceInfo"/>
+                    <apex:outputField value="{!currentObj.PBS_AAAP_Space_ID__c}" id="spaceInfo"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Rate ID:" for="Rateinfo"/>
+                    <apex:outputLink value="/{!rate.Id}" target="_blank" id="Rateinfo"> 
+                                {!rate.Name}
+                            </apex:outputLink>
+                    <!-- <apex:outputField value="{!rate.Id}" /> -->
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <div style="padding-left:20px;">
+            <!--<apex:pageBlockSection columns="1" collapsible="false">-->
+                <!--<p>AAAP offered rates are entered as per ABOA SF. When finalized, the above annual rent ($/Year) should be added to the table in Section 1.03 of the AAAP lease contract. Per section 1.03 of the lease, the calculations are as follows:<br/><br/>
+                    Shell rent calculation for firm and non firm term: $XX per ABOA SF multiplied by XX ABOA SF.<br/><br/>
+                    The Tenant Improvement Allowance of $XX.XX per ABOA (total TI amount $XXX,XXX) is amortized at a rate of X percent per annum over XX years. See TIA &amp; BSAC table below for calculation detail.<br/><br/>
+                    Operating Costs rent calculation: $XX per ABOA SF multiplied by XX ABOA SF.<br/><br/>
+                    Building Specific Amortized Capital (BSAC) of $XX.XX per ABOA are amortized at a rate of X percent per annum over XX years. See TIA &amp; BSAC table below for calculation detail.<br/><br/>
+                    Parking shall be provided at a rate of $XX per parking space per month (structured/inside), and $XX per parking space per month (surface/outside).<br/><br/>
+                    *Rounded rentable rates are calculated by dividing the Annual Rents by the Space RSF. Do not use these figures to recalculate the Annual Rents.<br/><br/>
+                    **Rounded rentable and ABOA rates are calculated by dividing the Annual Rents by the Space RSF and ABOA SF. Do not use these figures to calculate the Annual Rents.<br/>><br/>
+                    NOTE: Free rent, which includes shell, operating, TI and BSAC rent, has not been factored into the rental rate table above.  Any free rent offered is listed below.<br/>
+                </p>-->
+                <p>AAAP offered rates are entered as per ABOA SF. When finalized, the above annual rent ($/Year) should be added to the table in Section 1.03 of the AAAP lease contract. Per section 1.03 of the lease, the calculations are as follows:<br/><br/>
+                    <!--Shell rent calculation for firm and non firm term: $<apex:outputText value="{0, number,0.00}"><apex:param value="{!ROUND(currentObj.PBS_AAAP_Shell_Rent_Per_Year_ABOA__c, 2)}"/></apex:outputText> per ABOA SF multiplied by <apex:outputText value="{0, number, ###,###,###,###}"><apex:param value="{!ROUND(currentObj.PBS_AAAP_SELECTED_USF__c,0)}"/></apex:outputText> ABOA SF.<br/><br/>-->
+                    Shell rent calculation for initial term: $<apex:outputText value="{0, number,0.00}"><apex:param value="{!ROUND(currentObj.PBS_AAAP_Shell_Rent_Per_Year_ABOA__c, 2)}"/></apex:outputText> per ABOA SF multiplied by <apex:outputText value="{0, number, ###,###,###,###}"><apex:param value="{!ROUND(currentObj.PBS_AAAP_SELECTED_USF__c,0)}"/></apex:outputText> ABOA SF. Shell rent calculation for secondary term: $<apex:outputText value="{0, number,0.00}"><apex:param value="{!ROUND(currentObj.PBS_AAAP_Shell_Rent_Per_ABOA_NFT__c, 2)}"/></apex:outputText> per ABOA SF multiplied by <apex:outputText value="{0, number, ###,###,###,###}"><apex:param value="{!ROUND(currentObj.PBS_AAAP_SELECTED_USF__c,0)}"/></apex:outputText> ABOA SF.<br/><br/>
+                    The Tenant Improvement Allowance of $<apex:outputText value="{0, number,0.00}"><apex:param value="{!ROUND(currentObj.PBS_AAAP_TI_Allowance__c,2)}"/></apex:outputText> per ABOA (total TI amount $<apex:outputText value="{0, number,###,###,##0.00}"><apex:param value="{!ROUND(totTIammountRef,2)}"/></apex:outputText>) is amortized at a rate of&nbsp;<apex:outputText value="{0, number,0.00}"><apex:param value="{!ROUND(currentObj.PBS_AAAP_TI_Amortization_Rate__c,2)}"/></apex:outputText> percent per annum over {!ROUND(tiAmortizationTerm,0)} months. See TIA &amp; BSAC table above for calculation detail.<br/><br/>
+                    Operating Costs rent calculation: $<apex:outputText value="{0, number,0.00}"><apex:param value="{!ROUND(currentObj.PBS_AAAP_Operating_Costs_Per_ABOA__c,2)}"/></apex:outputText> per ABOA SF multiplied by <apex:outputText value="{0, number, ###,###,###,###}"><apex:param value="{!ROUND(currentObj.PBS_AAAP_SELECTED_USF__c,0)}"/></apex:outputText> ABOA SF.<br/><br/>
+                    Building Specific Amortized Capital (BSAC) of $<apex:outputText value="{0, number,0.00}"><apex:param value="{!ROUND(currentObj.PBS_AAAP_BSAC_Placeholder__c,2)}"/></apex:outputText> per ABOA are amortized at a rate of&nbsp;<apex:outputText value="{0, number,0.00}"><apex:param value="{!ROUND(currentObj.PBS_AAAP_BSAC_Amortization_Rate__c,2)}"/></apex:outputText> percent per annum over {!ROUND(bsacAmortizationTerm,0)} months. See TIA &amp; BSAC table above for calculation detail.<br/><br/>
+                    <!--Parking shall be provided at a rate of $XX per parking space per month (structured/inside), and $XX per parking space per month (surface/outside).<br/><br/>-->
+                    *Rounded rentable rates are calculated by dividing the Annual Rents by the Space RSF. Do not use these figures to recalculate the Annual Rents.<br/><br/>
+                    **Rounded rentable and ABOA rates are calculated by dividing the Annual Rents by the Space RSF and ABOA SF. Do not use these figures to calculate the Annual Rents.<br/><br/>
+                    <!--  NOTE: Free rent, which includes shell, operating, TI and BSAC rent, has not been factored into the rental rate table above.  Any free rent offered is listed below.<br/>-->
+                    NOTE: Free rent, which includes shell, operating, parking, TI and BSAC rent, has not been factored into the rental table above.  Any free rent offered is listed below.<br/>
+                </p>
+            <!--</apex:pageBlockSection>-->
+            </div>
+
+            <apex:pageBlockSection title="Other" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Lessor PM Fee"/>
+                    <apex:outputPanel >
+                    <!--<apex:outputField value="{!space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c}"/>-->
+                    <apex:inputField value="{!currentObj.PBS_AAAP_Lessor_PM_Fee__c}"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="HVAC Overtime Rate per Hour" for="OVACHeating"/>
+                    <apex:outputPanel >
+                    <!--<apex:outputField value="{!rate.PBS_AAAP_OT_RATE_COOLING_HEAT__c}" id="OVACHeating"/>-->
+                    <apex:inputField value="{!currentObj.PBS_AAAP_HVAC_Overtime_Rate_per_Hour__c}" id="OVACHeating"/>
+                    <apex:outputText value=" /per hour"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="A/E Fees"/>
+                    <apex:outputPanel >
+                        <apex:outputText rendered="{!space.PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c=='$ Per ABOA SF'}">
+                            <!--$<apex:outputField value="{!space.PBS_AAAP_ARCH_ENG_FEES__c}"/> &nbsp;Per ABOA SF-->
+                            $<apex:inputField value="{!currentObj.PBS_AAAP_A_E_Fees__c}"/>&nbsp;Per ABOA SF
+                        </apex:outputText>
+                        <apex:outputText rendered="{!space.PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c=='%'}">
+                            <!--<apex:outputField value="{!space.PBS_AAAP_ARCH_ENG_FEES__c}"/>%-->
+                            <apex:inputField value="{!currentObj.PBS_AAAP_A_E_Fees__c}"/>%
+                        </apex:outputText>
+                        <!-- <apex:outputField value="{!space.PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c}"/> -->
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Free Rent" />
+                    <apex:outputPanel >
+                    <!--<apex:outputText value="{0, number, ###,###,##0}">
+                        <apex:param value="{!rate.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c}"/>
+                    </apex:outputText>-->
+                    <apex:inputField value="{!currentObj.PBS_AAAP_Free_Rent__c}"/>
+                    <!-- <apex:outputField value="{!rate.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c}"/> -->
+                    <apex:outputText value=" months"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Adjustment for Vacant Premises"/>
+                    <apex:outputPanel >
+                        <!--<apex:outputField value="{!offer.PBS_AAAP_Vacant_Premise_Rate__c}"/>-->
+                        <apex:inputField value="{!currentObj.PBS_AAAP_Adjustment_for_Vacant_Premises__c}"/>
+                        <apex:outputText value=" /ABOA SF"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="% Occupancy (by RSF)"/>
+                    <apex:outputPanel >
+                        <apex:outputText value="{0, number, ###,###,##0.00}">
+                        <apex:param value="{!percentageOccupancyByRSF}"/>
+                        </apex:outputText>%
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="1" collapsible="false">
+                <p>‘Other’ components of the lease do not impact the fully services rates, but they do factor into the present value analysis and are elements that may be captured in the lease document. They are available in the table for your reference.</p>
+            </apex:pageBlockSection> 
+            <apex:pageBlockSection title="AAAP Manager Information" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="AAAP Manager:"/>
+                    <apex:inputField value="{!agency.PBS_AAAP_AASN_AAAP_MANAGER__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Last Modified By:"/>
+                    <apex:outputField value="{!currentObj.LastModifiedBy.Name}" />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!actionSave}" value="Save" />
+                <apex:commandButton action="{!actionCancel}" value="Cancel" immediate="true"/>
+        <!--
+                <apex:commandButton action="{!prepareDocument}" value="Award Offer" onclick="if(!confirm('Please read carefully - you have elected to award the Lease in the AAAP system. ' +
+                     'This process cannot be undone without Administrative action. ' +
+                      'By awarding in the AAAP system, you acknowledge that the Lease Contract has ' +
+                       'been awarded and the Award Offer Information Page is complete with Lease ' +
+                        'information that matches the Lease Contract.  If you are not ready to ' +
+                         'award, please click \'Cancel\'.  If you are ready to award, please press \'OK\'.'))return false;"/>
+        -->
+            </apex:pageBlockButtons>
+        </apex:PageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>StartEndConstructionBlankCheck</fullName>
+    <active>true</active>
+    <description>Either Start Construction or Date of Occupancy must be entered.</description>
+    <errorConditionFormula>(TEXT(Estimate_Type_Proj__c)&lt;&gt;&apos;Definitive Estimating&apos; &amp;&amp; TEXT(Estimate_Type_Proj__c)&lt;&gt;&apos;Cost Estimating Workbook&apos; &amp;&amp; ISBLANK (TEXT(Start_Construction__c)) &amp;&amp; 
+ISBLANK (TEXT(End_Construction__c)) 
+)</errorConditionFormula>
+    <errorDisplayField>Start_Construction__c</errorDisplayField>
+    <errorMessage>Enter either Start Construction or Date of Occupancy.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_RA_Default_Housing_Plan_Entry_Type</fullName>
+    <active>true</active>
+    <description>If Default housing plan is checked, then choose default housing plan entry type</description>
+    <errorConditionFormula>if(Default_Housing_Plan__c &amp;&amp;  TEXT(Project_type__c) != &apos;New Construction&apos;,if(TEXT(Default_Housing_Plan_Entry_Type__c ) != &apos;&apos;,false,true), false)</errorConditionFormula>
+    <errorMessage>For R&amp;A Default Housing Plan, choose Default Housing Plan Entry Type.</errorMessage>
+</ValidationRule>

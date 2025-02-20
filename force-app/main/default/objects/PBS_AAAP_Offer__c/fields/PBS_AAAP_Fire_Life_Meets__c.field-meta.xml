@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PBS_AAAP_Fire_Life_Meets__c</fullName>
+    <inlineHelpText>With regard to Fire Protection and Life Safety:
+The Property meets the Lease fire protection/life safety standards
+The Property will be improved to meet the Lease fire protection/life safety standards.
+The Property does not meet the Lease fire protection/life safety standards and will not be upgraded.</inlineHelpText>
+    <label>Fire/Life Meets</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Meets</fullName>
+                <default>false</default>
+                <label>Meets</label>
+            </value>
+            <value>
+                <fullName>Will meet</fullName>
+                <default>false</default>
+                <label>Will meet</label>
+            </value>
+            <value>
+                <fullName>Does not meet</fullName>
+                <default>false</default>
+                <label>Does not meet</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

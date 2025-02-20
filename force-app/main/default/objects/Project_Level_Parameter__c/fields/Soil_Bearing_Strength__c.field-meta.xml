@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Soil_Bearing_Strength__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(TEXT(Soil_Bearing_Capacity__c) == &apos;Poor&apos;, 2000, IF(TEXT(Soil_Bearing_Capacity__c) == &apos;Moderate&apos;,3000,IF(TEXT(Soil_Bearing_Capacity__c) == &apos;Good&apos;,5000,IF(TEXT(Soil_Bearing_Capacity__c) == &apos;Very Good&apos;,7000,0))))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Soil Bearing Strength PSF</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cost_Premium_Modifier__c</fullName>
+    <formula>if( Project_Cost_Summary__r.Project_Name__r.RecordType.Name == &quot;New Construction - TCO&quot; , Case(Core_Shell_Cost_Parameter__r.Core_Shell_Cost_Parameter_Identifier__c,
+&apos;CC21&apos;,IF(Unit_Cost__c==0, 0,(TCO_Performance_Input__r.Slab_Unit_Cost__c/Unit_Cost__c)), 
+&apos;CC167&apos;,TCO_Performance_Input__r.Wall_Nom_Cost_Modifier__c ,
+&apos;CC176&apos;,TCO_Performance_Input__r.Glaz_R_Cost_Modifier__c , 
+&apos;CC174&apos;,TCO_Performance_Input__r.Glaz_R_Cost_Modifier__c ,
+&apos;CC201&apos;,TCO_Performance_Input__r.Roof_Cost_Modifier__c ,
+&apos;CC-27182&apos;, Round(Value(Text(TCO_Performance_Input__r.Is_Non_Portable_Water_Available__c))*3.33,1)*30,
+&apos;CC289&apos;,if(VALUE(TEXT(TCO_Performance_Input__r.X100_Electric__c))==0,1,1.1) * TCO_Performance_Input__r.Heating_Efficiency_P__c ,
+&apos;CC290&apos;,TCO_Performance_Input__r.Cooling_Eff_Cost_Modifier__c,
+&apos;CC292&apos;, TCO_Performance_Input__r.Fan_Eff_Cost_Modifier_1__c, 
+&apos;CC293&apos;, TCO_Performance_Input__r.Fan_Eff_Cost_Modifier_1__c, 
+&apos;CC295&apos;,TCO_Performance_Input__r.Fan_Eff_Cost_Modifier_2__c,
+&apos;CC296&apos;,TCO_Performance_Input__r.Fan_Eff_Cost_Modifier_2__c,
+&apos;CC297&apos;,TCO_Performance_Input__r.Fan_Eff_Cost_Modifier_2__c,
+&apos;CC305&apos;,TCO_Performance_Input__r.D9__c,
+&apos;CC380&apos;,TCO_Performance_Input__r.Water_Cost_Modifier__c,
+&apos;CC-27180&apos;,200,
+&apos;CC-27181&apos;,90, 
+Cost_Premium_Mod_2__c), 0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Cost Premium Modifier</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

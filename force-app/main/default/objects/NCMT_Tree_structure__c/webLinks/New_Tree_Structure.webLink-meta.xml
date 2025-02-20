@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>New_Tree_Structure</fullName>
+    <availability>online</availability>
+    <description>To pass NCMT Project name to related tree page</description>
+    <displayType>button</displayType>
+    <encodingKey>UTF-8</encodingKey>
+    <linkType>url</linkType>
+    <masterLabel>New Tree Structure</masterLabel>
+    <openType>replace</openType>
+    <protected>false</protected>
+    <url>/{!$Setup.NCMT_RedirectCustomObjectpage__c.NCMT_Tree_Struc_UI__c}/e?{!$Setup.NCMT_RedirectCustomObjectpage__c.NCMT_Tree_Parent_Node_Lkid__c}={!NCMT_Tree_structure__c.Name}&amp;{!$Setup.NCMT_RedirectCustomObjectpage__c.NCMT_Tree_Parent_Node_Lkid__c}_lkid={!NCMT_Tree_structure__c.Id}&amp;{!$Setup.NCMT_RedirectCustomObjectpage__c.TreeStructure_Name_ID__c}={!NCMT_Tree_structure__c.Project_ID__c}&amp;{!$Setup.NCMT_RedirectCustomObjectpage__c.TreeStructure_Name_ID__c}_lkid={!NCMT_Tree_structure__c.Project_IDId__c}&amp;retURL=/{!NCMT_Tree_structure__c.Id}</url>
+</WebLink>

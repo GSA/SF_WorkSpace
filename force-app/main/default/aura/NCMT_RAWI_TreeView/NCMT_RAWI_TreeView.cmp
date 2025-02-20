@@ -1,0 +1,100 @@
+<aura:component controller="NCMT_RAWI_TreeViewCtrl_LC">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <aura:handler name="addMoreEvt" event="c:NCMT_RA_Add_More" action="{!c.doAddMore}"/>
+    <aura:attribute name="confirmBack" type="boolean" default="false" />
+
+    <aura:attribute name="tree" type="object" />
+    <aura:attribute name= 'phases' type='map' />
+    <aura:attribute name="pcs" type="NCMT_Project_Cost_Summary__c" />
+    <aura:attribute name= 'locationMultiplier' type='Decimal' />
+
+    <aura:attribute name= 'pcsId' type='string' />
+
+    
+    <div class="slds-page-header slds-container_xx-large">
+        
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-report" aria-hidden="true" title="NCMT RA Work Items">
+                            <lightning:icon class="slds-icon slds-page-header__icon" iconName="standard:report"/>
+                            <span class="slds-assistive-text">report</span>
+                        </span>
+                    </div>
+
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                 <h1>
+                                    <span class="slds-page-header__title slds-truncate">R&amp;A Work Items</span>
+                                    </h1>
+                            </div>
+                        </div>
+                        <div>
+                        <b class="slds-page-header__name-meta" title="{!v.projectCost.Project_Name__r.Name}">{!v.pcs.Project_Name__r.Name}</b>
+                        <p class="slds-page-header__name-meta"><ui:outputURL label="{!v.pcs.Cost_Category_Description__c}" value="{!'/' +v.pcs.Id}" target="_parent"/></p>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__col-actions">
+                <div class="slds-page-header__controls">
+                    <div>
+                            <div style="float:right;">
+                                <lightning:button label="Back" variant="neutral" iconName="utility:back" iconPosition="left"
+                                title="Success" onclick='{!c.openCloseConfirm}' />
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+        </div>
+        
+    </div>
+
+    <lightning:layout >
+        <lightning:layoutItem padding="around-small" class="slds-container_small">
+    <lightning:tree items="{!v.tree}" onselect="{!c.handleSelect}"/>
+        </lightning:layoutItem>
+        
+            <lightning:layoutItem padding="around-small" class="slds-width-fill">
+                <div aura:id="raItem">
+                    {!v.body}
+                </div>
+            </lightning:layoutItem>
+    </lightning:layout>
+
+
+
+    <aura:if isTrue="{!v.confirmBack}">
+        <!--Modal Box Start-->
+        <div role="dialog" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container">
+                <!--Modal Box Header Start-->
+                <header class="slds-modal__header">
+                    <h1 class="slds-text-heading--medium">Confirm Back</h1>
+                </header>
+                <!--Modal Box Header End-->
+                    
+                <!--Modal Box Content Start-->
+                <div class="slds-modal__content slds-p-around--medium">
+                    <center>Your Changes Will Not Be Saved<br/>
+                                <b>Are You Sure You Want To Continue?</b>
+                    </center>
+                </div>
+                <!--Modal Box Content End-->
+                    
+                <!--Modal Box Button Start-->
+                <footer class="slds-modal__footer">
+                    <lightning:button name='No' label='No' onclick='{!c.openCloseConfirm}'/>
+                    <lightning:button variant="brand" name='Yes' label='Yes' onclick='{!c.redirectToPcs}'/>
+                </footer>
+                <!--Modal Box Button End-->
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>            
+    </aura:if>
+
+</aura:component>

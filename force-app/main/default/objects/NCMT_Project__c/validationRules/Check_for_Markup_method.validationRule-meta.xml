@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_Markup_method</fullName>
+    <active>true</active>
+    <description>If Markup Method RSMeans - O&amp;P, it cannot be changed to GSA Markups</description>
+    <errorConditionFormula>AND(
+ISPICKVAL(PRIORVALUE(Markup_Method__c),&quot;RSMeans - O&amp;P&quot;),
+ISPICKVAL( Markup_Method__c,&quot;GSA Markups&quot;)
+)</errorConditionFormula>
+    <errorDisplayField>Markup_Method__c</errorDisplayField>
+    <errorMessage>Markup Method cannot be changed from RSMeans - O&amp;P to GSA Markups.</errorMessage>
+</ValidationRule>

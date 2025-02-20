@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Maintenance_Cost_Modifier__c</fullName>
+    <formula>Case(Core_Shell_Cost_Parameter__r.Core_Shell_Cost_Parameter_Identifier__c,
+ &quot;CC-27147&quot;,  TCO_Performance_Input__r.Glaz_R_Cost_Modifier__c , 
+&quot;CC-27157&quot;,  TCO_Performance_Input__r.Cooling_System_Loss_Cost__c,
+&quot;CC-27158&quot;,  TCO_Performance_Input__r.Cooling_System_Loss_Cost__c,
+&quot;CC-27159&quot;,  TCO_Performance_Input__r.Heating_System_Loss_Cost__c ,
+&quot;CC-27161&quot;,  TCO_Performance_Input__r.Fan_Eff_Cost_Modifier_3__c,
+&quot;CC-27162&quot;, TCO_Performance_Input__r.Fan_Eff_Cost_Modifier_3__c,
+&quot;CC-27165&quot;,  TCO_Performance_Input__r.D9__c,
+&quot;CC-27173&quot;,  TCO_Performance_Input__r.E9__c, 
+0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Maintenance Cost Modifier</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

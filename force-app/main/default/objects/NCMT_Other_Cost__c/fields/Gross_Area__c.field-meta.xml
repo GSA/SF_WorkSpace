@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Gross_Area__c</fullName>
+    <description>Gross Area</description>
+    <externalId>false</externalId>
+    <formula>if ( (text(Cost_Type__c) == &apos;Site Acquisition Cost&apos; &amp;&amp; text( Cost_Based_on__c )== &apos;Other&apos;) ,0,if( (text(Cost_Type__c) == &apos;Site Acquisition Cost&apos; &amp;&amp; text( Cost_Based_on__c )== &apos;Site Area&apos; &amp;&amp; RecordType.Name &lt;&gt; &apos;LPOE - Other Cost&apos;),NCMT_Project__r.Calculated_Site_Area__c,
+if (  NCMT_Project__r.RecordType.Name &lt;&gt; &apos;Parking Garage&apos;,
+   if ( text(Cost_Based_on__c) == &apos;Gross Area&apos; , NCMT_Project__r.Total_GSF__c ,
+   if ( text(Cost_Based_on__c) == &apos;Useable Area&apos; ,  NCMT_Project__r.Useable_Area_Total_USF__c ,
+   if ( text(Cost_Based_on__c) == &apos;Site Area&apos; ,  if( RecordType.Name == &apos;LPOE - Other Cost&apos;,  NCMT_Project__r.Total_LPOE_Site_Area_SF__c ,NCMT_Project__r.Calculated_Site_Area__c)  ,   
+   if ( text(Cost_Based_on__c) == &apos;% of Direct Cost: Total&apos; ,   0  ,   
+   if ( text(Cost_Based_on__c) == &apos;% of Direct Cost: GSA&apos; ,   0  ,   
+   if ( text(Cost_Based_on__c) == &apos;% of Direct Cost: Tenant&apos; ,   0  ,   
+   0))))))
+,  
+   if ( text(Cost_Based_on__c) == &apos;Gross Area&apos; , NCMT_Project__r.Parking_Garage_Gross_Area_SF__c,
+   if ( text(Cost_Based_on__c) == &apos;Useable Area&apos; ,  0 ,
+   if ( text(Cost_Based_on__c) == &apos;Site Area&apos; ,  NCMT_Project__r.Calculated_Site_Area__c    ,   
+   if ( text(Cost_Based_on__c) == &apos;% of Direct Cost: Total&apos; ,   0  ,   
+   if ( text(Cost_Based_on__c) == &apos;% of Direct Cost: GSA&apos; ,   0  ,   
+   if ( text(Cost_Based_on__c) == &apos;% of Direct Cost: Tenant&apos; ,   0  ,   
+   0))))))  
+  ))
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Area</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

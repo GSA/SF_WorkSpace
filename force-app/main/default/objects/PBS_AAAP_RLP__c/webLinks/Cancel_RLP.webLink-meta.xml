@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cancel_RLP</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Cancel RLP</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/23.0/connection.js&quot;)}
+var url = parent.location.href; //string for the URL of the current page
+var myObj = new sforce.SObject(&quot;PBS_AAAP_RLP__c&quot;); 
+myObj.Id = &quot;{!PBS_AAAP_RLP__c.Id}&quot;; 
+myObj.PBS_AAAP_STATUS__c = &quot;{!PBS_AAAP_RLP__c.PBS_AAAP_STATUS__c}&quot;; 
+
+
+if( myObj.PBS_AAAP_STATUS__c != &apos;Posted/Active&apos;){
+alert(&apos;Only RLPs with status POSTED/ACTIVE can be canceled&apos;);
+}
+else{
+//alert({!ISNULL( &quot;{!PBS_AAAP_RLP__c.PBS_AAAP_Canceled_Date__c}&quot;)});
+if({!ISNULL( &quot;{!PBS_AAAP_RLP__c.PBS_AAAP_Canceled_Date__c}&quot;)} &amp;&amp; {!ISBLANK(&quot;!PBS_AAAP_RLP__c.PBS_AAAP_Canceled_Reason__c }&quot;)}){
+myObj.PBS_AAAP_STATUS__c = &apos;Canceled&apos;;
+
+sforce.connection.update([myObj]);
+
+parent.location.href = url; //refresh the page
+}
+else{
+alert(&apos;Please enter Canceled Date and Canceled Reason and click on Save to Cancel RLP&apos;);
+}
+}</url>
+</WebLink>

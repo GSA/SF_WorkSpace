@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LOP_Fire_Safety_Declaration__c</fullName>
+    <description>Does the property meet the Lease fire/life safety standards?</description>
+    <inlineHelpText>Does the property meet the Lease fire/life safety standards?</inlineHelpText>
+    <label>LOP Fire Safety Declaration</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Meets the Lease fire/life safety standards.</fullName>
+                <default>false</default>
+                <label>Meets the Lease fire/life safety standards.</label>
+            </value>
+            <value>
+                <fullName>Does not meet the Lease fire/life safety standards</fullName>
+                <default>false</default>
+                <label>Does not meet the Lease fire/life safety standards</label>
+            </value>
+            <value>
+                <fullName>Does Not Meet</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Does Not Meet</label>
+            </value>
+            <value>
+                <fullName>Meets</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Meets</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

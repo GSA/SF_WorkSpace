@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ParkingwitinBuildingStructureSpacesCheck</fullName>
+    <active>true</active>
+    <description>For Gross Area, parking spaces within building should be checked</description>
+    <errorConditionFormula>RecordType.Name &lt;&gt; &apos;Parking Garage&apos; &amp;&amp; 
+( Gross_Area__c &amp;&amp; (Parking_Within_Building_Structure__c &gt; round((((Total_Area_Including_Parking__c * 3)/4)/400),0)))</errorConditionFormula>
+    <errorDisplayField>Parking_Within_Building_Structure__c</errorDisplayField>
+    <errorMessage>Number of Parking Spaces is too large for GSF</errorMessage>
+</ValidationRule>

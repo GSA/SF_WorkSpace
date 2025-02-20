@@ -1,0 +1,4 @@
+<aura:component implements="force:lightningQuickAction,lightning:availableForFlowActions" controller="RedirectToRecordController">
+    <aura:attribute name="recordId" type="String" />
+    <aura:handler name='init' value='{!this}' action='{!c.doInit}'/>
+</aura:component>

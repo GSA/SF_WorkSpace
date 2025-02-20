@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>line_item_number_changed</fullName>
+    <active>true</active>
+    <description>Only the last digit of CSI Line Item Number Can Be Changed</description>
+    <errorConditionFormula>MID(CSI_Line_Item_Number__c, 0, LEN(CSI_Line_Item_Number__c)-1)
+!= 
+MID (PRIORVALUE(CSI_Line_Item_Number__c), 0, LEN(PRIORVALUE(CSI_Line_Item_Number__c))-1 )</errorConditionFormula>
+    <errorDisplayField>CSI_Line_Item_Number__c</errorDisplayField>
+    <errorMessage>Only the last digit of CSI Line Item Number Can Be Changed</errorMessage>
+</ValidationRule>

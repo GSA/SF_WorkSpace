@@ -1,0 +1,444 @@
+<apex:page StandardController="PBS_AAAP_Agency_Requirement__c" extensions="PBS_AAAP_AgencyRequirement_Ext" lightningStylesheets="true">
+
+    <style>
+        .errMessage {color:red; font-weight:bold;}
+        .custPopup{
+            background-color: white;
+            border-width: 2px;
+            border-style: solid;
+            z-index: 9999;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            /* These are the 3 css properties you will need to change so the popup
+            displays in the center of the screen. First set the width. Then set
+            margin-left to negative half of what the width is. You can add
+            the height property for a fixed size pop up if you want.*/
+            width: 500px;
+            margin-left: -250px;
+            top:100px;
+        }
+        .popupBackground{
+            background-color:black;
+            opacity: 0.20;
+            filter: alpha(opacity = 20);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9998;
+        }
+
+
+    </style>
+    
+    <apex:includeLightning />
+    
+    <apex:form id="form_agncy_req">
+
+        <apex:PageBlock id="pgblck1" title="Agency Requirement" mode="edit">
+            <apex:messages styleClass="errMessage"/>
+            <apex:pageBlockSection title="Information" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Agency Name/Code" for="agencyName"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_Account_Name__c}"
+                                      id="agencyName"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Project Nickname" for="agencyNickName"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.Name}" id="agencyNickName"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="GREX Project #" for="projectId"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_Project_ID__c}" id="projectId"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Date Req. Received by AAAP" for="dateAAAP"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_DATE_REQ_RECEIVED_BY_AAP__c}"
+                                      id="dateAAAP"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Assigned AAAP Manager" for="assignedMGR"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_AASN_AAAP_MANAGER__c}"
+                                      id="assignedMGR"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Type of Requirement" for="requirementType"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_TYPE_OF_REQUIREMENT__c}"
+                                      id="requirementType"/>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Type Of Space" for="spaceType"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_TYPE_OF_SPACE__c}"
+                                      id="spaceType"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Lease Term" for="leaseterm"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_LEASE_TERM__c}" id="leaseterm"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="ABOA SF Min" for="minABOA"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_USF_REQ_MIN__c}" id="minABOA"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="ABOA SF Max" for="maxABOA"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_USF_REQ_MAX__c}" id="maxABOA"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Minimum Contiguous ABOA SF" for="minContABOA"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_MIN_CONT_USF__c}"
+                                      id="minContABOA"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Estimated HVAC overtime hours/year" for="estimatedHVAC"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_HVAC_OVERTIME_HOURS__c}"
+                                      id="estimatedHVAC"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="# of reserved surface parking spaces" for="reservedsurface"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_TOT_RESEV_PARK_SPACES_SUR_LOT__c}"
+                            id="reservedsurface"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Region" for="region"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_Region__c}" id="region"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="# of non-reserved surface parking spaces" for="nonreservedsurface"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_TOT_NONRESV_PARK_SPACES_SURLOT__c}"
+                            id="nonreservedsurface"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="RLP" for="rlp"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_RLP_Number__c}" id="rlp"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="# of reserved garage parking spaces" for="reservedgarage"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_TOT_RESV_PARKING_SPACES_GARAGE__c}"
+                            id="reservedgarage"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Proximity to Public Trans within 2640 ft" for="metro"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_WALKABLE_2640_FEET_METRO__c}"
+                                      id="metro"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="# of non-reserved garage parking spaces" for="nonreservedgarage"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_TOT_NONRESV_PARK_SPACES_GARAGE__c}"
+                            id="nonreservedgarage"/>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Status" for="status"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_REQ_STATUS__c}" id="status"/>
+                </apex:pageBlockSectionItem>
+
+
+            </apex:pageBlockSection>
+
+            <apex:outputPanel rendered="{!PBS_AAAP_Agency_Requirement__c.isNewRequirement__c}">
+                <apex:pageBlockSection title="Existing Lease Information" columns="2">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Building Name" for="buildingName" />
+                        <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CURRENT_BUILDING_NAME__c}"
+                                          id="buildingName"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Street Address" for="streetAdd" />
+                        <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CURRENT_STREET_ADDRESS__c}"
+                                          id="streetAdd"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="City" for="city" />
+                        <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CURRENT_CITY__c}" id="city"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="State" for="state" />
+                        <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CURRENT_STATE__c}"
+                                          id="state"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Zip Code" for="zipcode" />
+                        <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CURRENT_ZIP__c}"
+                                          id="zipcode"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Lease Expiration Date" for="leaseExpDate" />
+                        <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CURR_LEASE_EXPIRE_DT__c}"
+                                          id="leaseExpDate"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Current ABOA SF" for="currentABOA" />
+                        <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CURRENT_USF__c}"
+                                          id="currentABOA"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Current GSA Lease #" for="GSALeaseNum" />
+                        <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CURRENT_GSA_LEASE_NUM__c}"
+                                          id="GSALeaseNum"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Total # of official parking spaces" for="offPrkingSpaces" />
+                        <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_OFFICIAL_NUM_PARKING_SPACES__c}"
+                                id="offPrkingSpaces"/>
+                    </apex:pageBlockSectionItem>
+
+                </apex:pageBlockSection>
+            </apex:outputPanel>
+
+            <apex:pageBlockSection title="Identify Winner - Present Value Evaluation Criteria" columns="2">
+                    <apex:pageBlockSectionItem helptext="This value should match the project-specific advertisement.">
+                        <!--            <apex:outputText value="New Lease" >  Weston -->
+                    <apex:outputLabel value=" TI Allowance for New Space per ABOA SF"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_TIUSED_FOR_FIRM_TERM_NEW__c}"/>
+                        
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem helptext="This value should match the project-specific advertisement.">
+                    <apex:outputLabel value=" BSAC for New Space per ABOA SF"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_BSAC_per_ABOA__c}"/>
+                        
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem helptext="This value should match the project-specific advertisement.">
+                    <apex:outputLabel value=" TI Allowance for Continuing Space per ABOA SF"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_TIUSED_FOR_FIRM_TERM_SUCC__c}"/>
+                        
+                    </apex:pageBlockSectionItem>   
+
+                    <apex:pageBlockSectionItem helptext="This value should match the project-specific advertisement.">
+                    <apex:outputLabel value=" BSAC for Continuing Space per ABOA SF"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.BSAC_for_Continuing_Space_per_ABOA_SF__c}"/>
+
+                    </apex:pageBlockSectionItem> 
+                    
+
+                     <apex:pageBlockSectionItem helpText="This value is not factored into the PV calculation of a Continuing Offer.">
+
+                       
+                    <apex:outputLabel value=" Estimated Physical Move Costs per ABOA SF"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_MOVE_DEFAULT__c}"/>
+
+                    </apex:pageBlockSectionItem> 
+
+                    <apex:pageBlockSectionItem >
+                    </apex:pageBlockSectionItem> 
+                    
+                    <apex:pageBlockSectionItem helpText="This value is not factored into the PV calculation of a Continuing Offer.">
+                    <apex:outputLabel value="Estimated Telecom Costs per ABOA SF"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_TELCOMM_DEFAULT__c}"/>
+
+                    </apex:pageBlockSectionItem>   
+
+                    <apex:pageBlockSectionItem >
+                    </apex:pageBlockSectionItem>                                       
+
+                    <apex:pageBlockSectionItem helpText="This value is not factored into the PV calculation of a Continuing Offer.">
+
+                    <apex:outputLabel value="Lump Sum Costs per ABOA SF in excess of TI"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_PV_OTHER_UPFRONT_COSTS__c}"/>
+
+                    </apex:pageBlockSectionItem>  
+
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection title="Delineated Area Information" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Type of Delineated Area" for="delAreaType"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_DELINEATED_AREA_TYPE__c}"
+                                      id="delAreaType"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem />
+                <!-- <apex:pageBlockSectionItem >
+                    <input type="button" value= "Create User Delineated Area"/>
+                </apex:pageBlockSectionItem> -->
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Alternate Delineated Area" for="altdelAreaType"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_DELINEATED_AREA_TYPE_DESC__c}"
+                                      id="altdelAreaType"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem />
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Alternate Delineated Area Descriptor" for="altdelAreaTypeDesc"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_DELINEATED_DESCRIPTION__c}"
+                                      id="altdelAreaTypeDesc"/>
+                </apex:pageBlockSectionItem>
+                <!-- <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Polygon ID" for="polyobjectId"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_Polygon_Object_Id__c}" id="polyobjectId"/> 
+                </apex:pageBlockSectionItem>-->
+            </apex:pageBlockSection>
+
+            <!--  Added CHenson 05/24/2012 "User Delineated Area Support Section" -->
+            <apex:pageBlockSection id="pgblck_usr_del_area" title="User Delineated Area Information" columns="2">
+                <apex:pageBlockSectionItem id="usr_del_area_name">
+                    <apex:outputLabel id="lbl_usr_del_area_name" value="User Delineated Area Name"></apex:outputLabel>
+                    <apex:outputText id="val_usr_del_area_name" value="{!polyName}"></apex:outputText>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection title="Realty Specialist Contact Information" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Realty Specialist First Name" for="firstName"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_SC_REALTY_FIRST_NAME__c}"
+                                      id="firstName"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Realty Specialist Last Name" for="lastName"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_SC_REALTY_LAST_NAME__c}"
+                                      id="lastName"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Realty Specialist Phone" for="realtyPhone"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_SC_REALTY_PHONE__c}"
+                                      id="realtyPhone"/>
+                </apex:pageBlockSectionItem>
+
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection title="Client Agency Realty Contact Information" columns="2">
+
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Contact Name" for="contactName"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CONTACT_AGENCY_PERSON__c}"
+                                      id="contactName"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Phone" for="contactPhone"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CONTACT_AGENCY_PHONE__c}"
+                                      id="contactPhone"/>
+                </apex:pageBlockSectionItem>
+
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection title="Lease Contracting Officer Information" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Lease Contractor officer First Name" for="contrFirstName"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CONTRACTING_OFF_FNAME__c}"
+                                      id="contrFirstName"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Lease Contractor officer Last Name" for="contrLastName"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CONTRACTING_OFF_LNAME__c}"
+                                      id="contrLastName"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Lease Contractor officer Phone" for="contrPhone"/>
+                    <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CONTRACTING_OFF_PHONE__c}"
+                                      id="contrPhone"/>
+                </apex:pageBlockSectionItem>
+
+            </apex:pageBlockSection>
+
+
+            <apex:pageBlockSection columns="2" title="Record Owner Information" collapsible="false">
+                <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.CreatedById}"/>
+                <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.LastModifiedById}"/>
+                <apex:outputField value="{!PBS_AAAP_Agency_Requirement__c.OwnerId}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons location="top" >
+                <apex:commandButton value="Modify Requirement" action="{!actionEdit}"/>
+                <apex:commandButton value="Cancel Requirement" action="{!showPopup}"
+                                    onclick="if(confirm('Are you sure you want to Cancel this Agency Requirement record?')){return true;} else return false;"/>
+                <apex:commandButton value="Re-Activate Requirement" action="{!showPopup2}"
+                                    onclick="if(confirm('Are you sure you want to Re-Activate this Agency Requirement record?')){return true;} else return false;"/>
+                <apex:commandButton value="Identify Winner" action="{!actionIdentifyWinner}"/>
+            </apex:pageBlockButtons>
+
+            <apex:outputPanel id="tstpopup">
+                <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopUp}"/>
+                <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayPopUp}">
+                    Why are you cancelling this Agency Requirement?<span style="color: red">*</span> <br/><br/>
+                    <apex:inputTextarea value="{!cancellationReason}" rows="5" style="width:100%;"/>
+                    <br/><br/>
+                    <apex:outputPanel rendered="{!showCancelError}">
+                        <span style="color: red">{!canErr}</span>
+                    </apex:outputPanel>
+                    <br/><br/>
+                    <apex:commandButton value="Cancel Requirement" action="{!actionCancelAgencyRequirement}" rerender="tstpopup"/>
+                    <apex:commandButton value="Exit without Cancelling Agency Requirement" rerender="tstpopup" onClick="closeFunc(); return false;"/>
+
+                    <apex:actionFunction name="closePop" action="{!closePopup}" reRender="tstpopup"/>
+                </apex:outputPanel>
+            </apex:outputPanel>
+
+            <apex:outputPanel id="tstpopup2">
+                <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopUp2}"/>
+                <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayPopUp2}">
+                    Why are you re-activating this Agency Requirement after it has already been canceled?<span style="color: red">*</span> <br/><br/>
+                    <apex:inputTextarea value="{!reactivationReason}" rows="5" style="width:100%;"/>
+                    <br/><br/>
+                    <apex:outputPanel rendered="{!showReactivationError}">
+                        <span style="color: red">{!reactErr}</span>
+                    </apex:outputPanel>
+                    <br/><br/>
+                    <apex:commandButton value="Re-Activate Requirement" action="{!actionReActivateAgencyRequirement}" rerender="tstpopup2"/>
+                    <apex:commandButton value="Exit without Re-Activating Agency Requirement" rerender="tstpopup" onClick="closeFunc2(); return false;"/>
+
+                    <apex:actionFunction name="closePop2" action="{!closePopup2}" reRender="tstpopup2"/>
+                </apex:outputPanel>
+            </apex:outputPanel>
+
+
+        </apex:PageBlock>
+
+        <c:PBS_AAAP_OfferSelectAwardInfo targetObjId="{!PBS_AAAP_Agency_Requirement__c.Id}"
+                                         sectionTitle="{!$ObjectType.PBS_AAAP_Agency_Requirement__c.Label} Selected Offer Info"/>
+        <c:PBS_AAAP_OfferDeselectInfoComponent targetObjId="{!PBS_AAAP_Agency_Requirement__c.Id}"
+                                               sectionTitle="{!$ObjectType.PBS_AAAP_Agency_Requirement__c.Label} DeSelected Offer Info"/>
+                                               
+        
+    </apex:form>
+
+    <!--  <apex:relatedList list="OpenActivities"/> -->
+    <!-- added by syam for notes and attachments -->
+    <!-- <apex:relatedList list="Agency_Requirements__r" title="Saved Versions" rendered="{!!isHist}"/> -->
+    <apex:relatedList list="Agency_Requirement_Cancellation_Info__r"/>
+    <!--<apex:relatedList list="NotesAndAttachments" title="Files"/>-->
+    <apex:relatedList list="Campaigns__r"/>
+    <apex:relatedList list="Leads_Projects__r"/>
+     <apex:relatedList subject="{!PBS_AAAP_Agency_Requirement__c.Id}" list="AttachedContentDocuments" />
+    <!--<apex:relatedList list="AttachedContentNotes"/>-->
+    <div id="lightningContentNotes" />
+    <!--  Java Script Files -->
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="{!$Label.AAAP_JQUERY_URL}"></script>
+
+    <script type="text/javascript">
+        JQ  =  jQuery.noConflict();             // insure that JQuery doesn't interfere with Salesforce
+   
+         var AAAPGMAP    =   AAAPGMAP || {};         // define the applications namespace       
+         
+         AAAPGMAP.userDelAreaInfo               =   document.getElementById('{!$Component.form_agncy_req.pgblck1.pgblck_usr_del_area}');                                                                                        // bind the user delineated area information
+         AAAPGMAP.fldPolyName                       =   document.getElementById('{!$Component.form_agncy_req.pgblck1.pgblck_usr_del_area.usr_del_area_name.val_usr_del_area_name}');        // bind the shape name 
+
+         JQ(document).ready(function(){                     // execute the initialization scripts when the document model has loaded
+             if(JQ(AAAPGMAP.fldPolyName).text().length > 0){
+                 JQ(AAAPGMAP.userDelAreaInfo).show();
+             }  else {
+                JQ(AAAPGMAP.userDelAreaInfo).hide();
+             }  // end if
+         });
+
+         function closeFunc(){
+             closePop();
+             window.history.replaceState('','',window.location.href);
+         }
+
+        function closeFunc2(){
+            closePop2();
+            window.history.replaceState('','',window.location.href);
+        }
+
+         let recId = '{!$CurrentPage.parameters.Id}';
+          console.log('Page params ',recId);
+    
+        $Lightning.use("c:PBS_AAAP_EnhancedNotesApp", function() {
+            $Lightning.createComponent("c:PBS_AAAP_EnhancedNotes", {recordId: "{!$CurrentPage.parameters.Id}"}, "lightningContentNotes", function(cmp) {});
+        });
+    </script>
+</apex:page>

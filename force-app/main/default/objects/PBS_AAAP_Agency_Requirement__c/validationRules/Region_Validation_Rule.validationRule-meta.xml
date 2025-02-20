@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Region_Validation_Rule</fullName>
+    <active>true</active>
+    <description>This validation rule is used to ensue that a user select a region.</description>
+    <errorConditionFormula>AND(
+ISPICKVAL( PBS_AAAP_Region__c , &quot;National Capital Region&quot;), 
+ISPICKVAL( PBS_AAAP_Region__c , &quot;Region 1&quot;),
+ISPICKVAL( PBS_AAAP_Region__c , &quot;Region 2&quot;),
+ISPICKVAL( PBS_AAAP_Region__c , &quot;Region 3&quot;),
+ISPICKVAL( PBS_AAAP_Region__c , &quot;Region 4&quot;),
+ISPICKVAL( PBS_AAAP_Region__c , &quot;Region 5&quot;),
+ISPICKVAL( PBS_AAAP_Region__c , &quot;Region 6&quot;),
+ISPICKVAL( PBS_AAAP_Region__c , &quot;Region 7&quot;),
+ISPICKVAL( PBS_AAAP_Region__c,  &quot;Region 8&quot;),
+ISPICKVAL( PBS_AAAP_Region__c , &quot;Region 9&quot;),
+ISPICKVAL( PBS_AAAP_Region__c , &quot;Region 10&quot;),
+ISPICKVAL( PBS_AAAP_Region__c , &quot;10/5 Term - All Regions&quot;),
+ ISBLANK( TEXT(PBS_AAAP_Region__c)) 
+
+
+
+)</errorConditionFormula>
+    <errorDisplayField>PBS_AAAP_Region__c</errorDisplayField>
+    <errorMessage>Error: You must select a region from the drop down window.</errorMessage>
+</ValidationRule>

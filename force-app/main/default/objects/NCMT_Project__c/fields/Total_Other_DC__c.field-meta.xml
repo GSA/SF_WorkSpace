@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Other_DC__c</fullName>
+    <formula>(((((Other_Direct_Cost_Core_Shell__c + Other_Direct_Cost_TI__c) * (1+Design_and_Site_Contingency__c))* (1+ General_Contractor_Overhead_Profit_Bonds__c))*(1+ Construction_Contingency__c))*(1+Art_In_Architecture__c))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Total Other Direct Costs</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

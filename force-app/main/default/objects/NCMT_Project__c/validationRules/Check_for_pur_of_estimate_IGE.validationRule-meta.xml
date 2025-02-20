@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_pur_of_estimate_IGE</fullName>
+    <active>true</active>
+    <description>Checkbox to Hide Estimate for Purpose of Estimate IGE</description>
+    <errorConditionFormula>TEXT(Purpose_of_Estimate__c) &lt;&gt; &apos;Independent Government Estimate&apos; &amp;&amp;  Hide_Estimate__c</errorConditionFormula>
+    <errorDisplayField>Hide_Estimate__c</errorDisplayField>
+    <errorMessage>Hide Estimate for only Purpose of Estimate: Independent Government Estimate</errorMessage>
+</ValidationRule>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ParkingDeckNumberofLevelsCheck</fullName>
+    <active>true</active>
+    <description>For parking deck, number of levels must equal 2</description>
+    <errorConditionFormula>RecordType.Name == &apos;Parking Garage&apos; &amp;&amp; 
+ If ( Parking_Deck__c ,1,0) == 1  &amp;&amp; 
+( BLANKVALUE(At_and_above_grade__c, 0) &lt;&gt; 2 || 
+ BLANKVALUE(Below_grade__c, 0) &lt;&gt; 0 )</errorConditionFormula>
+    <errorMessage>If Parking Deck is checked, Number of At and above grade must equal to 2 and Below grade must be equal to 0</errorMessage>
+</ValidationRule>

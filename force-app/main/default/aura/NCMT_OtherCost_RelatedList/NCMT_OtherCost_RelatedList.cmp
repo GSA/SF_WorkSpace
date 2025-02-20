@@ -1,0 +1,33 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId" access="global" controller="NCMT_MoveCostModule_Ctrl_LC">
+    
+    <aura:attribute name="recordId" type="string"/>
+    <aura:attribute name="projectId" type="String" />
+    <aura:attribute name="isMoveCostMod" type="Boolean" default="false" />
+    
+    <!--FOR DATA TABLE-->
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:if isTrue="{!v.isMoveCostMod}">
+        <!--<div class="slds-grid">
+            <div class="slds-col slds-size_1-of-8 slds-p-bottom_x_small">
+                <h1 class="slds-text-heading_small lds-p-bottom_x_small"><b>NCMT Other Costs</b></h1>
+                <lightning:button variant="neutral" label="View All" onclick="{!c.viewAll}"/>
+            </div>
+        </div>-->
+        <!--<div style="height: 500px">-->
+        <div>
+            <lightning:datatable
+                                 keyField="id"
+                                 data="{! v.data }"
+                                 columns="{! v.columns }"
+                                 hideCheckboxColumn="true"
+                                 aura:id = "ocTable"/>
+        </div>  
+        
+    </aura:if>
+    
+    
+</aura:component>

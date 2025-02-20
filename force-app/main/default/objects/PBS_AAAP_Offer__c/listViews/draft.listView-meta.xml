@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>draft</fullName>
+    <columns>NAME</columns>
+    <columns>PBS_AAAP_Offer_Status__c</columns>
+    <columns>Formula_RLP_Region__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>PBS_AAAP_Offer_Status__c</field>
+        <operation>equals</operation>
+        <value>Draft,Withdrawn,Pending Modification</value>
+    </filters>
+    <filters>
+        <field>Formula_RLP_Region__c</field>
+        <operation>equals</operation>
+        <value>National Capital Region</value>
+    </filters>
+    <label>draft</label>
+    <sharedTo>
+        <role>AAAP_Manager_Region_11</role>
+    </sharedTo>
+</ListView>

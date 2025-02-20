@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_Email</name>
+        <label>Send Email</label>
+        <locationX>838</locationX>
+        <locationY>94</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Attempt_Text_Decide</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>UserObject.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>noreply-salesforce-ws@gsa.gov</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>One-time Verification Code</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <stringValue>&lt;p&gt;&lt;strong&gt;Verify your identity&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;You are attempting to access the Leasing Portal, an official website of the U.S. General Services Administration. Please enter the following code on the Second Level Authentication page to verify your identity.&lt;/p&gt;&lt;p&gt;Your verification code is {!code}&lt;/p&gt;&lt;p&gt;This verification code will expire in one hour, but you can generate a new code by attempting to log in again. For assistance:&lt;ul&gt;&lt;li&gt;AAAP or RSAP help: LOP.Help@gsa.gov or 1-866-450-6588 option 7.&lt;/li&gt;&lt;li&gt;Tax Tool help: BusinessApps@gsa.gov or 1-866-450-6588 option 8.&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;&lt;p&gt;Thank you.&lt;/p&gt;&lt;p&gt;Leasing Portal Support Team&lt;/p&gt;&lt;p&gt;&lt;img src= &quot;https://www.gsa.gov/sites/gsa.gov/themes/custom/gsa/logo.png&quot; width=&quot;50&quot; height=&quot;50&quot;/&gt;&lt;/p&gt;</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <apexPluginCalls>
+        <name>Generate_Random_Code</name>
+        <label>Generate Random Code</label>
+        <locationX>626</locationX>
+        <locationY>44</locationY>
+        <apexClass>GSA_Login_CodeGenerator</apexClass>
+        <connector>
+            <targetReference>Send_Email</targetReference>
+        </connector>
+        <outputParameters>
+            <assignToReference>code</assignToReference>
+            <name>Code</name>
+        </outputParameters>
+    </apexPluginCalls>
+    <apiVersion>49.0</apiVersion>
+    <assignments>
+        <name>Assign_Attempts</name>
+        <label>Assign Attempts</label>
+        <locationX>289</locationX>
+        <locationY>319</locationY>
+        <assignmentItems>
+            <assignToReference>Attempt</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Attempt</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>2.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Attempt</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>3.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Attempt</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>4.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Attempt</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>5.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Attempt_Loop</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Text_Last</name>
+        <label>Assign Text Last</label>
+        <locationX>915</locationX>
+        <locationY>397</locationY>
+        <assignmentItems>
+            <assignToReference>AttemptText</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LastAttemptTemplate</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Code</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Text_Regular</name>
+        <label>Assign Text Regular</label>
+        <locationX>767</locationX>
+        <locationY>397</locationY>
+        <assignmentItems>
+            <assignToReference>AttemptText</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Code</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>user_logout</name>
+        <label>user_logout</label>
+        <locationX>290</locationX>
+        <locationY>519</locationY>
+        <assignmentItems>
+            <assignToReference>LoginFlow_ForceLogout</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Final_Error</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Attempt_Text_Decide</name>
+        <label>Attempt Text Decide</label>
+        <locationX>813</locationX>
+        <locationY>234</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Text_Regular</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default</defaultConnectorLabel>
+        <rules>
+            <name>Regular_Attempt</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>varLoop</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <numberValue>5.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Text_Regular</targetReference>
+            </connector>
+            <label>Regular Attempt</label>
+        </rules>
+        <rules>
+            <name>Last_Attempt</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varLoop</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>5.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Text_Last</targetReference>
+            </connector>
+            <label>Last Attempt</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Code_Validation</name>
+        <label>Code Validation</label>
+        <locationX>603</locationX>
+        <locationY>393</locationY>
+        <defaultConnector>
+            <targetReference>Attempt_Loop</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Invalid</defaultConnectorLabel>
+        <rules>
+            <name>Valid</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>code</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>CodeInput</elementReference>
+                </rightValue>
+            </conditions>
+            <label>Valid</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check if the User Object contains an email address. 
+
+This is mainly useful when not running in a login context (e.g. within the designer) and the LoginFlow_UserId is not populated</description>
+        <name>Email_Validation</name>
+        <label>Email Validation</label>
+        <locationX>97</locationX>
+        <locationY>317</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Attempts</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Email exists</defaultConnectorLabel>
+        <rules>
+            <name>Email_is_missing</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>UserObject.Email</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>NoEmail</targetReference>
+            </connector>
+            <label>Email is missing</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Generate_Code</name>
+        <label>Generate_Code</label>
+        <locationX>367</locationX>
+        <locationY>92</locationY>
+        <defaultConnectorLabel>[Default Outcome]</defaultConnectorLabel>
+        <rules>
+            <name>First_Attempt</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varLoop</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>1.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Generate_Random_Code</targetReference>
+            </connector>
+            <label>First_Attempt</label>
+        </rules>
+        <rules>
+            <name>Non_First</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varLoop</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <numberValue>1.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Attempt_Text_Decide</targetReference>
+            </connector>
+            <label>Non_First</label>
+        </rules>
+    </decisions>
+    <description>Updated reference to noreply@gsa.gov to noreply-salesforce-ws@gsa.gov</description>
+    <environments>Default</environments>
+    <interviewLabel>RET Login Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>RET Login Flow</label>
+    <loops>
+        <name>Attempt_Loop</name>
+        <label>Attempt Loop</label>
+        <locationX>499</locationX>
+        <locationY>265</locationY>
+        <assignNextValueToReference>varLoop</assignNextValueToReference>
+        <collectionReference>Attempt</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Generate_Code</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>user_logout</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_User_Info</name>
+        <label>Get User Info</label>
+        <locationX>96</locationX>
+        <locationY>198</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Email_Validation</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>LoginFlow_UserId</elementReference>
+            </value>
+        </filters>
+        <object>User</object>
+        <outputReference>UserObject</outputReference>
+        <queriedFields>Email</queriedFields>
+        <queriedFields>FirstName</queriedFields>
+        <queriedFields>IsActive</queriedFields>
+    </recordLookups>
+    <screens>
+        <name>Final_Error</name>
+        <label>Final Error</label>
+        <locationX>291</locationX>
+        <locationY>684</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>Error_Message</name>
+            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;color: rgb(255, 0, 0); font-family: sans-serif; font-size: 18px;&quot;&gt;5 Unsuccessful Attempts.﻿&lt;/strong&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;color: rgb(255, 0, 0); font-family: sans-serif; font-size: 18px;&quot;&gt;User Locked.&lt;/strong&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;color: rgb(255, 0, 0); font-family: sans-serif; font-size: 18px;&quot;&gt;Contact BusinessApps@gsa.gov.&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Get_Code</name>
+        <label>Get Code</label>
+        <locationX>813</locationX>
+        <locationY>570</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Code_Validation</targetReference>
+        </connector>
+        <fields>
+            <name>Heading</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;color: rgb(0, 0, 0); font-family: sans-serif; font-size: 16px;&quot;&gt;Login Step 2:&lt;/strong&gt;&lt;/p&gt;&lt;p style=&quot;text-align: left;&quot;&gt;&lt;strong style=&quot;color: rgb(0, 0, 0); font-family: sans-serif; font-size: 16px;&quot;&gt;Second Level Authentication &lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>Instructions</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 18pt; font-family: Arial, sans-serif; color: rgb(0, 0, 0); background-color: transparent;&quot;&gt;Do not close this page&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 14px; font-family: sans-serif; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;font-size: 11pt; font-family: Arial, sans-serif; color: rgb(0, 0, 0); background-color: transparent;&quot;&gt;We emailed a verification code to&lt;/span&gt;&lt;span style=&quot;font-size: 14px; font-family: sans-serif; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);&quot;&gt; {!UserObject.Email}. &lt;/span&gt;&lt;span style=&quot;font-size: 11pt; font-family: Arial, sans-serif; color: rgb(0, 0, 0); background-color: transparent;&quot;&gt;Check your email without closing this page. Once received, enter your verification code in the box below then click the Next button in the bottom right corner of the page.&lt;/span&gt;&lt;span style=&quot;font-size: 14px; font-family: sans-serif; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);&quot;&gt; &lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>CodeInput</name>
+            <dataType>String</dataType>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>NoCodeErrMsg</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;{!AttemptText}&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>AttempNo</name>
+            <fieldText>&lt;p style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;color: rgb(255, 0, 0);&quot;&gt;Attempt {!varLoop} of 5. After 5 invalid attempts, your account will be logged out.&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span class=&quot;ql-cursor&quot;&gt;﻿&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>troubleMessage</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;font-family: Arial, sans-serif; font-size: 11pt; color: rgb(0, 0, 0); background-color: transparent;&quot;&gt;Troubleshooting&lt;/strong&gt;&lt;strong style=&quot;font-family: sans-serif; font-size: 14px; color: rgb(0, 0, 0);&quot;&gt; &lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-family: Arial, sans-serif; font-size: 11pt; color: rgb(0, 0, 0); background-color: transparent;&quot;&gt;You will need to restart the login process if you close this page.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-family: Arial, sans-serif; font-size: 11pt; color: rgb(0, 0, 0); background-color: transparent;&quot;&gt;Verification codes expire one hour after delivery.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-family: Arial, sans-serif; font-size: 11pt; color: rgb(0, 0, 0); background-color: transparent;&quot;&gt;Check your email spam if you cannot locate the email.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-family: Arial, sans-serif; font-size: 11pt; color: rgb(0, 0, 0); background-color: transparent;&quot;&gt;AAAP or RSAP help: LOP.Help@gsa.gov or 1-866-450-6588 option 7.&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;font-family: Arial, sans-serif; font-size: 11pt; color: rgb(0, 0, 0); background-color: transparent;&quot;&gt;Tax Tool help: BusinessApps@gsa.gov or 1-866-450-6588 option 8.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>NoEmail</name>
+        <label>NoEmail</label>
+        <locationX>96</locationX>
+        <locationY>436</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>false</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>Instruction</name>
+            <fieldText>&lt;p style=&quot;text-align: left;&quot;&gt;&lt;strong style=&quot;color: rgb(255, 0, 0); font-family: sans-serif; font-size: 16px;&quot;&gt;Please Contact &lt;/strong&gt;&lt;strong style=&quot;color: rgb(255, 0, 0); font-family: sans-serif; font-size: 16px; background-color: transparent;&quot;&gt;BusinessApps@gsa.gov&lt;/strong&gt;&lt;strong style=&quot;color: rgb(255, 0, 0); font-family: sans-serif; font-size: 16px;&quot;&gt; as email doesnt exist.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>Get_User_Info</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>Email_Template</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>Dear {!UserObject.FirstName},
+
+You have requested access to a GSA managed site. We have generated a One-Time Registration Code for you to verify your identity as an authorized user. This One-Time Registration Code is time sensitive and valid for a single use.
+
+Your One-Time Registration Code is {!code}
+
+This code will only work if you have not closed the ‘Second Level Authentication’ page that appeared after your initial login. Please use the code above and input it into your currently-active form page. 
+
+If you are experiencing technical issues or have questions, please refer to the resources below.
+
+Lease Offer Platform (LOP/AAAP/RSAP)
+For technical assistance with LOP/AAAP/RSAP, email LOP.help@gsa.gov or call1-866-450-6588 and select option 7. For answers to AAAP or RSAP program or policy questions, email LOP.manager@gsa.gov.
+
+Real Estate Tax Portal (RET)
+For technical assistance with the Real Estate Tax Portal, email businessapps@gsa.gov or call1-866-450-6588 and select option 8. For answers to Real Estate Tax program or policy questions, email RealEstateTaxQuestions@gsa.gov.
+
+Regards
+GSA Support</text>
+    </textTemplates>
+    <textTemplates>
+        <name>LastAttemptTemplate</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>Last attempt before Account is locked.</text>
+    </textTemplates>
+    <variables>
+        <name>ApplicationObject</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>AppMenuItem</objectType>
+    </variables>
+    <variables>
+        <name>Attempt</name>
+        <dataType>Number</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>AttemptText</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>code</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>LoginFlow_ForceLogout</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <name>LoginFlow_UserId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>UserObject</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>User</objectType>
+    </variables>
+    <variables>
+        <name>varLoop</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <scale>0</scale>
+    </variables>
+</Flow>

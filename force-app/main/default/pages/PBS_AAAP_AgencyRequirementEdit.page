@@ -1,0 +1,701 @@
+<apex:page StandardController="PBS_AAAP_Agency_Requirement__c" extensions="PBS_AAAP_AgencyRequirement_Ext" cache="true" lightningStylesheets="true">
+    <style>
+.errMessage {color:red; font-weight:bold;}
+        <!--Julia Kantarovsky changes 11/2020 start here-->
+        .rexusCustomPopup{
+            background-color: white;
+            border-width: 2px;
+            border-style: solid;
+            z-index: 9999;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            /* These are the 3 css properties you will need to change so the popup
+            displays in the center of the screen. First set the width. Then set
+            margin-left to negative half of what the width is. You can add
+            the height property for a fixed size pop up if you want.*/
+            width: 500px;
+            margin-left: -250px;
+            top:100px;
+        }
+        .rexusPopupBackground{
+            background-color:black;
+            opacity: 0.20;
+            filter: alpha(opacity = 20);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9998;
+        }
+        <!--JK changes end-->
+    </style>
+
+    <script>
+        function validate(evt) {
+          var theEvent = evt || window.event;
+
+          // Handle paste
+          if (theEvent.type === 'paste') {
+              key = event.clipboardData.getData('text/plain');
+          } else {
+          // Handle key press
+              var key = theEvent.keyCode || theEvent.which;
+              key = String.fromCharCode(key);
+          }
+          var regex = /[0-9]|\./;
+          if( !regex.test(key) ) {
+            theEvent.returnValue = false;
+            if(theEvent.preventDefault) theEvent.preventDefault();
+          }
+        }
+    </script>
+
+    <apex:form id="form_agncy_req">
+        <apex:PageBlock id="pgblck1" title="Agency Requirement" mode="edit">
+            <apex:messages styleClass="errMessage"/>
+            <!--Julia changes start-->
+                <!--apex:outputText styleClass="errMessage" value="REXUS does not recognize the project number, or is experiencing technical difficulties.  Try again with a verified project number or manually create the Agency Requirement without importing REXUS data." rendered="{!rexusError}" /-->
+            <!--Julia changes end-->
+            <apex:pageBlockSection title="Information" columns="2" id="infosection">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Agency Name/Code" for="agencyName"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_Account_Name__c}" required="true"
+                                     id="agencyName"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Nickname" for="agencyNickName"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.Name}" required="true"
+                                     id="agencyNickName"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="GREX Project #" for="projectId"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_Project_ID__c}" required="true"
+                                     id="projectId"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Date Req. Received by AAAP" for="dateAAAP"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_DATE_REQ_RECEIVED_BY_AAP__c}"
+                                     required="true" id="dateAAAP"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Assigned AAAP Manager" for="assignedMGR"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_AASN_AAAP_MANAGER__c}"
+                                     required="true" id="assignedMGR"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Type of Requirement" for="requirementType"/>
+                    <apex:actionRegion >
+                        <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_TYPE_OF_REQUIREMENT__c}"
+                                         required="true" id="requirementType">
+                            <apex:actionSupport event="onchange" action="{!showExistingLeaseInformation}"
+                                                rerender="buildingSection" status="status"/>
+                        </apex:inputField>
+                    </apex:actionRegion>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Type Of Space" for="spaceType"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_TYPE_OF_SPACE__c}" required="true"
+                                     id="spaceType"/>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Lease Term" for="leaseterm"/>   <!-- wes -->
+                    <apex:outputPanel id="leaseTermPanel">
+                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                        <apex:selectList value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_LEASE_TERM__c}" id="leaseterm"
+                                         size="1" required="true">
+                            <apex:selectOptions value="{!leaseTermList}"/>
+                        </apex:selectList>
+                    </apex:outputPanel>
+                    </apex:outputPanel>
+                    <!--<apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_LEASE_TERM__c}" required="true" id="leaseterm"/> -->
+                </apex:pageBlockSectionItem>
+
+
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="ABOA SF Min" for="minABOA"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_USF_REQ_MIN__c}" required="true"
+                                     id="minABOA"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="ABOA SF Max" for="maxABOA"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_USF_REQ_MAX__c}" required="true"
+                                     id="maxABOA"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Minimum Contiguous ABOA" for="minContABOA"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_MIN_CONT_USF__c}" required="true"
+                                     id="minContABOA"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Estimated HVAC overtime hours/year" for="estimatedHVAC"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_HVAC_OVERTIME_HOURS__c}"
+                                     required="true" id="estimatedHVAC"/>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="# of reserved surface parking spaces" for="reservedsurface"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_TOT_RESEV_PARK_SPACES_SUR_LOT__c}"
+                                     required="true" id="reservedsurface"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem id="infosectionRegion">
+                    <apex:outputLabel value="Region" for="region"/>
+                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                        <apex:actionRegion >
+                            <apex:selectList value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_Region__c}" id="region"
+                                             size="1" required="true">
+                                <apex:actionSupport event="onchange" rerender="pvSection,rlp,leaseterm,pgblck_srvc_cntr_pv_def,pgblck_srvc_cntr_pv_def_edit" status="counterStatus" action="{!getPVValuesForRLP}"
+                                                    oncomplete="AAAPGMAP.metroProximity(); "  />
+                                <apex:selectOptions value="{!regionList}"/>
+                            </apex:selectList>
+
+                        </apex:actionRegion>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="# of non-reserved surface parking spaces" for="nonreservedsurface"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_TOT_NONRESV_PARK_SPACES_SURLOT__c}"
+                            required="true" id="nonreservedsurface"/>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem id="infosectionRLP">
+                    <apex:outputLabel value="RLP" for="rlp"/>
+                    <apex:actionRegion >
+                        <apex:selectList value="{!selectedRlpNumber}" id="rlp"
+                                         size="1" required="true"> 
+
+                               <apex:actionSupport event="onchange" action="{!getPVValuesFromRLP}" 
+                                    rerender="pvSection,leaseTermPanel,pgblck_srvc_cntr_pv_def,leaseterm,pgblck_srvc_cntr_pv_def_edit,pgblck_srvc_cntr_pv_def"  >   
+                               </apex:actionSupport>
+
+                            <apex:selectOptions value="{!rlpList}"/>
+                        </apex:selectList>
+                        
+                    </apex:actionRegion>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="# of reserved garage parking spaces" for="reservedgarage"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_TOT_RESV_PARKING_SPACES_GARAGE__c}"
+                            required="true" id="reservedgarage"/>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem id="infosectionMetro">
+                    <apex:outputLabel value="Proximity to Public Trans within 2640 ft" for="metro"/>
+                    <!--<apex:selectList value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_WALKABLE_2640_FEET_METRO__c}" id="metro" size="1" required="true">
+                   <apex:selectOptions value="{!metroList}"/> 
+                    </apex:selectList>   -->
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_WALKABLE_2640_FEET_METRO__c}"
+                                     id="metro"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="# of non-reserved garage parking spaces" for="nonreservedgarage"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_TOT_NONRESV_PARK_SPACES_GARAGE__c}"
+                            required="true" id="nonreservedgarage"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <!-- <apex:outputLabel value="Status" for="status"/> -->
+                    <apex:inputHidden value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_REQ_STATUS__c}" id="status"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <apex:outputPanel id="buildingSection">
+                <apex:pageBlockSection title="Existing Lease Information" columns="1" rendered="{!showLeaseSection}">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Building Name" for="buildingName"/>
+                        <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CURRENT_BUILDING_NAME__c}"
+                                         id="buildingName"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Street Address" for="streetAdd"/>
+                        <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CURRENT_STREET_ADDRESS__c}"
+                                         id="streetAdd"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="City" for="city"/>
+                        <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CURRENT_CITY__c}" id="city"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="State" for="state"/>
+                        <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CURRENT_STATE__c}"
+                                         id="state"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Zip Code" for="zipcode"/>
+                        <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CURRENT_ZIP__c}"
+                                         id="zipcode"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Lease Expiration Date" for="leaseExpDate"/>
+                        <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CURR_LEASE_EXPIRE_DT__c}"
+                                         id="leaseExpDate"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Current ABOA SF" for="currentABOA"/>
+                        <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CURRENT_USF__c}"
+                                         id="currentABOA"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem helpText="Please refer to the incumbent lease for exact lease number. The format should be LXX12345 where XX is the state abbreviation. Characters must match exactly to properly link incumbent to new agency requirement. If the incumbent offer is not pulling in, please review how the Offeror input the lease number and adjust accordingly.">
+                        <apex:outputLabel value="Current GSA Lease #" for="GSALeaseNum"/>
+                        <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CURRENT_GSA_LEASE_NUM__c}"
+                                         required="true" id="GSALeaseNum"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Total # of official parking spaces" for="offPrkingSpaces"/>
+                        <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_OFFICIAL_NUM_PARKING_SPACES__c}"
+                                required="true" id="offPrkingSpaces"/>
+                    </apex:pageBlockSectionItem>
+
+                </apex:pageBlockSection>
+            </apex:outputPanel>
+            <!--
+            <apex:pageBlockSection id="pgblck_srvc_cntr_pv_def_edit"  title="Identify Winner - Present Value Evaluation Criteria" columns="2" rendered="false"> 
+
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value=" TI Allowance for New Space per ABOA SF"/>
+                        <apex:inputText onkeypress="validate(event)" value="{!pvDefault_TIUSED_FIRM_TERM_NEW_Edit_STR}" id="pv_1"/> 
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value=" BSAC for New Space per ABOA SF"/>
+                        <apex:inputText onkeypress="validate(event)" value="{!pvDefault_BSAC_per_ABOA_Edit}" id="pv_2"/>
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem >
+                    <apex:outputLabel value=" TI Allowance for Continuing Space per ABOA SF"/>
+                    <apex:inputText onkeypress="validate(event)" value="{!pvDefault_TIUSED_FOR_FIRM_TERM_SUCC_Edit}" id="pv_3"/>
+                        
+                    </apex:pageBlockSectionItem>   
+
+                    <apex:pageBlockSectionItem >
+                    <apex:outputLabel value=" BSAC for Continuing Space per ABOA SF"/>
+                    <apex:inputText onkeypress="validate(event)" value="{!pvDefault_BSAC_for_Continuing_Space_per_ABOA_SF_Edit}" id="pv_4"/>
+
+                    </apex:pageBlockSectionItem> 
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value=" Estimated Physical Move Costs per ABOA SF"/>
+                        <apex:inputText onkeypress="validate(event)" value="{!pvDefault_PBS_AAAP_MOVE_DEFAULT_Edit}" id="pv_5"/>
+                    </apex:pageBlockSectionItem> 
+
+                    <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Estimated Telecom Costs per ABOA SF"/>
+                        <apex:inputText onkeypress="validate(event)" value="{!pvDefault_PBS_AAAP_TELCOMM_DEFAULT_Edit}" id="pv_6"/>
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value=" Lump Sum Costs per ABOA SF in excess of TI"/>
+                        <apex:inputText onkeypress="validate(event)" value="{!pvDefault_PBS_AAAP_PV_OTHER_UPFRONT_COSTS_Edit}" id="pv_7"/>
+                    </apex:pageBlockSectionItem>
+
+            </apex:pageBlockSection> 
+            -->
+            <apex:outputPanel id="pvSection">
+            <apex:pageBlockSection id="pgblck_srvc_cntr_pv_def" title="Identify Winner - Present Value Evaluation Criteria" columns="2" rendered="true"> 
+
+                    <apex:pageBlockSectionItem helpText="This value should match the project-specific advertisement.">
+                        <apex:outputLabel value=" TI Allowance for New Space per ABOA SF"/>
+                        <apex:inputText onkeypress="validate(event)" value="{!pvDefault_TIUSED_FIRM_TERM_NEW_STR}" id="pv1"/>
+
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem helpText="This value should match the project-specific advertisement.">
+                        <apex:outputLabel value=" BSAC for New Space per ABOA SF"/>
+                        <apex:inputText onkeypress="validate(event)" value="{!pvDefault_BSAC_per_ABOA}" id="pv2"/>
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem helpText="This value should match the project-specific advertisement.">
+                        <apex:outputLabel value=" TI Allowance for Continuing Space per ABOA SF"/>
+                        <apex:inputText onkeypress="validate(event)" value="{!pvDefault_TIUSED_FOR_FIRM_TERM_SUCC}" id="pv3"/>
+                    </apex:pageBlockSectionItem>  
+
+                    <apex:pageBlockSectionItem helpText="This value should match the project-specific advertisement.">
+                        <apex:outputLabel value=" BSAC for Continuing Space per ABOA SF"/>
+                        <apex:inputText onkeypress="validate(event)" value="{!pvDefault_BSAC_for_Continuing_Space_per_ABOA_SF}" id="pv4"/>
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem helpText="This value is not factored into the PV calculation of a Continuing Offer.">
+                        <apex:outputLabel value=" Estimated Physical Move Costs per ABOA SF"/>
+                        <apex:inputText onkeypress="validate(event)" value="{!pvDefault_PBS_AAAP_MOVE_DEFAULT}" id="pv5"/>
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem helpText="This value is not factored into the PV calculation of a Continuing Offer.">
+                        <apex:outputLabel value=" Estimated Telecom Costs per ABOA SF"/>
+                        <apex:inputText onkeypress="validate(event)" value="{!pvDefault_PBS_AAAP_TELCOMM_DEFAULT}" id="pv6"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem helpText="This value is not factored into the PV calculation of a Continuing Offer.">
+                        <apex:outputLabel value=" Lump Sum Costs per ABOA SF in excess of TI"/>
+                        <apex:inputText onkeypress="validate(event)" value="{!pvDefault_PBS_AAAP_PV_OTHER_UPFRONT_COSTS}" id="pv7"/>
+                    </apex:pageBlockSectionItem>
+
+            </apex:pageBlockSection>
+            </apex:outputPanel>
+            
+            <apex:pageBlockSection id="pgblck_srvc_cntr_cntc_info" title="Delineated Area Information" columns="2">
+                <apex:pageBlockSectionItem id="pgblck_srvc_cntr_cntc_info_item1">
+                    <apex:outputLabel value="Type of Delineated Area" for="delAreaType"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_DELINEATED_AREA_TYPE__c}"
+                                     id="delAreaType" required="true" onChange="AAAPGMAP.delAreaType()"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem id="pgblck_srvc_cntr_cntc_info_item2">
+                    <apex:outputPanel id="btn_create_usr_del_area" layout="block">
+                        <apex:commandButton value="Create User Delineated Area"
+                                            action="{!shapeCreation}"></apex:commandButton>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Alternate Delineated Area" for="altdelAreaType"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_DELINEATED_AREA_TYPE_DESC__c}"
+                                     id="altdelAreaType">
+                        <apex:actionSupport event="onchange" rerender="altdelAreaTypeDesc" status="counterStatus"/>
+                    </apex:inputField>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem />
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Alternate Delineated Area Descriptor" for="altdelAreaTypeDesc"/>
+                    <apex:selectList value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_DELINEATED_DESCRIPTION__c}"
+                                     id="altdelAreaTypeDesc" size="1">
+                        <apex:selectOptions value="{!delineatedAreaTypeDescList}"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+
+            <!--  Added CHenson 05/24/2012 "User Delineated Area Support Section" -->
+            <apex:pageBlockSection id="pgblck_usr_del_area" title="User Delineated Area Information" columns="2">
+                <apex:pageBlockSectionItem id="usr_del_area_name">
+                    <apex:outputLabel id="lbl_usr_del_area_name" value="User Delineated Area Name"></apex:outputLabel>
+                    <apex:outputText id="val_usr_del_area_name" value="{!polyName}"></apex:outputText>
+                </apex:pageBlockSectionItem>
+                <apex:outputPanel id="btn_modify_usr_del_area" layout="block">
+                    <apex:commandButton value="Modify User Delineated Area"
+                                        action="{!shapeCreation}"></apex:commandButton>
+                </apex:outputPanel>
+            </apex:pageBlockSection>
+
+
+            <apex:pageBlockSection title="Realty Specialist Contact Information" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Realty Specialist First Name" for="firstName"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_SC_REALTY_FIRST_NAME__c}"
+                                     id="firstName"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Realty Specialist Last Name" for="lastName"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_SC_REALTY_LAST_NAME__c}"
+                                     id="lastName"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Realty Specialist Phone" for="realtyPhone"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_SC_REALTY_PHONE__c}"
+                                     id="realtyPhone"/>
+                </apex:pageBlockSectionItem>
+
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection title="Client Agency Realty Contact Information" columns="2">
+
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Contact Name" for="contactName"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CONTACT_AGENCY_PERSON__c}"
+                                     id="contactName"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Phone" for="contactPhone"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CONTACT_AGENCY_PHONE__c}"
+                                     id="contactPhone"/>
+                </apex:pageBlockSectionItem>
+
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection title="Contracting Officer Information" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Lease Contractor officer First Name" for="contrFirstName"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CONTRACTING_OFF_FNAME__c}"
+                                     id="contrFirstName"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Lease Contractor officer Last Name" for="contrLastName"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CONTRACTING_OFF_LNAME__c}"
+                                     id="contrLastName"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Lease Contractor officer Phone" for="contrPhone"/>
+                    <apex:inputField value="{!PBS_AAAP_Agency_Requirement__c.PBS_AAAP_CONTRACTING_OFF_PHONE__c}"
+                                     id="contrPhone"/>
+                </apex:pageBlockSectionItem>
+
+            </apex:pageBlockSection>
+
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" onclick="setValues();" action="{!actionSaveAgencyRequirement}"/>
+                <apex:commandButton value="Cancel" action="{!actionCancel}" immediate="true"/>
+                <!--Julia Kantarovsky changes 11/2020 start here-->
+                <apex:commandButton value="Import from Rexus" action="{!showRexusPopup}" immediate="true" rendered="{!isNewRecord}"/> <!--action from read only page: onclick="if(confirm('Are you sure you want to Cancel this Agency Requirement record?')){return true;} else return false;"-->
+                <!-- <apex:commandButton value="Import from Rexus" action="{!showRexusPopup}" reRender="rexuspopup"/><!-- rendered="{!displayRexusPopup}"rendered="{!displayRexusPopup}"    only render if agency req ID, use flag. Is there a SF tag?-->
+            </apex:pageBlockButtons>
+            
+           
+              <apex:outputPanel id="tstpopup">
+                      
+                
+    <script>    
+                  //Julia Kantarovsky changes 11/2020 start here
+                  //once the rexusDataStr is populated in the controller, calls setRexusValues to set the fields on the page
+                  if ('{!JSENCODE(rexusDataStr)}' != '') {
+                      setRexusValues('{!JSENCODE(rexusDataStr)}');
+                    } 
+
+                  //JK changes end here
+
+    </script>
+            <!--Julia Kantarovsky changes 11/2020 start here-->
+                <apex:outputPanel styleClass="rexusPopupBackground" layout="block" rendered="{!displayRexusPopup}"/>
+                    <apex:outputPanel styleClass="rexusCustomPopup" layout="block" rendered="{!displayRexusPopup}">
+                        Input the REXUS Project number for the project details you want applied to this page.  Imported data will replace any information currently entered into the applicable fields. <br/><br/>
+                            <apex:inputText id="pid"><apex:outputLabel >Rexus Project Number: </apex:outputLabel></apex:inputText><!--value="{!rexusProjectId}"-->
+                                         <br/> <br/>
+                            <br/><br/>
+                    
+                        <div id="test1">
+                             <apex:outputPanel rendered="{!showCancelError}">
+                                    <span style="{!errorStyle}">{!canErr}</span>
+                                </apex:outputPanel>
+                        </div>
+                               
+                        <br/>
+                             <span id="greenText" style="color:green">
+                                <apex:outputText value="" >
+                                </apex:outputText>
+                            </span>
+                  
+                                  
+                                <br/><br/>
+                                <apex:commandButton value="Okay" oncomplete="closeFunc();" onclick="callActionMethod();" immediate="true"><!--rerender="tstpopup" action="{!getRexusData}"    onclick="setRexusValues()" "onClick="closeFunc(); return false;"   -->
+                                </apex:commandButton>
+                                    <apex:actionFunction name="echo" action="{!getRexusData}" reRender="tstpopup,pvSection,rlp,leaseterm,pgblck_srvc_cntr_pv_def,pgblck_srvc_cntr_pv_def_edit" immediate="true" oncomplete="AAAPGMAP.metroProximity(); " >
+                                        <apex:param name="firstParam" assignTo="{!rexusProjectId}" value="" />
+                                    </apex:actionFunction>
+                                <apex:commandButton value="Cancel" rerender="tstpopup" immediate="true" action="{!closeRexusPopup}"/><!--onClick="closeFunc(); return false;" I'm not using the JS: onClick="closeFunc(); return false;"-->
+                        </apex:outputPanel>
+            </apex:outputPanel>
+            <!--JK changes to here-->
+        </apex:PageBlock>
+       
+    </apex:form>
+    <script type="text/javascript" src="{!$Label.AAAP_JQUERY_URL}"></script>
+    <script type="text/javascript">
+        <!--  Java Script Files -->
+            
+
+        JQ  =  jQuery.noConflict();             // insure that JQuery doesn't interfere with Salesforce
+         
+        var AAAPGMAP    =   AAAPGMAP || {};         // define the applications namespace       
+        
+        AAAPGMAP.btnCreateUsrDelArea        =   document.getElementById('{!$Component.form_agncy_req.pgblck1.pgblck_srvc_cntr_cntc_info.pgblck_srvc_cntr_cntc_info_item2.btn_create_usr_del_area}');        // bind the button to create the user delineated area
+        AAAPGMAP.fldPolyName                    =   document.getElementById('{!$Component.form_agncy_req.pgblck1.pgblck_usr_del_area.usr_del_area_name.val_usr_del_area_name}');                                                // bind the shape name
+        AAAPGMAP.btnModifyUsrDelArea    =   document.getElementById('{!$Component.form_agncy_req.pgblck1.pgblck_usr_del_area.btn_modify_usr_del_area}');                                                                                    // bind the button to modify the user delineated area       
+        AAAPGMAP.usrDelAreaInfo             =   document.getElementById('{!$Component.form_agncy_req.pgblck1.pgblck_usr_del_area}');                                                                                                                                // bind the user delineated area information
+        
+         // show the map for creating user delineated areas
+         AAAPGMAP.showMap   =   function(){
+            console.log('showing the map');
+            JQ(AAAPGMAP.usrDelArea).show();
+         }  // end showMap
+             
+
+        // function to discern if the drop-down box for the type of delineated are identifies a User Defined area
+        AAAPGMAP.delAreaType    =   function(){
+            var delAreaType =   JQ('select[id=' + "'{!$Component.form_agncy_req.pgblck1.pgblck_srvc_cntr_cntc_info.pgblck_srvc_cntr_cntc_info_item1.delAreaType}'" + ']').children(':selected').val();
+            var delAreaPolyName =   JQ(AAAPGMAP.fldPolyName).text();
+            console.log('User selected this type: ' + delAreaType);
+            console.log('Shape name: ' + delAreaPolyName);
+            
+            if(delAreaPolyName.length > 0){                         // the user has already created a shape
+                JQ(AAAPGMAP.btnModifyUsrDelArea).show();    // only show the modify button when the shape has a name
+                JQ(AAAPGMAP.usrDelAreaInfo).show();
+                JQ(AAAPGMAP.btnCreateUsrDelArea).hide();
+            } else {                                                                            // the user has not created a shape
+                JQ(AAAPGMAP.usrDelAreaInfo).hide();
+                if(delAreaType === 'User Delineated Area'){     // only show the button when the delineated area type is "User Delineated Area"
+                    JQ(AAAPGMAP.btnCreateUsrDelArea).show();
+                }   else {
+                    JQ(AAAPGMAP.btnCreateUsrDelArea).hide();            
+                }   // end if           
+            } 
+        }   // end delAreaType
+           
+
+        //added by syam on 04/28 for the proximity to metro area field behavior upon region value change
+        // function to discern if the drop-down box for the type of delineated are identifies a User Defined area
+        AAAPGMAP.metroProximity =   function(){
+            var region  =   JQ('select[id=' + "'{!$Component.form_agncy_req.pgblck1.infosection.infosectionRegion.region}'" + ']').children(':selected').val();
+            var metro   =   JQ('select[id=' + "'{!$Component.form_agncy_req.pgblck1.infosection.infosectionMetro.metro}'" + ']').children(':selected').val();
+            AAAPGMAP.metroById  =   document.getElementById('{!$Component.form_agncy_req.pgblck1.infosection.infosectionMetro.metro}'); 
+            
+            // bind the button to modify the user delineated area   
+            if(region == 'National Capital Region') {
+                //  JQ(AAAPGMAP.metroById).val(JQ("AAAPGMAP.metroById option:first").val());
+                JQ(AAAPGMAP.metroById).prop("disabled",false);
+            }
+            else {
+                JQ(AAAPGMAP.metroById).val("No");
+                JQ(AAAPGMAP.metroById).prop("disabled",true);
+            }
+        }   // end metroProximity
+
+         function ReadRLPRecordForPVValues(){
+            var region  =   JQ('select[id=' + "'{!$Component.form_agncy_req.pgblck1.infosection.infosectionRegion.region}'" + ']').children(':selected').val();
+            var rlp  =   JQ('select[id=' + "'{!$Component.form_agncy_req.pgblck1.infosection.infosectionRLP.RLP}'" + ']').children(':selected').val();            
+            console.log('rlp ' + rlp);
+
+            //selectRLP();
+
+                
+         }   
+         
+         function setValues(){
+             if(JQ('[id$=pv1]').val() == ''){
+                 JQ('[id$=pv1]').val('0.00');
+             }
+             if(JQ('[id$=pv2]').val() == ''){
+                 JQ('[id$=pv2]').val('0.00');
+             }
+             if(JQ('[id$=pv3]').val() == ''){
+                 JQ('[id$=pv3]').val('0.00');
+             }
+             if(JQ('[id$=pv4]').val() == ''){
+                 JQ('[id$=pv4]').val('0.00');
+             }
+             if(JQ('[id$=pv5]').val() == ''){
+                 JQ('[id$=pv5]').val('0.00');
+             }
+             if(JQ('[id$=pv6]').val() == ''){
+                 JQ('[id$=pv6]').val('0.00');
+             }
+             if(JQ('[id$=pv7').val() == ''){
+                 JQ('[id$=pv7]').val('0.00');
+             }
+         }     
+        
+         JQ(document).ready(function(){                     // execute the initialization scripts when the document model has loaded
+            JQ(AAAPGMAP.usrDelAreaInfo).hide();
+           JQ(AAAPGMAP.btnModifyUsrDelArea).hide();
+           AAAPGMAP.delAreaType();
+           console.log('This is the edit page');
+             //added by syam to disable metro field if the region is not selected
+             AAAPGMAP.metroProximity();
+         }); 
+    
+    //Julia Kantarovsky changes 11/2020 start here
+    function getRunningUserName(runningUserName){
+                 JQ('[id$=assignedMGR]').val(runningUserName); 
+          }
+    
+    function getAAAPCustomerPortalAccountName(AAAPCustomerPortalAccountName){
+                JQ('[id$=agencyName]').val(AAAPCustomerPortalAccountName);
+        }
+    
+    function setRexusValues(rexusDataString){
+        //console.log('init setRexusValues ' + rexusDataString);
+        var parsed = JSON.parse(rexusDataString);
+        //console.log('parsed ' + parsed);
+        //1.Agency Name/Code. Assigned this in the getAAAPCustomerPortalAccountName() method
+        //getAAAPCustomerPortalAccountName('{!AAAPCustomerPortalAccountName}');
+                if(parsed.agencyName !== null){
+                    JQ('[id$=agencyName]').val(parsed.agencyName);
+                    }
+           //2.GREX Project #
+                if(parsed.projectId !== null){
+                    JQ('[id$=projectId]').val(parsed.projectId);
+                    }
+           //3. Assigned AAAP Manager IN getRunningUserName() method
+                if('{!runningUserName}' !== null){
+                    getRunningUserName('{!runningUserName}');
+                    }
+        
+          //4. Type of Space
+                //JQ('[id$=spaceType]').val(parsed.spaceType);
+          
+           //5. ABOA SF Min
+                 if(parsed.aboaSFMin !== null){
+                    JQ('[id$=minABOA]').val(parsed.aboaSFMin);
+                     }
+          
+        //6.Minimum Contiguous ABOA //Same as ABOA SF Min above
+                  if(parsed.minimumContiguousABOA !== null){
+                    JQ('[id$=minContABOA]').val(parsed.minimumContiguousABOA);
+                      }
+
+          //7. Estimated HVAC Overtime 
+                   //if(parsed.hvac !== null){
+                   //     JQ('[id$=estimatedHVAC]').val(parsed.hvac);
+                   //     }
+
+          //8. Region
+                    if(parsed.region !== null){
+                    JQ('[id$=region]').val(parsed.region);
+                        }
+
+          //9. Nickname
+                    if(parsed.nickname !== null){
+                        JQ('[id$=agencyNickName]').val(parsed.nickname);
+                        }
+
+          //12. Lease Term //WIP How to manipulate this data and how does it map to the picklist values?
+                if(parsed.leaseTermStr !== null){
+                    JQ('[id$=leaseterm]').val(parsed.leaseTermStr);
+                    }
+
+          //14. # of reserved surface parking spaces. //this gets the first node with the defined id
+                if(parsed.surfaceParking !== null){
+                    JQ('[id$=reservedsurface]').first().val(parsed.surfaceParking);
+                    }
+         
+          //16. # of reserved garage parking spaces //this gets the first node with the defined id
+                if(parsed.garageParking !== null){
+                 JQ('[id$=reservedgarage]').first().val(parsed.garageParking);
+                    }
+          }
+    
+    function callActionMethod(){
+        //console.log('inside callActionMethod');
+        var txtVal1 = document.getElementById("{!$Component.form_agncy_req.pgblck1.pid}").value;
+         //display green message
+        if('{!canErr}' == '')document.getElementById('greenText').innerHTML = "Rexus data pull in progress, please wait...";
+        document.getElementById("test1").style = "display:none;";//removes the red error message
+         /*Below Method is generated by "apex:actionFunction" which will call Apex Method "echoVal" */
+        echo(txtVal1);
+        }
+
+    function closeFunc(){
+        //console.log('JK closeFunc() start');
+        //closePop();
+        window.history.replaceState('','',window.location.href);
+         }
+     function closeFunc2(){
+         //console.log('JK closeFunc2()');
+            closePop2();
+            window.history.replaceState('','',window.location.href);
+        }
+   
+
+    //JK changes end
+
+
+    </script>
+</apex:page>

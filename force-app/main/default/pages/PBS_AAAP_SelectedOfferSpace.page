@@ -1,0 +1,44 @@
+<apex:page controller="PBS_AAAP_SelectedOfferSpace_Contr">
+<!--
+    <style>
+.errMessage {color:red; }
+
+    </style>
+
+    <apex:form id="form_agncy_req">
+
+
+        <apex:PageBlock id="pgblck1" title="Select Space Amount for 'Pending Review'" mode="edit">
+            <apex:messages styleClass="errMessage"/>
+            <apex:pageBlockSection title="Information" columns="1">
+
+                <apex:pageBlockSectionItem >
+                  
+                    <apex:outputLabel value="Available ABOA SF" for="agencyNickName"/>
+                    <apex:outputText value="{!availableUSF}" id="agencyNickName"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                  
+                    <apex:outputLabel value="Desired ABOA SF" for="agencyName"/>
+                    <apex:inputField value="{!currentObj.PBS_AAAP_SELECTED_USF__c}" id="agencyName"/>
+                </apex:pageBlockSectionItem>
+
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!actionSave}"/>
+                <apex:commandButton value="Cancel" action="{!actionCancel}"/>
+            </apex:pageBlockButtons>
+        </apex:PageBlock>
+    </apex:form>
+-->
+<script type="text/javascript" src="{!$Label.AAAP_JQUERY_URL}"></script>
+<apex:form >
+    <apex:actionFunction name="actionSave" action="{!actionSave}"/>
+    <script>
+        j$ = jQuery.noConflict();
+        j$().ready(function() {
+            actionSave();
+        });
+    </script>
+</apex:form>
+</apex:page>

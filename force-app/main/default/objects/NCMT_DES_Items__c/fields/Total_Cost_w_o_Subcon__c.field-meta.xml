@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Cost_w_o_Subcon__c</fullName>
+    <formula>if(NCMT_Contractor_ID__c!=&apos;&apos;, 0, IF( Markup_Method__c != &apos;GSA Markups&apos;, Total_Cost__c,Total_Direct_Cost__c))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Total Cost w/o Subcon.</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

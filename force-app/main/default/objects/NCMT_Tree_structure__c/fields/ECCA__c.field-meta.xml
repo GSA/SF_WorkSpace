@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ECCA__c</fullName>
+    <formula>IF( text(Project_ID__r.Markup_Method__c) ==&apos;RSMeans - O&amp;P&apos;,
+
+(Markup__r.Bid_Factor__c*(Total_Cost__c*(1 + Markup__r.Market_Escalation__c))),
+
+Total_Including_Markups__c
+*(1 + Markup__r.CMc__c)
+*(1 + Markup__r.Professional_Services_Fees_Preconst__c)
+*(1 + Markup__r.Developer_Fee__c)
+*(1 + Markup__r.Professional_Services_Developer_Fee__c)
+*(1 + Markup__r.Lessor_Fee__c)
+*(1 + Markup__r.Professional_Services_Lessor_Fee__c)
+*(1 + Markup__r.Gross_Receipt_State_Construction__c)
+*(1 + Markup__r.Market_Escalation__c)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>ECCA</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

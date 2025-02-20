@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CEW_Total_Direct_Cost_1__c</fullName>
+    <label>CEW Total Direct Cost 1</label>
+    <summarizedField>NCMT_Work_Description__c.Total_Direct_Cost__c</summarizedField>
+    <summaryFilterItems>
+        <field>NCMT_Work_Description__c.Number__c</field>
+        <operation>notEqual</operation>
+        <value>6</value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>NCMT_Work_Description__c.Number__c</field>
+        <operation>notEqual</operation>
+        <value>8</value>
+    </summaryFilterItems>
+    <summaryForeignKey>NCMT_Work_Description__c.NCMT_Project__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

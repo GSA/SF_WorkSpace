@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_Comment_sd</fullName>
+    <active>true</active>
+    <description>Requires a comment if Design and Site Contingency are changed</description>
+    <errorConditionFormula>AND(
+OR(
+(ISBLANK(Comments__c)),
+(NOT(ISCHANGED(Comments__c)))
+),
+
+OR(
+ISCHANGED(Design_and_Site_Contingency__c)
+),
+
+AND(
+NOT(ISCHANGED(Project_Phases__c)),
+NOT(ISCHANGED(Project_SubPhases__c))
+)
+)</errorConditionFormula>
+    <errorDisplayField>Comments__c</errorDisplayField>
+    <errorMessage>Comment required to change Design &amp; Site Contingency</errorMessage>
+</ValidationRule>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_Purpose_of_Est_Ext_Agncy</fullName>
+    <active>true</active>
+    <description>For Purpose of Estimate Lease Scoring, External Agencies - Estimating Staff can create project</description>
+    <errorConditionFormula>((text(Purpose_of_Estimate__c)!= &apos;Lease Scoring - Regional Office&apos;) || (text(Purpose_of_Estimate__c)!= &apos;Lease Scoring - Central Office&apos;))&amp;&amp;
+ text($User.NCMT_User_Level__c) == &apos;External Agencies - Estimating Staff&apos;</errorConditionFormula>
+    <errorDisplayField>Purpose_of_Estimate__c</errorDisplayField>
+    <errorMessage>For the selected Purpose of Estimate, NCMT Project cannot be created. Please choose another Purpose of Estimate.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,26 @@
+<apex:page standardController="NCMT_Project_Markup__c" extensions="NCMT_MarkupsCtrl_LC" lightningStylesheets="true">
+    <apex:slds />
+    <apex:includeLightning />
+    <div id="lightningPage"></div>
+    <script>
+    var recordId ="{!$CurrentPage.parameters.id}";
+    //alert('recordId ==='+recordId);
+    $Lightning.use("c:NCMT_Markups_App", function(){
+        $Lightning.createComponent("c:NCMT_Markups", {
+            "recordId" : recordId
+            
+        },
+                                   'lightningPage',
+                                   function(cmp){
+                                       $A.eventService.addHandler({ "event": "c:NCMT_SendDataToVFPage", "handler": refreshPage });
+                                       
+                                       console.log("Lightning aura Component created Successfully!!");
+                                   });
+        
+    });   
+    function refreshPage(event){
+        document.rform.submit();
+    }
+    </script> 
+    <form action="/{!projmp.Id}" target="_parent" name="rform"></form>
+</apex:page>

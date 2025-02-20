@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ECCA_Formula__c</fullName>
+    <formula>((Total_Cost_Including_Phasing__c* (1+  Work_Item_Phase__r.Design_Contingency__c)) * (1+  Work_Item_Phase__r.Home_Office_Overhead_Bond_Profit__c)) * (1+ Work_Item_Phase__r.Escalation_Percent__c)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>ECCA*</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

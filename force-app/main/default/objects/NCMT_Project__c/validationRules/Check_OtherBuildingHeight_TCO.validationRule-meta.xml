@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_OtherBuildingHeight_TCO</fullName>
+    <active>true</active>
+    <errorConditionFormula>RecordType.Name == &apos;New Construction - TCO&apos; &amp;&amp; TEXT(Building_Type__c) != &apos;Utility&apos; &amp;&amp; ( TEXT(Building_Heigtht__c) == &apos;1 story, high bay, light structure&apos; || 
+TEXT(Building_Heigtht__c) == &apos;1 story, high bay, industrial&apos; || 
+TEXT(Building_Heigtht__c) == &apos;1 story, low bay, light structure&apos; || 
+TEXT(Building_Heigtht__c) == &apos;1 story, low bay, conventional (office like)&apos; || TEXT(Building_Heigtht__c) == &apos;Multi-story, low bay, conventional&apos;  || TEXT(Building_Heigtht__c) == &apos;Multi-story, high bay, industrial&apos;  )</errorConditionFormula>
+    <errorDisplayField>Building_Heigtht__c</errorDisplayField>
+    <errorMessage>Building Height should only be changed related to Building Type</errorMessage>
+</ValidationRule>

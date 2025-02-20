@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Location_Multiplier_f__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(Cost_Category_Type__c == &apos;GSA Assemblies&apos;, Location_Multiplier_Washington_DC_1_00__c,IF(Include_Location_Factor__c,Location_Multiplier_Washington_DC_1_00__c, 1))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Location Multiplier</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

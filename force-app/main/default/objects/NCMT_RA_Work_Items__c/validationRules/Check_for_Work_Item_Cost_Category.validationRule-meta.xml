@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_Work_Item_Cost_Category</fullName>
+    <active>true</active>
+    <description>Check for Work Item Cost Category and Work Item Lookup Details Cost Type</description>
+    <errorConditionFormula>Work_Item_Type_ID__r.Cost_Category_Description__c != &apos;Interior Construction - Space Plans&apos; &amp;&amp; IF( Work_Item_Cost_Category__c !=  Work_Item_Category__c, true, false)</errorConditionFormula>
+    <errorDisplayField>RA_WI_Lookup_Detail__c</errorDisplayField>
+    <errorMessage>Choose Work Item Category related to Project Cost Category</errorMessage>
+</ValidationRule>

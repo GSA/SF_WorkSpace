@@ -1,0 +1,20 @@
+<apex:page standardController="NCMT_Tree_structure__c" lightningStylesheets="true">
+    <apex:slds />
+    <apex:includeLightning />
+    <div id="lightningPage"></div>
+     <script>
+    $Lightning.use("c:NCMT_DESItemList_App", function(){
+            $Lightning.createComponent("c:NCMT_DESItemList", {
+                "recordId" : "{!$CurrentPage.parameters.id}",
+                //"recordId" : "a2F35000000gKFkEAM",
+
+            },
+            'lightningPage',
+                function(cmp){
+     
+                });
+        
+        });
+        </script> 
+   
+</apex:page>

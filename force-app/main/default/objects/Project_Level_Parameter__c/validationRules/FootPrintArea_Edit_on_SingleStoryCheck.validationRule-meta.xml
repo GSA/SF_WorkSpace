@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FootPrintArea_Edit_on_SingleStoryCheck</fullName>
+    <active>true</active>
+    <errorConditionFormula>IF( Above_Ground__c == 1 &amp;&amp; Below_Ground__c == 0 &amp;&amp; ( PRIORVALUE( Foot_Print_Area__c) != Foot_Print_Area__c), True, False)</errorConditionFormula>
+    <errorMessage>Foot Print Area Cannot Be Override For Single Story Building Height</errorMessage>
+</ValidationRule>

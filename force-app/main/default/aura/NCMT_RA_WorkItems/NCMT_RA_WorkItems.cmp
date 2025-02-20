@@ -1,0 +1,185 @@
+<aura:component controller='NCMT_RA_WorkItems_Ctrl' >
+    <aura:handler name='init' value='{!this}' action='{!c.doInit}'/>
+
+    <aura:registerEvent name="addMoreEvt" type="c:NCMT_RA_Add_More"/>
+
+
+
+    <aura:attribute name= 'raItems' type='object' />
+    <aura:attribute name= 'phases' type='map' />
+    <aura:attribute name= 'pcsId' type='string' />
+    <aura:attribute name= 'locationMultiplier' type='Decimal' />
+
+    <aura:attribute name= 'costType' type='string' />
+    <aura:attribute name= 'categoryType' type='string' />
+    <aura:attribute name= 'subType' type='string' />
+
+    <aura:attribute name="saveModal" type="boolean" default="false"/>
+    <aura:attribute name="itemsCreated" type="boolean" default="false"/>
+    <aura:attribute name= 'createdItems' type='object' />
+    <aura:attribute name= 'modalHeader' type='string' />
+
+
+    <div class="header">  
+        <b>{!v.costType} >> {!v.categoryType} >> {!v.subType}</b>          
+    </div>
+    <div class="slds-form slds-p-around--large slds-width-fill">
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered" aria-multiselectable="true">
+            <tbody>
+                <aura:iteration items='{!v.raItems}' var='wi'>
+                    <tr class="slds-hint-parent ">
+                        <th data-label="Select" scope="row">
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control">
+                                    <lightning:input type="checkbox" name="Select" checked='{!wi.selected}'/>
+                                </div>
+                            </div>
+                        </th>
+                        <td>
+                            <div class="slds-form-element ">
+                                <div class="slds-form-element__control">
+                                    <lightning:textarea  name="description"  required="true" value='{!wi.WI_Category_Description__c}'
+                                    label="WI Category Description"  disabled='true'/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="slds-form-element ">
+                                <div class="slds-form-element__control">
+                                    <lightning:input name='wiType'  title="wiType" value="{!wi.Work_Item_Type__c}" 
+                                    label='Work Item Type' disabled='true'/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="slds-form-element ">
+                                <div class="slds-form-element__control">
+                                    <lightning:input  type='number' name='quantity' title="Quantity" value="{!wi.Quantity_SF__c}" 
+                                    label='Quantity' />
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="slds-form-element ">
+                                <div class="slds-form-element__control">
+                                    <lightning:input name='UOM'  title="UOM" value="{!wi.UOM__c}" 
+                                    label='UOM' disabled='true'/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="slds-form-element ">
+                                <div class="slds-form-element__control">
+                                    <lightning:input type='number' name='rate'  title="Rate" value="{!wi.Rate__c}" formatter='currency' step='0.01'
+                                    label='Rate'/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="slds-form-element ">
+                                <div class="slds-form-element__control">
+                                    <lightning:input type='number' name='low'  title="Rate" value="{!wi.Low__c}" formatter='currency' step='0.01'
+                                    label='Low' disabled='true'/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="slds-form-element ">
+                                <div class="slds-form-element__control">
+                                    <lightning:input type='number' name='high'  title="Rate" value="{!wi.High__c}" formatter='currency' step='0.01'
+                                    label='High' disabled='true'/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="slds-form-element ">
+                                <!-- <aura:if isTrue="{!!wi.Notes__c}"> -->
+                                <aura:if isTrue="{!and(!wi.Notes__c, and(wi.selected, or(greaterthan(wi.Rate__c, wi.High__c), (lessthan(wi.Rate__c, wi.Low__c)))))}">
+                                    <span class="slds-text-color_error" style='color:rgb(194, 57, 52'> Note Required for Rate outside Cost Range <br/></span>
+                                </aura:if>
+                                <div class="slds-form-element__control">
+                                    <lightning:textarea  name='Notes'  title="Notes" value="{!wi.Notes__c}" label='Notes'/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control slds-wrap">
+                                    <lightning:combobox aura:id="wiPhase"
+                                    label="Phase"
+                                    required="true"
+                                    name="{!wi.index}"
+                                    value="{!wi.Work_Item_Phase__c}"
+                                    options="{!v.phases}"
+                                    messageWhenValueMissing= 'Please Select a Phase'
+                                   />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+        <aura:if isTrue="{!v.saveModal}">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-modal_small slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- ###### MODAL BOX HEADER Start ######-->
+                    <header class="slds-modal__header">
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!v.modalHeader}</h2>
+                    </header>
+                    <!--###### MODAL BOX BODY Part Start######-->
+                    <aura:if isTrue="{!v.itemsCreated}">
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <aura:iteration items='{!v.createdItems}' var='ci'>
+                                <div>
+                                    RA Work Item: <a href="{! '/'+ ci.Id}" target="_blank">{!ci.Name}</a>
+                                </div>
+                                <br/>
+                            </aura:iteration>
+                        </div>
+                        <!--###### MODAL BOX FOOTER Part Start ######-->
+                        <footer class="slds-modal__footer">
+                            <lightning:button label="Add More Items"
+                            title="addMore"
+                            onclick="{!c.addMoreItems}"/>
+                            <lightning:button variant="brand" 
+                                              label="Back to Project Cost Summary"
+                                              title="Back to Project Cost Summary"
+                                              onclick="{!c.goBack}"/>
+                        </footer>
+                        <aura:set attribute="else">
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                                <!-- ###### Errors in selection ######-->
+                                <p>{!v.createdItems}</p>
+                                <br/>
+                            </div>  
+                            <footer class="slds-modal__footer"> 
+                                
+                                <lightning:button label="Back"
+                                                  title="Back"
+                                                  onclick="{!c.closeModal}"/>
+                            </footer> 
+                        </aura:set>
+                    </aura:if>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+
+        </aura:if> 
+
+    </div>
+    <div class="slds-grid slds-p-around_large slds-grid_align-spread slds-docked-form-footer" style='float:right'>
+        <div class="slds-col"/>
+        <div class="slds-col">
+            
+            <!-- <lightning:button class="slds-button slds-button_text-destructive" label="Remove Line Item" iconName="utility:close" iconPosition="left"/> -->
+            <!-- <lightning:button label="Back" variant="neutral" iconName="utility:back" iconPosition="left" title="Back" onclick="{!c.redirectToStructure}"/>
+            <aura:if isTrue='{!v.isLevelTwo}'> -->
+                <!-- <lightning:button label="Add Line Item" iconName="utility:add" iconPosition="left" title="addRow" onclick="{! c.addRow }"/>
+            </aura:if>                 -->
+            <lightning:button label="Save" variant="brand" iconName="utility:save" iconPosition="right" title="Success" onclick="{!c.saveItems}"/>
+        </div>
+    </div>
+  
+
+</aura:component>

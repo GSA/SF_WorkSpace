@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>PS for only allowing Setup and Config view of Salesforce - Used for Delegated Admins and Limited Developers</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>OrgWide - Delegated Admin - System</label>
+    <userPermissions>
+        <enabled>true</enabled>
+        <name>ViewRoles</name>
+    </userPermissions>
+    <userPermissions>
+        <enabled>true</enabled>
+        <name>ViewSetup</name>
+    </userPermissions>
+</PermissionSet>

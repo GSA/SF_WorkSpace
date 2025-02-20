@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Project_type__c</fullName>
+    <inlineHelpText>Either new construction or repair and alteration based on the estimate type selected.</inlineHelpText>
+    <label>Project Type</label>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Estimate_Type_Proj__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>New Construction</fullName>
+                <default>false</default>
+                <label>New Construction</label>
+            </value>
+            <value>
+                <fullName>Repair &amp; Alteration - Work Item Detail</fullName>
+                <default>false</default>
+                <label>Repair &amp; Alteration - Work Item Detail</label>
+            </value>
+            <value>
+                <fullName>Repair &amp; Alteration - Parametric Entry</fullName>
+                <default>false</default>
+                <label>Repair &amp; Alteration - Parametric Entry</label>
+            </value>
+            <value>
+                <fullName>New Construction - DES</fullName>
+                <default>false</default>
+                <label>New Construction - DES</label>
+            </value>
+            <value>
+                <fullName>Repair &amp; Alteration - DES</fullName>
+                <default>false</default>
+                <label>Repair &amp; Alteration - DES</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Definitive Estimating</controllingFieldValue>
+            <valueName>New Construction - DES</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Definitive Estimating</controllingFieldValue>
+            <valueName>Repair &amp; Alteration - DES</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Parametric</controllingFieldValue>
+            <valueName>New Construction</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

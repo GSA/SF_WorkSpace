@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Default_HVAC_Heating_Load__c</fullName>
+    <description>Lookup value from building parameters</description>
+    <externalId>false</externalId>
+    <formula>IF( NCMT_Project__r.RecordType.Name =&apos;Parking Garage&apos;,5.000,12.000)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Default HVAC Heating Load</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>3</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

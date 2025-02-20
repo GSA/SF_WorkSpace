@@ -1,0 +1,23 @@
+<apex:page standardController="Building_Notes__c">
+    <apex:form >
+        <apex:pageBlock title="Building Notes" mode="edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!save}" value="Save"/>
+                <apex:commandButton action="{!cancel}" value="Cancel"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="Information" columns="1">
+                <!--<apex:outputField value="{!Building_Notes__c.ownerId}"/>-->
+                <apex:inputField value="{!Building_Notes__c.Contact__c}"/>
+                <!--<apex:outputField value="{!Building_Notes__c.Account__c}"/>-->
+                <apex:inputField value="{!Building_Notes__c.BuildingNotes__c}"/>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection title="Building Notes" columns="1">    
+            <span style="font-weight:bold;">Building Notes should be used as a reference when performing due diligence. Past notes should not be used to disqualify offers unless the leasing team confirms that the building issues are still present and the lessor is unwilling to remediate them.</span> <br/>  <br/>                         
+                <apex:inputField value="{!Building_Notes__c.Description__c}" style="width:500px;" required="true"/>
+                <apex:inputField value="{!Building_Notes__c.Closed_Removes_Flag_from_ID_Winner_Sea__c}" style="width:500px;" label="Closed - Removes Flag from ID Winner Search"/>
+            </apex:pageBlockSection>
+            
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

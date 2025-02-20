@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Help_Lightning</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <encodingKey>UTF-8</encodingKey>
+    <hasMenubar>false</hasMenubar>
+    <hasScrollbars>true</hasScrollbars>
+    <hasToolbar>false</hasToolbar>
+    <height>600</height>
+    <isResizable>true</isResizable>
+    <linkType>url</linkType>
+    <masterLabel>Help</masterLabel>
+    <openType>newWindow</openType>
+    <position>none</position>
+    <protected>false</protected>
+    <showsLocation>false</showsLocation>
+    <showsStatus>false</showsStatus>
+    <url>{!IF( 
+
+/* Logic #1 */
+
+ AND( ISPICKVAL( NCMT_Project__c.Project_type__c ,&apos;New Construction&apos;) , ISPICKVAL( NCMT_Project__c.Building_Type__c ,&apos;LPOE&apos;) ) 
+,  
+
+/* Action for True #1 */
+
+URLFOR($Setup.NCMT_HelpContent__c.NCMT_Help_Site_New_Construction_LPOE__c , null, null, true)   
+
+, 
+/* Action for False #1 */
+
+ IF(
+
+/* Logic #2 */
+
+ AND( ISPICKVAL( NCMT_Project__c.Project_type__c ,&apos;New Construction&apos;) , ISPICKVAL( NCMT_Project__c.Building_Type__c ,&apos;Parking Garage&apos;) )
+
+, 
+/* Action for True #2 */
+
+URLFOR($Setup.NCMT_HelpContent__c.NCMT_Help_Site_New_Construction_PG__c , null, null, true) , 
+
+/* Action for False #2 */
+
+ IF(
+/* Logic #3 */
+
+AND( ISPICKVAL( NCMT_Project__c.Project_type__c ,&apos;New Construction&apos;) ,
+
+OR(!ISPICKVAL( NCMT_Project__c.Building_Type__c ,&apos;LPOE&apos;),!ISPICKVAL( NCMT_Project__c.Building_Type__c ,&apos;Parking Garage&apos;)) 
+  ), 
+
+
+/* Action for True #3*/
+
+URLFOR($Setup.NCMT_HelpContent__c.NCMT_Help_Site_New_Construction_Oth__c , null, null, true), 
+
+
+
+/* Action for False #3 */
+
+ IF(
+
+/* Logic #4 */
+
+ AND( ISPICKVAL( NCMT_Project__c.Project_type__c ,&apos;Repair &amp; Alteration - Parametric Entry&apos;) , ISPICKVAL( NCMT_Project__c.Building_Type__c ,&apos;&apos;) )
+, 
+
+
+
+/* Action for True #4*/
+URLFOR( $Setup.NCMT_HelpContent__c.NCMT_Help_Site_RA_Parametric__c , null, null, true), 
+
+
+
+/* Action for False #4*/
+
+ IF(
+
+/* Logic #5 */
+ AND( ISPICKVAL( NCMT_Project__c.Project_type__c ,&apos;Repair &amp; Alteration - Work Item Detail&apos;) , ISPICKVAL( NCMT_Project__c.Building_Type__c ,&apos;&apos;) ), 
+
+/* Action for True #5*/
+URLFOR( $Setup.NCMT_HelpContent__c.NCMT_Help_Site_RA_WorkItem__c , null, null, true), 
+
+
+/* Action for False #5*/
+URLFOR( $Setup.NCMT_HelpContent__c.NCMT_Help_Site__c ,null, null, true)) 
+
+) 
+
+
+) 
+
+
+
+) 
+
+
+
+)}</url>
+</WebLink>

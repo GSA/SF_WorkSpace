@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ComplexDetailchkforDesignBuildOwned</fullName>
+    <active>true</active>
+    <description>Complex and Detail picklist values must be selected for Design Build - Owned</description>
+    <errorConditionFormula>if( text(Delivery_Method__c) == &apos;Design Build - Owned&apos; ,
+  if (text(For_Design_Build_Owned_Stipend_Compl__c) == &apos;&apos; || text(For_Design_Build_Owned_Stipend_Detail__c) == &apos;&apos;, true, false)
+,false)</errorConditionFormula>
+    <errorMessage>Select values for Design Build - Owned Stipend Detail and Design Build - Owned Stipend Complex</errorMessage>
+</ValidationRule>

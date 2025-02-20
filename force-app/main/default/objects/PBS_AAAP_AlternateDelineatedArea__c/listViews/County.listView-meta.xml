@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>County</fullName>
+    <columns>NAME</columns>
+    <columns>DilneatedAreaType__c</columns>
+    <columns>OBJECT_ID</columns>
+    <columns>State__c</columns>
+    <columns>Value__c</columns>
+    <columns>LAST_UPDATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>DilneatedAreaType__c</field>
+        <operation>contains</operation>
+        <value>County</value>
+    </filters>
+    <filters>
+        <field>State__c</field>
+        <operation>equals</operation>
+        <value>VA,MD,DC</value>
+    </filters>
+    <label>County</label>
+</ListView>

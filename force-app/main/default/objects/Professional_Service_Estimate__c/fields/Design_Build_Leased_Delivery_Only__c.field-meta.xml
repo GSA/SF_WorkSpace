@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Design_Build_Leased_Delivery_Only__c</fullName>
+    <description>Design Build - Leased Delivery Only</description>
+    <label>Design Build - Leased Delivery Only</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Delivery_Method__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Build to Suit</fullName>
+                <default>false</default>
+                <label>Build to Suit</label>
+            </value>
+            <value>
+                <fullName>Tenant Fit-out w/ Redesign</fullName>
+                <default>false</default>
+                <label>Tenant Fit-out w/ Redesign</label>
+            </value>
+            <value>
+                <fullName>Tenant Fit-out w/ no Redesign</fullName>
+                <default>false</default>
+                <label>Tenant Fit-out w/ no Redesign</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Design Build - Leased</controllingFieldValue>
+            <valueName>Build to Suit</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Design Build - Leased</controllingFieldValue>
+            <valueName>Tenant Fit-out w/ Redesign</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Design Build - Leased</controllingFieldValue>
+            <valueName>Tenant Fit-out w/ no Redesign</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

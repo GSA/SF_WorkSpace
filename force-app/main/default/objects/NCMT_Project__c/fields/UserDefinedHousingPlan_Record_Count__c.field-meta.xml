@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>UserDefinedHousingPlan_Record_Count__c</fullName>
+    <description>User Defined Housing Plan Record Count</description>
+    <label>UserDefinedHousingPlan Record Count</label>
+    <summaryFilterItems>
+        <field>NCMT_Housing_Plan__c.RecordTypeId</field>
+        <operation>equals</operation>
+        <value>User Defined</value>
+    </summaryFilterItems>
+    <summaryForeignKey>NCMT_Housing_Plan__c.Project__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

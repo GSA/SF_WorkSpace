@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>One_Custom_Housing_Plan_Per_Project</fullName>
+    <active>false</active>
+    <description>A project cannot have more than one custom housing plan</description>
+    <errorConditionFormula>AND(ISNEW(), Project__r.UserDefinedHousingPlan_Record_Count__c &gt; 0)</errorConditionFormula>
+    <errorMessage>A Project can have only one custom housing plan record.</errorMessage>
+</ValidationRule>

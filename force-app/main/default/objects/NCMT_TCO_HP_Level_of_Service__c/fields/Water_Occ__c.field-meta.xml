@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Water_Occ__c</fullName>
+    <externalId>false</externalId>
+    <formula>if( HP_Parameter__r.Land_Related__c == true, (HP_Parameter__r.GPD_Gallons_Person__c ), (HP_Parameter__r.GPD_Gallons_Person__c/8) *  Occuant_USF__c *  Occ_H_SF_Yr__c)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Water Consumption</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

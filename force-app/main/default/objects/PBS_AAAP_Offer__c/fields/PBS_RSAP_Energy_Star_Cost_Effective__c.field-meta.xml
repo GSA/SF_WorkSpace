@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PBS_RSAP_Energy_Star_Cost_Effective__c</fullName>
+    <description>(If ‘Meets exception’ selected) With regard to offers falling into a statutory exception category above, the Offeror has evaluated energy efficiency and conservation improvements and has determined:
+Cost effective improvements have been identified and are attached to this offer.
+There are no cost effective improvements.  Supporting documentation is attached to this offer.</description>
+    <label>Energy Star Cost Effective</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Cost effective improvements</fullName>
+                <default>false</default>
+                <label>Cost effective improvements have been identified and are attached to this offer.</label>
+            </value>
+            <value>
+                <fullName>No cost effective improvements</fullName>
+                <default>false</default>
+                <label>There are no cost effective improvements.  Supporting documentation is attached to this offer.</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

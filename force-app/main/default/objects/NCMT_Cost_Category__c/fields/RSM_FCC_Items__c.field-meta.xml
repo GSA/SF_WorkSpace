@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RSM_FCC_Items__c</fullName>
+    <label>RSM FCC Items</label>
+    <summaryFilterItems>
+        <field>NCMT_DES_Lookup_details__c.File_Name__c</field>
+        <operation>notEqual</operation>
+        <value>GSA_ 2020 M&amp;R Unit Price Data.xls</value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>NCMT_DES_Lookup_details__c.File_Name__c</field>
+        <operation>notEqual</operation>
+        <value>GSA 2020 FMR_PM_ASSMUP.xlsx</value>
+    </summaryFilterItems>
+    <summaryForeignKey>NCMT_DES_Lookup_details__c.Level_2__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

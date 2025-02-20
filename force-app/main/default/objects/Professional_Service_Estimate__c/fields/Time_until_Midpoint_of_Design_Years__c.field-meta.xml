@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Time_until_Midpoint_of_Design_Years__c</fullName>
+    <description>Time until Midpoint of Design (years)</description>
+    <externalId>false</externalId>
+    <formula>(( 
+DATETIMEVALUE(Anticipated_Date_of_Design_Award__c) +
+    IF(Text( Project_Type__c ) == &apos;New Construction&apos;, 
+        (( Design_Duration__c * 365) / 2)  
+    ,
+        (( Total_R_A_Design_Duration_years__c * 365) / 2)  
+    )
+    )
+ - DATETIMEVALUE(Base_Date_of_Estimate__c)
+) / 365</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Time until Midpoint of Design (years)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>9</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_CEW_Project_Area_GSF</fullName>
+    <active>true</active>
+    <description>For CEW Project, Project Area (GSF) should be greater than 0</description>
+    <errorConditionFormula>TEXT(Estimate_Type_Proj__c) ==&apos;Cost Estimating Workbook&apos; &amp;&amp;  Project_Area_GSF__c &lt;= 0</errorConditionFormula>
+    <errorDisplayField>Project_Area_GSF__c</errorDisplayField>
+    <errorMessage>Project Area (GSF) should be entered.</errorMessage>
+</ValidationRule>

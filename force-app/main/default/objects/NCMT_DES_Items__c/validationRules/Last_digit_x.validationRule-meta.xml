@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Last_digit_x</fullName>
+    <active>true</active>
+    <description>If line item number edited, last digit must be x</description>
+    <errorConditionFormula>AND(ISCHANGED(CSI_Line_Item_Number__c ), 
+REGEX(CSI_Line_Item_Number__c ,&quot;[^x]*$&quot;)
+)</errorConditionFormula>
+    <errorDisplayField>CSI_Line_Item_Number__c</errorDisplayField>
+    <errorMessage>Last digit of Line Item Number must be x</errorMessage>
+</ValidationRule>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OneCladdingOptionsCheck</fullName>
+    <active>true</active>
+    <description>Only one of the Utilitarian or Medium or High fields can be checked.</description>
+    <errorConditionFormula>RecordType.Name == &apos;Parking Garage&apos; &amp;&amp; 
+(
+IF(   Utilitarian__c , 1, 0) + IF(   Medium__c , 1, 0) + IF(   High__c , 1, 0)  
+= 0 ||
+IF(   Utilitarian__c , 1, 0) + IF(   Medium__c , 1, 0) + IF(   High__c , 1, 0)  
+&gt; 1
+)</errorConditionFormula>
+    <errorMessage>Only one of the Utilitarian or Medium or High fields can be checked.</errorMessage>
+</ValidationRule>

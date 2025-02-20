@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Use_Change_Setback_FT_Check</fullName>
+    <active>false</active>
+    <description>Use Change Setback(100%) FT</description>
+    <errorConditionFormula>PRIORVALUE(Change_Setback_100__c)!= 0 &amp;&amp; Change_Setback_100__c == 0</errorConditionFormula>
+    <errorDisplayField>Change_Setback_100__c</errorDisplayField>
+    <errorMessage>Change Setback cannot be override to 0</errorMessage>
+</ValidationRule>

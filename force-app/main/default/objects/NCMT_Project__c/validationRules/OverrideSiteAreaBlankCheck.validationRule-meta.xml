@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OverrideSiteAreaBlankCheck</fullName>
+    <active>false</active>
+    <description>Check if Site Area (if known) is not zero when Total Area (Including Parking) is changed</description>
+    <errorConditionFormula>TEXT(Project_type__c)== &apos;New Construction&apos; &amp;&amp; Total_Area_Including_Parking__c &lt;&gt;  PRIORVALUE(Total_Area_Including_Parking__c ) &amp;&amp; Override_Calculated_Site_Area__c &lt;&gt; 0</errorConditionFormula>
+    <errorDisplayField>Override_Calculated_Site_Area__c</errorDisplayField>
+    <errorMessage>Site Area (if known) must be zero, if Total Area (Including Parking) is changed.</errorMessage>
+</ValidationRule>

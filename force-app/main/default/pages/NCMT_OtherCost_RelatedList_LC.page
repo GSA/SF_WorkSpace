@@ -1,0 +1,19 @@
+<apex:page standardController="NCMT_Housing_Plan__c" lightningStylesheets="true">
+    <apex:slds />
+    <apex:includeLightning />
+    <div id="lightningPage"></div>
+     <script>
+    $Lightning.use("c:NCMT_OtherCost_RelatedList_App", function(){
+            $Lightning.createComponent("c:NCMT_OtherCost_RelatedList", {
+                "recordId" : "{!$CurrentPage.parameters.id}"
+                //"recordId" : "a1C35000001P62u"
+            },
+            'lightningPage',
+                function(cmp){
+     
+                });
+        
+        });
+        </script> 
+   
+</apex:page>

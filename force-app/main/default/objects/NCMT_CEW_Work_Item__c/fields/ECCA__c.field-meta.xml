@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ECCA__c</fullName>
+    <formula>if((text(NCMT_CEW_Work_Description__r.Number__c) == &quot;6&quot; || text(NCMT_CEW_Work_Description__r.Number__c) == &quot;8&quot;),  
+(Total_Direct_Cost__c * NCMT_CEW_Work_Description__r.NCMT_Project__r.CECAMultiplier__c *( 1+Project_Cost_Summary__r.Project_Name__r.Total_Escalation__c)), 
+(Total_Direct_Cost__c * NCMT_CEW_Work_Description__r.NCMT_Project__r.CECAMultiplier__c *( 1+Project_Cost_Summary__r.Project_Name__r.Total_Escalation__c +  Project_Cost_Summary__r.Project_Name__r.Total_Escalation_CPE__c))
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>ECCA</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

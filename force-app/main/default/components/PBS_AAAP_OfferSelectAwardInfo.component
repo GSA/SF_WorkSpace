@@ -1,0 +1,49 @@
+<apex:component controller="PBS_AAAP_OfferSelectAwardInfo_Contr" allowDML="true">
+<apex:attribute name="targetObjId" description="Target Object Record Id"
+        type="String" required="true" assignTo="{!targetObjId}"/>
+
+    <apex:attribute name="sectionTitle" description="Section Title"
+        type="String" required="true"/>
+ 
+    <apex:pageBlock title="{!sectionTitle}">
+        <apex:pageBlockSection columns="1" id="OfferSpaceSection">
+        
+            <apex:pageBlockTable value="{!aphList}" var="aph" width="100%">
+                <apex:column headerValue="Offer Select Award"  >
+                    <apex:commandLink action="{!actionShowOfferSelectAwardInfo}" value="{!aph.Name}" >
+                        <apex:param name="q" value="{!aph.id}" assignTo="{!offerSelectAwardID}"/>
+                    </apex:commandLink>
+                </apex:column>
+                <apex:column headerValue="Space ID" value="{!aph.PBS_AAAP_Space_ID__c}" />
+                <apex:column headerValue="Offer" value="{!aph.PBS_AAAP_Offer_ID__c}" />
+                <apex:column value="{!aph.CreatedDate}" />
+                <apex:column value="{!aph.PBS_AAAP_isSelected__c}" headerValue="IsSelected"  />
+                <apex:column value="{!aph.PBS_AAAP_IsAwarded__c}" />
+                <apex:column value="{!aph.PBS_AAAP_AGENCY_REQUIREMENT_ID__c}" />
+                <apex:column value="{!aph.PBS_AAAP_SELECTED_USF__c}" />
+                <apex:column rendered="{!showDeSelectButton}" >
+
+                    <apex:commandLink value="Prepare/Award Offer" action="{!actionAwardOfferSpace}" id="prepareDocButton" style="font-weight:bold; color:Green;" rendered="{!NOT(aph.PBS_AAAP_IsAwarded__c)}">
+                        <apex:param name="q" value="{!aph.id}" assignTo="{!offerSelectAwardID}"/>
+                    </apex:commandLink><!--<br/>
+                    <apex:commandLink value="Award Offer" action="{!prepareDocument}" id="awardselectSpaceButton" style="font-weight:bold; color:Blue;" rendered="{!NOT(aph.PBS_AAAP_IsAwarded__c)}" onclick="if(!confirm('Please read carefully - you have elected to award the Lease in the AAAP system. ' +
+                     'This process cannot be undone without Administrative action. ' +
+                      'By awarding in the AAAP system, you acknowledge that the Lease Contract has ' +
+                       'been awarded and the Award Offer Information Page is complete with Lease ' +
+                        'information that matches the Lease Contract.  If you are not ready to ' +
+                         'award, please click \'Cancel\'.  If you are ready to award, please press \'OK\'.'))return false;">
+                        <apex:param name="q" value="{!aph.id}" assignTo="{!offerSelectAwardID}"/>
+                    </apex:commandLink>-->&nbsp;&nbsp;
+                    <apex:commandLink value="DeSelect Offer" action="{!actionDeSelectOfferSpace}" id="deselectSpaceButton" style="font-weight:bold; color:Red;" rendered="{!NOT(aph.PBS_AAAP_IsAwarded__c)}" >
+                        <apex:param name="selectedSpaceId" assignTo="{!selectedSpaceId}" value="{!aph.PBS_AAAP_Space_ID__c}" id="spaceParam2"/>
+                        <apex:param name="selectedOfferId" assignTo="{!selectedOfferId}" value="{!aph.PBS_AAAP_Offer_ID__c}" id="offerParam2"/>
+                        <apex:param name="agencyRequirementId" assignTo="{!agencyRequirementId}" value="{!aph.PBS_AAAP_AGENCY_REQUIREMENT_ID__c}" id="agencyRequirementParam2"/>
+                    </apex:commandLink>
+                    
+                    <apex:facet name="header">Action</apex:facet>
+                </apex:column>
+                
+            </apex:pageBlockTable> 
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:component>

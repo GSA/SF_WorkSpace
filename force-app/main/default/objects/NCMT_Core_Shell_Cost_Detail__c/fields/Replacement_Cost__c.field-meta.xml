@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Replacement_Cost__c</fullName>
+    <formula>IF( Core_Shell_Cost_Parameter__r.Duplicate_Maintenance_Related__c = true,( Unit_Cost__c * Total_Units__c * Core_Shell_Cost_Parameter__r.PCT__c * 100 * Project_Cost_Summary__r.Project_Name__r.Core_Shell_Adjustment_Factor__c) ,(Total_Cost__c *  Core_Shell_Cost_Parameter__r.PCT__c * Project_Cost_Summary__r.Project_Name__r.Core_Shell_Adjustment_Factor__c))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Replacement Cost</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

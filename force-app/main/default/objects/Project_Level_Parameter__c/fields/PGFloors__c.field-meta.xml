@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PGFloors__c</fullName>
+    <externalId>false</externalId>
+    <formula>(NCMT_Project__r.Parking_Garage_Gross_Area_SF__c )/( NCMT_Project__r.At_and_above_grade__c + NCMT_Project__r.Below_grade__c )</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>PGFloors</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

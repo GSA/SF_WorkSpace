@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Region_4</fullName>
+    <columns>NAME</columns>
+    <columns>OBJECT_ID</columns>
+    <columns>Formula_RLP_Region__c</columns>
+    <columns>PBS_AAAP_RLP_Number__c</columns>
+    <columns>PBS_AAAP_Building_Name__c</columns>
+    <columns>PBS_AAAP_Street_Address__c</columns>
+    <columns>PBS_AAAP_City__c</columns>
+    <columns>CREATEDBY_USER</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>PBS_AAAP_Offer_Status__c</columns>
+    <columns>PBS_AAAP_Is_Offer_Valid__c</columns>
+    <columns>Property__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Formula_RLP_Region__c</field>
+        <operation>equals</operation>
+        <value>Region 4</value>
+    </filters>
+    <filters>
+        <field>PBS_AAAP_Is_Offer_Valid__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <filters>
+        <field>PBS_AAAP_Offer_Status__c</field>
+        <operation>equals</operation>
+        <value>Submitted,Selected,Awarded,Awarded/Submitted,Awarded/Selected</value>
+    </filters>
+    <label>Region 4</label>
+    <sharedTo>
+        <group>AAAP_Region_4</group>
+    </sharedTo>
+</ListView>

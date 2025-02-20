@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Region_11_NCR_Validation</fullName>
+    <active>false</active>
+    <description>The selection of the state, county, and city must match the prescribed information for Region 11 / National Capital Region</description>
+    <errorConditionFormula>AND(
+OR(LOWER(TEXT(PBS_AAAP_RLP_Number__r.PBS_AAAP_Region__c)) = &apos;region 11&apos;,
+LOWER(TEXT(PBS_AAAP_RLP_Number__r.PBS_AAAP_Region__c)) = &apos;national capital region&apos;
+),
+AND(OR(LOWER(TEXT(PBS_AAAP_State__c)) != &apos;dc&apos;,
+LOWER(TEXT(PBS_AAAP_State__c)) != &apos;district of columbia&apos;,
+LOWER(PBS_AAAP_County__c) != &apos;district of columbia&apos;
+),
+OR(
+AND(LOWER(TEXT(PBS_AAAP_State__c)) = &apos;va&apos;,
+LOWER(PBS_AAAP_County__c) != &apos;fairfax&apos;,
+LOWER(PBS_AAAP_County__c) != &apos;arlington&apos;,
+LOWER(PBS_AAAP_County__c) != &apos;loudoun&apos;,
+LOWER(PBS_AAAP_County__c) != &apos;prince william&apos;
+),
+AND(LOWER(TEXT(PBS_AAAP_State__c)) = &apos;md&apos;,
+LOWER(PBS_AAAP_County__c) != &apos;montgomery&apos;,
+LOWER(PBS_AAAP_County__c) != &quot;prince george&apos;s&quot;
+),
+AND(LOWER(TEXT(PBS_AAAP_State__c)) != &apos;va&apos;,
+LOWER(TEXT(PBS_AAAP_State__c)) != &apos;md&apos;
+)
+)
+),
+$Profile.Name != &quot;AAAP Manager&quot;,
+$Profile.Name != &quot;GSA System Administrator&quot;,
+$Profile.Name != &quot;System Administrator&quot;,
+$Profile.Name != &quot;AAAP Customer Portal&quot;,
+$Profile.Name != &quot;GSA RET Community Plus Login User&quot;
+)</errorConditionFormula>
+    <errorMessage>Your building address does not fall within Region 11 / NCR boundaries.  Please check your address data and try again.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,530 @@
+<apex:page controller="PBS_AAAP_IdentifyWinnerController" id="pageid" tabStyle="PBS_AAAP_Agency_Requirement__c" lightningStylesheets="true">
+
+    <!--Todd Brown 07/30/2022 Replaced old JQuery library references with latest version in static resource files
+    <apex:includeScript value="{!URLFOR($Resource.jQueryFiles, 'js/jquery-1.7.1.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.jQueryFiles, 'js/jquery-ui-1.8.18.custom.min.js')}"/> -->
+    <apex:includeScript value="{!URLFOR($Resource.JQueryLibs, 'JQueryLibs/' + $Label.JQueryCurrentVersion + '/scripts.js')}"/> 
+
+    <!-- Load JQuery Overlay plug-in library from https://gasparesganga.com/labs/jquery-loading-overlay -->
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_JQueryOverlay,'/JQueryOverlay/loadingoverlay.min.js')}" />
+
+    <!-- Load BluebirdJS required by IE11 -->
+    <apex:includescript value="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.5.5/bluebird.core.min.js" />
+    
+    <!-- Todd Brown 07/30/2022 Replaced ESRI ArcGIS JS API v3.29 library references with supported v4.23 libraries
+    <apex:stylesheet value="https://js.arcgis.com/3.29/esri/css/esri.css" />
+    <script src="https://js.arcgis.com/3.29/" />
+    <apex:stylesheet value="{!URLFOR($Resource.PBS_AAAP_IdentifyWinner, 'PBS_AAAP_IdentifyWinner/PBS_AAAP_IdentifyWinner.css')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_IdentifyWinner, 'PBS_AAAP_IdentifyWinner/PBS_AAAP_IdentifyWinner.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_IdentifyWinner, 'PBS_AAAP_IdentifyWinner/PBS_AAAP_IdentifyWinner_Map.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_IdentifyWinner, 'PBS_AAAP_IdentifyWinner/PBS_AAAP_IdentifyWinner_Map_Layers.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_IdentifyWinner, 'PBS_AAAP_IdentifyWinner/PBS_AAAP_IdentifyWinner_Circle.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_IdentifyWinner, 'PBS_AAAP_IdentifyWinner/PBS_AAAP_IdentifyWinner_Polygon.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_IdentifyWinner, 'PBS_AAAP_IdentifyWinner/PBS_AAAP_IdentifyWinner_Download.js')}" /> -->
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.23/esri/themes/light/main.css"/>
+   
+    <script src="https://js.arcgis.com/4.23/"></script>
+    <apex:stylesheet value="{!URLFOR($Resource.PBS_AAAP_IdentifyWinnerSearch, 'PBS_AAAP_IdentifyWinnerSearch423/PBS_AAAP_IdentifyWinnerSearch.css')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_IdentifyWinnerSearch, 'PBS_AAAP_IdentifyWinnerSearch423/PBS_AAAP_IdentifyWinnerSearch.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_IdentifyWinnerSearch, 'PBS_AAAP_IdentifyWinnerSearch423/PBS_AAAP_IdentifyWinnerSearch_Map.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_IdentifyWinnerSearch, 'PBS_AAAP_IdentifyWinnerSearch423/PBS_AAAP_IdentifyWinnerSearch_Map_Layers.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_IdentifyWinnerSearch, 'PBS_AAAP_IdentifyWinnerSearch423/PBS_AAAP_IdentifyWinnerSearch_Circle.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_IdentifyWinnerSearch, 'PBS_AAAP_IdentifyWinnerSearch423/PBS_AAAP_IdentifyWinnerSearch_Polygon.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_IdentifyWinnerSearch, 'PBS_AAAP_IdentifyWinnerSearch423/PBS_AAAP_IdentifyWinnerSearch_Download.js')}" />
+    
+    <script type="text/javascript">
+        var SF = {
+            Shape: {!shape},
+            Props: JSON.parse('{!JSENCODE(props)}'),
+            fetchCookieData: '{!$RemoteAction.PBS_AAAP_IdentifyWinnerController.fetchCookieData}',
+            selectedHistorical: '{!JSENCODE(selectedHistorical)}',
+            Label: {
+                SpaceKeyPrefix: '{!$Label.PBS_AAAP_SpaceKeyPrefix}',
+                OfferKeyPrefix: '{!$Label.PBS_AAAP_OfferKeyPrefix}'
+            },
+            rlpRecord: {
+                Year: '{!JSENCODE(rlpRecord.PBS_AAAP_Year__c)}'
+            },
+            CurrentPage: {
+                agencyId: '{!JSENCODE($CurrentPage.parameters.agencyId)}'
+            },
+            Flags: {
+                EnergyStar: "{!$Resource.Offer_EnergyStar}",
+                Metro: "{!$Resource.Offer_Metro}",
+                Historic: "{!$Resource.Offer_Historic}",
+                HubZone: "{!$Resource.Offer_HubZone}",
+                Selected: "{!$Resource.Offer_Selected}",
+                Awarded: "{!$Resource.Offer_Awarded}",
+                Problems: "{!$Resource.Offer_Problems}"
+            }
+        }
+        
+        var SF_Label = {
+            urlPrefix: '{!$Label.AAAP_ESRI_URL_Prefix}',
+            proxyUrl: '{!$Label.AAAP_ESRI_Internal_Proxy_URL}',
+            locator: {
+                CBD: "{!JSENCODE($Label.AAAP_ESRI_CBD_Layer)}"   
+            }
+        }
+        console.log('JK SF_Label ' + JSON.stringify(SF_Label));
+        
+        function openSelectConfirmation(spacelocalparam, offerlocalparam, costlocalparam){     
+            debugger;
+            document.getElementById('selectModal').style.display = 'block';
+            var modalTxt = "Selecting an Offer will export the Offeror's documentation to the associated GREX project.<br/><br/>Are you sure Project Number: {!JSENCODE(agencyRecord.PBS_AAAP_Project_ID__c)} is the correct GREX project number for this Agency Requirement? <br/>";
+            document.getElementById('selectModalText').innerHTML = modalTxt;
+            
+            spaceparam = spacelocalparam ;
+            offerparam = offerlocalparam;
+            costparam = costlocalparam;
+        }
+        
+        function closeSelectConfirmation(){
+            document.getElementById('selectModal').style.display = 'none';
+        }
+        
+        function CallSelectConfirmation(){
+            //alert(spaceparam+' '+offerparam+' '+costparam);
+            debugger;
+            document.getElementById('pageid:form_ident_win:selectedSpaceId').value = spaceparam;
+            document.getElementById('pageid:form_ident_win:selectedOfferId').value = offerparam;
+            document.getElementById('pageid:form_ident_win:selectedPV').value = costparam;
+            actionSelectSpaceActionFunction();
+        }
+        
+    </script>
+
+    <apex:includescript value="{!$Resource.jspdf}"/>
+    <apex:includescript value="{!$Resource.html2canvas}"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <apex:includeLightning />
+
+
+    <apex:messages styleClass="errMessage"/>
+
+    <apex:form id="form_ident_win">
+        <apex:actionFunction action="{!captureImage}" name="captureImage" rerender="frm" oncomplete="captureDone();">
+            <apex:param assignTo="{!strImageBlob1}" name="imageBlob" value=""/>
+            <apex:param assignTo="{!strImagename}" name="imagename" value=""/>
+        </apex:actionFunction>
+        <apex:actionFunction name="actionSelectSpaceActionFunction" action="{!actionSelectSpace}" id="selectSpaceButton">            
+        </apex:actionFunction>
+
+        <!-- Select Modal -->
+        <div id="selectModal" class="modal" >
+            <!-- Modal content -->
+            <div class="modal-content" style="border-radius: 18px;">
+                <span class="close" onclick="closeSelectConfirmation();return false">&times;</span>
+                <p id="selectModalText"></p>
+                <br/>
+                <input type="button" value="Yes, Select Offer" onclick="CallSelectConfirmation();return false" />
+                <input type="button" value="No, Cancel Selection" onclick="closeSelectConfirmation();return false" />
+            </div>
+        </div>
+
+        <!-- Modal Section -->
+        <div id="myModal" class="modal" >
+            <!-- Modal content -->
+            <div class="modal-content" style="border-radius: 18px;">
+                <span class="close" onclick="$('#myModal').hide();return falsel">&times;</span>
+                <p id="modalText"></p>
+                <br/>
+                <input type="button" value="Continue" onclick="openScreenShotPage();return false" />
+            </div>
+        </div>
+
+        <apex:inputHidden id="projectId" value="{!agencyRecord.PBS_AAAP_Project_ID__c}"/>
+        <apex:inputHidden id="regionId" value="{!agencyRecord.PBS_AAAP_Region__c}"/>
+        <apex:inputHidden id="rlpAfter2016" value="{!rlpAfter2016}"/>
+        
+        <apex:inputHidden id="selectedSpaceId" value="{!selectedSpaceId}"/>
+        <apex:inputHidden id="selectedOfferId" value="{!selectedOfferId}"/>
+        <apex:inputHidden id="selectedPV" value="{!selectedPV}"/>
+        
+        <div id="pdfIdentifyWinner">
+            <apex:actionFunction name="snapshotmethod" action="{!callCloningClass}" reRender="spaceTable" status="status">
+                <apex:param id="anode" name="node" value="" />
+                <apex:param id="bnode" name="list" value="" />
+            </apex:actionFunction>
+            <apex:actionFunction action="{!redirectHist}" name="histFunc"/>
+            <apex:actionFunction action="{!redirectHist2}" name="histFunc2"/>
+            <apex:actionStatus id="status">
+                <apex:facet name="start">
+                    <div class="waitingSearchDiv" id="el_loading" style="background-color: #fbfbfb; height:100%;opacity:0.65;width:100%;">
+                        <div class="waitingHolder" style="top: 100px; width: 91px;">
+                            <img class="waitingImage" src="/img/loading.gif" title="Please Wait..." />
+                            <span class="waitingDescription">Loading...</span>
+                        </div>
+                    </div>
+                </apex:facet>
+            </apex:actionStatus>
+
+            <apex:pageBlock id="pgblck_ident_win" mode="edit" title="Identify Winner- {!agencyRecord.PBS_AAAP_Project_ID__c}">
+
+                <apex:pageBlockSection id="pgBlckPV" columns="2" title="Present Value Evaluation Criteria">
+
+                    <apex:pageBlockSectionItem id="pgBlckSecItem_FIRM_TERM_NEW">
+                        <apex:outputText value=" TI Allowance for New Space per ABOA SF">
+                            <div style="position:relative;left:10px">
+                                <!--<span>
+                                Total Estimated TI Allowance for New Space / ABOA SF. Not an amortized annual rate.
+                                </span> -->
+                            </div>
+                            <!-- Weston says here's the info button steve wanted -->
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <!-- attempting to restrict input to 5 digits belw weston -->
+                            <apex:outputText value="{0, number, ###,###,###,##0.00}">
+                                <apex:param value="{!agencyRecord.PBS_AAAP_TIUSED_FOR_FIRM_TERM_NEW__c}" />
+                            </apex:outputText>
+                            <!-- <apex:outputText id="inp_FIRM_TERM_NEW" value="{!agencyRecord.PBS_AAAP_TIUSED_FOR_FIRM_TERM_NEW__c}"/>                                             -->
+                            <apex:inputCheckBox value="{!newLeaseArchAndEng}" disabled="true"/>
+                            <apex:outputText value="Include A&E"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="pgBlckSecItem_BSAC_per_ABOA" >
+                        <!--            <apex:outputText value="New Lease" >  Weston -->
+                        <apex:outputText value=" BSAC for New Space per ABOA SF">
+                            <div style="position:relative;left:10px">
+                               <!-- <span>
+                                Total Estimated BSAC for New Space / ABOA SF. Not an amortized annual rate.
+                                </span>-->
+                            </div>
+                            <!-- Weston says here's the info button steve wanted -->
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <!-- attempting to restrict input to 5 digits belw weston -->
+                            <!--<apex:inputField id="inp_BSAC_per_ABOA"  onchange="limitFive(this.value)" styleClass="numericField"
+                                value="{!agencyRecord.PBS_AAAP_BSAC_per_ABOA__c}"/>-->
+                            <apex:outputText value="{0, number, ###,###,###,##0.00}">
+                                <apex:param value="{!agencyRecord.PBS_AAAP_BSAC_per_ABOA__c}" />
+                            </apex:outputText>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="pgBlckSecItem_FIRM_TERM_SUCC" >
+                        <!-- Weston old text here, new below <apex:outputText value="Continuing Lease"/> -->
+                        <apex:outputText value="TI Allowance for Continuing Space per ABOA SF">
+                            <div  style="position:relative;left:10px">
+                             <!--   <span>
+                                Total Estimated TI Allowance for Continuing Space / ABOA SF. Not an amortized annual rate.
+                                </span> Weston says here's the info button steve wanted -->
+                            </div>
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <!-- <apex:inputField id="inp_FIRM_TERM_SUCC" onchange="limitFive(this.value)" styleClass="numericField"
+                                value="{!agencyRecord.PBS_AAAP_TIUSED_FOR_FIRM_TERM_SUCC__c}"/> -->
+                            <apex:outputText value="{0, number, ###,###,###,##0.00}">
+                                <apex:param value="{!agencyRecord.PBS_AAAP_TIUSED_FOR_FIRM_TERM_SUCC__c}" />
+                            </apex:outputText>
+                            <apex:inputCheckBox value="{!succLeaseArchAndEng}" disabled="true"/>
+                            <apex:outputText value="Include A&E"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="pgBlckSecItem_Continuing_Space_per_ABOA_SF"  >
+                        <!--            <apex:outputText value="New Lease" >  Weston -->
+                        <apex:outputText value=" BSAC for Continuing Space per ABOA SF">
+                            <div style="position:relative;left:10px">
+                                <!---<span>
+                                Total Estimated BSAC for Continuing Space / ABOA SF. Not an amortized annual rate.
+                                </span>--->
+                            </div>
+                            <!-- Weston says here's the info button steve wanted -->
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <!-- attempting to restrict input to 5 digits belw weston -->
+                            <!-- <apex:inputField id="inp_Continuing_Space_per_ABOA_SF" onchange="limitFive(this.value)" styleClass="numericField"
+                                value="{!agencyRecord.BSAC_for_Continuing_Space_per_ABOA_SF__c}"/>-->
+                            <apex:outputText value="{0, number, ###,###,###,##0.00}">
+                                <apex:param value="{!agencyRecord.BSAC_for_Continuing_Space_per_ABOA_SF__c}" />
+                            </apex:outputText>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="pgBlckSecItem_MOVE_DEFAULT"  >
+                        <!-- old text here, new below weston <apex:outputText value="Estimated $/ANSI BOMA ABOA Physical Move Costs"/>  -->
+                        <apex:outputText value="Estimated Physical Move Costs per ABOA SF"/>
+                        <!-- <apex:inputField id="inp_MOVE_DEFAULT" onchange="limitFive(this.value)" styleClass="numericField"
+                            value="{!agencyRecord.PBS_AAAP_MOVE_DEFAULT__c}"/>-->
+                        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+                            <apex:param value="{!agencyRecord.PBS_AAAP_MOVE_DEFAULT__c}" />
+                        </apex:outputText>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="pgBlckSecItem_TELCOMM_DEFAULT"  >
+                        <apex:outputText value="Estimated Telecom Costs per ABOA SF"/>
+                        <!-- <apex:inputField id="inp_TELCOMM_DEFAULT" onchange="limitFive(this.value)" styleClass="numericField"
+                            value="{!agencyRecord.PBS_AAAP_TELCOMM_DEFAULT__c}"/>-->
+                        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+                            <apex:param value="{!agencyRecord.PBS_AAAP_TELCOMM_DEFAULT__c}" />
+                        </apex:outputText>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="pgBlckSecItem_OTHER_UPFRONT_COSTS"  >
+                        <!--<apex:outputText value="Estimated $/ANSI BOMA ABOA Build out Cost, in excess of the TI for both a new and continuing lease"/>-->
+                        <!-- <apex:outputText value="Lump Sum Costs per ABOA SF in Excess of TI (New & Continuing)"/> Weston new text below -->
+                        <!-- weston -->
+                        <apex:outputText value="Lump Sum Costs per ABOA SF in excess of TI">
+                            <div style="position:relative;left:10px">
+                               <!--- <span>
+                                This variable no longer applies to Continuing space offers in the PV.
+                                </span>--->
+                            </div>
+                        </apex:outputText>
+                        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+                            <apex:param value="{!agencyRecord.PBS_AAAP_PV_OTHER_UPFRONT_COSTS__c}" />
+                        </apex:outputText>
+                        <!-- <apex:inputField id="inp_OTHER_UPFRONT_COSTS" onchange="limitFive(this.value)" styleClass="numericField"
+                            value="{!agencyRecord.PBS_AAAP_PV_OTHER_UPFRONT_COSTS__c}"/>-->
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                <!-- -------------------------------------- Search Criteria ------------------------------------------------ -->
+                <apex:pageBlockSection columns="2" title="Search Criteria">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Lease Term"/>
+                        <apex:outputPanel >
+                            <apex:outputField value="{!agencyRecord.PBS_AAAP_LEASE_TERM__c}"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Type of Requirement"/>
+                        <apex:outputText value="{!agencyRecord.PBS_AAAP_TYPE_OF_REQUIREMENT__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="ABOA SF Min"/>
+                        <apex:outputText value="{!agencyRecord.PBS_AAAP_USF_REQ_MIN__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="ABOA SF Max"/>
+                        <apex:outputText value="{!agencyRecord.PBS_AAAP_USF_REQ_MAX__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Minimum Contiguous ABOA SF"/>
+                        <apex:outputText value="{!agencyRecord.PBS_AAAP_MIN_CONT_USF__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Proximity to Metro within 2640ft"/>
+                        <apex:outputText id="metroArea" styleClass="metroArea"
+                                         value="{!agencyRecord.PBS_AAAP_WALKABLE_2640_FEET_METRO__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Type of Delineated Area"/>
+                        <apex:outputText value="{!agencyRecord.PBS_AAAP_DELINEATED_AREA_TYPE__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Include HVAC Overtime"/>
+                        <apex:inputField value="{!agencyRecord.PBS_AAAP_Include_HVAC_Overtime__c}" styleClass="HVACOT"
+                                         id="HVACOT"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Alt. Delineated Area"/>
+                        <apex:outputText value="{!agencyRecord.PBS_AAAP_DELINEATED_AREA_TYPE_DESC__c}">
+                            <!--<apex:actionSupport event="onchange" rerender="altdelAreaTypeDesc" status="counterStatus"/>-->
+                        </apex:outputText>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Total # of Official parking Spaces"/>
+                        <apex:outputText id="q33" value="{0, number, #}">
+                            <apex:param value="{!parkingSpacesOnAgency}"></apex:param>
+                        </apex:outputText>
+                        <!-- <apex:outputLabel value="{!parkingSpacesOnAgency}" /> -->
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Alt. Delineated Area Descriptor"/>
+                        <apex:outputText value="{!agencyRecord.PBS_AAAP_DELINEATED_DESCRIPTION__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <!-- Ingnor Parking Requirement --- -->
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Ignore Parking Requirement"/>
+
+                        <apex:inputCheckbox label="Absent" value="{!isParkingRequirement}" disabled="{!disableParkingOption}"/>
+
+                    </apex:pageBlockSectionItem>
+                    <!-- Ingnor Parking Requirement --- -->
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Estimated HVAC Overtime Hours"/>
+                        <apex:outputText value="{!agencyRecord.PBS_AAAP_HVAC_OVERTIME_HOURS__c}"/>
+                    </apex:pageBlockSectionItem>
+
+                </apex:pageBlockSection>
+
+
+                <apex:pageBlockButtons location="top">
+                    <!--<div id="select1">-->
+                        <apex:selectList value="{!selectedHistorical}" multiselect="false" size="1" rendered="true" onchange="histFunc();">
+                            <apex:selectOptions value="{!HistoricalOptions}"/>
+                        </apex:selectList>
+                    <!--</div>-->
+                    <apex:commandButton value="Generate Property List" action="{!actionSearch}" id="btn1"/>
+                    <apex:commandButton value="Reset" action="{!actionReset}"/>
+                    <apex:commandButton value="Back to Agency Requirements" action="{!backtoAgencyReq}"/>
+                </apex:pageBlockButtons>
+                <div id="ignoreMap" data-html2canvas-ignore="false">
+                    <apex:outputPanel id="map_canvas" layout="block" style="padding:0;margin:0;position:relative;display:none;">
+                        <table id="BasemapToggle" style="position:absolute;">
+                            <tr>
+                                <td id="streetTab" onclick="streetViewToggle()" style="font-weight:bold;">
+                                    Street
+                                </td>
+                                <td id="satTab" onclick="satelliteViewToggle()">
+                                    Satellite
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="map-menu-table" id="layers">
+                            <tr>
+                                <td id="layer-seismic"><span1>Seismic</span1></td>
+                                <td id="layer-flood"><span2>Flood</span2></td>
+                                <td id="layer-lessor"><span2>GSA Leases</span2></td>
+                                <td id="layer-cbd"><span1>CBD</span1></td>
+                            </tr>
+                        </table>
+                    </apex:outputPanel>
+                </div>
+            </apex:pageBlock>
+
+            <apex:outputPanel id="tab_props" layout="block">
+                <apex:pageBlock title="List of Offers" rendered="{!showTable}" id="spaceTable">
+                    <apex:panelGrid columns="1" id="ofr_images">
+                        <apex:outputPanel >
+                            <input id="btn_rend_props" type="button" value="Render Properties to Map"
+                                   onclick="renderMap();" />
+                            <apex:outputPanel rendered="{!showSaveIdButton}" >
+                                <input id="saveIdWinner" type="button" value="Save ID Winner"
+                                       onclick="snapshot('{!HTMLENCODE(agencyRecord2.id)}')" style="display:none" />
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!NOT(isParkingRequirement)}" >
+                            <input id="generatePDF2" type="button" value="Offer Report PDF"
+                                   onclick="pdfGen();return false;" style="display:none" />
+                            </apex:outputPanel>     
+                        </apex:outputPanel>
+                        <apex:outputPanel id="offerImages">
+                            <br/>
+                            <table>
+                                <tr>
+                                    <td style="width: 150px;">
+                                        <apex:image value="{!$Resource.Offer_EnergyStar}" title="Energy Star"/>
+                                        <br/>
+                                        <apex:outputLabel value="Energy Star"/>
+                                    </td>
+                                    <td style="width: 150px;">
+                                        <apex:image value="{!$Resource.Offer_Metro}" title="Near to Metro"/>
+                                        <br/>
+                                        <apex:outputLabel value="Metro"/>
+                                    </td>
+                                    <td style="width: 150px;">
+                                        <apex:image value="{!$Resource.Offer_Historic}" title="Historic Property"/>
+                                        <br/>
+                                        <apex:outputLabel value="Historic Property"/>
+                                    </td>
+                                    <td style="width: 150px;">
+                                        <apex:image value="{!$Resource.Offer_HubZone}" title="HubZone Area"/>
+                                        <br/>
+                                        <apex:outputLabel value="HubZone Area"/>
+                                    </td>
+                                    <td style="width: 150px;">
+                                        <apex:image value="{!$Resource.Offer_Awarded}" title="Offer Awarded"/>
+                                        <br/>
+                                        <apex:outputLabel value="Awarded"/>
+                                    </td>
+                                    <td style="width: 150px;">
+                                        <apex:image value="{!$Resource.Offer_Selected}" title="Offer Selected"/>
+                                        <br/>
+                                        <apex:outputLabel value="Selected"/>
+                                    </td>
+                                    <td style="width: 150px;">
+                                        <apex:image value="{!$Resource.Offer_Problems}" title="Building Problems"/>
+                                        <br/>
+                                        <apex:outputLabel value="Building Notes"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+                        <br/>
+                    </apex:panelGrid>
+                    <apex:outputPanel rendered="{!isParkingRequirement}">
+                        <b>You may not select from this table since you are excluding the parking requirements.</b>
+                    </apex:outputPanel>
+                    <input type="hidden" id="hiddenValue" name="iwfJson" value="{!identifyWinnerFormJson}" />
+                    <div id="relatedscreenshot">
+                        <apex:pageBlockTable value="{!identifyWinnerForm}" var="c" styleClass="myTable" rowClasses="row">
+                            <!--update by snehith 04/05/2018 - for displaying Offer name with link on the page-->
+                            <apex:column >
+                                <apex:inputCheckbox HTML-offer="{!c.offerId}" HTML-space="{!c.spaceId}" HTML-cbox="offer"/>
+                            </apex:column>
+                                    <!--Julia changes from here-->
+                            <!--apex:column >
+                                <apex:facet name="header">Rank</apex:facet>
+                                <span class="counter"></span>
+                            </apex:column-->
+                                    <!--Julia changes to here-->
+                            <apex:column >
+                                <apex:facet name="header">Offer Name</apex:facet>
+                                <apex:outputLink value="/{!c.offerId}" target="_blank"> {!c.offerName}
+                                </apex:outputLink>
+                            </apex:column>
+                            <apex:column value="{!c.buildingName}">
+                                <apex:facet name="header">Building</apex:facet>
+                            </apex:column>
+                            <apex:column value="{!c.city}">
+                                <apex:facet name="header">City</apex:facet>
+                            </apex:column>
+                            <apex:column value="{!c.street}">
+                                <apex:facet name="header">Street</apex:facet>
+                            </apex:column>
+                            <apex:column value="{!c.typeOfSpace}">
+                                <apex:facet name="header">Type of Space</apex:facet>
+                            </apex:column>
+                            <apex:column style="text-align:right;padding-right:8px;">
+                                <apex:outputText value="{0, number,#,###.00}">
+                                    <apex:param value="{!c.SFOfSpace}"/>
+                                </apex:outputText>
+                                <apex:facet name="header">SF of Space</apex:facet>
+                            </apex:column>
+                            <apex:column value="{!c.NewAndSucc}">
+                                <apex:facet name="header">New/Continuing</apex:facet>
+                            </apex:column>
+                            <!--<apex:column >
+                                <apex:outputText value="{0, number, $#,###.00}">
+                                    <apex:param id="q5_rates_5_val" value="{!c.fullServiceRentFirm}"></apex:param>
+                                </apex:outputText>
+                                <apex:facet name="header">Full Serv rent</apex:facet>
+                            </apex:column>-->
+                            <apex:column >
+                                <apex:facet name="header">PV</apex:facet>
+                                $
+                                <apex:outputLink value="/apex/PBS_AAAP_PV_Summary_Page?offerId={!HTMLENCODE(JSENCODE(c.offerId))}&agencyId={!HTMLENCODE(JSENCODE(agencyId))}&spaceId={!HTMLENCODE(JSENCODE(c.spaceId))}&pv={!c.PVCosts}&newLease={!c.newLease}&succeedingLease={!c.succLease}&physicalMoveCost={!c.physicalcosts}&otherupfrontcosts={!c.otherupfrontcosts}&telecommunicationsCost={!c.telecommcosts}&bsacperABOA={!c.BSACperABOA}&bsacForContinuingSpace={!c.bsacForContinuingSpace}" HTML-sId="{!c.spaceId}" target="_blank" HTML-Link="copyLink">
+                                    <apex:outputText value="{0, number,#,###.00}">
+                                        <apex:param value="{!c.PVCosts}"/>
+                                    </apex:outputText>
+                                </apex:outputLink>
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">Flags</apex:facet>
+                                <apex:image value="{!$Resource.Offer_EnergyStar}" height="20" width="20" rendered="{!c.isEnergyStar}"/> 
+                                <apex:image value="{!$Resource.Offer_Metro}" height="20" width="20" rendered="{!c.isMetro}"/> 
+                                <apex:image value="{!$Resource.Offer_Historic}" height="20" width="20" rendered="{!c.isHistoricProperty}"/>
+                                <apex:image value="{!$Resource.Offer_HubZone}" height="20" width="20" rendered="{!c.isHUBZONEArea}"/>
+                                <apex:image value="{!$Resource.Offer_Selected}" rendered="{!c.isSelected}"/> 
+                                <apex:image value="{!$Resource.Offer_Awarded}" rendered="{!c.isAwarded}"/> 
+                                <apex:image value="{!$Resource.Offer_Problems}" rendered="{!c.isBuildingProblem}"/>
+                            </apex:column>
+                            <apex:column id="selectColumn" rendered="{!!isParkingRequirement}"> <!--rendered="{!showSelectButton || true}"-->
+                                <div id="selectCell_{!c.spaceId}_{!c.offerId}" style="display:block">
+                                    <apex:commandLink value="Select" onclick="openSelectConfirmation('{!JSENCODE(c.spaceId)}','{!JSENCODE(c.offerId)}','{!JSENCODE(TEXT(c.PVCosts))}'); return false" >
+                                    </apex:commandLink>
+                                </div>
+                                <apex:facet name="header">Action</apex:facet>
+                            </apex:column>
+                            <apex:column styleClass="latlng">
+                                <apex:outputText value="{!c.buildingName}&&{!c.lng}&&{!c.lat}" styleClass="longitude"
+                                                 style="display:none;"/>
+                            </apex:column>
+                        </apex:pageBlockTable>
+                    </div>
+                </apex:pageBlock>
+            </apex:outputPanel>
+        </div>
+    </apex:form>
+
+    <div id="testing"></div>
+</apex:page>

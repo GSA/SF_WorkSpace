@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_for_RA_Phasing_Record_Type</fullName>
+    <active>true</active>
+    <description>Check for correct project record type with RA Phasing record type</description>
+    <errorConditionFormula>AND(ISNEW(), NOT(OR((TEXT(Project__r.Project_type__c) == &apos;Repair &amp; Alteration - Parametric Entry&apos; &amp;&amp; RecordType.Name == &apos;Repair &amp; Alteration - Parametric Entry&apos;), (TEXT(Project__r.Project_type__c) == &apos;Repair &amp; Alteration - Work Item Detail&apos; &amp;&amp; RecordType.Name == &apos;Repair &amp; Alteration - Work Item Detail&apos;),(TEXT(Project__r.Estimate_Type_Proj__c ) == &apos;Definitive Estimating&apos; &amp;&amp; RecordType.Name == &apos;New Construction - DES&apos;),(TEXT(Project__r.Estimate_Type_Proj__c ) == &apos;Cost Estimating Workbook&apos; &amp;&amp; RecordType.Name == &apos;New Construction - CEW&apos;))))</errorConditionFormula>
+    <errorMessage>Choose correct RA Phasing Record Type for related project</errorMessage>
+</ValidationRule>
