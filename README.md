@@ -116,6 +116,7 @@ To clone the Workspace Repo
 ```bash
 git clone https://github.com/GSA/SF_WorkSpace.git
 ```
+If you are not currently signed in to GitHub you'll be prompted to do so. Go ahead and sign in. When you're prompted to specify what you want to authorize, click the Authorize button for "GitHub." If the authorization page is displayed, click Authorize Visual-Studio-Code.
 
 ### Command Overview
 
