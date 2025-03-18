@@ -1,0 +1,15 @@
+<!--This component is being utilized with utility bar, it looks at 'SurveyUtilityBar' custom label for survey url
+and this can be overridden with Component properties URL parameter. -->
+
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="url" type="String" />
+	<aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    
+    <aura:if isTrue="{!v.url}">
+    <iframe aura:id="myIframe" class="iframe" src="{!v.url}" height="100%" width="100%"></iframe>
+    <aura:set attribute="else">
+      <iframe aura:id="myIframe" class="iframe" src="{!$Label.c.SurveyUtilityBar}" height="100%" width="100%"></iframe>
+    </aura:set>
+  </aura:if>
+    
+</aura:component>

@@ -1,0 +1,149 @@
+<!-- 7-JUL-2020 acheslyn updated Head section with google analytics section user story sfws 766 -->
+<!--<apex:page controller="PBS_AAAP_OfferForm1217" standardstylesheets="false" sidebar="false" renderAs="pdf" action="{!isValidUserAction}"> -->
+<apex:page renderAs="pdf" controller="PBS_AAAP_OfferForm1217" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false"  action="{!isValidUserAction}">
+    <head>
+        <style type="text/css">
+
+.homeTab .brdPalette { height:850px; }
+
+
+span.cls_006{font-family:Arial,serif;font-size:6.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_006{font-family:Arial,serif;font-size:6.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_004{font-family:Arial,serif;font-size:10.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_004{font-family:Arial,serif;font-size:10.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+span.cls_002{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_002{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_007{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:bold;font-style:italic}
+
+div.cls_007{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:bold;font-style:italic}
+
+span.cls_008{font-family:Arial,serif;font-size:6.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_008{font-family:Arial,serif;font-size:6.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+span.cls_005{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_005{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+
+        </style>
+        <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+ 		<script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+        <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+    </head>
+
+    <body>
+    <apex:panelGrid rendered="{!!isValidUser}">
+        <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+        <apex:messages styleClass="errMessage" id="errmessage"/>
+    </apex:panelGrid>
+    <apex:panelGrid rendered="{!isValidUser}">
+        <apex:form >
+            <div style="position:absolute;left:50%;margin-left:-306px;top:0px;width:612px;height:792px;border-style:outset;overflow:hidden">
+
+                <div style="position:absolute;left:0px;top:0px">
+
+                    <img src="{!$Resource.form1217attach}" width="612" height="792"/></div>
+                    
+                <div style="position:absolute;left:292.50px;top:31.38px" class="cls_006">SOLICITATION FOR
+                    OFFERS<br/><br/>{!RLPNumber}</div>
+
+                <div style="position:absolute;left:472.55px;top:31.38px" class="cls_006">STATEMENT
+                    DATE<br/><br/>{!sysDate}</div>
+
+                <div style="position:absolute;left:74.76px;top:34.32px" class="cls_004">ATTACHMENT TO GSA FORM 1217
+                </div>
+
+                <div style="position:absolute;left:292.50px;top:63.00px" class="cls_006">BUILDING NAME AND ADDRESS (No.,
+                    street, city, state, and zip code)<br/><br/>
+                    {!offer.PBS_AAAP_Building_Name__c}<br/>
+                    {!offer.PBS_AAAP_Street_Address__c}<br/>
+                    {!offer.PBS_AAAP_City__c}, {!offer.PBS_AAAP_State__c} - {!offer.PBS_AAAP_ZipCode__c}</div>
+
+                <div style="position:absolute;left:83.16px;top:65.82px" class="cls_002">GENERAL SERVICES
+                    ADMINISTRATION
+                </div>
+
+                <div style="position:absolute;left:103.14px;top:84.00px" class="cls_002">PUBLIC BUILDINGS SERVICE</div>
+
+                <div style="position:absolute;left:134.40px;top:127.32px" class="cls_002">CONTINUATION OF SECTION I -
+                    ESTIMATED ANNUAL COST OF SERVICES AND UTILITIES
+                </div>
+
+                <div style="position:absolute;left:182.52px;top:136.50px" class="cls_002">FURNISHED BY LESSOR AS PART OF
+                    RENTAL CONSIDERATION
+                </div>
+
+                <div style="position:absolute;left:293.70px;top:150.90px" class="cls_002">LESSOR'S ANNUAL COST FOR</div>
+
+                <div style="position:absolute;left:478.98px;top:152.52px" class="cls_007">FOR GOVERNMENT</div>
+
+                <div style="position:absolute;left:91.32px;top:162.54px" class="cls_002">SERVICES AND UTILITIES</div>
+
+                <div style="position:absolute;left:496.62px;top:162.66px" class="cls_007">USE ONLY</div>
+
+                <div style="position:absolute;left:271.98px;top:167.88px" class="cls_008">(a) ENTIRE BUILDING</div>
+
+                <div style="position:absolute;left:364.88px;top:167.88px" class="cls_008">(b) GOVERNMENT-LEASED</div>
+
+                <div style="position:absolute;left:395.76px;top:174.96px" class="cls_008">AREA</div>
+
+                <div style="position:absolute;left:36.00px;top:185.64px" class="cls_005">G.26.</div>
+
+                <div style="position:absolute;left:72.00px;top:185.64px" class="cls_005">EXPLANATION OF OTHER COSTS
+                </div>
+
+
+                <div style="position:absolute;left:36.00px;top:205.64px" class="cls_008"> {!otherCosts[0].field1}</div>
+                <div style="position:absolute;left:271.98px;top:205.64px" class="cls_008">{!otherCosts[0].field2}</div>
+
+                <div style="position:absolute;left:36.00px;top:222.64px" class="cls_008"> {!otherCosts[1].field1}</div>
+                <div style="position:absolute;left:271.98px;top:222.64px" class="cls_008">{!otherCosts[1].field2}</div>
+
+                <div style="position:absolute;left:36.00px;top:241.64px" class="cls_008"> {!otherCosts[2].field1}</div>
+                <div style="position:absolute;left:271.98px;top:241.64px" class="cls_008">{!otherCosts[2].field2}</div>
+
+                <div style="position:absolute;left:36.00px;top:260.64px" class="cls_008"> {!otherCosts[3].field1}</div>
+                <div style="position:absolute;left:271.98px;top:260.64px" class="cls_008">{!otherCosts[3].field2}</div>
+
+                <div style="position:absolute;left:36.00px;top:278.64px" class="cls_008"> {!otherCosts[4].field1}</div>
+                <div style="position:absolute;left:271.98px;top:278.64px" class="cls_008">{!otherCosts[4].field2}</div>
+
+                <div style="position:absolute;left:36.00px;top:296.64px" class="cls_008"> {!otherCosts[5].field1}</div>
+                <div style="position:absolute;left:271.98px;top:296.64px" class="cls_008">{!otherCosts[5].field2}</div>
+
+                <div style="position:absolute;left:36.00px;top:312.64px" class="cls_008"> {!otherCosts[6].field1}</div>
+                <div style="position:absolute;left:271.98px;top:312.64px" class="cls_008">{!otherCosts[6].field2}</div>
+
+                <div style="position:absolute;left:36.00px;top:330.64px" class="cls_008"> {!otherCosts[7].field1}</div>
+                <div style="position:absolute;left:271.98px;top:330.64px" class="cls_008">{!otherCosts[7].field2}</div>
+
+                <div style="position:absolute;left:36.00px;top:349.64px" class="cls_008"> {!otherCosts[8].field1}</div>
+                <div style="position:absolute;left:271.98px;top:349.64px" class="cls_008">{!otherCosts[8].field2}</div>
+
+                <div style="position:absolute;left:36.00px;top:368.64px" class="cls_008"> {!otherCosts[9].field1}</div>
+                <div style="position:absolute;left:271.98px;top:368.64px" class="cls_008">{!otherCosts[9].field2}</div>
+
+
+                <div style="position:absolute;left:72.00px;top:666.72px" class="cls_005">TOTAL</div>
+                <div style="position:absolute;left:271.98px;top:666.72px"
+                     class="cls_005">{!offer.PBS_AAAP_TOTAL_OTHER_COSTS__c}</div>
+
+                <div style="position:absolute;left:420.42px;top:760.62px" class="cls_002">ATTACHMENT TO GSA FORM 1217
+                    (6/04)
+                </div>
+
+            </div>
+
+
+        </apex:form>
+    </apex:panelGrid>
+    </body>
+
+</apex:page>

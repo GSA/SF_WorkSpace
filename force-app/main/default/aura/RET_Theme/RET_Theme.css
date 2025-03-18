@@ -1,0 +1,222 @@
+/* Real Estate Tax styles */
+.THIS .clear { clear: both; }
+.THIS .hidden, .THIS .hide { display: none; }
+.THIS #ret-page-content {
+	font-size: 0.8em;
+}
+.THIS .ret-tile {
+	float: left;
+	margin: 1em;
+	width: 45%;
+}
+.THIS .ret-button svg {
+	position: relative;
+	bottom: 2px;
+	right: 4px;
+}
+.THIS .ret-form dd {
+	padding: 2px 0 2px 0;
+}
+.THIS h2 {
+    color: #00467F;
+    font-size: 20px;
+    font-weight: bold;
+}
+.THIS .error h4 {
+    color: #871b12;
+    font-size: 1em;
+    padding: 0;
+}
+.THIS .ret-nohyphens {
+	hyphens: none;
+}
+
+/* Button styles */
+.THIS .action-buttons-centered {
+	clear: both;
+	padding: 0.5em;
+	text-align: center;
+}
+
+/* Table styles */
+.THIS .ret-table-container {
+	margin-bottom: 2em;
+}
+.THIS .ret-table-container td, .THIS .ret-table-container th {
+	font-size: 0.9em;
+}
+.THIS .ret-table-container table thead th {
+	background-color: #f5f5f5;
+}
+.THIS a.ret-table-link {
+	color: #2574A9;
+	text-decoration: underline;
+}
+.THIS a.ret-table-link:hover {
+	color: #0e2b3f;
+}
+
+/* Modal dialogs */
+.THIS .ret-modal-container {
+	display: none; }
+	.THIS .ret-modal-container section .slds-modal__container {
+		height: 100%;
+		max-height: 100%;
+		max-width: 70%;
+		width: 70%; }
+	.THIS .ret-modal-container .slds-modal__header {
+    	font-weight: bold;
+	}
+	.THIS .ret-modal-confirm section .slds-modal__container {
+		height: 350px;
+		max-height: 350px;
+		max-width: 600px;
+		width: 600px; }
+	.THIS .ret-modal-container section .slds-modal__container ul {
+	    border-top: 1px solid #ccc;
+	    margin-top: 0.5em;
+	    padding-top: 0.5em;
+	}
+	.THIS .ret-modal-container section .slds-modal__container ul li {
+	    color: #00467F;
+	    font-weight: bold;
+	    list-style-type: disc;
+	    margin-left: 3em;
+	}
+
+
+.THIS .tax-edit-column {
+	display: inline-block;
+	padding: 0 4px;
+	width: 50%; }
+
+/* GSA styles */
+.THIS h2 {
+	clear: both;
+}
+.THIS .salesforceIdentityLoginForm2,
+.THIS .salesforceIdentityForgotPassword2,
+.THIS .salesforceIdentitySelfRegister2 {
+    margin: auto;
+    width: 400px;
+}
+
+.THIS #skip {
+	width: 100%; }
+	.THIS #skip a {
+		position: absolute;
+		left: auto;
+		top: -10000px;
+		height: 1px;
+		overflow: hidden;
+		display: block; }
+		.THIS #skip a:focus {
+			position: absolute;
+			height: auto;
+			top: 0;
+			left: 0;
+			background: #8fc7ea;
+			text-align: center;
+			z-index: 9999;
+			color: #fff;
+			padding: 20px; }
+
+.THIS .inverseTextColor {
+	color: #2574A9 !important;
+}
+
+/* Menu */
+.THIS .profileMenu {
+	height: 10px;
+	position: relative;
+	top: -8px; }
+	.THIS .profileMenu .down-arrow {
+		position: relative;
+		top: 2px; }
+.THIS #profileMenu {
+	font-size: 10px; }
+	.THIS .profileName {
+		color: #004F87;
+		font-size: 10px;
+		font-weight: bold;
+		overflow: visible;
+		padding-right: 44px; }
+	.THIS .profileIcon {
+    	transform: scale(0.7); }
+    .THIS .menuList .uiMenuItem {
+    	width: 100%; }
+.THIS .uiMenuList {
+    border: 1px solid #00467F;
+	-webkit-box-shadow: 0px 2px 6px 1px rgba(0,0,0,0.3);
+	-moz-box-shadow: 0px 2px 6px 1px rgba(0,0,0,0.3);
+	box-shadow: 0px 2px 6px 1px rgba(0,0,0,0.3);
+	opacity: 0.95;
+}
+.THIS .trigger-link:focus{
+    background-color: rgba(0,70,127,0.3);
+    box-shadow:0 0 0 0;
+    border-radius: 0;;
+}
+.THIS .selfServiceProfileMenuTrigger a {
+	text-shadow: none !important;
+}
+.THIS .uiMenuList--default.uiMenuList {
+	margin-top: -3px;
+	margin-left: 8px;
+}
+
+/* GSA Community Styles */
+.THIS #footer ul {
+    position: relative;
+    bottom: 14px;
+}
+.THIS .forceCommunityHeadline .headlineTitle {
+	padding: 0 0 7px 0;
+	border-bottom: 1px solid #e5e5e5;
+}
+.THIS h1.headlineTitle {
+    color: #00467F;
+    font-size: 20px;
+    text-align: left;
+}
+.THIS .ui-widget {
+	margin: 0;
+}
+.THIS #content {
+	padding: 1em;
+}
+.THIS .uiOutputRichText h2 {
+	font-weight: bold;
+}
+.THIS #footer {
+	position: relative;
+	botom: 5px;
+}
+
+/* Pagination */
+.THIS .table-pagination {
+    margin-top: 0.5em;
+    text-align: center; }
+    .THIS .page-totals {
+    	color: #696972;
+    }
+    .THIS .navigate-left a svg, .THIS .navigate-right a svg {
+		fill: #00467F;
+    }
+    .THIS .navigate-left:hover a svg, .THIS .navigate-right:hover a svg {
+    	opacity: 0.7;
+    }
+    .THIS .navigate-left {
+    	float: left;
+    }
+    .THIS .navigate-right {
+    	float: right;
+    }
+
+
+/* Profile; hide some unnecessary sections since the components can't be customized much. */
+.THIS .forceCommunityUserProfileTabs,
+.THIS .profileVisibilitySection,
+.THIS .emailNotificationsSection {
+    display: none !important;
+}

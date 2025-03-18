@@ -1,0 +1,179 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="RET_TaxSubmissionSummaryController" description="Displays summary of tax information for a submission.">
+	<aura:attribute name="caseId" type="String" />
+	<aura:attribute name="pageData" type="Map" />
+	<aura:attribute name="docTypes" type="String[]" />
+	<aura:attribute name="taxCase" type="Case" />
+	<aura:attribute name="initialTaxYear" type="String" default=""/>
+	<aura:attribute name="initialTaxCounty" type="String" default=""/>
+	<aura:attribute name="errors" type="String" />
+	<aura:attribute name="modalErrors" type="String" />
+	<aura:attribute name="modalErrorTitle" type="String" />
+	<aura:attribute name="modalErrorBody" type="String" />
+	<aura:attribute name="missingDocList" type="String" />
+	<aura:attribute name="submitTaxDataBtn" type="Boolean" default="false"/>
+	<aura:handler name="init" action="{!c.initPage}" value="{!this}" />
+	
+	<div id="tax-submission-summary">
+	<aura:if isTrue="{!not(empty(v.errors))}">
+		<ui:message title="Error:" severity="error" closable="false">
+			{!v.errors}
+		</ui:message>
+	</aura:if>
+
+	<aura:if isTrue="{!empty(v.errors)}">
+		<h2>Tax Submission Summary</h2>
+
+		<div class="tax-summary-container">
+			
+			<div class="slds-tile ret-tile">
+			    <div class="slds-tile__detail">
+					<dl class="slds-list_horizontal slds-wrap">
+						<dt class="slds-item_label slds-text-color_weak slds-truncate">Lease Number:</dt>
+						<dd class="slds-item_detail slds-truncate">{!v.taxCase.PBS_Lease__r.Lease_Number__c}</dd>
+						<dt class="slds-item_label slds-text-color_weak slds-truncate">Lessor:</dt>
+				        <dd class="slds-item_detail slds-truncate">{!v.taxCase.PBS_Lease__r.Lessor__c}</dd>
+						<dt class="slds-item_label slds-text-color_weak slds-truncate">Submitter Name:</dt>
+				        <dd class="slds-item_detail slds-truncate">{!v.taxCase.Owner.Name}</dd>
+					<!--	<dt class="slds-item_label slds-text-color_weak slds-truncate">Company:</dt>
+				        <dd class="slds-item_detail slds-truncate">{!v.taxCase.Account.Name}</dd>-->
+						<dt class="slds-item_label slds-text-color_weak slds-truncate">Base Tax Year:</dt>
+				        <dd class="slds-item_detail slds-truncate">{!v.taxCase.RET_Base_Tax_Year__c}</dd>
+					</dl>
+			    </div>
+			</div>
+
+			<div class="slds-tile ret-tile">
+			    <div class="slds-tile__detail">
+					<dl class="slds-list_horizontal slds-wrap">
+						<dt class="slds-item_label slds-text-color_weak slds-truncate">Building Address:</dt>
+						<dd class="slds-item_detail slds-truncate">
+							{!v.taxCase.PBS_Lease__r.Building_Street_Address__c}<br />
+							<aura:if isTrue="{!not(empty(v.taxCase.PBS_Building__r.Address2__c))}">
+								{!v.taxCase.PBS_Lease__r.PBS_Building__r.Address2__c}<br />
+							</aura:if>
+							{!v.taxCase.PBS_Lease__r.Building_City__c}, {!v.taxCase.PBS_Lease__r.Building_State_Code__c}<br />
+							{!v.taxCase.PBS_Lease__r.Building_Zip_Code__c}
+						</dd>
+						<dt class="slds-item_label slds-text-color_weak slds-truncate">County:</dt>
+				        <dd class="slds-item_detail slds-truncate">{!v.taxCase.RET_Tax_County__c}</dd>
+					</dl>
+			    </div>
+			</div>
+			
+			<div class="action-buttons-centered">
+					<aura:if isTrue="{!v.taxCase.RET_Editable_by_Submitter__c == true}">
+						<ui:button label="Edit Tax Information" press="{!c.editTaxData}"/>
+					</aura:if>
+			</div>
+			
+		</div>
+
+		<div id="doc-upload-list" class="doc-upload-list">
+			<c:RET_DocumentsList docTypes="{!v.docTypes}" caseId="{!v.caseId}" editEnabled="{!v.taxCase.RET_Editable_by_Submitter__c}" />
+		</div>
+
+		<div id="doc-type-list" class="doc-type-list">
+			{!$Label.c.RET_Document_Types_Summary}
+			<ul>
+				<aura:iteration items="{!v.docTypes}" var="docType">
+					<li>{!docType}</li>
+				</aura:iteration>
+			</ul>
+		</div>
+
+		<div class="action-buttons-centered">
+			<aura:if isTrue="{!v.taxCase.RET_Editable_by_Submitter__c == true}">
+				<ui:button label="Submit to GSA" press="{!c.verifyRequiredDocuments}" />
+			</aura:if>
+		</div>
+
+	</aura:if>
+	<div class="clear"></div>
+
+	<!-- Edit Tax Information modal container -->
+	<div id="tax-edit" class="ret-modal-container">
+		<section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+			<div class="slds-modal__container">
+				<header class="slds-modal__header">
+					<span id="file-upload-header">Edit Tax Information</span>
+				</header>
+				<div class="slds-modal__content slds-p-around_medium ret-upload-container">
+					
+					<aura:if isTrue="{!not(empty(v.modalErrors))}">
+						<ui:message title="Error:" severity="error" closable="false">
+							{!v.modalErrors}
+						</ui:message>
+					</aura:if>
+
+					<!-- tax edit modal content -->
+					<div class="tax-edit-column" id="tax-edit-left">
+						<ui:inputText value="{!v.taxCase.RET_Base_Tax_Year__c}" label="Base Tax Year (from the lease)" />
+					</div>
+					<div class="tax-edit-column" id="tax-edit-left">
+						<ui:inputText value="{!v.taxCase.RET_Tax_County__c}" label="County" />
+					</div>
+
+				</div>
+				<footer class="slds-modal__footer">
+					<div id="edit-footer-buttons">
+						<ui:button class="slds-button slds-button_neutral" press="{!c.cancelTaxEdit}" label="Cancel" />
+						<ui:button class="slds-button slds-button_brand" press="{!c.saveTaxData}" label="Save Changes" labelClass="SaveChanges"/>
+					</div>
+				</footer>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+	</div>
+
+	<!-- Submit confirmation modal container -->
+	<div id="confirm-submission" class="ret-modal-container ret-modal-confirm">
+		<section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+			<div class="slds-modal__container" style="height:500px;max-height:500px">
+				<header class="slds-modal__header">
+					<span id="file-upload-header">Confirm Submission</span>
+				</header>
+				<div class="slds-modal__content slds-p-around_medium ret-upload-container ret-nohyphens">
+					You are about to submit your tax documents for processing.<br/>
+					<ui:inputTextArea aura:id="comments" label="Please enter any additional (optional) comments you want to accompany your submission below:" value="{!v.taxCase.RET_Submission_Comments__c}" rows="5"/>
+					{!$Label.c.RET_Confirm_Tax_Submission}
+				</div>
+				<footer class="slds-modal__footer">
+					<div id="confirm-footer-buttons">
+						<ui:button class="slds-button slds-button_neutral" press="{!c.cancelModal}" label="Cancel" />
+						<ui:button class="slds-button slds-button_brand" press="{!c.submitTaxData}" label="Continue" labelClass="Continue" disabled="{!v.submitTaxDataBtn}"/>
+					</div>
+				</footer>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+	</div>
+
+	<!-- General messages or errors modal container -->
+	<div id="general-messages" class="ret-modal-container ret-modal-confirm">
+		<section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+			<div class="slds-modal__container">
+				<header class="slds-modal__header">
+					<span id="message-header">{!v.modalErrorTitle}</span>
+				</header>
+				<div class="slds-modal__content slds-p-around_medium ret-upload-container" id="message-body">
+					{!v.modalErrorBody}
+					<aura:if isTrue="{!v.missingDocList.length > 0}">
+						<ul>
+							<aura:iteration items="{!v.missingDocList}" var="docType">
+								<li>{!docType}</li>
+							</aura:iteration>
+						</ul>
+					</aura:if>
+				</div>
+				<footer class="slds-modal__footer">
+					<div id="message-footer-buttons">
+						<ui:button class="slds-button slds-button_neutral" press="{!c.cancelModal}" label="OK" />
+					</div>
+				</footer>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+	</div>
+	</div>
+
+</aura:component>

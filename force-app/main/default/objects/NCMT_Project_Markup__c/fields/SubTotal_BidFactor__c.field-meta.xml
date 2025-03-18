@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>SubTotal_BidFactor__c</fullName>
+    <externalId>false</externalId>
     <formula>IF( RecordType.Name ==&apos;DES O&amp;P Project Markup&apos;, ((Total_Cost_w_Subcon_Markups__c + Total_Cost_w_o_SubCon_Markups__c) * ( Bid_Factor__c )),0)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>SubTotal w. Bid Factor</label>

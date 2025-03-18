@@ -1,0 +1,151 @@
+<!-- 9-JUL-2020 acheslyn added analytics script for user story sfws 766 -->
+<apex:page sidebar="false" standardStylesheets="false" showHeader="false" >
+
+<apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/demo_page.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+
+<apex:includescript value="{!$Resource.showpopup}"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="{!URLFOR($Resource.modaljquery)}"></script>
+<apex:stylesheet value="{!$Resource.showpopupcss}"/>
+
+<!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+<script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+<meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+
+<!-- <c:EnrollCSS /> -->
+<!--<c:jQueryInit bDataTables="true" /> -->
+<style>
+span.dropt {border-bottom: thin dotted; background: #ffeedd;}
+span.dropt:hover {text-decoration: none; background: #fefefe; z-index: 6; }
+span.dropt span {position: absolute; left: -9999px;
+  margin: 20px 0 0 0px; padding: 3px 3px 3px 3px;
+  border-style:solid; border-color:black; border-width:1px; z-index: 6;}
+span.dropt:hover span {left: 2%; background:rgb(236, 236, 236);} 
+span.dropt span {position: absolute; left: -9999px;
+  margin: 4px; padding: 3px 3px 3px 3px; text-indent:0in;
+  border-style:solid; border-color:#666; border-width:1px;}
+span.dropt:hover span {margin: 20px 0 0 170px; background:rgb(236, 236, 236); z-index:6;} 
+
+.sb-int {margin:10px;padding:10px;}
+#rightCol {width:620px; padding-right:20px;}
+.sb-int .bucket {margin-top:10px !important;}
+h3.blue {color:#3366ff;padding-top:15px;}
+.portalhome .apexp .selector {top:70px; left:0px;}
+menu.table-options {top:40px;left:-350px;}
+.tabbed-table table tr {height:35px;}
+menu.table-options a {border:1px solid#666666; border-radius:3px;padding:6px;background-image:url(https://gsa--aaap--c.cs12.visual.force.com/resource/1334347636000/gsa_common/images/sprite.png);background-position:-5px 145px;color:#333333;font-size:12px;text-decoration:none;}
+
+#lean_overlay {
+    position: fixed;
+    z-index:100;
+    top: 0px;
+    left: 0px;
+    height:100%;
+    width:100%;
+    background:none;
+    display: none;
+}
+
+
+#content{
+    padding-right: 55px;
+}
+
+a {
+    color:#0000ff;
+}
+
+
+</style>
+
+
+
+
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+    <ul>
+        <li><a href="/AAAP/PBS_AAAP_HomePage">Home</a></li>
+        <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp" rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}"><li>| {!$Label.site.logout}</li></apex:outputLink>
+        <li>|</li>
+        <li><a href="http://www.gsa.gov/">About GSA</a></li>
+    </ul>  
+</div>
+-->
+<!--/login-->
+
+
+
+<div id="wrapper">
+    <!-- Header logo part starts Here -->
+    <h1 class="logo">GSA</h1>
+    <!--   <div id="nav">
+ 
+        <ul>
+            <li><a class="selected" href="/AAAP/PBS_AAAP_HomePage">AAAP Home</a></li>
+            <li><a href="/AAAP/PBS_AAAP_News_Updates">News &amp; Updates</a></li>
+            <li><a href="/AAAP/PBS_AAAP_About_AAAP">FAQs</a></li>
+            <li><a href="/AAAP/PBS_AAAP_SiteHelp">Help</a></li>
+            <li><a href="/AAAP/PBS_AAAP_UserRegistration">Registration</a></li>
+        </ul>
+        
+    </div>--><!--/nav-->
+  
+    <!--div id="hero-int">
+        <h2>AAAP</h2>
+    </div--><!--/hero-->
+    <!-- Header logo part ends Here -->
+    <BR/><BR/><BR/>
+    <div id="content">
+    <apex:form styleClass="formwrap">
+
+     <h3 class="blue">Privacy Act Notice</h3>
+    
+
+<!--/Page begins here -->
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+<tr>
+
+    <td align="left">
+
+
+     <div align="center">
+          <p align="left">GSA's Automated Advanced Acquisition Program (AAAP) offers people and businesses the opportunity to electronically offer building space for lease to the Federal Government in response to a Request for Lease Proposal (RLP) in accordance with General Services Administration Regulation (GSAR) Part 570.</p>
+          
+          <p align="left">Documents and data requested by the AAAP are used to process your offer of space to the Government. Your use of AAAP is voluntary; however, if you do not submit the requested information, GSA may not be able to consider you for an award. GSA may use information you submit via AAAP pursuant to its published Privacy Act system of records notice,
+                          <a href="https://www.federalregister.gov/documents/2008/04/25/E8-8934/privacy-act-of-1974-notice-of-updated-systems-of-records">GSA/PBS-5</a>, eLease.</p>
+         
+          <p align="left">This is a gsa.gov website is also subject to the&nbsp;<a href="https://www.gsa.gov/website-information/privacy-and-security-notice">GSA Privacy and Security Notice</a>.</p>
+          
+     </div>
+    </td>
+
+</tr>
+
+<tr>
+
+  <td>
+
+
+  </td>
+
+</tr>
+
+</table>
+</apex:form>        
+<!--/Page ends here-->
+
+</div><!-- end rightcol -->
+
+
+
+</div><!--/content--> 
+      
+<!--
+<c:SiteFooterUX />-->
+<script>
+   $(".popup").leanModal();
+</script>
+
+</apex:page>

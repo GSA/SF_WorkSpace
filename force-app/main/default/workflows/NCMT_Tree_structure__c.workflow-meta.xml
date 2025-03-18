@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <rules>
+        <fullName>NCMT Map Tree Total Direct Cost to Project</fullName>
+        <actions>
+            <name>NCMT_Update_Des_Total_Direct_Cost</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>NCMT_Tree_structure__c.SortOrdertxt__c</field>
+            <operation>equals</operation>
+            <value>01</value>
+        </criteriaItems>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+</Workflow>

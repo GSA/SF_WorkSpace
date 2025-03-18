@@ -1,0 +1,1464 @@
+<apex:page controller="PBS_AAAP_OfferForm1364Controller_2019" sidebar="false"  applyBodyTag="false" applyHtmlTag="false" showHeader="false">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+    <head>
+        <style type="text/css">
+            @page {
+                size: portrait;
+                margin: 50px .5in 1in .5in;
+                counter-increment: pages;
+                @bottom-center {
+                    content: element(footer);
+                }
+            }
+    div.footer {
+        position: running(footer);
+    }
+    .pageNumber:before {
+        content: counter(page);
+    }
+    .pagecount:before {
+        content: counter(pages);
+    }
+    tab {
+        page-break-before: always;
+    }
+    table.fixed {
+        border: 1px solid black;
+        table-layout: fixed;
+        text-align: left;
+        vertical-align: top;
+        word-wrap: break-word;
+    }
+    </style>
+    </head>
+    <div id ="loadingdiv" style="display:none;">
+        <div class="waitingSearchDiv" id="el_loading" style="background-color: #fbfbfb; height:100%;opacity:0.65;width:100%;">
+            <div class="waitingHolder" style="top: 100px; width: 91px;">
+                <img class="waitingImage" src="/img/loading.gif" title="Please Wait..." />
+                    <span class="waitingDescription" id="waitingDesc">Loading...</span>
+                    </div>
+                    </div>
+                    </div>
+                    <apex:form >
+                        <apex:actionFunction action="{!captureImage}" name="captureImage" rerender="frm" oncomplete="captureDone();">
+                            <apex:param assignTo="{!strImageBlob}" name="imageBlob" value=""/>
+                                <apex:param assignTo="{!strImagename}" name="imagename" value=""/>
+                                    </apex:actionFunction>
+                                </apex:form>
+                                <div class="container" id="mapDiv">
+                                    <div class="footer" style="page-break-after: always; font-size: 8pt; text-align: right; font-family: Arial,Helvetica,sans-serif; font-size:small;">
+                                        <p>
+                                        <hr />
+                                        GSA FORM 1364 AAAP
+                                        <br />
+                                            (REV 10/2018)<br />
+                                            PAGE <span class="pageNumber" /> of <span class="pagecount" />
+                                                </p>
+                                            </div>
+                                            <body>
+                                                <apex:panelGrid rendered="{!!isValidUser}">
+                                                    <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+                                                    <apex:messages styleClass="errMessage" id="errmessage" />
+                                                        </apex:panelGrid>
+                                                    <apex:outputPanel style="overflow: scroll;" layout="block">
+                                                        <apex:panelGrid rendered="{!isValidUser}">
+                                                            <apex:outputPanel >
+                                                                <apex:pageBlock >
+                                                                    <table class="fixed" align="center" border="1" width="100%" cellpadding="0" cellspacing="0">
+                                                                        <tr>
+                                                                        <td>
+                                                                        <div style="size:30px;font-size: 22px;font-weight: bold; "> AAAP Proposal to Lease Space </div>
+                                                                        <div style="size: 10px"> Request for Lease Proposals (RLP) Number: </div>
+                                                                                                                              <div style="size: 10px; ">
+                                                                                                                              {!RLPNumber}
+                                                                                                                              </div>
+                                                                                                                              </td>
+                                                                                                                              <td align="bottom">
+                                                                                                                              <!-- <apex:outputPanel> -->
+                                                                                                                              <!-- <br/> -->
+                                                                                                                              <div style="vertical-align:bottom;text-align:right;size:10px;">
+                                                                                                                              <!-- <apex:outputText value="{0, DATE, dd'/'MM'/'yyyy}"> -->
+                                                                                                                              Date/Time Submitted: <br/> 
+                                                                                                                              <div>
+                                                                                                                              {!sysDate} &nbsp;
+                                                                                                                              <!-- <apex:outputField value="{!offer.PBS_AAAP_Offer_Submission_Date__c}"/>&nbsp; -->
+                                                                                                                              </div>
+                                                                                                                              &nbsp;
+                                                                                                                              <!-- <apex:param value="{!sysDate}"/>
+                                                                                                                              </apex:outputText>  -->
+                                                                                                                              </div>
+                                                                                                                              <!-- </apex:outputPanel> -->
+                                                                                                                              </td>
+                                                                                                                              </tr>
+                                                                                                                              </table>
+                                                                                                                              </apex:pageBlock>
+                                                                                                                              </apex:outputPanel>
+                                                                                                                              <br />
+                                                                                                                              <div style="font-size: 22px;font-weight: bold;"> BUILDING</div>
+                                                                                                                              <hr />
+                                                                                                                              <table class="fixed" border="1" width="100%" cellpadding="0" cellspacing="0">
+                                                                                                                              <tr>
+                                                                                                                              <td colspan="2">
+                                                                                                                              <div style="font-size:17px;font-weight:bold;"> Building Name, Address, and Contacts </div>
+                                                                                                                              </td>
+                                                                                                                              </tr>
+                                                                                                                              <tr>
+                                                                                                                              <td>
+                                                                                                                              <div>
+                                                                                                                              Building Name
+                                                                                                                              </div>
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              {!offer.PBS_AAAP_Building_Name__c}
+                                                                                                                              </td>
+                                                                                                                              </tr>
+                                                                                                                              <tr>
+                                                                                                                              <td>
+                                                                                                                              Building Address
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              {!offer.PBS_AAAP_Street_Address__c}
+                                                                                                                              </td>
+                                                                                                                              </tr>
+                                                                                                                              <tr>
+                                                                                                                              <td>
+                                                                                                                              City, State, Zip
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              {!offer.PBS_AAAP_City__c}, {!offer.PBS_AAAP_State__c}, {!offer.PBS_AAAP_ZipCode__c}
+                                                                                                                              </td>
+                                                                                                                              </tr>
+                                                                                                                              <tr>
+                                                                                                                              <td>
+                                                                                                                              Congressional District
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              {!offer.PBS_AAAP_Congressional_District__c}
+                                                                                                                              </td>
+                                                                                                                              </tr>
+                                                                                                                              </table>
+                                                                                                                              <br />
+                                                                                                                              <apex:pageBlock >
+                                                                                                                              <!-- <apex:pageBlockTable border="1" width="200%" cellpadding="0" cellspacing="0"> -->
+                                                                                                                              <table class="fixed" border="1" width="100%" cellpadding="0" cellspacing="0">
+                                                                                                                              <tr>
+                                                                                                                              <td>
+                                                                                                                              <div> Building Owner Name</div>
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              {!offer.PBS_AAAP_Owner_Name__c}
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              <div> Offeror Name</div>
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              {!offer.PBS_AAAP_Offeror__r.Name}
+                                                                                                                              </td>
+                                                                                                                              </tr>
+                                                                                                                              <tr>
+                                                                                                                              <td>
+                                                                                                                              <div> Building Owner Address </div>
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              {!offer.PBS_AAAP_Owner_Address__c}, {!offer.PBS_AAAP_Owner_City__c}, <br />{!offer.PBS_AAAP_Owner_State__c}, 
+                                                                                                                              <apex:outputText rendered="{!IF(offer.PBS_AAAP_Owner_Country__c == 'United States',true,false)}">
+                                                                                                                              {!offer.PBS_AAAP_Owner_Zip__c}
+                                                                                                                              </apex:outputText>
+                                                                                                                              <apex:outputText rendered="{!IF(offer.PBS_AAAP_Owner_Country__c != 'United States',true,false)}">
+                                                                                                                              {!offer.PBS_AAAP_Owner_Zip__c}, {!offer.PBS_AAAP_Owner_Country__c}
+                                                                                                                              </apex:outputText>
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              <div> Offeror Company</div>
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              {!userdetail.Contact.PBS_AAAP_Company__c}
+                                                                                                                              </td>
+                                                                                                                              </tr>
+                                                                                                                              <tr>
+                                                                                                                              <td>
+                                                                                                                              <div> Building Owner Phone </div>
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              <apex:outputText rendered="{!IF(offer.PBS_AAAP_Property_Phone_Extn__c == null,true,false)}">
+                                                                                                                              {!offer.PBS_AAAP_Owner_Main_Phone__c}
+                                                                                                                              </apex:outputText>
+                                                                                                                              <apex:outputText rendered="{!IF(offer.PBS_AAAP_Property_Phone_Extn__c != null,true,false)}">
+                                                                                                                              {!offer.PBS_AAAP_Owner_Main_Phone__c},&nbsp;Ext:{!offer.PBS_AAAP_Property_Phone_Extn__c}
+                                                                                                                              </apex:outputText>
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              <div> Offeror Address</div>
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              <apex:outputPanel layout="block">
+                                                                                                                              {!userdetail.Street}, {!userdetail.City} <br />{!userdetail.State}, {!userdetail.PostalCode}
+                                                                                                                              </apex:outputPanel>
+                                                                                                                              </td>
+                                                                                                                              </tr>
+                                                                                                                              <tr>
+                                                                                                                              <td>
+                                                                                                                              <div> Building Owner DUNS </div>
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              {!offer.PBS_AAAP_DUNS_Number__c}
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              <div> Offeror Phone</div>
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              {!userdetail.Phone}
+                                                                                                                              </td>
+                                                                                                                              </tr>
+                                                                                                                              <tr>
+                                                                                                                              <td>
+                                                                                                                              <!-- <div> Building Owner DUNS </div> -->
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              <!-- {!offer.PBS_AAAP_DUNS_Number__c} -->
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              <div> Offeror Email</div>
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              {!userdetail.Email}
+                                                                                                                              </td>
+                                                                                                                              </tr>
+                                                                                                                              </table>
+                                                                                                                              <!-- </apex:pageBlockTable> -->
+                                                                                                                              </apex:pageBlock>
+                                                                                                                              <br />
+                                                                                                                              <apex:pageBlock >
+                                                                                                                              <!-- <apex:pageBlockTable border="1" width="200%" cellpadding="0" cellspacing="0"> -->
+                                                                                                                              <table class="fixed" border="1" width="100%" cellpadding="0" cellspacing="0">
+                                                                                                                              <tr>
+                                                                                                                              <td colspan="4">
+                                                                                                                              <div style="font-weight:bold; font-size:17px"> Building Description</div>
+                                                                                                                              </td>
+                                                                                                                              </tr>
+                                                                                                                              <tr>
+                                                                                                                              <td>
+                                                                                                                              <div> Total Building RSF</div>
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              <div >
+                                                                                                                              {!offer.PBS_AAAP_GEN_PURPOSE_RENTABLE__c}
+                                                                                                                              </div>
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              <div> % Office Space</div>
+                                                                                                                              </td>
+                                                                                                                              <td>
+                                                                                                                              <div >
+                                                                                                                              {!offer.PBS_AAAP_BLD_INCOME_PERCENT_OFF_SPACE__c}% (based on RSF)
+                                                                            </div>
+                                                                            </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                <div> Total Building ABOA SF </div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div >
+                                                                                    {!offer.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c}
+                                                                                </div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div> % Warehouse</div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div >
+                                                                                    {!offer.PBS_AAAP_BLD_INCOME_PERCENT_RET_SPACE__c}% (based on RSF)
+                                                                                </div>
+                                                                                </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                    <div> Est. Common Area Factor </div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div >
+                                                                                        {!CAF}
+                                                                                    </div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div> % Other</div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div >
+                                                                                        {!offer.PBS_AAAP_BLD_INCOME_PERCENT_GAR_SPACE__c}% (based on RSF)
+                                                                                    </div>
+                                                                                    </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                        <div > # of Floors </div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div >
+                                                                                        {!offer.PBS_AAAP_Number_of_floors__c}
+                                                                                    </div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div> Site size </div>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <!-- <apex:outputText rendered="{!offer.PBS_AAAP_SITE_AREA_TYPE__c=='SQFT'}">
+                                                                                                <div >
+                                                                                                {!offer.PBS_AAAP_SITE_SIZE_SQFT__c} (Square Feet)
+                                                                                            </div>
+                                                                                            
+                                                                                            </apex:outputText> -->
+                                                                                            <apex:outputText >
+                                                                                                <div >
+                                                                                                {!offer.PBS_AAAP_SITE_SIZE_SQFT__c} (Square Feet)
+                                                                                            </div>
+                                                                                            </apex:outputText>
+                                                                                            </td>
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td>
+                                                                                                <div> Live floor load  </div>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <div >
+                                                                                                    {!offer.PBS_AAAP_LIVE_FLOOR_LOAD__c} (Lbs. per SF)
+                                                                                                </div>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <div> HVAC Operating Hours</div>
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        <div >
+                                                                                                        M-F {!offer.PBS_AAAP_HVAC_HRS_MON_TO_FRI_START__c} - {!offer.PBS_AAAP_HVAC_HRS_MON_TO_FRI_END__c}
+                                                                                                        </div>
+                                                                                                        </td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td>
+                                                                                                            <div> Year the building <br />constructed  </div>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <div >
+                                                                                                                {!offer.PBS_AAAP_Year_Built__c}
+                                                                                                            </div>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <div> </div>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <div >
+                                                                                                                Sat {!offer.PBS_AAAP_HVAC_HRS_ON_SAT_START__c} - {!offer.PBS_AAAP_HVAC_HRS_ON_SAT_END__c}
+                                                                                                                </div>
+                                                                                                                </td>
+                                                                                                                </tr>
+                                                                                                                <tr>
+                                                                                                                    <td>
+                                                                                                                    <div> Most recent building <br />renovation year  </div>
+                                                                                                                    </td>
+                                                                                                                    <td>
+                                                                                                                        <div >
+                                                                                                                        {!offer.PBS_AAAP_Renovation_Year__c}
+                                                                                                                    </div>
+                                                                                                                    </td>
+                                                                                                                    <td>
+                                                                                                                        <div></div>
+                                                                                                                    </td>
+                                                                                                                    <td>
+                                                                                                                        <div >
+                                                                                                                        Sun {!offer.PBS_AAAP_HVAC_HRS_ON_SUN_START__c} - {!offer.PBS_AAAP_HVAC_HRS_ON_SUN_END__c}
+                                                                                                                        </div>
+                                                                                                                        </td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td colspan="2">
+                                                                                                                                <div> Building Fully Sprinklered</div>
+                                                                                                                                </td>
+                                                                                                                                <td colspan="2">
+                                                                                                                                    <div >
+                                                                                                                                    {!offer.PBS_AAAP_Building_Sprinklered__c}
+                                                                                                                                </div>
+                                                                                                                                </td>
+                                                                                                                                </tr>
+                                                                                                                                <tr>
+                                                                                                                                    <td colspan="2">
+                                                                                                                                        <div>2 Remote Stairwells</div>
+                                                                                                                                        </td>
+                                                                                                                                        <td colspan="2">
+                                                                                                                                            <div >
+                                                                                                                                            {!offer.PBS_AAAP_BLDG_Physical_Remote_Stairwell__c}
+                                                                                                                                        </div>
+                                                                                                                                        </td>
+                                                                                                                                        </tr>
+                                                                                                                                        <tr>
+                                                                                                                                            <td colspan="2">
+                                                                                                                                                <div> Building Alarm System</div>
+                                                                                                                                                </td>
+                                                                                                                                                <td colspan="2">
+                                                                                                                                                    <div >
+                                                                                                                                                    {!offer.PBS_AAAP_BLDG_Wide_Alarm_System__c}
+                                                                                                                                                </div>
+                                                                                                                                                </td>
+                                                                                                                                                </tr>
+                                                                                                                                                <tr>
+                                                                                                                                                    <td colspan="2">
+                                                                                                                                                        <div>Within 2,640 walkable linear feet of <br /> public transportation</div>
+                                                                                                                                                        </td>
+                                                                                                                                                        <td colspan="2">
+                                                                                                                                                            <div >
+                                                                                                                                                            {!offer.PBS_AAAP_Close_To_Metro__c}
+                                                                                                                                                        </div>
+                                                                                                                                                        </td>
+                                                                                                                                                        </tr>
+                                                                                                                                                        <tr>
+                                                                                                                                                            <td colspan="2">
+                                                                                                                                                                <div>Energy Star Certified</div>
+                                                                                                                                                                </td>
+                                                                                                                                                                <td colspan="2">
+                                                                                                                                                                    <div >
+                                                                                                                                                                    <apex:outputText rendered="{!offer.PBS_AAAP_Energy_Star__c=='No'}">
+                                                                                                                                                                        {!offer.PBS_AAAP_Energy_Star__c},&nbsp;{!offer.PBS_AAAP_Energy_Star_Reason__c}
+    </apex:outputText>
+    <apex:outputText rendered="{!offer.PBS_AAAP_Energy_Star__c=='Yes'}">
+        {!offer.PBS_AAAP_Energy_Star__c},&nbsp;N/A
+        </apex:outputText>
+        </div>
+        </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div>Historic Property</div>
+                </td>
+                <td colspan="2">
+                    <div >
+                    {!offer.PBS_AAAP_HIST_PROP_IN_HIST_DIST__c}
+                </div>
+                </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div>Historic District</div>
+                        </td>
+                        <td colspan="2">
+                            <div >
+                            {!offer.PBS_AAAP_NON_HIST_PROP_IN_HIST_DIST__c}
+                        </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div>HubZone Small Business</div>
+                                </td>
+                                <td colspan="2">
+                                    <div >
+                                    {!offer.PBS_AAAP_HubZone_SBC__c}
+                                </div>
+                                </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <div>Waived Hubzone Price Evaluation Preference</div>
+                                        </td>
+                                        <td colspan="2">
+                                            <div>
+                                            <apex:outputText value="{!IF(offer.PBS_AAAP_HubZone_SBC__c=='Yes', offer.PBS_AAAP_HubZone_SBC_Preference__c,'N/A')}">
+                                                <!-- ,&nbsp;N/A -->
+                                                    </apex:outputText>
+                                                <!-- {!offer.PBS_AAAP_HubZone_SBC_Preference__c} -->
+                                                    </div>
+                                                </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <div>Complete Rehab or Reconst. of Existing Building</div>
+                                                        </td>
+                                                        <td colspan="2">
+                                                            <div >
+                                                            {!offer.PBS_AAAP_Reconstruction__c}
+                                                        </div>
+                                                        </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <div>Medium- or High-risk Seismic Zone</div>
+                                                                </td>
+                                                                <td colspan="2">
+                                                                    <div >
+                                                                    {!offer.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c}
+                                                                </div>
+                                                                </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="2">
+                                                                        <div>Building Type</div>
+                                                                        </td>
+                                                                        <td colspan="2">
+                                                                            <div >
+                                                                            <apex:outputText value="{!IF(offer.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c=='Yes', offer.PBS_AAAP_BUILDING_TYPE__c,'N/A')}">
+                                                                                <!-- ,&nbsp;N/A -->
+                                                                                    </apex:outputText>
+                                                                                <!-- {!offer.PBS_AAAP_BUILDING_TYPE__c} -->
+                                                                                    </div>
+                                                                                </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td colspan="2">
+                                                                                        <div>Building Code</div>
+                                                                                        </td>
+                                                                                        <td colspan="2">
+                                                                                            <div >
+                                                                                            <apex:outputText value="{!IF(offer.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c=='Yes', offer.PBS_AAAP_BUILDING_CODE__c,'N/A')}">
+                                                                                                <!-- ,&nbsp;N/A -->
+                                                                                                    </apex:outputText>
+                                                                                                <!-- {!offer.PBS_AAAP_BUILDING_CODE__c} -->
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                                </tr>
+                                                                                                <tr>
+                                                                                                    <td colspan="2">
+                                                                                                        <div>Building Code Year</div>
+                                                                                                        </td>
+                                                                                                        <td colspan="2">
+                                                                                                            <div >
+                                                                                                            <apex:outputText value="{!IF(offer.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c=='Yes', offer.PBS_AAAP_BUILDING_CODE_YEAR__c,'N/A')}">
+                                                                                                                <!-- ,&nbsp;N/A -->
+                                                                                                                    </apex:outputText>
+                                                                                                                <!-- {!offer.PBS_AAAP_BUILDING_CODE_YEAR__c} -->
+                                                                                                                    </div>
+                                                                                                                </td>
+                                                                                                                </tr>
+                                                                                                                </table>
+                                                                                                                <!-- </apex:pageBlockTable> -->
+                                                                                                                </apex:pageBlock>
+                                                                                                                <br />
+                                                                                                                    <apex:pageBlock >
+                                                                                                                        <table class="fixed" border="1" width="100%" cellpadding="0" cellspacing="0">
+                                                                                                                            <tr>
+                                                                                                                            <td colspan="3">
+                                                                                                                                <div style="font-weight:bold; font-size: 17px;"> Parking Information &amp; Rates</div>
+                                                                                                                                </td>
+                                                                                                                                </tr>
+                                                                                                                                <tr>
+                                                                                                                                    <td></td>
+                                                                                                                                <td>
+                                                                                                                                    Structured
+                                                                                                                                </td>
+                                                                                                                                <td>
+                                                                                                                                    Surface
+                                                                                                                                </td>
+                                                                                                                                </tr>
+                                                                                                                                <tr>
+                                                                                                                                    <td>
+                                                                                                                                    <div>
+                                                                                                                                    Number Parking Spaces for Entire Building under Offeror's Control
+                                                                                                                                        </div>
+                                                                                                                                        </td>
+                                                                                                                                        <td>
+                                                                                                                                        <div >
+                                                                                                                                    {!offer.PBS_AAAP_Total_Structured_Parking_Spaces__c}
+                                                                                                                                        </div>
+                                                                                                                                        </td>
+                                                                                                                                        <td>
+                                                                                                                                        <div >{!offer.PBS_AAAP_Total_Surface_Parking_Spaces__c}</div>
+                                                                                                                                        </td>
+                                                                                                                                        </tr>
+                                                                                                                                        <tr>
+                                                                                                                                        <td>
+                                                                                                                                        <div>
+                                                                                                                                        Number Parking Required by Code
+                                                                                                                                        </div>
+                                                                                                                                        </td>
+                                                                                                                                        <td>
+                                                                                                                                        <div >
+                                                                                                                                    {!offer.PBS_AAAP_Total_Struct_Park_Space_Offered__c}
+                                                                                                                                        </div>
+                                                                                                                                        </td>
+                                                                                                                                        <td>
+                                                                                                                                        <div >{!offer.PBS_AAAP_Total_Surf_Park_Space_Offered__c}</div>
+                                                                                                                                        </td>
+                                                                                                                                        </tr>
+                                                                                                                                        <tr>
+                                                                                                                                        <td>
+                                                                                                                                        <div>
+                                                                                                                                        Non-Reserved Rate per Month per Space
+                                                                                                                                        </div>
+                                                                                                                                        </td>
+                                                                                                                                        <td>
+                                                                                                                                        <div >
+                                                                                                                                        ${!offer.PBS_AAAP_Monthly_cost_nonres_gar_park__c}
+                                                                                                                                        </div>
+                                                                                                                                        </td>
+                                                                                                                                        <td>
+                                                                                                                                        <div >${!offer.PBS_AAAP_Monthly_cost_nonres_sur_park__c}</div>
+                                                                                                                                        </td>
+                                                                                                                                        </tr>
+                                                                                                                                        <tr>
+                                                                                                                                        <td>
+                                                                                                                                        <div>
+                                                                                                                                        Reserved Rate per Month per Space
+                                                                                                                                        </div>
+                                                                                                                                        </td>
+                                                                                                                                        <td>
+                                                                                                                                        <div >
+                                                                                                                                        ${!offer.PBS_AAAP_Monthly_cost_res_gar_park__c}
+                                                                                                                                        </div>
+                                                                                                                                        </td>
+                                                                                                                                        <td>
+                                                                                                                                        <div >${!offer.PBS_AAAP_Monthly_cost_res_sur_park__c}</div>
+                                                                                                                                        </td>
+                                                                                                                                        </tr>
+                                                                                                                                        </table>
+                                                                                                                                        </apex:pageBlock>
+                                                                                                                                        <br />
+                                                                                                                                        <apex:pageBlock >
+                                                                                                                                        <table class="fixed" align="center" border="1" width="100%" cellpadding="0" cellspacing="0">
+                                                                                                                                        <tr>
+                                                                                                                                        <td colspan="2">
+                                                                                                                                        <div style="font-weight:bold;font-size:17px;">
+                                                                                                                                        Estimated Annual Cost of Ownership Exclusive of Capital Charges (included in Shell Rent)
+                                                                                                                                        </div>
+                                                                                                                                        </td>
+                                                                                                                                        </tr>
+                                                                                                                                        <tr>
+                                                                                                                                            <td>
+                                                                                                                                            <div>
+                                                                                                                                            Real Estate Taxes
+                                                                                                                                            </div>
+                                                                                                                                            </td>
+                                                                                                                                            <td>
+                                                                                                                                                <div >
+                                                                                                                                                ${!offer.PBS_AAAP_REAL_ESTATE_TAXES__c}
+    </div>
+    </td>
+    </tr>
+    <tr>
+        <td>
+        <div>
+        Insurance (hazard, liability, etc.)
+    </div>
+    </td>
+    <td>
+        <div >
+        ${!offer.PBS_AAAP_INSURANCE__c}
+    </div>
+    </td>
+    </tr>
+    <tr>
+        <td>
+        <div>
+        Building Maintenance and Reserves for Replacement
+            </div>
+            </td>
+            <td>
+            <div >
+            ${!offer.PBS_AAAP_BUILDING_MAINTENANCE__c}
+            </div>
+            </td>
+            </tr>
+            <tr>
+            <td>
+            <div>
+            Lease Commission
+            </div>
+            </td>
+            <td>
+            <div >
+            ${!offer.PBS_AAAP_LEASE_COMMISSION__c}
+            </div>
+            </td>
+            </tr>
+            <tr>
+            <td>
+            <div>
+            Management
+            </div>
+            </td>
+            <td>
+            <div >
+            ${!offer.PBS_AAAP_MANAGEMENT__c}
+            </div>
+            </td>
+            </tr>
+            </table>
+            </apex:pageBlock>
+            <apex:repeat value="{!spaceList}" var="space">
+            <div style="page-break-before: always;">
+            <apex:outputPanel >
+            <apex:outputText >
+            <div style="font-weight: bold;font-size: 25px;font-weight:bold;">
+            Space: {!space.PBS_AAAP_SF_OFFERED__c} SF -&nbsp;
+            <apex:outputText value="{!IF(space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c == true, 'New', 'Continuing')}"/>
+            &nbsp;-&nbsp;{!space.Name}
+            </div>
+            </apex:outputText>
+            <hr />
+            <br />
+            <apex:pageBlock >
+            <table class="fixed" align="center" border="1" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+            <td colspan="4">
+            <div style="font-weight:bold; font-size:17px;">
+            Space Description
+            </div>
+            </td>
+            </tr>
+            <tr>
+            <td>
+            <div>Available ABOA SF</div>
+            </td>
+            <td>
+        {!space.PBS_AAAP_SF_OFFERED__c}
+            </td>
+            <td></td>
+            <td></td>
+            </tr>
+            <tr>
+            <td>
+            <div>Min Avail. ABOA SF</div>
+            </td>
+            <td>{!space.PBS_AAAP_MIN_OFFERABLE_SPACE__c}</td>
+            <td></td>
+            <td></td>
+            </tr>
+            <tr>
+            <td>
+            <div>Max Avail. ABOA SF</div>
+            </td>
+            <td>{!space.PBS_AAAP_MAX_OFFERABLE_SPACE__c}</td>
+            <td></td>
+            <td></td>
+            </tr>
+            <!-- <tr>
+            <td>
+            <div>Avail. Contiguous ABOA SF</div>
+            </td>
+            <td>
+        {!space.PBS_AAAP_Max_Contiguous_Space__c}
+            </td>
+            <td></td>
+            <td></td>
+            </tr> -->
+            </table>
+            </apex:pageBlock>
+            <br />
+            <apex:pageBlock >
+            <table class="fixed" align="center" border="1" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+            <td colspan="4">
+            <div style="font-weight:bold;font-size:17px;">
+            Space Rates
+            </div>
+            </td>
+            </tr>
+            <tr>
+            <td>
+            <div></div>
+            </td>
+            <td>
+            <apex:repeat value="{!space.Rates__r}" var="rate">
+            <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='25 Months,16 Firm'|| rate.PBS_AAAP_LEASE_TERM__c=='25 Months, 16 Firm'}">
+            25 Months, 16 Firm
+            </apex:outputText>
+            </apex:repeat>
+            <apex:repeat value="{!space.Rates__r}" var="rate" rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+            <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='10 years, 8 firm'}">
+            10 Years / 8 Firm
+            </apex:outputText>
+            </apex:repeat>
+            </td>
+            <td>
+            <apex:repeat value="{!space.Rates__r}" var="rate">
+            <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='19 Months,11 Firm'|| rate.PBS_AAAP_LEASE_TERM__c=='19 Months, 11 Firm'}">
+            19 Months, 11 Firm
+            </apex:outputText>
+            </apex:repeat>
+            <apex:repeat value="{!space.Rates__r}" var="rate" rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+            <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='15 years, 13 firm'}">
+            15 Years / 13 Firm
+            </apex:outputText>
+            </apex:repeat>
+            </td>
+            <td>
+            <apex:repeat value="{!space.Rates__r}" var="rate" rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+            <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='17 years, 15 firm'}">
+            17 Years / 15 Firm
+            </apex:outputText>
+            </apex:repeat>
+            </td>
+            </tr>
+            <tr>
+            <td>
+            <div>Shell Rent - Yrs. 1 - 8</div>
+            </td>
+            <td>
+            <apex:repeat value="{!space.Rates__r}" var="rate">
+            <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='25 Months,16 Firm'|| rate.PBS_AAAP_LEASE_TERM__c=='25 Months, 16 Firm'}">
+            <apex:outputText value="{0, number, currency}">
+            <apex:param value="{!rate.PBS_AAAP_BASE_RATE__c}" />
+            </apex:outputText>
+            /ABOA SF
+            </apex:outputText>
+            </apex:repeat>
+            <apex:repeat value="{!space.Rates__r}" var="rate" rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+            <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='10 years, 8 firm'}">
+            <apex:outputText value="{0, number, currency}">
+            <apex:param value="{!rate.PBS_AAAP_BASE_RATE__c}" />
+            </apex:outputText>
+            /ABOA SF
+            </apex:outputText>
+            </apex:repeat>
+            </td>
+            <td>
+            <apex:repeat value="{!space.Rates__r}" var="rate">
+            <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='19 Months,11 Firm'|| rate.PBS_AAAP_LEASE_TERM__c=='19 Months, 11 Firm'}">
+            <apex:outputText value="{0, number, currency}">
+            <apex:param value="{!rate.PBS_AAAP_BASE_RATE__c}" />
+            </apex:outputText>
+            /ABOA SF
+            </apex:outputText>
+            </apex:repeat>
+            <apex:repeat value="{!space.Rates__r}" var="rate" rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+            <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='15 years, 13 firm'}">
+            <apex:outputText value="{0, number, currency}">
+            <apex:param value="{!rate.PBS_AAAP_BASE_RATE__c}" />
+            </apex:outputText>
+            /ABOA SF
+            </apex:outputText>
+            </apex:repeat>
+            </td>
+            <td>
+            <apex:repeat value="{!space.Rates__r}" var="rate">
+            <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='10 years'}">
+            <apex:outputText value="{0, number, currency}">
+            <apex:param value="{!rate.PBS_AAAP_BASE_RATE__c}" />
+            </apex:outputText>
+            /ABOA SF
+            </apex:outputText>
+            </apex:repeat>
+            <apex:repeat value="{!space.Rates__r}" var="rate" rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+            <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='17 years, 15 firm'}">
+            <apex:outputText value="{0, number, currency}">
+            <!-- <apex:param value="{!rate.PBS_AAAP_FULLY_SRVC_FIRM_TERM__c}" /> -->
+            <apex:param value="{!rate.PBS_AAAP_BASE_RATE__c}" />
+            </apex:outputText>
+            /ABOA SF
+            </apex:outputText>
+            </apex:repeat>
+            </td>
+            </tr>
+            <tr>
+            <td>
+            <div>Shell Rent - Yrs. 9 - End</div>
+            </td>
+            <td>
+            <apex:repeat value="{!space.Rates__r}" var="rate">
+            <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='25 Months,16 Firm'|| rate.PBS_AAAP_LEASE_TERM__c=='25 Months, 16 Firm'}">
+            <apex:outputText value="{0, number, currency}">
+            <apex:param value="{!rate.PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c}" />
+            </apex:outputText>
+            /ABOA SF
+            </apex:outputText>
+            </apex:repeat>
+            <apex:repeat value="{!space.Rates__r}" var="rate" rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+            <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='10 years, 8 firm'}">
+            <apex:outputText value="{0, number, currency}">
+            <apex:param value="{!rate.PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c}" />
+            </apex:outputText>
+            /ABOA SF
+            </apex:outputText>
+            </apex:repeat>
+            </td>
+            <td>
+            <apex:repeat value="{!space.Rates__r}" var="rate">
+            <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='19 Months,11 Firm'|| rate.PBS_AAAP_LEASE_TERM__c=='19 Months, 11 Firm'}">
+            <apex:outputText value="{0, number, currency}">
+            <apex:param value="{!rate.PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c}" />
+            </apex:outputText>
+            /ABOA SF
+            </apex:outputText>
+            </apex:repeat>
+            <apex:repeat value="{!space.Rates__r}" var="rate" rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+            <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='15 years, 13 firm'}">
+            <apex:outputText value="{0, number, currency}">
+            <apex:param value="{!rate.PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c}" />
+            </apex:outputText>
+            /ABOA SF
+            </apex:outputText>
+            </apex:repeat>
+            </td>
+            <td>
+            <apex:repeat value="{!space.Rates__r}" var="rate" rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+            <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='17 years, 15 firm'}">
+            <apex:outputText value="{0, number, currency}">
+            <apex:param value="{!rate.PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c}" />
+            </apex:outputText>
+            /ABOA SF
+            </apex:outputText>
+            </apex:repeat>
+            </td>
+            </tr>
+            <tr>
+            <td>
+            <div>Operating Rent (Base Year)</div>
+                                 </td>
+                                 <td>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='25 Months,16 Firm'|| rate.PBS_AAAP_LEASE_TERM__c=='25 Months, 16 Firm'}">
+                                 <apex:outputText value="{0, number, currency}">
+                                 <apex:param value="{!rate.PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c}" />
+                                 </apex:outputText>
+                                 /ABOA SF
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate" rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='10 years, 8 firm'}">
+                                 <apex:outputText value="{0, number, currency}">
+                                 <apex:param value="{!rate.PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c}" />
+                                 </apex:outputText>
+                                 /ABOA SF
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 </td>
+                                 <td>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='19 Months,11 Firm'|| rate.PBS_AAAP_LEASE_TERM__c=='19 Months, 11 Firm'}">
+                                 <apex:outputText value="{0, number, currency}">
+                                 <apex:param value="{!rate.PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c}" />
+                                 </apex:outputText>
+                                 /ABOA SF
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate" rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='15 years, 13 firm'}">
+                                 <apex:outputText value="{0, number, currency}">
+                                 <apex:param value="{!rate.PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c}" />
+                                 </apex:outputText>
+                                 /ABOA SF
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 </td>
+                                 <td>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate" rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='17 years, 15 firm'}">
+                                 <apex:outputText value="{0, number, currency}">
+                                 <apex:param value="{!rate.PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c}" />
+                                 </apex:outputText>
+                                 /ABOA SF
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 </td>
+                                 </tr>
+                                 </table>
+                                 </apex:pageBlock>
+                                 <br />
+                                 <apex:pageBlock >
+                                 <table class="fixed" align="center" border="1" width="100%" cellpadding="0" cellspacing="0">
+                                 <tr>
+                                 <td>
+                                 <div>TI and BSAC Amort. Rate</div>
+                                 </td>
+                                 <td>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='25 Months,16 Firm'|| rate.PBS_AAAP_LEASE_TERM__c=='25 Months, 16 Firm'}">
+                                 <apex:outputText value="{0, number, 0.00}">
+                                 <apex:param value="{!rate.PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c}"/>
+                                 </apex:outputText>
+                                 %
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate" rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='10 years, 8 firm'}">
+                                 <apex:outputText value="{0, number, 0.00}">
+                                 <apex:param value="{!rate.PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c}"/>
+                                 </apex:outputText>
+                                 %
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 </td>
+                                 <td>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='19 Months,11 Firm'|| rate.PBS_AAAP_LEASE_TERM__c=='19 Months, 11 Firm'}">
+                                 <apex:outputText value="{0, number, 0.00}">
+                                 <apex:param value="{!rate.PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c}"/>
+                                 </apex:outputText>
+                                 %
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate" rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='15 years, 13 firm'}">
+                                 <apex:outputText value="{0, number, 0.00}">
+                                 <apex:param value="{!rate.PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c}"/>
+                                 </apex:outputText>
+                                 %
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 </td>
+                                 <td>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate" rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='17 years, 15 firm'}">
+                                 <apex:outputText value="{0, number, 0.00}">
+                                 <apex:param value="{!rate.PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c}"/>
+                                 </apex:outputText>
+                                 %
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 </td>
+                                 </tr>
+                                 <tr>
+                                 <td>
+                                 <div>PM Fees <span style="font-size: x-small;">*</span></div>
+                                 </td>
+                                 <td>
+                                 {!space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c}%
+                                 </td>
+                                 <td>{!space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c}%</td>
+                                 <td>
+                                 <apex:outputPanel rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+                                 {!space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c}%
+                                 </apex:outputPanel>
+                                 </td>
+                                 </tr>
+                                 <tr>
+                                 <td>
+                                 <div>A|E Fees<span style="font-size: x-small;">*</span></div>
+                                 </td>
+                                 <td>
+                                 <apex:outputText rendered="{!space.PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c == '$ Per ABOA SF'}">
+                                 <apex:outputText value="{0, number, currency}">
+                                 <apex:param value="{!space.PBS_AAAP_ARCH_ENG_FEES__c}" />
+                                 </apex:outputText>
+                                 /ABOA SF
+                                 </apex:outputText>
+                                 <apex:outputText rendered="{!space.PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c == '%'}">
+                                 {!space.PBS_AAAP_ARCH_ENG_FEES__c}%
+                                 </apex:outputText>
+                                 </td>
+                                 <td>
+                                 <apex:outputText rendered="{!space.PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c == '$ Per ABOA SF'}">
+                                 <apex:outputText value="{0, number, currency}">
+                                 <apex:param value="{!space.PBS_AAAP_ARCH_ENG_FEES__c}" />
+                                 </apex:outputText>
+                                 /ABOA SF
+                                 </apex:outputText>
+                                 <apex:outputText rendered="{!space.PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c == '%'}">
+                                 {!space.PBS_AAAP_ARCH_ENG_FEES__c}%
+                                 </apex:outputText>
+                                 </td>
+                                 <td>
+                                 <apex:outputPanel rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+                                 <apex:outputText rendered="{!space.PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c == '$ Per ABOA SF'}">
+                                 <apex:outputText value="{0, number, currency}">
+                                 <apex:param value="{!space.PBS_AAAP_ARCH_ENG_FEES__c}" />
+                                 </apex:outputText>
+                                 /ABOA SF
+                                 </apex:outputText>
+                                 <apex:outputText rendered="{!space.PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c == '%'}">
+                                 {!space.PBS_AAAP_ARCH_ENG_FEES__c}%
+                                 </apex:outputText>
+                                 </apex:outputPanel>
+                                 </td>
+                                 </tr>
+                                 <!-- <p style="font-size: small;">*These fees only apply to Tenant Improvements. They do not apply to Building Specific Amortized Capital.
+                                 </p>  -->
+                                 </table>
+                                 <apex:pageBlockSection >
+                                 <div style="font-size: x-small;">
+                                 *These fees only apply to Tenant Improvements. They do not apply to Building Specific Amortized Capital.
+                                 </div>
+                                 </apex:pageBlockSection>
+                                 </apex:pageBlock>
+                                 <br />
+                                 <apex:pageBlock >
+                                 <table class="fixed" align="center" border="1" width="100%" cellpadding="0" cellspacing="0">
+                                 <tr>
+                                 <td>
+                                 <div>Adj. for Vacant Premises</div>
+                                 </td>
+                                 <td>${!offer.PBS_AAAP_Vacant_Premise_Rate__c} /ABOA SF
+                                 </td>
+                                 <td>
+                                 ${!offer.PBS_AAAP_Vacant_Premise_Rate__c} /ABOA SF
+                                 </td>
+                                 <td>
+                                 <apex:outputPanel rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}"> 
+                                 ${!offer.PBS_AAAP_Vacant_Premise_Rate__c} /ABOA SF
+                                 </apex:outputPanel>
+                                 </td>
+                                 </tr>
+                                 <tr>
+                                 <td>
+                                 <div>HVAC Overtime Rate </div>
+                                 </td>
+                                 <td>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='25 Months,16 Firm'|| rate.PBS_AAAP_LEASE_TERM__c=='25 Months, 16 Firm'}">
+                                 <apex:outputText value="{0, number, currency}">
+                                 <apex:param value="{!rate.PBS_AAAP_OT_RATE_COOLING_HEAT__c}" />
+                                 </apex:outputText>
+                                 /Hr
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate" rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='10 years, 8 firm'}">
+                                 <apex:outputText value="{0, number, currency}">
+                                 <apex:param value="{!rate.PBS_AAAP_OT_RATE_COOLING_HEAT__c}" />
+                                 </apex:outputText>
+                                 /Hr
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 </td>
+                                 <td>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='19 Months,11 Firm'|| rate.PBS_AAAP_LEASE_TERM__c=='19 Months, 11 Firm'}">
+                                 <apex:outputText value="{0, number, currency}">
+                                 <apex:param value="{!rate.PBS_AAAP_OT_RATE_COOLING_HEAT__c}" />
+                                 </apex:outputText>
+                                 /Hr
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='15 years, 13 firm'}">
+                                 <apex:outputText value="{0, number, currency}">
+                                 <apex:param value="{!rate.PBS_AAAP_OT_RATE_COOLING_HEAT__c}" />
+                                 </apex:outputText>
+                                 /Hr
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 </td>
+                                 <td>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='17 years, 15 firm'}">
+                                 <apex:outputText value="{0, number, currency}">
+                                 <apex:param value="{!rate.PBS_AAAP_OT_RATE_COOLING_HEAT__c}" />
+                                 </apex:outputText>
+                                 /Hr
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 </td>
+                                 </tr>
+                                 <tr>
+                                 <td>
+                                 <div>Free Rent *</div>
+                                 </td>
+                                 <td>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='25 Months,16 Firm'|| rate.PBS_AAAP_LEASE_TERM__c=='25 Months, 16 Firm'}">
+                                 <apex:outputText value="{0, number, 0}">
+                                 <apex:param value="{!rate.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c}" />
+                                 </apex:outputText>
+                                 &nbsp;months
+                                 <!-- {!rate.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c} --> 
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate" rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='10 years, 8 firm'}">
+                                 <apex:outputText value="{0, number, 0}">
+                                 <apex:param value="{!rate.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c}" />
+                                 </apex:outputText>
+                                 &nbsp;months
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 </td>
+                                 <td>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='19 Months,11 Firm'|| rate.PBS_AAAP_LEASE_TERM__c=='19 Months, 11 Firm'}">
+                                 <apex:outputText value="{0, number, 0}">
+                                 <apex:param value="{!rate.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c}" />
+                                 </apex:outputText>
+                                 &nbsp;months
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate" rendered="{!IF(space.PBS_AAAP_OFFER_NUMBER__r.PBS_AAAP_RLP_Region__c != 'Census',true,false)}">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='15 years, 13 firm'}">
+                                 <apex:outputText value="{0, number, 0}">
+                                 <apex:param value="{!rate.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c}" />
+                                 </apex:outputText>
+                                 &nbsp;months
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 </td>
+                                 <td>
+                                 <apex:repeat value="{!space.Rates__r}" var="rate">
+                                 <apex:outputText rendered="{!rate.PBS_AAAP_LEASE_TERM__c=='17 years, 15 firm'}">
+                                 <apex:outputText value="{0, number, 0}">
+                                 <apex:param value="{!rate.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c}" />
+                                 </apex:outputText>
+                                 &nbsp;months
+                                 </apex:outputText>
+                                 </apex:repeat>
+                                 </td>
+                                 </tr>
+                                 </table>
+                                 </apex:pageBlock>
+                                 </apex:outputPanel>
+                                 </div>
+                                 </apex:repeat>
+                                 <div style="page-break-before: always;">
+                                 <apex:outputPanel style="size: 50px;">
+                                 <apex:outputText style="font-size:x-small;">
+                                 <p>
+                                 Note: A fully-serviced rental rate is dependent upon calculating Tenant Improvements (TI) and Building-Specific Amortized Capital (BSAC) rental rates.  Since these rates are calculated by amortizing TI Allowance and BSAC placeholder estimates that are unique for each requirement being procured through the application, the system cannot generate the actual TI and BSAC rental rates until the Government’s actual space requirements are identified and “run” through the application.  Therefore, it is not possible for the system to display an accurate fully-serviced rental rate to users at the time of offer submission. Refer to the table below to show how different Tenant Improvement scenarios could impact the overall lease rate, based on the 'TI and BSAC Amortization Rate' you provided above.
+                </p>
+                </apex:outputText>
+                <br />
+                <apex:pageBlock >
+                <table class="fixed" align="center" border="1" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                <td colspan="4">
+                <div>
+                Tenant Improvement Scenarios
+                </div>
+                </td>
+                </tr>
+                <tr>
+                <td colspan="4">
+                <div style="float: center;">
+                <p>
+                The table below shows the annual Rate per ABOA/SF a Lessor would get for a hypothetical 5000 ABOA SF lease for three different scenarios at three different amortization rates, amortized over the first 8 years of a Lease. Note that you may have chosen to charge the Government an amortization rate different from these examples. The purpose of this table is to show how the offered amortization rate interacts with the Government's final Tenant Improvement requirement to produce a rate in the executed Lease document.
+                </p>
+                </div>
+                </td>
+                </tr>
+                <tr>
+                <td>
+                <div style="float: right;">Amortized at: &nbsp;</div>
+                </td>
+                <td>
+                <div style="text-align: center;">0%</div>
+                <!-- &nbsp; -->
+                </td>
+                <td>
+                <div style="text-align: center;">5%</div>
+                </td>
+                <td>
+                <div style="text-align: center;">10%</div>
+                </td>
+                </tr>
+                <tr>
+                <td colspan="4">
+                <div>Scenario 1</div>
+                </td>
+                </tr>
+                <tr>
+                <td>
+                <div>$10,000 total project cost ($2 per ABOA SF)</div>
+                </td>
+                <td>
+                    <div style="text-align: center;">$0.25</div>
+                    </td>
+                    <td>
+                        <div style="text-align: center;">$0.30</div>
+                        </td>
+                        <td>
+                            <div style="text-align: center;">$0.36</div>
+                            </td>
+                            </tr>
+                            <tr></tr>
+                            <tr>
+                                <td colspan="4">
+                                    <div>Scenario 2</div>
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        <div>$80,000 total project cost ($16 per ABOA SF)</div>
+                                        </td>
+                                        <td>
+                                            <div style="text-align: center;">$2.00</div>
+                                            </td>
+                                            <td>
+                                                <div style="text-align: center;">$2.43</div>
+                                                </td>
+                                                <td>
+                                                    <div style="text-align: center;">$2.91</div>
+                                                    </td>
+                                                    </tr>
+                                                    <tr></tr>
+                                                    <tr>
+                                                        <td colspan="4">
+                                                            <div>Scenario 3</div>
+                                                            </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                <div>$150,000 total project cost ($30 per ABOA SF)</div>
+                                                                </td>
+                                                                <td>
+                                                                    <div style="text-align: center;">$3.75</div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div style="text-align: center;">$4.56</div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div style="text-align: center;">$5.56</div>
+                                                                            </td>
+                                                                            </tr>
+                                                                            </table>
+                                                                            </apex:pageBlock>
+                                                                            <br />
+                                                                                </apex:outputPanel>
+                                                                            </div>
+                                                                            <!-- <apex:panelGrid columns="1" border="1">
+                                                                                <apex:outputPanel >
+                                                                                    <div style="size:20px;font-size:15px;"> Building Name, Address, and Contacts </div>
+                                                                                    </apex:outputPanel>
+                                                                                    <apex:panelGrid columns="2" border="1">
+                                                                                        <apex:outputPanel >
+                                                                                            <div style="font-size:15px; ">
+                                                                                                Building Name
+                                                                                                </div>
+                                                                                                </apex:outputPanel>
+                                                                                                <apex:outputPanel >
+                                                                                                    {!buildingName}
+                                                                                                </apex:outputPanel>
+                                                                                                </apex:panelGrid>
+                                                                                                
+                                                                                                
+                                                                                                
+                                                                                                </apex:panelGrid>
+                                                                                                <apex:panelGrid columns="2" border="1">
+                                                                                                    <apex:outputPanel >
+                                                                                                        
+                                                                                                        </apex:outputPanel>
+                                                                                                    <apex:outputPanel></apex:outputPanel>
+                                                                                                    <apex:outputPanel></apex:outputPanel>
+                                                                                                    <apex:outputPanel></apex:outputPanel>
+                                                                                                    </apex:panelGrid>
+                                                                                                    -->
+                                                                                                        </apex:panelGrid>
+                                                                                                    </apex:outputPanel>
+                                                                                                    </body>
+                                                                                                    </div>
+                                                                                                    <script type="text/javascript">            
+                                                                                                        window.onload = function(){                     
+                                                                                                        takePic();
+                                                                                                    }        
+                                                                                                    
+                                                                                                    
+                                                                                                    function takePic(){
+                                                                                                        html2canvas(document.body, 
+                                                                                                                    {
+                                                                                                                        useCORS: true,
+                                                                                                                        onrendered: function(canvas) 
+                                                                                                                        {
+                                                                                                                            var recId = '{!JSENCODE($CurrentPage.parameters.id)}';    
+                                                                                                                            var total = '{!JSENCODE($CurrentPage.parameters.total)}'; 
+                                                                                                                            var current = '{!JSENCODE($CurrentPage.parameters.current)}';                                 
+                                                                                                                            document.body.appendChild(canvas);
+                                                                                                                            document.getElementById("mapDiv").style.display = 'none';
+                                                                                                                            document.getElementById("loadingdiv").style.display = '';                               
+                                                                                                                            document.getElementById("waitingDesc").innerHTML = 'Taking '+current+' of '+total;
+                                                                                                                            var pageName = '{!$CurrentPage.Name}';
+                                                                                                                            captureImage(document.getElementsByTagName('canvas')[0].toDataURL(),(recId+'Form'+current));
+                                                                                                                            
+                                                                                                                        }
+                                                                                                                    });
+                                                                                                        return false;
+                                                                                                    }
+    
+    
+    function escapeRegExp(string){
+        return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+    
+    function replaceAll(str, term, replacement) {
+        return str.replace(new RegExp(escapeRegExp(term), 'g'), replacement);
+    }
+    
+    
+    function captureDone(){
+        debugger;
+        
+        var recId = '{!JSENCODE($CurrentPage.parameters.offerId)}';   
+        var total = '{!JSENCODE($CurrentPage.parameters.total)}';  
+        var current = '{!JSENCODE($CurrentPage.parameters.current)}'; 
+        
+        var agid = '';
+        var rlpyear ;
+        var history = '';
+        current = parseInt(current)+1;
+        
+        decodedCookie = {!JSENCODE('document.cookie')};
+        var ca = decodedCookie.split(';');
+        for(var j = 0; j <ca.length; j++) {
+            name = ca[j].split('=')[0];
+            value = ca[j].split('=')[1];
+            if(name.trim() == 'apex__links'){
+                ids = value;
+            }
+            
+            if(name.trim() == 'apex__agencyId'){
+                agid = value;
+            }
+            
+            if(name.trim() == 'apex__RLPYear'){
+                rlpyear = value;
+            }
+            
+            if(name.trim() == 'apex__histId'){
+                history = value;
+            }
+        }           
+        
+        //alert(rlpyear);
+        var rlpYearInt = 99999;
+        if(rlpyear != ''
+           && rlpyear != undefined
+           && rlpyear != null){
+            rlpYearInt = parseInt(rlpyear);
+            
+            if(rlpYearInt >= 2019){
+                //openNexForm();
+                // checking if we have ids in cookie
+                if(ids != ''){
+                    var allIds = ids.split(',');
+                    var firstEle = allIds[0];
+                    allIds.shift();
+                    
+                    var stringArray = allIds.join();
+                    document.cookie = "apex__links="+stringArray;                           
+                    var newurl = replaceAll(firstEle, '#', '=')
+                    window.location.href = newurl+'&current='+current+'&total='+total;
+                }
+                else{
+                    //alert(agid);
+                    window.location.href = "/apex/PBS_AAAP_ImagePDF?agencyId="+agid+'&histId='+history+'&isImagePrintPage=yes';   
+                }
+            }
+        }
+        
+        if(rlpYearInt < 2019){
+            // checking if we have ids in cookie
+            if(ids != ''){
+                var allIds = ids.split(',');
+                var firstEle = allIds[0];
+                allIds.shift();
+                
+                var stringArray = allIds.join();
+                document.cookie = "apex__links="+stringArray;                           
+                var newurl = replaceAll(firstEle, '#', '=')
+                window.location.href = newurl+'&current='+current+'&total='+total;
+            }
+            else{
+                //alert(agid);
+                window.location.href = "/apex/PBS_AAAP_ImagePDF?agencyId="+agid+'&histId='+history+'&isImagePrintPage=yes';   
+            }
+        }
+    }
+    
+    
+    function openNexForm(){
+        debugger;
+        
+        var recId = '{!JSENCODE($CurrentPage.parameters.offerId)}';   
+        var total = '{!JSENCODE($CurrentPage.parameters.total)}';  
+        var current = '{!JSENCODE($CurrentPage.parameters.current)}';     
+        current = parseInt(current)+1;
+        window.location.href = "/apex/PBS_AAAP_offerform1364ratestructure_Img?formtype=offerform1364ratestructure&offerId="+recId+'&total='+total+'&current='+current;
+        
+        
+    }
+    
+    </script>
+</apex:page>

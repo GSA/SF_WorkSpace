@@ -1,0 +1,92 @@
+<aura:component>
+<aura:attribute name="workDescTotals" type="Object"/>
+<article class="slds-card slds-container_xx-large ">
+    <div class="slds-page-header slds-bg-dark-gray table-space">
+        <div class="slds-page-header__title slds-truncate ">
+            <h1>
+                <span class="slds-page-header__title slds-truncate slds-text-title_caps">
+                    <b> Total Project Cost</b>
+                </span>
+            </h1>
+        </div>
+    </div>
+    <div>
+        <table class="slds-table slds-no-row-hover slds-table_bordered slds-table_cell-buffer slds-table_col-bordered ">
+            <thead>
+                <tr class="slds-text-title_caps slds-truncate slds-line-height_reset bg-hgt">
+                    <th  scope="col">
+                        <div class="slds-truncate slds-custom-header-row" title="Cost Category"> Cost Category </div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate slds-custom-header-row" title="Markupt">Direct Cost</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate slds-custom-header-row" title="Impact">CECA</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate slds-custom-header-row" title="Impact">ECCA</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate slds-custom-header-row" title="Impact">ECC</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate slds-custom-header-row" title="Impact">EDRC</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate slds-custom-header-row" title="Impact">EMIC</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate slds-custom-header-row" title="Impact">ETPC</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items='{!v.workDescTotals}' var='wd' indexvar='w'>
+                    <tr class="{!wd.key == 'Total - PBS and RWA Funded' || wd.key == 'SubTotal - PBS Funded'? 'slds-hint-parent slds-text-title_caps slds-bg-dark-gray bg-hgt': 'slds-hint-parent slds-text-title_caps bg-hgt'}">
+                        <td class="slds-text-title_caps">{!wd.key}</td>
+                        <td>
+                            <div class='total-div'>
+                                <lightning:formattedNumber value="{!wd.Total_Direct_Cost__c}" style="currency" currencyCode="USD" />     
+                            </div>
+                        </td>
+                        <td>
+                            <div class='total-div'>
+                                <lightning:formattedNumber value="{!wd.CECCA__c}" style="currency" currencyCode="USD" />     
+                            </div>
+                        </td>
+                        <td>
+                            <div class='total-div'>
+                                <lightning:formattedNumber value="{!wd.ECCA__c}" style="currency" currencyCode="USD" />     
+                            </div>
+                        </td>
+                        <td>
+                            <div class='total-div'>
+                                <lightning:formattedNumber value="{!wd.ECC__c}" style="currency" currencyCode="USD" />     
+                            </div>
+                        </td>
+                        <td>
+                            <div class='total-div'>
+                                <lightning:formattedNumber value="{!wd.EDRC__c}" style="currency" currencyCode="USD" />     
+                            </div>
+                        </td>
+                        <td>
+                            <div class='total-div'>
+                                <lightning:formattedNumber value="{!wd.EMIC__c}" style="currency" currencyCode="USD" />     
+                            </div>
+                        </td>
+                        <td>
+                            <div class='total-div'>
+                                <lightning:formattedNumber value="{!wd.ETPC__c}" style="currency" currencyCode="USD" />     
+                            </div>
+                        </td>
+                    </tr>
+                </aura:iteration>
+
+            </tbody>
+        </table>
+
+    </div>
+</article>
+
+
+</aura:component>

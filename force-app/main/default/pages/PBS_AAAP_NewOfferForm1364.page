@@ -1,0 +1,746 @@
+<apex:page controller="PBS_AAAP_NewOfferForm1364Controller" showHeader="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" renderAs="pdf">
+<html>
+    <head>
+    <style type="text/css" media="print">
+        @page {
+            margin-bottom: 1cm;
+            @bottom-center {
+             content: element(footer);
+            }
+        }
+
+        div.footer {
+            display: block;
+            padding: 10px;
+            text-align:right;
+            position: running(footer);
+        }
+    </style>
+    <style>
+        h1,h2,h3,h4,h5,h6{
+            margin:4px;
+        }
+        .top_border{
+            width:100%;
+            border-top: 2px solid;
+        }
+        .breakAll {
+            word-break: break-all;
+        }
+        select{
+            min-width: 100px;
+            background: #d3d3d3;
+        }
+    </style>
+    </head>
+
+<body>
+    <div class="footer" name="footer">
+        GSA FORM 1364 (REV 10/21)
+    </div>
+    <table class="outerTable" cellspacing="0" width="100%">
+    
+    <!-- SECTION I and II repeat for each space record associated to the offer.  -->
+    
+      <apex:repeat value="{!spaceList}" var="spaceRecord">
+        <tr>
+            <td colspan="12" style="border-left:1px solid black;border-top:1px solid black;font-size:14.5px;"><b>PROPOSAL TO LEASE SPACE - GSA FORM 1364</b></td>
+            <td colspan="8" style="border-top:1px solid black;text-align:right;font-size:11.6px;">This Offer is in response to Request<br/> For Lease Proposals (RLP) Number:</td>
+            <td colspan="4" style="border-top:1px solid black;color:red;text-align:center;font-size:13.5px;border-right:1px solid black;"><b>{!RLPNumber}</b></td>
+        </tr>
+        
+        <!-- SECTION I  -->
+        
+        <tr style="border:none;">
+            <td class="top_border" style="font-size:14.5px;border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;" colspan="24"  ><b>I. BUILDING OVERVIEW</b></td>            
+        </tr>
+        <tr>
+            <td colspan="9" style="font-size:11.6px;border-left:1px solid black;border-right:1px solid black;"><b>01. Building Name </b></td>
+            <td colspan="15" style="font-size:11.6px;border-right:1px solid black;"><b>02. Building Street Address </b></td>
+        </tr>
+        <tr style="color:red;">
+            <td colspan="9" style="font-size:13.5px; vertical-align: top; border-left:1px solid black;border-right:1px solid black;">{!offer.PBS_AAAP_Building_Name__c}</td>
+            <td colspan="15" style="font-size:13.5px; vertical-align: top; border-right:1px solid black;">{!offer.PBS_AAAP_Street_Address__c}</td>
+        </tr>
+        <tr>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+            <td width="5.00%"></td>
+            <td width="3.74%"></td>
+            <td width="3.74%"></td>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+            <td width="4.16%"></td>
+        </tr>
+        <tr>
+            <td colspan="17" style="font-size:11.6px;border-top:1px solid black;border-left:1px solid black;border-right:1px solid black;"><b>03. City, State and 9-Digit ZIP Code</b></td>
+            <td colspan="7" style="font-size:11.6px;border-top:1px solid black;border-right:1px solid black;"><b>04. Number of Floors in Building</b></td>
+        </tr>
+        <tr style="color:red; font-size:11.6px;">
+            <td colspan="17" style="font-size:13.5px; vertical-align: top; border-left:1px solid black;border-bottom:1px solid black;border-right:1px solid black;">{!offer.PBS_AAAP_City__c}, {!offer.PBS_AAAP_State__c}  {!offer.PBS_AAAP_ZipCode__c}</td>
+            <td colspan="7" style="text-align:center; font-size:13.5px;border-bottom:1px solid black;border-right:1px solid black;">{!offer.PBS_AAAP_Number_of_floors__c}</td>
+        </tr>
+        <tr>
+            <td colspan="9" style="border-left:1px solid black;font-size:11.4px;"><b>05. Total Rentable Square Feet (RSF) in Building</b></td>
+            <td colspan="1" rowspan="2" style="color:red;text-align:right; font-size:13.5px; padding-right:25px;">
+                <apex:outputText value="{0, number, #,###,###,##0.00}">
+                    <apex:param value="{!offer.PBS_AAAP_GEN_PURPOSE_RENTABLE__c}"/>
+                </apex:outputText>
+            </td>
+            <td colspan="8" rowspan="2" style="border-left:1px solid black;font-size:11.4px;"><b>06.    Total ANSI/BOMA Occupant Area (ABOA) Square Feet (SF) in Building</b></td>
+            <td colspan="6" rowspan="2" style="font-size:11.6px;border-left:1px solid black;border-right:1px solid black;"><b>07.   Building Common Area Factor (CAF)</b></td>
+        </tr>
+        <tr>
+            <td colspan="9" style="border-left:1px solid black;font-size:11.4px;">Building Space Breakout</td>
+        </tr>
+        <tr>
+            <td colspan="5" style="border-left:1px solid black;font-size:11px;"><b>a. General Purpose/Office:</b></td>
+            <td colspan="4" style="font-size:11px; text-align:center;"><b>b. Warehouse:</b></td>
+            <td colspan="1" style="font-size:11px; text-align:center;"><b>c. Other:</b></td>
+            <td colspan="8" rowspan="2" style="border-bottom:1px solid black;border-left:1px solid black;color:red; text-align:center; font-size:13.5px;">
+                <apex:outputText value="{0, number, #,###,###,##0.00}">
+                    <apex:param value="{!offer.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c}"/>
+                </apex:outputText>
+            </td>
+            <td colspan="6" rowspan="2" style="border-bottom:1px solid black;border-left:1px solid black;border-right:1px solid black;color:red; text-align:center; font-size:13.5px;">{!CAF}</td>
+        </tr>
+        <tr style="color:red; text-align:center; font-size:13.5px;">
+            <td colspan="5" style="border-left:1px solid black;border-bottom:1px solid black;">
+                <apex:outputText value="{0, number, #,###,###,##0.00}">
+                    <apex:param value="{!offer.PBS_AAAP_OFFICE_SPACE_RSF__c}"/>
+                </apex:outputText>
+            </td>
+            <td colspan="4" style="text-align:center; border-bottom:1px solid black;">
+                <apex:outputText value="{0, number, #,###,###,##0.00}">
+                    <apex:param value="{!offer.PBS_AAAP_RETAIL_SPACE_RSF__c}"/>
+                </apex:outputText>
+            </td>
+            <td colspan="1" style="border-bottom:1px solid black; text-align:center; padding-right:10px;">
+                <apex:outputText value="{0, number, #,###,###,##0.00}">
+                    <apex:param value="{!offer.PBS_AAAP_GARAGE_SPACE_RSF__c}"/>
+                </apex:outputText>
+            </td>     
+         </tr>
+        <tr>
+            <td colspan="17" style="font-size:11px;border-left:1px solid black;"><b>08. Total Building Parking Under Offeror's Control</b></td>
+            <td colspan="7" rowspan="3" style="font-size:11px;border-right:1px solid black;">Parking spaces and associated costs offered to meet the requirements outlined in the RLP shall be detailed in Box 20.</td>
+        </tr>
+        <tr>
+            <td colspan="6" style="font-size:11px;border-left:1px solid black;">a. Total Surface:<span style="color:red; text-align:right; font-size:13.5px;">&#160;&#160;&#160;&#160;&#160;<apex:outputText value="{0,number, #,###,###,##0.##}"><apex:param value="{!offer.PBS_AAAP_Total_Surface_Parking_Spaces__c}"/></apex:outputText></span></td>
+            <td colspan="11" style="font-size:11px;">c. Is all of the parking onsite?<span style="color:red; text-align:center; font-size:13.5px;">&#160;{!parkingOnsite}</span></td>
+        </tr>
+        <tr>
+            <td colspan="6" style="font-size:11.6px;border-left:1px solid black;">b. Total Structured:<span style="color:red; text-align:right; font-size:13.5px;"><apex:outputText value="{0,number, #,###,###,##0.##}"><apex:param value="{!offer.PBS_AAAP_Total_Structured_Parking_Spaces__c}"/></apex:outputText></span></td>
+            <td colspan="11" style="font-size:11.6px;">d. Number of spaces required by local code, if applicable:<span style="color:red; text-align:left; font-size:13.5px;"><apex:outputText value="{0,number, #,###,###,##0.##}"><apex:param value="{!offer.PBS_AAAP_Total_Park_Spaces_Offered__c}"/></apex:outputText></span></td>    
+        </tr>
+        <tr>
+            <td class="top_border" style="border-left:1px solid black;border-right:1px solid black;font-size:14.5px;" colspan="24">
+                <b>II. PRIMARY OFFER DETAILS - {!spaceRecord.Name} -&#160;<apex:outputText value="{!IF(spaceRecord.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c == true, 'New', 'Continuing')}"/>
+                <apex:outputText rendered="{!IF(spaceRecord.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c == false, true, false)}" value=" - {!spaceRecord.PBS_AAAP_GSA_EXPIRE_LEASE_NUMBER__c}"/>
+                -&#160;Available 
+                <apex:outputText value="{0, DATE, MM'/'dd'/'yyyy}">
+                    <apex:param value="{!spaceRecord.PBS_AAAP_DATE_SPACE_AVAILABILITY__c}" />
+                </apex:outputText>                    
+                </b>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" style="font-size:10.8px;border-top:1px solid black;border-right:1px solid black;border-left:1px solid black;"><b>09. Total Available ABOA SF Offered</b></td>
+            <td colspan="4" style="font-size:10.8px;border-top:1px solid black;border-right:1px solid black;"><b>10. Max Contiguious ABOA SF</b></td>
+            <td colspan="7" style="font-size:10.8px;border-top:1px solid black;border-right:1px solid black;"><b>11. Minimum Demisable ABOA SF</b></td>
+            <td colspan="6" style="font-size:10.6px;border-top:1px solid black;border-right:1px solid black;"><b>12. Floors/Suites of Offered Space</b></td>
+        </tr>
+        <tr>
+            <td colspan="7" style="color:red; font-size:13.5px; text-align:center;border-bottom:1px solid black;border-right:1px solid black;border-left:1px solid black;">
+                <apex:outputText value="{0, number, #,###,###,##0.00}">
+                    <apex:param value="{!spaceRecord.PBS_AAAP_SF_OFFERED__c}"/>
+                </apex:outputText>
+            </td>
+            <td colspan="4" style="color:red; font-size:13.5px; text-align:center;border-bottom:1px solid black;border-right:1px solid black;">
+                <apex:outputText value="{0, number, #,###,###,##0.00}">
+                    <apex:param value="{!spaceRecord.PBS_AAAP_Max_Contiguous_Space__c}"/>
+                </apex:outputText>
+            </td>
+            <td colspan="7" style="color:red; font-size:13.5px; text-align:center;border-bottom:1px solid black;border-right:1px solid black;">
+                <apex:outputText value="{0, number, #,###,###,##0.00}">
+                    <apex:param value="{!spaceRecord.PBS_AAAP_MIN_OFFERABLE_SPACE__c}"/>
+                </apex:outputText>
+            </td>
+            <td colspan="6" style="font-size:11.6px; border-bottom:1px solid black;border-right:1px solid black;">Floors/Suites are not currently collected for AAAP offers.</td>
+        </tr>
+        <tr>
+            <td colspan="6" style="font-size:11.6px;border-left:1px solid black;border-right:1px solid black;vertical-align: top;"><b>13. Full Term of the Lease</b></td>
+            <td colspan="4" style="font-size:11.6px;border-right:1px solid black;vertical-align: top;"><b>14. Firm Term of the Lease</b></td>
+            <td colspan="9" rowspan="2" style="font-size:11.6px;width:500px;">After the Firm Term, the Government may terminate the Lease by providing advanced written notice to the Lessor. Indicate the minimum number of days the Government <br/>must provide prior written notice by.</td>
+            <td colspan="5" style="font-size:11.3px;border-right:1px solid black;"><b>15. Number of Days Notice</b></td>
+        </tr>
+         <tr>
+            <td colspan="6" style="border-left:1px solid black;border-right:1px solid black; font-size:11.6px;">See Rent Table below.</td>
+            <td colspan="4" style="border-right:1px solid black; font-size:11.6px;">See Rent Table below.</td>
+            <td colspan="5" style="color:red; text-align:center;border-right:1px solid black; font-size:13.5px;">120</td>
+         </tr>
+        <tr>
+            <td rowspan="2" colspan="4" style="text-align:center;border-top:1px solid black;border-left:1px solid black;border-bottom:1px solid black;font-size:14.3px;"><b>RENT TABLE</b></td>
+            <td rowspan="2" colspan="8" style="border-right:1px solid black;font-size:11.6px;border-top:1px solid black;border-bottom:1px solid black;">&#160;&#160;&#160;&#160;AAAP Offers: Rates displayed are per ABOA SF. Final &#160;&#160;&#160;&#160;annual rent amounts depend on the lease duration and <br/>&#160;&#160;&#160;&#160;amount of ABOA SF the Government selects from your &#160;&#160;&#160;&#160;offered range.</td>
+            <td colspan="4" style="text-align:center; font-size:11.6px;border-top:1px solid black;border-right:1px solid black;"><b>X.</b></td>
+            <td colspan="4" style="text-align:center; font-size:11.6px;border-top:1px solid black;border-right:1px solid black;"><b>Y.</b></td>
+            <td colspan="4" style="border-right:1px solid black;text-align:center; font-size:11.6px;border-top:1px solid black;"><b>Z.</b></td>
+        </tr>
+        <tr style="text-align:center;">
+            <td colspan="4" style="font-size:11.6px;border-right:1px solid black;border-bottom:1px solid black;"><b>{!IF(offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions','10 Years, 5 Firm','17 Years, 15 Firm')}</b></td>
+            <td colspan="4" style="font-size:11.6px;border-right:1px solid black;border-bottom:1px solid black;" width="8.33%"><b>{!IF(offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions','','15 Years, 13 Firm')}</b></td>
+            <td colspan="4" style="border-right:1px solid black;font-size:11.6px;border-bottom:1px solid black;"><b>{!IF(offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions','','10 Years, 8 Firm')}</b></td>
+        </tr>
+        <tr>
+            <td colspan="12" style="border-right:1px solid black;font-size:11.6px;border-left:1px solid black;"><b>16.&#160;&#160;<u>SHELL RATE</u></b></td>
+            <td colspan="4" style="border-right:1px solid black;color:red; font-size:11.6px;"></td>
+            <td colspan="4" style="border-right:1px solid black;background-color:{!IF(offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions','#696969;','#FFFFFF;')} font-size:11.6px;"></td>
+            <td colspan="4" style="border-right:1px solid black;background-color:{!IF(offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions','#696969;','#FFFFFF;')} font-size:11.6px;"></td>
+        </tr>
+        <tr>
+            <td colspan="12" style="border-right:1px solid black;font-size:11.6px;border-left:1px solid black;">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;a.&#160;&#160;{!IF(offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions','Years 1 through 5  ','Years 1 through 8')}<br/></td>
+            <apex:repeat value="{!spaceRecord.Rates__r}" var="rate">
+                <td colspan="4" style="border-right:1px solid black;color:red; text-align:center; font-size:13.5px;">a.&#160;${!rate.PBS_AAAP_BASE_RATE__c}</td>
+            </apex:repeat>
+            <apex:outputText rendered="{!offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions'}">
+                <td colspan="4" style="border-right:1px solid black;  color:red;background-color:#696969; text-align:center; font-size:13.5px;" />
+            </apex:outputText>
+            <apex:outputText rendered="{!offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions'}">
+                <td colspan="4" style="border-right:1px solid black;  color:red;background-color:#696969; text-align:center; font-size:13.5px;" />
+            </apex:outputText>
+        </tr>
+        <tr>
+            <td colspan="12" style="border-right:1px solid black;font-size:11.6px;border-left:1px solid black;border-bottom:1px solid black;">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;b.&#160;&#160;{!IF(offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions','Years 6 through 10','Years 9 through End of Lease')}</td>
+            <apex:repeat value="{!spaceRecord.Rates__r}" var="rate">
+                <td colspan="4" style="border-right:1px solid black;color:red; text-align:center; font-size:13.5px;border-bottom:1px solid black;">b.&#160;${!rate.PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c}</td>
+            </apex:repeat>
+            <apex:outputText rendered="{!offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions'}">
+                <td colspan="4" style="border-right:1px solid black;  color:red;background-color:#696969; text-align:center; font-size:13.5px;" />
+            </apex:outputText>
+            <apex:outputText rendered="{!offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions'}">
+                <td colspan="4" style="border-right:1px solid black;  color:red;background-color:#696969; text-align:center; font-size:13.5px;" />
+            </apex:outputText>
+        </tr>
+        <tr>
+            <td colspan="12" style="border-bottom:1px solid black;border-right:1px solid black;font-size:11.6px;border-left:1px solid black;"><b>17.&#160;&#160;<u>OPERATING COST RATE</u></b><br/><br/><br/></td>
+            <apex:repeat value="{!spaceRecord.Rates__r}" var="rate">
+                <td colspan="4" style="border-bottom:1px solid black;border-right:1px solid black;color:red; text-align:center; font-size:13.5px;">
+                    <apex:outputText value="{0, number, currency}">
+                        <apex:param value="{!rate.PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c}"/>
+                    </apex:outputText>
+                </td>
+            </apex:repeat>
+            <apex:outputText rendered="{!offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions'}">
+                <td colspan="4" style="border-right:1px solid black;  color:red;background-color:#696969; text-align:center; font-size:13.5px;" />
+            </apex:outputText>
+            <apex:outputText rendered="{!offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions'}">
+                <td colspan="4" style="border-right:1px solid black;  color:red;background-color:#696969; text-align:center; font-size:13.5px;" />
+            </apex:outputText>
+        </tr>
+        <tr>
+            <td colspan="12" style="border-right:1px solid black;font-size:11.6px;border-left:1px solid black;"><b>18.&#160;&#160;<u>AMORTIZATION RATES</u></b></td>
+            <apex:repeat value="{!spaceRecord.Rates__r}" var="rate">
+                <td rowspan="2" colspan="4" style="border-bottom:1px solid black;border-right:1px solid black;color:red; text-align:center; font-size:13.5px;">
+                    <apex:outputText value="{0, number, #,##0.00}">
+                        <apex:param value="{!rate.PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c}"/>
+                    </apex:outputText>%
+                </td>
+            </apex:repeat>
+            <apex:outputText rendered="{!offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions'}">
+                <td rowspan="2" colspan="4" style="border-right:1px solid black;  color:red;background-color:#696969; text-align:center; font-size:13.5px;" />
+            </apex:outputText>
+            <apex:outputText rendered="{!offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions'}">
+                <td rowspan="2" colspan="4" style="border-right:1px solid black;  color:red;background-color:#696969; text-align:center; font-size:13.5px;" />
+            </apex:outputText>
+        </tr>
+        <tr>
+            <td colspan="12" style="border-bottom:1px solid black;border-right:1px solid black;border-right:1px solid black;font-size:11.6px;border-left:1px solid black;">The amortization duration period for the Tenant Improvement Allowance and the Building Specific Amortized Capital (BSAC) for all lease terms is {!IF(offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions', '5 Years',' 8 Years')}.<br/><br/></td>
+        </tr>
+        <tr>
+            <td colspan="12" style="border-right:1px solid black;font-size:11.6px;border-left:1px solid black;"><b>19.&#160;&#160;<u>ADDITIONAL TERM-SPECIFIC FINANCIAL TERMS</u></b></td>
+            <td colspan="4" style="border-right:1px solid black;color:red; font-size:13.5px;"></td>
+            <td colspan="4" style="border-right:1px solid black;color:red;background-color:{!IF(offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions','#696969;','#FFFFFF;')} font-size:13.5px;"></td>
+            <td colspan="4" style="border-right:1px solid black;color:red;background-color:{!IF(offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions','#696969;','#FFFFFF;')}; font-size:13.5px;"></td>
+        </tr>
+        <tr>
+            <td colspan="12" style="border-right:1px solid black;font-size:11.6px;border-left:1px solid black;">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;a. &#160;HVAC Overtime Rate<br/><br/></td>
+            <apex:repeat value="{!spaceRecord.Rates__r}" var="rate">
+                <td colspan="4" style="border-right:1px solid black;color:red; text-align:left; font-size:13.5px;">a.&#160;${!rate.PBS_AAAP_OT_RATE_COOLING_HEAT__c}&#160;/&#160;Hour</td>
+            </apex:repeat>
+            <apex:outputText rendered="{!offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions'}">
+                <td colspan="4" style="border-right:1px solid black;  color:red;background-color:#696969; text-align:center; font-size:13.5px;" />
+            </apex:outputText>
+            <apex:outputText rendered="{!offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions'}">
+                <td colspan="4" style="border-right:1px solid black;  color:red;background-color:#696969; text-align:center; font-size:13.5px;" />
+            </apex:outputText>
+        </tr>
+        <tr>
+            <td colspan="12" style="border-bottom:1px solid black;border-right:1px solid black;font-size:11.6px;border-left:1px solid black;">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;b. &#160;Free Rent in Months</td>
+            <apex:repeat value="{!spaceRecord.Rates__r}" var="rate">
+                <td colspan="4" style="border-bottom:1px solid black;border-right:1px solid black;color:red; text-align:left; font-size:13.5px;">b.
+                    <apex:outputText value="{0, number, #,##0.##}">
+                        <apex:param value="{!rate.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c}"/>
+                    </apex:outputText>
+                    &#160;{!IF(rate.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c == 1, 'Month', 'Months')}
+                </td>
+            </apex:repeat>
+            <apex:outputText rendered="{!offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions'}">
+                <td colspan="4" style="border-right:1px solid black;  color:red;background-color:#696969; text-align:center; font-size:13.5px;" />
+            </apex:outputText>
+            <apex:outputText rendered="{!offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions'}">
+                <td colspan="4" style="border-right:1px solid black;  color:red;background-color:#696969; text-align:center; font-size:13.5px;" />
+            </apex:outputText>
+        </tr>
+        <tr>
+            <td colspan="12" style="font-size:11.6px;border-right:1px solid black;border-left:1px solid black;"><b>20.&#160;&#160;<u>PARKING</u></b></td>
+            <td rowspan="2" colspan="12" style="text-align:left;font-size:11.6px;border-right:1px solid black;border-bottom:1px solid black;">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Total rental rates for parking will be determined by the 
+                                                                                                                                              &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;number and type of parking spaces selected and agreed 
+                                                                                                                                              &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;upon prior to a Lease award decision.
+            </td>
+        </tr>
+        <tr style="font-size:11.6px;">
+            <td colspan="12" style="border-right:1px solid black;border-left:1px solid black;border-bottom:1px solid black;">
+            <table width="100%">
+                <tr>
+                    <td colspan="4" style="text-align:right;">a. Gen Surface:</td>
+                    <td style="font-size:13.5px;">$ <span style="color:red;">{!offer.PBS_AAAP_Monthly_cost_nonres_sur_park__c}</span></td>
+                    <td colspan="4">space / month</td>
+                    <td colspan="4">b. #Spaces Offered: </td>
+                    <td><span style="color:red; font-size:13.5px;">N/A</span></td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="text-align:right;">c. Gen Structured:</td>
+                    <td style="font-size:13.5px;">$ <span style="color:red; font-size:13.5px;">{!offer.PBS_AAAP_Monthly_cost_nonres_gar_park__c}</span></td>
+                    <td colspan="4">space / month</td>
+                    <td colspan="4">d. #Spaces Offered: </td>
+                    <td><span style="color:red; font-size:13.5px;">N/A</span></td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="text-align:right;">e. Res Surface:</td>
+                    <td style="font-size:13.5px;">$ <span style="color:red; font-size:13.5px;">{!offer.PBS_AAAP_Monthly_cost_res_sur_park__c}</span></td>
+                    <td colspan="4">space / month</td>
+                    <td colspan="4">f. #Spaces Offered: </td>
+                    <td><span style="color:red; font-size:13.5px;">N/A</span></td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="text-align:right;">g. Res Structured:</td>
+                    <td style="font-size:13.5px;">$ <span style="color:red; font-size:13.5px;">{!offer.PBS_AAAP_Monthly_cost_res_gar_park__c}</span></td>
+                    <td colspan="4">space / month</td>
+                    <td colspan="4">h. #Spaces Offered: </td>
+                    <td><span style="color:red; font-size:13.5px;">N/A</span></td>
+                </tr>
+            </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="12" style="font-size:11.6px;border-left:1px solid black;border-right:1px solid black;"><b>21.&#160;&#160;<u>RENT FOR NON-STANDARD CIRCUMSTANCES </u></b></td>
+            <td rowspan="2" colspan="4" style="background-color:#696969; font-size:11.6px;border-right:1px solid black;border-bottom:1px solid black;"></td>
+            <td rowspan="2" colspan="4" style="background-color:#696969; font-size:11.6px;border-right:1px solid black;border-bottom:1px solid black;"></td>
+            <td rowspan="2" colspan="4" style="background-color:#696969; font-size:11.6px;border-right:1px solid black;border-bottom:1px solid black;"></td>
+        </tr>
+        <tr>
+            <td colspan="8" style="font-size:11.6px;border-left:1px solid black;border-bottom:1px solid black;">The RLP requires a non-standard rental component applicable only under specific conditions outlined in the Lease.  It is called: </td>
+            <td colspan="1" style="color:red; font-size:13.5px;border-bottom:1px solid black;">&#160;&#160;&#160;N/A</td>
+            <td colspan="3" style="font-size:13.5px;border-bottom:1px solid black;border-right:1px solid black;"></td>
+        </tr>
+        <tr>
+            <td colspan="24" style="font-size:11.6px;border-right:1px solid black;border-bottom:1px solid black;border-left:1px solid black;"><b>22. TOTAL RENT</b> is determined by adding all relevant rent components after a Lease Term is selected and number/type of parking is determined.</td>
+        </tr>
+        <tr style="font-size:11.6px;">
+            <td colspan="8" style="font-size:11px;border-left:1px solid black;border-right:1px solid black;"><b>23. Tenant Improvement Fee Schedule</b></td>
+            <td colspan="8" style="font-size:11.6px;border-right:1px solid black;"><b>a.</b> Architectural / Engineering fees will be: (choose one)</td>
+            <td colspan="8" style="font-size:11.6px;border-right:1px solid black;"><b>b.</b> Lessor's Project Management Fee will be:</td>
+        </tr>
+        <tr style="font-size:11.6px;page-break-after:always;">
+            <td colspan="8" rowspan="1" style="border-bottom:1px solid black;border-left:1px solid black;border-right:1px solid black;" >Tenant Improvement Fees are only applicable for TI subject to post-award pricing; they are not applicable for turn-key pricing.</td>
+            <td colspan="8" style="border-bottom:1px solid black;border-right:1px solid black;">
+                <table width="100%">
+                    <tr>
+                        <td style="font-size:11px;"><img src="{!IF(spaceRecord.PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c == '%', $Resource.AAAPcheckbox_checked, $Resource.AAAPcheckbox_unchecked)}" /> Percent of Total TI construction Costs</td>
+                        <td>
+                            <span style="font-size:13px; text-align:left; color:red;">{!IF(spaceRecord.PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c == '%', spaceRecord.PBS_AAAP_ARCH_ENG_FEES__c, '')}%</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size:11px;"><img src="{!IF(spaceRecord.PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c == '$ Per ABOA SF', $Resource.AAAPcheckbox_checked, $Resource.AAAPcheckbox_unchecked)}" /> Dollar amount per ABOA SF</td>
+                        <td>
+                            <span style="font-size:13px; text-align:left; color:red;">${!IF(spaceRecord.PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c == '$ Per ABOA SF', spaceRecord.PBS_AAAP_ARCH_ENG_FEES__c, '')}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size:11px;"><img src="{!IF(spaceRecord.PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c == 'Flat fee', $Resource.AAAPcheckbox_checked, $Resource.AAAPcheckbox_unchecked)}" /> Flat fee</td>
+                        <td>
+                            <span style="font-size:13px; text-align:left; color:red;">$</span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td colspan="8" style="border-bottom:1px solid black;border-right:1px solid black;">
+                <span  style="font-size:10.5px;">Percent of Total TI construction Costs</span>
+                <span>
+                    <span style="font-size:13px; text-align:left; color:red;">{!spaceRecord.PBS_AAAP_GC_OVERHEAD_AND_PROF__c}%</span>
+                    <!-- <span style="font-size:13.5px; background-color:white;">&#160;%</span> -->
+                </span><br /><br />
+                <br /><br />
+            </td>
+        </tr> 
+      </apex:repeat>
+      
+      <!-- END OF SECTIONS I and II  -->
+      
+      <!-- SECTION III  -->
+      
+        <tr>
+            <td class="top_border" colspan="24" style="font-size:14.5px;border-left:1px solid black;border-bottom:1px solid black;border-right:1px solid black;"><b>III. ADDITIONAL FINANCIAL ASPECTS OF THE OFFER</b></td>
+        </tr>
+        <tr>
+            <apex:outputText rendered="{!freeRentOffered == 'Yes'}">
+                <td colspan="8" rowspan="2" style="font-size:11.6px;border-left:1px solid black;border-bottom:1px solid black;border-right:1px solid black;"><b>24. Are you offering free rent?</b><br/>a.<span style="color:red;"> <b>YES</b> - Refer to the Rent Tables for details.</span></td>
+            </apex:outputText>
+            <apex:outputText rendered="{!freeRentOffered == 'No'}">
+                <td colspan="8" rowspan="2" style="font-size:11.6px;border-left:1px solid black;border-bottom:1px solid black;border-right:1px solid black;"><b>24. Are you offering free rent?</b><br/>a.<span style="color:red;"> <b>NO</b></span></td>
+            </apex:outputText>
+            <td colspan="4" rowspan="2" style="font-size:11.6px;border-bottom:1px solid black;">b. What rent components are included in free rent offered?</td>
+            <td colspan="4" style="font-size:11.6px;">
+                <img src="{!IF(True, $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" /> 
+             Shell</td>
+            <td colspan="4" style="font-size:11.6px;"><img src="{!IF(True, $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />TI</td>
+            <td colspan="4" style="font-size:11.6px;border-right:1px solid black;"><img src="{!IF(True, $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />Parking</td>
+        </tr>
+        <tr>
+            <td colspan="4" style="font-size:11.6px; border-bottom:1px solid black;"><img src="{!IF(True, $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />Operating</td>
+            <td colspan="4" style="font-size:11.6px; border-bottom:1px solid black;"><img src="{!IF(True, $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />BSAC</td>
+            <td colspan="4" style="font-size:11.6px; border-right:1px solid black;border-bottom:1px solid black;"><img src="{!IF(False, $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />Non-Standard</td>
+        </tr>
+        <tr>
+            <td colspan="10" style="font-size:11.6px; border-left:1px solid black;border-bottom:1px solid black;border-right:1px solid black;"><b>25. Are you offering free space?</b><br/><span style="font-size:11.2px; color:blue;">No - Free space may not be offered for a AAAP Lease offer at this time.</span></td>
+            <td colspan="14" style="font-size:11.6px; border-bottom:1px solid black;border-right:1px solid black;" ><b>26. Are you offering renewal options?</b><br/><span style="font-size:11.2px; color:blue;">No - Renewal Options are not available for a AAAP Lease offer at this time.</span></td>
+        </tr>
+        <tr>
+            <td rowspan="2" colspan="12" style="font-size:11.6px; border-left:1px solid black; border-bottom:1px solid black;"><b>27. COMMISSIONS</b><br/><span style="color:blue;">Commission information is not required for AAAP Lease offers.</span></td>
+            <td colspan="8" style="font-size:11.6px;">a. Tenant's Representative Commission</td>
+            <td colspan="4" style="font-size:13.5px; border-right:1px solid black;"><span style="color:blue;">N/A</span>&#160;&#160;&#160;&#160;%</td>
+        </tr>
+        <tr>
+            <td colspan="8" style="font-size:11.6px; border-bottom:1px solid black;">b. Owner's Representative Commission</td>
+            <td colspan="4" style="font-size:13.5px; border-bottom:1px solid black; border-right:1px solid black;"><span style="color:blue;">N/A</span>&#160;&#160;&#160;&#160;%</td>
+        </tr>
+         <tr>
+             <td colspan="24" style="margin:0px;padding:0px;">
+                <table width="100%" border="0" cellspacing="0" style="margin:0px;padding:0px;">
+                    <tr>
+                        <td width="30%" colspan="11" style="font-size:11.6px; border-left:1px solid black;border-right:1px solid black;"><b>28. Adjustment for Vacant Premises</b></td>
+                        <td width="30%" colspan="11" style="font-size:11.6px; border-right:1px solid black;"><b>29. Adjustment for Reduced Services</b></td>
+                        <td width="40%" colspan="2" style="font-size:11.6px; border-right:1px solid black;"><b>30. Tax Parcel Percent of Government Occupancy</b></td>
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="font-size:11.6px; border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;">
+                            <table width="100%">
+                                <tr>
+                                    <td style="font-size:13.5px;">$</td>
+                                    <td style="font-size:13.5px; color:red; text-align:center;">{!offer.PBS_AAAP_Vacant_Premise_Rate__c}</td>
+                                    <td>per ABOA SF</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td colspan="11" style="font-size:11.6px; border-right:1px solid black;border-bottom:1px solid black;">
+                            <table width="100%">
+                                <tr>
+                                    <td style="font-size:13.5px;">$</td>
+                                    <td style="font-size:13.5px; color:blue; text-align:center;">N/A</td>
+                                    <td>per ABOA SF</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td colspan="2" style="font-size:11.6px; border-right:1px solid black;border-bottom:1px solid black; color:blue">Additional Tax Parcel information may be requested by a GSA representative at a later date.</td>
+                    </tr>
+                </table>
+            </td>   
+        </tr>        
+        <tr>
+            <td colspan="24" style="font-size:11.6px;border-right:1px solid black;border-left:1px solid black;"><b>31. HVAC Overtime Rate</b><br/>
+                <span style="color:blue;">Offered HVAC Overtime rates vary by Lease Term and Offered Space breakouts.  Rates are listed in the Rental Rates tables.  Additional details about how actual HVAC Overtime rates will be charged may be requested of the Offeror by a GSA representative at a later date.</span>
+            </td>
+        </tr>
+        
+        <!-- SECTION IV  -->
+        
+        <tr>
+            <td class="top_border" colspan="24" style="font-size:14.5px;border-bottom:1px solid black;border-right:1px solid black;border-left:1px solid black;"><b>IV. BUILDING AND PROPERTY INFORMATION</b></td>
+        </tr>
+        <tr>
+            <td colspan="16" style="font-size:11.6px;border-left:1px solid black;"><b>32. </b>In what year was the original building construction completed and ready for initial occupancy?</td>
+            <td colspan="2">
+                <div style="border-bottom:1px solid black;color:red;height:15px;padding-top:5px;text-align:center;font-size:13.5px;">
+                    {!offer.PBS_AAAP_Year_Built__c}
+                </div>
+            </td>
+            <td colspan="6" style="border-right:1px solid black;"></td>
+        </tr>
+        <tr>
+            <td colspan="24" style="font-size:11.6px;border-right:1px solid black;border-left:1px solid black;"><b>33. </b>Provide the year and a brief description of the last major buidling renovation, if applicable:
+                &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<div style="vertical-align: top; padding-left:18px;font-size:13.5px; color:red;height:25px;min-height:50px;padding-top:5px;word-break: break-all;">
+                    {!offer.PBS_AAAP_Renovation_Year__c}
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="24" style="font-size:11.6px;border-right:1px solid black;border-left:1px solid black;"><b>34. </b>Select the approximate level of construction necessary to meet the building shell requirements:
+                <br/>&#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(False, $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />a. Improvements to the existing Building will be required to meet the Lease shell requirements.<br/>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;The total approximate construction cost to achieve Lease shell standards is:&#160;&#160;&#160;&#160;&#160;&#160; $ <span  style="font-size:13.5px; border-bottom:1px solid black;color:red;height:20px;padding:1px;width:50px;">TBD</span>
+                <br/>&#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(True, $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />b. The Building already meets all the Lease shell requirements; no improvements are necessary.
+                <br/>&#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(False, $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />c. The requirements of the Lease will be satisifed through the construction of a new building.<br/>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Land Site Size: <span style="font-size:13.5px;border-bottom:1px solid black;color:red;height:25px;">&#160;&#160;&#160;&#160;&#160;N/A&#160;&#160;&#160;&#160;&#160;</span><span style="font-size:13.5px;color:red;height:20px;">&#160;&#160;SF / Acres</span>&#160;&#160;&#160;(select one)&#160;&#160;&#160;&#160;Total Land Costs: $ <span  style="font-size:13.5px;border-bottom:1px solid black;color:red;height:20px;">&#160;&#160;&#160;&#160;&#160;N/A&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span><br/><br/></td>
+        </tr>
+        <tr>
+            <td colspan="24" style="font-size:11.6px;border-right:1px solid black;border-left:1px solid black;"><b>35.</b> What are the Building's normal hours of operations for HVAC included in the Operating Costs?
+                <table style="width:100%;padding-left:20px;">
+                    <tr>
+                        <td style="width:4%;"></td>
+                        <td style="width:16%; text-align:center;">Monday - Friday</td>
+                        <td style="width:4%;"></td>
+                        <td style="width:16%; text-align:center;">&#160;&#160;&#160;&#160;&#160;&#160;Saturday&#160;&#160;&#160;&#160;&#160;&#160;</td>
+                        <td style="width:4%;"></td>
+                        <td style="width:16%; text-align:center;">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Sunday&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;">Start</td>
+                        <td style="text-align:center;">
+                            <div style="font-size:13.5px;color:red;height:20px;">{!IF(offer.PBS_AAAP_HVAC_HRS_MON_TO_FRI_START__c == null, 'N/A', offer.PBS_AAAP_HVAC_HRS_MON_TO_FRI_START__c)}</div>
+                        </td>
+                        <td style="text-align:right;">Start</td>
+                        <td style="text-align:center;">
+                            <div style="font-size:13.5px;color:red;height:20px;">{!IF(offer.PBS_AAAP_HVAC_HRS_ON_SAT_START__c == null, 'N/A', offer.PBS_AAAP_HVAC_HRS_ON_SAT_START__c)}</div>
+                        </td>
+                        <td style="text-align:right;">Start</td>
+                        <td style="text-align:center;">
+                            <div style="font-size:13.5px;color:red;height:20px;">{!IF(offer.PBS_AAAP_HVAC_HRS_ON_SUN_START__c == null, 'N/A', offer.PBS_AAAP_HVAC_HRS_ON_SUN_START__c)}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;">End</td>
+                        <td style="text-align:center;">
+                            <div style="font-size:13.5px;color:red;height:20px;">{!IF(offer.PBS_AAAP_HVAC_HRS_MON_TO_FRI_END__c == null, 'N/A', offer.PBS_AAAP_HVAC_HRS_MON_TO_FRI_END__c)}</div>
+                        </td>
+                        <td style="text-align:right;">End</td>
+                        <td style="text-align:center;">
+                            <div style="font-size:13.5px;color:red;height:20px;">{!IF(offer.PBS_AAAP_HVAC_HRS_ON_SAT_END__c == null, 'N/A', offer.PBS_AAAP_HVAC_HRS_ON_SAT_END__c)}</div>
+                        </td>
+                        <td style="text-align:right;">End</td>
+                        <td style="text-align:center;">
+                            <div style="font-size:13.5px;color:red;height:20px;">{!IF(offer.PBS_AAAP_HVAC_HRS_ON_SUN_END__c == null ,'N/A', offer.PBS_AAAP_HVAC_HRS_ON_SUN_END__c)}</div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="24" style="font-size:11.6px;border-right:1px solid black;border-left:1px solid black;"><b>36. </b>With regard to <b>Fire Protection and Life Safety:</b><br/>
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(fireLifeMeets == 'Meets', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />a. The Property meets the Lease fire protection/life safety standards.<br />
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(fireLifeMeets == 'Will meet', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />b. The Property will be improved to meet the Lease fire protection/life safety standards.<br />
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(fireLifeMeets == 'Does not meet', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />c. The Property does not meet the Lease fire protection/life safety standard and will not be upgraded.<br /><br /></td>
+        </tr>
+        <tr>
+            <td colspan="24" style="font-size:11.6px;border-right:1px solid black;border-left:1px solid black;"><b>37. </b>With regard to <b>Accessibility</b> (Architectural Barriers Act Accessibility Standard / ABAAS):<br/>
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(accessibility == 'Meets', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />a. The Property meets the Lease accessibility standards.<br />
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(accessibility == 'Will meet', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />b. The Property will be improved to meet the Lease accessibility standards.<br />
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(accessibility == 'Does not meet', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />c. The Property does not meet the Lease accessibility standards and will not be upgraded.<br /><br /></td>
+        </tr>
+        <tr>
+            <td colspan="24" style="font-size:11.6px;border-right:1px solid black;border-left:1px solid black;"><b>38. </b>With regard to <b>Asbestos-Containing Material (ACM):</b> (Select all that apply.)<br/>
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(CONTAINS(asbestos, 'None'), $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />a. The Building contains no ACM.<br />
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(CONTAINS(asbestos, 'Undamaged_nonfriable'), $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />b. The Building contains undamaged, nonfriable ACM.<br />
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(CONTAINS(asbestos, 'thermal'), $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />c. The Building contains thermal system insulation ACM which is not damaged or subject to damage by routine operations.<br />
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(CONTAINS(asbestos, 'ACM_other'), $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />d. The Building contains ACM that does not fall within any of the above categories.<br />
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(CONTAINS(asbestos, 'ACM_abatement'), $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />e. The building contains ACM; abatement will be completed prior to occupancy.<br /><br /></td>
+        </tr>
+        <tr style="page-break-after:always;">
+            <td colspan="24" style="font-size:11.6px;border-right:1px solid black;border-left:1px solid black;border-bottom:1px solid black;"><b>39. </b>With regard to <b>Flood Plains:</b><br/>
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(floodPlains == '100', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />a. The Property is in a base (100-year) floodplain.<br />
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(floodPlains == '500', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />b. The Property is in a (500-year) floodplain.<br />
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(floodPlains == 'None', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />c. The Property is not in a floodplain.<br /><br /></td>
+        </tr>
+        <tr>
+            <td colspan="24" style="font-size:11.6px;border-top:1px solid black;border-right:1px solid black;border-left:1px solid black;"><br/><b>40. </b>With regard to <b>Seismic Safety</b> of the Building:<br/>
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(offer.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c == 'No', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />a. The RLP does not contain seismic requirements.<br />
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(seismicStatement == 'Meets', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />b. The Building either fully meets RLP seismic requirements or meets an exemption.<br />
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(seismicStatement == 'Will meet', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />c. The Building will be retrofitted to meet RLP seismic requirements it does not currently meet.<br />
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src= "{!$Resource.AAAPcheckbox_unchecked}" />d. The Building will be constructed to meet RLP seismic requirements.<br />
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(seismicStatement == 'Will not meet', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />e. The Building will not meet RLP seismic requirements.<br /><br /></td>
+        </tr>
+        <tr>
+            <td colspan="24" style="font-size:11.6px;border-right:1px solid black;border-left:1px solid black;"><b>41. </b>With regard to <b>Energy Star ®:</b><br/>
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(offer.PBS_AAAP_Energy_Star__c == 'Yes', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />a. The Property has received the ENERGY STAR® Label within the past twelve months.<br />
+                &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Date (MM/DD/YYYY):&#160;&#160;&#160;&#160;<span style=" font-size:13.5px; border-bottom:1px solid black;color:red;height:25px;">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;{!energyStarCertDate}&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>
+                &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<br/>&#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(offer.PBS_AAAP_Energy_Star__c = 'No', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />b.  If you are expecting to earn an ENERGY STAR® Label for your building, or are planning any other energy efficient improvements in the &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;near future, please briefly outline those plans below.<br />
+                <div style="vertical-align: top; font-size:13.5px; color:red; min-height:120px; padding-top:5px; padding-left:37px; word-break:break-all;">{!offer.PBS_AAAP_Energy_Star_Reason__c}</div>  
+            </td>
+        </tr>
+        <tr>
+            <td colspan="24" style="font-size:11.6px;border-right:1px solid black;border-left:1px solid black;"><b>42. </b>With regard to <b>Historic Preference:</b><br/>
+                &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;a. Is the Building a historic property? &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<span  style="font-size:13.5px; color:red;height:20px;">&#160;{!offer.PBS_AAAP_HIST_PROP_IN_HIST_DIST__c}</span><br />
+                &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;b. Is the Building within a historic district? &#160;<span  style="font-size:13.5px; color:red;height:20px;">&#160;{!offer.PBS_AAAP_NON_HIST_PROP_IN_HIST_DIST__c}</span><br /><br />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="24" style="font-size:11.6px;border-right:1px solid black;border-left:1px solid black;"><b>43. </b>With regard to <b>HUBZone Price Evaluation Preference:</b><br/>
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(offer.PBS_AAAP_HubZone_SBC_Preference__c == 'Yes', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />a. I am a HUBZone SBC Offeror and I elect to waive the price evaluation preference.<br />
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(offer.PBS_AAAP_HubZone_SBC_Preference__c == 'No', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />b. I am a HUBZone SBC Offeror and do not waive the price evaluation preference.<br />
+                &#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(offer.PBS_AAAP_HubZone_SBC__c == 'No', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />c. I am not a HUBZone SBC Offeror. This question does not apply to me.<br /><br />
+            </td>
+        </tr>
+        
+        <!-- SECTION V  -->
+        
+        <tr>
+            <td class="top_border" colspan="24" style="font-size:14.5px;border-right:1px solid black;border-left:1px solid black;border-bottom:1px solid black;"><b>V. OWNER IDENTIFICATION AND OFFEROR CERTIFICATION</b></td>
+        </tr>
+        <tr>
+            <td colspan="24" style="border-right:1px solid black;border-left:1px solid black;">
+            <table style="width:100%" cellspacing="0">
+                <tr>
+                    <td style="width:20%; font-size:11.6px;border-right:1px solid black;"><b>44. Recorded Owner Name</b></td>
+                    <td style="width:25%; font-size:11.6px;border-right:1px solid black;"><b>45. Owner Street Address</b></td>
+                    <td style="width:28%; font-size:11.6px;border-right:1px solid black;"><b>46. City, State &#38; 9-Digit ZIP Code</b></td>
+                    <td style="width:27%; font-size:11.6px;"><b>47. Unique Entity Identifier (UEI)</b></td>
+                </tr>
+                <tr>
+                    <td style="color:red; vertical-align: top; font-size:13.5px;boder:0px;border-right:1px solid black;border-bottom:1px solid black;">
+                        {!offer.PBS_AAAP_Owner_Name__c}
+                    </td>
+                    <td style="color:red; vertical-align: top; font-size:13.5px;border-right:1px solid black;border-bottom:1px solid black;">
+                        {!offer.PBS_AAAP_Owner_Address__c}
+                    </td>
+                    <td style="color:red; vertical-align: top; font-size:13.5px;border-right:1px solid black;border-bottom:1px solid black;">
+                        {!offer.PBS_AAAP_Owner_City__c}, {!offer.PBS_AAAP_Owner_State__c}  {!offer.PBS_AAAP_Owner_Zip__c}<br/><br/>
+                    </td>
+                    <td style="color:red; text-align:center; font-size:13.5px;border-bottom:1px solid black;">
+                        {!offer.PBS_AAAP_DUNS_Number__c}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size:11.6px;border-right:1px solid black;"><b>48. Offeror Name  </b></td>
+                    <td style="font-size:11.6px;border-right:1px solid black;"><b>49. Offeror Street Address</b></td>
+                    <td style="font-size:11.6px;border-right:1px solid black;"><b>50. City, State &#38; 9-Digit ZIP Code</b></td>
+                    <td style="font-size:11.6px;"><b>51. Contact Information</b></td>
+                </tr>
+                <tr>
+                    <td style="color:red; vertical-align: top; font-size:13.5px;border-right:1px solid black;border-bottom:1px solid black;">
+                        {!userDetail.Name}
+                    </td>
+                    <td style="color:red; vertical-align: top; font-size:13.5px;border-right:1px solid black;border-bottom:1px solid black;">
+                        {!userDetail.Street}
+                    </td>
+                    <td style="color:red; vertical-align: top; font-size:13.5px;border-right:1px solid black;border-bottom:1px solid black;">
+                        {!userDetail.City}, {!userDetail.State}  {!userDetail.PostalCode}
+                    </td>
+                    <td style="text-align:center; font-size:13.5px;border-bottom:1px solid black;">
+                        <table style="width:100%;">
+                            <tr>
+                                <td>a.Email <br /><br /></td>
+                                <td colspan="8" style="vertical-align: top; word-break: break-all; font-size:13.5px; color:red;">{!email}<br /><br /></td>
+                            </tr>
+                            <tr>
+                                <td>b.Phone </td>
+                                <td colspan="8" style="color:red;">{!userDetail.Phone}</td>
+                            </tr>                            
+                        </table>                        
+                    </td>
+                </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" rowspan="2" style="font-size:11.6px;border-left:1px solid black;border-bottom:1px solid black;"><b>52. Offeror's Interest in the Property</b></td>
+            <td colspan="10" style="font-size:11.6px;"><img src="{!IF(offer.PBS_AAAP_OFFEROR_INTEREST__c == 'Owner', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />Owner (Offeror and Recorded Owner are the same person)</td>
+            <td colspan="4" style="font-size:11.6px;"><img src="{!IF(offer.PBS_AAAP_OFFEROR_INTEREST__c == 'Agent', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />Agent / Broker</td>
+            <td colspan="3" style="border-right:1px solid black;"></td>
+        </tr>
+        <tr>
+            <td colspan="3" style="font-size:11.6px;border-bottom:1px solid black;"><img src="{!IF(offer.PBS_AAAP_OFFEROR_INTEREST__c == 'Other', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />Other - Please Explain: </td>
+            <td colspan="17" style="color:red; font-size:13.5px;border-bottom:1px solid black;border-right:1px solid black;">{!offer.PBS_AAAP_OFFEROR_INTEREST_OTHER__c}</td>
+        </tr>
+        <tr>
+            <td colspan="24" style="font-size:12.5px;border-right:1px solid black;border-left:1px solid black;"><br/>By submitting this offer, the offeror agrees to lease the premises described within the offer to the United States of America upon the Lease Contracting Officer’s acceptance of the offer. The offeror acknowledges they have read and fully understand the Request for Lease Proposals and agrees (1) to honor the terms and conditions specified in their offer and (2) to full <i>compliance with</i> and <i>acceptance of</i> the Request for Lease Proposals and its attachments with<b> NO DEVIATIONS.</b><br/><br/><br/><br/><br/></td>
+        </tr>
+        <tr>
+            
+            <td colspan="5" style="font-size:13.5px;border-left:1px solid black;"><b>Offeror's Signature </b><br/></td>
+            <td colspan="5" style="font-size:13.5px;min-width:180px;width:180px">{!IF(offer.PBS_AAAP_Offer_Status__c == 'Draft' || offer.PBS_AAAP_Offer_Status__c == 'Pending Modification', '___________________________', userDetail.Name)}</td>
+            <td colspan="2"></td>
+            <td colspan="4" style="font-size:13.5px;"><b>Date Signed</b><br/></td>
+            <td colspan="8" style="font-size:13.5px;border-right:1px solid black;min-width:160px;width:160px"> {!IF(offer.PBS_AAAP_Offer_Status__c == 'Draft' || offer.PBS_AAAP_Offer_Status__c == 'Pending Modification' , '_____________________', sysDate)}</td>
+        </tr>
+        <tr  style="page-break-after:always">
+            <td colspan="24" style="border-left:1px solid black;border-bottom:1px solid black;border-right:1px solid black;"> &#160; </td>        
+        </tr>
+        
+        <!-- SECTION VI  -->
+        
+        <tr>
+            <td class="top_border" colspan="24" style="font-size:14.5px;border-right:1px solid black;border-left:1px solid black;border-bottom:1px solid black;"><b>VI. FORM 1364 ADDENDUM</b></td>
+        </tr>
+        <tr>
+            <td colspan="24" style="font-size:11.6px;border-right:1px solid black;border-left:1px solid black;border-bottom:1px solid black;">
+                <b>A. Step Rent</b><br />
+                One Shell Rent step for a AAAP Lease is available beginning Year {!IF(offer.PBS_AAAP_RLP_Region__c == '10/5 Term - All Regions','6','9')}.  Refer to the rent table for each offered Space breakout.<br />
+                <br />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="24" style="font-size:11.6px;border-right:1px solid black;border-left:1px solid black;border-bottom:1px solid black;">
+                <b>B. Renewal Options</b><br />
+                Renewal Options are not available for a AAAP Lease offer at this time.<br />
+                <br />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="24" style="font-size:11.6px;border-right:1px solid black;border-left:1px solid black;border-bottom:1px solid black;">
+                <b>C. Additional Tax Parcel Information</b><br />
+                Additional Tax Parcel information may be requested by a GSA representative at a later date.<br />
+                <br />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="24" style="font-size:11.6px;border-right:1px solid black;border-left:1px solid black;">
+                <b>D. Additional Remarks or Conditions with Respect to this Offer</b><br />
+                Deviations from the RLP requirements are generally not permitted for a AAAP Lease offer.<br />
+                <br />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="24" style="font-size:11.6px;border-right:1px solid black;border-left:1px solid black;border-bottom:1px solid black;">
+                <b>Is the building within 2,640 walkable feet of a commuter rail, light rail, or subway station?</b>
+                <br /><span style="font-size:13.5px; color:red;">{!offer.PBS_AAAP_Close_To_Metro__c}</span>
+                <br />
+                <br />
+                <b>Do you propose to satisfy the requirements of this RLP, Lease through the complete rehabiliation or reconstruction of an existing Building?</b>
+                <br /><span style="font-size:13.5px; color:red;">{!offer.PBS_AAAP_Reconstruction__c}</span>
+                <apex:outputText rendered="{!offer.PBS_AAAP_Reconstruction__c == 'Yes'}">
+                    <br />Checked box acknowledging schedule requirements and applicable Labor Standards in the RLP? <span style="font-size:13.5px; color:red;">&#160;{!IF(offer.PBS_AAAP_Reconstruction_Acknowledgement__c == true, 'Yes', 'No')}</span>
+                    <br />
+                </apex:outputText>
+                <br /><b>Additional Seismic Information:</b>  
+                <br />Building Type: <span style="font-size:13.5px; color:red;">&#160;{!offer.PBS_AAAP_BUILDING_TYPE__c}</span>&#160;&#160;&#160;&#160;Building Code:<span style="font-size:13.5px; color:red;">&#160;{!offer.PBS_AAAP_BUILDING_CODE__c}</span>&#160;&#160;&#160;&#160;Building Code Year:<span style="font-size:13.5px; color:red;">&#160;{!offer.PBS_AAAP_BUILDING_CODE_YEAR__c}</span><br /><br />
+                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+            </td>
+        </tr>
+    </table>
+</body>
+    </html>
+</apex:page>

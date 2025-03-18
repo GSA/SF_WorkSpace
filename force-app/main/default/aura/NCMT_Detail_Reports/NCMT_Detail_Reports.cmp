@@ -1,0 +1,1474 @@
+<aura:component>
+<aura:attribute name = 'treeObj' type = 'Object'/>
+
+<aura:attribute name = "reportType" type="string" />
+<aura:attribute name="markup" type="NCMT_Project_Markup__c" default="{ 'sobjectType': 'NCMT_Project_Markup__c' }"/> 
+<aura:attribute name="markuppctnts" type="object"/>
+<aura:attribute name ="catsUsed" type="Object" />    
+
+<aura:handler name='init' value='{!this}' action='{!c.doInit}'/>
+
+<!-- ### Start Detail A Section ###-->
+<aura:if isTrue="{!v.reportType=='detailA'}">
+    <article class="slds-card slds-container_xx-large">
+        <div class="slds-page-header">
+        <div class="slds-page-header__title slds-truncate">
+            <h1>
+            <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Line Item Summary">
+            <b class='reportTitle'>Detail Labor Material Equipment Report</b>
+            </span>
+            </h1>
+        </div>
+        </div>
+        
+        <div class="slds-container_xx-large">
+            <table class="slds-table slds-no-row-hover slds-table_bordered slds-table_col-bordered">
+                <aura:iteration items='{!v.treeObj}' var='tObj' indexvar='key'>
+                    <thead class="slds-light-blue">
+                        <tr class="slds-hint-parent">
+                            <aura:if isTrue="{!tObj.tree.Level__c==0}">
+                                <td class="slds-hint-parent slds-border_bottom" scope="col" colspan="9">
+                                    <div class="slds-truncate" style="text-transform:uppercase;margin-left:5px;" title="Item Category"><b>{!tObj.tree.Branch_Name__c}</b></div>
+                                </td>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c==1}">
+                                <td class="slds-hint-parent slds-border_bottom" scope="col" colspan="9">
+                                    <div class="slds-truncate slds-level-one" style="text-transform:uppercase;" title="Item Category"><b>{!tObj.tree.Branch_Name__c}</b></div>
+                                </td>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c==2}">
+                                <td class="slds-hint-parent slds-border_bottom" scope="col" colspan="9">
+                                    <div class="slds-truncate slds-level-two" style="text-transform:uppercase;" title="Item Category"><b>{!tObj.tree.Branch_Name__c}</b></div>
+                                </td>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c==3}">
+                                <td class="slds-hint-parent slds-border_bottom" scope="col" colspan="9">
+                                    <div class="slds-truncate slds-level-three" style="text-transform:uppercase;" title="Item Category"><b>{!tObj.tree.Branch_Name__c}</b></div>
+                                </td>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c==4}">
+                                <td class="slds-hint-parent slds-border_bottom" scope="col" colspan="9">
+                                    <div class="slds-truncate slds-level-four" style="text-transform:uppercase;" title="Item Category"><b>{!tObj.tree.Branch_Name__c}</b></div>
+                                </td>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c==5}">
+                                <td class="slds-hint-parent slds-border_bottom" scope="col" colspan="9">
+                                    <div class="slds-truncate slds-level-five" style="text-transform:uppercase;" title="Item Category"><b>{!tObj.tree.Branch_Name__c}</b></div>
+                                </td>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c==6}">
+                                <td class="slds-hint-parent slds-border_bottom" scope="col" colspan="9">
+                                    <div class="slds-truncate slds-level-six" style="text-transform:uppercase;" title="Item Category"><b>{!tObj.tree.Branch_Name__c}</b></div>
+                                </td>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c>=7}">
+                                <td class="slds-hint-parent slds-border_bottom" scope="col" colspan="9">
+                                    <div class="slds-truncate slds-level-seven" style="text-transform:uppercase;" title="Item Category"><b>{!tObj.tree.Branch_Name__c}</b></div>
+                                </td>
+                            </aura:if>
+                        <td class="pcnt-div slds-border_bottom">
+                            <div class="slds-truncate small-heading" title="Quantity">Qty.</div>
+                            <lightning:formattedNumber class="small-heading-light" value="{!tObj.tree.Quantity__c}" minimumFractionDigits="2"/>
+                        </td>
+                        <td class="pcnt-div slds-border_bottom">
+                            <div class="slds-truncate small-heading" title="Unit of Measure">UOM</div>
+                            <div class="small-heading-light" title="Item Unit">{!tObj.tree.UOM__c}</div> 
+                       </td>
+
+                        <td class="pcnt-div slds-border_bottom">
+                            <div class="slds-truncate small-heading" title="Unit Cost">Unit Cost</div>
+                            <aura:if isTrue="{!tObj.tree.Unit_Cost__c != null}">
+                                <lightning:formattedNumber class="small-heading-light" value="{!tObj.tree.Direct_Unit_Cost__c}" style="currency" currencyCode="USD"/>
+                                <aura:set attribute="else">
+                                    <div class="small-heading-light" value="N/A">N/A</div>
+                                </aura:set>
+                            </aura:if>
+                        </td>
+                        <td class="pcnt-div slds-border_bottom">
+                            <div class="slds-truncate small-heading" title="Total Cost">Direct Cost w/o Subcontractor Markup</div>
+                            <lightning:formattedNumber class="small-heading-light" value="{!tObj.tree.Total_Direct_Cost__c}" style="currency" currencyCode="USD"/>        
+                        </td>
+                        <td class="pcnt-div slds-border_bottom" colspan="">
+                            <div class="slds-truncate small-heading" title="Total Direct Cost">Total Direct Cost</div>
+                            <lightning:formattedNumber class="small-heading-light" value="{!tObj.tree.Total_Cost__c}" style="currency" currencyCode="USD"/>
+                        </td>
+                        <td class="pcnt-div slds-border_bottom">
+                            <div class="slds-truncate small-heading" title="ECCA">ECCA</div>
+                            <lightning:formattedNumber class="small-heading-light" value="{!tObj.tree.ECCA__c}" style="currency" currencyCode="USD"/>
+                        </td>
+                        <td class="pcnt-div slds-border_bottom">
+                            <div class="slds-truncate small-heading" title="ECC">ECC</div>
+                            <lightning:formattedNumber class="small-heading-light" value="{!tObj.tree.ECC__c}" style="currency" currencyCode="USD"/>
+                        </td>
+                        <td class="pcnt-div slds-border_bottom">
+                            <div class="slds-truncate small-heading" title="ETPC">ETPC</div>
+                            <lightning:formattedNumber class="small-heading-light" value="{!tObj.tree.ETPC__c}" style="currency" currencyCode="USD"/>
+                        </td>
+                        </tr>
+                    </thead>
+                    <aura:iteration items='{!tObj.catArr}' var='cat' indexvar='key2'>
+                    
+                    <thead class="slds-text-title_caps" style="font-size:smaller;">
+                    <aura:if isTrue="{!tObj.catArr != null}">
+                    <tr class="slds-hint-parent">
+                        <!-- start aura if indentations -->    
+                    <aura:if isTrue="{!tObj.tree.Level__c==0}">
+                        <th scope="col" colspan="2" class="slds-border_top">
+                            <div class="slds-truncate slds-level-zero" style="margin-left:5px;" title="Item Description">Line Item Code | Description</div>
+                        </th>
+                    </aura:if>
+                    <aura:if isTrue="{!tObj.tree.Level__c==1}">
+                        <th scope="col" colspan="2" class="slds-border_top">
+                            <div class="slds-truncate slds-level-one" title="Item Description">Line Item Code | Description</div>
+                        </th>
+                    </aura:if>
+                    <aura:if isTrue="{!tObj.tree.Level__c==2}">
+                        <th scope="col" colspan="2" class="slds-border_top">
+                            <div class="slds-truncate slds-level-two" title="Item Description">Line Item Code | Description</div>
+                        </th>
+                    </aura:if>
+                    <aura:if isTrue="{!tObj.tree.Level__c==3}">
+                        <th scope="col" colspan="2" class="slds-border_top">
+                            <div class="slds-truncate slds-level-three" title="Item Description">Line Item Code | Description</div>
+                        </th>
+                    </aura:if>
+                    <aura:if isTrue="{!tObj.tree.Level__c==4}">
+                        <th scope="col" colspan="2" class="slds-border_top">
+                            <div class="slds-truncate slds-level-four" title="Item Description">Line Item Code | Description</div>
+                        </th>
+                    </aura:if>
+                    <aura:if isTrue="{!tObj.tree.Level__c==5}">
+                        <th scope="col" colspan="2" class="slds-border_top">
+                            <div class="slds-truncate slds-level-five" title="Item Description">Line Item Code | Description</div>
+                        </th>
+                    </aura:if>
+                    <aura:if isTrue="{!tObj.tree.Level__c==6}">
+                        <th scope="col" colspan="2" class="slds-border_top">
+                            <div class="slds-truncate slds-level-six" title="Item Description">Line Item Code | Description</div>
+                        </th>
+                    </aura:if>
+                    <aura:if isTrue="{!tObj.tree.Level__c>=7}">
+                        <th scope="col" colspan="2" class="slds-border_top">
+                            <div class="slds-truncate slds-level-seven" title="Item Description">Line Item Code | Description</div>
+                        </th>
+                    </aura:if>                    
+                    <!-- end aura if-->
+                    
+                    <th scope="col" class="slds-border_top">
+                        <div class="slds-truncate" title="Item Quantity">Qty.</div>
+                    </th>      
+                    <th scope="col" class="slds-border_top">
+                        <div class="slds-truncate" title="Item Unit">UOM</div>
+                    </th> 
+                    <th scope="col" class="slds-border_top">
+                        <div class="slds-truncate" title="Item Crew">Crew</div>
+                    </th> 
+                    <th scope="col" class="slds-border_top">
+                        <div class="slds-truncate" title="Item Daily">Daily Output</div>
+                    </th>
+                    <th scope="col" class="slds-border_top">
+                        <div class="slds-truncate" title="Item Labor Hours">Total Labor Hours</div>
+                    </th>      
+                    <th scope="col" class="slds-border_top">
+                    <div class="slds-truncate" title="Item Material">Material<br/>Subtotal</div>
+                    </th>      
+                    <th scope="col" class="slds-border_top">
+                        <div class="slds-truncate" title="Material Sales Tax">Material<br/> Sales Tax</div>
+                    </th>  
+                    <th scope="col" class="slds-border_top">
+                        <div class="slds-truncate" title="Item Total Material">Total<br/>Material</div>
+                    </th>  
+                    <th scope="col" class="slds-border_top">
+                        <div class="slds-truncate" title="Item Labor">Labor<br/>Subtotal</div>
+                    </th>
+                    <!-- <th scope="col" class="slds-border_top">
+                        <div class="slds-truncate" title="Item Difficulty Factor">Difficulty<br/>Factor</div>
+                    </th> -->
+                    <th scope="col" class="slds-border_top">
+                        <div class="slds-truncate" title="Item Labor Burden">Labor<br/>Burden</div>
+                    </th>
+
+                    <th scope="col" class="slds-border_top">
+                        <div class="slds-truncate" title="Item Total Labor">Total <br/>Labor</div>
+                    </th>
+                    <th scope="col" class="slds-border_top">
+                        <div class="slds-truncate" title="Item Equipment">Equipment<br/>Subtotal</div>
+                    </th>
+                    <th scope="col" class="slds-border_top">
+                        <div class="slds-truncate" title="Equipment Sales Tax">Equipment<br/>Sales Tax </div>
+                    </th>
+                    <th scope="col" class="slds-border_top">
+                        <div class="slds-truncate" title="Equipment Total">Total<br/>Equipment</div>
+                    </th>
+                    <th scope="col" class="slds-border_top">
+                        <div class="slds-truncate" title="Item Total">Total Direct Cost</div>
+                    </th>
+                    </tr>
+                    </aura:if>
+                </thead>                        
+                    <tbody>
+                        <tr class="slds-hint-parent slds-is-selected">
+                            <aura:if isTrue="{!tObj.tree.Level__c==0}">
+                                <th scope="col" colspan="2" >
+                                    <div class="slds-truncate slds-indent" title="{!cat.key}"><b>{!cat.key}</b></div>
+                                </th>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c==1}">
+                                <th scope="col" colspan="2" >
+                                    <div class="slds-truncate slds-level-one" title="{!cat.key}"><b>{!cat.key}</b></div>
+                                </th>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c==2}">
+                                <th scope="col" colspan="2" >
+                                    <div class="slds-truncate slds-level-two" title="{!cat.key}"><b>{!cat.key}</b></div>
+                                </th>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c==3}">
+                                <th scope="col" colspan="2" >
+                                    <div class="slds-truncate slds-level-three" title="{!cat.key}"><b>{!cat.key}</b></div>
+                                </th>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c==4}">
+                                <th scope="col" colspan="2" >
+                                    <div class="slds-truncate slds-level-four" title="{!cat.key}"><b>{!cat.key}</b></div>
+                                </th>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c==5}">
+                                <th scope="col" colspan="2" >
+                                    <div class="slds-truncate slds-level-five" title="{!cat.key}"><b>{!cat.key}</b></div>
+                                </th>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c==6}">
+                                <th scope="col" colspan="2" >
+                                    <div class="slds-truncate slds-level-six" title="{!cat.key}"><b>{!cat.key}</b></div>
+                                </th>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c>=7}">
+                                <th scope="col" colspan="2" >
+                                    <div class="slds-truncate slds-level-seven" title="{!cat.key}"><b>{!cat.key}</b></div>
+                                </th>
+                            </aura:if>
+
+                            <td></td><td></td><td></td><td></td><td></td>
+
+                            <td scope="col" data-label="Line Item" class="pcnt-div">
+                                <b><lightning:formattedNumber value="{!cat.value.Total_Material_Cost_Adj__c}" style="currency" currencyCode="USD"/></b>
+                            </td>
+                            <td scope="col" class="pcnt-div">
+                                <b><lightning:formattedNumber value="{!cat.value.materialSalesTax}" style="currency" currencyCode="USD"/></b>
+                            </td>                            
+                            <td scope="col" data-label="Line Item" class="pcnt-div">
+                                <b><lightning:formattedNumber value="{!cat.value.Total_Material_Cost_w_Sales_Tax__c}" style="currency" currencyCode="USD"/></b>
+                            </td>
+                            <td scope="col" data-label="Line Item" class="pcnt-div">
+                                <b><lightning:formattedNumber value="{!cat.value.Total_Labor_Cost_Adj__c}" style="currency" currencyCode="USD"/></b>
+                            </td>
+                            <!-- <td scope="col" data-label="Line Item" class="pcnt-div">
+                                <b><lightning:formattedNumber value="{!cat.value.difficultyFactor}" style="currency" currencyCode="USD"/></b>
+                            </td> -->
+                            <td scope="col" data-label="Line Item" class="pcnt-div">
+                                <b><lightning:formattedNumber value="{!cat.value.laborBurden}" style="currency" currencyCode="USD"/></b>
+                            </td>
+                            <td scope="col" data-label="Line Item" class="pcnt-div">
+                                <b><lightning:formattedNumber value="{!cat.value.Total_Labor_Cost_w_Labor_Burden_Tax__c}" style="currency" currencyCode="USD"/></b>
+                            </td>      
+                            <td scope="col" data-label="Line Item" class="pcnt-div">
+                                <b><lightning:formattedNumber value="{!cat.value.Total_Equip_Cost_Adj__c}" style="currency" currencyCode="USD"/></b>
+                            </td>
+                            <td scope="col" data-label="Line Item" class="pcnt-div">
+                                <b><lightning:formattedNumber value="{!cat.value.equipmentSalesTax}" style="currency" currencyCode="USD"/></b>
+                            </td>
+                            <td scope="col" data-label="Line Item" class="pcnt-div">
+                                <b><lightning:formattedNumber value="{!cat.value.Total_Equipment_Cost_w_Sales_Tax__c}" style="currency" currencyCode="USD"/></b>
+                            </td>
+                            <td scope="col" data-label="Line Item" class="pcnt-div">
+                                <b><lightning:formattedNumber value="{!cat.value.Total_Cost__c}" style="currency" currencyCode="USD"/></b>
+                            </td>
+                        </tr>
+                            <aura:iteration items='{!cat.value}' var='items' indexvar='key3'>
+                                <tr class="slds-hint-parent" style="font-size:smaller;">
+                                    <td data-label="item name">
+                                        <div class="slds-truncate" style="margin-left:40px;" title="Line Item Code">{!items.CSI_Line_Item_Number__c}</div>
+                                    </td>    
+                                    <td data-label="Line Item">
+                                        <div class="slds-truncate" title="Item Name">{!items.Description__c}</div> 
+                                    </td>    
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!items.Quantity__c}" minimumFractionDigits="2" />
+                                    </td>    
+                                    <td data-label="Line Item">
+                                        <div class="slds-truncate" title="Item Unit">{!items.Unit__c}</div> 
+                                    </td>    
+                                    <td data-label="Line item" class="pcnt-div">
+                                        <div class="slds-truncate" title="Item Crew">{!items.NCMT_Crew_Master__r.Name}</div> 
+                                    </td>
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!items.Daily_Output__c}" minimumFractionDigits="2"/>
+                                    </td>
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!items.Adj_Labor_Hours__c}" minimumFractionDigits="2"/>
+                                    </td>
+                                    <!-- <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!items.Adj_Labor_Hours_Per_Unit__c}" minimumFractionDigits="2"/>
+                                    </td> -->
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!items.Total_Material_Cost_Adj__c}" style="currency" currencyCode="USD"/>
+                                    </td>
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!items.materialSalesTax}" style="currency" currencyCode="USD"/>
+                                    </td>
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!items.Total_Material_Cost_w_Sales_Tax__c}" style="currency" currencyCode="USD"/>
+                                    </td>
+                                    <!-- //labor -->
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!items.Total_Labor_Cost_Adj__c}" style="currency" currencyCode="USD"/>
+                                    </td>
+                                    <!-- <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!items.difficultyFactor}" style="currency" currencyCode="USD"/>
+                                    </td> -->
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!items.laborBurden}" style="currency" currencyCode="USD"/>
+                                    </td>
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!items.Total_Labor_Cost_w_Labor_Burden_Tax__c}" style="currency" currencyCode="USD"/>
+                                    </td>      
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!items.Total_Equip_Cost_Adj__c}" style="currency" currencyCode="USD"/>
+                                    </td>           
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!items.equipmentSalesTax}" style="currency" currencyCode="USD"/>
+                                    </td>   
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!items.Total_Equipment_Cost_w_Sales_Tax__c}" style="currency" currencyCode="USD"/>
+                                    </td>   
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!items.Total_Cost__c}" style="currency" currencyCode="USD"/>
+                                    </td>    
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </aura:iteration>
+                </aura:iteration>
+            </table>
+        </div>
+    </article>
+
+</aura:if>
+<!-- ### END Detail A Section ### -->
+
+<!-- ### START DETAIL B SECTION ### -->
+<aura:if isTrue="{!v.reportType=='detailB'}">
+    <article class="slds-card slds-container_xx-large">
+        <div class="slds-page-header">
+            <div class="slds-page-header__title slds-truncate">
+                <h1>
+                    <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Line Item Summary">
+                        <b class='reportTitle'> Detail Line Item Total Report</b>
+                    </span>
+                </h1>
+            </div>
+        </div>
+        <div class="slds-container_xx-large">
+            <table class="slds-table slds-no-row-hover slds-table_bordered slds-table_col-bordered">
+                <thead class="slds-text-title_caps">
+                    <tr class="slds-line-height_reset">
+                        <th scope="col">
+                            <div class="slds-truncate" style="margin-left:20px;" title="Line Item Code">Line Item Code</div>
+                        </th>      
+                        <th scope="col">
+                            <div class="slds-truncate" title="Item Description">Description</div>
+                        </th>      
+                        <th scope="col">
+                            <div class="slds-truncate pcnt-div" title="Item Quantity">Quantity</div>
+                        </th>      
+                        <th scope="col">
+                            <div class="slds-truncate pcnt-div" title="UOM">UOM</div>
+                        </th> 
+                        <!--NEW LAB/MAT/EQ COLUMNS-->
+                        <th scope="col">
+                            <div class="slds-truncate pcnt-div" title="Labor Cost">Labor Cost</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate pcnt-div" title="Material Cost">Material Cost</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate pcnt-div" title="Equipment Cost">Equipment Cost</div>
+                        </th>
+                        <!--END-->
+                        
+                        <th scope="col">
+                            <div class="slds-truncate pcnt-div" title="Total Including Markups">Unit Cost</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate pcnt-div" title="Direct Cost SubTotal">Subototal Direct Cost</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate pcnt-div" title="Subcontractor Markup">Subcontractor Markup Cost</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate pcnt-div" title="Total Including Markups">Total Direct Cost</div>
+                        </th>
+        
+                        <!-- REMOVE ECC COLUMNS<th scope="col">
+                            <div class="slds-truncate pcnt-div" title="ECCA">ECCA</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate pcnt-div" title="ECC">ECC</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate pcnt-div" title="ETPC">ETPC</div>
+                        </th>-->
+                    </tr>
+                </thead>
+                <aura:iteration items='{!v.treeObj}' var='tObj' indexvar='key'>
+                    <tbody>  
+                        <tr class="slds-hint-parent slds-light-blue">
+                            <aura:if isTrue="{!tObj.tree.Level__c==0}">
+                                <td class="slds-hint-parent slds-border_bottom" scope="col" colspan="2">
+                                    <div class="slds-truncate" style="text-transform:uppercase;margin-left:5px;" title="Item Category"><b>{!tObj.tree.Branch_Name__c}</b></div>
+                                </td>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c==1}">
+                                <td class="slds-hint-parent slds-border_bottom" scope="col" colspan="2">
+                                    <div class="slds-truncate slds-level-one" style="text-transform:uppercase;" title="Item Category"><b>{!tObj.tree.Branch_Name__c}</b></div>
+                                </td>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c==2}">
+                                <td class="slds-hint-parent slds-border_bottom" scope="col" colspan="2">
+                                    <div class="slds-truncate slds-level-two" style="text-transform:uppercase;" title="Item Category"><b>{!tObj.tree.Branch_Name__c}</b></div>
+                                </td>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c==3}">
+                                <td class="slds-hint-parent slds-border_bottom" scope="col" colspan="2">
+                                    <div class="slds-truncate slds-level-three" style="text-transform:uppercase;" title="Item Category"><b>{!tObj.tree.Branch_Name__c}</b></div>
+                                </td>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c==4}">
+                                <td class="slds-hint-parent slds-border_bottom" scope="col" colspan="2">
+                                    <div class="slds-truncate slds-level-four" style="text-transform:uppercase;" title="Item Category"><b>{!tObj.tree.Branch_Name__c}</b></div>
+                                </td>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c==5}">
+                                <td class="slds-hint-parent slds-border_bottom" scope="col" colspan="2">
+                                    <div class="slds-truncate slds-level-five" style="text-transform:uppercase;" title="Item Category"><b>{!tObj.tree.Branch_Name__c}</b></div>
+                                </td>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c==6}">
+                                <td class="slds-hint-parent slds-border_bottom" scope="col" colspan="2">
+                                    <div class="slds-truncate slds-level-six" style="text-transform:uppercase;" title="Item Category"><b>{!tObj.tree.Branch_Name__c}</b></div>
+                                </td>
+                            </aura:if>
+                            <aura:if isTrue="{!tObj.tree.Level__c>=7}">
+                                <td class="slds-hint-parent slds-border_bottom" scope="col" colspan="2">
+                                    <div class="slds-truncate slds-level-seven" style="text-transform:uppercase;" title="Item Category"><b>{!tObj.tree.Branch_Name__c}</b></div>
+                                </td>
+                            </aura:if>
+                                                             
+                                <td data-label="Line Item" class="pcnt-div">
+                                    <lightning:formattedNumber value="{!tObj.tree.Quantity__c}" minimumFractionDigits="2" />
+                                </td>    
+                                <td data-label="Line Item">
+                                    <div class="slds-truncate" title="UOM">{!tObj.tree.UOM__c}</div> 
+                                </td>   
+                            <!-- ADD LAB/MAT/EQ COLUMNS-->
+                            	<td class="pcnt-div">
+                                    <lightning:formattedNumber value="" style="currency" currencyCode="USD"/>
+                                </td>
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="" style="currency" currencyCode="USD"/>
+                                </td>
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="" style="currency" currencyCode="USD"/>
+                                </td>
+                            <!-- END -->
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!tObj.tree.Direct_Unit_Cost__c}" style="currency" currencyCode="USD"/>
+                                </td>
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!tObj.tree.Total_Direct_Cost__c}" style="currency" currencyCode="USD"/>
+                                </td>
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!tObj.tree.subContactorMarkups}" style="currency" currencyCode="USD"/>
+                                </td>
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!tObj.tree.Total_Cost__c}" style="currency" currencyCode="USD"/>
+                                </td>
+                                <!-- REMOVE ECC COLUMNS<td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!tObj.tree.ECCA__c}" style="currency" currencyCode="USD"/>
+                                </td>
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!tObj.tree.ECC__c}" style="currency" currencyCode="USD"/>
+                                </td>
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!tObj.tree.ETPC__c}" style="currency" currencyCode="USD"/>
+                                </td> -->
+                        
+                        </tr>
+                        <aura:iteration items='{!tObj.catArr}' var='cat' indexvar='key2'>
+                            <tr class="slds-hint-parent slds-parent-select slds-is-selected">
+                                <aura:if isTrue="{!tObj.tree.Level__c==0}">
+                                    <th scope="col" colspan="2" >
+                                        <div class="slds-truncate slds-indent" title="{!cat.key}"><b>{!cat.key}</b></div>
+                                    </th>
+                                </aura:if>
+                                <aura:if isTrue="{!tObj.tree.Level__c==1}">
+                                    <th scope="col" colspan="2" >
+                                        <div class="slds-truncate slds-level-one" title="{!cat.key}"><b>{!cat.key}</b></div>
+                                    </th>
+                                </aura:if>
+                                <aura:if isTrue="{!tObj.tree.Level__c==2}">
+                                    <th scope="col" colspan="2" >
+                                        <div class="slds-truncate slds-level-two" title="{!cat.key}"><b>{!cat.key}</b></div>
+                                    </th>
+                                </aura:if>
+                                <aura:if isTrue="{!tObj.tree.Level__c==3}">
+                                    <th scope="col" colspan="2" >
+                                        <div class="slds-truncate slds-level-three" title="{!cat.key}"><b>{!cat.key}</b></div>
+                                    </th>
+                                </aura:if>
+                                <aura:if isTrue="{!tObj.tree.Level__c==4}">
+                                    <th scope="col" colspan="2" >
+                                        <div class="slds-truncate slds-level-four" title="{!cat.key}"><b>{!cat.key}</b></div>
+                                    </th>
+                                </aura:if>
+                                <aura:if isTrue="{!tObj.tree.Level__c==5}">
+                                    <th scope="col" colspan="2" >
+                                        <div class="slds-truncate slds-level-five" title="{!cat.key}"><b>{!cat.key}</b></div>
+                                    </th>
+                                </aura:if>
+                                <aura:if isTrue="{!tObj.tree.Level__c==6}">
+                                    <th scope="col" colspan="2" >
+                                        <div class="slds-truncate slds-level-six" title="{!cat.key}"><b>{!cat.key}</b></div>
+                                    </th>
+                                </aura:if>
+                                <aura:if isTrue="{!tObj.tree.Level__c>=7}">
+                                    <th scope="col" colspan="2" >
+                                        <div class="slds-truncate slds-level-seven" title="{!cat.key}"><b>{!cat.key}</b></div>
+                                    </th>
+                                </aura:if>
+
+                                <td data-label="Line Item" class="pcnt-div">
+                                    <b><lightning:formattedNumber value="{!cat.value.Quantity__c}" minimumFractionDigits="2"/></b> 
+                                </td>    
+                                <td data-label="Line Item" class="pcnt-div"></td>
+                                <td></td>
+                                <!-- ADD LAB/MAT/EQ COLUMNS-->
+                            	<td class="pcnt-div">
+                                    <lightning:formattedNumber value="" style="currency" currencyCode="USD"/>
+                                </td>
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="" style="currency" currencyCode="USD"/>
+                                </td>
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="" style="currency" currencyCode="USD"/>
+                                </td>
+                            <!-- END -->
+    
+                                <td data-label="Line Item" class="pcnt-div">
+                                    <b> <lightning:formattedNumber value="{!cat.value.Total_Direct_Cost__c}" style="currency" currencyCode="USD" /></b> 
+                                </td>    
+                                <td data-label="Line Item" class="pcnt-div">
+                                    <b> <lightning:formattedNumber value="{!cat.value.subContactorMarkups}" style="currency" currencyCode="USD" /></b> 
+                                </td>    
+                                <td data-label="Line Item" class="pcnt-div">
+                                    <b> <lightning:formattedNumber value="{!cat.value.Total_Cost__c}" style="currency" currencyCode="USD" /></b> 
+                                </td>    
+                                <!-- REMOVE ECC COLUMNS<td data-label="Line Item" class="pcnt-div">
+                                    <b> <lightning:formattedNumber value="{!cat.value.ecca}" style="currency" currencyCode="USD"/></b> 
+                                </td>    
+                                <td data-label="Line Item" class="pcnt-div">
+                                    <b><lightning:formattedNumber value="{!cat.value.ecc}" style="currency" currencyCode="USD"/> </b>
+                                </td>    
+                                <td data-label="Line Item" class="pcnt-div">
+                                    <b><lightning:formattedNumber value="{!cat.value.etpc}" style="currency" currencyCode="USD"/></b> 
+                                </td>  -->
+                            </tr>
+                            <aura:iteration items='{!cat.value}' var='liArr' indexvar='key3'>
+                                <tr class="slds-hint-parent">
+                                    <td data-label="item name">
+                                        <div class="slds-truncate slds-level-two" title="Line Item Code">
+                                            <aura:if isTrue="{!liArr.NCMT_DES_Assembly_Details__r.length > 0}">
+                                                   
+                                                        <lightning:button label="+" 
+                                                            type="button" 
+                                                            name="{!liArr.Id}"
+                                                            class="expandButton"
+                                                            title="expand"
+                                                            onclick="{!c.expandDetails}"
+                                                            />
+                                               <!--&nbsp;-->
+                                                </aura:if>
+                                            <b>{!liArr.CSI_Line_Item_Number__c}</b>
+                                        </div>
+                                    </td>    
+                                    <td data-label="item name">
+                                        <div class="slds-truncate" title="Item Name">{!liArr.Description__c}</div> 
+                                    </td>    
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!liArr.Quantity__c}" minimumFractionDigits="2" />
+                                    </td>    
+                                    <td data-label="Line Item" class="">
+                                        <div class="slds-truncate" title="UOM">{!liArr.Unit__c}</div> 
+                                    </td> 
+                                    <!-- ADD LAB/MAT/EQ COLUMNS-->
+                                    <td class="pcnt-div">
+                                        <lightning:formattedNumber value="{!liArr.Total_Labor_Cost_w_Labor_Burden_Tax__c}" style="currency" currencyCode="USD"/>
+                                    </td>
+                                    <td class="pcnt-div">
+                                        <lightning:formattedNumber value="{!liArr.Total_Material_Cost_w_Sales_Tax__c}" style="currency" currencyCode="USD"/>
+                                    </td>
+                                    <td class="pcnt-div">
+                                        <lightning:formattedNumber value="{!liArr.Total_Equipment_Cost_w_Sales_Tax__c}" style="currency" currencyCode="USD"/>
+                                    </td>
+                                	<!-- END -->
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!liArr.Direct_Unit_Cost__c}" style="currency" currencyCode="USD"/>
+                                    </td>
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!liArr.Total_Direct_Cost__c}" style="currency" currencyCode="USD"/>
+                                    </td>
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!liArr.subContactorMarkups}" style="currency" currencyCode="USD"/>
+                                    </td>
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!liArr.Total_Cost__c}" style="currency" currencyCode="USD"/>
+                                    </td>
+                                    <!-- REMOVE ECC COLUMNS<td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!liArr.ecca}" style="currency" currencyCode="USD"/>
+                                    </td>
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!liArr.ecc}" style="currency" currencyCode="USD"/>
+                                    </td>
+                                    <td data-label="Line Item" class="pcnt-div">
+                                        <lightning:formattedNumber value="{!liArr.etpc}" style="currency" currencyCode="USD"/>
+                                    </td>   -->
+                                </tr>
+                                
+                                <!-- ASSEMBLY DETAILS -->
+                                <aura:iteration items="{!liArr.NCMT_DES_Assembly_Details__r}" var="detail">
+                                    <tr class="{!liArr.Id +'-details'}" style="display:none;">
+                                        <td data-label="item name">
+                                                <div class="slds-truncate slds-level-two" title="Line Item Code" style="padding-left:15px;">
+                                                    {!detail.Name}</div>
+                                            </td>
+                                        <td data-label="item name">
+                                                <div class="slds-truncate" title="Item Name">{!detail.Line_Item_Description__c}</div> 
+                                            </td>
+                                        <td class="pcnt-div">
+                                                <lightning:formattedNumber value="{!detail.Quantity__c}" minimumFractionDigits="2" />
+                                            </td>
+                                            <td data-label="Line Item" class="pcnt-div">
+                                                <div class="slds-truncate" title="Item Unit">{!detail.Unit__c}</div> 
+                                            </td>
+                                        <!-- ADD LAB/MAT/EQ COLUMNS-->
+                                        <td class="pcnt-div">
+                                            <lightning:formattedNumber value="{!detail.Labor_Unit_Cost__c}" style="currency" currencyCode="USD"/>
+                                        </td>
+                                        <td class="pcnt-div">
+                                            <lightning:formattedNumber value="{!detail.Material_Unit_Cost__c}" style="currency" currencyCode="USD"/>
+                                        </td>
+                                        <td class="pcnt-div">
+                                            <lightning:formattedNumber value="{!detail.Equipment_Unit_Cost__c}" style="currency" currencyCode="USD"/>
+                                        </td>
+                                    	<!-- END -->
+                                        <td class="pcnt-div grayOut">
+                                                <!--<lightning:formattedNumber value="{!detail.Equipment_Unit_Cost__c + detail.Material_Unit_Cost__c + detail.Labor_Unit_Cost__c}" style="currency" currencyCode="USD"/>-->
+                                            <!--<lightning:formattedNumber value="{!detail.Total_Cost_w_Labor_Burden_Tax_f__c}" style="currency" currencyCode="USD"/>-->
+                                            </td>
+                                        <td class="pcnt-div grayOut">
+                                        </td>
+                                        <td class="pcnt-div grayOut">
+                                        </td>
+                                        <td class="pcnt-div grayOut">
+                                        </td>
+                                    </tr>
+                                </aura:iteration>
+                            </aura:iteration>
+                        </aura:iteration>
+                    </tbody>
+                </aura:iteration>
+            </table>
+        </div>
+    </article>
+</aura:if>
+<!-- ### END Detail B Section ### -->
+    
+<!-- ### START Summary Report D Section ### -->
+<aura:if isTrue="{!v.reportType=='detailC'}">
+    <article class="slds-card slds-container_xx-large">
+        <!--HEADER-->
+        <div class="slds-page-header">
+        <div class="slds-page-header__title slds-truncate">
+            <h1>
+            <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Line Item Summary">
+            <b class='reportTitle'>Summary Report D</b>
+            </span>
+            </h1>
+        </div>
+        </div>
+        <!--TABLE-->
+        <div class="slds-container_xx-large">
+            <table class="slds-table slds-no-row-hover slds-table_bordered slds-table_col-bordered">
+                <thead class="slds-text-title_caps">
+                    <tr class="slds-line-height_reset">
+                        <th scope="col">
+                            <div class="slds-truncate" style="margin-left:5px;" title="blank"></div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" style="margin-left:5px;" title="Description">Description</div>
+                        </th>
+                        <!--ADD TREE BRANCH COLUMNS-->
+                        <aura:iteration items='{!v.catsUsed[0].value}' var='val' indexvar='key'>
+                            <th scope="col">
+                                <div class="slds-truncate" style="margin-left:5px;" title="Branch">{!val.Tree}</div>
+                            </th>
+                         </aura:iteration>
+                        <th scope="col">
+                            <div class="slds-truncate" style="margin-left:5px;" title="Percentage">&#37;</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody> 
+                    <aura:iteration items='{!v.catsUsed}' var='cat' indexvar='key'>
+                        <tr class="">
+                        <td class="" scope="col" colspan="1">
+                        	<div class="slds-truncate" style="margin-left:5px;" title="Division">{!cat.value.Division}</div>
+                        </td>
+                        <td class="" scope="col" colspan="1">
+                        	<div class="slds-truncate" style="margin-left:5px;" title="Category">{!cat.value.Description}</div>
+                        </td>
+                            <!--GET INDIVIDUAL TREE COSTS -->
+                            <aura:iteration items='{!cat.value}' var='val'>
+                                <td class="">
+                           			<lightning:formattedNumber value="{!val.Total}" style="currency" currencyCode="USD"/>
+                        		</td>
+                            </aura:iteration>
+                            <td class="" >
+                                <lightning:formattedNumber value="{!cat.value.Total / v.treeObj[0].tree.Total_Cost__c}" style="percent" maximumFractionDigits="1"/>
+                        	</td>
+                        </tr>
+                    </aura:iteration>
+                    <!--GET TOTALS -->
+                    <tr class="slds-hint-parent slds-light-blue slds-text-title_caps" >
+                        <td ><b>Total</b></td>
+                        <td></td>
+                        <aura:iteration items="{!v.treeObj}" var="tObj">
+                            <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                <td class="">
+                                    <lightning:formattedNumber value="{!tObj.tree.Total_Cost__c}" style="currency" currencyCode="USD"/>
+                                </td>
+                            </aura:if>
+                        </aura:iteration>
+                        <!--TOTAL OF TOP-LEVEL BRANCH-->
+                        <td class="">
+                            <lightning:formattedNumber value="{!v.treeObj[0].tree.Total_Cost__c}" style="currency" currencyCode="USD"/>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr class="slds-hint-parent" >
+                        <td data-label="column" scope="row">
+                            <div class="slds-truncate" title="Site and Design Contingency">
+                                <div class="slds-truncate slds-text-title_caps" title="Site and Design Contingency">
+                                    <b>Site and Design Contingency&nbsp;</b>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate total-div" >
+                                <lightning:formattedNumber value="{!v.markuppctnts.Site_Design_Contingency__c}"  style="percent"  minimumFractionDigits="2"/>
+                            </div>
+                        </td>
+                        <aura:iteration items="{!v.treeObj}" var="tObj">
+                            <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                <td class="">
+                                    <lightning:formattedNumber value="{!tObj.tree.Total_Cost__c * (v.markuppctnts.Site_Design_Contingency__c)}" style="currency" currencyCode="USD"/>
+                                </td>
+                            </aura:if>
+                        </aura:iteration>
+                        <td class="">
+                            <lightning:formattedNumber value="{!v.treeObj[0].tree.Total_Cost__c * (v.markuppctnts.Site_Design_Contingency__c)}" style="currency" currencyCode="USD"/>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr class="slds-hint-parent slds-light-blue slds-text-title_caps">
+                        <td data-label="column" scope="row">
+                            <div class="slds-truncate" title="SubTotal">
+                                <div class="slds-truncate slds-text-title_caps" title="SubTotal">
+                                    <b>SubTotal</b>
+                                </div>
+                            </div>
+                        </td>
+                        <td></td>
+                        <aura:iteration items="{!v.treeObj}" var="tObj">
+                            <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                <td class="">
+                                    <lightning:formattedNumber value="{!tObj.tree.Total_Cost__c * ((v.markuppctnts.Site_Design_Contingency__c) + 1)}" style="currency" currencyCode="USD"/>
+                                </td>
+                            </aura:if>
+                        </aura:iteration>
+                        <td class="">
+                            <lightning:formattedNumber value="{!v.treeObj[0].tree.Total_Cost__c * ((v.markuppctnts.Site_Design_Contingency__c) + 1)}" style="currency" currencyCode="USD"/>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr class="slds-hint-parent" >
+                        <td data-label="column" scope="row">
+                            <div class="" title="Prime Markup">
+                                <div class="slds-text-title_caps" title="">
+                                    <b>Prime Contractor Markup   </b>
+                                    <c:customHelpText text="Prime Contractor Markups on Self Performed\n
+                                                            and Outsourced Work includes:\n 
+                                                            Jobsite Overhead (Gen. Conditions), \n
+                                                            Profit, \n
+                                                            Commission, \n
+                                                            Home Office Overhead, \n
+                                                            Bond &amp; Insurance,\n
+                                                            Professional Service Fees" />
+                                </div>
+                            </div>
+                        </td>
+                        <td></td>
+                        <aura:iteration items="{!v.treeObj}" var="tObj">
+                            <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                <td class="">
+                                    <lightning:formattedNumber value="{!(tObj.tree.Total_Including_Markups__c - tObj.tree.Total_Cost__c * ((v.markuppctnts.Site_Design_Contingency__c) + 1))}" style="currency" currencyCode="USD"/>
+                                </td>
+                            </aura:if>
+                        </aura:iteration>
+                        <td class="">
+                            <div class="slds-truncate" >
+                                <lightning:formattedNumber value="{!(v.markup.Subtotal_OS_Self__c - v.treeObj[0].tree.Total_Cost__c * ((v.markuppctnts.Site_Design_Contingency__c) + 1))}" style="currency" currencyCode="USD"/>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr class="slds-hint-parent slds-light-blue slds-text-title_caps">
+                        <td data-label="column1" scope="row">
+                            <div class="slds-truncate" title="CECA">
+                                <div class="slds-truncate slds-text-title_caps" title="CECA">
+                                    <b>CECA</b>
+                                </div>
+                            </div>
+                        </td>
+                        <td></td>
+                        <aura:iteration items="{!v.treeObj}" var="tObj">
+                            <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                <td class="">
+                                    <div class="slds-truncate slds-text-title_caps" >
+                                    <lightning:formattedNumber value="{!tObj.tree.Total_Including_Markups__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                            </aura:if>
+                        </aura:iteration>
+                        <td class="">
+                            <div class="slds-truncate slds-text-title_caps" >
+                                <lightning:formattedNumber value="{!v.markup.Subtotal_OS_Self__c}" style="currency" currencyCode="USD"/>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr class="slds-bg-gray">
+                            <td colspan="{!v.catsUsed[0].value.length + 3}"><!--BLANK ROW--> </td>
+                    </tr>
+                    <aura:if isTrue="{!v.markuppctnts.CMc__c != 0}">
+                        <tr class="slds-hint-parent">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Developer Fee">
+                                        <div class="slds-truncate slds-text-title_caps" title="Developer Fee">
+                                            <b>CMc Contingency Allowance</b>
+                                        </div>
+                                    </div>
+                                </td>   
+                            <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!v.markuppctnts.CMc__c}"  style="percent"  minimumFractionDigits="2"/>
+                                </td> 
+                           <aura:iteration items="{!v.treeObj}" var="tObj">
+                                <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                    <td class="">
+                                        <div class="slds-truncate" >
+                                            <lightning:formattedNumber value="{!tObj.tree.CMc_Impact}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                    </td>
+                                </aura:if>
+                            </aura:iteration>
+                            <td data-label="subtotal">
+                                    <div class="slds-truncate" >
+                                        <lightning:formattedNumber value="{!v.markup.CMC_Impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                            <td></td>
+                        </tr>
+                    </aura:if>
+                    <aura:if isTrue="{!v.markuppctnts.Professional_Services_Fees_Preconst__c != 0}">
+                            <tr class="slds-hint-parent ">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Developer Professional Services">
+                                        <div class="slds-truncate slds-text-title_caps" title="Developer Professional Services">
+                                            <b>Prof. Services Fees (Preconst. Phase)</b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!v.markuppctnts.Professional_Services_Fees_Preconst__c}"  style="percent" minimumFractionDigits="2"/>
+                                </td> 
+                                <aura:iteration items="{!v.treeObj}" var="tObj">
+                                <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                    <td class="">
+                                        <div class="slds-truncate" >
+                                            <lightning:formattedNumber value="{!tObj.tree.Pro_Services_Pre_Const_Impact}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                    </td>
+                                </aura:if>
+                            </aura:iteration>
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate" >
+                                        <lightning:formattedNumber value="{!v.markup.Pro_Services_Pre_Const_Impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td></td>
+                        </tr>
+                    </aura:if>
+                    <aura:if isTrue="{!v.markup.SubTotal_CMc_f__c != 0}">
+                            <tr class="slds-hint-parent slds-light-blue slds-text-title_caps">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="SubTotal - Developer">
+                                        <div class="slds-truncate slds-text-title_caps" title="SubTotal - Developer">
+                                            <b>SubTotal - CMc</b>
+                                        </div>
+                                    </div>
+                                </td>  
+                                <td></td>
+                                <aura:iteration items="{!v.treeObj}" var="tObj">
+                                <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                    <td class="">
+                                        <div class="slds-truncate" >
+                                            <lightning:formattedNumber value="{!tObj.tree.Subtotal_CMc}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                    </td>
+                                </aura:if>
+                            </aura:iteration>
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate slds-text-title_caps" >
+                                        <lightning:formattedNumber value="{!v.markup.SubTotal_CMc_f__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr> 
+                        </aura:if>
+                    <aura:if isTrue="{!AND((v.markuppctnts.Developer_Fee__c != 0),(v.markup.SubTotal_CMc_f__c == 0))}">
+                            <tr class="slds-hint-parent">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Developer Fee">
+                                        <div class="slds-truncate slds-text-title_caps" title="Developer Fee">
+                                            <b>Developer Fee</b>
+                                        </div>
+                                    </div>
+                                </td>                            
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!v.markuppctnts.Developer_Fee__c}"  style="percent"   minimumFractionDigits="2"/>
+                                </td>   
+                                <aura:iteration items="{!v.treeObj}" var="tObj">
+                                <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                    <td class="">
+                                        <div class="slds-truncate" >
+                                            <lightning:formattedNumber value="{!tObj.tree.Dev_Fee_Impact}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                    </td>
+                                </aura:if>
+                            </aura:iteration>
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate" >
+                                        <lightning:formattedNumber value="{!(v.markup.SubTotal_Out_SourcedWork__c + v.markup.SubTotal_SelfPerformedWork__c) * v.markuppctnts.Developer_Fee__c}" style="currency" currencyCode="USD"  minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr> 
+                        </aura:if>
+                        <aura:if isTrue="{!AND((v.markuppctnts.Developer_Fee__c != 0),(v.markup.SubTotal_CMc_f__c != 0))}">
+                            <tr class="slds-hint-parent">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Developer Fee">
+                                        <div class="slds-truncate slds-text-title_caps" title="Developer Fee">
+                                            <b>Developer Fee</b>
+                                        </div>
+                                    </div>
+                                </td>                            
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!v.markuppctnts.Developer_Fee__c}"  style="percent"   minimumFractionDigits="2"/>
+                                </td>   
+                                <aura:iteration items="{!v.treeObj}" var="tObj">
+                                <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                    <td class="">
+                                        <div class="slds-truncate" >
+                                            <lightning:formattedNumber value="{!tObj.tree.Dev_Fee_Impact}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                    </td>
+                                </aura:if>
+                            </aura:iteration>
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate" >
+                                        <lightning:formattedNumber value="{!v.markup.Developer_Fee_Impact__c}" style="currency" currencyCode="USD"  minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr> 
+                        </aura:if>
+                       
+                        <aura:if isTrue="{!AND((v.markuppctnts.Professional_Services_Developer_Fee__c != 0),(v.markup.SubTotal_CMc_f__c != 0))}">
+                            <tr class="slds-hint-parent ">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Developer Professional Services">
+                                        <div class="slds-truncate slds-text-title_caps" title="Developer Professional Services">
+                                            <b>Developer Professional Services (AE, CM, Comm)</b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!v.markuppctnts.Professional_Services_Developer_Fee__c}"  style="percent"   minimumFractionDigits="2"/>
+                                </td>  
+                                <aura:iteration items="{!v.treeObj}" var="tObj">
+                                    <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                        <td class="">
+                                            <div class="slds-truncate" >
+                                                <lightning:formattedNumber value="{!tObj.tree.Dev_Prof_Serv_Impact}" style="currency" currencyCode="USD"/>
+                                            </div>
+                                        </td>
+                                    </aura:if>
+                                </aura:iteration>
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate" >
+                                        <lightning:formattedNumber value="{!v.markup.Developer_Professional_Services_Impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr> 
+                        </aura:if>
+                       
+                        <aura:if isTrue="{!AND((v.markuppctnts.Professional_Services_Developer_Fee__c != 0),(v.markup.SubTotal_CMc_f__c == 0))}">
+                            <tr class="slds-hint-parent ">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Developer Professional Services">
+                                        <div class="slds-truncate slds-text-title_caps" title="Developer Professional Services">
+                                            <b>Developer Professional Services (AE, CM, Comm)</b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!v.markuppctnts.Professional_Services_Developer_Fee__c}"  style="percent"   minimumFractionDigits="2"/>
+                                </td>  
+                                <aura:iteration items="{!v.treeObj}" var="tObj">
+                                    <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                        <td class="">
+                                            <div class="slds-truncate" >
+                                                <lightning:formattedNumber value="{!tObj.tree.Dev_Prof_Serv_Impact}" style="currency" currencyCode="USD"/>
+                                            </div>
+                                        </td>
+                                    </aura:if>
+                                </aura:iteration>
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate" >
+                                        <lightning:formattedNumber value="{!((((v.markup.SubTotal_Out_SourcedWork__c + v.markup.SubTotal_SelfPerformedWork__c) * v.markuppctnts.Developer_Fee__c) + v.markup.Subtotal_OS_Self__c) * v.markuppctnts.Professional_Services_Developer_Fee__c)}" style="currency" currencyCode="USD"  minimumFractionDigits="2"/>
+                                        <!--<lightning:formattedNumber value="{!v.markup.Developer_Professional_Services_Impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/> -->
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr> 
+                        </aura:if>
+                        
+                    <aura:if isTrue="{!v.markup.SubTotal_Developer_f__c != 0}">
+                            <tr class="slds-hint-parent slds-light-blue slds-text-title_caps">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="SubTotal - Developer">
+                                        <div class="slds-truncate slds-text-title_caps" title="SubTotal - Developer">
+                                            <b>SubTotal - Developer</b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <aura:iteration items="{!v.treeObj}" var="tObj">
+                                <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                    <td class="">
+                                        <div class="slds-truncate" >
+                                            <lightning:formattedNumber value="{!tObj.tree.Subtotal_Dev}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                    </td>
+                                </aura:if>
+                            </aura:iteration>
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate slds-text-title_caps" >
+                                        <lightning:formattedNumber value="{!v.markup.SubTotal_Developer_f__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr> 
+                        </aura:if>
+                    <aura:if isTrue="{!v.markuppctnts.Lessor_Fee__c != 0}">
+                            <tr class="slds-hint-parent">
+                                <td>
+                                    <div class="slds-truncate" title="Lessor Fee">
+                                        <div class="slds-truncate slds-text-title_caps" title="Lessor Fee">
+                                            <b>Lessor Fee</b>
+                                        </div>
+                                    </div>
+                                </td> 
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!v.markuppctnts.Lessor_Fee__c}"  style="percent" minimumFractionDigits="2"/>
+                                </td> 
+                                <aura:iteration items="{!v.treeObj}" var="tObj">
+                                <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                    <td class="">
+                                        <div class="slds-truncate" >
+                                            <lightning:formattedNumber value="{!tObj.tree.Lessor_Fee_Impact}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                    </td>
+                                </aura:if>
+                            </aura:iteration>
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate" >
+                                        <lightning:formattedNumber value="{!v.markup.Lessor_Fee_impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr> 
+                        </aura:if>
+                    <aura:if isTrue="{!v.markuppctnts.Professional_Services_Lessor_Fee__c != 0}">
+                            <tr class="slds-hint-parent">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Lessor Professional Services">
+                                        <div class="slds-truncate slds-text-title_caps" title="Lessor Professional Services">
+                                            <b>Lessor Professional Services (AE, CM, Comm)</b>
+                                        </div>
+                                    </div>
+                                </td> 
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!v.markuppctnts.Professional_Services_Lessor_Fee__c}"  style="percent"   minimumFractionDigits="2"/>
+                                </td>  
+                                <aura:iteration items="{!v.treeObj}" var="tObj">
+                                <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                    <td class="">
+                                        <div class="slds-truncate" >
+                                            <lightning:formattedNumber value="{!tObj.tree.Lessor_Prof_Serv_Impact}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                    </td>
+                                </aura:if>
+                            </aura:iteration>
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate" >
+                                        <lightning:formattedNumber value="{!v.markup.Lessor_Professional_Services_Impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr> 
+                        </aura:if>
+                    <aura:if isTrue="{!v.markup.SubTotal_Lessor_f__c != 0}">
+                            <tr class="slds-hint-parent slds-light-blue slds-text-title_caps">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Sub Total - Lessor">
+                                        <div class="slds-truncate slds-text-title_caps" title="Sub Total - Lessor">
+                                            <b>Sub Total - Lessor</b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td> 
+                                <aura:iteration items="{!v.treeObj}" var="tObj">
+                                <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                    <td class="">
+                                        <div class="slds-truncate" >
+                                            <lightning:formattedNumber value="{!tObj.tree.Subtotal_Lessor}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                    </td>
+                                </aura:if>
+                            </aura:iteration>
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate slds-text-title_caps" >
+                                        <lightning:formattedNumber value="{!v.markup.SubTotal_Lessor_f__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr> 
+                        </aura:if>
+                    <aura:if isTrue="{!v.markuppctnts.Gross_Receipt_State_Construction__c != 0}">
+                            <tr class="slds-hint-parent">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Gross Receipt/State Cons. Tax">
+                                        <div class="slds-truncate slds-text-title_caps" title="Gross Receipt/State Cons. Tax">
+                                            <b>Gross Receipt/State Cons. Tax </b>
+                                        </div>
+                                    </div>
+                                </td>  
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!v.markuppctnts.Gross_Receipt_State_Construction__c}"  style="percent"  minimumFractionDigits="2"/>
+                                </td>    
+                                <aura:iteration items="{!v.treeObj}" var="tObj">
+                                <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                    <td class="">
+                                        <div class="slds-truncate" >
+                                            <lightning:formattedNumber value="{!tObj.tree.Gross_Receipt_Impact}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                    </td>
+                                </aura:if>
+                            </aura:iteration>
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate" >
+                                        <lightning:formattedNumber value="{!v.markup.Gross_Receipts_Impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr> 
+                        </aura:if>
+                    <tr class="slds-hint-parent slds-light-blue slds-text-title_caps">
+                            <td data-label="column1" scope="row">
+                                <div class="slds-truncate" title="Total CECA">
+                                    <div class="slds-truncate" title="Total CECA">
+                                        <b>Total CECA</b>
+                                    </div>
+                                </div>
+                            </td>
+                            <td></td>   
+                        <aura:iteration items="{!v.treeObj}" var="tObj">
+                                <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                    <td class="">
+                                        <div class="slds-truncate" >
+                                            <lightning:formattedNumber value="{!tObj.tree.Total_CECA}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                    </td>
+                                </aura:if>
+                            </aura:iteration>
+                            <td data-label="subtotal">
+                                <div class="slds-truncate" >
+                                    <lightning:formattedNumber value="{!v.markup.Total_CECCA__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                </div>
+                            </td>
+                        <td></td>
+                        </tr> 
+                    <aura:if isTrue="{!v.markuppctnts.Market_Escalation__c != 0}">
+                        <tr class="slds-hint-parent">
+                            <td data-label="column1" scope="row">
+                                <div class="slds-truncate" title="Market Escalation">
+                                    <div class="slds-truncate slds-text-title_caps" title="Market Escalation">
+                                        <b>Market Escalation </b>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="pcnt-div">
+                                <lightning:formattedNumber value="{!v.markuppctnts.Market_Escalation__c}"  style="percent"  minimumFractionDigits="4"/>
+                            </td>
+                            <aura:iteration items="{!v.treeObj}" var="tObj">
+                                <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                    <td class="">
+                                        <div class="slds-truncate" >
+                                            <lightning:formattedNumber value="{!tObj.tree.Total_CECA * v.markuppctnts.Market_Escalation__c}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                    </td>
+                                </aura:if>
+                            </aura:iteration>
+                            <td>
+                                <div class="slds-truncate" >
+                                    <lightning:formattedNumber value="{!v.markup.Market_Escalation_Markup_Impact__c}" style="currency" currencyCode="USD"  minimumFractionDigits="2"/>
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </aura:if>
+                        <tr class="slds-hint-parent  slds-light-blue">
+                        <td>
+                            <div class="slds-truncate" title="ECCA">
+                                <div class="slds-truncate slds-text-title_caps" title="ECCA">
+                                    <b>ECCA  </b>
+                                </div>
+                            </div>
+                        </td>
+                        <td></td>
+                            <aura:iteration items="{!v.treeObj}" var="tObj">
+                                <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                    <td class="">
+                                        <div class="slds-truncate" >
+                                            <lightning:formattedNumber value="{!tObj.tree.ECCA__c}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                    </td>
+                                </aura:if>
+                            </aura:iteration>
+                      	<td>
+                          <div class="slds-truncate slds-text-title_caps" >
+                              <lightning:formattedNumber value="{!v.markup.ECCA__c}" style="currency" currencyCode="USD"   minimumFractionDigits="2"/>
+                          </div>
+                       	</td>
+                            <td></td>
+                        </tr>
+                        <aura:if isTrue="{!v.markuppctnts.Construction_Contingency__c != 0}">
+                         <tr class="slds-hint-parent">
+                             <td data-label="column1" scope="row">
+                                 <div class="slds-truncate" title="Construction Contingency">
+                                     <div class="slds-truncate slds-text-title_caps" title="Construction Contingency">
+                                         <b>Construction Contingency </b>
+                                     </div>
+                                 </div>
+                             </td>
+                             <td class="pcnt-div">
+                                <lightning:formattedNumber value="{!v.markuppctnts.Construction_Contingency__c}"  style="percent"  minimumFractionDigits="2"/>
+                            </td>
+                             <aura:iteration items="{!v.treeObj}" var="tObj">
+                                <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                    <td class="">
+                                        <div class="slds-truncate" >
+                                            <lightning:formattedNumber value="{!tObj.tree.ECCA__c * v.markuppctnts.Construction_Contingency__c}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                    </td>
+                                </aura:if>
+                            </aura:iteration>
+                             <td>
+                                 <div class="slds-truncate" >
+                                     <lightning:formattedNumber value="{!v.markup.Construction_Contingency_Markup_Impact__c }" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                 </div>
+                             </td>
+                             <td></td>
+                          </tr>
+                        </aura:if>
+                         <aura:if isTrue="{!v.markuppctnts.Art_In_Architecture__c!= 0}">
+                        <tr class="slds-hint-parent">
+                            <td data-label="column1" scope="row">
+                                <div class="slds-truncate" title="Art in Archtecture">
+                                    <div class="slds-truncate slds-text-title_caps" title="Art in Archtecture">
+                                        <b>Art in Architecture</b>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="pcnt-div">
+                                <lightning:formattedNumber value="{!v.markuppctnts.Art_In_Architecture__c}"  style="percent"  minimumFractionDigits="2"/>
+                            </td>
+                            <aura:iteration items="{!v.treeObj}" var="tObj">
+                                <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                            <td>
+                                <div class="slds-truncate" >
+                                    <lightning:formattedNumber value="{!v.markuppctnts.Art_In_Architecture__c * (tObj.tree.ECCA__c * (1+v.markuppctnts.Construction_Contingency__c))}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                </div>
+                            </td>
+                                </aura:if>
+                            </aura:iteration>
+                            <td>
+                                <div class="slds-truncate" >
+                                    <lightning:formattedNumber value="{!v.markup.Art_In_Architecture_Markup_Impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr> 
+                    </aura:if>
+                        <tr class="slds-hint-parent slds-light-blue slds-text-title_caps">
+                            <td data-label="column1" scope="row">
+                                <div class="slds-truncate" title="ECC">
+                                    <div class="slds-truncate slds-text-title_caps" title="ECC">
+                                        <b>ECC</b>
+                                    </div>
+                                </div>
+                            </td>
+                            <td></td>
+                            <aura:iteration items="{!v.treeObj}" var="tObj">
+                                <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                    <td class="">
+                                        <div class="slds-truncate" >
+                                            <lightning:formattedNumber value="{!tObj.tree.ECC__c}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                    </td>
+                                </aura:if>
+                            </aura:iteration>
+                            <td>
+                            <div class="slds-truncate slds-text-title_caps" >
+                                <lightning:formattedNumber value="{!v.markup.ECC__c }" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                            </div>
+                        	</td>
+                            <td></td>
+                        </tr>
+                        <aura:if isTrue="{!v.markuppctnts.EDRC_Estimated_Design_and_Review_Cost__c != 0}">
+                        <tr class="slds-hint-parent">
+                            <td data-label="column1" scope="row">
+                                <div class="slds-truncate" title="EDRC">
+                                    <div class="slds-truncate slds-text-title_caps" title="EDRC">
+                                        <b>EDRC</b>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="pcnt-div">
+                                <lightning:formattedNumber value="{!v.markuppctnts.EDRC_Estimated_Design_and_Review_Cost__c}"  style="percent"  minimumFractionDigits="2"/>
+                            </td>
+                            <aura:iteration items="{!v.treeObj}" var="tObj">
+                                <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                    <td class="">
+                                        <div class="slds-truncate" >
+                                            <lightning:formattedNumber value="{!tObj.tree.ECC__c * v.markuppctnts.EDRC_Estimated_Design_and_Review_Cost__c}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                    </td>
+                                </aura:if>
+                            </aura:iteration>
+                            <td>
+                                <div class="slds-truncate" >
+                                    <lightning:formattedNumber value="{!v.markup.EDRC_Impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                </div>
+                            </td>
+                            <td></td>
+                            </tr>
+                        </aura:if>
+                            <aura:if isTrue="{!v.markuppctnts.EMIC_Estimated_Management_Inspection_Co__c != 0}">
+                                <tr class="slds-hint-parent">
+                                    <td data-label="column1" scope="row">
+                                        <div class="slds-truncate" title="EMIC">
+                                            <div class="slds-truncate slds-text-title_caps" title="EMIC">
+                                                <b>EMIC</b>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="pcnt-div">
+                                        <lightning:formattedNumber value="{!v.markuppctnts.EMIC_Estimated_Management_Inspection_Co__c}"  style="percent"  minimumFractionDigits="2"/>
+                                    </td>
+                                    <aura:iteration items="{!v.treeObj}" var="tObj">
+                                        <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                            <td class="">
+                                                <div class="slds-truncate" >
+                                                    <lightning:formattedNumber value="{!tObj.tree.ECC__c * v.markuppctnts.EMIC_Estimated_Management_Inspection_Co__c}" style="currency" currencyCode="USD"/>
+                                                </div>
+                                            </td>
+                                        </aura:if>
+                                    </aura:iteration>
+                                    <td>
+                                        <div class="slds-truncate" >
+                                            <lightning:formattedNumber value="{!v.treeObj[0].tree.ECC__c * v.markuppctnts.EMIC_Estimated_Management_Inspection_Co__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </aura:if>
+                                <tr class="slds-hint-parent slds-light-blue slds-text-title_caps">
+                                    <td data-label="column1" scope="row">
+                                        <div class="slds-truncate" title="ETPC">
+                                            <div class="slds-truncate slds-text-title_caps" title="ETPC">
+                                                <b>ETPC</b>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <aura:iteration items="{!v.treeObj}" var="tObj">
+                                        <aura:if isTrue="{!and(tObj.tree.Level__c == 1, tObj.tree.Total_Cost__c > 0)}">
+                                            <td class="">
+                                                <div class="slds-truncate" >
+                                                    <lightning:formattedNumber value="{!tObj.tree.ETPC__c}" style="currency" currencyCode="USD"/>
+                                                </div>
+                                            </td>
+                                        </aura:if>
+                                    </aura:iteration>
+                                    <td>
+                                        <div class="slds-truncate slds-text-title_caps" >
+                                            <lightning:formattedNumber value="{!v.treeObj[0].tree.ETPC__c }" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                        <!--</aura:if>-->
+                </tbody>
+            
+            </table>
+        </div>
+    </article>
+</aura:if>
+<!-- ### END Summary Report D Section ### -->
+
+</aura:component>

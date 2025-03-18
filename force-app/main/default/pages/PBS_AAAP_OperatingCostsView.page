@@ -1,0 +1,430 @@
+<apex:page controller="PBS_AAAP_OperatingCostController" showHeader="false" standardStylesheets="false" sidebar="false">
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/demo_page.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+
+    <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+    <script type="text/javascript"
+            src="{!$Label.AAAP_JQUERYUI_URL}"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+    <apex:stylesheet value="{!$Resource.OutputFieldcss}"/>
+
+    <head>
+        <style type="text/css">
+            .col1   {text-align: left;
+                     width: 400px;}
+            .col2   {text-align: center;
+                     width: 230px;}
+            .tabbed-table table td {
+                    background:#fff;}
+            h2        {color:#fff; font-weight:bold; padding-left:40px; width:80%; font-size:18px;}     
+            .errMessage {color:red; }  
+            .hr { 
+                    font-weight:bold;
+                    font-size:28px;
+                    border-bottom: 1px solid #cccccc;
+                    padding: 0 0 8px;
+                    color:#002BAD;  padding-top:15px;
+                    margin: 0 0 0 45px
+                }  
+            .mainForm
+            {
+                margin-right: 50px;
+            }
+            .dataTables_wrapper
+            {
+                margin-left: 40px;
+            }   
+            .pbBottomButtons
+            {
+                margin-left: 35px;
+                margin-right: 50px;
+            } 
+
+        </style>
+        <script>
+        /*
+JQuery DataTables JS file is not loading.
+As other errors are fixed, we're now getting to this point.
+I'm not going to load datatables as the CSS is then also messed up.
+So instead... don't load this.
+Fix when we clean up the site
+
+var j$ = jQuery.noConflict();  
+ j$(document).ready(function() {
+ j$(".tablesorter").dataTable( {
+        "sScrollY": "400px",
+        "bAutoWidth": true,
+        "bPaginate": true,
+        "bJQueryUI": true,
+        "bScrollCollapse": true
+        
+     } );
+     j$('.dataTables_length').css("display", "none");
+      j$('.myAppTable').find('.dataTables_filter').css("display", "none");
+      j$('.myAppTab').find('.dataTables_filter').css("display", "none");
+    j$(".tablesorter tr:odd").css("background-color", "#CFEEF8");
+    j$(".tablesorter tr:even").css("background-color", "#F3F3EC");
+});
+*/
+
+        </script>
+
+        <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+        <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+        <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+       
+    </head>
+    <body>
+
+    <div id="login">
+        <ul>
+            <li><a href="{!$Site.Prefix}/secur/logout.jsp">LOGOUT</a></li>
+            <li>|</li>
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>
+            <!--
+        <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp" rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}"><li>| {!$Label.site.logout}</li></apex:outputLink>
+         -->
+        </ul>
+    </div><!--/login-->
+
+
+    <div id="wrapper">
+        <c:inside_header />
+        <div id="content" class="PBS_AAAP_OperatingCosts">
+            <apex:panelGrid rendered="{!!isValidUser}">
+                <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+                <apex:messages styleClass="errMessage" id="errmessage"/>
+            </apex:panelGrid>
+            <apex:panelGroup rendered="{!isValidUser}">
+                <apex:panelGrid columns="2" style="float:right"><a href="#" onclick="window.print();">Click Here To
+                        Print This Page</a>
+                    <apex:outputLabel style="padding-right:47px"></apex:outputLabel>
+                </apex:panelGrid>
+                <!-- <c:PBS_AAAP_ProgressBar myValue="{!offer.Id}" linksToViewModePage="true"/> -->
+                <c:PBS_AAAP_ProgressBarV myValue="{!offer.Id}" linksToViewModePage="true" step="4" />
+            </apex:panelGroup>
+
+            <apex:form id="form" rendered="{!isValidUser}" styleClass="mainForm">
+                <div class="hr">{!QLabels.opCostsPgHdr}</div>
+                <apex:pageBlock >
+                    <div class="tabbed-table">
+
+
+                        <div id="example_wrapper_op" class="dataTables_wrapper" role="grid" style="background-color:#f6f6f6; border-color:#99999;">
+
+                            <table id="offersTable" StyleClass="tablesorter" style="border:0px; background-color:#fff;">
+
+                                <h2 style="background-color:#f6f6f6; border-color:#99999;">&nbsp;</h2>
+
+                                <apex:panelGrid id="pangrid_bldgEffInfo" columnClasses="col1, col2" columns="2"
+                                                width="600px" frame="border" rules="all">
+                                    <apex:outputText id="txt_q1" value="{!QLabels.opCostsQ1}"></apex:outputText>
+                                    <apex:outputText id="q1" value="{0, number, #,###.##}" styleClass="outputfield">
+                                        <apex:param id="q1_val"
+                                                    value="{!offer.PBS_AAAP_GEN_PURPOSE_RENTABLE__c}"></apex:param>
+                                    </apex:outputText>
+                                    <apex:outputText id="txt_q2" value="{!QLabels.opCostsQ2}"></apex:outputText>
+                                    <apex:outputText id="q2" value="{0, number, #,###.##}" styleClass="outputfield">
+                                        <apex:param id="q2_val"
+                                                    value="{!offer.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c}"></apex:param>
+                                    </apex:outputText>
+                                    <apex:outputText id="txt_q3" value="{!QLabels.opCostsQ3}"></apex:outputText>
+                                    <apex:outputText id="q3" value="{!offer.PBS_AAAP_RU_FACTOR__c}" styleClass="outputfield"></apex:outputText>
+
+                                    <apex:outputPanel >
+                                        <apex:outputText id="txt_q4" value="{!QLabels.opCostsQ4}"
+                                                         rendered="{!IF((( RegionName != 'Census')),true,false)}"></apex:outputText>
+                                        <!-- weston: they wanted to add the word "Operating" to the Q4 question label but only for census  -->
+                                        <apex:outputText id="txt_q4_1" value="{!QLabels.CensusopCostQ4}"
+                                                         rendered="{!IF((( RegionName == 'Census')),true,false)}"></apex:outputText>
+
+                                        <apex:outputPanel rendered="{!IF((( RegionName != 'Census')),true,false)}">
+                                            <a class="popup" href="#CostPerABOA"><img src="{!$Resource.Info_Icon}"/></a>
+                                            <div id="CostPerABOA"
+                                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:500px;">
+                                                <p>This equals line 27 of GSA Form 1217, Lessor’s Annual Cost Statement,
+                                                    divided by the TOTAL ABOA SF of the building, as entered in the
+                                                    “Building” tab of the AAAP application, to produce the operating
+                                                    cost rate per ABOA SF (computed automatically by the AAAP
+                                                    application).</p>
+                                            </div>
+                                        </apex:outputPanel>
+
+                                    </apex:outputPanel>
+
+
+                                    <apex:outputText id="q4" value="{0, number, currency}" styleClass="outputfield">
+                                        <apex:param id="q4_val" value="{!offer.PBS_AAAP_COST_PER_ABOA__c}"></apex:param>
+                                    </apex:outputText>
+                                </apex:panelGrid>
+                                <p></p>
+
+                                <!-- weston cut the whole page for census starting here -->
+                                <apex:variable value="hiding" var="hiding" rendered="{!!RLPisCensus}">
+
+
+                                    <h2 style="color: #2D2D2D;">{!QLabels.opCostsSectOneHdr}</h2>
+                                    <apex:panelGrid id="pangrid_sect1" columnClasses="col1, col2" columns="2"
+                                                    width="600px" frame="border" rules="all">
+                                        <apex:outputText id="txt_sub_sect_one"
+                                                         value="{!QLabels.opCostsSubSectOne}"></apex:outputText>
+                                        <apex:outputText id="txt_sub_sect_one_space">&nbsp;</apex:outputText>
+                                        <apex:outputText id="txt_q5" value="{!QLabels.opCostsQ5}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q5"
+                                                                                  value="{!offer.PBS_AAAP_CLEANING_SALARIES__c}"></apex:outputField>
+                                        </apex:outputPanel>
+                                        <apex:outputText id="txt_q6" value="{!QLabels.opCostsQ6}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q6"
+                                                                                  value="{!offer.PBS_AAAP_CLEANING_SUPPLIES__c}"></apex:outputField>
+                                        </apex:outputPanel>
+                                        <apex:outputText id="txt_q7" value="{!QLabels.opCostsQ7}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q7"
+                                                                                  value="{!offer.PBS_AAAP_CLEANING_CONTRACT_SERVICES__c}"></apex:outputField>
+                                        </apex:outputPanel>
+                                        <apex:outputText id="txt_sub_sect_two"
+                                                         value="{!QLabels.opCostsSubSectTwo}"></apex:outputText>
+                                        <apex:outputText id="txt_sub_sect_two_space">&nbsp;</apex:outputText>
+                                        <apex:outputText id="txt_q8" value="{!QLabels.opCostsQ8}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q8"
+                                                                                  value="{!offer.PBS_AAAP_HEATING_SALARIES__c}"></apex:outputField>
+                                        </apex:outputPanel>
+                                        <apex:panelGroup id="pangrp_fuel">
+                                            <apex:outputText id="txt_q9" value="{!QLabels.opCostsQ9}"></apex:outputText>&nbsp;
+                                            <apex:outputText value="{!FuelType}" styleClass="outputfield" />
+                                        </apex:panelGroup>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q9"
+                                                                                  value="{!offer.PBS_AAAP_HEATING_FUEL_COST__c}"></apex:outputField>
+                                        </apex:outputpanel>
+                                        <apex:outputText id="txt_q10" value="{!QLabels.opCostsQ10}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q10"
+                                                                                  value="{!offer.PBS_AAAP_HEATING_MAINTENANCE__c}"></apex:outputField>
+                                        </apex:outputpanel>
+                                        <apex:outputText id="txt_sub_sect_three"
+                                                         value="{!QLabels.opCostsSubSectThree}"></apex:outputText>
+                                        <apex:outputText id="txt_sub_sect_three_space">&nbsp;</apex:outputText>
+                                        <apex:outputText id="txt_q11" value="{!QLabels.opCostsQ11}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q11"
+                                                                                  value="{!offer.PBS_AAAP_ELECTRICAL_POWER__c}"></apex:outputField>
+                                        </apex:outputpanel>
+                                        <apex:outputText id="txt_q12" value="{!QLabels.opCostsQ12}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q12"
+                                                                                  value="{!offer.PBS_AAAP_ELECTRICAL_REPLACEMENT__c}"></apex:outputField>
+                                        </apex:outputpanel>
+                                        <apex:outputText id="txt_q13" value="{!QLabels.opCostsQ13}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q13"
+                                                                                  value="{!offer.PBS_AAAP_ELECTRICAL_SPECIALEQUIP__c}"></apex:outputField>
+                                        </apex:outputpanel>
+                                        <apex:outputText id="txt_q14" value="{!QLabels.opCostsQ14}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q14"
+                                                                                  value="{!offer.PBS_AAAP_ELECTRICAL_MAINTENANCE__c}"></apex:outputField>
+                                        </apex:outputpanel>
+                                        <apex:outputText id="txt_sub_sect_four"
+                                                         value="{!QLabels.opCostsSubSectFour}"></apex:outputText>
+                                        <apex:outputText id="txt_sub_sect_four_space">&nbsp;</apex:outputText>
+                                        <apex:outputText id="txt_q15" value="{!QLabels.opCostsQ15}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q15"
+                                                                                  value="{!offer.PBS_AAAP_PLUMBING_WATER__c}"></apex:outputField>
+                                        </apex:outputpanel>
+                                        <apex:outputText id="txt_q16" value="{!QLabels.opCostsQ16}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q16"
+                                                                                  value="{!offer.PBS_AAAP_PLUMBING_SUPPLIES__c}"></apex:outputField>
+                                        </apex:outputpanel>
+                                        <apex:outputText id="txt_q17" value="{!QLabels.opCostsQ17}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q17"
+                                                                                  value="{!offer.PBS_AAAP_PLUMBING_MAINTENANCE__c}"></apex:outputField>
+                                        </apex:outputpanel>
+                                        <apex:outputText id="txt_sub_sect_five"
+                                                         value="{!QLabels.opCostsSubSectFive}"></apex:outputText>
+                                        <apex:outputText id="txt_sub_sect_five_space">&nbsp;</apex:outputText>
+                                        <apex:outputText id="txt_q18" value="{!QLabels.opCostsQ18}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q18"
+                                                                                  value="{!offer.PBS_AAAP_AC_UTILITIES__c}"></apex:outputField>
+                                        </apex:outputpanel>
+                                        <apex:outputText id="txt_q19" value="{!QLabels.opCostsQ19}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q19"
+                                                                                  value="{!offer.PBS_AAAP_AC_MAINTENANCE__c}"></apex:outputField>
+                                        </apex:outputpanel>
+                                        <apex:outputText id="txt_sub_sect_six"
+                                                         value="{!QLabels.opCostsSubSectSix}"></apex:outputText>
+                                        <apex:outputText id="txt_sub_sect_six_space">&nbsp;</apex:outputText>
+                                        <apex:outputText id="txt_q20" value="{!QLabels.opCostsQ20}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q20"
+                                                                                  value="{!offer.PBS_AAAP_ELEVATOR_SALARIES__c}"></apex:outputField>
+                                        </apex:outputpanel>
+                                        <apex:outputText id="txt_q21" value="{!QLabels.opCostsQ21}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q21"
+                                                                                  value="{!offer.PBS_AAAP_ELEVATOR_MAINTENANCE__c}"></apex:outputField>
+                                        </apex:outputpanel>
+                                        <apex:outputText id="txt_sub_sect_seven"
+                                                         value="{!QLabels.opCostsSubSectSeven}"></apex:outputText>
+                                        <apex:outputText id="txt_sub_sect_seven_space">&nbsp;</apex:outputText>
+                                        <apex:outputText id="txt_q22" value="{!QLabels.opCostsQ22}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q22"
+                                                                                  value="{!offer.PBS_AAAP_BLDG_ENGINEERCOST__c}"></apex:outputField>
+                                        </apex:outputpanel>
+                                        <apex:outputText id="txt_q23" value="{!QLabels.opCostsQ23}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q23"
+                                                                                  value="{!offer.PBS_AAAP_SECURITY__c}"></apex:outputField>
+                                        </apex:outputpanel>
+                                        <apex:outputText id="txt_q24" value="{!QLabels.opCostsQ24}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q24"
+                                                                                  value="{!offer.PBS_AAAP_SSTAX_WORKCOMP__c}"></apex:outputField>
+                                        </apex:outputpanel>
+                                        <apex:outputText id="txt_q25" value="{!QLabels.opCostsQ25}"></apex:outputText>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q25"
+                                                                                  value="{!offer.PBS_AAAP_LANDSCAPING_MAINTENANCE__c}"></apex:outputField>
+                                        </apex:outputpanel>
+                                        <apex:panelGroup id="pangrp_other_costs">
+                                            <apex:outputText id="txt_q26" style="padding-right:10px;"
+                                                             value="{!QLabels.opCostsQ26}"></apex:outputText>
+                                            <!--  <apex:commandButton id="btn_other_costs" action="{!oCosts}" value="View Other Costs" ></apex:commandButton> -->
+                                        </apex:panelGroup>
+                                        <apex:outputText id="q26" value="{0, number, currency}" styleClass="outputfield">
+                                            <apex:param value="{!offer.PBS_AAAP_TOTAL_OTHER_COSTS__c}"></apex:param>
+                                        </apex:outputText>
+                                        <apex:outputText id="txt_q27" value="{!QLabels.opCostsQ27}"></apex:outputText>
+                                        <apex:outputText id="q27" value="{0, number, currency}" styleClass="outputfield">
+                                            <apex:param value="{!offer.PBS_AAAP_SRVC_UTIL_TOTAL__c}"></apex:param>
+                                        </apex:outputText>
+                                    </apex:panelGrid>
+
+                                    <p></p>
+                                    <!--<h2 style="color: #2D2D2D;">{!QLabels.opCostsSectTwoHdr}</h2><font
+                                            color="2D2D2D"
+                                            style="display: block; margin-right: 160px; margin-left: 40px;">Items 28
+                                        through 32 will be useful in the Government's determination of the fair market
+                                        value of the space to be rented.</font>
+                                    <apex:panelGrid id="pangrid_sect3" width="600px" columnClasses="col1, col2"
+                                                    columns="2" frame="border" rules="all">
+
+                                        <apex:outputPanel >
+                                            <apex:outputText id="txt_q28"
+                                                             value="{!QLabels.opCostsQ28}"></apex:outputText>
+                                            <a class="popup" href="#Modal_Bldg_Ques10"><img
+                                                        src="{!$Resource.Info_Icon}"/></a>
+                                            <div id="Modal_Bldg_Ques10"
+                                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                                <p>Include all applicable real estate taxes imposed upon the
+                                                    property.</p>
+                                            </div>
+                                        </apex:outputpanel>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q28"
+                                                                                  value="{!offer.PBS_AAAP_REAL_ESTATE_TAXES__c}"></apex:outputField>
+                                        </apex:outputpanel>
+
+                                        <apex:outputPanel >
+                                            <apex:outputText id="txt_q29"
+                                                             value="{!QLabels.opCostsQ29}"></apex:outputText>
+                                            <a class="popup" href="#Modal_Bldg_Ques11"><img
+                                                        src="{!$Resource.Info_Icon}"/></a>
+                                            <div id="Modal_Bldg_Ques11"
+                                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                                <p>Enter the annual cost of fire, liability, and other insurance carried
+                                                    on the real estate.</p>
+                                            </div>
+                                        </apex:outputpanel>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q29"
+                                                                                  value="{!offer.PBS_AAAP_INSURANCE__c}"></apex:outputField>
+                                        </apex:outputpanel>
+
+                                        <apex:outputPanel >
+                                            <apex:outputText id="txt_q30"
+                                                             value="{!QLabels.opCostsQ30}"></apex:outputText>
+                                            <a class="popup" href="#Modal_Bldg_Ques12"><img
+                                                        src="{!$Resource.Info_Icon}"/></a>
+                                            <div id="Modal_Bldg_Ques12"
+                                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:500px;">
+                                                <p>Enter the annual cost of wages, materials, and outside services used
+                                                    in repairs and maintenance of the building itself and all similar
+                                                    repairs and maintenance costs not included
+                                                    in Section I above (Heating, Electrical, Plumbing, Air Conditioning,
+                                                    and Elevators). This includes major repairs and changes in the
+                                                    nature of a permanent improvement such as annual
+                                                    cost to replace relatively short-lived items such as boilers,
+                                                    compressors, elevators, and roof coverings.</p>
+                                            </div>
+                                        </apex:outputpanel>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q30"
+                                                                                  value="{!offer.PBS_AAAP_BUILDING_MAINTENANCE__c}"></apex:outputField>
+                                        </apex:outputpanel>
+
+                                        <apex:outputPanel >
+                                            <apex:outputText id="txt_q31"
+                                                             value="{!QLabels.opCostsQ31}"></apex:outputText>
+                                            <a class="popup" href="#Modal_Bldg_Ques13"><img
+                                                        src="{!$Resource.Info_Icon}"/></a>
+                                            <div id="Modal_Bldg_Ques13"
+                                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                                <p>Enter any lease commission which you may be responsible for due to
+                                                    the Government leasing action.</p>
+                                            </div>
+                                        </apex:outputpanel>
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q31"
+                                                                                  value="{!offer.PBS_AAAP_LEASE_COMMISSION__c}"></apex:outputField>
+                                        </apex:outputpanel>
+
+                                        <apex:outputPanel >
+                                            <apex:outputText id="txt_q32"
+                                                             value="{!QLabels.opCostsQ32}"></apex:outputText>
+                                            <a class="popup" href="#Modal_Bldg_Ques14"><img
+                                                        src="{!$Resource.Info_Icon}"/></a>
+                                            <div id="Modal_Bldg_Ques14"
+                                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                                <p>Include administrative expenses such as agency fees, legal fees,
+                                                    auditing, and advertising. Do not include financial charges such as
+                                                    income or corporate taxes or organization expense.</p>
+                                            </div>
+                                        </apex:outputpanel>
+
+                                        <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="q32"
+                                                                                  value="{!offer.PBS_AAAP_MANAGEMENT__c}"></apex:outputField>
+                                        </apex:outputpanel>
+                                        <apex:outputText id="txt_q33" value="{!QLabels.opCostsQ33}"></apex:outputText>
+                                        <apex:outputText id="q33" value="{0, number, currency}" styleClass="outputfield">
+                                            <apex:param value="{!offer.PBS_AAAP_SECT2_TOTAL__c}"></apex:param>
+                                        </apex:outputText>
+                                    </apex:panelGrid>-->
+                                    <!-- Weston the cut ends here -->
+                                </apex:variable>
+                                <!-- added by syam for fy16 change -->
+                                <p></p>
+                                <h2>&nbsp;</h2>
+                                <apex:panelGrid id="pangrid_vacantPremises" columnClasses="col1, col2" columns="2"
+                                                width="600px" frame="border" rules="all">
+                                    <apex:outputPanel >
+                                        <apex:outputText id="txt_premises"
+                                                         value="Adjustment for Vacant premises per ABOA SF:"></apex:outputText>
+
+                                        <a class="popup" href="#txt_premises_help"><img
+                                                    src="{!$Resource.Info_Icon}"/></a>
+                                        <div id="txt_premises_help"
+                                             style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:500px;">
+                                            <p>If the Government fails to occupy or vacates the entire or any portion of
+                                                the Premises prior to expiration of the term of the Lease, the operating
+                                                costs paid by the Government as part of the rent shall be reduced.</p>
+                                        </div>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel styleClass="outputfield">&nbsp;<apex:outputField id="input_premises"
+                                                                              value="{!offer.PBS_AAAP_Vacant_Premise_Rate__c}"></apex:outputField>
+                                    </apex:outputPanel>
+                                </apex:panelGrid>
+
+                            </table>
+
+                            <div class="clearfix">&nbsp;</div>
+                        </div><!-- /#example_wrapper -->
+                    </div><!-- /tabbed-table -->
+                    <apex:pageBlockButtons location="bottom">
+                        <apex:commandButton id="btn_view_offer" value="View Offer"
+                                            onclick="window.open('/AAAP/PBS_AAAP_PreviewOfferPage?offerId={!JSENCODE(offer.id)}','View Offer Screen','width=900, height=700,scrollbars=yes,resizable=yes,location=no');return false;"/>
+                    </apex:pageBlockButtons>
+                </apex:pageBlock>
+            </apex:form>
+        </div><!-- /content -->
+    </div><!-- /wrapper -->
+    <c:SiteFooterUX />
+    </body>
+</apex:page>

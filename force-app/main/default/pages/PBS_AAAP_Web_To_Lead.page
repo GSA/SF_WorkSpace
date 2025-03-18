@@ -1,0 +1,181 @@
+<!-- 9-JUL-2020 acheslyn added analytics script for user story sfws 766 -->
+<apex:page sidebar="false" standardStylesheets="false" showHeader="false">
+
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/demo_page.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+
+    <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+    <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+    <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+    <!-- <c:EnrollCSS /> -->
+    <!--<c:jQueryInit bDataTables="true" /> -->
+    <style>
+.sb-int {margin:10px;padding:10px;}
+#rightCol {width:620px; padding-right:20px;}
+.sb-int .bucket {margin-top:10px !important;}
+h3.blue {padding-top:15px;}
+.portalhome .apexp .selector {top:70px; left:0px;}
+menu.table-options {top:40px;left:-350px;}
+.tabbed-table table tr {height:35px;}
+menu.table-options a {border:1px solid#666666; border-radius:3px;padding:6px;background-position:-5px 145px;color:#333333;font-size:12px;text-decoration:none;}
+
+    </style>
+    
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+        <ul>
+            <li><a href="/AAAP/PBS_AAAP_HomePage">Home</a></li>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>| {!$Label.site.logout}</li>
+            </apex:outputLink>
+            <li>|</li>
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>
+        </ul>
+    </div><!--/login-->
+
+
+    <div id="wrapper" class="portalhome">
+        <!-- Header logo part starts Here -->
+        <h1 class="logo">GSA</h1>
+        <div id="nav">
+            <ul>
+                <li><a href="/AAAP/PBS_AAAP_HomePage">Lease Offer Platform Home</a></li>
+                <li><a href="/AAAP/PBS_AAAP_News_Updates">News &amp; Updates</a></li>
+                <li><a href="/AAAP/PBS_AAAP_About_AAAP">FAQs</a></li>
+                <li><a href="/AAAP/PBS_AAAP_Sitehelp">Help</a></li>
+                <li><a href="/AAAP/PBS_AAAP_UserRegistration">Registration</a></li>
+            </ul>
+        </div><!--/nav-->
+
+        <div id="hero-int">
+            <h2>AAAP</h2>
+        </div><!--/hero-->
+        <!-- Header logo part ends Here -->
+        <div id="content">
+            <div style="margin-left:10px; !important"/>
+
+            <!--  ----------------------------------------------------------------------  -->
+            <!--  NOTE: Please add the following <META> element to your page <HEAD>.      -->
+            <!--  If necessary, please modify the charset parameter to specify the        -->
+            <!--  character set of your HTML page.                                        -->
+            <!--  ----------------------------------------------------------------------  -->
+
+
+            <!--  ----------------------------------------------------------------------  -->
+            <!--  NOTE: Please add the following <FORM> element to your page.             -->
+            <!--  ----------------------------------------------------------------------  -->
+
+            <form id="form" action="https://www.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST"
+                  Class="formwrap" onsubmit="return validation(this);">
+                <h3 id="page-title" class="blue">Register for AAAP Email List</h3>
+                <input type="hidden" name="oid" value="00D80000000PN58"/>
+                <input type="hidden" name="retURL" value="https://aaap.secure.force.com/AAAP/PBS_AAAP_HomePage"/>
+
+                <!--  ----------------------------------------------------------------------  -->
+                <!--  NOTE: These fields are optional debugging elements. Please uncomment    -->
+                <!--  these lines if you wish to test in debug mode.                          -->
+                <!--  <input type="hidden" name="debug" value=1/>                              -->
+                <!--  <input type="hidden" name="debugEmail"                                  -->
+                <!--  value="vaishali.shah@gsa.gov">                                    -->
+                <!--  ----------------------------------------------------------------------  -->
+
+
+                <table>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td><label for="first_name">First Name</label></td>
+                        <td><input id="first_name" maxlength="40" name="first_name" size="20" type="text"/></td>
+                    </tr>
+                    <tr>
+                        <td><label for="last_name">Last Name</label></td>
+                        <td><input id="last_name" maxlength="80" name="last_name" size="20" type="text"/></td>
+                    </tr>
+                    <tr>
+                        <td><label for="email">Email</label></td>
+                        <td><input id="email" maxlength="80" name="email" size="20" type="text"/></td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="Campaign_ID">Region</label></td>
+                        <td><select id="Campaign_ID" name="Campaign_ID" required="true">
+                                <option value="">--None--</option>
+                                <option value="70180000000j3An">National Capital Region</option>
+                                <option value="70180000000j3As">Region 1</option>
+                                <option value="70180000000j3Ax">Region 2</option>
+                                <option value="70180000000j3B2">Region 3</option>
+                                <option value="70180000000j3B7">Region 4</option>
+                                <option value="70180000000j3BC">Region 5</option>
+                                <option value="70180000000j3BH">Region 6</option>
+                                <option value="70180000000j3BM">Region 7</option>
+                                <option value="70180000000j3BW">Region 8</option>
+                                <option value="70180000000j3Bb">Region 9</option>
+                                <option value="70180000000j3Bg">Region 10</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="submit" name="submit"/></td>
+                    </tr>
+                </table>
+
+
+            </form>
+        </div><!--/content-->
+
+
+    </div><!-- /Wrapper -->
+    <script type="text/javascript">
+function validation(form) {
+var e = document.getElementById("Campaign_ID");
+var strUser = e.options[e.selectedIndex].value;
+
+      
+if(form.first_name.value == '') {
+
+alert('Please enter your first name');
+form.first_name.focus();
+return false;
+}
+
+
+if(form.last_name.value == '') {
+
+alert('Please enter your last name');
+form.last_name.focus();
+return false;
+}
+
+if(form.email.value == '') {
+
+alert('Please enter your email address');
+form.email.focus();
+return false;
+}
+
+if(strUser == '--None--') {
+
+alert('Please select Region');
+form.Campaign_ID.focus();
+return false;
+}
+
+
+
+
+return true;
+}
+
+
+
+    </script>
+    <c:SiteFooterUX />
+</apex:page>

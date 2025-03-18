@@ -1,0 +1,302 @@
+<!-- 9-JUL-2020 acheslyn added analytics script for user story 766 -->
+<apex:page Controller="PBS_AAAP_HomePageController" sidebar="false" standardStylesheets="false" showHeader="false"
+           cache="true" expires="60">
+
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+
+    <!-- <script src="{!$Label.AAAP_JQUERY_URL}"></script> -->
+    <!-- *** Todd Brown updated the above old JQuery v1.7.2 lib to the below latest v3.5.1 lib -->
+    <script src="{!$Label.AAAP_JQUERY_URL_V3_5_1}"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+    <site:googleAnalyticsTracking />
+    
+    <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+    <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+    <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+
+
+    <style>
+        .errMessage {color:red; }
+        
+        .tab { margin-left: 40px; }      
+        
+        h3.blue {padding-top:10px;}
+        p, .formwrap td {font-size:12px;}
+        .bucket {margin-top:10px;}
+        .redtitle {font-size:16px;color:red;font-weight:bold;}
+        .bluetitle {font-size:20px;color:#0023a7;font-weight:bold;}
+        
+        #nav ul {
+            float: right;
+            list-style: none;
+            margin: 30px 0px 25px 20px;
+        }
+        
+        #nav1 ul {            
+            float: right;
+            text-transform: uppercase;
+            font-size: 10px;
+            font-weight: bold;
+            color: #666666;
+            padding-left: 5px;
+        }
+        
+        #nav1 {
+            border-bottom: 1px solid #cccccc;
+            padding-top: 20px;
+        }
+        #rightCol {
+            width:  87%;
+            padding: 0px 40px 40px 40px;
+            float: left;
+        }
+        
+        #outer
+        {
+        width:100%;
+        text-align: center;
+        }
+        .inner
+        {
+        display: inline-block;
+        }
+        .button {
+            background-color: Crimson;  
+            border-radius: 5px;
+            color: black;
+            padding: .5em;
+            text-decoration: none;
+        }
+        
+        .button:focus,
+        .button:hover {            
+            color: black;
+        }
+        
+        .custom_btn {
+            border: 1px solid #000000;
+            border-radius: 20px;
+            align-content: center;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            padding: 5px;
+            opacity:1;
+        }
+        .custom_btn:hover{
+            //border: 3px solid #000000;
+            box-shadow:
+                    1px 1px #000000,
+                    2px 2px #000000,
+                    3px 3px #000000;
+            -webkit-transform: translateX(-3px);
+            transform: translateX(-3px);
+        }
+        .custom_link {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        text-indent: -9999px;
+        overflow: hidden;        
+        }
+        
+        .bluelink {
+            color: blue !important; 
+            text-decoration-color: blue;
+            text-decoration: underline;
+        }
+        
+        ul.listviewStyle{
+            list-style-type: disc !important;
+            list-style-position: inside;
+        }
+        
+        
+    </style>
+       
+    <apex:outputText rendered="{!$Label.AAAP_PBS_ShowMessage}" >
+        <div style="width:980px;
+                    margin:auto;
+                    background-color:#fff;
+                    border:1px solid #999;
+                    position:relative;
+                    margin-top:33px;
+                    -moz-box-shadow: 0 0 10px 5px #ccc;
+                    -webkit-box-shadow: 0 0 10px 5px #ccc;
+                    padding-left: 10px;">
+            {!$Label.AAAP_PBS_Message}
+        </div>
+    </apex:outputText>
+     
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+        <ul>
+            <li><a href="/"> LOP Home</a></li>
+            <li>|</li>
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>
+        </ul>
+    </div><!--/login-->
+
+    <div id="wrapper">
+        <h1 class="logo">GSA</h1>
+        <div id="nav">
+            <ul>
+                <!--<li><a href="/AAAP/PBS_AAAP_About_AAAP" style="text-decoration:underline;font-weight:bold;"><b>FAQs</b></a></li>-->
+                <li style="margin-top: 4px;font-size: 14px !important;">
+                    <a href="/LOPHelp"><font>LOP Help</font></a>
+                </li>
+                <!-- <li style="font-size: 14px !important;">
+                    <a href="/AAAP/UserRegistration" style="font-weight:normal;background-image:linear-gradient(#f9e5b8,#f5b351);border-radius:5px;">
+                        <font class="orange" style="font-weight:normal;color:#000;">Registration</font>
+                    </a>
+                </li> -->
+                <li style="font-size: 14px !important;">
+                    <a href="#" onclick="window.parent.location.href = '{!$Label.LOP_Community_Base_URL}Registration'" style="font-weight:normal;background-image:linear-gradient(#f9e5b8,#f5b351);border-radius:5px;">
+                        <font class="orange" style="font-weight:normal;color:#000;">Registration</font>
+                    </a>
+                </li>
+            </ul>
+        </div><!--/nav-->
+
+        <div id="hero-int2">
+
+        </div><!--/hero-->
+        <!-- Header logo part ends Here -->
+        <!-- added by syam for the line-->
+
+
+        <h4 style="border-bottom: 2px solid #cccccc;padding-bottom: 2px;"></h4>
+        <div id="content">
+            <div id="rightCol">
+                <!--h4 class="blue" style="padding-top: 8px;">GSA's Lease Offer Platform</h4-->
+                <p>
+
+
+                    <font class="bluetitle">GSA's Lease Offer Platform</font>
+                </p>
+                <h4 style="border-bottom: 1px solid #cccccc;padding-top: 2px;"></h4>
+
+
+                <!--   <p>
+
+
+                       <font class="redtitle">The Lease Offer Platform (LOP) is the new homepage for GSA's Automated Advanced Acquisition Program (AAAP).</font>
+                   </p> -->
+
+                <p>The <strong>Lease Offer Platform (LOP)</strong> provides the opportunity for building owners and
+                    building owner representatives to electronically offer building space to the Federal Government.
+                    The offer submission process is completely web-enabled, allowing all registered participants to
+                    submit and update offers for lease space to the Federal Government within specified
+                    timeframes, in response to a Request for Lease Proposal (RLP) package. The <strong>Lease Offer
+                        Platform</strong> consists of the:</p>
+                
+                
+                
+                <p class="tab">
+                   <div id="outer">
+                       <div class="custom_btn" style="background-image: linear-gradient(#d8edf9,#6175d8); width: 47%;">
+                           <a href="/AAAP/LoginPage" class="custom_link">hidden link for whole div</a>
+                           <a href="/AAAP/LoginPage"><h2 class="bluelink"><strong>Automated Advanced Acquisition Platform (AAAP)</strong></h2></a>
+                           <p style="text-align:left;margin-left:10px;padding-bottom:5px;padding-left: 20px;">CLICK HERE to login, learn more, and enter an offer for AAAP if:</p>
+                           <table width="90%" style="margin-left:35px;text-align:left;font-size:12px">
+                               <tr>
+                                   <td>&#8226;</td>
+                                   <td style="padding-left:10px;padding-bottom:10px;"> You are responding to an ad that specifies the AAAP as the procurement method </td>
+                               </tr>
+                               <tr>
+                                   <td></td>
+                                   <td style="text-align:center">OR</td>
+                               </tr>
+                               <tr>
+                                   <td>&#8226;</td>
+                                   <td style="padding-left:10px;padding-top:10px;padding-bottom:18.5px;"> You want your offered space available for any current or future government requirements tasked to the AAAP </td>
+                               </tr>
+                           </table>                          
+                       </div>
+                       <div class="custom_btn" style="background-image: linear-gradient(#f9e5b8,#f5b351); width: 45%;">
+                           <a href="/RSAP/LoginPage" class="custom_link">hidden link for whole div</a>
+                           <a href="/RSAP/LoginPage"><h2 class="bluelink"><strong>Requirement Specific Acquisition  Platform (RSAP)</strong></h2></a>
+                           <p style="text-align:left;margin-left:10px;padding-bottom:5px;padding-left: 20px;">CLICK HERE to login, learn more, and enter an offer for RSAP if:</p>
+                           <table width="90%" style="margin-left:35px;text-align:left;font-size:12px">
+                               <tr>
+                                   <td>&#8226;</td>
+                                   <td style="padding-left:10px;padding-bottom:10px;"> You are submitting an offer in response to a unique Request for Lease Proposals (RLP), issued for a specific agency requirement (not AAAP) </td>
+                               </tr>
+                               <tr>
+                                   <td></td>
+                                   <td style="text-align:center">AND</td>
+                               </tr>
+                               <tr>
+                                   <td>&#8226;</td>
+                                   <td style="padding-left:10px;padding-top:10px;"> The RLP requires offers to be submitted through the RSAP application </td>
+                                   
+                               </tr>
+                           </table>
+                           
+                       </div>
+                      <!-- <a href="#" class="button js-button" role="button" style="background-color: #add8dc;">Automated Advance Acquisition Platform (AAAP)</a>
+                       <a href="#" class="button js-button" role="button" style="background-color:#f3a75a;">Automated Advance Acquisition Platform (RSAP)</a>-->
+                 </div>
+                </p>
+                <!-- <p><strong>To register, please go to the <a href="/AAAP/PBS_AAAP_UserRegistration">offeror registration</a> page</strong>. &nbsp;&nbsp;For additional help, contact <a href="/AAAP/PBS_AAAP_ContactUs">AAAP.Manager@gsa.gov</a>.</p> -->
+
+
+                <p>
+                    <span style="font-size:120%;"> <strong>Who Are We?</strong></span>
+                </p>
+                <p>
+
+                    The GSA is an independent agency of the United States government, established in 1949 to help manage and support the basic
+                    functioning of federal agencies, to include leasing space for federal agencies, so that government employees have space to perform
+                    their work. Today’s GSA lease portfolio consists of more than 8,000 leases, consisting of about 192 million RSF with a total contract
+                    value exceeding 5.6 billion dollars in annual rent. </p>
+                
+                <p><strong> Helpful resources are available by clicking the “Help” link at the top of each page. For technical assistance, email
+                            <a style="font-size: small; font-weight: bold; color: blue;" href="mailto:LOP.help@gsa.gov">LOP.help@gsa.gov</a> or call 1-866-450-6588 and select option 7. For answers to program or policy questions, email
+                            <a class="bluelink" href = "mailto: LOP.manager@gsa.gov">LOP.manager@gsa.gov</a>.
+                   </strong>
+                </p>
+               
+
+            </div> <!--/rightCol-->
+        </div>  <!--/content-->
+
+    </div><!-- /Wrapper -->
+
+    <script type="text/javascript">
+function validate(){    
+    var flag = true;
+    
+    var region   =   document.getElementById('{!$Component.regionForm.region}').value;  
+    if(region==""){
+        document.getElementById('regionerror').style.display = 'inline';            
+        flag = false;
+    }else{
+        document.getElementById('regionerror').style.display ='none';
+    }
+    return flag;
+}
+
+    //redirect to authoritative hostname (i.e. lop.gsa.gov) as appropriate
+    var authoritativeExternalHost = "{!$Label.AAAP_EXTERNAL_HOST}";
+    //alert("v4\nCurrent Url=["+window.location+"]\nCurrent Host=["+window.location.host+"]\nauthoritativeExternalHost=["+authoritativeExternalHost+"]");
+    if (authoritativeExternalHost!=null && authoritativeExternalHost.length > 1 && !window.location.href.includes('leasing')){
+        //var u = window.location;
+        //u = (""+u).replace(window.location.host, authoritativeExternalHost);
+        //alert("old => ["+window.location+"]\nnew => ["+u+"]");
+        //window.location.replace(u);
+        window.location.href = authoritativeExternalHost;
+    }
+
+
+
+    </script>
+    <c:sitefooterhome ></c:sitefooterhome>
+
+
+</apex:page>

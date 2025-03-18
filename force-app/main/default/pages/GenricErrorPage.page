@@ -1,0 +1,85 @@
+<!-- 9-JUL-2020 acheslyn added analytics script for user story sfws 766 -->
+<apex:page showHeader="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" >
+    
+    <head>
+        
+        <style>
+            table.outerTable{
+            width: 95%;
+            margin-left:2.5%;
+            border-spacing: 0px;
+            border: black;
+            border-style: solid;
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-top: 5px;
+            }
+            
+            table.mainTable{
+            border-spacing: 0px;
+            width: 100%;
+            }
+            
+            table.mainTable td{
+            border:black;
+            border-style: solid;
+            border-width: 0.5px;
+            border-spacing: 0px;
+            /*border-left: none;
+            border-top: none;*/
+            }
+            
+            td.td1{
+            font-weight: bold;
+            vertical-align: middle;
+            font-size: x-small;
+            font-family: Arial;
+            text-align: center;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            padding-bottom: 5px;
+            }
+            
+            td.td2{
+            font-weight: normal;
+            vertical-align: middle;
+            font-family: Arial;
+            font-size: xx-small;
+            padding-left: 3px;
+            padding-right: 3px;
+            vertical-align: top;
+            padding-bottom: 5px;
+            }
+            
+            td.td3{
+            font-weight: normal;
+            vertical-align: middle;
+            font-family: Arial;
+            font-size: xx-small;
+            padding-left: 3px;
+            padding-right: 3px;
+            background-color: darkgray;
+            padding-bottom: 5px;
+            }
+            
+            span.resp{
+            color: red;
+            font-weight: bold;
+            }
+            
+            
+        </style>
+
+        <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+ 		<script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+        <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+
+    </head>
+    
+    <center>
+        <div style="color:red;padding:5%">
+            {!$CurrentPage.parameters.errormessage}  
+        </div>
+    </center>
+    
+</apex:page>

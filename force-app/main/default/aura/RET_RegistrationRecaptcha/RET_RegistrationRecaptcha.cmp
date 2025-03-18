@@ -1,0 +1,5 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="siteKey" type="String"/>
+    <ltng:require scripts='https://www.google.com/recaptcha/api.js'/>
+    <div class="g-recaptcha" data-sitekey="{!v.siteKey}">reCaptcha did not display</div>
+</aura:component>

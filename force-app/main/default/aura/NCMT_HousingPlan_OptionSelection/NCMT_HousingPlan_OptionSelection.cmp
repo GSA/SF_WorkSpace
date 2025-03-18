@@ -1,0 +1,147 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId,lightning:isUrlAddressable" access="global" controller="NCMT_HousingPlan_OptionSelection">
+   
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+   
+    <aura:attribute name="id" type="String" />
+    <aura:attribute name="selectedHP" type="String" />
+    <aura:attribute name="templateRecordType" type="String" />
+    <aura:attribute name="templateType" type="String" />
+    <aura:attribute name="typeOptions" type="List"/>
+    <aura:attribute name="isLoaded" type="Boolean" default="false" />
+    <aura:attribute name="isSaved" type="Boolean" default="false" />
+    <aura:attribute name="isHP" type="Boolean" />
+    <aura:attribute name="idHP" type="String" />
+    <aura:attribute name="saveError" type="String" />
+    <aura:if isTrue="{! !v.isLoaded }">
+        <lightning:spinner alternativeText="Loading" />
+    </aura:if>
+   
+
+    <lightning:card title="Moving Options">
+        <!--
+        <aura:set attribute="actions">
+            <lightning:button label="Save"/>
+        </aura:set>
+  -->
+        <lightning:layout>
+            <lightning:layoutItem size="3" >
+                &nbsp;
+            </lightning:layoutItem>
+
+            <lightning:layoutItem size="6" >
+                <aura:if isTrue="{!v.isSaved}">
+                    <div style="width:30em;" class="notifBox">
+                        Moving Options Saved!
+                    </div>
+                </aura:if>
+                <aura:if isTrue="{!v.saveError != null}">
+                    <div  class="notifBox" style="font-color:red;">
+                        {!v.saveError}
+                    </div>
+                </aura:if>
+            </lightning:layoutItem>
+        
+            <lightning:layoutItem  size="3" >
+                <div style="text-align:right;padding-right:10px;display:inline-block;width:100%;">
+                    <lightning:button label="Save" variant="brand" title="Save" onclick="{! c.handleSave }"/>
+                    &nbsp;
+                    <aura:if isTrue="{!v.isHP}">
+                        <a href="{!'/apex/NCMT_MoveCostModule_LC'}" target="_parent">
+                            <button class="slds-button slds-button_neutral">Back</button>
+                        </a>
+                        <aura:set attribute="else">
+                            <a href="{!('/' +v.id)}" target="_parent">
+                                <button class="slds-button slds-button_neutral">Back</button>
+                            </a>
+                        </aura:set>
+                    </aura:if>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+        <lightning:tabset>
+            <aura:iteration items="{!v.typeOptions}" var="hp">
+                
+                <lightning:tab label="{!hp.groupName}" >
+                    
+                    <lightning:card>
+                        <aura:set attribute="title">
+                            <div style="display:inline-block;padding-right:5px;">
+                                <b>Move #</b>
+                            </div>
+                            <div style="display:inline-block;">
+                                <div>
+                                    <lightning:select name="rec" variant="label-inline" onchange="{!c.recChange}" value="{!hp.selectedRecurrence}" class="moveSelect">
+                                        <aura:iteration items="{!hp.recurrences}" var="rec">
+                                            <option value="{!rec.num}" selected="{!rec.num==hp.selectedRecurrence}">{!rec.num}</option>
+                                        </aura:iteration>
+                                        
+                                        
+                                    </lightning:select>
+                                </div>
+                            </div>
+                            <div style="display:inline-block;padding-left:5px;">
+                                <lightning:button name="{!hp.groupName}" label="Add Move" onclick="{!c.addMove}"/> 
+                            </div>
+                        </aura:set>
+                        
+
+                        <div id="optionSelection" style="padding:15px;">
+                            <aura:iteration items="{!hp.recurrences}" var="rec">
+                                
+                                <aura:if isTrue="{!hp.selectedRecurrence +'' == rec.num +''}">
+                                    
+                                        <aura:iteration items="{!rec.subTypes}" var="sub">
+                                            <div style="padding-bottom:5px;">
+                                                <ui:outputText value="{!sub.name}" class="slds-text-heading_small"/>
+                                            </div>
+                                            <div style="padding-left:25px;">
+                                                <aura:iteration items="{!sub.options}" var="o">
+                                                    <lightning:layout>
+                                                        
+                                                        <lightning:layoutItem  class="optionCheck" size="1" >
+                                                            
+                                                                <ui:inputCheckbox value="{!o.selected}"/>
+                                                    
+                                                        </lightning:layoutItem>
+
+                                                        <lightning:layoutItem class="optionCell" size="11" >
+                                                            <div style="font-size: 1.1em;">
+                                                                <b>{!o.record.Choice_Text__c}</b>
+                                                            </div>
+                                                                
+                                                            {!o.record.Description__c}
+                                                        
+                                                            <aura:if isTrue="{!hp.isTCO}">
+                                                                <div>
+                                                                    <lightning:layout>
+                                                                        <lightning:layoutItem class="optionCell" size="4" >
+                                                                            <lightning:input value="{!o.optSelect.TCO_Repair_Every_X_Years__c}" variant="label-inline" label="TCO Repair Every X Years" class="numInput"/>
+                                                                        </lightning:layoutItem>
+                                                                        <lightning:layoutItem class="optionCell" size="4" >
+                                                                            <lightning:input value="{!o.optSelect.TCO_Repair_Cost_Percentage__c}" variant="label-inline" label="TCO Repair Cost %" class="numInput"/>
+                                                                        </lightning:layoutItem>
+                                                                        <lightning:layoutItem class="optionCell" size="4" >
+                                                                            <lightning:input value="{!o.optSelect.TCO_Replacement_Every_X_Years__c}" variant="label-inline" label="TCO Replace Every X Years" class="numInput"/>
+                                                                        </lightning:layoutItem>
+                                                                    </lightning:layout>
+                                                                </div>
+                                                            </aura:if>
+                                                        </lightning:layoutItem>
+
+                                                    
+                                                    </lightning:layout>   
+                                                </aura:iteration>
+                                            </div>
+                                        </aura:iteration>
+                                    
+                                </aura:if>
+                            
+                            </aura:iteration> 
+                        </div>
+                    </lightning:card>
+                </lightning:tab>
+            </aura:iteration>
+        </lightning:tabset>
+        
+    </lightning:card>
+</aura:component>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PBS_RSAP_Step_Payment_Basis__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(ISPICKVAL( PBS_RSAP_Step_Rent_Type__c , &apos;&apos;),&apos;&apos;,IF( ISPICKVAL( PBS_RSAP_Step_Rent_Type__c , &apos;Shell&apos;) , &apos;Year&apos;, &apos;Space per Month&apos;))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Step Payment Basis</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

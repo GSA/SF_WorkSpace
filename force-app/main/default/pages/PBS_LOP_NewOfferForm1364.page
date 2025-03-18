@@ -1,0 +1,1575 @@
+<apex:page controller="PBS_LOP_NewOfferForm1364Controller" showHeader="false" standardStylesheets="false" applyBodyTag="false"
+    applyHtmlTag="false" renderAs="pdf">
+
+    <apex:stylesheet value="{!$Resource.PBS_Stylesheet_1364}" />
+  
+    <html>
+
+    <head>
+        <style type="text/css" media="print">
+            @page {
+                size: 8.5in 14in;
+                margin: .4cm .5cm 1.7cm .5cm;
+                @bottom-center {
+                    content: element(footer);
+                }
+            }
+        </style>
+
+    </head>
+
+    <body>
+
+
+        <!--  SECTION I AND II  -->
+        <div style='page-break-after: always'>
+            
+            <div class="footer text_header" name="footer">
+                <div class="column text_header  margin_left_10">GENERAL SERVICES ADMINISTRATION</div>
+                <div class="column_right text_header ">GSA 1364 (REV. 1/2023) PAGE
+                    <span class="pagenumber" />
+                </div>
+            </div>
+     
+            <table class="outerTable">
+
+                <tr>
+                    <td class="border_bold padding_top_0">
+                        <div class="text_title">PROPOSAL TO LEASE SPACE</div>
+                        <div class="text_small text_italic text_center">(See Paperwork Reduction Act Statement in Section V)</div>
+                    </td>
+                    <td class="border_bold padding_top_0">
+                        <div>This Offer is in response to Request for Lease
+                            <br/>Proposals (RLP) Number:
+                            <span class="data_cell_inline">{!OfferWrapper.PBS_AAAP_Solicitation_Number}</span>
+                        </div>
+                    </td>
+                    <td class="border_bold border_right_none padding_top_0 ">
+                        <div class="text_bold">OMB Control Number: 3090-0086</div>
+                        <div class="text_bold">Expiration Date: 1/31/2026</div>
+                    </td>
+                </tr>
+            </table>
+
+            <table>
+                <tr>
+                    <td width="100%" class="text_header" style="border-width: 2px 0px 2px 0px;border-color:black">
+                        SECTION I - BUILDING OVERVIEW
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td width="50%" class="border_bottom_none ">1. Building Name<br/>
+                    </td>
+                    <td width="50%" class="border_right_none border_bottom_none ">2. Building Street Address<br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="data_cell" style="min-height:34px;">{!OfferWrapper.PBS_AAAP_Building_Name}
+                    </td>
+                    <td class="border_right_none data_cell">{!OfferWrapper.PBS_AAAP_Street_Address}
+                    </td>
+                </tr>
+            </table>
+
+            <table>
+                <tr>
+                    <td width="76%" class="border_bottom_none" >3. City, State and 9-Digit Zip Code<br/>
+                    </td>
+                    <td width="24%" class="border_right_none border_bottom_none">4. Number of Floors in Building<br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="data_cell">{!OfferWrapper.PBS_AAAP_City}, {!OfferWrapper.PBS_AAAP_State} {!OfferWrapper.PBS_AAAP_ZipCode}
+                    </td>
+                    <td class="border_right_none data_cell"> {!OfferWrapper.PBS_AAAP_floors_Suites_in_Offered_Space}
+                    </td>
+                </tr>
+            </table>
+            
+            <table>
+                <tr>
+                    <td width="55%">5. Total Rentable Square Feet (RSF) in Building&nbsp;
+                        <span class="data_cell text_underline">
+                            <apex:outputText value="{0, number, ###,##0.00}">
+                                <apex:param value="{!OfferWrapper.PBS_AAAP_GEN_PURPOSE_RENTABLE}" /> </apex:outputText>
+                        </span>
+                        <br/>
+                       
+                        <div class="text_underline text_italic margin_left_13 margin_top_5 ">Building Space Breakout </div>
+                        <table>
+                            <tr>
+                                <td width="50%" class="border_none">
+                                    <div class="margin_left_13 margin_top_2">a. General Purpose/Office:</div>
+                                    <div class="data_cell margin_top_6 margin_left_12">
+                                        <apex:outputText value="{0, number,###,##0.00}">
+                                            <apex:param value="{!OfferWrapper.PBS_AAAP_OFFICE_SPACE_RSF}" /> </apex:outputText>
+                                    </div>
+                                </td>
+                                <td class="border_none">
+                                    <div class="margin_top_2">b. Warehouse:</div>
+                                    <div class="data_cell margin_top_6 ">
+                                        <apex:outputText value="{0, number,###,##0.00}">
+                                            <apex:param value="{!OfferWrapper.PBS_AAAP_RETAIL_SPACE_RSF}" /> </apex:outputText>
+                                    </div>
+                                </td>
+                                <td class="border_none">
+                                    <div  class="margin_top_2">c. Other:</div>
+                                    <div class="data_cell margin_top_6 ">
+                                        <apex:outputText value="{0, number,###,##0.00}">
+                                            <apex:param value="{!OfferWrapper.PBS_AAAP_GARAGE_SPACE_RSF}" /> </apex:outputText>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+
+
+                    <td width="25%">6. Total ANSI/BOMA Occupant
+                        <div class="margin_left_13">Area (ABOA) Square Feet</div>
+                        <div class="margin_left_13">(SF) in Building</div><br/>
+                        <div class="data_cell margin_left_13 ">N/A</div>
+                    </td>
+                    <td width="20%" class="border_right_none">7. Building
+                        <div class="margin_left_13">Common Area</div>
+                        <div class="margin_left_13">Factor (CAF)</div><br/>
+                        <div class="data_cell margin_left_13 ">N/A</div>
+                    </td>
+
+
+                </tr>
+                </table>
+                <table>
+                    <tr>
+                        <td width="100%" class="border_none">
+                            8. Total Building Parking Under Offeror's Control
+                        </td>
+                    </tr>
+                </table>
+                <table> 
+                <tr>
+                    <td width="16%" class="border_none"><div></div>
+
+                        <div style="margin-left:10px">a. Total Surface
+                            <div class="data_cell margin_top_10">
+                                <apex:outputText value="{0, number, ###,##0}">
+                                    <apex:param value="{!OfferWrapper.PBS_AAAP_Total_Surface_Parking_Spaces}" /> </apex:outputText>
+                            </div>
+                        </div>
+                    </td>
+                    <td width="16%" class="border_none"> <div>b. Total Structured
+                            <div class="data_cell margin_top_10">
+                                <apex:outputText value="{0, number, ###,##0}">
+                                    <apex:param value="{!OfferWrapper.PBS_AAAP_Total_Structured_Parking_Spaces}" /> </apex:outputText>
+                            </div>
+                        </div>
+                    </td>
+                    <td width="22%" class="border_none"><div>c. Is all the parking onsite?
+                            <div class="border_none margin_top_10">
+                               
+                                <img src="{!IF(OfferWrapper.PBS_AAAP_Parking_Onsite == 'Yes', $Resource.checkbox_checked, $Resource.checkbox_unchecked)}" /> &nbsp;YES&nbsp;&nbsp;
+                                <img src="{!IF(OfferWrapper.PBS_AAAP_Parking_Onsite == 'No',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)} "
+                                /> &nbsp;NO
+                            </div>
+                        </div>
+                    </td>
+                    <td width="66%" class="border_none"><div >d. Number of spaces required by local code, if applicable:
+                            <div class="data_cell margin_top_10">
+                                <apex:outputText value="{0, number, ###,##0.00}">
+                                    <apex:param value="{!OfferWrapper.PBS_AAAP_Total_Park_Spaces_Offered}" /> </apex:outputText>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </table>  
+                <table>
+                <tr>
+
+
+                    <td width="100%" class="border_none text_italic  padding_bottom_7 padding_left_12 padding_top_5">
+                        (Parking spaces and associated costs offered to meet the requirements outlined in the RLP shall be detailed in Box 20).
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td class="border_bold border_right_none text_header">SECTION II - PRIMARY OFFER DETAILS</td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td width="23%" >9. ABOA SF of Offered Space
+                        <div class="data_cell margin_top_5 margin_left_10" style="min-height:20px;">
+                            <apex:outputText value="{0, number, ###,##0.00}">
+                                <apex:param value="{!OfferWrapper.PBS_AAAP_Total_Ofc_ABOA_offered}" /> </apex:outputText>
+                        </div>
+                    </td>
+                    <td width="23%">10. RSF of Offered Space
+                        <div class="data_cell margin_top_5 margin_left_10">
+                            <apex:outputText value="{0, number, ###,##0.00}">
+                                <apex:param value="{!OfferWrapper.PBS_AAAP_Office_RSF_OFFERED}" /> </apex:outputText>
+                        </div>
+                    </td>
+                    <td width="21%">11. CAF of Offered Space
+                        <div class="data_cell margin_top_5 margin_left_10">
+                            <apex:outputpanel rendered="{!OfferWrapper.PBS_AAAP_Common_Area_Factor  != null}">
+                                <apex:outputText value="{0, number, ###,##0.00}">
+                                    <apex:param value="{!OfferWrapper.PBS_AAAP_Common_Area_Factor}"/> </apex:outputText>%
+                            </apex:outputpanel>
+                        </div>
+                    </td>
+                    <td width="33%" class="border_right_none">12. Floor(s) and/or Suite(s) of Offered Space
+                        <div class="data_cell margin_top_5 margin_left_10">{!OfferWrapper.PBS_AAAP_floors_and_suites_offered}</div>
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td width="16%">
+                        <div class="padding_bottom_4">13. Full Term
+                            <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; of the Lease
+                        </div>
+                        <apex:outputPanel rendered="{!OfferWrapper.Confirm_Full_Term_Lease_Months != null}">
+                            <div class="data_cell margin_left_10 margin_top_6 padding_bottom_3">{!OfferWrapper.Confirm_Full_Term_Lease_Months}&nbsp;Months</div>
+                        </apex:outputPanel>
+                    </td>
+                    <td width="16%">
+                        <div class="padding_bottom_4">14. Firm Term
+                            <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; of the Lease</div>
+                       
+                        <apex:outputPanel rendered="{!OfferWrapper.Confirm_Firm_Term_Lease_Months != null}">
+                            <div class="data_cell margin_left_10 margin_top_6 padding_bottom_3">{!OfferWrapper.Confirm_Firm_Term_Lease_Months}&nbsp;Months</div>
+                        </apex:outputPanel>
+                    </td>
+                    <td width="52%" class="border_right_none text_italic vertical_align_middle">
+                        After the Firm Term, the Government may terminate the Lease by providing advanced written notice to the Lessor. Indicate
+                        the minimum number of days the Government must provide prior written notice by.
+                    </td>
+                    <td width="16%" class="border_right_none" >
+                        <div class="padding_bottom_4">15. Number of</div>
+                        <div class="margin_left_20">Days Notice</div>
+                        <div class="data_cell margin_left_10 margin_top_6 padding_bottom_3">{!OfferWrapper.PBS_AAAP_Initial_Day_Terminate_Lease}</div>
+                    </td>
+                </tr>
+            </table>
+
+            <table  style="width:764px; table-layout:fixed; ">
+                <tr>
+                    <td width="455px">
+                    
+                        <div class="text_header" style="text-align:left">RENT TABLE</div>
+                        <div class="text_italic padding_top_3 padding_bottom_3">Enter initial rental figures only. Scheduled step rents for Shell rent and <br/>
+                                                Parking rates must be entered in Section VI, Addendum.
+                        </div>
+                    </td>
+                    <td width="100px" class="text_bold text_larger text_center padding_none" >X.
+                        <br/>Annual Rent</td>
+                    <td width="84px" class="text_bold text_larger text_center padding_none" >Y.
+                        <br/>Annual Rate<br/>$ Per RSF</td>
+                    <td width="100px" class="text_bold text_larger text_center padding_none" >Z.
+                        <br/>Annual Rate<br/>$ Per ABOA SF</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="text_normal_plus">16.
+                            <u>Shell Rent</u>
+                        </div>
+                        <div class="padding_top_5">The initial Shell Rent is a total annual dollar amount of
+                                  <apex:image html-class="margin_left_10 " value="{!$Resource.Long_Right_Arrow}"></apex:image></div>
+ 
+                        <div class="padding_top_5 text_small margin_left_20">Does the initial Shell Rent offered change during the term of the lease?
+                            <div class="border_none padding_bottom_5">
+                                <img class="margin_left_20" src="{!IF(OfferWrapper.PBS_AAAP_Is_Shell_Rent_Stepped == 'Yes',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                                />&nbsp;YES&nbsp;&nbsp;
+                                <img src="{!IF(OfferWrapper.PBS_AAAP_Is_Shell_Rent_Stepped == 'No',   $Resource.checkbox_checked, $Resource.checkbox_unchecked)} "
+                                /> &nbsp;NO
+                            </div>
+                        </div>
+                    </td>
+                    <td class="data_cell vertical_align_middle text_right" style="padding-left:1px">
+                        <apex:outputText value="{0, number,currency}">
+                            <apex:param value="{!OfferWrapper.PBS_RSAP_Shell_Initial_Annual}" /> </apex:outputText>
+                    </td>
+                    <td class="data_cell vertical_align_middle text_right" style="padding-left:1px">
+                        <apex:outputText value="{0, number,currency}">
+                            <apex:param value="{!OfferWrapper.PBS_RSAP_Shell_Rent_Per_RSF_Initial}" /> </apex:outputText>
+                    </td>
+                    <td class="data_cell vertical_align_middle text_right" style="padding-left:1px">
+                        <apex:outputText value="{0, number,currency}">
+                            <apex:param value="{!OfferWrapper.PBS_RSAP_Shell_Rent_Per_ABOA_Initial}" /> </apex:outputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td  class="padding_bottom_5" style='padding-right:0px'>
+                        <div class="text_normal_plus">17.
+                            <u>Operating Costs</u>
+                            <i>(Refer to Line 27 on the GSA 1217)</i>
+                        </div>
+                        <div class="padding_top_5 padding_bottom_3" style="display:inline-block">The Operating Cost base is a total annual dollar amount of
+                            <apex:image html-class="margin_left_10" value="{!$Resource.Short_Right_Arrow}"></apex:image>
+                        </div>
+
+                    </td>
+                    <td class="data_cell vertical_align_middle text_right">
+                        <apex:outputText value="{0, number,currency}">
+                            <apex:param value="{!OfferWrapper.PBS_AAAP_SRVC_UTIL_TOTAL_GOV}" /> </apex:outputText>
+                    </td>
+                    <td class="data_cell vertical_align_middle text_right">
+                        <apex:outputText value="{0, number,currency}">
+                            <apex:param value="{!OfferWrapper.PBS_AAAP_OP_COST_COST_PER_RSF}" /> </apex:outputText>
+                    </td>
+                    <td class="data_cell vertical_align_middle text_right">
+                        <apex:outputText value="{0, number,currency}">
+                            <apex:param value="{!OfferWrapper.PBS_AAAP_OP_COST_COST_PER_ABOA}" /> </apex:outputText>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td class="padding_bottom_5">
+                        <div class="text_normal_plus">18.
+                            <u>Tenant Improvement (TI) Rent</u>
+                        </div>
+                       
+                        <div class="margin_top_8   text_small">a. TI Allowance per ABOA SF:
+                            <apex:outputPanel html-class="data_cell_inline" rendered="{!OfferWrapper.PBS_RSAP_TIA_Or_Turnkey == 'TIA'}">
+                                $<apex:outputText value="{0, number, ##.######}">
+                                    <apex:param value="{!OfferWrapper.PBS_AAAP_TI_Buildout_as_in_RLP}" /> 
+                                </apex:outputText>
+                            </apex:outputPanel>&nbsp; (stated in RLP; leave blank for turnkey)
+                        
+                        </div>
+                        
+
+                        <div class="margin_top_8   text_small">b. Total TI:
+                            <apex:outputPanel html-class="data_cell_inline" rendered="{!OfferWrapper.PBS_RSAP_TIA_Or_Turnkey == 'TIA'}">
+                                <apex:outputText value="{0, number,currency}">
+                                    <apex:param value="{!OfferWrapper.PBS_AAAP_TI_Total_Build_out_Costs}" /> </apex:outputText>
+                            </apex:outputPanel>
+                            <apex:outputPanel html-class="data_cell_inline" rendered="{!OfferWrapper.PBS_RSAP_TIA_Or_Turnkey == 'Turnkey'}">
+                                <apex:outputText value="{0, number,currency}">
+                                    <apex:param value="{!OfferWrapper.PBS_RSAP_Total_TI_Turnkey}" /> </apex:outputText>
+                            </apex:outputPanel>
+                            <i>('a' above multiplied by offered ABOA SF or turnkey price)</i>
+                        </div>
+                       
+                        <table>
+                            <tr>
+                                <td width="45%" class="border_top_none border_bottom_none  text_small padding_left_0 padding_top_5 padding_bottom_0">
+                                    c. Amortization Interest Rate:
+                                    <span class="data_cell_inline"> 
+                                        <apex:outputText value="{0, number,#0.00}">
+                                            <apex:param value="{!OfferWrapper.PBS_AAAP_TI_Amorti_Interest_Rate}" /> 
+                                        </apex:outputText>%
+                                    </span>
+                                </td>
+                                <td width="55%" class="border_none padding_left_5 text_small">
+                                    d. Amortization Period in Months:<span class="data_cell_inline padding_bottom_0 padding_top_5"> {!OfferWrapper.PBS_AAAP_TI_Amorization_in_Years}</span>
+                                </td>
+                            </tr>
+                        </table>
+                    <!-- 
+                        <div class="margin_top_8   text_small padding_bottom_2">c. Amortization Interest Rate:
+                            <span class="data_cell_inline"> {!OfferWrapper.PBS_AAAP_TI_Amorti_Interest_Rate}%</span> &nbsp;&nbsp;&nbsp;|
+                                                &nbsp;&nbsp;&nbsp;  d. Amortization Period in Months:
+                            <span class="data_cell_inline"> {!OfferWrapper.PBS_AAAP_TI_Amorization_in_Years}</span>
+                        </div>
+                    -->
+
+                    </td>
+                    <td class="data_cell vertical_align_middle text_right padding_bottom_0">
+                        <apex:outputText value="{0, number,currency}">
+                            <apex:param value="{!OfferWrapper.PBS_AAAP_Annual_TI_Rent}" /></apex:outputText>
+                    </td>
+                    <td class="data_cell vertical_align_middle text_right padding_bottom_0">
+                        <apex:outputText value="{0, number,currency}">
+                            <apex:param value="{!OfferWrapper.PBS_AAAP_TI_Annual_Rent_Per_RSF}" /></apex:outputText>
+                    </td>
+                    <td class="data_cell vertical_align_middle text_right padding_bottom_0">
+                        <apex:outputText value="{0, number,currency}">
+                            <apex:param value="{!OfferWrapper.PBS_AAAP_TI_Annual_Rent_Per_ABOA}" /></apex:outputText>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td class="padding_bottom_5">
+                        <div class="text_normal_plus">19.
+                            <u>Building Specific Amortized Capital (BSAC) Rent</u>
+                        </div>
+                        <div class="margin_top_8   text_small">a. BSAC Amount per ABOA SF:
+                            <apex:outputPanel html-class="data_cell_inline" rendered="{!OfferWrapper.PBS_RSAP_BSAC_Rate_ABOA_or_Total == 'Rate per ABOA SF specified in RLP'}">
+                                <apex:outputText value="{0, number,currency}">
+                                    <apex:param value="{!OfferWrapper.PBS_RSAP_BSAC_Rate_from_RLP}" /></apex:outputText>
+                            </apex:outputPanel>
+                            <i>&nbsp;(if stated in RLP)</i>
+                        </div>
+                        <div class="margin_top_8   text_small">b. Total BSAC:
+                            <apex:outputPanel html-class="data_cell_inline" rendered="{!OfferWrapper.PBS_RSAP_BSAC_Rate_ABOA_or_Total == 'Rate per ABOA SF specified in RLP'}">
+                                <apex:outputText value="{0, number,currency}">
+                                    <apex:param value="{!OfferWrapper.PBS_AAAP_BSAC_Total_Build_out_Costs}" /> </apex:outputText>
+                            </apex:outputPanel>
+                            <apex:outputPanel html-class="data_cell_inline" rendered="{!OfferWrapper.PBS_RSAP_BSAC_Rate_ABOA_or_Total != 'Rate per ABOA SF specified in RLP'}">
+                                <apex:outputText value="{0, number,currency}">
+                                    <apex:param value="{!OfferWrapper.PBS_RSAP_BSAC_Calc_from_Rate}" /> </apex:outputText>
+                            </apex:outputPanel>
+                            <i>&nbsp;('a' above multiplied by offered ABOA SF or total cost)</i>
+                        </div>
+
+                        
+                        <table>
+                            <tr>
+                                <td width="45%" class="border_top_none border_bottom_none  text_small padding_left_0 padding_top_5 padding_bottom_0">
+                                    c. Amortization Interest Rate:
+                                    <span class="data_cell_inline"><apex:outputText value="{0, number,##0.00}">
+                                        <apex:param value="{!OfferWrapper.PBS_AAAP_BSAC_Amorti_Interest_Rate}" /> </apex:outputText>%
+                                    </span>
+                                </td>
+                                <td width="55%" class="border_none padding_left_5 text_small">
+                                    d. Amortization Period in Months:<span class="data_cell_inline padding_bottom_0 padding_top_5"> {!OfferWrapper.PBS_AAAP_BSAC_Amorization_in_Years}</span>
+                                </td>
+                            </tr>
+                        </table>
+                    <!--
+                        <div class="margin_top_8 text_small padding_bottom_2">c. Amortization Interest Rate:
+                            <span class="data_cell_inline"> {!OfferWrapper.PBS_AAAP_BSAC_Amorti_Interest_Rate}</span> %&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                            d. Amortization Period in Months:
+                            <span class="data_cell_inline"> {!OfferWrapper.PBS_AAAP_BSAC_Amorization_in_Years}</span>
+                        </div>
+                    -->
+                    </td>
+                    <td class="data_cell vertical_align_middle text_right">
+                        <apex:outputText value="{0, number,currency}">
+                            <apex:param value="{!OfferWrapper.PBS_AAAP_Anual_BSAC_Rent}" /></apex:outputText>
+                    </td>
+                    <td class="data_cell vertical_align_middle text_right">
+                        <apex:outputText value="{0, number,currency}">
+                            <apex:param value="{!OfferWrapper.PBS_AAAP_BSAC_Annual_Rent_Per_RSF}" /></apex:outputText>
+                    </td>
+                    <td class="data_cell vertical_align_middle text_right">
+                        <apex:outputText value="{0, number,currency}">
+                            <apex:param value="{!OfferWrapper.PBS_AAAP_BSAC_Annual_Rent_Per_ABOA}" /></apex:outputText>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="padding_bottom_2">
+                        <div class="text_normal_plus">20.
+                            <u>Parking Required by the RLP</u>
+                        </div>
+                        <table class="margin_top_5">
+                            <tr>
+                                <td width="15%" class="border_none  padding_top_0 text_small">
+                                    a. General <br/>&nbsp;&nbsp;&nbsp;&nbsp; Surface:
+                                </td>
+                                <td width="15%" class="data_cell_inline text_right  text_small border_none  padding_top_0"> <apex:outputText value="{0, number,currency}">
+                                        <apex:param value="{!OfferWrapper.PBS_AAAP_Monthly_cost_nonres_sur_park}" /></apex:outputText></td>
+                                <td  width="30%" class="border_none  padding_top_0 text_small "> per space per month</td>
+                                <td width="40%" class="border_none  padding_top_0 text_small ">b. Number of
+                                    <br/>&nbsp;&nbsp;&nbsp;&nbsp;Spaces Offered:
+                                    <span class="data_cell_inline">{!OfferWrapper.PBS_RSAP_Surf_NonResv_Parking}</span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="border_none  padding_top_0 text_small ">
+                                    c. General<br/>&nbsp;&nbsp;&nbsp;&nbsp;Structured:
+                                </td>
+                                <td  class="data_cell_inline text_right border_none  padding_top_0 text_small "> <apex:outputText value="{0, number,currency}">
+                                        <apex:param value="{!OfferWrapper.PBS_AAAP_Monthly_cost_nonres_gar_park}" /></apex:outputText></td>
+                                <td  class="border_none  padding_top_0 text_small "> per space per month</td>
+                                <td  class="border_none  padding_top_0 text_small ">d. Number of
+                                    <br/>&nbsp;&nbsp;&nbsp;&nbsp;Spaces Offered:
+                                    <span class="data_cell_inline">{!OfferWrapper.PBS_RSAP_Struct_NonResv_Parking}</span>
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td class="border_none  padding_top_0 text_small ">
+                                    e. Reserved<br/>&nbsp;&nbsp;&nbsp;&nbsp;Surface:
+                                </td>
+                                <td  class="data_cell_inline text_right border_none  padding_top_0 text_small "> <apex:outputText value="{0, number,currency}">
+                                        <apex:param value="{!OfferWrapper.PBS_AAAP_Monthly_cost_res_sur_park}" /></apex:outputText></td>
+                                <td class="border_none  padding_top_0 text_small "> per space per month</td>
+                                <td class="border_none  padding_top_0 text_small ">f. Number of
+                                    <br/>&nbsp;&nbsp;&nbsp;&nbsp;Spaces Offered:
+                                    <span class="data_cell_inline">{!OfferWrapper.PBS_RSAP_Surf_Resv_Parking}</span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="border_none  padding_top_0 padding_bottom_10 text_small ">
+                                    g. Reserved<br/>&nbsp;&nbsp;&nbsp;&nbsp;Structured: 
+                                </td>
+                                <td class="data_cell_inline text_right border_none  padding_top_0 text_small "> <apex:outputText value="{0, number,currency}">
+                                        <apex:param value="{!OfferWrapper.PBS_AAAP_Monthly_cost_res_gar_park}" /></apex:outputText></td>
+                                <td class="border_none  padding_top_0 text_small "> per space per month</td>
+                                <td class="border_none  padding_top_0 text_small ">h. Number of
+                                    <br/>&nbsp;&nbsp;&nbsp;&nbsp;Spaces Offered:
+                                    <span class="data_cell_inline">{!OfferWrapper.PBS_RSAP_Struct_Resv_Parking}<br/></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="data_cell vertical_align_middle text_right  padding_top_0">
+                        <apex:outputText value="{0, number,currency}">
+                            <apex:param value="{!OfferWrapper.PBS_RSAP_Total_Parking_Annual_Amount}" /></apex:outputText>
+                    </td>
+                    <td class=" padding_top_0" style="background-color: gray;">
+                        <br/>
+                    </td>
+                    <td class=" padding_top_0" style="background-color: gray;">
+                        <br/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="text_normal_plus">21.
+                            <u>Rent for Non-Standard Circumstances</u>
+                        </div>
+
+                        <table class="margin_left_10">
+                            <tr>
+                                <td width="62%" class="border_none text_italic padding_top_5">
+                                    The RLP requires a non-standard rental<br/> component applicable only under specific<br/> conditions outlined in the Lease called:
+                                </td>
+                                <td width="38%" class="border_none">Not Applicable</td>
+                            </tr>
+
+                        </table>
+                    </td>
+                    <td style="background-color: gray;">
+                        <br/>
+                    </td>
+                    <td style="background-color: gray;">
+                        <br/>
+                    </td>
+                    <td style="background-color: gray;">
+                        <br/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="text_header_no_center padding_top_10 padding_bottom_10" style="text-align:right; padding-right:60px" >22. TOTAL INITIAL RENT</td>
+                    <td class="data_cell vertical_align_middle text_right padding_top_10 padding_bottom_10 text_bold ">
+                        <apex:outputText value="{0, number,currency}">
+                            <apex:param value="{!OfferWrapper.PBS_RSAP_Lease_Annual_Rent}" /></apex:outputText>
+                    </td>
+                    <td class="data_cell vertical_align_middle text_right padding_top_10 padding_bottom_10 text_bold ">
+                        <apex:outputText value="{0, number,currency}">
+                            <apex:param value="{!OfferWrapper.PBS_AAAP_Lease_Annual_Rent_Per_RSF}" /></apex:outputText>
+                    </td>
+                    <td class="data_cell vertical_align_middle text_right padding_top_10 padding_bottom_10 text_bold ">
+                        <apex:outputText value="{0, number,currency}">
+                            <apex:param value="{!OfferWrapper.PBS_AAAP_Lease_Annual_Rent_Per_ABOA}" /></apex:outputText>
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td width="100%" class="text_normal_plus border_none">23. <u>Fee Schedule</u></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td width="29%" class="padding_none border_none">
+                        <div class="margin_left_10 text_italic">
+                            <br/>The RLP outlines how fees may<br/> apply. Fees are not applicable<br/>for turnkey pricing.
+                        </div>
+                    </td>
+                    <td width="39%" class=" text_small padding_none border_top_none border_bottom_none" >
+                        <div>a. Architectural/Engineering fees will be
+                            <i>(choose one):</i>
+                        </div>
+                        <div >
+                            <img src="{!IF(OfferWrapper.PBS_AAAP_ARCHITECTURAL_ENG_FEES_UOM == 'Percent of Total Construction Costs (%)',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            /> Percent of Total Construction Costs:
+                            <apex:outputPanel rendered="{!OfferWrapper.PBS_AAAP_ARCHITECTURAL_ENG_FEES_UOM == 'Percent of Total Construction Costs (%)'}">
+                                <span class="data_cell_inline">
+                                    <apex:outputText value="{0, number,##0.00}">
+                                        <apex:param value="{!OfferWrapper.PBS_AAAP_Architectural_Fees_Percent}" />
+                                    </apex:outputText>%   
+                                </span>
+                            </apex:outputPanel>
+                        </div>
+                        <div>
+                            <img src="{!IF(OfferWrapper.PBS_AAAP_ARCHITECTURAL_ENG_FEES_UOM == 'Per ABOA Square Feet ($)',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            /> Dollar Amount per ABOA SF:
+                            <apex:outputPanel html-class="data_cell_inline" rendered="{!OfferWrapper.PBS_AAAP_ARCHITECTURAL_ENG_FEES_UOM == 'Per ABOA Square Feet ($)'}">
+                                <apex:outputText value="{0, number,currency}">
+                                    <apex:param value="{!OfferWrapper.PBS_AAAP_ARCH_ENG_FEES_PER_USF}" /></apex:outputText>
+                            </apex:outputPanel>
+                        </div>
+                        <div >
+                            <img src="{!IF(OfferWrapper.PBS_AAAP_ARCHITECTURAL_ENG_FEES_UOM == 'Flat Fee ($)',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            /> Flat Fee:
+                            <span class="data_cell_inline">
+                                <apex:outputPanel html-class="data_cell_inline" rendered="{!OfferWrapper.PBS_AAAP_ARCHITECTURAL_ENG_FEES_UOM == 'Flat Fee ($)'}">
+                                    <apex:outputText value="{0, number,currency}">
+                                        <apex:param value="{!OfferWrapper.PBS_AAAP_Architectural_Fees_Flat}" />
+                                    </apex:outputText>
+                                </apex:outputPanel>
+                            </span>
+                        </div>
+                    </td>
+                    <td width="32%" class=" padding_none border_none">
+                        &nbsp;b. Lessor's Project Management fee will be:
+                        <br/><br/>
+                        <div class="margin_left_10">Percent of Total Construction Costs</div>
+                        <br/> 
+                        <div class="data_cell_inline margin_left_10">
+                            <apex:outputpanel rendered="{!OfferWrapper.PBS_AAAP_Lessor_Prj_Fees != null}">
+                                <apex:outputText value="{0,number, ##0.00}">
+                                    <apex:param value="{!OfferWrapper.PBS_AAAP_Lessor_Prj_Fees}"/>
+                                </apex:outputText>%
+                            </apex:outputpanel>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!--  Page Break Here -->
+        <!--  SECTION III AND IV  -->
+        <div>
+            <table>
+                <tr>
+                    <td class="border_bold border_right_none text_header">SECTION III - ADDITIONAL FINANCIAL ASPECTS OF THE OFFER</td>
+                </tr>
+            </table>
+
+            <table>
+                <tr>
+                    <td width="25%" class="border_none">
+                        <div>24. Are you offering free rent?</div>
+                       
+
+                        <div class="border_none margin_left_10">
+                            <img src="{!IF(OfferWrapper.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM != null && OfferWrapper.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM > 0,  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;YES&nbsp;&nbsp;
+                            <img src="{!IF((OfferWrapper.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM == 0) || (OfferWrapper.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM == null) ,   $Resource.checkbox_checked, $Resource.checkbox_unchecked)} "
+                            /> &nbsp;NO
+
+                        </div>
+                           
+                    </td>
+           
+                    <td width="25%" class="border_none">
+                        <div>a. If yes, enter the number of
+                            <br/>&nbsp;&nbsp;&nbsp;&nbsp;free months being offered.
+                            <br/>
+                            <br/>
+                            <apex:outputPanel rendered = "{!OfferWrapper.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM != null && OfferWrapper.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM > 0}">
+                                <div class="data_cell_inline margin_left_10">{!OfferWrapper.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM} months</div>
+                            </apex:outputPanel>
+                        </div>
+                    </td>
+
+                    <td width="50%" class="border_none">
+                        <div>b. What rent components are included in the free rent?</div>
+                        <table>
+                            <tr>
+                                <td width="33%" class="border_none margin_left_10">
+                                    <div>
+                                        <img src="{!IF(OfferWrapper.PBS_RSAP_Free_Shell_Is_Offered == 'Yes',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                                        />&nbsp;Shell</div>
+                                    <div>
+                                        <img src="{!IF(OfferWrapper.PBS_RSAP_Free_Operating_Is_Offered == 'Yes',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                                        />&nbsp;Operating Costs</div>
+                                </td>
+                                <td width="33%" class="border_none margin_left_10">
+                                    <div>
+                                        <img src="{!IF(OfferWrapper.PBS_RSAP_Free_TI_Is_Offered  == 'Yes',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                                        />&nbsp;TI</div>
+                                    <div>
+                                        <img src="{!IF(OfferWrapper.PBS_RSAP_Free_BSAC_Is_Offered == 'Yes',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                                        />&nbsp;BSAC</div>
+                                </td>
+                                <td width="34%" class="border_none margin_left_10">
+                                    <div>
+                                        <img src="{!IF(OfferWrapper.PBS_RSAP_Free_Parking_Is_Offered == 'Yes',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                                        />&nbsp;Parking</div>
+                                    <div>
+                                        <img src="{!IF(OfferWrapper.PBS_RSAP_Free_Non_Standard_is_Offered == 'Yes',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                                        />&nbsp;Non-Standard</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <table>
+                <tr>
+                    <td width="19%" class="border_right_none">
+                        <div>25. Are you offering free
+                            <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;space?</div>
+                        <div class="border_none margin_left_10">
+                            <img src="{!IF(OfferWrapper.PBS_AAAP_Free_Space_Offered != null && OfferWrapper.PBS_AAAP_Free_Space_Offered > 0,  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}" />&nbsp;YES&nbsp;&nbsp;
+                            <img src="{!IF((OfferWrapper.PBS_AAAP_Free_Space_Offered == 0) || (OfferWrapper.PBS_AAAP_Free_Space_Offered == null) ,   $Resource.checkbox_checked, $Resource.checkbox_unchecked)} "
+                            /> &nbsp;NO
+                        </div>
+                    </td>
+
+                    <td width="36%" >
+                        <div>a. If yes, how much free space, <u>in addition</u> to the
+                            <div class="margin_left_10">space offered in Box 9 above, is being offered?</div>
+                            <div class="data_cell margin_left_10 margin_top_8">
+                                <apex:outputText value="{0, number, ###,##0.00}">
+                                    <apex:param value="{!OfferWrapper.PBS_AAAP_Free_Space_Offered}" /> </apex:outputText>
+                                <span class="text_normal">&nbsp;&nbsp;ABOA SF</span>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td width="23%" class="border_right_none">
+                        <div>26. Are you offering renewal
+                            <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;options?</div>
+                        <div class="border_none margin_left_10">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Are_you_offering_renewal_option == 'Yes',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;YES&nbsp;&nbsp;
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Are_you_offering_renewal_option  == 'No',   $Resource.checkbox_checked, $Resource.checkbox_unchecked)} "
+                            /> &nbsp;NO
+                        </div>
+                    </td>
+                    <td width="23%" class="text_italic text_center border_right_none vertical_align_middle">If yes, fill out 'Renewal Options' in Section VI, Addendum. </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td width="60%" class="border_right_none">
+                        <div>27. Commissions
+                            <br/>
+                            <div class="margin_left_20 margin_top_2 text_small">If applicable, enter the commission distribution and ATTACH BROKER COMMISSION AGREEMENT.</div>
+
+                        </div>
+                    </td>
+                    <td width="40%" class="border_right_none">
+                        <div>a. Tenant's Representative Commission
+                            <span class="data_cell_inline">{!OfferWrapper.PBS_AAAP_BROKER_TENANT_REP_COMM} %</span>
+                        </div>
+                        <br/>
+                        <div>b. Owner's Representative Commission
+                            <span class="data_cell_inline">{!OfferWrapper.PBS_AAAP_BROKER_OWNER_REP_COMM} %</span>
+                        </div>
+
+                    </td>
+
+                </tr>
+            </table>
+
+            <table>
+                <tr>
+                    <td width="22%">
+                        <div>28. Adjustment for Vacant
+                            <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Premises
+                            <br/>
+                            <div class="data_cell margin_left_10 margin_top_5">
+                                <apex:outputText value="{0, number,currency}">
+                                    <apex:param value="{!OfferWrapper.PBS_AAAP_Vacant_Premise_Rate}" /></apex:outputText>
+                                <span class="text_normal">&nbsp;&nbsp;per ABOA SF</span>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td width="22%">
+                        <div>29. Adjustment for Reduced
+                            <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Services
+                            <br/>
+                            <div class="data_cell margin_left_10 margin_top_5">
+                                <apex:outputText value="{0, number,currency}">
+                                    <apex:param value="{!OfferWrapper.PBS_AAAP_Adj_for_Reduced_Services_Rate}" /></apex:outputText>
+                                <span class="text_normal">&nbsp;&nbsp;per ABOA SF</span>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td width="37%" class="border_right_none">
+                        <div>30. Tax Parcel Percent of Government Occupancy </div>
+                        <div class="margin_left_10 margin_top_5">a. RSF of Tax Parcel
+                            <span class="data_cell_inline">
+                                <apex:outputText value="{0, number, ###,##0.00}">
+                                    <apex:param value="{!OfferWrapper.PBS_RSAP_Tax_Parcel_RSF}" /> </apex:outputText>
+                            </span>
+                            <span class="margin_left_10">RSF</span>
+                        </div>
+                        <div class="margin_left_10 margin_top_5">b. Percent of Occupancy
+                            <span class="data_cell_inline">
+                                <apex:outputText value="{0, number, ###,##0.00}">
+                                    <apex:param value="{!OfferWrapper.PBS_AAAP_Government_Occupancy_Percentage}"/>
+                                </apex:outputText>%
+                            </span>
+                        </div>
+                    </td>
+                    <td width="19%" class="text_italic text_center border_right_none vertical_align_middle">Explain complex tax parcel arrangements in Section VI, Addendum. </td>
+                </tr>
+            </table>
+            <div class="text_normal padding_top_5 padding_bottom_2">31. Heating, Ventilation, and Air Conditioning (HVAC) Overtime Rate</div>
+            <table>
+                <tr>
+                    <td width="21%" class="border_top_none">
+                        <div class="margin_left_10">a.
+                            <span class="data_cell_inline">
+                                <apex:outputText value="{0, number,currency}">
+                                    <apex:param value="{!OfferWrapper.PBS_AAAP_HVAC_OT_Rate}" /></apex:outputText>
+                            </span>
+                            <div class="margin_left_10">rate per hour&nbsp;&nbsp;&nbsp;-PER-</div>
+                        </div>
+                    </td>
+                    <td width="25%" class="border_top_none">
+                        <div>b. Select one of the options below:</div>
+
+                        <div>
+                            <img src="{!IF(OfferWrapper.PBS_AAAP_HVAC_OT_Rate_Type == 'Per Zone',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;Zone&nbsp;&nbsp;
+                            <img src="{!IF(OfferWrapper.PBS_AAAP_HVAC_OT_Rate_Type == 'Per Floor', $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;Floor&nbsp;&nbsp;
+                            <img src="{!IF(OfferWrapper.PBS_AAAP_HVAC_OT_Rate_Type == 'Per Space', $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;Space
+                        </div>
+                    </td>
+                    <td width="15%" class="border_top_none">
+                        c. Total Number 
+                        <div class="margin_left_10"></div>
+                        <div class="margin_left_10">of Zones, Floors,</div>
+                        <div class="margin_left_10">or Spaces</div>
+                        <div class="data_cell margin_left_10 padding_top_5">{!OfferWrapper.PBS_AAAP_Number_of_zones}</div>
+                    </td>
+                    <td width="36%" class="border_top_none border_right_none">d. If the Government used 1 hour of overtime HVAC 
+                        <div class="margin_left_10">for the entire offered space, it would owe:</div>
+                        <div class="text_italic margin_left_10 text_center">(Multiply 31a times 31c)</div>
+                        <div class="data_cell margin_left_20 padding_top_5 text_center text_underline" >
+                            <apex:outputText value="{0, number,currency}">
+                                <apex:param value="{!OfferWrapper.PBS_RSAP_HVAC_Example}" /></apex:outputText>
+                        </div>
+                        <br/>
+                    </td>
+                </tr>
+            </table>
+
+            <table>
+                <tr>
+                    <td class="border_bold border_right_none text_header">SECTION IV - BUILDING AND PROPERTY INFORMATION</td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td class="border_right_none">
+                        <div class="margin_bottom_5 margin_top_8">32. In what year was the original building construction completed and ready for initial occupancy?
+                            <span class="data_cell_inline">{!OfferWrapper.PBS_RSAP_Year_Built}</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="border_right_none">
+                        <div class="margin_top_8">33. Provide the year and a brief description of the last major building renovation, if applicable.</div>
+                        <div class="data_cell margin_top_8"  style="min-height:30px">{!OfferWrapper.PBS_RSAP_Renovation_Year}</div>
+                       
+                    </td>
+                </tr>
+                <tr>
+                    <td class="border_right_none">
+                        <div class=" margin_top_8">34. Select the approximate level of construction necessary to meet the building shell requirements:</div>
+                        <div class="margin_left_10 margin_bottom_5">
+                            <img src="{!IF(OfferWrapper.PBS_AAAP_Approximate_Construction_Level == 'Improvements Needed',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;a. Improvements to the existing Building will be required to meet the Lease shell requirements.
+                        </div>
+                        <div class="margin_left_30 margin_top_2">&nbsp;&nbsp;The total approximate construction cost to achieve Lease shell standards is:
+                            <span class="data_cell_inline">
+                                <apex:outputText value="{0,number,currency}">
+                                    <apex:param value="{!OfferWrapper.PBS_AAAP_SHELL_Build_out_Costs}"/>
+                                </apex:outputText>
+                            </span>
+                        </div>
+                        <div class="margin_left_10 margin_top_3">
+                            <img src="{!IF(OfferWrapper.PBS_AAAP_Approximate_Construction_Level == 'Already Meets',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;b. The Building already meets all the Lease shell requirements; no improvements are necessary.
+                        </div>
+                        <div class="margin_left_10 margin_top_3">
+                            <img src="{!IF(OfferWrapper.PBS_AAAP_Approximate_Construction_Level == 'New Construction',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;c. The requirements of the Lease will be satisfied through the construction of a new building.
+                        </div>
+                        <table class="margin_left_40">
+                            <tr>
+
+                                <td width="28%" class="margin_top_5 border_none">Land Site Size:
+                                    
+                                    <span class="data_cell_inline"><apex:outputText value="{0, number, ###,##0.00}">
+                                        <apex:param value="{!OfferWrapper.PBS_AAAP_SITE_SIZE_SQFT}" /> </apex:outputText></span>&nbsp;&nbsp;
+
+                                </td>
+                                <td width="32%" class="margin_top_5 border_top_none border_bottom_none ">
+
+                                    <img src="{!IF(OfferWrapper.PBS_AAAP_SITE_AREA_TYPE == 'Square Feet',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                                    />&nbsp;SF
+                                    <u>or</u>&nbsp;
+                                    <img src="{!IF(OfferWrapper.PBS_AAAP_SITE_AREA_TYPE == 'Acres',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                                    />&nbsp;Acres
+                                    <div class="margin_left_10 text_italic padding_top_5 padding_bottom_5">(Choose one)</div>
+                                </td>
+
+                                <td class="margin_bottom_5 border_none">
+                                    <span style="border-left:1px">Total Land Costs:
+                                        <span class="data_cell_inline"> 
+                                            <apex:outputText value="{0, number,currency}">
+                                                <apex:param value="{!OfferWrapper.PBS_AAAP_Total_Land_Cost}" /> 
+                                            </apex:outputText></span>
+                                       
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+
+            </table>
+            <div class="text_normal margin_top_8">35. What are the Building's normal hours of operations for HVAC included in the Operating Costs?</div>
+            <table>
+                <tr>
+                    <td width="23%" class="border_none">
+                        <div class="margin_left_70 margin_bottom_10 margin_top_5">Monday - Friday</div>
+                        <div class="margin_bottom_4 margin_left_40">Start&nbsp;
+                            <span class="data_cell_inline">{!OfferWrapper.PBS_AAAP_HVAC_HRS_MON_TO_FRI_START}</span>
+                        </div>
+                        <div class="margin_bottom_4 margin_left_40">End&nbsp;&nbsp;
+                            <span class="data_cell_inline">{!OfferWrapper.PBS_AAAP_HVAC_HRS_MON_TO_FRI_END}</span>
+                        </div>
+                    </td>
+                    <td width="23%" class="border_none">
+                        <div class="margin_left_100 margin_bottom_10">Saturday</div>
+                        <div class="margin_bottom_4 margin_left_70">&nbsp;&nbsp;Start&nbsp;
+                            <span class="data_cell_inline">{!OfferWrapper.PBS_AAAP_HVAC_HRS_ON_SAT_START}</span>
+                        </div>
+                        <div class="margin_bottom_4 margin_left_70">&nbsp;&nbsp;End&nbsp;&nbsp;
+                            <span class="data_cell_inline">{!OfferWrapper.PBS_AAAP_HVAC_HRS_ON_SAT_END}</span>
+                        </div>
+                    </td>
+                    <td width="54%" class="border_none">
+                        <div class="margin_left_100 margin_bottom_10">Sunday</div>
+                        <div class="margin_bottom_4 margin_left_70">&nbsp;&nbsp;Start&nbsp;
+                            <span class="data_cell_inline">{!OfferWrapper.PBS_AAAP_HVAC_HRS_ON_SUN_START}</span>
+                        </div>
+                        <div class="margin_bottom_4 margin_left_70">&nbsp;&nbsp;End&nbsp;&nbsp;
+                            <span class="data_cell_inline">{!OfferWrapper.PBS_AAAP_HVAC_HRS_ON_SUN_END}</span>
+                        </div>
+                       
+                    </td>
+                </tr>
+            </table>
+
+            <table>
+                <tr>
+                    <td class="padding_bottom_3 border_top margin_top_8">36. With regard to Fire Protection and Life Safety:</td>
+                </tr>
+                <tr>
+                    <td class="border_none">
+                        <div class=" margin_left_20">
+                            <img src="{!IF(OfferWrapper.PBS_AAAP_FIRE_SAFETY_CERT == 'Meets',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;a. The Property meets the Lease fire protection/life safety standards.</div>
+                        <div class=" margin_left_20">
+                            <img src="{!IF(OfferWrapper.PBS_AAAP_FIRE_SAFETY_CERT == 'Will meet',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;b. The Property will be improved to meet the Lease fire protection/life safety standards.</div>
+                        <div class=" margin_left_20 margin_bottom_5">
+                            <img src="{!IF(OfferWrapper.PBS_AAAP_FIRE_SAFETY_CERT == 'Does not meet',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;c. The Property does NOT meet the Lease fire protection/life safety standards and will
+                            NOT be upgraded.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class=" border_top margin_top_8">37. With regard to Accessibility (Architectural Barriers Act Accessibility Standard - ABAAS):</td>
+                </tr>
+                <tr>
+                    <td class="border_none">
+                        <div class=" margin_left_20">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Accessibility_Standards_Met == 'Meets',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;a. The Property meets the Lease accessibility standards.</div>
+                        <div class=" margin_left_20">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Accessibility_Standards_Met == 'Will meet',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;b. The Property will be improved to meet the Lease accessibility standards.</div>
+                        <div class=" margin_left_20 margin_bottom_5">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Accessibility_Standards_Met == 'Does not meet',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;c. The Property does NOT meet the Lease accessibility standards and will NOT be upgraded.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class=" border_top margin_top_8">38. With regard to Asbestos-Containing Material (ACM):
+                        <i> (Select all that apply)</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="border_none">
+                        <div class=" margin_left_20">
+                            <img src="{!IF(CONTAINS(OfferWrapper.PBS_AAAP_Asbestos,'None'),  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;a. The Building contains no ACM.</div>
+                        <div class=" margin_left_20">
+                            <img src="{!IF(CONTAINS(OfferWrapper.PBS_AAAP_Asbestos,'Undamaged_nonfriable'),  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;b. The Building contains undamaged, nonfriable ACM.</div>
+                        <div class=" margin_left_20">
+                            <img src="{!IF(CONTAINS(OfferWrapper.PBS_AAAP_Asbestos,'thermal'),  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;c. The Building contains thermal system insulation ACM which is not damaged or subject to
+                            damage by routine operations.
+                        </div>
+                        <div class=" margin_left_20">
+                            <img src="{!IF(CONTAINS(OfferWrapper.PBS_AAAP_Asbestos,'ACM_other'),  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;d. The Building contains ACM that does not fall within any of the above categories.</div>
+                        <div class="margin_bottom_5 margin_left_20">
+                            <img src="{!IF(CONTAINS(OfferWrapper.PBS_AAAP_Asbestos,'ACM_abatement'),  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;e. The Building contains ACM; abatement will be completed prior to occupancy.</div>
+                    </td>
+                </tr>
+                </table>
+                <table >
+                <tr >
+                    <td class=" border_top margin_top_8">39. With regard to Flood Plains:</td>
+                </tr>
+                <tr>
+                    <td class="border_none">
+                        <div class=" margin_left_20">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Flood_Plain_Declaration == 'in a base (100-year) flood plain',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;a. The Property is in a base (100 year) floodplain.</div>
+                        <div class=" margin_left_20">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Flood_Plain_Declaration == 'in a 500-year flood plain',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;b. The Property is in a 500 year floodplain.</div>
+                        <div class="margin_left_20">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Flood_Plain_Declaration == 'Not in a flood plain',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;c. The Property is NOT in a floodplain.</div>
+                    </td>
+                </tr>
+            </table>
+            <table style='page-break-before:always'>
+                <tr>
+                    <td class="margin_bottom__5 border_none  margin_top_8">40. With regard to Seismic Safety of the Building:</td>
+                </tr>
+                <tr>
+                    <td class="border_none">
+                        <div class="margin_bottom_5 margin_left_20">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Offeror_Seismic_Declaration_YES_NO == 'No',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;a. The RLP does NOT contain seismic requirements.</div>
+                        <div class="margin_bottom_5 margin_left_20">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Offeror_Seismic_Declaration == 'Fully meets seismic requirements or meets an exemption under the RLP',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;b. The Building either fully meets RLP seismic requirements or meets an exemption.</div>
+                        <div class="margin_bottom_5 margin_left_20">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Offeror_Seismic_Declaration == 'Does not meet seismic requirements, but will be retrofitted to meet seismic requirements',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;c. The Building will be retrofitted to meet RLP seismic requirements it does not currently
+                            meet.</div>
+                        <div class="margin_bottom_5 margin_left_20">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Offeror_Seismic_Declaration == 'Will be constructed to meet seismic requirements',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;d. The Building will be constructed to meet RLP seismic requirements.</div>
+                        <div class="margin_bottom_5 margin_left_20">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Offeror_Seismic_Declaration == 'Will not meet seismic requirements',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;e. The Building will NOT meet RLP seismic requirements.</div>
+                    </td>
+                </tr>
+            </table>
+
+
+            <table>
+                <tr>
+                    <td class="margin_bottom__5 border_top margin_top_8">41. With regard to ENERGY STAR®:</td>
+                </tr>
+                <tr>
+                    <td class="border_none">
+                        <div class=" margin_left_20">
+                            <img src="{!IF(OfferWrapper.PBS_AAAP_Energy_Star == 'Yes',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}" />&nbsp;a. The Property has received the ENERGY STAR® Label within the past twelve months.</div>
+                        <div class=" margin_left_56 margin_top_2">Date <i>(MM/DD/YYYY):</i>
+                             <span class="data_cell_inline">{!OfferWrapper.PBS_AAAP_CERTIFICATION_DATE}
+                            </span>
+                        </div>
+                        <div class=" margin_left_20">
+                            <img src="{!IF(OfferWrapper.PBS_AAAP_Energy_Star == 'No',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}" />&nbsp;b. The Property has NOT received the ENERGY STAR® Label within the past twelve months but
+                            falls into one of the <div class="margin_left_40">following categories:</div></div>
+
+                        <div class=" margin_left_50">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Energy_Star_Response_No == 'New construction',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;i. New construction</div>
+                        <div class=" margin_left_50">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Energy_Star_Response_No == 'Insufficient Occupancy',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;ii. Existing building that cannot obtain label due to insufficient occupancy</div>
+                        <div class=" margin_left_50">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Energy_Star_Response_No == 'Statutory Exception',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;iii. Meets one of the statutory exceptions below:</div>
+
+                        <div class=" margin_left_80">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Energy_Star_Meets_Exceptions == 'Agency Staying',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;(1) The agency would remain in the building it currently occupies.</div>
+                        <div class=" margin_left_80">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Energy_Star_Meets_Exceptions == 'Special Category',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;(2) The Lease would be in a building of historical, architectural, or cultural significance
+                            listed or eligible to be listed
+                            <br/>
+                            <div class="margin_left_40">on the National Register of Historic Places.</div>
+                        </div>
+                        <div class=" margin_left_80">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Energy_Star_Meets_Exceptions == '10k or less',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;(3) The Lease is for 10,000 RSF or less.</div>
+
+                        <div class=" margin_left_50 text_italic"><br/>With regard to offerors falling into a statutory exception category above, the Offeror has evaluated
+                            energy efficiency and<br/> conservation improvements and has determined:</div>
+                        <div class=" margin_left_80">
+                            <img src="{!IF(OfferWrapper.PBS_AAAP_Energy_Star_Evaluation == 'Improvements declared',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;(i) Cost effective improvements have been identified and are attached to this offerwrapper.</div>
+                        <div class=" margin_left_80 margin_bottom_4">
+                            <img src="{!IF(OfferWrapper.PBS_AAAP_Energy_Star_Evaluation == 'no effective improvements',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;(ii) There are no cost effective improvements. Supporting documentation is attached to
+                            this offer.</div>
+                    </td>
+                </tr>
+            </table>
+
+
+            <table>
+                <tr>
+                    <td class="border_top margin_top_5">42. With regard to Historic Preference:</td>
+                </tr>
+                <tr>
+                    <td class="border_none">
+                        <div class="margin_left_20">a. Is the Building a Historic Property?&nbsp;
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Building_is_a_historic_property == 'Yes',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;YES&nbsp;&nbsp;
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Building_is_a_historic_property  == 'No',   $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            /> &nbsp;NO</div>
+                        <div class="margin_left_20 margin_bottom_5">b. Is the Building within an Historic District?&nbsp;
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Bldg_within_a_historic_district == 'Yes',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;YES&nbsp;&nbsp;
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Bldg_within_a_historic_district  == 'No',   $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            /> &nbsp;NO</div>
+                    </td>
+                </tr>
+            </table>
+
+
+            <table>
+                <tr>
+                    <td class="margin_bottom__5 border_top margin_top_5">43. With regard to Historically Underutilized Business Zones (HUBZone) Price Evaluation Preference:</td>
+                </tr>
+                <tr>
+                    <td class="border_none">
+                        <div class=" margin_left_20">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_HubZone_Waiver  == 'I am a HUBZone SBC Offeror and I elect to waive the price evaluation preference',   $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;a. I am a HUBZone Small Business Concern (SBC) Offeror and I elect to waive the price evaluation
+                            preference.</div>
+                        <div class=" margin_left_20">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_HubZone_Waiver  == 'I am a HUBZone SBC Offeror and do not waive the price evaluation preference',   $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;b. I am a HUBZone SBC Offeror and I do NOT waive the price evaluation preference.</div>
+                        <div class="margin_bottom_5 margin_left_20">
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_HubZone_Waiver  == 'I am not a HUBZone SBC Offeror. This question does not apply to me',   $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;c. I am NOT a HUBZone SBC Offeror. The question does not apply.</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+   
+        <table >
+
+                <!-- SECTION V  -->
+                <tr>
+                    <td class="border_bold border_right_none text_header">
+                        <b>SECTION V - OWNER IDENTIFICATION AND OFFEROR CERTIFICATION</b>
+                    </td>
+                </tr>
+        </table>
+        <table>
+
+                <!-- table style="width:100%" cellspacing="0"  -->
+                <tr>
+                    <td width="22%" class="border_bottom_none margin_top_5">44. Recorded Owner Name</td>
+                    <td width="25%" class="border_bottom_none margin_top_5">45. Owner Street Address</td>
+                    <td width="28%" class="border_bottom_none margin_top_5">46. City, State and 9-Digit ZIP Code</td>
+                    <td width="25%" class="border_bottom_none border_right_none margin_top_5">47. Unique Entity Identifier (UEI)</td>
+                </tr>
+
+
+
+                <tr>
+                    <td  class="data_cell " style="min-height:34px; padding-left:3px"> {!OfferWrapper.PBS_AAAP_Owner_Name}</td>
+                    <td class="data_cell " style="padding-left:3px">{!OfferWrapper.PBS_AAAP_Owner_Address}</td>
+                    <td  class="data_cell " style="padding-left:3px"> {!OfferWrapper.PBS_AAAP_Owner_City} {!OfferWrapper.PBS_AAAP_Owner_State} {!OfferWrapper.PBS_AAAP_Owner_Zip}
+                        <br/>
+                        <br/>
+                    </td>
+                    <td class="data_cell border_right_none " style="padding-left:3px">{!OfferWrapper.PBS_AAAP_DUNS_Number}</td>
+                </tr>
+
+                <tr>
+                    <td class="border_bottom_none margin_top_5">48. Offeror Name</td>
+                    <td  class="border_bottom_none margin_top_5">49. Offeror Street Address</td>
+                    <td  class="border_bottom_none margin_top_5">50. City, State and 9-Digit ZIP Code</td>
+                    <td  class="border_bottom_none border_right_none margin_top_5">51. Contact Information</td>
+                </tr>
+
+                <tr>
+                    <td  class="data_cell "  style="min-height:34px;padding-left:3px"> {!userDetail.Name}</td>
+                    <td  class="data_cell " style="padding-left:3px">{!userDetail.Street}</td>
+                    <td  class="data_cell " style="padding-left:3px">{!userDetail.City} {!userDetail.State} {!userDetail.PostalCode}
+                        <br/>
+                        <br/>
+                    </td>
+                    <td class="border_right_none border_top_none ">
+                        <table>
+                            <tr>
+                                <td width="30%" class="border_none text_small" style="white-space:nowrap">a. Email</td>
+                                <td width="70%"  class="data_cell_small border_none padding_none">{!email}</td>
+                            </tr>
+                        </table>
+
+                        <table>
+                            <tr>
+                                <td width="30%" class="border_none text_small" style="white-space:nowrap">b. Telephone</td>
+                                <td width="70%" class="data_cell_small border_none padding_none">{!userDetail.Phone}</td>
+                            </tr>
+                        </table>
+
+
+                    </td>
+                </tr>
+                </table>
+
+                <table>
+    
+                    <tr>
+                        <td  width="20%" class="border_bottom_none border_right_none">52. Offeror's Interest
+                                <div class="margin_left_20">in the Property</div>
+                        </td>
+                       
+                        <td width="80%" class="border_bottom_none border_right_none">
+
+                            <div><img src="{!IF(offerwrapper.PBS_AAAP_OFFEROR_INTEREST == 'Owner',  $Resource.checkbox_checked,$Resource.checkbox_unchecked)}"/>&nbsp;Owner
+                                        <i>(Offeror and Recorded Owner are the same person)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i>
+                                <img src="{!IF(offerwrapper.PBS_AAAP_OFFEROR_INTEREST == 'Agent',  $Resource.checkbox_checked,$Resource.checkbox_unchecked)}"/>&nbsp;Agent / Broker
+                            </div>
+                            <table>
+                                <tr>
+                                    <td width="39%" class="border_none padding_none">
+                                        <img src="{!IF(offerwrapper.PBS_AAAP_OFFEROR_INTEREST == 'Other',  $Resource.checkbox_checked,$Resource.checkbox_unchecked)}"/>
+                                        &nbsp;Other  <i>(Explain if Other is selected)</i> 
+                                    </td>
+                                    <td width="61%"  class="data_cell_inline border_none">
+                                        {!OfferWrapper.PBS_AAAP_OFFEROR_INTEREST_OTHER}
+                                    </td>
+                                </tr>
+                            </table>
+                        
+                        </td>
+
+
+                        
+                    </tr>
+                 
+                    </table>
+                <table>
+
+                <tr>
+                    <td width="100%" class="border_right_none border_bottom_none">
+                        By submitting this offer, the offeror agrees to lease the premises described within the offer to
+                        the United States of America upon the Lease <br/>
+                        Contracting Officer's acceptance of the offer. The offeror acknowledges they have read and fully understand the Request for Lease <br/>
+                        Proposals and agrees to honor the terms and conditions specified in their offer and to full compliance with and acceptance of the Request <br/>
+                        for Lease Proposals and its attachments.
+                        <br/>
+                        <br/>By signing this form, you acknowledge having read the RLP with attachments in its entirety. No deviations are allowed unless authorized <br/>
+                        by the Lease Contracting Officer (LCO).
+
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td width="45%" class="border_right_none border_top_none margin_bottom_3">53. Does your offer request any deviation from the RLP?</td>
+                    <td width="55%" class="border_right_none border_top_none ">
+                        <span >
+                            <img src="{!IF(offerwrapper.PBS_AAAP_ACCEPTED_TERMS_AND_COND == False,  $Resource.checkbox_checked,$Resource.checkbox_unchecked)}"
+                            />&nbsp;NO&nbsp;</span>
+                        <span>
+                            <img src="{!IF(offerwrapper.PBS_AAAP_ACCEPTED_TERMS_AND_COND == True,  $Resource.checkbox_checked,$Resource.checkbox_unchecked)}"
+                            />&nbsp;YES - I request a deviation from the LCO</span>
+                    </td>
+                </tr>
+            </table>
+            <table>
+
+                <tr>
+                    <td width="50%"><br/>Offeror's Signature <span class="data_cell_inline margin_left_10">{!IF(offerWrapper.sysDate!=null ,userDetail.Name,'')}</span></td>
+                    <td width="50%" class="border_right_none">
+                        <br/>Date Signed <span class="data_cell_inline margin_left_10">{!IF(offerWrapper.sysDate!=null ,offerWrapper.sysDate,'')}
+                            </span>
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td width="100%" class="text_center border_right_none border_bottom_none padding_top_8">PAPERWORK REDUCTION ACT STATEMENT</td>
+                </tr>
+                <tr>
+                    <td class="border_none">This information collection meets the requirements of 44 U.S.C. § 3507, as amended by section 2 of the
+                        Paperwork Reduction Act of 1995. <br/>
+                        You do not need to answer these questions unless we display a valid  Office of Management and Budget (OMB) control number. The OMB <br/>
+                        control number for this collection is 3090-0086. We estimate that it will take 2.3 hours to read the instructions, gather the facts, and answer<br/>
+                        the questions. Send only comments relating to our time estimate, including suggestions for reducing this burden, or any other aspects of <br/>
+                        this collection of information to: U.S. General Services Administration, Regulatory Secretariat Division (M1V1CB), 1800 F Street, NW,<br/>
+                        Washington, DC 20405.</td>
+                </tr>
+            </table>
+ 
+
+        <!-- SECTION VI  -->
+        <div style="page-break-before: always">
+
+            <table>
+                <tr>
+                    <td class="text_header"  style="border-width:2px 0px 2px 0px">SECTION VI - ADDENDUM</td>
+                </tr>
+                <tr>
+                    <td  class="border_all text_center text_normal_plus">
+                        <b>A. Step Rent</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="border_none text_normal_plus">
+                        Shell Rent and Parking steps should be detailed if the initial amount stated in the Rent Table above does NOT remain the<br/>
+                        same for the full term  of the Lease. Shell Rent step amounts should be stated in Annual Rent for the entire Leased space.<br/>
+                        Parking step rents should be stated as a dollar amount per space per month.
+                        <br/>
+                    </td>
+                </tr>
+                <tr>
+                   <td class="border_none">
+                        <apex:outputPanel rendered="{!stepFreeRentRecords.size > 0}">
+                            <table>
+                                <tr>
+                                    <td width="30%" class="text_center border_all text_normal_plus">
+                                        <u>Rent Type</u>
+                                    </td>
+                                    <td width="15%" class="text_center text_normal_plus">
+                                        <u>Beginning Year</u>
+                                    </td>
+                                    <td width="15%" class="text_center text_normal_plus">
+                                        <u>Through Year</u>
+                                    </td>
+                                    <td width="20%" class="text_center text_normal_plus">
+                                        <u>Amount Will Be ($)</u>
+                                    </td>
+                                    <td width="20%" class="text_center text_normal_plus">
+                                        <u>Per</u>
+                                    </td>
+                                </tr>
+                                <apex:repeat value="{!stepFreeRentRecords}" var="record">
+                                    <tr>
+                                        <td class="data_cell_small text_center border_all"   style="min-height:15px;">{!record.PBS_RSAP_Step_Rent_Type}</td>
+                                        <td class="data_cell_small text_center">{!record.PBS_RSAP_Step_Start}</td>
+                                        <td class="data_cell_small text_center">{!record.PBS_RSAP_Step_End}</td>
+                                        <td class="data_cell_small text_center">
+                                            <apex:outputText value="{0, number,currency}">
+                                                <apex:param value="{!record.PBS_RSAP_Step_Annual_Rent}" /></apex:outputText>
+                                        </td>
+                                        <td class="data_cell_small text_center">{!record.PBS_RSAP_Step_Payment_Basis}</td>
+                                    </tr>
+                                </apex:repeat>
+                            </table>
+                        </apex:outputPanel>
+                   </td>
+                </tr>
+                <tr>
+                    <td class="border_none">
+                        <apex:outputPanel rendered="{!stepFreeRentRecords.size > 0}">
+                            <br/>
+                            <!--
+                            <button type="button" class="button" >Add a Step Rent</button>
+                            <button type="button" class="button">Remove a Step Rent</button>
+                            -->
+                            <img src="{!$Resource.Form1364StepRentButtons}"/>
+                            <br/>
+                            <br/>
+                        </apex:outputPanel>
+                    </td>
+                </tr>
+
+
+
+
+                <tr>
+                    <td  class="border_all text_normal_plus">
+                        <b>B. Renewal Options</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="border_none text_normal_plus">
+                        Renewal Options are optional unless required by the RLP. Only renewal options that are required by the RLP will factor into<br/> 
+                        the Government's financial analysis of the Offer.
+                    </td>
+                </tr>
+                <tr>
+                    <td  class="border_none text_normal_plus">
+                        <apex:outputPanel rendered="{!renewalOptionsRecords.size > 0}" style="width:100%">
+                            <table style="width:65%">
+                                <tr>
+                                    <td width="20%" class="text_center border_all">
+                                        <u>Option Number</u>
+                                    </td>
+                                    <td width="25%" class="text_center">
+                                        <u>Duration in Years</u>
+                                    </td>
+                                    <td width="25%" class="text_center">
+                                        <u>Annual Shell Rate<br/> per RSF</u>
+                                    </td>
+                                    <td width="30%" class="text_center">
+                                        <u>Number of Days Notice <br/>to Exercise Option</u>
+                                    </td>
+                                </tr>
+                                <apex:repeat value="{!renewalOptionsRecords}" var="record">
+                                    <tr>
+
+                                        <td class="data_cell_small text_center border_all"  style="min-height:15px;">{!record.PBS_RSAP_Option_Number}</td>
+                                        <td class="data_cell_small text_center">{!record.PBS_RSAP_Option_Duration}</td>
+                                        <td class="data_cell_small text_center">
+                                            <apex:outputText value="{0, number,currency}">
+                                                <apex:param value="{!record.PBS_RSAP_Option_RSF_Rate}" /></apex:outputText>
+                                        </td>
+                                        <td class="data_cell_small text_center ">{!record.PBS_RSAP_Option_Days_Notice_to_Exercise}</td>
+
+                                    </tr>
+                                </apex:repeat>
+                            </table>
+                        </apex:outputPanel>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="border_none">
+                        <apex:outputPanel rendered="{!renewalOptionsRecords.size > 0}">
+                            <br/>
+                            <!-- button type="button" class="button">Add an Option</>
+                            <button type="button" class="button">Remove an Option</button -->
+                            <img src="{!$Resource.Form1364RenewalOptionsButtons}"/>
+                            <br/>
+                            <br/>
+                        </apex:outputPanel>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td class="border_all">
+                        <div class="text_center text_normal_plus">
+                            <b>C. Additional Tax Parcel Information</b>
+                            <br />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="border_right_none border_bottom_none text_normal_plus">
+                        <div>
+                            <span>Is the offered space part of multiple tax bills or multiple buildings on a single tax parcel?</span>
+                            <span>
+                                <img src="{!IF(offerwrapper.PBS_AAAP_Offered_Space_Mul_Tax_Bills == 'Yes',  $Resource.checkbox_checked,$Resource.checkbox_unchecked)}"
+                                />YES</span>
+                            <span>
+                                <img src="{!IF(offerwrapper.PBS_AAAP_Offered_Space_Mul_Tax_Bills == 'No',  $Resource.checkbox_checked,$Resource.checkbox_unchecked)}"
+                                />NO</span>
+                        </div>
+                        <br/>
+                    </td>
+                </tr>
+                <tr style="{!IF(offerwrapper.PBS_AAAP_Offered_Space_Mul_Tax_Bills == 'Yes','','display:none')}">
+                    <td  class="border_none text_normal_plus">
+                        <apex:outputPanel rendered="{!additionalTaxParcelInfoRecords.size > 0}">
+                            If 'YES', use the boxes below to account for the total number of buildings, associated RSF, and tax parcel associated with<br/>
+                            the overall space offered to the Government.
+                            <u>Attach the legal description(s) of the offered property/properties as part of your<br/>
+                                 overall RLP submission.</u>
+                        </apex:outputPanel>
+                    </td>
+                </tr>
+
+                <tr style="{!IF(offerwrapper.PBS_AAAP_Offered_Space_Mul_Tax_Bills == 'Yes','','display:none')}">
+                    <td class="border_none">
+                        <apex:outputPanel rendered="{!renewalOptionsRecords.size > 0}">
+
+
+
+                            <table  style="width:65%">
+                                <tr>
+                                    <td width="15%" class="text_center border_all text_normal_plus">
+                                        <u>Building</u>
+                                    </td>
+                                    <td width="25%" class="text_center text_normal_plus">
+                                        <u>Building RSF</u>
+                                    </td>
+                                    <td width="25%" class="text_center text_normal_plus">
+                                        <u>Tax Parcel</u>
+                                    </td>
+                                    <td width="35%" class="text_center text_normal_plus">
+                                        <u>Tax Parcel ID Number</u>
+                                    </td>
+                                </tr>
+
+
+                                <apex:repeat value="{!additionalTaxParcelInfoRecords}" var="record">
+                                    <tr>
+
+                                        <td class="data_cell_small text_center border_all"   style="min-height:15px;">{!record.PBS_RSAP_Sub_Tax_Parcel_Building_ID}</td>
+                                        <td class="data_cell_small text_center">
+                                
+                                            <apex:outputPanel rendered="{!record.PBS_RSAP_Sub_Tax_Parcel_Building_RSF != null}">
+                                                <span class="data_cell_small"><apex:outputText value="{0, number, ###,##0.00}">
+                                                    <apex:param value="{!record.PBS_RSAP_Sub_Tax_Parcel_Building_RSF}" /> </apex:outputText></span>
+                                            </apex:outputPanel>
+                                        </td>
+                                        <td class="data_cell_small text_center">{!record.PBS_RSAP_Sub_Tax_Parcel_ID}</td>
+                                        <td class="data_cell_small text_center ">{!record.PBS_RSAP_Sub_Tax_Parcel_ID_Number}</td>
+
+                                    </tr>
+                                </apex:repeat>
+
+                            </table>
+
+                        </apex:outputPanel>
+                    </td>
+                </tr>
+
+
+
+
+                <tr>
+                    <td class="border_none">
+                        <apex:outputPanel rendered="{!renewalOptionsRecords.size > 0}" style="width:100%">
+                            <br/>
+                            <!-- button type="button" class="button">Add a Building/Tax Parcel/>
+                            <button type="button" class="button">Remove a Building/Tax Parcel</button  -->
+                            <img src="{!$Resource.Form1364AdditionalTaxParcelButtons}"/>
+                            <br/>
+                            <br/>
+                        </apex:outputPanel>
+                    </td>
+                </tr>
+
+
+
+
+                <tr>
+                    <td class="border_all">
+                        <div class="text_center text_normal_plus">
+                            <b>D. Additional Remarks or Conditions with Respect to this Offer</b>
+                            <br />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="border_right_none border_bottom_none text_normal_plus">
+                        Any deviations from the RLP requirements must be requested prior to the request for final proposal revisions. If the Offeror<br/>
+                        requests any deviations, GSA at its sole discretion will make the decision whether to accept the deviation.
+                        <br/>
+                    </td>
+                </tr>
+                                                                                                                                              
+                <tr>
+                    <td  class="data_cell border_none">{!OfferWrapper.PBS_AAAP_Offer_Additional_Remarks} </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+
+    </html>
+</apex:page>

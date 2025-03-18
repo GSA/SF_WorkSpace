@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>GSA_Email_Notification</name>
+        <label>GSA Email Notification</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <actionName>Case.GSA_Email_Notification</actionName>
+        <actionType>emailAlert</actionType>
+        <connector>
+            <targetReference>RET_Case_Submission</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Case.GSA_Email_Notification</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>RET_Case_Submission</name>
+        <label>RET Case Submission</label>
+        <locationX>176</locationX>
+        <locationY>431</locationY>
+        <actionName>Case.RET_Case_Submission</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Case.RET_Case_Submission</nameSegment>
+    </actionCalls>
+    <apiVersion>62.0</apiVersion>
+    <description>SFWS-3482 : This flow replaces the WFR, RET Case Submission and that is deactivated. This flow sends an email notifications to the GSA Inbox and Case owner.</description>
+    <interviewLabel>RET : Case : After Save : Email GSA, Case Owner {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>RET : Case : After Save : Email GSA, Case Owner</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>GSA_Email_Notification</targetReference>
+        </connector>
+        <object>Case</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

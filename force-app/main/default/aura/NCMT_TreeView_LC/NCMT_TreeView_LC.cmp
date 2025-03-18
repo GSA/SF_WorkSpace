@@ -1,0 +1,59 @@
+<aura:component controller="NCMT_TreeView_Ctrl_LC">
+    
+    <aura:attribute name="recordId" type="String" />
+    
+    <aura:attribute name="categories" type="Map" />
+    <aura:attribute name="selectedCat" type="String" />
+    <aura:attribute name="items" type="Object" />
+    <aura:attribute name="fullItems" type="Object" />
+    
+    <aura:attribute name="level2desc" type="String" />
+    <aura:attribute name="level3desc" type="String" />
+    <aura:attribute name="level4desc" type="String" />
+    <aura:attribute name="level5desc" type="String" />
+    <aura:attribute name="ESTFormat" type="String" />
+
+    <aura:attribute name="fiscalYear" type="String" />
+    <aura:attribute name="unsearchable" type="Boolean" default="true" />
+    <aura:attribute name="spinner" type="Boolean" default="false" />
+
+    
+    <aura:attribute name="showDESList" type="Boolean" default="false" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    <lightning:layout >
+        <lightning:layoutItem padding="around-small" class="slds-container_small">
+            <lightning:input type="search" label="Search" name="search" aura:id="search" onchange="{!c.search}" disabled="{!v.unsearchable}"/>
+    <lightning:select aura:id="cats" name="cats" label="Cost Categories" onchange="{!c.updateTree}">
+        <option text="--Select a Cost Category--" value="" />
+        <aura:iteration items="{!v.categories}" var="cat" indexVar="key">
+            <option text="{!cat.value}" value="{!cat.value}" />
+        </aura:iteration>
+    </lightning:select>
+    <aura:if isTrue="{!v.spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--medium slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+                <!-- <p style="transform: translate(-32%, -50%) rotate(-90deg);width: 320px;text-align: center;"> Loading... </p> -->
+
+            </div>
+        </div>
+    </aura:if>
+    
+    <lightning:tree items="{!v.items}" header="{!v.selectedCat}" onselect="{!c.handleSelect}"/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" class="slds-width-fill">
+    <div aura:id="desList">
+        <aura:if isTrue="{!v.unsearchable}">
+    		Please select a Cost Category from the dropdown menu
+    	<aura:set attribute="else">
+     		 {!v.body}
+    	</aura:set>
+  		</aura:if> 
+    </div>
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>

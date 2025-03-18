@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>CEW_ECCA__c</fullName>
+    <externalId>false</externalId>
     <formula>((CEW_Total_Ditect_Cost__c - CEW_Total_Ditect_Cost1__c) *  Project_Name__r.CECAMultiplier__c *( 1+Project_Name__r.Total_Escalation__c)) +
 (CEW_Total_Ditect_Cost1__c * Project_Name__r.CECAMultiplier__c *( 1+Project_Name__r.Total_Escalation__c + Project_Name__r.Total_Escalation_CPE__c))</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>

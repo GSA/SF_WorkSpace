@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <rules>
+        <fullName>NCMT Update Markup Impacts</fullName>
+        <actions>
+            <name>Update_Developer_Fee_Impact</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Update_Developer_ProServices_Impact</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Update_EDRC</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Update_EMIC</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Update_Gross_Receipts_Impact</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Update_Lessor_Fee_Impact</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Update_Lessor_Pro_Services_Impact</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>NCMT_Project_Markup__c.CreatedById</field>
+            <operation>notEqual</operation>
+            <value>null</value>
+        </criteriaItems>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+</Workflow>

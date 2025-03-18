@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Escalation_Percent__c</fullName>
+    <externalId>false</externalId>
     <formula>((1+ (Project__r.Standard_Escalation_Rate__c/12)  )^  Escalation_Months__c )-1</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Escalation</label>

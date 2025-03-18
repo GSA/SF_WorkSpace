@@ -1,0 +1,416 @@
+<apex:page Controller="PBS_AAAP_RLPSearchController" sidebar="false" showHeader="false" standardStylesheets="false">
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/demo_page.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.jszip, 'jsZip/dist/jszip.js')}"/>
+    <!--<apex:includeScript value="https://fastcdn.org/FileSaver.js/1.1.20151003/FileSaver.min.js"/>-->
+    <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"/>
+    <!--<apex:includescript value="//code.jquery.com/jquery-1.11.1.min.js"/>-->
+    <script type="text/javascript" src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <head>
+        <style type="text/css">
+        .col1   {text-align: left;
+                 width: 400px;}
+        .col2   {text-align: center;
+                 width: 230px;}
+        .tabbed-table table td {
+                background:#fff;}
+        h2        {color:#fff; font-size:80%; font-weight:bold; padding-left:40px; width:80%;}                 
+        
+        .trClass{
+        height: 100%;
+        line-height: 30px;
+        }
+        
+        p.thick {color:red;font-weight:bold;}
+ 
+        #searchTable.tabbed-table h3 {float:none !important; font-size:20px;}
+        #searchTable.tabbed-table table {margin:0px;width:800px !important; border:0px;}
+        #searchTable.tabbed-table  {width:800px;padding:0px;margin-top:20px; border:0px;background:none;}
+        #searchTable.tabbed-table table tr {height:20px !important;}
+        #searchTable.tabbed-table table td.labelCol {background:#ccc; font-weight:bold;}
+        #searchTable.tabbed-table table td {width:25%;}
+        .tabbed-table table {width:800px !important;}
+        .tabbed-table {width:800px !important;}
+        
+        a.downloadAll {
+            float: right;
+            border-radius: 3px;
+            background: url("{!URLFOR($Resource.gsa_common, '/images/btn_green.png')}");
+            background-repeat: repeat-y;            
+            background-position: 35px 144px;
+            color: #fff;
+            font-size: 12px;
+            text-decoration: none;
+            width: 200px;
+            height: 36px;
+            line-height: 38px; 
+            display: inline-block;
+            padding-left: 10px;
+            padding-right: 95px;
+            text-align: center;
+            font-weight: normal;
+            font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .downloadAll:hover {
+            background: url("{!URLFOR($Resource.gsa_common, '/images/btn_green_hover.png')}");
+            background-repeat: repeat-y;            
+            background-position: 35px 144px;
+            padding-left: 10px;
+            text-align: center;
+            color: #fff;
+        }
+		.RLP_Search{
+        	margin-left: 12px;
+        }
+        </style>
+        <script>
+            var j$ = jQuery.noConflict();
+             j$(document).ready(function() {
+             j$(".tablesorter").dataTable( {
+                    "sScrollY": "400px",
+                    "bAutoWidth": true,
+                    "bPaginate": true,
+                    "bJQueryUI": true,
+                    "bScrollCollapse": true
+
+                 } );
+                 j$('.dataTables_length').css("display", "none");
+                  j$('.myAppTable').find('.dataTables_filter').css("display", "none");
+                  j$('.myAppTab').find('.dataTables_filter').css("display", "none");
+                j$(".tablesorter tr:odd").css("background-color", "#CFEEF8");
+                j$(".tablesorter tr:even").css("background-color", "#F3F3EC");
+            });
+
+            var zipFile = new JSZip();
+            var jsAtt;
+            function downloadAttachment(rlpId)
+            {
+                console.log('**'+rlpId);
+                $('#LoadingImage').show();
+                Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.PBS_AAAP_RLPSearchController.DownloadAllFiles}', rlpId, function(result,event) {
+                    if(event.status){
+                        jsAtt = result;
+                        console.log(result);
+                        j$.each(jsAtt, function(key,value) {
+                            compressFile(zipFile, value.attName, value.attEncodedBody);
+                        });
+                        downloadZip(zipFile);
+                        $('#LoadingImage').hide();
+                    }
+                });
+            }
+
+            function compressFile(zipFile, name, data) {
+                   zipFile.file(name, data, {base64:true});
+            }
+
+            function downloadZip(zipFile){
+                var attachmentData = zipFile.generate({type:"blob"});
+                var fileName = 'RLP And Attachments Package.zip';
+                saveAs(attachmentData,fileName);
+            }
+
+        </script>
+        <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+        <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+        <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />    
+
+    </head>
+    <!--  J. Rogers - Remover headers
+    <div id="login">
+        <ul>
+            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
+                <apex:outputLink value="/AAAP/home/home.jsp">
+                    <li>{!$Label.site.login_button}</li>
+                </apex:outputLink>
+                <li> |</li>
+                <apex:outputLink value="/AAAP/ForgotPassword">
+                    <li>{!$Label.site.forgot_your_password_q}</li>
+                </apex:outputLink>
+                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
+                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
+                    <li>{!$Label.site.new_user_q}</li>
+                </apex:outputLink>
+            </apex:panelGroup>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>{!$Label.site.logout}</li>
+            </apex:outputLink>
+            <li>|</li>
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>
+        </ul>
+
+    </div><!--/login-->
+
+    <div id="wrapper">
+        <c:inside_header />
+        <div id="content"><!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
+
+            <apex:form id="myform" styleClass="formwrap">
+                <h3 class="blue">Search RLP</h3>
+                <apex:outputPanel id="searchform" rendered="{!showSearchForm}">
+                    <apex:pageMessages />
+
+
+                    <apex:panelGrid columns="1" id="searchgrid">
+                        <apex:outputPanel >
+                            <apex:outputText value="1. RLP # : "/>
+                            <br/>
+                            <apex:selectList value="{!selectedRLPNumber}" size="1">
+                                <apex:selectOptions value="{!rlps}"/>
+                            </apex:selectList>
+                        </apex:outputPanel>
+                        <apex:outputPanel >
+                            <apex:outputText value="2. Regions : "/>
+                            <br/>
+                            <apex:selectList value="{!selectedRegion}" size="1">
+                                <apex:selectOptions value="{!regions}"/>
+                            </apex:selectList>
+                        </apex:outputPanel>
+                        <apex:outputPanel >
+                            <apex:outputText value="3. Category : "/>
+                            <br/>
+                            <apex:selectList value="{!categorieType}" size="1">
+                                <apex:selectOptions value="{!categories}"/>
+                            </apex:selectList>
+                        </apex:outputPanel>
+                        <apex:outputPanel >
+                            <apex:outputText value="4. RLP Status : "/>
+                            <br/>
+                            <apex:selectList value="{!RLPStatusType}" size="1">
+                                <apex:selectOptions value="{!RLPStatus}"/>
+                            </apex:selectList>
+                        </apex:outputPanel>
+                        <apex:outputPanel >
+                            <apex:outputText value="5. Title : "/>
+                            <br/>
+                            <apex:inputText value="{!RLPTitle}"/>
+                        </apex:outputPanel>
+                        <apex:outputPanel >
+                            <apex:commandButton value="Search" action="{!actionSearchRLP}"/>
+                            <!-- rerender="message,myRLFblock,searchRLP" -->
+                            <apex:commandButton value="Clear"/>
+                        </apex:outputPanel>
+                    </apex:panelGrid>
+
+
+                    <br/>
+
+                    <apex:outputText id="message" rendered="{!showMessage}"><p class="thick">No Records Found </p>
+                    </apex:outputText>
+
+                    <apex:pageBlock title="List of RLPs" id="myRLFblock" rendered="{!showRLPTable}">
+                        <div class="tabbed-table">
+                            <h3 class="blue">Search Results</h3>
+                            <div class="clearfix" style="margin-bottom:-40px;">&nbsp;</div>
+                            <div id="example_wrapper" class="dataTables_wrapper" role="grid">
+                                <apex:pageBlockTable id="RLPTable" value="{!rlpList}" var="rlp"
+                                                     StyleClass="tablesorter">
+                                    <apex:column headerClass="trClass">
+                                        <apex:facet name="header">RLP #</apex:facet>
+                                        <apex:commandLink action="{!actionShowRLP}"
+                                                          value="{!rlp.PBS_AAAP_RLP_Number__c}">
+                                            <apex:param name="q" value="{!rlp.id}" assignTo="{!rlpID}"/>
+                                        </apex:commandLink>
+                                    </apex:column>
+                                    <apex:column headerClass="trClass" value="{!rlp.PBS_AAAP_Title__c}"/>
+                                    <apex:column headerClass="trClass" value="{!rlp.PBS_AAAP_Region__c}"/>
+                                    <apex:column headerClass="trClass" value="{!rlp.PBS_AAAP_Category__c}"/>
+                                    <apex:column headerClass="trClass" value="{!rlp.PBS_AAAP_STATUS__c}"/>
+                                </apex:pageBlockTable>
+                            </div>
+                        </div>
+                    </apex:pageBlock>
+
+                </apex:outputPanel>
+                <apex:outputPanel id="detailform" rendered="{!!showSearchForm}">
+                    <apex:PageBlock title="View & Print RLP" id="viewandprint">
+
+
+                        <div id="searchTable" class="tabbed-table">
+                            <apex:PageBlockSection title="RLP General Information" id="generalinfo" columns="2"
+                                                   collapsible="false">
+
+
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="RLP #"/>
+                                    <apex:outputText value="{!rlpdetail.PBS_AAAP_RLP_Number__c}"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="Title"/>
+                                    <apex:outputText value="{!rlpdetail.PBS_AAAP_Title__c}"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="Category"/>
+                                    <apex:outputText value="{!rlpdetail.PBS_AAAP_Category__c}"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="Region"/>
+                                    <apex:outputText value="{!rlpdetail.PBS_AAAP_Region__c}"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="RLP Replaced"/>
+                                    <apex:outputText value="{!rlpdetail.Replaced_RLP__r.PBS_AAAP_RLP_Number__c}"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="RLP Replaced By"/>
+                                    <apex:outputField value="{!rlpdetail.RLP_Replaced_By__c}"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="RLP Status"/>
+                                    <apex:outputText value="{!rlpdetail.PBS_AAAP_STATUS__c}"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="Status Change Date"/>
+                                    <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                                        <apex:param value="{!rlpdetail.PBS_AAAP_Status_Change_Date__c}"/>
+                                    </apex:outputText>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="Cancel Date"/>
+                                    <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                                        <apex:param value="{!rlpdetail.PBS_AAAP_Canceled_Date__c}"/>
+                                    </apex:outputText>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="Cancel Reason"/>
+                                    <apex:outputText value="{!rlpdetail.PBS_AAAP_Canceled_Reason__c}"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="Last Amended Date"/>
+                                    <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                                        <apex:param value="{!rlpdetail.LastModifiedDate}"/>
+                                    </apex:outputText>
+                                </apex:pageBlockSectionItem>
+
+                            </apex:PageBlockSection>
+                        </div>
+                        <div id="searchTable" class="tabbed-table">
+                            <apex:PageBlockSection title="Open Period Information" id="openperiodinfo" columns="2"
+                                                   collapsible="false">
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="This Month's open period Begin day"/>
+                                    <apex:outputText value="{!rlpdetail.PBS_AAAP_DEFAULT_MONTH_BEGIN__c}"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="End day"/>
+                                    <apex:outputText value="{!rlpdetail.PBS_AAAP_DEFAULT_MONTH_END__c}"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="Exception Month's open period Begin day"/>
+                                    <apex:outputText value="{!rlpdetail.PBS_AAAP_EXCEPTION_MONTH_BEGIN__c}"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="End day"/>
+                                    <apex:outputText value="{!rlpdetail.PBS_AAAP_EXCEPTION_MONTH_END__c}"/>
+                                </apex:pageBlockSectionItem>
+
+                            </apex:PageBlockSection>
+                        </div>
+
+                        <!-- <apex:PageBlockSection title="Attachments List" id="attachmentsinfo" columns="1" collapsible="false"> -->
+
+                        <div id="searchTable" class="tabbed-table">
+                            <h3>Attachments List</h3>
+                            <apex:pageBlockTable value="{!seqNumList}" var="rlpatt" id="attachmentsTable"
+                                                 rowClasses="odd,even">
+                                <apex:column value="{!rlpatt.i}">
+                                    <apex:facet name="header">Att #</apex:facet>
+                                </apex:column>
+                                <apex:column value="{!rlpatt.rlpratts.RLP_Attachment_Name__c}">
+                                    <apex:facet name="header">Attachment Name</apex:facet>
+                                </apex:column>
+                                <apex:column value="{!rlpatt.rlpratts.Other_Attachment_Name__c}">
+                                    <apex:facet name="header">Other Attachment Name</apex:facet>
+                                </apex:column>
+                                <apex:column >
+                                    <apex:facet name="header">Attachment Name</apex:facet>
+                                    <apex:repeat value="{!rlpatt.rlpratts.ContentDocumentLinks}" var="a">
+                                        <apex:outputText value="{!a.ContentDocument.Title}"/>
+                                    </apex:repeat>
+                                </apex:column>
+                                <apex:column >
+                                    <apex:facet name="header">Date Submitted</apex:facet>
+                                    <apex:repeat value="{!rlpatt.rlpratts.ContentDocumentLinks}" var="a">
+                                        <apex:outputText value="{0,date,MM/dd/yyyy}">
+                                            <apex:param value="{!a.ContentDocument.Createddate}"/>
+                                        </apex:outputText>
+                                    </apex:repeat>
+                                </apex:column>
+                                <apex:column >
+                                    <apex:facet name="header">View File</apex:facet>
+                                    <apex:repeat value="{!rlpatt.rlpratts.ContentDocumentLinks}" var="a">
+                                        <apex:outputLink onclick="window.open('{!JSENCODE(a.ContentDocument.LatestPublishedVersion.Public_Link__c)}','RLP Attachment','width=800, height=600,scrollbars=yes,resizable=yes,location=no');return false;">
+                                            <apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
+                                                    style="align: right;" alt="Salesforce" title="Salesforce"/>
+                                        </apex:outputLink>
+                                    </apex:repeat>
+                                </apex:column>
+                            </apex:pageBlockTable>
+
+                        </div>
+
+                        <!--</apex:pageBlockSection>  -->
+
+
+                        <div id="searchTable" class="tabbed-table">
+                            <!--<apex:PageBlockSection title="Amendments List" id="amendmentsinfo" columns="2" collapsible="false" rendered="{!showAmendmentsTable}">-->
+                            <h3>Amendments List</h3>
+                            <apex:pageBlockTable value="{!seqNumListAmendments}" var="rlpatt" id="amendmentsTable"
+                                                 rowClasses="odd,even">
+                                <apex:column value="{!rlpatt.i}">
+                                    <apex:facet name="header">Att #</apex:facet>
+                                </apex:column>
+                                <apex:column value="{!rlpatt.rlpratts.RLP_Attachment_Name__c}">
+                                    <apex:facet name="header">Attachment Name</apex:facet>
+                                </apex:column>
+                                <apex:column value="{!rlpatt.rlpratts.Other_Attachment_Name__c}">
+                                    <apex:facet name="header">Other Attachment Name</apex:facet>
+                                </apex:column>
+                                <apex:column >
+                                    <apex:facet name="header">Attachment Name</apex:facet>
+                                    <apex:repeat value="{!rlpatt.rlpratts.ContentDocumentLinks}" var="a">
+                                        <apex:outputText value="{!a.ContentDocument.Title}"/>
+                                    </apex:repeat>
+                                </apex:column>
+                                <apex:column >
+                                    <apex:facet name="header">Date Submitted</apex:facet>
+                                    <apex:repeat value="{!rlpatt.rlpratts.ContentDocumentLinks}" var="a">
+                                        <apex:outputText value="{0,date,MM/dd/yyyy}">
+                                            <apex:param value="{!a.ContentDocument.Createddate}"/>
+                                        </apex:outputText>
+                                    </apex:repeat>
+                                </apex:column>
+                                <apex:column >
+                                    <apex:facet name="header">View File</apex:facet>
+                                    <apex:repeat value="{!rlpatt.rlpratts.ContentDocumentLinks}" var="a">
+                                        <apex:outputLink onclick="window.open('{!JSENCODE(a.ContentDocument.LatestPublishedVersion.Public_Link__c)}','RLP Attachment','width=800, height=600,scrollbars=yes,resizable=yes,location=no');return false;">
+                                            <apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
+                                                    style="align: right;" alt="Salesforce" title="Salesforce"/>
+                                        </apex:outputLink>
+                                    </apex:repeat>
+                                </apex:column>
+                            </apex:pageBlockTable>
+                            <!-- </apex:pageBlockSection> -->
+                            <br/><br/>
+                        </div>
+
+                    </apex:pageBlock>
+                                                    <span class="RLP_Search" >
+                    <apex:commandButton action="{!backToSearch}" value="Back to RLP Search"  />
+                        </span>
+                        <!-- <apex:commandButton onclick="downloadAttachment('{!rlpID}');return false;" value="Download All Documents" styleClass="buttongreen"/> -->
+                    <div id="LoadingImage" style="display:none;float:left;position:relative;top: 10px;left: 630px;"><img src="/img/loading.gif" style="float: left;" /></div>
+                    <a href="#" class="downloadAll" id="download"
+                       onclick="downloadAttachment('{!rlpID}');return false;">Download All Documents</a>
+                </apex:outputPanel>
+            </apex:form>
+
+
+        </div>
+    </div>
+    <c:SiteFooterUX />
+</apex:page>

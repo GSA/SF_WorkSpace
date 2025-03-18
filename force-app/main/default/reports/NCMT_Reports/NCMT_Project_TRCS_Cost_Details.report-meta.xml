@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>NCMT_Project__c.Project_Cost_Summary__r.TI_TRCS_Cost_Detail__r$TI_TRCS_Cost_Criterion__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_Project__c.Project_Cost_Summary__r.TI_TRCS_Cost_Detail__r$TI_TRCS_Space_Type__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_Project__c.Project_Cost_Summary__r.TI_TRCS_Cost_Detail__r$TRCS_Total_Units__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_Project__c.Project_Cost_Summary__r.TI_TRCS_Cost_Detail__r$TRCS_Unit_Cost__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_Project__c.Project_Cost_Summary__r.TI_TRCS_Cost_Detail__r$TRCS_Total_Cost__c</field>
+    </columns>
+    <description>NCMT REPORTS</description>
+    <filter>
+        <criteriaItems>
+            <column>NCMT_Project__c$Name</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>test4</value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>NCMT_Project__c.Project_Cost_Summary__r$Cost_Category_ID__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Project TRCS Cost Details</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>NCMT_Projects_with_Project_Cost_Summary_with_TI_TRCS_Cost_Detail__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>false</showGrandTotal>
+    <showSubTotals>false</showSubTotals>
+    <sortColumn>NCMT_Project__c.Project_Cost_Summary__r.TI_TRCS_Cost_Detail__r$TI_TRCS_Space_Type__c</sortColumn>
+    <sortOrder>Asc</sortOrder>
+    <timeFrameFilter>
+        <dateColumn>NCMT_Project__c$CreatedDate</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

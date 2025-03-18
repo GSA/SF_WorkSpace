@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>CUST_NAME</field>
+    </columns>
+    <columns>
+        <field>NCMT_Contractor__c.Contractor_Description__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_Contractor__c.Bond__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_Contractor__c.Overhead__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_Contractor__c.Profit__c</field>
+    </columns>
+    <description>NCMT LOOKUP</description>
+    <format>Tabular</format>
+    <name>NCMT Subcontractor Details</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CustomEntity$NCMT_Contractor__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>CUST_CREATED_DATE</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

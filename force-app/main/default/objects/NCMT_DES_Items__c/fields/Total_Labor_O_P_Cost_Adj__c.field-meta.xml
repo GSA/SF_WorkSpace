@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Total_Labor_O_P_Cost_Adj__c</fullName>
+    <externalId>false</externalId>
     <formula>IF( Item_Type__c == &apos;Assemblies&apos;, IF(Minimum_Cost__c &gt;0 &amp;&amp; ( Markup_Method__c !=&apos;RSMeans - O&amp;P&apos;)&amp;&amp;(( Total_Labor_Cost__c) &lt; Original_Minimum_Cost__c ), 
 Minimum_Cost__c,(Location_Multiplier_wf__c * Labor_Assembly_Cost__c * Quantity__c)), (  DES_Lookup_Detail__r.Labor_Unit_O_P_Cost__c * Quantity__c * Location_Multiplier_wf__c))</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>

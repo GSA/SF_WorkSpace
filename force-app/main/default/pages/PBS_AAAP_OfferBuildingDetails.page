@@ -1,0 +1,879 @@
+<apex:page Controller="PBS_AAAP_OfferBuildingDetailsController" sidebar="false" showHeader="false" standardStylesheets="true" cache="true">
+    <c:PBS_AAAP_PortalPage_Begin ></c:PBS_AAAP_PortalPage_Begin>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+
+    <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+
+    <script type="text/javascript">
+        // j.rogers 01/13/2022  SFWS-2104
+        console.log('{!pageURLForRedirection}');
+        if('{!JSENCODE(pageURLForRedirection)}' != ''){
+            window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
+            window.parent.document.body = document.createElement('body');
+        }
+    	else{
+        	window.parent.document.body.scrollTop = 0;
+  			window.parent.document.documentElement.scrollTop = 0;
+        }
+        // end SFWS-2104
+        JQ = jQuery;
+        function debugAlert(msg){
+            //alert("DEBUG: "+msg);
+            console.log(msg);
+        }
+    </script>
+
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css"/>
+    <apex:stylesheet value="{!URLFOR($Resource.JQueryDataTable, '/JQueryDataTable/css/jquery.dataTables.css')}"/>
+
+    <head>
+        <style type="text/css">
+            .ui-dialog {
+                background: #fff;
+                padding: 10px;
+                border: 1px solid #999;
+            }
+
+            .ui-dialog a {
+                float: right;
+                font-weight: bold;
+                padding: 3px;
+                color: #999;
+                text-transform: uppercase;
+                font-size: 10px;
+            }
+
+            .myButton {
+                color: white !important;
+                background: red !important;
+                border-left: 0px !important;
+                border-top: 0px !important;
+                border-bottom: 0px !important;
+                border-right: 0px !important;
+                width: 60px !important;
+                height: 22px !important;
+            }
+
+            .blueMessage {
+                color: #002BAD;
+                font-weight: bold;
+            }
+
+            .errMessage {
+                color: red;
+            }
+    /*SGanti 7/23/2021 */
+            .noPadding td {
+            padding-top:0px
+                }
+    
+            #lean_overlay {
+                position: fixed;
+                z-index: 100;
+                top: 0px;
+                left: 0px;
+                height: 100%;
+                width: 100%;
+                background: none;
+                display: none;
+            }
+
+            body .bPageBlock, body #bodyCell .bResource .secondaryPalette, body .secondaryPalette.bPageBlock, body .individualPalette .secondaryPalette.bPageBlock, body .bodyDiv .genericTable, body .genericPageBlockTable, body .bodyDiv .bSubBlock, body .bComponentBlock .bPageBlock, body .bMyDashboard .bPageBlock, body.rlHoverFrame .bPageBlock, body.subjectSelectionPopup div.choicesBox, body.lookupTab .secondaryPalette.bPageBlock, body.popupTab .secondaryPalette.bPageBlock, body.UserTagStatsPage .secondaryPalette.bPageBlock {
+                border-bottom: #fff;
+            }
+
+            body .pbBody table.list tr.headerRow td, body .pbBody table.list tr.headerRow th {
+                background: #999;
+            }
+
+            body .pbBody table.list tr th, body .pbBody table.list tr td {
+                border: 1px solid rgb(200, 200, 200);
+            }
+
+            body .pbBody table.list tr.headerRow th:first-child, body .pbBody table.list tr.dataRow td:first-child {
+                border-left-width: 1px;
+            }
+
+            body .pbBody table.list tr.headerRow td, body .pbBody table.list tr.headerRow th {
+                border: 0px;
+            }
+
+            ul li, ol li {
+                margin-left: 0em;
+            }
+
+            .message {
+                background-color: #fff;
+                border-style: solid;
+                border-width: 0px;
+                color: #000;
+                padding: 6px 8px 6px 6px;
+                margin: 4px;
+            }
+
+            .col1 {
+                text-align: left;
+                width: 400px;
+            }
+
+            .col2 {
+                text-align: center;
+                width: 230px;
+            }
+
+            .col3 {
+                text-align: center;
+                width: 230px;
+            }
+
+            .col4 {
+                text-align: center;
+                width: 230px;
+            }
+
+            .tabbed-table table td {
+                background: #fff;
+            }
+
+            h2 {
+                color: #fff;
+                font-size: 80%;
+                font-weight: bold;
+                padding-left: 40px;
+                width: 80%;
+            }
+
+            .tabbed-table table th {
+                padding-left: 3px;
+                padding-right: 3px;
+                font-size: 12px !important;
+            }
+
+            .hr {
+                font-weight: bold;
+                font-size: 28px;
+                border-bottom: 1px solid #cccccc;
+                padding: 0 0 8px;
+                color: #002BAD;
+                padding-top: 15px;
+            }
+
+            .mainForm {
+                margin-right: 50px;
+            }
+
+            menu.table-options {
+                top: 40px;
+                left: -350px;
+            }
+
+            #map_canvas {
+                padding: 0;
+                margin: 0;
+                height: 100%;
+                position: relative;
+            }
+
+            #addressTable tbody tr:hover {
+                background-color: #C0C0C0;
+            }
+
+            #BasemapToggle {
+                position: absolute;
+                background-color: #ffffff;
+                top: 20px;
+                left: 57px;
+                z-index: 5;
+            }
+
+            #BasemapToggle tbody td:hover {
+                background-color: #dddddd;
+                cursor: pointer;
+            }
+
+            #BasemapToggle td {
+                border: 1px solid #C0C0C0;
+                border-collapse: collapse;
+                height: 12px;
+                padding: 2px 3px 2px 3px;
+                font-size: 12px;
+                color: #000000;
+                font-weight: normal;
+            }
+
+            .instructions{
+                color:#002bad;
+                font-family:Arial,Helvetica,sans-serif;
+                font-size:12px !important;
+            }
+          .infopopup {
+              position:fixed !important;
+              display:inline-block;
+              top:60% !important;
+              left:50% !important;
+              //width:700px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+              //transform: translate(-50%, -50%); !important;
+              
+           
+           }
+        
+           .infopopup1 {
+              position:fixed !important;
+              display:inline-block;
+              top:70% !important;
+              left:50% !important;
+              //width:700px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+              //transform: translate(-50%, -50%); !important;
+              
+           
+           }
+                    
+        </style>
+        <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+        <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+        <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+
+    </head>
+    <body onload="init()">
+    <!--<div id="login">
+        <ul>
+            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
+                <apex:outputLink value="/AAAP/home/home.jsp">
+                    <li>{!$Label.site.login_button}</li>
+                </apex:outputLink>
+                <li> |</li>
+                <apex:outputLink value="/AAAP/ForgotPassword">
+                    <li>{!$Label.site.forgot_your_password_q}</li>
+                </apex:outputLink>
+                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
+                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
+                    <li>{!$Label.site.new_user_q}</li>
+                </apex:outputLink>
+            </apex:panelGroup>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>{!$Label.site.logout}</li>
+            </apex:outputLink>
+            <li>|</li>
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>
+        </ul>
+    </div>--><!--/login-->
+
+    <div id="wrapper">
+        <c:inside_header offerId="{!offerBuilding.Id}"/>
+        <div id="content" class="building"><!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
+            <!-- apex:form id="errorMessage" rendered="{!!isValidUser}" styleClass="formwrap"-->
+            <!--apex:pageMessages /-->
+            <!--/apex:form-->
+
+
+            <!--<apex:actionRegion rendered="{!!isValidUser}">
+        <apex:pageMessages />
+        </apex:actionRegion>    -->
+            <apex:panelGrid rendered="{!!isValidUser}">
+                <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+                <apex:messages styleClass="errMessage" id="errmessage"/>
+            </apex:panelGrid>
+            <apex:panelGroup rendered="{!isValidUser}">
+                <c:PBS_AAAP_ProgressBar myValue="{!offerBuilding.Id}" step="1" />
+            </apex:panelGroup>
+            <apex:form id="newOffer" styleClass="mainForm">
+                <apex:inputHidden value="{!pageUrl}" id="pgUrl" />                     
+                <apex:actionRegion rendered="{!isValidUser}">
+                    
+                    <apex:actionFunction name="deleteOffer" action="{!actionDeleteOffer}">
+                    </apex:actionFunction>
+
+                    <apex:outputPanel id="thePanelform1" layout="block" styleClass="formwrap">
+                        <div class="hr" id="pageHeading">Building Details</div>
+                        <apex:messages styleClass="errMessage" id="message"/>
+                        <apex:outputPanel id="other_bldg_data" layout="block">
+                            <apex:panelGrid columns="1" id="theGridsection2">
+                                
+                                <!--JK removed 7/2021-->
+                                <!--apex:outputPanel >
+                                    <apex:outputtext value="{!$Label.PBS_AAAP_Building_Sprinklered}"/>
+                                    <span class="required">*</span>
+                                    <a class="popup" href="#Modal_Bldg_Ques9"><img src="{!$Resource.Info_Icon}"/></a>
+                                    <div id="Modal_Bldg_Ques9"
+                                         style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px">
+                                        <p>An "automatic sprinkler system" for fire protection purposes means an electronically supervised, integrated system of
+                                            underground and overhead piping, designed in accordance with NFPA Standard No. 13. The system is usually activated by
+                                            heat from fire and discharges water over the fire area. The system includes a suitable water supply.<br/><br/>
+
+                                            Refer to section 2.07 FIRE PROTECTION AND LIFE SAFETY of the RLP<br/><br/>
+
+                                            Refer to section 3.13 AUTOMATIC FIRE SPRINKLER SYSTEM and 5.19 AUTOMATIC FIRE SPRINKLER SYSTEM - TI of the Lease
+                                        </p>
+                                    </div>
+                                    <br/>
+                                    <apex:selectRadio styleClass="radioCell"
+                                                      value="{!offerBuilding.PBS_AAAP_Building_Sprinklered__c}"
+                                                      id="bsprink">
+                                        <apex:selectOptions value="{!partialItems}"/>
+                                    </apex:selectRadio>
+
+                                </apex:outputPanel-->
+
+                                <!--JK added new question #1 7/2021. Note: value will PBS_AAAP_Fire_Life_Meets__c field on offer, and selectOptions needs to be defined in the controller similar to partialItems var/list, in getPartialItems()and action needs to be changed-->
+                                <apex:outputPanel >
+                                    <apex:outputtext value="{!$Label.PBS_AAAP_Fire_Life_Meets}"/>
+                                    <span class="required">*</span>
+                                    <br/>
+                                    <apex:selectRadio styleClass="noPadding"
+                                                      value="{!offerBuilding.PBS_AAAP_Fire_Life_Meets__c}"
+                                                      id="bsprink"
+                                                      layout="pageDirection">
+                                        <apex:selectOptions value="{!fireLifeMeetsItems}"/>
+                                    </apex:selectRadio>
+
+                                </apex:outputPanel>
+                                <!--JK removed 7/2021-->
+                                <!--apex:outputPanel >
+                                    <apex:outputtext value="{!$Label.PBS_AAAP_Remote_Stairwell}"/>
+                                    <span class="required">*</span>
+                                    <a class="popup" href="#Modal_Bldg_Ques10"><img src="{!$Resource.Info_Icon}"/></a>
+                                    <div id="Modal_Bldg_Ques10"
+                                         style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                        <p>Offered space must meet or be upgraded to meet the applicable egress requirements in NFPA Standard No. 101,
+                                            Life Safety Code, or equivalent prior to occupancy. The space must provide access to a minimum of two remote
+                                            exits on each floor of Government occupancy. Scissor stairs shall only be counted as one exit stairway and
+                                            'open air' exterior fire escapes shall not be counted as an approved exit.<br/><br/>
+
+                                            Refer to section 3.12 MEANS OF EGRESS of the Lease
+
+                                        </p>
+                                    </div>
+                                    <br/>
+                                    <apex:selectRadio styleClass="radioCell"
+                                                      value="{!offerBuilding.PBS_AAAP_BLDG_Physical_Remote_Stairwell__c}"
+                                                      id="bstairwell">
+                                        <apex:selectOptions value="{!stairwellitems}"/>
+                                    </apex:selectRadio>
+
+                                </apex:outputPanel-->
+                                <!--JK added Question #2 July 2021. Note: value will be PBS_AAAP_Accessibility__c field on offer, and selectOptions needs to be defined in the controller similar to stairwellitems var/list, in getPartialItems() and action needs to be changed-->
+                                <apex:outputPanel >
+                                    <apex:outputtext value="{!$Label.PBS_AAAP_Accessibility}"/>
+                                    <span class="required">*</span>
+                                    <br/>
+                                    <apex:selectRadio styleClass="noPadding"
+                                                      value="{!offerBuilding.PBS_AAAP_Accessibility__c}"
+                                                      id="bsprin"
+                                                      layout="pageDirection">
+                                        <apex:selectOptions value="{!accessibilityitems}"/>
+                                    </apex:selectRadio>
+
+                                </apex:outputPanel>
+
+                                                          
+                                <!--JK removed 7/2021-->
+                                <!--apex:outputPanel >
+                                    <apex:outputtext value="{!$Label.PBS_AAAP_Alarm_System}"/>
+                                    <span class="required">*</span>
+                                    <a class="popup" href="#Modal_Bldg_Ques11"><img src="{!$Resource.Info_Icon}"/></a>
+                                    <div id="Modal_Bldg_Ques11"
+                                         style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px">
+                                        <p>Fire alarm systems shall be provided in accordance with the requirements of NFPA Standard NFPA Standard No. 72
+                                            (current as of the date of this RLP) or be in compliance with the local building and fire codes, and local ordinances
+                                            (current as of the date of this RLP) adopted by the jurisdiction in which the offered space is located.<br/><br/>
+
+
+                                            The fire alarm system shall be maintained by the lessor in accordance with NFPA Standard No. 72.<br/><br/>
+
+
+                                            The fire alarm system wiring and equipment must be electrically supervised and automatically notify the local
+                                            fire department (NFPA Standard No. 72) or approved central station. Emergency power must be provided in accordance
+                                            with NFPA Standards 70 and 72.<br/><br/>
+
+                                            Refer to section 2.07 FIRE PROTECTION AND LIFE SAFETY of the RLP<br/><br/>
+
+                                            Refer to section 3.14 FIRE ALARM SYSTEM of the Lease
+                                        </p>
+                                    </div>
+                                    <br/>
+                                    <apex:selectRadio styleClass="radioCell"
+                                                      value="{!offerBuilding.PBS_AAAP_BLDG_Wide_Alarm_System__c}"
+                                                      id="balarm">
+                                        <apex:selectOptions value="{!items}"/>
+                                    </apex:selectRadio>
+
+                                </apex:outputPanel-->
+                                <!--JK added Question #3 July 2021. Note: value will be PBS_AAAP_Asbestos__c field on offer, and selectOptions needs to be defined in the controller similar to items var/list, in getter method () and action needs to be changed-->
+            <!--SGanti added on 7/22/2021  -->                          
+                <apex:outputPanel >   
+                        <apex:outputtext value="{!$Label.PBS_AAAP_Asbestos}"/>
+                        <span class="required">*</span> 
+                        <br/>
+                                <apex:selectCheckboxes styleClass="noPadding" value="{!getAsbestosItems}" layout="pageDirection">
+                                <apex:selectOptions value="{!getAsbestos}"/>
+                                </apex:selectCheckboxes>
+                </apex:outputPanel>     
+                                
+    <!--JK added Question #4 July 2021. Note: value will be PBS_AAAP_Flood_Plains__c field on offer, and selectOptions needs to be defined in the controller similar to items var/list, in getter method (), and action needs to be changed-->
+                                <apex:outputPanel >
+                                    <apex:outputtext value="{!$Label.PBS_AAAP_Flood_Plains}"/>
+                                    <span class="required">*</span> 
+                                    <br/>
+                                    <apex:selectRadio styleClass="noPadding"
+                                                      value="{!offerBuilding.PBS_AAAP_Flood_Plains__c}"
+                                                      id="bspri"
+                                                      layout="pageDirection">
+                                        <apex:selectOptions value="{!FloodPlainsItems}"/>
+                                    </apex:selectRadio>
+                                </apex:outputPanel>
+                                                                                                               
+                                <!--JK moved to here 7/2021-->
+                                
+  								
+                                <apex:outputPanel >
+                                    <apex:outputtext value="{!$Label.PBS_AAAP_Building_close_to_Metro}"/>
+                                    <span class="required">*</span> 
+                                    <!-- J. Rogers SFWS-2558 - Remove info tip 
+                                    <a class = "popup" href="#Modal_Bldg_Ques111"><img src="{!$Resource.Info_Icon}"/></a>
+                                    <div id="Modal_Bldg_Ques111"
+                                         class = "infopopup" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px; width:700px;">
+                                        <p>Types of public transportation include commuter rail, light rail, subway, and public or campus bus lines. If the
+                                            building you are offering is within 2,640 walkable linear feet of an access point to one of these types of public
+                                            transportation, answer "YES". If it is not, answer "NO".<br/><br/>
+
+                                            Refer to Section 1 NEIGHBORHOOD, PARKING, LOCATION AMENITIES, AND PUBLIC TRANSPORTATION (AAAP VARIATION) of the RLP
+                                        </p>
+                                    </div>
+                                    <br/>
+                                    -->
+                                    <apex:actionRegion >
+                                        <apex:selectRadio styleClass="radioCell"
+                                                          value="{!offerBuilding.PBS_AAAP_Close_To_Metro__c}"
+                                                          id="closetometro" onchange="resetMetroFields()">
+                                            <apex:actionSupport event="onchange" action="{!displayMetroStation}"/>
+                                            <apex:selectOptions value="{!items}"/>
+                                        </apex:selectRadio>
+                                    </apex:actionRegion>
+                                    
+                                </apex:outputPanel>
+                                    
+                                
+                                <apex:outputPanel id="energyStarSection" style="display: block; width: 812px;">
+                                    <apex:outputtext value="{!$Label.PBS_AAAP_Building_Energy_Star}"/>
+                                    <span class="required">*</span>
+                                    <a class="popup" href="#Modal_Bldg_Ques8"><img src="{!$Resource.Info_Icon}"/></a>
+                                    
+                                    <div id="Modal_Bldg_Ques8"
+                                         class = "infopopup" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                        <p>Refer to section 2 ENERGY INDEPENDENCE AND SECURITY ACT (AAAP VARIATION) and section 3
+                                            ADDITIONAL SUBMITTALS (AAAP VARIATION) of the RLP
+                                            <br/><br/>
+                                            Refer to section 3 ENERGY INDEPENDENCE AND SECURITY ACT of the lease
+                                        </p>
+                                    </div>
+                                    
+                                    <br/>
+                                    <apex:actionRegion >
+                                        <apex:selectRadio styleClass="radioCell"
+                                                          value="{!offerBuilding.PBS_AAAP_Energy_Star__c}"
+                                                          id="benergystar" onchange="resetEnergyStarFields();">
+                                            <apex:actionSupport event="onchange" action="{!displayEnergyStarText}"/>                                                                              
+                                           <apex:selectOptions value="{!items}"/> 
+                                        </apex:selectRadio>
+                                    </apex:actionRegion>
+                                    <apex:outputPanel id="energyStarCertDate">
+                                        <br/>
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Date_of_certification}" />
+                                            <apex:inputField value="{!offerBuilding.PBS_AAAP_CERTIFICATION_DATE__c}" />
+                                    </apex:outputPanel>    
+                                    <apex:outputPanel id="energyStar">
+                                        <br/>
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Building_Energy_Star_Reason}" />
+                                           <span class="required">*</span>
+                                        <br/>
+                                        <apex:inputTextArea id="energyStarReasonTA" value="{!offerBuilding.PBS_AAAP_Energy_Star_Reason__c}" rows="5" cols="70" html-maxlength="500" onkeyup="updateEnergyStarReasonTACounter()" /><br/>
+                                        <apex:outputText id="energyStarReasonTACounter" />&#160;Characters Used
+                                  </apex:outputPanel>
+
+                                </apex:outputPanel>
+                            </apex:panelGrid>
+                            
+                            <apex:panelGrid columns="1">
+                                <apex:outputPanel >
+                                    <apex:outputtext value="{!$Label.PBS_AAAP_Hist_Prop_in_Hist_Dist}"/>
+                                    <span class="required">*</span>
+                                    <a class="popup" href="#Modal_Historic_inside"><img
+                                                src="{!$Resource.Info_Icon}"/></a>
+                                    <div id="Modal_Historic_inside"
+                                         class = "infopopup1" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                        <p>Refer to section 2 HISTORIC PREFERENCE (AAAP VARIATION) and NATIONAL HISTORIC PRESERVATION ACT REQUIREMENTS - RLP (AAAP VARIATION) in the RLP<br/><br/>
+
+                                            Refer to section 3 NATIONAL HISTORIC PRESERVATION ACT REQUIREMENTS - LEASE (AAAP VARIATION) of the lease
+
+                                        </p>
+                                    </div>
+                                    <br/>
+                                    <apex:selectRadio styleClass="radioCell"
+                                                      value="{!offerBuilding.PBS_AAAP_HIST_PROP_IN_HIST_DIST__c}"
+                                                      id="hphid">
+                                        <apex:selectOptions value="{!items}"/>
+                                    </apex:selectRadio>
+                                    <span id="hphiderror" for="hphid"
+                                          style="color:red;display:none;font-family:Arial,Helvetica,sans-serif;font-size:12px;"><br/>Error: Historic propertry is Required</span>
+                                </apex:outputPanel>
+
+                                <apex:outputPanel >
+                                    <apex:outputtext value="{!$Label.PBS_AAAP_NonHist_Prop_in_Hist_Dist}"/>
+                                    <span class="required">*</span>
+                                    <a class="popup" href="#Modal_NON_Historic_inside"><img
+                                                src="{!$Resource.Info_Icon}"/></a>
+                                    <div id="Modal_NON_Historic_inside"
+                                        class = "infopopup1" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                        <p>Refer to section 2 HISTORIC PREFERENCE (AAAP VARIATION) and NATIONAL HISTORIC PRESERVATION ACT REQUIREMENTS - RLP (AAAP VARIATION) in the RLP<br/><br/>
+
+                                            Refer to section 3 NATIONAL HISTORIC PRESERVATION ACT REQUIREMENTS - LEASE (AAAP VARIATION) of the lease
+                                        </p>
+                                    </div>
+                                    <br/>
+                                    <apex:selectRadio styleClass="radioCell"
+                                                      value="{!offerBuilding.PBS_AAAP_NON_HIST_PROP_IN_HIST_DIST__c}"
+                                                      id="nhihd">
+                                        <apex:selectOptions value="{!items}"/>
+                                    </apex:selectRadio>
+                                    <span id="nhihderror" for="nhihd"
+                                          style="color:red;display:none;font-family:Arial,Helvetica,sans-serif;font-size:12px;"><br/>Error: Non-Historic property is Required</span>
+                                </apex:outputPanel>
+
+                                <apex:outputPanel >
+                                    <apex:outputText value="{!$Label.PBS_AAAP_Hzone_SBC}" />
+                                    <span class="required">*</span>
+                                    <a class="popup" href="#Modal_Hubzone"><img
+                                                src="{!$Resource.Info_Icon}"/></a>
+                                    <div id="Modal_Hubzone"
+                                       class = "infopopup1" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px; width:700px;">
+                                        <p>A HUBZone small business concern (SBC) Offeror may elect to waive the price evaluation provided in section 4 of the RLP.<br/><br/>
+
+                                            In such a case, no price evaluation preference shall apply to the evaluation of the HUBZone SBC, and the performance of work requirements set forth in section 1 of the lease shall not be applicable to a lease awarded to the HUBZone SBC Offeror under this solicitation.<br/><br/>
+
+                                            Refer to section 4 HUBZONE SMALL BUSINESS CONCERN ADDITIONAL PERFORMANCE REQUIREMENTS (AAAP VARIATION) of the RLP<br/><br/>
+
+                                            Refer to section 1 HUBZONE SMALL BUSINESS CONCERNS ADDITIONAL PERFORMANCE REQUIREMENTS of the lease
+
+                                        </p>
+                                    </div>
+                                    <apex:actionRegion >
+                                        <apex:selectRadio styleClass="radioCell"
+                                                          value="{!offerBuilding.PBS_AAAP_HubZone_SBC__c}"
+                                                          id="hzonefield" onchange="resethzoneFields()">
+                                            <apex:actionSupport event="onchange" action="{!displayhzone}"/>
+                                            <apex:selectOptions value="{!items}"/>
+                                        </apex:selectRadio>
+                                    </apex:actionRegion>
+                                    <span id="hzoneerror" for="hzonefield"
+                                          style="color:red;display:none;font-family:Arial,Helvetica,sans-serif;font-size:12px;"><br/>Error: 8. Indicate Hubzone SBC status.</span>
+                                    
+                                    <apex:outputPanel id="hzonepreference">
+                                        <br/>
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_HZone_SBC_Preference}"/>
+                                        <span class="required">*</span>
+                                        <apex:selectRadio value="{!offerBuilding.PBS_AAAP_HubZone_SBC_Preference__c}">
+                                            <apex:selectOptions value="{!items}"/>
+                                        </apex:selectRadio>
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel >
+                                    <apex:outputtext value="{!$Label.PBS_AAAP_Reconstruction_question}"/>
+                                    <span class="required">*</span> <br/>
+                                    <apex:actionRegion >
+                                        <apex:selectRadio styleClass="radioCell"
+                                                          value="{!offerBuilding.PBS_AAAP_Reconstruction__c}"
+                                                          id="reconstruction" onchange="resetReconstructionFields()">
+                                            <apex:actionSupport event="onchange" action="{!displayreconstructionAcknowledgement}"/>
+                                            <apex:selectOptions value="{!items}"/>
+                                        </apex:selectRadio>
+                                    </apex:actionRegion>
+                                    <span id="reconstructionerror" for="reconstruction"
+                                          style="color:red;display:none;font-family:Arial,Helvetica,sans-serif;font-size:12px;"><br/>Error: 10. Indicate if a complete rehabilitation or extensive renovation is proposed.</span>
+                                    
+                                    <apex:outputPanel id="ReconstructionAcknowledgement">
+                                        <br/>
+                                        <apex:inputField value="{!offerBuilding.PBS_AAAP_Reconstruction_Acknowledgement__c}"/>
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Reconstruction_Acknowledgement_question}"/>
+                                        <span class="required">*</span>
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+
+                                <apex:outputPanel >
+
+                                    <apex:outputtext value="{!$Label.PBS_AAP_Building_Located_in_Sesimic_Zone}"/>
+                                    <span class="required">*</span>
+                                    (Defined as being within the yellow- or red-shaded area of the&nbsp;
+                                    <apex:outputLink value="{!$Resource.SeismicMap}" target="_blank">Seismic Map
+                                    </apex:outputLink>
+                                    .)<br/>
+
+                                    <apex:actionRegion >
+                                        <apex:selectRadio styleClass="radioCell"
+                                                          value="{!offerBuilding.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c}"
+                                                          id="quesbuildingLocated" onchange="resetBuildingLocated()">
+                                            <apex:actionSupport event="onchange"
+                                                                action="{!displayBuildingTypeCodeyear}"/>
+                                            <apex:selectOptions value="{!items}"/>
+                                        </apex:selectRadio>
+                                    </apex:actionRegion>
+                                    <span id="quesbuilingLocatederror" for="quesbuildingLocated"
+                                          style="color:red;display:none;font-family:Arial,Helvetica,sans-serif;font-size:12px;"><br/>Error: Building located in sesimic zone is Required</span>
+                                    <br/>
+                                    <apex:outputPanel id="buildinglocated">
+                                    <!-- Todd Brown added following Seismic question 11a 08/2021 for SFWS-1313 -->
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Seismic_Safety}"/>
+                                        <span class="required">*</span>
+                                        <br/>
+                                            <apex:selectRadio styleClass="noPadding"
+                                                      value="{!offerBuilding.PBS_AAAP_Seismic_Statement__c}"
+                                                      layout="pageDirection">
+                                            <apex:selectOptions value="{!SeismicSafetyItems}"/>
+                                        </apex:selectRadio>
+                                        <br/>
+                                        <apex:outputtext value="{!$Label.PBS_AAP_Building_Type_Code_and_Year}"/>  
+                                        <span class="required">*</span>
+                                        <br/>
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <apex:outputtext value="{!$Label.PBS_AAAP_Building_Type} "/>
+                                                </td>
+                                                <td>
+                                                    <apex:outputtext value="{!$Label.PBS_AAAP_Building_Code} "/>
+                                                </td>
+                                                <td>
+                                                    <apex:outputtext value="{!$Label.PBS_AAAP_Building_Code_year} "/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <apex:inputField value="{!offerBuilding.PBS_AAAP_BUILDING_TYPE__c}"
+                                                                     id="buildingType"/>
+                                                </td>
+                                                <td>
+                                                    <apex:inputField value="{!offerBuilding.PBS_AAAP_BUILDING_CODE__c}"
+                                                                     id="buildingCode"/>
+                                                </td>
+                                                <td>
+                                                    <apex:inputField value="{!offerBuilding.PBS_AAAP_BUILDING_CODE_YEAR__c}"
+                                                            id="buildingCodeYear"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                                <apex:panelGrid columns="1">
+                                    <apex:outputPanel >
+                                         <apex:commandButton value="Back" action="{!backToOfrBlding}" styleClass="buttonred"/>
+                                        <apex:commandButton id="btnSaveForm" value="Save Page" styleClass="btnJQSubmit"
+                                                            action="{!actionSaveBuildingInfo}" />
+                                        <apex:commandButton id="btnSave" value="Next" action="{!saveBuilding}" />
+                                        <!-- new changes -->
+                                        <apex:commandButton value="Exit Offer"
+                                                onclick="if(confirm('Are you sure you want to cancel editing this record without saving changes?')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}AAAP-PortalHome';return false;} else {return false;}" 
+                                             />
+
+
+                                        <!--<apex:commandButton value="Exit Offer" action="{!actionCancel}"
+                                                            onclick="if(confirm('Please make sure that, you have saved changes to the offer, before leaving from this page.')){return true;} else return false;"/>-->
+                                        <span style="padding-right:250px;">&nbsp;</span>
+                                        <!-- <a href="#" class="buttonred" id="view"
+                                           onclick="if(confirm('Are you sure you want to permanently delete your offer?  If so, click OK.  Click Cancel to return to the page.')){deleteOffer(); return true;} else return false;">Delete
+                                            Offer</a> -->
+
+                                    </apex:outputPanel>
+                                </apex:panelGrid>
+                            </apex:panelGrid>
+
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                    <!-- weston  -->
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+                    <script type="text/javascript" src="{!$Label.AAAP_JQUERYUI_URL}"></script>
+                    <script type="text/javascript" src="/soap/ajax/17.0/connection.js"></script>
+                    <script type='text/javascript'>google.load('visualization', '1', {packages:['table']});</script>
+                    <script src="{!URLFOR($Resource.JQueryDataTable,'/JQueryDataTable/js/jquery.dataTables.min.js')}"></script>
+                    <script src="{!URLFOR($Resource.PBS_AAAP_JQueryOverlay,'/JQueryOverlay/loadingoverlay.min.js')}"></script>
+                    <script src="https://js.arcgis.com/3.17/"></script>
+                    <apex:outputPanel id="thehalf">
+                        
+                    </apex:outputPanel>
+                    <script type='text/javascript'>
+
+    var ignoreAjaxError = false;
+    var onAddressToLocationsCallback = null;
+
+    var METERTHRESHOLD = 804.672;
+    var AAAPGMAP = AAAPGMAP || {};         // define the applications namespace
+    AAAPGMAP.closeToMetro = false;
+    //AAAPGMAP.ReconstructionAcknowledgement = false;
+    AAAPGMAP.quesbuildingLocated = false;
+    AAAPGMAP.reconstruction = false;
+    AAAPGMAP.hzonefield = false;
+    AAAPGMAP.formDiv = document.getElementById('{!$Component.newOffer}');
+    
+
+                    </script>
+                </apex:actionRegion>
+            </apex:form>
+        </div><!--/content-->
+    </div><!-- /Wrapper -->
+
+    </body>
+
+    <script type="text/javascript">
+    //alert('test');
+    JQ(document).ready(function () {
+        JQ(AAAPGMAP.mapDiv).hide();
+        JQ(AAAPGMAP.tabDiv).hide();
+        resetEnergyStarFields();
+        resetMetroFields();
+        resetBuildingLocated();
+        resethzoneFields();
+        resetReconstructionFields();
+        AAAPGMAP.initHide();
+        updateEnergyStarReasonTACounter();
+        //added by syam
+        bldMsg = JQ('input[id=' + "'{!$Component.newOffer.bldMsg}'" + ']').val();
+        if (bldMsg == '')
+            addrFlag = false;
+        else addrFlag = true;
+        sessionStorage.setItem("addrFlag", addrFlag);
+
+        //added by syam display msg when submitted offer is saved.
+        draftMsgFlag = JQ('input[id=' + "'{!$Component.newOffer.draftMsgFlag}'" + ']').val();
+        if (draftMsgFlag == 'true') {
+            var confirm1 = JQ('<div></div>').html("Your offer is no longer submitted. Offer status is updated to 'Draft' status and needs to be submitted again.").dialog({
+                autoOpen: false,
+                title: '',
+                modal: true,
+                position: ['center', 'center'],
+                buttons: {
+                    'OK': function () { JQ(this).dialog('close'); }
+                }
+            });
+            confirm1.dialog('open');
+        }
+        
+    });
+    
+    function updateEnergyStarCounter() {
+
+        var cnt = document.getElementById('{!$Component.newOffer.energyStarReason}').value.length;
+        var esrc = document.getElementById('{!$Component.newOffer.energyStarReasonCounter}');
+        esrc.value = cnt;
+        //alert('energy star reason count: ' + cnt);
+    
+    }
+    
+    function resetEnergyStarFields() {
+        var flag = JQ('input[name=' + "'{!$Component.newOffer.benergystar}'" + ']:checked').val();
+        AAAPGMAP.energyStar = document.getElementById('{!$Component.newOffer.energyStar}');
+        AAAPGMAP.energyStarCertDate = document.getElementById('{!$Component.newOffer.energyStarCertDate}');
+        if (flag == "No") {
+            JQ(AAAPGMAP.energyStar).show();
+            JQ(AAAPGMAP.energyStarCertDate).hide();
+        }
+        else {
+            if (flag == 'Yes') {
+                JQ(AAAPGMAP.energyStarCertDate).show();
+                JQ(AAAPGMAP.energyStar).hide();
+            }
+            else { //null
+                JQ(AAAPGMAP.energyStarCertDate).hide();
+                JQ(AAAPGMAP.energyStar).hide();
+            }
+        }
+        /* J. Rogers - Fix scroll bar */
+        top.postMessage('Page Updated', document.location.origin);
+    }
+
+    function resetMetroFields() {
+        var flag = JQ('input[name=' + "'{!$Component.newOffer.closetometro}'" + ']:checked').val();
+        AAAPGMAP.metrostation = document.getElementById('{!$Component.newOffer.metrostation}');
+        if (flag == "Yes") {
+            JQ(AAAPGMAP.metrostation).show();
+        }
+        else {
+            JQ(AAAPGMAP.metrostation).hide();
+        }
+        /* J. Rogers - Fix scroll bar */
+        top.postMessage('Page Updated', document.location.origin);
+    }
+
+    function resethzoneFields() {
+        var flag = JQ('input[name=' + "'{!$Component.newOffer.hzonefield}'" + ']:checked').val();
+        AAAPGMAP.hzonepreference = document.getElementById('{!$Component.newOffer.hzonepreference}');
+        if (flag == "Yes") {
+            JQ(AAAPGMAP.hzonepreference).show();
+        }
+        else {
+            JQ(AAAPGMAP.hzonepreference).hide();
+        }
+        /* J. Rogers - Fix scroll bar */
+        top.postMessage('Page Updated', document.location.origin);
+    }
+    
+    function resetReconstructionFields() {
+        var flag = JQ('input[name=' + "'{!$Component.newOffer.reconstruction}'" + ']:checked').val();
+        AAAPGMAP.ReconstructionAcknowledgement = document.getElementById('{!$Component.newOffer.ReconstructionAcknowledgement}');
+        if (flag == "Yes") {
+            JQ(AAAPGMAP.ReconstructionAcknowledgement).show();
+        }
+        else {
+            JQ(AAAPGMAP.ReconstructionAcknowledgement).hide();
+        }
+        /* J. Rogers - Fix scroll bar */
+        top.postMessage('Page Updated', document.location.origin);
+    }
+    
+    function resetBuildingLocated() {
+        var flag = JQ('input[name=' + "'{!$Component.newOffer.quesbuildingLocated}'" + ']:checked').val();
+        AAAPGMAP.buildinglocated = document.getElementById('{!$Component.newOffer.buildinglocated}');
+        if (flag == "Yes") {
+            JQ(AAAPGMAP.buildinglocated).show();
+        }
+        else {
+            JQ(AAAPGMAP.buildinglocated).hide();
+        }
+        /* J. Rogers - Fix scroll bar */
+        top.postMessage('Page Updated', document.location.origin);
+    }
+        console.log('{!pageURLForRedirection}');
+		if('{!JSENCODE(pageURLForRedirection)}' != ''){
+            window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
+            /* J. Rogers - Fix scroll bar */
+            top.postMessage('Page Updated', document.location.origin);
+        }
+        
+    
+    function init() {
+        updateEnergyStarReasonTACounter();
+    }
+    
+    function updateEnergyStarReasonTACounter() {
+      
+        var cnt = document.getElementById('{!$Component.newOffer.energyStarReasonTA}').value.length;
+        var c = cnt + '/500';
+        document.getElementById('{!$Component.newOffer.energyStarReasonTACounter}').innerText = c;            
+      
+    }   
+    
+    </script>
+    
+    <c:SiteFooterUX />
+
+</apex:page>

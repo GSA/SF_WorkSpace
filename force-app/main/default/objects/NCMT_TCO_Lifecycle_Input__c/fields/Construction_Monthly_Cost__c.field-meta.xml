@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Construction_Monthly_Cost__c</fullName>
+    <externalId>false</externalId>
     <formula>If(And(Construction__c &lt;&gt; 0, Not(IsBlank(Construction__c))), ((NCMT_Project__r.EMIC__c * NCMT_Project__r.Total_ECC__c) + NCMT_Project__r.Total_ECC__c) / Construction__c, 0)
 /*  + ( NCMT_Project__r.EDRC__c * NCMT_Project__r.Total_ECC__c) */</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>

@@ -1,0 +1,134 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="RET_DocumentsListController" description="Displays a list of documents included with a tax submission.">
+	<aura:attribute name="caseId" type="String" />
+	<aura:attribute name="editEnabled" type="Boolean" default="true" />
+	<aura:attribute name="existingDocs" type="List" />
+	<aura:attribute name="docTypes" type="List" />
+	<aura:attribute name="errors" type="String" />
+	<aura:attribute name="btnType" type="String" />
+	<aura:attribute name="vfHost" type="String" />
+	<aura:attribute name="selectedRecordId" type="String" />
+	<aura:attribute name="selectedRecordName" type="String" />
+	<aura:handler name="init" action="{!c.initPage}" value="{!this}" />
+	<aura:handler name="change" value="{!v.caseId}" action="{!c.initDocList}" />
+
+	<div id="ret-document-list">
+		<aura:if isTrue="{!not(empty(v.errors))}">
+			<ui:message title="Error:" severity="error" closable="false">
+				{!v.errors}
+			</ui:message>
+		</aura:if>
+
+		<h2>Tax Documents</h2>
+
+		<aura:if isTrue="{!v.editEnabled == true}">
+			<div id="attach-document-button">
+				<ui:button press="{!c.uploadFile}" label="Attach New Document" />
+			</div>
+		</aura:if>
+
+		<aura:if isTrue="{!and(v.editEnabled == true,v.existingDocs.length != 0)}">
+			<div id="attach-document-button" class="Download-button">
+				<ui:button press="{!c.downloadAllAttachments}" label="Download All Attachments" />
+			</div>
+		</aura:if>
+		
+
+		<div id="ret-document-list-container">
+			<aura:if isTrue="{!v.existingDocs.length == 0}">
+				<div class="no-docs-notice">{!$Label.c.RET_No_Documents_Attached}</div>
+			</aura:if>
+			<ul>
+				<aura:iteration items="{!v.existingDocs}" var="docWrapper">
+					<li>{!docWrapper.documentType}
+						<table class="ret-document-list">
+							<aura:iteration items="{!docWrapper.attachList}" var="attachment">
+								<tr>
+									<td class="doc-links">
+										<aura:if isTrue="{!v.editEnabled == true}">
+											<a onclick="{!c.editDocument}" 
+												data-recordid="{!attachment.Id}">Edit</a>
+												&nbsp;|&nbsp;
+										</aura:if>
+										<!--Changes made to View Link-->
+										<a href="{!'/realestatetaxes/servlet/servlet.FileDownload?file=' + attachment.Id}" download="{!'/realestatetaxes/servlet/servlet.FileDownload?file=' + attachment.Id}">View</a>
+										<aura:if isTrue="{!v.editEnabled == true}">
+											&nbsp;|&nbsp;
+											<a onclick="{!c.confirmRemoveDocument}" 
+												data-recordid="{!attachment.Id}"
+												data-recordname="{!attachment.Name}">Remove</a>
+										</aura:if>
+									</td>
+									<td class="doc-name">
+										<lightning:icon iconName="doctype:unknown" size="x-small" />
+										{!attachment.Name}
+									</td>
+								</tr>
+							</aura:iteration>
+						</table>
+					</li>
+				</aura:iteration>
+			</ul>
+
+		</div>
+
+		<!-- File upload modal container -->
+		<div id="document-upload" class="ret-modal-container">
+			<section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+				<div class="slds-modal__container">
+					<header class="slds-modal__header">
+						<span id="file-upload-header">Upload New Document</span>
+					</header>
+					<div id="ret-upload-container" class="slds-modal__content slds-p-around_medium ret-upload-container hidden">
+						<iframe id="upload-frame" />
+					</div>
+                   
+					<div id="ret-upload-spinner" class="slds-modal__content slds-p-around_medium ret-upload-container">
+				        <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+				            <span class="slds-assistive-text">Loading</span>
+				            <div class="slds-spinner__dot-a"></div>
+				            <div class="slds-spinner__dot-b"></div>
+				        </div>
+				        <span class="loading-text">Loading...</span>
+					</div>
+					<footer class="slds-modal__footer">
+						<div id="modal-footer-buttons-new">
+							<ui:button class="slds-button slds-button_neutral" press="{!c.doneUploading}" label="Cancel" />
+							<ui:button class="slds-button slds-button_brand" press="{!c.saveDocument}" label="Save Document" labelClass="SaveDocument"/>
+							<ui:button class="slds-button slds-button_brand" press="{!c.saveNewDocument}" label="Save &amp; Add New" labelClass="SaveNewDocument"/>
+
+						</div>
+						<div id="modal-footer-buttons-done" class="hidden">
+							<ui:button class="slds-button slds-button_neutral" press="{!c.doneUploading}" label="Done" />
+						</div>
+					</footer>
+				</div>
+			</section>
+			<div class="slds-backdrop slds-backdrop_open"></div>
+		</div>
+
+		<!-- Confirm remove attachment. -->
+		<div id="confirm-doc-delete" class="ret-modal-container ret-modal-confirm">
+			<section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+				<div class="slds-modal__container">
+					<header class="slds-modal__header">
+						<span id="file-upload-header">Remove the Following Document?</span>
+					</header>
+					<div class="slds-modal__content slds-p-around_medium ret-upload-container ret-nohyphens">
+						{!$Label.c.RET_Confirm_Remove_Attachment}
+						<ul>
+							<li>{!v.selectedRecordName}</li>
+						</ul>
+					</div>
+					<footer class="slds-modal__footer">
+						<div id="confirm-footer-buttons">
+							<ui:button class="slds-button slds-button_neutral" press="{!c.cancelModal}" label="Cancel" />
+							<ui:button class="slds-button slds-button_brand" press="{!c.removeDocument}" label="Remove Document" labelClass="RemoveDocument"/>
+						</div>
+					</footer>
+				</div>
+			</section>
+			<div class="slds-backdrop slds-backdrop_open"></div>
+		</div>		
+
+	</div>
+</aura:component>

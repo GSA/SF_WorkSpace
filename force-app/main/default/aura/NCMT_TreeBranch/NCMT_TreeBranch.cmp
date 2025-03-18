@@ -1,0 +1,178 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId,lightning:isUrlAddressable" access="global" controller="NCMT_TreeStructure_CostSelection">
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+ 
+    <aura:attribute name="branches" type="NCMT_TreeNode[]" default="[]"/>
+
+    <aura:attribute name="projectId" type="String" />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="parentKey" type="String" />
+    <aura:attribute name="level" type="Integer" />
+    <aura:attribute name="fiscalYear" type="String" />
+    <aura:attribute name="searchVal" type="String" />
+    <aura:attribute name="isLoaded" type="Boolean"/>
+    <aura:attribute name="fileType" type="String"/>
+    <aura:attribute name="objectName" type="String"/>
+    <aura:attribute name="estFormat" type="String"/>
+    <aura:attribute name="title" type="String"/>
+    <aura:attribute name="showList" type="Boolean" default="false" />
+    <aura:attribute name="years" type="String[]" default="[]"/>
+
+
+    <aura:registerEvent name="branchClick" type="c:NCMT_BranchClick" /> 
+    <!--Extranous? handled in the NCMT_TreeBranch componenet below
+    <aura:handler name="branchClick" event="c:NCMT_BranchClick" action="{!c.handleBranchClick}"/>
+    -->
+   
+    <aura:if isTrue="{! !v.isLoaded }">
+        <lightning:spinner alternativeText="Loading" />
+    </aura:if>
+    
+    <!-- PAGE HEADER, level 1 only-->
+    <aura:if isTrue="{!v.level == 1}">
+        <div class="slds-page-header slds-page-header_record-home" style="padding-bottom:4px;">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning:icon iconName="standard:work_order_item" alternativeText="Service Items" title="Service Items" />
+                            
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate"
+                                            title="{!v.title}">{!v.title}</span>
+                                        
+                                    </h1>
+                                    <aura:if isTrue="{!(v.projectId == '')}">
+                                        
+                                        <div style="width:200px;">
+                                            <div style="display:inline-block;padding-right:5px;">
+                                                Fiscal Year
+                                            </div>
+                                            <div style="display:inline-block">
+                                                <lightning:select name="year" value="{!v.fiscalYear}" onchange="{!c.init}">
+                                                    <aura:iteration items="{!v.years}" var="y">
+                                                        <option value="{!y}">{!y}</option>
+                                                    </aura:iteration>
+                                                </lightning:select>
+                                            </div>
+                                        </div>
+                                    </aura:if>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-page-header__col-actions">
+                    <div class="slds-page-header__controls">
+
+                        <div>
+                            <ul class="slds-button-group-list">
+                                <li>
+                                    <aura:if isTrue="{!and(v.recordId != null, v.recordId != '')}">
+                                        <a href="{!('/' +v.recordId)}" target="_parent">
+                                            <button class="slds-button slds-button_neutral">Back</button>
+                                        </a>
+                                        <aura:set attribute="else">
+                                            <a href="/apex/NCMT_ReportsLandingPageLauncher_LC" target="_parent">
+                                                <button class="slds-button slds-button_neutral">Back</button>
+                                            </a>
+                                        </aura:set>
+                                    </aura:if>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+
+    <lightning:layout class="">
+        <lightning:layoutItem class="slds-container_small leftSidebar">
+
+            <!--FILTER-->
+            <aura:if isTrue="{!v.level == 1}">
+                <div style="padding:8px 8px 8px 16px;">
+                    <lightning:input name="searchVal" value="{!v.searchVal}" oncommit="{! c.init }" placeholder="Enter filter value..." style="max-width: 180px;display:inline-block;"/>
+                    &nbsp;
+                    <lightning:button variant="brand" label="Filter" title="Filter" onclick="{! c.init }"/>
+                
+                    <lightning:button variant="neutral" label="Clear" title="Clear" onclick="{! c.clear }"/>
+                </div>
+            </aura:if>
+
+            <!--BRANCHES-->
+            <aura:iteration items="{!v.branches}" var="branch">
+               
+                <aura:if isTrue="{!(branch.hasChildBranches || branch.hasItems)}">
+                    <div class="branchWrapper" style="{!('padding-left:' +(branch.level*10) +'px;')}" id="{!branch.uniqueKey +'-' +v.level +'-block'}">
+                        
+                            <div style="display:inline-block;padding:0px 1px 0px 3px;width:20px;vertical-align:top;">
+                                <aura:if isTrue="{!branch.hasChildBranches}">
+                                    <aura:if isTrue="{! !branch.branchesExpanded }">
+                                        <div onclick="{!c.toggleBranch}" data-value="{!branch.parentKey}">
+                                            <lightning:buttonIcon iconName="utility:chevronright" variant="bare" alternativeText="Settings" iconClass="dark"/>
+                                        </div>
+                                    </aura:if>
+                                    <aura:if isTrue="{!branch.branchesExpanded}">
+                                        <div onclick="{!c.toggleBranch}" data-value="{!branch.parentKey}">
+                                            <lightning:buttonIcon iconName="utility:chevrondown" variant="bare" alternativeText="Settings" iconClass="dark"/>
+                                        </div>
+                                    </aura:if>
+                                </aura:if>
+                            </div>
+                        
+                        <aura:if isTrue="{!branch.hasItems}">
+                            <div onclick="{!c.sendBranchClick}" 
+                                    data-unique="{!branch.uniqueKey}"
+                                    data-catId="{!branch.lookupRecord.Level_2__c}" 
+                                    data-cat="{!branch.lookupRecord.Level_2_Description__c}" 
+                                    data-level3="{!branch.lookupRecord.Level_3_Description__c}"
+                                    data-level4="{!branch.lookupRecord.Level_4_Description__c}"
+                                    data-level5="{!branch.lookupRecord.Level_5_Description__c}"
+                                    data-level6="{!branch.lookupRecord.Level_6_Description__c}"
+                                    data-estFormat="{!branch.estFormat}"
+                                    data-showItems="{!branch.hasItems}"
+                                    class="branchHeader slds-p-bottom_xx-small slds-show_inline-block treeLabel">
+                                <u>{!branch.label}</u>
+                            </div>
+                            <aura:set attribute="else">
+                                <div class="slds-p-bottom_xx-small treeLabel">
+                                    {!branch.label} 
+                                </div>
+                            </aura:set>
+                        </aura:if>
+                        <aura:if isTrue="{!branch.branchesExpanded}">
+
+                            <!--CHILD BRANCHES-->
+                            <c:NCMT_TreeBranch parentKey="{!branch.parentKey}" level="{!branch.level + 1}" 
+                                fiscalYear="{!branch.fiscalYear}" searchVal="{!v.searchVal}" 
+                                recordId="{!v.recordId}" branchClick="{!c.handleBranchClick}"
+                                fileType="{!v.fileType}" >
+                            </c:NCMT_TreeBranch>
+                                <!--   -->
+                        </aura:if>
+                        
+
+                    </div>
+                </aura:if>
+            </aura:iteration>
+            
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small">
+            <div aura:id="desList">
+                <!--<aura:if isTrue="{!v.unsearchable}">
+                    Please select a Cost Category from the dropdown menu
+                <aura:set attribute="else">-->
+                    {!v.body}
+                <!--</aura:set>
+                </aura:if> -->
+            </div>
+        </lightning:layoutItem>
+    </lightning:layout>
+ 
+</aura:component>

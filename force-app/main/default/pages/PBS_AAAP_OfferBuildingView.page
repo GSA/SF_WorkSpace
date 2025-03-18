@@ -1,0 +1,456 @@
+<apex:page Controller="PBS_AAAP_OfferBuildingController" sidebar="false" showHeader="false" standardStylesheets="false" >
+
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+    <apex:stylesheet value="{!$Resource.OutputFieldcss}"/>
+    
+    <style type="text/css">
+.ui-dialog {
+    background:#fff;
+    padding:10px;
+    border:1px solid #999;
+} 
+.ui-dialog a {
+    float:right;
+    font-weight:bold;
+    padding:3px;
+    color:#999;
+    text-transform:uppercase;
+    font-size:10px;
+} 
+#lean_overlay {
+    position: fixed;
+    z-index:100;
+    top: 0px;
+    left: 0px;
+    height:100%;
+    width:100%;
+    background:none;
+    display: none;
+} 
+
+
+    </style>
+    <style>
+.errMessage {color:red; }
+
+    </style>
+    
+    
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+        <ul>
+            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
+                <apex:outputLink value="/AAAP/home/home.jsp">
+                    <li>{!$Label.site.login_button}</li>
+                </apex:outputLink>
+                <li> |</li>
+                <apex:outputLink value="/AAAP/ForgotPassword">
+                    <li>{!$Label.site.forgot_your_password_q}</li>
+                </apex:outputLink>
+                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
+                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
+                    <li>{!$Label.site.new_user_q}</li>
+                </apex:outputLink>
+            </apex:panelGroup>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>{!$Label.site.logout}</li>
+            </apex:outputLink>
+            <li>|</li>
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>
+        </ul>
+    </div><!--/login-->
+
+    <div id="wrapper" >
+        <c:inside_header />
+        <div id="content" class="building"><!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
+            <apex:panelGrid rendered="{!!isValidUser}">
+                <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+                <apex:messages styleClass="errMessage" id="errmessage"/>
+            </apex:panelGrid>
+            <apex:panelGroup rendered="{!isValidUser}">
+                <apex:panelGrid columns="2" style="float:right"><a href="#" onclick="window.print();">Click Here To
+                        Print This Page</a>
+                    <apex:outputLabel style="padding-right:47px"></apex:outputLabel>
+                </apex:panelGrid>
+                <c:PBS_AAAP_ProgressBarV myValue="{!offerBuilding.Id}" linksToViewModePage="true" step="0" />
+            </apex:panelGroup>
+            <apex:form id="newOffer" styleClass="formwrap" rendered="{!isValidUser}" style="margin-right: 50px;">
+                <h3 class="blue">Building Information</h3>
+                <apex:messages styleClass="errMessage"/>
+
+                <apex:outputPanel id="thePanelform1" layout="block">
+
+                    <apex:panelGrid columns="2" id="bld_addr_fields">
+                        <apex:outputPanel id="rlp_selection" layout="block">
+                            <apex:outputtext value="1. Select an RLP:"/>
+                            <span class="required">*</span></apex:outputPanel>
+                        
+                        <apex:outputText id="chooseRLP" value="{!offerBuilding.Formula_RLP_Num__c}" styleClass="outputfield"/>
+                        
+                        <apex:outputPanel >
+                            <apex:outputtext value="2. Building Name"/>
+                            <span class="required">*</span></apex:outputPanel>
+                        <apex:outputText value="{!offerBuilding.PBS_AAAP_Building_Name__c}" id="bname" styleClass="outputfield"/>
+                        <apex:outputPanel >3. Street Address<span class="required">*</span><a class="popup"
+                                                                                             href="#Modal_Bldg_Ques3"><img
+                                        src="{!$Resource.Info_Icon}"/></a>
+                            <div id="Modal_Bldg_Ques3"
+                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                <p>Report the offered building street address in geo-codable format, i.e., an address
+                                    that can be mapped by <br/>
+                                    geographic information system software or used by an overnight delivery service to
+                                    deliver packages. <br/>
+                                    An example of a geo-codable address is 1800 F Street. Do NOT use the following:
+                                    <br/>
+                                    - Mailing address that is different than the location's address,<br/>
+                                    - Building name, <br/>- Street corner (e.g., 18th &amp; F Streets), <br/>
+                                    - Other description (such as a Post Office Box number), or <br/>
+                                    - Symbols such as double quote ("), underline (_), plus (+), percent (%), and
+                                    ampersand (&amp;).</p>
+                            </div>
+                        </apex:outputPanel>
+                        <apex:outputText value="{!offerBuilding.PBS_AAAP_Street_Address__c}" id="bstreet" styleClass="outputfield"/>
+
+                        <apex:outputPanel >
+                            <apex:outputtext value="4. City"/>
+                            <span class="required">*</span></apex:outputPanel>
+                        <apex:outputText value="{!offerBuilding.PBS_AAAP_City__c}" id="bcity" styleClass="outputfield"/>
+
+                        <apex:outputPanel >
+                            <apex:outputtext value="5. State"/>
+                            <span class="required">*</span></apex:outputPanel>
+                        <apex:outputText value="{!offerBuilding.PBS_AAAP_State__c}" id="bstate" styleClass="outputfield"/>
+
+                        <apex:outputPanel >
+                            <apex:outputtext value="6. Zip Code"/>
+                            <span class="required">*</span></apex:outputPanel>
+                        <apex:outputText value="{!offerBuilding.PBS_AAAP_ZipCode__c}" id="bzip" styleClass="outputfield"/>
+                        
+                    </apex:panelGrid>
+
+                    <apex:outputPanel id="other_bldg_data" layout="block">
+                        <apex:panelGrid columns="1" id="theGridsection2">
+                            <apex:outputPanel >
+                                <apex:outputtext value="{!$Label.PBS_AAAP_Building_Gen_Purpose_Rentable}"/>
+                                <span class="required">*</span>
+                                <a class="popup" href="#Modal_Bldg_Ques13"><img src="{!$Resource.Info_Icon}"/></a>
+                                <div id="Modal_Bldg_Ques13"
+                                     style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                    <p>Rentable square feet is the area for which a tenant is charged rent. It is
+                                        determined by the building owner<br/>
+                                        and may vary by city or by building within the same city. The rentable space may
+                                        include a share of building <br/>
+                                        support/common areas such as elevator lobbies, building corridors, and floor
+                                        service areas. Floor service areas <br/>
+                                        typically include restrooms, janitor rooms, telephone closets, electrical
+                                        closets, and mechanical rooms. <br/>
+                                        The rentable space does not include vertical building penetrations and their
+                                        enclosing walls, such as stairs, <br/>
+                                        elevator shafts, and vertical ducts.</p>
+                                </div>
+                                <br/>
+                                <apex:outputText value="{!offerBuilding.PBS_AAAP_GEN_PURPOSE_RENTABLE__c}" id="brsf" styleClass="outputfield"/>
+                            </apex:outputPanel>
+
+                            <apex:outputPanel id="BuildingSpace">
+                                <Table>
+                                    <tr>
+                                        <th style="text-align:center">&nbsp;</th>
+                                        <th style="text-align:center">RSF</th>
+                                        <th style="text-align:center">%</th>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <apex:outputText value="General Purpose (Office): "/>
+                                        </td>
+                                        <td>
+                                            <apex:outputText value="{!offerBuilding.PBS_AAAP_OFFICE_SPACE_RSF__c}" styleClass="outputfield"/>
+                                        </td>
+                                        <td>
+                                            <apex:outputPanel id="offerpercent">
+                                                <apex:outputText value="{!officePercent}"/>
+                                            </apex:outputPanel>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <apex:outputText value="Warehouse: "/>
+                                        </td>
+                                        <td>
+                                            <apex:outputText value="{!offerBuilding.PBS_AAAP_RETAIL_SPACE_RSF__c}" styleClass="outputfield"/>
+                                        </td>
+                                        <td>
+                                            <apex:outputPanel id="retailPercent">
+                                                <apex:outputText value="{!retailPercent}"/>
+                                            </apex:outputPanel>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <apex:outputText value="Other: "/>
+                                        </td>
+                                        <td>
+                                            <apex:outputText value="{!offerBuilding.PBS_AAAP_GARAGE_SPACE_RSF__c}" styleClass="outputfield"/>
+                                        </td>
+                                        <td>
+                                            <apex:outputPanel id="garagePercent">
+                                                <apex:outputText value="{!garagePercent}"/>
+                                            </apex:outputPanel>
+                                        </td>
+                                    </tr>
+                                </Table>
+                            </apex:outputPanel>
+
+                            <apex:outputPanel >
+                                <apex:outputtext value="{!$Label.PBS_AAAP_Building_ANSI_BOMA}"/>
+                                <span class="required">*</span>
+                                <a class="popup" href="#Modal_Bldg_Ques14"><img src="{!$Resource.Info_Icon}"/></a>
+                                <div id="Modal_Bldg_Ques14"
+                                     style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                    <p>For the purposes of this RLP, the Government recognizes the American National
+                                        Standards Institute/Building Owners and <br/>
+                                        Managers Association (ANSI/BOMA) international standard (Z65.1-1996) definition
+                                        for Office Area, which means "the area <br/>
+                                        where a tenant normally houses personnel and/or furniture, for which a
+                                        measurement is to be computed." ANSI/BOMA Office <br/>
+                                        Area square feet shall be computed by measuring the area enclosed by the
+                                        finished surface of the room side of corridors <br/>
+                                        (corridors in place as well as those required by local codes and ordinances to
+                                        provide an acceptable level of safety and/or <br/>
+                                        to provide access to essential building elements) and other permanent walls, the
+                                        dominant portion (refer to Z65.1) of building <br/>
+                                        exterior walls, and the center of tenant's separating partitions. Where alcoves,
+                                        recessed entrances, or similar deviations from <br/>
+                                        the corridor are present, ANSI/BOMA Office Area square feet shall be computed as
+                                        if the deviation were not present. For purposes of<br/>
+                                        this solicitation, floor common area, including rest rooms, janitors closets,
+                                        telephone and electrical closets, mechanical rooms, <br/>
+                                        elevator lobbies, and public or fire safety egress corridors are not included.
+                                    </p>
+                                </div>
+                                <br/>
+                                <apex:outputText value="{!offerBuilding.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c}"
+                                                 id="ansiboma" styleClass="outputfield"/>
+                            </apex:outputPanel>
+
+                            <apex:panelGrid columns="4">
+
+                                    <apex:outputtext value="{!$Label.PBS_AAAP_site_size}"/>
+                                    <span class="required">*</span>
+                                    <apex:outputText value="{!offerBuilding.PBS_AAAP_SITE_SIZE_SQFT__c}" id="siteSize" styleClass="outputfield"/>
+                                    <apex:selectRadio styleClass="radioCell"
+                                                      value="{!offerBuilding.PBS_AAAP_SITE_AREA_TYPE__c}"
+                                                      id="siteSizeOption" disabled="true">
+                                        <apex:selectOptions value="{!siteSizeItems}"/>
+                                    </apex:selectRadio>
+
+                                </apex:panelGrid>
+
+                            <apex:outputPanel >
+                                <apex:outputtext value="{!$Label.PBS_AAAP_Building_Number_of_Floors}"/>
+                                <span class="required">*</span><br/>
+                                <apex:outputText value="{!offerBuilding.PBS_AAAP_Number_of_floors__c}" id="bnumfloors" styleClass="outputfield"/>
+                            </apex:outputPanel>
+
+                            <apex:outputPanel >
+                                <apex:outputtext value="{!$Label.PBS_AAAP_Building_Live_Floor_Load} "/>
+                                <a class="popup" href="#Modal_Bldg_Ques15"><img src="{!$Resource.Info_Icon}"/></a>
+                                <div id="Modal_Bldg_Ques15"
+                                     style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                    <p>Office areas shall have a minimum live load capacity of 50 pounds per ANSI/BOMA
+                                        Office Area square foot plus 20 pounds per <br/>
+                                        ANSI/BOMA Office Area square foot for moveable partitions. Storage areas shall
+                                        have a minimum live load capacity of 100 pounds <br/>
+                                        per ANSI/BOMA Office Area square foot including moveable partitions. A report
+                                        showing the floor load capacity, at no cost to <br/>
+                                        the Government, by a registered professional engineer may be required.
+                                        Calculations and structural drawings may also be required.</p>
+                                </div>
+                                <br/>
+                                <apex:outputText value="{!offerBuilding.PBS_AAAP_LIVE_FLOOR_LOAD__c}" styleClass="outputfield"/>
+                            </apex:outputPanel>
+                           
+                            <apex:outputPanel >
+                                <apex:outputtext value="{!$Label.PBS_AAAP_Building_Constructed_Year}"/>
+                                <span class="required">*</span><br/>
+                                <apex:outputText value="{!offerBuilding.PBS_AAAP_Year_Built__c}" id="yearconstructed" styleClass="outputfield"/>
+                            </apex:outputPanel>
+
+                            <apex:outputPanel >
+                                <apex:outputtext value="{!$Label.PBS_AAAP_Building_Recent_Renovated_Year} "/>
+                                <br/>
+                                <apex:outputText value="{!offerBuilding.PBS_AAAP_Renovation_Year__c}" styleClass="outputfield"/>
+                            </apex:outputPanel>
+
+                            
+
+                            <apex:outputPanel id="HVAC">
+                                <apex:outputtext value="{!$Label.PBS_AAAP_Hours_of_HVAC}"/>
+                                <span class="required">*</span>
+                                <Table>
+                                    <tr>
+                                        <td align="right">
+                                            <apex:outputText value="{!$Label.PBS_AAAP_Mon_Fri_Hours_Start}"/>
+                                        </td>
+                                        <td>
+                                            <apex:outputText value="{!offerBuilding.PBS_AAAP_HVAC_HRS_MON_TO_FRI_START__c}"
+                                                    id="hvachrs" styleClass="outputfield"/>
+                                        </td>
+                                        <td align="right">
+                                            <apex:outputText value="{!$Label.PBS_AAAP_Building_Hours_End}"/>
+                                        </td>
+                                        <td>
+                                            <apex:outputText value="{!offerBuilding.PBS_AAAP_HVAC_HRS_MON_TO_FRI_END__c}" styleClass="outputfield"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <apex:outputText value="{!$Label.PBS_AAAP_SAT_Hours_Start}"/>
+                                        </td>
+                                        <td>
+                                            <apex:outputText value="{!offerBuilding.PBS_AAAP_HVAC_HRS_ON_SAT_START__c}" styleClass="outputfield"/>
+                                        </td>
+                                        <td align="right">
+                                            <apex:outputText value="{!$Label.PBS_AAAP_Building_Hours_End}"/>
+                                        </td>
+                                        <td>
+                                            <apex:outputText value="{!offerBuilding.PBS_AAAP_HVAC_HRS_ON_SAT_END__c}" styleClass="outputfield"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <apex:outputText value="{!$Label.PBS_AAAP_SUN_Hours_Start}"/>
+                                        </td>
+                                        <td>
+                                            <apex:outputText value="{!offerBuilding.PBS_AAAP_HVAC_HRS_ON_SUN_START__c}" styleClass="outputfield"/>
+                                        </td>
+                                        <td align="right">
+                                            <apex:outputText value="{!$Label.PBS_AAAP_Building_Hours_End}"/>
+                                        </td>
+                                        <td>
+                                            <apex:outputText value="{!offerBuilding.PBS_AAAP_HVAC_HRS_ON_SUN_END__c}" styleClass="outputfield"/>
+                                        </td>
+                                    </tr>
+                                </Table>
+                            </apex:outputPanel>
+
+                            <apex:outputText value="{!$Label.PBS_AAAP_Building_Annual_Figures}"/>
+                                <!-- <apex:panelGrid columns="1"> -->
+                                    <apex:outputPanel id="realEstate">
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Real_Estate_Taxes_Question}"/>
+                                        <span class="required">*</span>
+                                        <a class="popup" href="#Modal_Bldg_Ques15"><img
+                                                        src="{!$Resource.Info_Icon}"/></a>
+                                            <div id="Modal_Bldg_Ques15"
+                                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                                <p>Include all applicable real estate taxes imposed upon the
+                                                    property.</p>
+                                            </div>
+                                        <br />
+                                        <apex:outputText >$</apex:outputText>
+                                        <apex:outputText value="{!offerBuilding.PBS_AAAP_REAL_ESTATE_TAXES__c}"
+                                                         id="realestatetax" styleClass="outputfield"/>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel id="insurance">
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Annual_Insurance_Question}"/>
+                                        <span class="required">*</span>
+                                        <a class="popup" href="#Modal_Bldg_Ques16"><img
+                                                        src="{!$Resource.Info_Icon}"/></a>
+                                            <div id="Modal_Bldg_Ques16"
+                                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                                <p>Enter the annual cost of fire, liability, and other insurance carried
+                                                    on the real estate.</p>
+                                            </div>
+                                        <br/>
+                                        <apex:outputText >$</apex:outputText>
+                                        <apex:outputText value="{!offerBuilding.PBS_AAAP_INSURANCE__c}"
+                                                         id="insuranceamount" styleClass="outputfield"/>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel id="BuildingMaintenance">
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Building_Maintenance_Question}"/>
+                                        <span class="required">*</span>
+                                        <a class="popup" href="#Modal_Bldg_Ques17"><img
+                                                        src="{!$Resource.Info_Icon}"/></a>
+                                            <div id="Modal_Bldg_Ques17"
+                                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:500px;">
+                                                <p>Enter the annual cost of wages, materials, and outside services used
+                                                    in repairs and maintenance of the building itself and all similar
+                                                    repairs and maintenance costs not included
+                                                    in Section I above (Heating, Electrical, Plumbing, Air Conditioning,
+                                                    and Elevators). This includes major repairs and changes in the
+                                                    nature of a permanent improvement such as annual
+                                                    cost to replace relatively short-lived items such as boilers,
+                                                    compressors, elevators, and roof coverings.</p>
+                                            </div>
+                                        <br/>
+                                        <apex:outputText >$</apex:outputText>
+                                        <apex:outputText value="{!offerBuilding.PBS_AAAP_BUILDING_MAINTENANCE__c}"
+                                                         id="Maintenanceamount" styleClass="outputfield"/>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel id="leaseCommision">
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Lease_Commission_question}"/>
+                                        <span class="required">*</span>
+                                        <a class="popup" href="#Modal_Bldg_Ques18"><img
+                                                        src="{!$Resource.Info_Icon}"/></a>
+                                            <div id="Modal_Bldg_Ques18"
+                                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                                <p>Enter any lease commission which you may be responsible for due to
+                                                    the Government leasing action.</p>
+                                            </div>
+                                        <br />
+                                        <apex:outputText >$</apex:outputText>
+                                        <apex:outputText value="{!offerBuilding.PBS_AAAP_LEASE_COMMISSION__c}"
+                                                         id="leasecommission" styleClass="outputfield"/>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel id="Management">
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Building_Management_Question}"/>
+                                        <span class="required">*</span>
+                                        <a class="popup" href="#Modal_Bldg_Ques19"><img
+                                                        src="{!$Resource.Info_Icon}"/></a>
+                                            <div id="Modal_Bldg_Ques19"
+                                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                                <p>Include administrative expenses such as agency fees, legal fees,
+                                                    auditing, and advertising. <br/>Do not include financial charges such as
+                                                    income or corporate taxes or organization expense.</p>
+                                            </div>
+                                        <br />
+                                        <apex:outputText >$</apex:outputText>
+                                        <apex:outputText value="{!offerBuilding.PBS_AAAP_MANAGEMENT__c}"
+                                                         id="managementAnswer" styleClass="outputfield"/>
+                                    </apex:outputPanel>
+
+                            
+                            <apex:outputPanel >
+                                <apex:commandButton value="View Offer"
+                                                    onclick="window.open('/AAAP/PBS_AAAP_PreviewOfferPage?offerId={!JSENCODE(offerBuilding.id)}','View Offer Screen','width=900, height=700,scrollbars=yes,resizable=yes,location=no');return false;"/>
+                            </apex:outputPanel>
+                        </apex:panelGrid>
+                    </apex:outputPanel>
+                </apex:outputPanel>
+                <script>
+        (function(){
+            var _buildingtype = document.querySelectorAll('[id$="buildingType"]')[0];
+            if (_buildingtype && !_buildingtype[0].value) {_buildingtype.remove(0);}
+            var _buildingcode = document.querySelectorAll('[id$="buildingCode"]')[0];
+            if (_buildingcode && !_buildingcode[0].value) {_buildingcode.remove(0);}
+            var _buildingcodeYear = document.querySelectorAll('[id$="buildingCodeYear"]')[0];
+            if (_buildingcodeYear && !_buildingcodeYear[0].value) {_buildingcodeYear.remove(0);}
+        })();
+
+                </script>
+
+
+            </apex:form>
+        </div><!--/content-->
+    </div><!-- /Wrapper -->
+    <c:SiteFooterUX />
+
+
+</apex:page>

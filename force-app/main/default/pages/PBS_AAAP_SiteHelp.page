@@ -1,0 +1,182 @@
+<!-- 9-JUL-2020 acheslyn added analytics section for user story sfws 766 -->
+<apex:page sidebar="false" standardStylesheets="false" showHeader="false">
+
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/demo_page.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+
+    <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+    <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+    <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+
+    <!-- <c:EnrollCSS /> -->
+    <!--<c:jQueryInit bDataTables="true" /> -->
+    <style>
+span.dropt {border-bottom: thin dotted; background: #ffeedd;}
+span.dropt:hover {text-decoration: none; background: #fefefe; z-index: 6; }
+span.dropt span {position: absolute; left: -9999px;
+  margin: 20px 0 0 0px; padding: 3px 3px 3px 3px;
+  border-style:solid; border-color:black; border-width:1px; z-index: 6;}
+span.dropt:hover span {left: 2%; background:rgb(236, 236, 236);} 
+span.dropt span {position: absolute; left: -9999px;
+  margin: 4px; padding: 3px 3px 3px 3px; text-indent:0in;
+  border-style:solid; border-color:#666; border-width:1px;}
+span.dropt:hover span {margin: 20px 0 0 170px; background:rgb(236, 236, 236); z-index:6;} 
+
+.sb-int {margin:10px;padding:10px;}
+#rightCol {width:620px; padding-right:20px;}
+.sb-int .bucket {margin-top:10px !important;}
+h3.blue {padding-top:15px;}
+.portalhome .apexp .selector {top:70px; left:0px;}
+menu.table-options {top:40px;left:-350px;}
+.tabbed-table table tr {height:35px;}
+menu.table-options a {border:1px solid#666666; border-radius:3px;padding:6px;background-image:url(https://gsa--aaap--c.cs12.visual.force.com/resource/1334347636000/gsa_common/images/sprite.png);background-position:-5px 145px;color:#333333;font-size:12px;text-decoration:none;}
+
+#lean_overlay {
+    position: fixed;
+    z-index:100;
+    top: 0px;
+    left: 0px;
+    height:100%;
+    width:100%;
+    background:none;
+    display: none;
+}
+
+    </style>
+
+
+    
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>| {!$Label.site.logout}</li>
+            </apex:outputLink>
+            <li>|</li>
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>
+        </ul>
+    </div><!--/login-->
+
+
+    <div id="wrapper" class="portalhome">
+
+        <!-- Header logo part starts Here -->
+        <h1 class="logo">GSA</h1>
+        <div id="nav">
+            <ul>
+                <!--<li><a href="/AAAP/PBS_AAAP_HomePage">Lease Offer Platform Home</a></li>
+                <li><a href="/AAAP/PBS_AAAP_News_Updates">News &amp; Updates</a></li>
+                <li><a href="/AAAP/PBS_AAAP_About_AAAP">FAQs</a></li>
+                <li><a class="selected" href="/AAAP/PBS_AAAP_SiteHelp">Help</a></li>
+                <li><a href="/AAAP/PBS_AAAP_UserRegistration">Registration</a></li>-->
+            </ul>
+        </div><!--/nav-->
+
+        <div id="hero-int2">
+            <h2>AAAP</h2>
+        </div><!--/hero-->
+        <!-- Header logo part ends Here -->
+        <div id="content">
+
+            <apex:form styleClass="formwrap">
+                <h3 id="page-title" class="blue">Help and Training Files:</h3>
+
+                <div class="clearfix">&nbsp;</div>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/-M98LH-HIdc" frameborder="0"
+                        allowfullscreen="true"></iframe>
+                <p style="font-size:120%;"><strong>Learn how to navigate the AAAP:</strong></p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>1.
+                    <span style='mso-tab-count:1'>   </span>
+                    <span style='mso-spacerun:yes'>  </span>
+                    <a href="{!URLFOR($Resource.HowtoRegistertoOfferSpace)}" target="_blank">How to Register for AAAP</a></p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+
+                    <span style='font-family:"Arial","sans-serif"'></span>2.
+                    <span style='mso-tab-count:1'>   </span>
+                    <span style='mso-spacerun:yes'>  </span>
+                    <a href="{!URLFOR($Resource.CreateOfferTrainingN)}" target="_blank">How to Create and Submit an
+                        Offer</a></p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>3.
+                    <span style='mso-tab-count:1'>   </span>
+                    <span style='mso-spacerun:yes'>  </span>
+                    <a href="{!URLFOR($Resource.QuestionsAndHelpText)}" target="_blank">AAAP: Questions and Helper Text</a></p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>4.
+                    <span style='mso-tab-count:1'>   </span>
+                    <span style='mso-spacerun:yes'>  </span>
+                    <a href="{!URLFOR($Resource.ViewPrintOfferForms)}" target="_blank">How to View and Print Offer Forms
+                        in the AAAP</a></p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>5.
+                    <span style='mso-tab-count:1'>   </span>
+                    <span style='mso-spacerun:yes'>  </span>
+                    <a href="{!URLFOR($Resource.CreateAndSubmitOfferN)}" target="_blank">How to Create and Submit Offer-
+                        Census-Specific Workflow</a></p>
+                        
+                <p style="font-size:120%;"><strong>AAAP Video Tutorials:</strong></p>
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>1.
+                    <span style='mso-tab-count:1'>   </span>
+                    <span style='mso-spacerun:yes'>  </span>
+                    <a href="https://www.youtube.com/watch?v=-M98LH-HIdc;feature=em-share_video_user" target="_blank">What
+                        is the AAAP?</a></p>
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>2.
+                    <span style='mso-tab-count:1'>   </span>
+                    <span style='mso-spacerun:yes'>  </span>
+                    <a href="https://youtu.be/KymnkdhwHiE"
+                       target="_blank">Homepage Orientation and Registration</a></p>                       
+                       <!--https://www.youtube.com/watch?v=kMYe-wuVr8E&amp;feature=em-share_video_user-->
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>3.
+                    <span style='mso-tab-count:1'>   </span>
+                    <span style='mso-spacerun:yes'>  </span>
+                    <a href="https://youtu.be/70q2FPSd5Vg" target="_blank">Submitting an Offer</a></p>
+                    <!--https://www.youtube.com/watch?v=Fr-xsKeDuzk-->
+                <div class="MsoNormal" style="padding-top: 1%;font-size: 14px">
+                    <ul style="list-style-type:disc;margin-left:5%" class="MsoNormal">
+                      <li>  <a href="https://youtu.be/cGIHqOLYFco" target="_blank">"Breaking Down the Rates" - Intro Video</a> </li>
+                        <ul style="list-style-type:disc;margin-left:5%">
+                            <li ><a href="https://youtu.be/SMH1cBesBFU" target="_blank">Shell Rent</a></li>
+                            <li><a href="https://youtu.be/EbG3fEtnGmY" target="_blank">Base Operating Rent</a></li>
+                            <li><a href="https://youtu.be/yEInw-MT5es" target="_blank">Tenant Improvement Rent</a></li>
+                            <li><a href="https://youtu.be/m3zTWXe6wsw" target="_blank">Building Specific Amortized Capital Rent</a></li>
+                        </ul>
+                    </ul>
+                </div>   
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>4.
+                    <span style='mso-tab-count:1'>   </span>
+                    <span style='mso-spacerun:yes'>  </span>
+                    <a href="https://youtu.be/cAyXtfQY51w" target="_blank">Editing, Copying, and Viewing an Offer</a></p>
+
+                <!--
+                        &nbsp;&nbsp;&nbsp;&nbsp;&#8226;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.youtube.com/watch?v=kMYe-wuVr8E&amp;feature=em-share_video_user" target="_blank">AAAP - Homepage Orientation and Registration</a><BR />
+                &nbsp;&nbsp;&nbsp;&nbsp;&#8226;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.youtube.com/watch?v=Fr-xsKeDuzk" target="_blank">Submitting an Offer</a>
+                -->
+
+            </apex:form>
+        </div><!--/content-->
+
+    </div><!-- /Wrapper -->
+    <script>
+   $(".popup").leanModal();
+
+    </script>
+    <c:SiteFooterUX ></c:SiteFooterUX>
+</apex:page>

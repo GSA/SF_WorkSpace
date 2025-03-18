@@ -1,0 +1,682 @@
+<apex:page controller="LOP_PBS_AAAP_OfferForm1217"  showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false">
+    <html>
+        <head>
+            <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <style>
+                /*@page :first {
+                @bottom-left {
+                content: "GENERAL SERVICES ADMINISTRATION";
+                font-weight:bold;
+                
+                }
+                }    
+                @page {
+                size: letter;
+                @bottom-right {
+                content: "GSA 1217 (REV. 11/2016) Page " counter(page);
+                font-weight:bold;  
+                padding-bottom: 60px;
+                margin-bottom: 60px;
+                }
+                }*/
+                .page-break {
+                    display:block;                
+                }
+                
+                body {
+                    font-family: Times New Roman;
+                }
+                
+                table {
+                    border-collapse: collapse;
+                    width: 100%;   
+                }
+                
+                table.table1 td,th{
+                    border:2px solid black; 
+                }
+                
+                table.table2 td,th{
+                    border:1px solid #D3D3D3; 
+                } 
+                
+                table.table3 td,th{
+                    border:1px solid #D3D3D3; 
+                } 
+                
+                table.table4 td,th{
+                    border:2px solid black; 
+                } 
+                
+                table tr td:last-child {
+                    border-right: 0;
+                }
+                
+                table tr td:first-child {
+                    border-left: 0;
+                }
+                
+                table.table4 tr th:first-child {
+                    border-left: 0;
+                }
+                
+                table.table4 tr th:last-child {
+                    border-right: 0;
+                } 
+                
+                table tr td:first-child {
+                  border-left: 0;
+                }
+                
+                table tr:last-child td {
+                  border-bottom: 0;
+                }
+                
+                .font12px{
+                    font-size: 12px;
+                } 
+                
+                .font10px{
+                    font-size: 10px;
+                }
+                
+                .padding4px{
+                    padding : 4px;
+                }
+                
+                .padding5px{
+                    padding : 5px;
+                }
+                
+                .paddingtop5px{
+                    padding-top:5px;
+                }
+                .paddingleft10px{
+                    padding-left : 10px;
+                }
+                
+                .paddingleft15px{
+                    padding-left : 15px;
+                }
+                
+                .font14px{
+                    font-size:14px;
+                }
+                
+                .font10px{
+                    font-size:10px;
+                }
+                
+            </style>
+        </head>
+        <body>
+            <div id ="loadingdiv" style="display:none;">
+                <div class="waitingSearchDiv" id="el_loading" style="background-color: #fbfbfb; height:100%;opacity:0.65;width:100%;">
+                    <div class="waitingHolder" style="top: 100px; width: 91px;">
+                        <img class="waitingImage" src="/img/loading.gif" title="Please Wait..." />
+                        <span class="waitingDescription" id="waitingDesc">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <apex:form >
+                <apex:actionFunction action="{!captureImage}" name="captureImage" rerender="frm" oncomplete="captureDone();">
+                    <apex:param assignTo="{!strImageBlob}" name="imageBlob" value=""/>
+                    <apex:param assignTo="{!strImagename}" name="imagename" value=""/>
+                </apex:actionFunction>
+            </apex:form>
+            <div class="container" id="mapDiv" >
+            <apex:pageBlock >
+                <div style="page-break-after:always;border: 2px solid #B5B8B7;padding: 20px;padding-bottom: 35px;"> 
+                    
+                    <table class="table1">                        
+                        <tr>
+                            <td class="font12px padding4px" style="text-align:center;"><b>LESSOR'S ANNUAL COST STATEMENT</b><br/>
+                                <i>Important - Read attached "Instructions"</i>
+                            </td>
+                            <td class="font12px padding4px" style="border-right: 0;"> <b> OMB Control Number: 3090-0086</b>
+                                <br/><b>  Expiration Date: 11/30/2019</b>
+                            </td>
+                        </tr>
+                    </table>  
+                    <div style="padding-left:15px;padding-right:15px;padding-top:4px;padding-bottom:4px;" class="font10px">
+                        Paperwork Reduction Act Statement - This information collection meets the requirements of 44 U.S.C. 5 3507, as amended by section 2 of the Paperwork Reduction Act of 1995. You do not need to answer these questions unless we display a valid Office of Management and Budget (OMB) control number. The OMB control number for this collection is 3090-0086. We estimate that it will take 2 hours to read the instructions, gather the facts, and answer the questions. Send only comments relating to our time estimate, including suggestions for reducing this burden, or any other aspects of this collection of information to: U.S. General Services Administration, Regulatory Secretariat Division (MI VI CB), 1800 F Street, NW, Washington, DC 20405. 
+                    </div>
+                    <table class="table2">
+                        <tr>
+                            <td colspan="2" class="font12px padding4px">
+                                1. Request for Lease Proposals (RLP)
+                                <br/><span style="margin-left: 25px;font-size:14px;">{!RLPNumber}</span>
+                            </td>
+                            <td colspan="1"  class="font12px padding4px" style="border-right: 0;">2. Statement Date
+                                <br/><span style="margin-left: 25px;font-size:14px;">{!sysDate}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font12px padding4px" valign="top"> 3. Rental Area (Square Feet)</td>
+                            <td class="font12px padding4px" >3A. Entire Building 
+                                <br/><span style="margin-left: 30px;font-size:14px;">{!opCost3}</span>
+                            </td>
+                            <td class="font12px padding5px" valign="top" style="border-right: 0;">
+                                3B. Leased by Government
+                                <br/> <span style="margin-left: 30px;font-size:14px;">{!opCost3A}</span>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    
+                    <div class="font12px padding4px">
+                        4. Building Name and Address (Number, Street, City, State, and Zip Code) <br/>
+                        <span style="margin-left: 15px;" class="font12px">{!bldgName}</span><br/>
+                        <span style="margin-left: 15px;" class="font12px">{!bldgStreet}</span><br/>
+                        <span style="margin-left: 15px;" class="font12px"> {!bldgCity}, {!bldgState}</span><br/>
+                        <span style="margin-left: 15px;" class="font12px">{!bldgZip}</span><br/>
+                    </div>
+                    
+                    <table class="table4">
+                        <tr><th style="text-align:center;font-size:14px;border-right: 0;"><b>SECTION I - ESTIMATED ANNUAL COST OF SERVICES AND UTILITIES </b><br/>
+                            <b>FURNISHED BY LESSOR AS PART OF RENTAL CONSIDERATION </b></th></tr>
+                    </table>
+                    
+                    
+                    
+                    <table class="table3" width="100%">
+                        <tr>
+                            <td width="43%" rowspan="2" class="font12px" halign="center" style="text-align: center;">SERVICES AND UTILITIES</td>
+                            <td  colspan="2" class="font12px padding4px" style="text-align: center;">LESSOR'S ANNUAL COST FOR </td>
+                            <td width="17%" rowspan="2" style="font-weight:bold;text-align: center;border-right: 0;" class="font10px padding4px"><i>FOR GOVERNMENT USE ONLY</i></td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px" width="18%">(a) Entire Building</td>
+                            <td class="font10px padding4px" width="22%">(b)  Government-Leased Area</td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px"><b>A. CLEANING, JANITOR AND/OR CHAR SERVICE </b>
+                                <br/>
+                                <div class="paddingleft10px paddingtop5px font10px">5. Salaries</div> </td>
+                            <td class="font12px padding5px">${!opCost5}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov5}--></td>
+                            <td style="border-right: 0;"></td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">6. Supplies (Wax, cleaners, cloths, etc.)  </td>
+                            <td class="font12px padding4px">${!opCost6}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov6}--></td>
+                            <td style="border-right: 0;"></td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">7. Contract Services (Window washing, waste and snow removal)</td>
+                            <td class="font12px padding4px">${!opCost7}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov7}--></td>
+                            <td style="border-right: 0;"></td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px"><b class="font12px">B. HEATING </b>
+                                <br/>
+                                <div class="paddingleft10px paddingtop5px">8. Salaries</div> </td>
+                            <td class="font12px padding5px">${!opCost8}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov8}--></td>
+                            <td style="border-right: 0;"></td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">9. Fuel&nbsp;("X" one)
+                                <span style="display: inline-block; width: 10px; height: 10px; border: 1px solid black;margin-left:10px;margin-right:5px;">{!oil}</span>Oil
+                                <span style="display: inline-block; width: 10px; height: 10px; border: 1px solid black;margin-right:5px;">{!gas}</span>Gas
+                                <span style="display: inline-block; width: 10px; height: 10px; border: 1px solid black;margin-right:5px;">{!coal}</span>Coal
+                                <span style="display: inline-block; width: 10px; height: 10px; border: 1px solid black;margin-right:5px;">{!electric}</span>Electric
+                            </td>
+                            <td class="font12px padding4px">${!opCost9}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov9}--></td>
+                            <td style="border-right: 0;"></td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">10. System Maintenance and Repair </td>
+                            <td class="font12px padding4px">${!opCost10}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov10}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px"><b>C. ELECTRICAL</b> 
+                                <br/>
+                                <div class="paddingleft10px paddingtop5px font10px">11. Current for Light and Power</div>  </td>
+                            <td class="font12px padding5px">${!opCost11}</td>
+                            <td class="font12px padding5px"><!--${!opCostGov11}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">12. Replacement of Bulbs, Tires, Starters  </td>
+                            <td class="font12px padding4px">${!opCost12}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov12}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">13. Power for Special Equipment   </td>
+                            <td class="font12px padding4px">${!opCost13}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov13}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">14. System Maintenance and Repair (Ballasts, Fixtures, etc.)  </td>
+                            <td class="font12px padding4px">${!opCost14}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov14}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px"><b>D. PLUMBING</b>  
+                                <br/>
+                                <div class="paddingleft10px paddingtop5px font10px">15. Water (For all purposes) (Include Sewage Charges)</div>   </td>
+                            <td class="font12px padding5px">${!opCost15}</td>
+                            <td class="font12px padding5px"><!--${!opCostGov15}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">16. Supplies (Soap, towels, tissues not in 6 above)   </td>
+                            <td class="font12px padding4px">${!opCost16}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov16}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">17. System Maintenance and Repair   </td>
+                            <td class="font12px padding4px">${!opCost17}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov17}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="font10px padding4px"><b>E. AIR CONDITIONING </b>
+                                <br/>
+                                <div class="paddingleft10px paddingtop5px font10px">18. Utilities (Include electricity, if not in Cl1)</div>    </td>
+                            <td class="font12px padding5px">${!opCost18}</td>
+                            <td class="font12px padding5px"><!--${!opCostGov18}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">19. System Maintenance and Repair    </td>
+                            <td class="font12px padding4px">${!opCost19}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov19}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px"><b>F. ELEVATORS</b>
+                                <br/>
+                                <div class="paddingleft10px paddingtop5px font10px">20. Salaries (Operators, starters, etc.)</div>     </td>
+                            <td class="font12px padding5px">${!opCost20}</td>
+                            <td class="font12px padding5px"><!--${!opCostGov20}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">21. System Maintenance and Repair   </td>
+                            <td class="font12px padding4px">${!opCost21}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov21}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                    </table>
+                    <div style="width=100%;border-top: 1px solid black;"></div>
+                    <div class="font12px" style="float:left;"><b>GENERAL SERVICES ADMINISTRATION</b></div>
+                    <div class="font12px" style="float:right;"><b>GSA 1217</b> (REV. 11/2016) <b>Page&nbsp;1</b></div>
+                </div>
+                
+                 
+                <div style="page-break-after:always;border: 2px solid #B5B8B7;padding: 20px;padding-bottom: 35px;">
+                    <table class="table3" width="100%">
+                        <tr>
+                            <td width="43%" class="font10px padding5px"><b>G. MISCELLANEOUS (To the extent not included on Page 1)</b>
+                                <br/>
+                                <div class="paddingleft10px paddingtop5px font10px">22. Building Engineer and/or Manager</div>    </td>
+                            <td width="18%" class="font12px padding5px">${!opCost22}</td>
+                            <td width="22%" class="font12px padding5px"><!--${!opCostGov22}--></td>
+                            <td width="17%" style="border-right: 0;"> </td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">23. Security (Watchperson, guards, not janitors)   </td>
+                            <td class="font12px padding4px">${!opCost23}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov23}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">24. Social Security Tax and Workperson's Compensation Insurance  </td>
+                            <td class="font12px padding4px">${!opCost24}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov24}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">25. Lawn and Landscaping Maintenance  </td>
+                            <td class="font12px padding4px">${!opCost25}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov25}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">26. Other (Explain on separate sheet)   </td>
+                            <td class="font12px padding4px">${!opCost26}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov26}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold" class="font10px padding5px paddingleft15px"><b>27. TOTAL </b>  </td>
+                            <td style="font-weight:bold" class="font12px padding5px"><b>${!opCost27}</b></td>
+                            <td class="font12px padding4px"><!--${!opCostGov27}--></td>
+                            <td style="border-right: 0;"><!--$--></td>
+                        </tr>
+
+                        <tr style="border-top-style: solid !important; border-top-width: thick !important;">
+                            <td colspan="4" style="text-align:center;font-size:12px;border-right: 0;border-top:2px solid black;border-bottom:2px solid black"><b>SECTION II - ESTIMATED ANNUAL COST OF OWNERSHIP EXCLUSIVE OF CAPITAL CHARGES </b> </td>
+                        </tr>
+
+
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">28. Real Estate Taxes  </td>
+                            <td class="font12px padding4px">${!opCost28}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov28}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">29. Insurance (Hazard, Liability, etc.)   </td>
+                            <td class="font12px padding4px">${!opCost29}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov29}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">30. Building Maintenance and Reserves for Replacement  </td>
+                            <td class="font12px padding4px">${!opCost30}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov30}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">31. Lease Commission   </td>
+                            <td class="font12px padding4px">${!opCost31}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov31}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        <tr>
+                            <td class="font10px padding4px paddingleft15px">32. Management   </td>
+                            <td class="font12px padding4px">${!opCost32}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov32}--></td>
+                            <td style="border-right: 0;"> </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold" class="font10px padding4px paddingleft15px">33. TOTAL   </td>
+                            <td style="font-weight:bold" class="font12px padding4px">${!opCost33}</td>
+                            <td class="font12px padding4px"><!--${!opCostGov33}--></td>
+                            <td style="border-right: 0;" class="font12px padding4px"><!--$--></td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="font12px padding4px">LESSOR'S CERTIFICATION - The amounts entered in Columns (a)
+                                and (b) represent my best estimate as to the annual costs of
+                                services, utilities, and ownership.
+                            </td>
+                            <td class="font12px padding4px" style="border-right: 0;">
+                                34.&nbsp;&nbsp;Signature of:                                 
+                            </td>  
+                            
+                            <td style="text-align:left;border-right: 0;border-left: 0;" class="font12px">
+                                <span style="display: inline-block; width: 10px; height: 10px; border: 1px solid black;margin-left:10px;margin-right:5px;">{!xownerType}</span>Owner 
+                            </td>
+                            <td style="text-align:left;border-right: 0;border-left: 0;" class="font12px">
+                                <span style="display: inline-block; width: 10px; height: 10px; border: 1px solid black;margin-left:10px;margin-right:5px;">{!legalAgentType}</span>Legal agent
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center;" class="font12px padding4px">TYPED NAME AND TITLE  </td>
+                            <td style="text-align:center;" colspan="2" class="font12px padding4px">SIGNATURE</td>
+                            <td style="text-align:center;border-right: 0;" class="font12px padding4px">DATE   </td>
+                        </tr>
+                        <tr>
+                            <td class="font12px padding4px">34A.  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {!userdetail.Name} </td>
+                            <td colspan="2" class="font12px padding4px">34B.  &nbsp;&nbsp;&nbsp;&nbsp;   <i><b>{!if(sysDate!='',userdetail.Name,'')}</b></i></td>
+                            <td class="font12px padding4px" style="border-right: 0;">34C. {!if(sysDate!='','','')} {!sysDate}   </td>
+                        </tr>
+                        <tr>
+                            <td class="font12px padding4px">35A.  </td>
+                            <td colspan="2" class="font12px padding4px">35B. </td>
+                            <td class="font12px padding4px" style="border-right: 0;">35C.    </td>
+                        </tr>
+                    </table>
+                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                    <br/><br/><br/><br/><br/><br/>
+                    <div style="width=100%;border-top: 1px solid black;"></div>
+                    <div class="font12px" style="width=100%;float:right;"><b>GSA 1217</b> (REV. 11/2016) <b>Page&nbsp;2</b></div>
+                </div>
+                
+                <div style="border: 2px solid #B5B8B7;padding: 20px;padding-bottom: 35px;"> 
+                    <center class="font12px padding4px"><b>INSTRUCTIONS</b></center>
+                    <div class="font12px padding4px">In acquiring space by lease, it is the established policy of GSA to enter into leases only at rental charges which are consistent
+                        with prevailing scales in the community for facilities.
+                    </div>
+                    <br/>
+                    <center class="font12px padding4px"><b>ITEM NUMBER</b></center>
+                    <br/>
+                    <div class="font12px padding4px" style="font:10px !important;">
+                        <table>
+                            <tr>
+                                <td valign="top">
+                                    1.
+                                </td>
+                                <!--<td valign="top">
+
+                                </td>-->
+                                <td valign="top" colspan="2">
+                                    Enter the Government lease or Request for Lease Proposals (RLP) number, if available.<br/><br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td  valign="top">
+                                    2.
+                                </td>
+                                <!--<td valign="top">
+
+                                </td>-->
+                                <td valign="top" colspan="2">
+                                    Enter the date that your statement was prepared and signed.<br/><br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td  valign="top">
+                                    3.
+                                </td>
+                                <td valign="top">
+                                    A.
+                                </td>
+                                <td valign="top">
+                                    Enter in this block a computation of the rentable area (multiple tenancy basis) for the entire building. The rentable area shall be computed by
+                                    measurement to the inside finish of permanent outer building walls to the inside finish of corridor walls (actual or proposed) or to other permanent
+                                    partitions, or both. Rentable space is the area for which a tenant is charged rent. It is determined by the building owner and may vary by city or by
+                                    building within the same city. The rentable space may include a share of building support/common areas such as elevator lobbies, building corridors,
+                                    and floor service areas. Floor services areas typically include restrooms, janitor rooms, telephone closets, electrical closets, and mechanical rooms.
+                                    The rentable space generally does not include the vertical building penetrations and their enclosing walls, such as stairs, elevator shafts, and vertical
+                                    ducts.<br/><br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top">
+                                    3.
+                                </td>
+                                <td valign="top">
+                                    B.
+                                </td>
+                                <td valign="top">
+                                    Enter in this block a computation of the rentable area to be rented to the Government. For this area, follow the procedure as outlined above, except that
+                                    measurements are to be made only to the center of the partitions which separate the area to be rented by the Government from adjoining rented or rentable areas.<br/><br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top">
+                                    4.
+                                </td>
+                                <!--<td valign="top">
+
+                                </td>-->
+                                <td valign="top" colspan="2">
+                                    Identify the property by name and address.<br/><br/>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <center class="font12px padding4px"> <b>SECTION I</b></center>
+                    <center class="font12px padding4px">ESTIMATED ANNUAL COST OF SERVICES AND UTILITIES</center>
+                    
+                    <br/>
+                    
+                    <div class="font12px padding4px" style="font:10px !important;">
+                        <table>
+                            <tr>
+                                <td valign="top" width="6%">
+                                    5. - 26.
+                                </td>
+                                <!--<td valign="top">
+
+                                </td>-->
+                                <td valign="top" colspan="2">
+                                    The services and utilities listed in this section are required in most of our rented space whether furnished by the Government or
+                                    the Lessor. <br/><br/>
+                                    Carefully review the Request for Lease Proposals (RLP) and/or the proposed lease to identify those services and utilities to be furnished by you as
+                                    part of the rental consideration. Then enter your best cost estimate, or the actual cost from the previous year, for each of these services and
+                                    utilities in column (a) for the entire building and in column (b) for the area to be rented to the Government. If any service or utility furnished for the
+                                    space rented by the Government is not furnished throughout the building, or the cost of a service or utility furnished to the Government space
+                                    exceeds the cost of the same service or utility furnished to other rented space, explain on a separate sheet. For convenience, each major category
+                                    has been divided into separate items such as salaries and supplies so that they may be entered when applicable. However, in the event that your
+                                    records are not maintained for each item contained in Section l, 5 through 26, the total for a major category (A through F) may be entered under the
+                                    category heading in columns (a) and (b) in lieu of the specific items. System maintenance and repairs includes the annual cost of such items as
+                                    oiling, inspecting, cleaning, regulating, and routine replacement costs.
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br/>
+                    
+                    <center class="font12px padding4px"> <b>SECTION II</b></center>
+                    <center class="font12px padding4px">ESTIMATED ANNUAL COST OF OWNERSHIP EXCLUSIVE OF CAPITAL CHARGES</center>
+                    
+                    
+                    <div class="font12px padding4px" style="font:10px !important;">
+                        Items 28 through 32 will be useful in the Government's determination of the fair market value of the space to be rented and shall be completed irrespective
+                        of whether Section I is applicable, as follows:
+                        <br/>
+                        <br/>
+                        <table>
+                            <tr>
+                                <td valign="top">
+                                    28.
+                                </td>
+                                <td valign="top">
+                                    Include all applicable real estate taxes imposed upon the property.<br/><br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top">
+                                    29.
+                                </td>
+                                <td valign="top">
+                                    Enter the annual cost of fire, liability, and other insurance carried on the real estate.<br/><br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top">
+                                    30.
+                                </td>
+                                <td valign="top">
+                                    Enter the annual cost of wages, materials, and outside services used in repairs and maintenance of the building itself and all similar repairs and
+                                    maintenance of the building itself and all similar repairs and maintenance costs not included in Section I above (Heating, Electrical, Plumbing,
+                                    Air Conditioning, and Elevators). This includes major repairs and changes in the nature of a permanent improvement such as annual cost to replace
+                                    relatively short-lived items such as boiler, compressors, elevators, and roof coverings.<br/><br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top">
+                                    31.
+                                </td>
+                                <td valign="top">
+                                    Enter any lease commission which you may be responsible for due to the Government leasing action.<br/><br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top">
+                                    32.
+                                </td>
+                                <td valign="top">
+                                    Include administrative expenses such as agency fees, legal fees, auditing, and advertising. Do not include financial charges such as income or
+                                    corporate taxes or organization expense.<br/><br/>
+                                </td>
+                            </tr>
+                        </table>
+                        34. - 35. Complete Lessor certification.
+                    </div>
+                    <br/>
+                    <div style="width=100%;border-top: 1px solid black;"></div>
+                    <div class="font12px" style="width=100%;float:right;"><b>GSA 1217</b> (REV. 11/2016) <b>Page&nbsp;3</b></div>
+                </div>
+            </apex:pageBlock>
+            </div>
+        </body>
+        <script type="text/javascript">            
+        window.onload = function(){   
+            document.body.style.zoom = "100%";
+            takePic();
+        }        
+            
+            
+        function takePic(){
+            html2canvas(document.body,
+            {
+            useCORS: true,
+            onrendered: function(canvas) 
+            {
+                var recId = '{!JSENCODE($CurrentPage.parameters.offerId)}';    
+                var total = '{!JSENCODE($CurrentPage.parameters.total)}'; 
+                var current = '{!JSENCODE($CurrentPage.parameters.current)}';                                 
+                document.body.appendChild(canvas);
+                document.getElementById("mapDiv").style.display = 'none';
+                document.getElementById("loadingdiv").style.display = '';                               
+                document.getElementById("waitingDesc").innerHTML = 'Taking '+current+' of '+total;
+                var pageName = '{!$CurrentPage.Name}';
+                captureImage(document.getElementsByTagName('canvas')[0].toDataURL(),(recId+'Form'+current));
+                
+            }
+        });
+        return false;
+        }       
+   
+        
+        
+        function escapeRegExp(string){
+        return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        }
+        
+        function replaceAll(str, term, replacement) {
+        return str.replace(new RegExp(escapeRegExp(term), 'g'), replacement);
+        }
+        
+        function captureDone(){     
+            var recId = '{!JSENCODE($CurrentPage.parameters.offerId)}';   
+            var total = '{!JSENCODE($CurrentPage.parameters.total)}';  
+            var current = '{!JSENCODE($CurrentPage.parameters.current)}';  
+            current = parseInt(current)+1;
+            var isfirst = '{!JSENCODE($CurrentPage.parameters.isfirst)}';  
+            if(isfirst == 'yes'){
+                var ids = '';
+                decodedCookie = document.cookie;
+                ca = decodedCookie.split(';');
+                for(var j = 0; j <ca.length; j++) {
+                    name = ca[j].split('=')[0];
+                    value = ca[j].split('=')[1];
+                    if(name.trim() == 'apex__offerRecids'){
+                        ids = value;
+                    }
+                }
+                var allIds = ids.split(',');
+                var firstEle = allIds[0];            
+                allIds.shift();
+                var stringArray = allIds.join();
+                document.cookie = "apex__offerRecids="+stringArray; 
+            }            
+            //alert('done');
+            window.location.href = "/apex/PBS_AAAP_offerform1217attachment_Image?formtype=offerform1217Attachment&offerId="+recId+'&total='+total+'&current='+current;
+        }
+    </script>
+    </html>
+</apex:page>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Total_Material_Cost_Adj__c</fullName>
+    <externalId>false</externalId>
     <formula>IF(Item_Type__c ==&apos;Assemblies&apos;, (Material_Assembly_Cost__c * Quantity__c),((Material_Adj__c * Material_Unit_Cost__c))) * Location_Multiplier_wf__c</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Total Material Cost Adj</label>

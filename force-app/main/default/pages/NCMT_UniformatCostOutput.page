@@ -1,0 +1,2281 @@
+<apex:page Controller="NCMT_ReportData" title="{!strCUIHeader}" readonly="true" showHeader="false" sidebar="false" cache="true" lightningStylesheets="true">
+     <apex:form id="rptUniformat"> 
+        <head>
+            <style>
+                table { 
+                border-collapse: collapse; 
+                }
+                .borderR {
+                border-Right: 1px solid;
+                }
+                .topBorder {
+                border-top: 1px solid;
+                }
+                .bottomBorder {
+                border-bottom: 1px solid;
+                }
+                .borderL {
+                border-left: 1px solid;
+                }
+                .number {
+                font-size: 9px;
+                border-bottom: 1px solid;
+                }
+                .summaryRow {
+                font-weight:bold;
+                }
+                @media print {
+                   .print-margin {margin-top:75px !important;}
+                   .screen-only { display: none !important; }
+                
+                @page { 
+                    size: landscape !important;                    
+                    font-size: 9px !important;                    
+                  }            
+               }
+ 
+                div.footer {
+                display: block;
+                padding: 1px;
+                position: running(footer);
+                }
+                .screen-only {
+                font-size: 1.5rem;
+                color: darkred;
+                text-align: center;
+                }
+                
+            </style>
+            
+        </head>
+    
+       <div class="screen-only" >
+         {!strCUIHeader}  
+        </div>
+        <div class="footer"></div>
+        <table border="0">
+            <tr>
+                <td width = "100%" align="center" >
+                    <h1><font color="darkred" size="2">
+                        <label id="labelHeader">Report Header</label>
+                        </font>
+                    </h1>
+                    <h2 style='color:darkred'>
+                        <!--SFWS-2246:URLProjectID added -->
+                    Project Name: <a href="../{!URLProjectID}">{!strProjectName}</a>&nbsp;&nbsp;&nbsp;&nbsp;Date:<apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!today()}"/></apex:outputText>
+                    </h2>
+                    <br/>
+                </td>
+                <td>
+                </td>
+                <td align="right" ><input type="button" onClick="funprint();" id="prnBtn" value="Print This Page" style="background: grey;"/></td>
+            </tr>
+        </table>
+        <!-- <table  width="100%" border="0">
+<tr>
+<td align="center" class = "topBorder borderR bottomBorder borderL">
+<h2><font color="darkred" size="2" >
+Project Name: <a href="../{!strProjectID}">{!strProjectName}</a>&nbsp;&nbsp;&nbsp;&nbsp;Date:<apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!today()}"/></apex:outputText>
+</font></h2>
+</td>
+</tr>
+</table>  -->
+        
+        <!--  **** Project Properties **** -->
+        <table align="center" width = "100%" style="border:solid 1px;">
+            <tr>
+                <th style ="background-color: lightslategrey;" class = "number">Project Properties</th>
+                <td style ="background-color: lightslategrey;" class = "number">&nbsp;</td>
+                <td style ="background-color: lightslategrey;" class = "number">&nbsp;</td>
+                <td style ="background-color: lightslategrey;" class = "number">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class = "number borderR">Project Type:&nbsp;&nbsp;{!strHPProjectType}, {!strBuildingtype}</td>
+                <td class = "number borderR">Project Location:&nbsp;&nbsp;{!strCity},{!strProjectState}</td>
+                <td class = "number borderR">Project Status:&nbsp;&nbsp;{!strProjectStatus}</td>
+                <td class = "number borderR">GSA Project#:&nbsp;&nbsp;{!strGSAProject}&nbsp;&nbsp;&nbsp;Region:&nbsp;&nbsp;&nbsp;{!strRegionCode}&nbsp;&nbsp;&nbsp;<apex:outputPanel layout="none" rendered="{!Not(IsNull(strPBSBuilding))}">PBS Building:&nbsp;&nbsp;&nbsp;{!strPBSBuilding}</apex:outputPanel></td>
+            </tr>
+            <tr>
+                <td class = "number borderR">Index Location:&nbsp;&nbsp;{!strProjectLocation},{!strProjectState}</td>
+                <td class = "number borderR">Level of Protection:&nbsp;&nbsp;{!strlvlofprotection}</td>
+                <td class = "number borderR">Building Height:&nbsp;&nbsp;{!strbuildingheight}</td>
+                <td class = "number borderR">Project Seismic Design Category:&nbsp;&nbsp;{!strprojseismicdesigncat}</td>
+            </tr>
+            <tr>
+                <td class = "number borderR">Building Quality:&nbsp;&nbsp;{!strbuildingquality}</td>
+                <td class = "number borderR">Start Construction:&nbsp;&nbsp;<apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!startconsdate}"/></apex:outputText></td>
+                <td class = "number borderR">Estimate Date:&nbsp;&nbsp;<apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!dateofestimate}"/></apex:outputText></td>
+                <td class = "number borderR">Basis Date of Estimate:&nbsp;&nbsp;<apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!costparamdate}"/></apex:outputText></td>
+            </tr>
+            <tr>
+                <td class = "number borderR">Purpose of Estimate:&nbsp;&nbsp;{!strPurposeOfEstimate}</td>
+                <td class = "number borderR">Annual Market Escalation Rate:&nbsp;&nbsp;{!dblescrate}</td>
+                <td class = "number borderR">Location Remoteness:&nbsp;&nbsp;{!strremoteness}</td>
+                <td class = "number borderR">Building Efficiency Factor:&nbsp;&nbsp;{!dblUseableeff}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class = "number borderR">Estimate Prepared By:&nbsp;&nbsp;{!strcreatedby}</td>
+                <td class = "number borderR">Requestor:&nbsp;&nbsp;{!strRequestor}</td>
+                <td class = "number borderR">Estimate Reviewer:&nbsp;&nbsp;{!strpeerreviewer}</td>
+                <td class = "number borderR">Estimate Approver:&nbsp;&nbsp;{!strRegionalPortfolio}</td>
+            </tr>
+            <tr>
+                <td class = "number borderR">Project Status:&nbsp;&nbsp;{!strProjectStatus}</td>
+                <td colspan="3" class = "number borderR" style="max-width:400px;">Brief Narrative:&nbsp;&nbsp;{!strbriefnarrative}</td>
+            </tr>
+        </table>
+        
+        <apex:pageBlock html-style="font-size: 7px;" id="DataBlock" title="UNIFORMAT Level II Report" rendered="{!If(DatasetProjectCostSummary!=null,TRUE,FALSE)}">
+            <table align="center" style="width: 100%; font-size: 9px;" border="1" cellspacing="0" id="ReportData">
+                <colgroup>
+                    <col class="col1" style="background-color:White"/>
+                    <col class="col2" style="background-color:White"/>
+                    <col class="col3" style="background-color:White"/>
+                    <col class="col4" style="background-color:White"/>
+                    <col class="col5" style="background-color:White"/>
+                    <col class="col6" style="background-color:White"/>
+                    <col class="col7" style="background-color:White"/>
+                    <col class="col8" style="background-color:White"/>
+                    <col class="col9" style="background-color:White"/>
+                    <col class="col10" style="background-color:White"/>
+                    <col class="col11" style="background-color:White"/>
+                    <col class="col12" style="background-color:White"/>
+                    <col class="col13" style="background-color:White"/>
+                    <col class="col14" style="background-color:White"/>
+                    <col class="col15" style="background-color:White"/>
+                    <col class="col16" style="background-color:White"/>
+                    <col class="col17" style="background-color:White"/>
+                    <col class="col18" style="background-color:White"/>
+                    <col class="col19" style="background-color:White"/>
+                    <col class="col20" style="background-color:White"/>
+                    <col class="col21" style="background-color:White"/>
+                    <col class="col22" style="background-color:White"/>
+                </colgroup>
+                <tr>
+                    <td align="center"><b><label id="lblTotal">TOTAL COSTS</label></b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>UNIT COSTS</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>Profile of Cost</b></td>
+                </tr>
+                <tr>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>Parameter</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>Direct Costs</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                    <td align="center"><b>ECCA</b></td>
+                    <td align="center"><b>ECC</b></td>
+                    <td align="center"><b>ETPC</b></td>
+                    <td align="center"><b>Oth.Direct Cost/GSF</b></td>
+                    <td align="center"><b>Direct Cost/GSF</b></td>
+                    <td align="center"><b>ECC/GSF</b></td>
+                    <td align="center"><b>ECC(shell)/Parameter</b></td>
+                    <td align="center"><b>ECCA/GSF</b></td>
+                    <td align="center"><b>ECCA(shell)/Parameter</b></td>
+                    <td align="center"><b>ETPC/GSF</b></td>
+                    <td align="center"><b>ETPC(shell)/Parameter</b></td>
+                    <td align="center"><b>&nbsp;</b></td>
+                </tr>
+                <tr>
+                    <td align="Center" width="3%" style="background-color: lightslategrey;"><b>CODE</b></td>
+                    <td align="Center" width="25%" style="background-color: lightslategrey;"><b>WORK DESCRIPTION</b></td>
+                    <td align="Center" width="6%" style="background-color: lightslategrey;"><b>Quantity</b></td>
+                    <td align="Center" width="6%" style="background-color: lightslategrey;"><b>UOM</b></td>
+                    <td align="Center" width="6%" style="background-color: lightslategrey;"><b>Core/Shell</b></td>
+                    <td align="Center" width="6%" style="background-color: lightslategrey;"><b>TRCS</b></td>
+                    <td align="Center" width="6%" style="background-color: lightslategrey;"><b>Tenant Imp.</b></td>
+                    <td align="Center" width="6%" style="background-color: lightslategrey;"><b>Blast/Security</b></td>
+                    <td align="Center" width="6%" style="background-color: lightslategrey;"><b>Parking</b></td>
+                    <td align="Center" width="6%" style="background-color: lightslategrey;"><b>TOTAL</b></td>
+                    <td align="Center" width="6%"><b>&nbsp;</b></td>
+                    <td align="Center" width="6%"><b>&nbsp;</b></td>
+                    <td align="Center" width="6%"><b>&nbsp;</b></td>
+                    <td align="Center" width="6%"><b>&nbsp;</b></td>
+                    <td align="Center" width="6%"><b>&nbsp;</b></td>
+                    <td align="Center" width="6%"><b>&nbsp;</b></td>
+                    <td align="Center" width="6%"><b>&nbsp;</b></td>
+                    <td align="Center" width="6%"><b>&nbsp;</b></td>
+                    <td align="Center" width="6%"><b>&nbsp;</b></td>
+                    <td align="Center" width="6%"><b>&nbsp;</b></td>
+                    <td align="Center" width="6%"><b>&nbsp;</b></td>
+                    <td align="Center" width="6%"><b>&nbsp;</b></td>
+                </tr>
+                <!-- <apex:repeat  value="{!CoreShellData}" var="key">
+<p> {!key}</p>
+</apex:repeat> -->
+               
+                <apex:repeat value="{!DatasetProjectCostSummary}" var="CostSummary">
+                    <tr class="summaryRow">
+                        <td align="Left" >
+                            
+                            <div style="width:45px;">
+                                <apex:commandButton value="+" reRender="none" onclick="toggleLevel3('{!JSENCODE(CostSummary.Cost_Category_Code__c)}');" styleClass="{!CostSummary.Cost_Category_Code__c}-level3button" rendered="{!And(showLevel3,CostSummary.Total_Cost_Adjusted__c!=0)}"/>
+                                
+                                <apex:outputText ID="NCMT_C1" value="{!CostSummary.Cost_Category_Code__c}"/>
+                 
+                            </div>
+                        </td>
+                        <td align="Left"><apex:outputText ID="NCMT_C2" value="{!CostSummary.Cost_Category_Description__c}"/></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C3" value="QTY"/></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C4" value="UOM"/></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C5" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.Core_Shell_Cost_Adj__c + CostSummary.Other_Core_Shell_Cost__c}" /></apex:outputText></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C6" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.TRCS_Cost_Adjusted__c}" /></apex:outputText></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C7" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.TI_Cost_Adjusted__c + CostSummary.Oth_TI_Cst__c}" /></apex:outputText></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C8" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.Security_Cost_Adjusted__c + CostSummary.Other_Direct_Security_Costs__c}" /></apex:outputText></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C9" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.Parking_Cost_Adjusted__c}" /></apex:outputText></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C10" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.Total_Cost_Adjusted__c}" /></apex:outputText></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C11" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.Total_Cost_Adjusted__c}" /></apex:outputText></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C12" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.ECC__c}" /></apex:outputText></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C13" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.ECC__c}" /></apex:outputText></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C23" value="{0, number, $###,###,##0.00}"><apex:param value="{!CostSummary.Other_Direct_Cost_GSF__c}" /></apex:outputText></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C14" value="{0, number, $###,###,##0.00}"><apex:param value="{!CostSummary.Direct_Cost_GSF__c}" /></apex:outputText></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C15" value="{0, number, $###,###,##0.00}"><apex:param value="{!CostSummary.ECC_GSF__c}" /></apex:outputText></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C16" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.Core_Shell_Cost_Adj__c}" /></apex:outputText></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C17" value="{0, number, $###,###,##0.00}"><apex:param value="{!CostSummary.ECCA_GSF__c}" /></apex:outputText></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C18" value="{0, number, $###,###,##0.00}"><apex:param value="{!CostSummary.Core_Shell_Cost_Adj__c}" /></apex:outputText></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C19" value="{0, number, $###,###,##0.00}"><apex:param value="{!CostSummary.ECCA_GSF__c}" /></apex:outputText></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C20" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.Core_Shell_Cost_Adj__c  + CostSummary.Other_Core_Shell_Cost__c}" /></apex:outputText></td>
+                        <td align="Right"><apex:outputText ID="NCMT_C21" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.Total_Cost_Adjusted__c}" /></apex:outputText></td>
+                        
+                    </tr>
+                    
+                    
+                    <apex:repeat value="{!CoreShellData}" var="key" rendered="{!showLevel3}">
+                        <apex:outputText rendered="{!key==CostSummary.Cost_Category_Code__c}">
+                            <apex:repeat value="{!CoreShellData[key]}" var="cat">
+                                <apex:repeat value="{!cat}" var="item">
+                                    <tr class="{!key}-level3" style="display:none;">
+                                        <td align="Left" style="padding-left:15px;">{!item.level3}</td>
+                                        <td> {!item.level3desc}</td>
+                                        <td align="Right"><apex:outputText ID="SUB_C3" value="QTY"/></td><!--<apex:outputText value="{0, number, ###,###,##0}" style="display:none;"><apex:param value="{!item.qty}" />-->
+                                        <td align="Right"><apex:outputText ID="SUB_C4" value="UOM"/></td>
+                                        <td align="Right"><apex:outputText ID="SUB_C5" value="{0, number, $###,###,##0}"><apex:param value="{!item.coreShell}" /></apex:outputText></td>
+                                        <td align="Right"><apex:outputText ID="SUB_C6" value="{0, number, $###,###,##0}"><apex:param value="{!item.trcs}" /></apex:outputText></td>
+                                        <td align="Right"><apex:outputText ID="SUB_C7" value="{0, number, $###,###,##0}"><apex:param value="{!item.ti}" /></apex:outputText></td>
+                                        <td align="Right"><apex:outputText ID="SUB_C8" value="{0, number, $###,###,##0}"><apex:param value="{!item.security}" /></apex:outputText></td>
+                                        <td align="Right"><apex:outputText ID="SUB_C9" value="{0, number, $###,###,##0}"><apex:param value="{!item.parking}" /></apex:outputText></td>
+                                        <td align="Right"><apex:outputText ID="SUB_C10" value="{0, number, $###,###,##0}"><apex:param value="{!item.total}" /></apex:outputText></td>
+                                        
+                                        
+                                        <td align="Right"><apex:outputText ID="SUB_C11" value="{0, number, $###,###,##0}"><apex:param value="{!item.total}" /></apex:outputText></td>
+                                        
+                                        <td align="Right"><apex:outputText ID="SUB_C12" value="{0, number, $###,###,##0}"><apex:param value="{!item.ecc}" /></apex:outputText></td>
+                                        <td align="Right"><apex:outputText ID="SUB_C13" value="{0, number, $###,###,##0}"><apex:param value="{!item.total}" /></apex:outputText></td>
+                                        <td align="Right"><apex:outputText ID="SUB_C23" value="{0, number, $###,###,##0}"><apex:param value="{!item.otherGSF}" /></apex:outputText></td>
+                                        <td align="Right"><apex:outputText ID="SUB_C14" value="{0, number, $###,###,###.##}"><apex:param value="{!item.directGSF}" /></apex:outputText></td>
+                                        <td align="Right"><apex:outputText ID="SUB_C15" value="{0, number, $###,###,##0}"><apex:param value="{!item.eccGSF}" /></apex:outputText></td>
+                                        <td align="Right"><apex:outputText ID="SUB_C16" value="{0, number, $###,###,##0}"><apex:param value="{!item.coreshell}" /></apex:outputText></td>
+                                        <td align="Right"><apex:outputText ID="SUB_C17" value="{0, number, $###,###,##0}"><apex:param value="{!item.coreshell}" /></apex:outputText></td>
+                                        <td align="Right" class="shell"><apex:outputText ID="SUB_C18" value="{0, number, $###,###,##0}"><apex:param value="{!item.coreshell}" /></apex:outputText></td>
+                                        <td align="Right"><apex:outputText ID="SUB_C19"  value="{0, number, $###,###,##0}"><apex:param value="{!item.eccaGSF}" /></apex:outputText></td>
+                                        
+                                        <td align="Right" class="shell"><apex:outputText ID="SUB_C20" value="{0, number, $###,###,##0}"><apex:param value="{!item.coreshell}" /></apex:outputText></td>
+                                        <td align="Right"><apex:outputText ID="SUB_C21" value="{0, number, $###,###,##0}"><apex:param value="{!item.total}" /></apex:outputText></td>
+                                        
+                                        
+                                    </tr>
+                                </apex:repeat>
+                            </apex:repeat>
+                        </apex:outputText>
+                    </apex:repeat>
+                    
+                </apex:repeat>
+                <tr>
+                    <td align="Left"><apex:outputText ID="SF_NCMT_C1"  value=""/></td>
+                    <td align="Left"><apex:outputText ID="SF_NCMT_C2"  value="Surface Parking"/></td>
+                    <!-- <td align="Right"><apex:outputText ID="SF_NCMT_C3"  value="" /></td>-->
+                    <td align="Right"><b><apex:outputText ID="SF_NCMT_C3" value="{0, number, ###,###,##0}"><apex:param value="{!dblsiteinfosurfaceparking}" /></apex:outputText></b></td>
+                    <td align="Right"><b><apex:outputText ID="SF_NCMT_C4"  value="SFT" /></b></td>
+                    <td align="Right"><apex:outputText ID="SF_NCMT_C5"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="SF_NCMT_C6"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="SF_NCMT_C7"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="SF_NCMT_C8"  value="0" /></td>
+                    <!--<td align="Right"><apex:outputText ID="SF_NCMT_C9"  value="{0, number, $###,###,##0}"><apex:param value="{!dblSurfaceParkingCost}" /></apex:outputText></td>-->
+                    <td align="Right"><apex:outputText ID="SF_NCMT_C9" value="{0, number, $###,###,##0}"><apex:param value="{!dbllssurfaceparkingcosts}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="SF_NCMT_C10" value="{0, number, $###,###,##0}"><apex:param value="{!dbllssurfaceparkingcosts}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="SF_NCMT_C11" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="SF_NCMT_C12" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="SF_NCMT_C13" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="SF_NCMT_C23" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="SF_NCMT_C14" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="SF_NCMT_C15" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="SF_NCMT_C16" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="SF_NCMT_C17" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="SF_NCMT_C18" value="0.00" /></td>
+                    <td align="Right"><apex:outputText ID="SF_NCMT_C19" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="SF_NCMT_C20" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="SF_NCMT_C21" value="0" /></td>
+                </tr>
+                <tr>
+                    <td align="Left"><apex:outputText ID="ST_NCMT_C1"  value=""/></td>
+                    <td align="Left"><apex:outputText ID="ST_NCMT_C2"  value="Structured Parking"/></td>
+                    <!--<td align="Right"><apex:outputText ID="ST_NCMT_C3"  value="" /></td>-->
+                    <td align="Right"><b><apex:outputText ID="ST_NCMT_C3" value="{0, number, ###,###,##0}"><apex:param value="{!dblsiteinfostrucparking}" /></apex:outputText></b></td>
+                    <td align="Right"><b><apex:outputText ID="ST_NCMT_C4"  value="SFT" /></b></td>
+                    <td align="Right"><apex:outputText ID="ST_NCMT_C5"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="ST_NCMT_C6"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="ST_NCMT_C7"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="ST_NCMT_C8"  value="0" /></td>
+                    <!--<td align="Right"><apex:outputText ID="ST_NCMT_C9"  value="{0, number, $###,###,##0}"><apex:param value="{!dblStructuredParkingCost}" /></apex:outputText></td>-->
+                    <!--<td align="Right"><apex:outputText ID="ST_NCMT_C10" value="{0, number, $###,###,##0}"><apex:param value="{!dblStructuredParkingCost}" /></apex:outputText></td>-->
+                    <td align="Right"><apex:outputText ID="ST_NCMT_C9"  value="{0, number, $###,###,##0}"><apex:param value="{!dbllsstructuredparkingcosts}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="ST_NCMT_C10"  value="{0, number, $###,###,##0}"><apex:param value="{!dbllsstructuredparkingcosts}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="ST_NCMT_C11" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="ST_NCMT_C12" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="ST_NCMT_C13" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="ST_NCMT_C23" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="ST_NCMT_C14" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="ST_NCMT_C15" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="ST_NCMT_C16" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="ST_NCMT_C17" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="ST_NCMT_C18" value="0.00" /></td>
+                    <td align="Right"><apex:outputText ID="ST_NCMT_C19" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="ST_NCMT_C20" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="ST_NCMT_C21" value="0" /></td>
+                </tr>
+                
+                <tr style="display: none;">
+                    <td align="Left"><apex:outputText ID="OT_NCMT_C1"   value=""/></td>
+                    <td align="Left"><apex:outputText ID="OT_NCMT_C2"   value="Other Direct Construction Costs"/></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C3"  value="" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C4"  value="" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C5"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C6"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C7"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C8"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C9"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C10" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C11" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C12" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C13" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C23" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C14" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C15" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C16" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C17" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C18" value="0.00" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C19" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C20" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C21" value="0" /></td>
+                </tr>
+                <tr class="totalRow">
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SubTotal</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="CoreShell_T1" value=""/></b></td>                                     
+                    <td align="Right"><b><apex:outputText ID="TRCS_T1" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TI_T1" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Security_T1" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Parking_T1" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Total_T1" value=""/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow">
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Design Contingency</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">{!dblDesign * 100}%</td>
+                    <td align="Right"><apex:outputText ID="CoreShell_DC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TRCS_DC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TI_DC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Security_DC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Parking_DC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_DC" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow">
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SubTotal</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="CoreShell_T2" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TRCS_T2" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TI_T2" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Security_T2" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Parking_T2" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Total_T2" value=""/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow">
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;General Conditions and Profit</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">{!dblGeneral * 100}%</td>
+                    <td align="Right"><apex:outputText ID="CoreShell_GC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TRCS_GC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TI_GC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Security_GC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Parking_GC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_GC" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow">
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SubTotal CECC</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="CoreShell_T3" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TRCS_T3" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TI_T3" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Security_T3" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Parking_T3" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Total_T3" value=""/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow">
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Market Escalation</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">{!Round(dblEscMarkets * 100,4)}%</td>
+                    <td align="Right"><apex:outputText ID="CoreShell_MC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TRCS_MC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TI_MC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Security_MC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Parking_MC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_MC" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow ">
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Code and Practice Escalation</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">{!Round(dblEscCode * 100, 4)}%</td>
+                    <td align="Right"><apex:outputText ID="CoreShell_CP" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TRCS_CP" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TI_CP" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Security_CP" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Parking_CP" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_CP" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow">
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SubTotal ECCA</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="CoreShell_T4" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TRCS_T4" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TI_T4" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Security_T4" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Parking_T4" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Total_T4" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Total_ECCA" value=""/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow skipV3">
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Construction Contingency</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">{!dblConstruct * 100}%</td>
+                    <td align="Right"><apex:outputText ID="CoreShell_CA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TRCS_CA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TI_CA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Security_CA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Parking_CA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_CA" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow skipV3">
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SubTotal ECC*</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="CoreShell_T8" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TRCS_T8" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TI_T8" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Security_T8" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Parking_T8" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Total_T8" value=""/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow skipV3">
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Art-In-Architecture</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">{!Round(dblArt * 100,2)}%</td>
+                    <td align="Right"><apex:outputText ID="CoreShell_AA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TRCS_AA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TI_AA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Security_AA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Parking_AA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_AA" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow skipV3">
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total ECC</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="CoreShell_T5" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TRCS_T5" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TI_T5" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Security_T5" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Parking_T5" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Total_T5" value=""/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="Total_ECC" value=""/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow skipV2 skipV3">
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; EDRC: GSA or Lessor</td> <!--EDRC: GSA-->
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">&nbsp;</td>
+                    <td align="Right"><apex:outputText ID="CoreShell_EG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TRCS_EG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TI_EG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Security_EG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Parking_EG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_EG" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow skipV2 skipV3">
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EDRC: Tenant</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">&nbsp;</td>
+                    <td align="Right"><apex:outputText ID="CoreShell_ET" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TRCS_ET" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TI_ET" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Security_ET" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Parking_ET" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_ET" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow skipV2 skipV3">
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total EDRC</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="CoreShell_T6" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TRCS_T6" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TI_T6" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Security_T6" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Parking_T6" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Total_T6" value=""/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow skipV2 skipV3">
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EMIC: GSA</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">&nbsp;</td>
+                    <td align="Right"><apex:outputText ID="CoreShell_MG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TRCS_MG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TI_MG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Security_MG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Parking_MG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_MG" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow skipV2 skipV3">
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EMIC: Tenant</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">&nbsp;</td>
+                    <td align="Right"><apex:outputText ID="CoreShell_MT" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TRCS_MT" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TI_MT" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Security_MT" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Parking_MT" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_MT" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow skipV2 skipV3">
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total EMIC</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="CoreShell_T7" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TRCS_T7" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TI_T7" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Security_T7" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Parking_T7" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Total_T7" value=""/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow skipV2 skipV3" style="display: none;">
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;Other Project Costs: GSA</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="OPCGSA" value="0.00"/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow skipV3 skipV2" style="display: none;">
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other Project Costs: Tenant</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><apex:outputText ID="OPCTenant" value="0.00"/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow skipV3 skipV2">
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Estimated Site and Other Costs</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="OPCTotal" value="0.00"/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow skipV2 skipV3">
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total ETPC: GSA</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="TotalETPCGSA" value="0.00"/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow skipV2 skipV3">
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total ETPC: Tenant</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="TotalETPCTenant" value="0.00"/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="totalRow skipV2 skipV3">
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total ETPC</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="TotalETPC" value="0.00"/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr class="skipV2 skipV3">
+                    <td align="Left"><apex:outputText ID="Move_NCMT_C1"  value=""/></td>
+                    <td align="Left"><apex:outputText ID="Move_NCMT_C2"  value="Moving Costs"/></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C3"  value="" /></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C4"  value="" /></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C5"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C6"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C7"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C8"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C9"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C10" value="{0, number, $###,###,##0}"><apex:param value="{!MovingCOsts}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C11" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C12" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C13" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C23" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C14" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C15" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C16" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C17" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C18" value="0.00" /></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C19" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C20" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="Move_NCMT_C21" value="0" /></td>
+                </tr>
+                
+            </table>
+            <table>
+                <p> Note :</p>
+                <tr>
+                    <td>1 CECC = Current Estimated Construction Cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>3 EDRC = Estimated Design and Review Cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>5 ESOC = Estimated Site and Other Cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>2 ECC = Estimated Construction Cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>4 EMIC = Estimated Management and Inspection Cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>6 ETPC = Estimated Total Project Cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                </tr>
+            </table>
+        </apex:pageBlock>
+        
+        <script language = "Javascript">
+        
+        // Remember to save the sequence of functions ....
+        
+        AdjustECCAAndECC();        
+        AdjustB10AndB20();
+        LoadLast3Rows();
+        CalculateQTY();
+        CalculateUOM();
+        CalculateTotals();
+        ComputeDesignContigency();
+        ComputeGeneralConditions();
+        ComputeEscalations();
+        ComputeConstruction();
+        ComputeArtinArch();
+        ComputeEDRC();
+        ComputeEMCI();
+        ComputeOPC();
+        ComputeETPCTotal();
+        ComputeETPCLineItems();
+        ComputeECCShellParameter();
+        ComputeECCAShellParameter();
+        ComputeETPCShellParameter();
+        ComputeProfileOfCost();
+        AdjustReportLayout();
+        
+        function funprint(){
+            document.getElementById('prnBtn').style.display='none';
+            //Expand level3s
+            var elems = document.querySelectorAll(style$='-level3');
+            for (var i = 0; i < elems.length; i++) {
+                elems[i].style.display = '';
+            }
+            elems = document.querySelectorAll(style$='-level3button');
+            for (var i = 0; i < elems.length; i++) {
+                elems[i].style.display = 'none';
+            }
+            window.print();
+            document.getElementById('prnBtn').style.display='block';
+            for (var i = 0; i < elems.length; i++) {
+                elems[i].style.display = 'block';
+            }
+        }
+        
+        function AdjustB10AndB20() {
+            
+            var blnAdjustB10 = 'false';
+            var blnAdjustB20 = 'false';
+            var dblblastwinFac = parseFloat('{!dblblastwinFac}').toFixed(0);
+            var dblchangesetbackcost = parseFloat('{!dblchangesetbackcost}').toFixed(0);
+            var dblchangeadjsetbackcost = parseFloat('{!dblchangeadjsetbackcost}').toFixed(0);
+            
+            var elems = document.getElementsByTagName("*");
+            for (var i=0, m=elems.length; i<m; i++) {
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C1") != -1) {                    
+                    if (document.getElementById(elems[i].id).innerHTML == 'B10'){
+                        blnAdjustB10 = 'true';
+                    }
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C1") != -1) {                    
+                    if (document.getElementById(elems[i].id).innerHTML == 'B20'){
+                        blnAdjustB20 = 'true';
+                    }
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C8") != -1 &&  blnAdjustB10 == 'true') {
+                    
+                    securitycostadjB10 = Number(DollarToDecimal(document.getElementById(elems[i].id).innerHTML)) + Number({!dblchangesetbackcost}) +Number({!dblchangeadjsetbackcost});
+                    document.getElementById(elems[i].id).innerHTML = DecimalToDollar(securitycostadjB10);
+                    blnAdjustB10 = 'false';
+                }
+                
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C8") != -1 &&  blnAdjustB20 == 'true') {
+                    securitycostadjB20 = Number(DollarToDecimal(document.getElementById(elems[i].id).innerHTML)) + Number({!dblblastwinFac});
+                    document.getElementById(elems[i].id).innerHTML = DecimalToDollar(securitycostadjB20);
+                    blnAdjustB20 = 'false';
+                }
+            }
+        }
+        
+        function LoadLast3Rows() {
+            var ECCAMultiplier = Number({!dblDesign}) + Number({!dblGeneral}) + Number({!dblEscCode}) + Number({!dblEscMarkets});
+            var ECCMultiplier = '{!dblConstructArt}';
+            var TotalCost;
+            var ECCA;         
+            
+            //Surface Parking
+            TotalCost = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.SF_NCMT_C10}').innerHTML);            
+            OthTotalCost = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.SF_NCMT_C9}').innerHTML);
+            //ECCA = parseFloat(TotalCost * ECCAMultiplier).toFixed(2);
+            ECCA = parseFloat((TotalCost * (1 + Number({!dblDesign}))) * (1 + Number({!dblGeneral})) * (1+ Number({!dblEscMarkets}) + Number({!dblEscCode}))).toFixed(2);
+            ECC = Number(ECCA) + (Number(ECCA) * ECCMultiplier); 
+            
+            
+            ETPC = ECC * ( 1 + Number({!dblEDRC}) + Number({!dblEMIC}));            
+            DirectCostGSF = Number(TotalCost)/Number({!dblGross});
+            OthDirectCostGSF = Number(OthTotalCost)/Number({!dblGross});
+            document.getElementById('{!$Component.rptUniformat.DataBlock.SF_NCMT_C11}').innerHTML = DecimalToDollar(ECCA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.SF_NCMT_C12}').innerHTML = DecimalToDollar(ECC);            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.SF_NCMT_C13}').innerHTML = DecimalToDollar(ETPC);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.SF_NCMT_C23}').innerHTML = DecimalToDollar2(OthDirectCostGSF);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.SF_NCMT_C14}').innerHTML = DecimalToDollar2(DirectCostGSF);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.SF_NCMT_C15}').innerHTML = DecimalToDollar2(Number(ECC)/Number({!dblGross}));
+            document.getElementById('{!$Component.rptUniformat.DataBlock.SF_NCMT_C17}').innerHTML = DecimalToDollar2(Number(ECCA)/Number({!dblGross}));
+            document.getElementById('{!$Component.rptUniformat.DataBlock.SF_NCMT_C19}').innerHTML = DecimalToDollar2(Number(ETPC)/Number({!dblGross}));            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.SF_NCMT_C21}').innerHTML = DecimalToDollar(TotalCost);
+            
+            //Structured Parking
+            TotalCost = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.ST_NCMT_C10}').innerHTML);
+            OthTotalCost = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.ST_NCMT_C9}').innerHTML);
+            //ECCA = parseFloat(TotalCost * ECCAMultiplier).toFixed(2);
+            ECCA = parseFloat((TotalCost * (1 + Number({!dblDesign}))) * (1 + Number({!dblGeneral})) * (1+ Number({!dblEscMarkets}) + Number({!dblEscCode}))).toFixed(2);
+            //ECC = Number(ECCA) + (Number(ECCA) * ECCMultiplier);  
+            ECC = parseFloat((ECCA) * (1 + Number({!dblConstruct}))).toFixed(2);
+            ECC = parseFloat((ECC) * (1 + Number({!dblArt}))).toFixed(2);
+            ETPC = ECC * ( 1 + Number({!dblEDRC}) + Number({!dblEMIC}));
+            DirectCostGSF = Number(TotalCost)/Number({!dblGross});
+            OthDirectCostGSF = Number(TotalCost)/Number({!dblGross});
+            document.getElementById('{!$Component.rptUniformat.DataBlock.ST_NCMT_C11}').innerHTML = DecimalToDollar(ECCA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.ST_NCMT_C12}').innerHTML = DecimalToDollar(ECC);            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.ST_NCMT_C13}').innerHTML = DecimalToDollar(ETPC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.ST_NCMT_C23}').innerHTML = DecimalToDollar2(OthDirectCostGSF);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.ST_NCMT_C14}').innerHTML = DecimalToDollar2(DirectCostGSF);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.ST_NCMT_C15}').innerHTML = DecimalToDollar2(Number(ECC)/Number({!dblGross}));
+            document.getElementById('{!$Component.rptUniformat.DataBlock.ST_NCMT_C17}').innerHTML = DecimalToDollar2(Number(ECCA)/Number({!dblGross}));
+            document.getElementById('{!$Component.rptUniformat.DataBlock.ST_NCMT_C19}').innerHTML = DecimalToDollar2(Number(ETPC)/Number({!dblGross}));
+            document.getElementById('{!$Component.rptUniformat.DataBlock.ST_NCMT_C21}').innerHTML = DecimalToDollar(TotalCost);
+            
+            //Other Direct Construction Costs
+            //ODC
+            var CoreShellODC = Number({!dblOtherDirectCostCoreShell}) + Number({!dblCoreShellCosts}) + Number({!dblParkingCosts});
+            var TIODC = Number({!dblOtherDirectCostTI}) + Number({!dblTRCSCosts}) + Number({!dblTICosts}) + Number({!dblSecurityCosts});
+            var TotalODC = Number(CoreShellODC) + Number(TIODC);
+            if (Number(TotalODC) <= 0.00) TotalOPC = 1;
+            var ProRatedODC = Number({!dblProRatedODC});
+            var CoreShellPercentODC = Number(CoreShellODC)/Number(TotalODC);
+            var TIPercentODC = Number(TIODC)/Number(TotalODC);
+            CoreShellODC = Number({!dblOtherDirectCostCoreShell});
+            TIODC = Number({!dblOtherDirectCostTI});
+            var GSAODC = Number(CoreShellODC) + (Number(CoreShellPercentODC) * Number(ProRatedODC));
+            var TenantODC = Number(TIODC) +  (Number(TIPercentODC) * Number(ProRatedODC));
+            var AdjustedODC = Number(GSAODC) + Number(TenantODC);
+            
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C5}').innerHTML = DecimalToDollar(GSAODC);
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C7}').innerHTML = DecimalToDollar(TenantODC);
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C10}').innerHTML = DecimalToDollar(AdjustedODC);
+            
+            //TotalCost = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C10}').innerHTML);
+            //ECCA =  parseFloat(TotalCost * (1+ECCAMultiplier)).toFixed(2);
+            ECCA = parseFloat((TotalCost * (1 + Number({!dblDesign}))) * (1 + Number({!dblGeneral})) * (1+ Number({!dblEscMarkets}) + Number({!dblEscCode}))).toFixed(2);
+            ECC = Number(ECCA) + (Number(ECCA) * ECCMultiplier);
+            DirectCostGSF = Number(TotalCost)/Number({!dblGross});
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C11}').innerHTML = DecimalToDollar(ECCA);
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C12}').innerHTML = DecimalToDollar(ECC);
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C13}').innerHTML = DecimalToDollar(ECC);
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C14}').innerHTML = DecimalToDollar2(DirectCostGSF);
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C15}').innerHTML = DecimalToDollar2(Number(ECC)/Number({!dblGross}));
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C17}').innerHTML = DecimalToDollar2(Number(ECCA)/Number({!dblGross}));
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C21}').innerHTML = DecimalToDollar(ECCA);
+        }
+        
+        
+        function AdjustReportLayout() {
+            var rows = document.getElementsByClassName("totalRow");
+            for (var i = 0; i < rows.length; i++) {
+                rows[i].cells[0].colSpan = 3;
+                rows[i].cells[1].style.display = 'none';
+                rows[i].cells[2].style.display = 'none';
+            }
+            
+            // Report - UNIFORMAT COST OUTPUT - TOTAL PROJECT ECCA
+            if (get('Rep') == 'V3'){
+                // Dynamically update the document title using strCUIHeader
+                document.addEventListener('DOMContentLoaded', function() {
+                    const pageTitle = "{!JSENCODE(strCUIHeader)}";
+                     if (pageTitle && pageTitle !== 'null' && pageTitle !== '') {
+                        document.title = pageTitle;
+                    } else {
+                        document.title = "UNIFORMAT COST OUTPUT - TOTAL PROJECT ECCA";
+                    }
+                });
+                document.getElementById('labelHeader').innerHTML = 'UNIFORMAT COST OUTPUT - TOTAL PROJECT ECCA';
+                
+                show_hide_column(11, false);
+                show_hide_column(12, false);
+                
+                show_hide_column(15, false);
+                show_hide_column(16, false);
+                show_hide_column(19, false);
+                show_hide_column(20, false);
+                
+                //Total Cost
+                document.getElementById('ReportData').rows[0].cells[0].colSpan = 11;
+                for (var rowcounter = 1; rowcounter <= 10; rowcounter++ ) {
+                    document.getElementById('ReportData').rows[0].cells[rowcounter].style.display = 'none';
+                }
+                
+                //Unit Cost
+                document.getElementById('ReportData').rows[0].cells[13].colSpan = 4;
+                document.getElementById('ReportData').rows[0].cells[14].style.display = 'none';
+                document.getElementById('ReportData').rows[0].cells[17].style.display = 'none';
+                document.getElementById('ReportData').rows[0].cells[18].style.display = 'none';
+                
+                //Parameter
+                document.getElementById('ReportData').rows[1].cells[2].colSpan = 2;
+                document.getElementById('ReportData').rows[1].cells[3].style.display = 'none';
+                
+                //Direct Cost
+                document.getElementById('ReportData').rows[1].cells[4].colSpan = 6;
+                for (var rowcounter = 5; rowcounter <= 9; rowcounter++ ) {
+                    document.getElementById('ReportData').rows[1].cells[rowcounter].style.display = 'none';
+                }
+                
+                var s = ({!showLevel3} ? 69 : 28);
+                var e = ({!showLevel3} ? 76 : 35);
+                
+                
+                s = ({!showLevel3} ? 74 : 33);
+                e = ({!showLevel3} ? 89 : 48);
+                //Remove Rows
+                /*for (var rowcounter = s; rowcounter <= e; rowcounter++ ) {
+                    console.log(document.getElementById('ReportData').rows[rowcounter].cells[0]);
+                    document.getElementById('ReportData').rows[rowcounter].cells[0].innerHTML = 'to hide';
+                    for (var colcounter = 0; colcounter <= 21; colcounter++ ) {
+                        //document.getElementById('ReportData').rows[rowcounter].cells[colcounter].style.display = 'none';
+                    }
+                }*/
+                //Remove Rows
+                rows = document.getElementsByClassName("skipV3");
+                for (var i = 0; i < rows.length; i++) {
+                    
+                    for (var colcounter = 0; colcounter <= 21; colcounter++ ) {
+                        rows[i].cells[colcounter].style.display = 'none';
+                    }
+                }
+                
+                // Project Type - Parking Project 
+                var strProjectType = '{!JSENCODE(strProjectType)}';
+                if (strProjectType == 'Parking_Garage'){
+                    show_hide_column(5, false);
+                    show_hide_column(6, false);
+                    show_hide_column(7, false);
+                    show_hide_column(8, false);
+                    
+                    document.getElementById('ReportData').rows[0].cells[0].colSpan = 7;
+                    document.getElementById('ReportData').rows[1].cells[4].colSpan = 2;
+                }
+                
+                
+            }
+            
+            // Report - UNIFORMAT COST OUTPUT - TOTAL PROJECT ECC
+            if (get('Rep') == 'V2'){
+                // Dynamically update the document title using strCUIHeader
+                document.addEventListener('DOMContentLoaded', function() {
+                    const pageTitle = "{!JSENCODE(strCUIHeader)}";
+                     if (pageTitle && pageTitle !== 'null' && pageTitle !== '') {
+                        document.title = pageTitle;
+                    } else {
+                        document.title = "UNIFORMAT COST OUTPUT - TOTAL PROJECT ECC";
+                    }
+                });
+                document.getElementById('labelHeader').innerHTML = 'UNIFORMAT COST OUTPUT - TOTAL PROJECT ECC';
+                
+                show_hide_column(12, false);
+                
+                // show_hide_column(17, false);
+                show_hide_column(18, false);
+                show_hide_column(19, false);
+                show_hide_column(20, false);
+                
+                //Total Cost
+                document.getElementById('ReportData').rows[0].cells[0].colSpan = 12;
+                for (var rowcounter = 1; rowcounter <= 11; rowcounter++ ) {
+                    document.getElementById('ReportData').rows[0].cells[rowcounter].style.display = 'none';
+                }
+                
+                //Unit Cost
+                document.getElementById('ReportData').rows[0].cells[13].colSpan = 4;
+                document.getElementById('ReportData').rows[0].cells[14].style.display = 'none';
+                document.getElementById('ReportData').rows[0].cells[15].style.display = 'none';
+                document.getElementById('ReportData').rows[0].cells[16].style.display = 'none';
+                
+                //Parameter
+                document.getElementById('ReportData').rows[1].cells[2].colSpan = 2;
+                document.getElementById('ReportData').rows[1].cells[3].style.display = 'none';
+                
+                //Direct Cost
+                document.getElementById('ReportData').rows[1].cells[4].colSpan = 6;
+                for (var rowcounter = 5; rowcounter <= 9; rowcounter++ ) {
+                    document.getElementById('ReportData').rows[1].cells[rowcounter].style.display = 'none';
+                }
+                
+                
+                //Remove Rows
+                rows = document.getElementsByClassName("skipV2");
+                for (var i = 0; i < rows.length; i++) {
+                    
+                    for (var colcounter = 0; colcounter <= 21; colcounter++ ) {
+                        rows[i].cells[colcounter].style.display = 'none';
+                    }
+                }
+                
+                // Project Type - Parking Project
+                var strProjectType = '{!JSENCODE(strProjectType)}';
+                if (strProjectType == 'Parking_Garage'){
+                    show_hide_column(5, false);
+                    show_hide_column(6, false);
+                    show_hide_column(7, false);
+                    show_hide_column(8, false);
+                    
+                    document.getElementById('ReportData').rows[0].cells[0].colSpan = 8;
+                    document.getElementById('ReportData').rows[1].cells[4].colSpan = 2;
+                }
+                
+            }
+            
+            // Report - UNIFORMAT COST OUTPUT - TOTAL PROJECT ETPC
+            if (get('Rep') == 'V1'){
+                // Dynamically update the document title using strCUIHeader
+                document.addEventListener('DOMContentLoaded', function() {
+                    const pageTitle = "{!JSENCODE(strCUIHeader)}";
+                     if (pageTitle && pageTitle !== 'null' && pageTitle !== '') {
+                        document.title = pageTitle;
+                    } else {
+                        document.title = "UNIFORMAT COST OUTPUT - TOTAL PROJECT ETPC";
+                    }
+                });
+                document.getElementById('labelHeader').innerHTML = 'UNIFORMAT COST OUTPUT - TOTAL PROJECT ETPC';
+                
+                // show_hide_column(15, false);
+                show_hide_column(16, false);
+                // show_hide_column(17, false);
+                show_hide_column(18, false);
+                
+                //Total Cost
+                document.getElementById('ReportData').rows[0].cells[0].colSpan = 13;
+                for (var rowcounter = 1; rowcounter <= 12; rowcounter++ ) {
+                    document.getElementById('ReportData').rows[0].cells[rowcounter].style.display = 'none';
+                }
+                
+                //Unit Cost
+                document.getElementById('ReportData').rows[0].cells[13].colSpan = 4;
+                document.getElementById('ReportData').rows[0].cells[14].style.display = 'none';
+                document.getElementById('ReportData').rows[0].cells[19].style.display = 'none';
+                document.getElementById('ReportData').rows[0].cells[20].style.display = 'none';
+                
+                //Parameter
+                document.getElementById('ReportData').rows[1].cells[2].colSpan = 2;
+                document.getElementById('ReportData').rows[1].cells[3].style.display = 'none';
+                
+                //Direct Cost
+                document.getElementById('ReportData').rows[1].cells[4].colSpan = 6;
+                for (var rowcounter = 5; rowcounter <= 9; rowcounter++ ) {
+                    document.getElementById('ReportData').rows[1].cells[rowcounter].style.display = 'none';
+                }
+                var s = ({!showLevel3} ? 69 : 28);
+                var e = ({!showLevel3} ? 93 : 52);
+                
+                
+                
+                // Project Type - Parking Project
+                var strProjectType = '{!JSENCODE(strProjectType)}';
+                if (strProjectType == 'Parking_Garage'){
+                    show_hide_column(5, false);
+                    show_hide_column(6, false);
+                    show_hide_column(7, false);
+                    show_hide_column(8, false);
+                    
+                    document.getElementById('ReportData').rows[0].cells[0].colSpan = 9;
+                    document.getElementById('ReportData').rows[1].cells[4].colSpan = 2;
+                }
+                
+            }
+            
+        }
+        
+        function show_hide_column(col_no, do_show) {
+            var tbl = document.getElementById('ReportData');
+            var rows = tbl.getElementsByTagName('tr');
+            
+            for (var row = 0; row < rows.length; row++) {
+                var cols = rows[row].children;
+                if (col_no >= 0 && col_no < cols.length) {
+                    var cell = cols[col_no];
+                    if (cell.tagName == 'TD') cell.style.display = do_show ? 'block' : 'none';
+                }
+            }
+        }
+        
+        function get(name){
+            if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+                return decodeURIComponent(name[1]);
+        }
+        
+        function ComputeProfileOfCost() {
+            var SubTotalOfECCA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T4}').innerHTML);
+            
+            var elems = document.getElementsByTagName("*");
+            for (var i=0, m=elems.length; i<m; i++) {
+                if (elems[i].id &&(elems[i].id.indexOf("NCMT_C21") != -1 || elems[i].id.indexOf("SUB_C21") != -1)) {
+                    //POCLine = (DollarToDecimal(document.getElementById(elems[i].id).innerHTML) / SubTotalOfECCA) * 100;
+                    POCLine = ((DollarToDecimal(document.getElementById(elems[i].id).innerHTML) * (1 + Number({!dblDesign})) * (1 + Number({!dblGeneral}))* (1 + Number({!dblEscMarkets}) + Number({!dblEscCode}))) / SubTotalOfECCA) * 100;
+                    document.getElementById(elems[i].id).innerHTML = parseFloat(POCLine).toFixed(2) + '%';
+                }
+            }
+        }
+        
+        function AdjustECCAAndECC() {
+            
+            var elems = document.getElementsByTagName("*");
+            for (var i=0, m=elems.length; i<m; i++) {
+                
+                if (elems[i].id &&(elems[i].id.indexOf("NCMT_C11") != -1 || elems[i].id.indexOf("SUB_C11") != -1)) {                    
+                    AdjECCA = (DollarToDecimal(document.getElementById(elems[i].id).innerHTML) * (1 + Number({!dblDesign})) * (1 + Number({!dblGeneral}))* (1 + Number({!dblEscMarkets}) + Number({!dblEscCode})));
+                    document.getElementById(elems[i].id).innerHTML = DecimalToDollar(AdjECCA);                    
+                }
+                if (elems[i].id &&(elems[i].id.indexOf("NCMT_C12") != -1 || elems[i].id.indexOf("SUB_C12") != -1)) {                    
+                    AdjECC = AdjECCA * (1 + Number({!dblConstruct}) * (1 + Number({!dblArt})));
+                    document.getElementById(elems[i].id).innerHTML = DecimalToDollar(AdjECC);                  
+                }
+                if (elems[i].id &&(elems[i].id.indexOf("NCMT_C13") != -1 || elems[i].id.indexOf("SUB_C13") != -1)) {
+                    AdjETPC = AdjECC * ( 1 + Number({!dblEDRC}) + Number({!dblEMIC}));
+                    // ETPCLine = (DollarToDecimal(document.getElementById(elems[i].id).innerHTML) * ( 1 + Number({!dblEDRC}) + Number({!dblEMIC})));
+                    document.getElementById(elems[i].id).innerHTML = DecimalToDollar(AdjETPC);                    
+                }
+                if (elems[i].id &&(elems[i].id.indexOf("NCMT_C19") != -1 || elems[i].id.indexOf("SUB_C19") != -1)) {
+                    document.getElementById(elems[i].id).innerHTML = DecimalToDollar2(Number(AdjETPC)/Number({!dblGross}));
+                }
+                if (elems[i].id &&(elems[i].id.indexOf("NCMT_C15") != -1 || elems[i].id.indexOf("SUB_C15") != -1)) {
+                    document.getElementById(elems[i].id).innerHTML = DecimalToDollar2(Number(AdjECC)/Number({!dblGross}));
+                }
+                if (elems[i].id &&(elems[i].id.indexOf("NCMT_C17") != -1 || elems[i].id.indexOf("SUB_C17") != -1)) {
+                    document.getElementById(elems[i].id).innerHTML = DecimalToDollar2(Number(AdjECCA)/Number({!dblGross}));
+                    
+                }
+                
+            }
+        }
+        
+        function ComputeETPCShellParameter(){
+            //ETPC(Shell)/Parameter = (Core Shell Adjusted *(Total ETPC/SubTotalOfTotal)/Qty))
+            
+            var ETPCTotal = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TotalETPC}').innerHTML);
+            var SubTotalOfTotal = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T1}').innerHTML);
+            var ETPCAdjustment = (ETPCTotal/SubTotalOfTotal);
+            var Qty = 0.00;
+            
+            var elems = document.getElementsByTagName("*");
+            for (var i=0, m=elems.length; i<m; i++) {
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C3") != -1) {
+                    Qty = '1.0';
+                    if (document.getElementById(elems[i].id).innerHTML){
+                        Qty = DecimalwithnoComma(document.getElementById(elems[i].id).innerHTML);
+
+                    }
+                    if ((Qty == '0') || (Qty == '0.0')){
+                        Qty = '1.0';
+                    }
+                }
+                if (elems[i].id &&(elems[i].id.indexOf("NCMT_C20") != -1 || elems[i].id.indexOf("SUB_C20") != -1)) {
+                    //document.getElementById(elems[i].id).innerHTML = Qty;
+                    
+                    ETPCShellLine = (DollarToDecimal(document.getElementById(elems[i].id).innerHTML) * ETPCAdjustment) / Qty;
+                    document.getElementById(elems[i].id).innerHTML = DecimalToDollar2(ETPCShellLine);
+                }
+            }
+        }
+        
+        function ComputeECCAShellParameter(){
+            //ECCA = (ECCA_Shell_Parameter__c)/Quantity
+            var Qty = 0.00;
+            
+            var elems = document.getElementsByTagName("*");
+            for (var i=0, m=elems.length; i<m; i++) {
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C3") != -1) {
+                    Qty = '1.0';
+                    if (document.getElementById(elems[i].id).innerHTML){
+                        Qty = DecimalwithnoComma(document.getElementById(elems[i].id).innerHTML);
+                    }
+                    if ((Qty == '0') || (Qty == '0.0')){
+                        Qty = '1.0';
+                    }
+                }
+                if (elems[i].id &&(elems[i].id.indexOf("NCMT_C18") != -1 || elems[i].id.indexOf("SUB_C18") != -1)) {
+                    //document.getElementById(elems[i].id).innerHTML = Qty;
+                    ECCAShellParameter = DollarToDecimal(document.getElementById(elems[i].id).innerHTML) / Qty;
+                    document.getElementById(elems[i].id).innerHTML = DecimalToDollar2(ECCAShellParameter);
+                }
+            }
+            
+        }
+        
+        function ComputeECCShellParameter() {
+            var ETPCTotal = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TotalETPC}').innerHTML);
+            var SubTotalOfTotal = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T1}').innerHTML);
+            var ETPCAdjustment = (ETPCTotal/SubTotalOfTotal);
+            var Qty = 0.00;
+            
+            var elems = document.getElementsByTagName("*");
+            for (var i=0, m=elems.length; i<m; i++) {
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C3") != -1) {
+                    Qty = '1.0';
+                    if (document.getElementById(elems[i].id).innerHTML){
+                        Qty = DecimalwithnoComma(document.getElementById(elems[i].id).innerHTML);
+                    }
+                    if ((Qty == '0') || (Qty == '0.0')){
+                        Qty = '1.0';
+                    }
+                }
+                if (elems[i].id && (elems[i].id.indexOf("NCMT_C16") != -1 || elems[i].id.indexOf("SUB_C16") != -1)) {
+                    //document.getElementById(elems[i].id).innerHTML = Qty;
+                    ECCShellLine = (DollarToDecimal(document.getElementById(elems[i].id).innerHTML) * ETPCAdjustment) / Qty;
+                    document.getElementById(elems[i].id).innerHTML = DecimalToDollar2(ECCShellLine);
+                }
+            }
+        }
+        
+        function ComputeETPCLineItems() {
+            //ETPC = ((ECC Adjusted) * (ETPC Total/Total ECC))
+            //ETPC/GSF = ((ECC Adjusted ROW) * (ETPC Total/Total ECC)) / GSF
+            
+            var ETPCLine = '0';
+            var ETPCTotal = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TotalETPC}').innerHTML);
+            var ECCTotal = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_ECC}').innerHTML);
+            var ETPCAdjustment = (ETPCTotal/ECCTotal);
+            var GrossSqFt = {!dblGross};
+            
+            var elems = document.getElementsByTagName("*");
+            for (var i=0, m=elems.length; i<m; i++) {
+                //console.log("elemsid",elems[i].id);
+                /*  if (elems[i].id &&(elems[i].id.indexOf("NCMT_C13") != -1  || elems[i].id.indexOf("SUB_C13") != -1)) {                    
+                   console.log("ComputeETPCLineItems", document.getElementById(elems[i].id).innerHTML);                    
+                    //ETPCLine = (DollarToDecimal(document.getElementById(elems[i].id).innerHTML) * (1 + Number({!dblDesign})) * (1 + Number({!dblGeneral}))* (1 + Number({!dblEscMarkets}) + Number({!dblEscCode}))) * (1 + Number({!dblConstruct}) * (1 + Number({!dblArt}))) * ETPCAdjustment;
+                    ETPCLine = (DollarToDecimal(document.getElementById(elems[i].id).innerHTML) * ( 1 + Number({!dblEDRC}) + Number({!dblEMIC})));
+                    document.getElementById(elems[i].id).innerHTML = DecimalToDollar(ETPCLine);
+                    
+                }
+                if (elems[i].id &&(elems[i].id.indexOf("NCMT_C19") != -1 || elems[i].id.indexOf("SUB_C19") != -1)) {                    
+                    ETPCGSF = ETPCLine/GrossSqFt;
+                    document.getElementById(elems[i].id).innerHTML = DecimalToDollar2(ETPCGSF);
+                }*/
+            }
+        }
+        
+        function ComputeETPCTotal() {
+            
+            var TotalETPCGSA = '0';
+            var TotalETPCTen = '0';
+            var TotalETPC = '0';
+            
+            TotalETPCGSA = (+ DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T5}').innerHTML) +
+                            + DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T5}').innerHTML) +
+                            + DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_EG}').innerHTML) +
+                            + DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_MG}').innerHTML) +
+                            + DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.OPCTotal}').innerHTML)
+                           );
+            TotalETPCTen = (+ DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T5}').innerHTML) +
+                            + DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T5}').innerHTML) +
+                            + DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T5}').innerHTML) +
+                            + DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_ET}').innerHTML) +
+                            + DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_MT}').innerHTML) +
+                            + DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.OPCTenant}').innerHTML)
+                           );
+            TotalETPC = +TotalETPCGSA + +TotalETPCTen;
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TotalETPCGSA}').innerHTML = DecimalToDollar(TotalETPCGSA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TotalETPCTenant}').innerHTML = DecimalToDollar(TotalETPCTen);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TotalETPC}').innerHTML = DecimalToDollar(TotalETPC);
+        }
+        
+        
+        function ComputeOPC() {
+            
+            //ODC
+            var CoreShellODC = Number({!dblOtherDirectCostCoreShell}) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T1}').innerHTML)) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T1}').innerHTML));
+            var TIODC = Number({!dblOtherDirectCostTI}) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T1}').innerHTML)) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T1}').innerHTML)) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T1}').innerHTML));
+            var TotalODC = Number(CoreShellODC) + Number(TIODC);
+            if (Number(TotalODC) <= 0.00) TotalOPC = 1;
+            var ProRatedODC = Number({!dblProRatedODC});
+            var CoreShellPercentODC = Number(CoreShellODC)/Number(TotalODC);
+            var TIPercentODC = Number(TIODC)/Number(TotalODC);
+            CoreShellODC = Number({!dblOtherDirectCostCoreShell});
+            TIODC = Number({!dblOtherDirectCostTI});
+            var varGSAODC = Number(CoreShellODC) + (Number(CoreShellPercentODC) * Number(ProRatedODC));
+            var varTenantODC = Number(TIODC) + (Number(TIPercentODC) * Number(ProRatedODC));
+            
+            //OPC
+            var CoreShellOPC = Number({!dblCoreShellOPC}) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T1}').innerHTML)) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T1}').innerHTML));
+            var TIOPC = Number({!dblTIOPC}) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T1}').innerHTML)) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T1}').innerHTML)) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T1}').innerHTML));
+            var TotalOPC = Number(CoreShellOPC) + Number(TIOPC);
+            if (Number(TotalOPC) <= 0.00) TotalOPC = 1;
+            var ProRatedOPC = Number({!dblProRatedOPC});
+            var CoreShellPercentOPC = Number(CoreShellOPC)/Number(TotalOPC);
+            var TIPercentOPC = Number(TIOPC)/Number(TotalOPC);
+            CoreShellOPC =  Number({!dblCoreShellOPC});
+            TIOPC = Number({!dblTIOPC});
+            var varGSAOPC = Number(CoreShellOPC) +  (Number(CoreShellPercentOPC) * Number(ProRatedOPC));
+            var varTenantOPC = Number(TIOPC) + (Number(ProRatedOPC) * Number(TIPercentOPC));
+            
+            ///Total
+            //varOtherCostGSA = varGSAODC + varGSAOPC;
+            //varOtherCostTenant = varTenantODC + varTenantOPC;
+            varOtherCostGSA = varGSAOPC;
+            varOtherCostTenant = varTenantOPC;
+            varOtherCostTotal = Number({!dbltotalotherprojectcosts});
+            //varOtherCostTotal = varOtherCostGSA + varOtherCostTenant;
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.OPCGSA}').innerHTML = DecimalToDollar(varOtherCostGSA);
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.OPCTenant}').innerHTML = DecimalToDollar(varOtherCostTenant);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.OPCTotal}').innerHTML = DecimalToDollar(varOtherCostTotal);
+        }
+        
+        function ComputeEMCI() {
+            
+            var CoreShell_MG = '0';
+            var TRCS_MG = '0';
+            var TI_MG = '0';
+            var Security_MG = '0';
+            var Parking_MG = '0';
+            var Total_MG = '0';
+            
+            var CoreShell_MT = '0';
+            var TRCS_MT = '0';
+            var TI_MT = '0';
+            var Security_MT = '0';
+            var Parking_MT = '0';
+            var Total_MT = '0';
+            
+            var CoreShell_T7 = '0';
+            var TRCS_T7 = '0';
+            var TI_T7 = '0';
+            var Security_T7 = '0';
+            var Parking_T7 = '0';
+            var Total_T7 = '0';
+            
+            CoreShell_MG = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T5}').innerHTML) * {!dblEMIC};
+            TRCS_MG = 0.00;
+            TI_MG = 0.00;
+            Security_MG = 0.00;
+            Parking_MG = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T5}').innerHTML) * {!dblEMIC};
+            Total_MG = +CoreShell_MG + +TRCS_MG + +TI_MG + +Security_MG + +Parking_MG;
+            
+            CoreShell_MT = 0.00;
+            TRCS_MT = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T5}').innerHTML) * {!dblEMIC};
+            TI_MT = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T5}').innerHTML) * {!dblEMIC};
+            Security_MT = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T5}').innerHTML) * {!dblEMIC};
+            Parking_MT = 0.00;
+            Total_MT = +CoreShell_MT + +TRCS_MT + +TI_MT + +Security_MT + +Parking_MT;
+            
+            //CoreShell_T7 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T5}').innerHTML) + +CoreShell_MG + +CoreShell_MT;
+            //TRCS_T7 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T5}').innerHTML) + +TRCS_MG + +TRCS_MT;
+            //TI_T7 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T5}').innerHTML) + +TI_MG + +TI_MT;
+            //Security_T7 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T5}').innerHTML) + +Security_MG + +Security_MT;
+            //Parking_T7 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T5}').innerHTML) + +Parking_MG + +Parking_MT;
+            //Total_T7 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T5}').innerHTML) + +Total_MG + +Total_MT;
+            
+            CoreShell_T7 = +CoreShell_MG + +CoreShell_MT;
+            TRCS_T7 = +TRCS_MG + +TRCS_MT;
+            TI_T7 =  +TI_MG + +TI_MT;
+            Security_T7 = +Security_MG + +Security_MT;
+            Parking_T7 = +Parking_MG + +Parking_MT;
+            Total_T7 = +Total_MG + +Total_MT;
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_MG}').innerHTML = DecimalToDollar(CoreShell_MG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_MG}').innerHTML = DecimalToDollar(TRCS_MG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TI_MG}').innerHTML = DecimalToDollar(TI_MG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Security_MG}').innerHTML = DecimalToDollar(Security_MG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_MG}').innerHTML = DecimalToDollar(Parking_MG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_MG}').innerHTML = DecimalToDollar(Total_MG);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_MT}').innerHTML = DecimalToDollar(CoreShell_MT);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_MT}').innerHTML = DecimalToDollar(TRCS_MT);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TI_MT}').innerHTML = DecimalToDollar(TI_MT);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Security_MT}').innerHTML = DecimalToDollar(Security_MT);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_MT}').innerHTML = DecimalToDollar(Parking_MT);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_MT}').innerHTML = DecimalToDollar(Total_MT);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T7}').innerHTML = DecimalToDollar(CoreShell_T7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T7}').innerHTML = DecimalToDollar(TRCS_T7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T7}').innerHTML = DecimalToDollar(TI_T7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T7}').innerHTML = DecimalToDollar(Security_T7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T7}').innerHTML =DecimalToDollar(Parking_T7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T7}').innerHTML = DecimalToDollar(Total_T7);
+        }
+        
+        function ComputeEDRC() {
+            
+            var CoreShell_EG = '0';
+            var TRCS_EG = '0';
+            var TI_EG = '0';
+            var Security_EG = '0';
+            var Parking_EG = '0';
+            var Total_EG = '0';
+            
+            var CoreShell_ET = '0';
+            var TRCS_ET = '0';
+            var TI_ET = '0';
+            var Security_ET = '0';
+            var Parking_ET = '0';
+            var Total_ET = '0';
+            
+            var CoreShell_T6 = '0';
+            var TRCS_T6 = '0';
+            var TI_T6 = '0';
+            var Security_T6 = '0';
+            var Parking_T6 = '0';
+            var Total_T6 = '0';
+            
+            CoreShell_EG = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T5}').innerHTML) * {!dblEDRC};
+            TRCS_EG = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T5}').innerHTML) * {!dblEDRC} * 0.35;
+            TI_EG = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T5}').innerHTML) * {!dblEDRC} * 0.35;
+            Security_EG = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T5}').innerHTML) * {!dblEDRC} * 0.35;
+            Parking_EG = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T5}').innerHTML) * {!dblEDRC};
+            Total_EG = +CoreShell_EG + +TRCS_EG + +TI_EG + +Security_EG + +Parking_EG;
+            
+            CoreShell_ET = 0.00;
+            TRCS_ET = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T5}').innerHTML) * {!dblEDRC} * 0.65;
+            TI_ET = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T5}').innerHTML) * {!dblEDRC} * 0.65;
+            Security_ET = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T5}').innerHTML) * {!dblEDRC} * 0.65;
+            Parking_ET = 0.00;
+            Total_ET = +CoreShell_ET + +TRCS_ET + +TI_ET + +Security_ET + +Parking_ET;
+            
+            //CoreShell_T6 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T5}').innerHTML) + +CoreShell_EG + +CoreShell_ET;
+            //TRCS_T6 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T5}').innerHTML) + +TRCS_EG + +TRCS_ET;
+            //TI_T6 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T5}').innerHTML) + +TI_EG + +TI_ET;
+            //Security_T6 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T5}').innerHTML) + +Security_EG + +Security_ET;
+            //Parking_T6 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T5}').innerHTML) + +Parking_EG + +Parking_ET;
+            //Total_T6 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T5}').innerHTML) + +Total_EG + +Total_ET;
+            
+            CoreShell_T6 = +CoreShell_EG + +CoreShell_ET;
+            TRCS_T6 = +TRCS_EG + +TRCS_ET;
+            TI_T6 =  +TI_EG + +TI_ET;
+            Security_T6 = +Security_EG + +Security_ET;
+            Parking_T6 = +Parking_EG + +Parking_ET;
+            Total_T6 = +Total_EG + +Total_ET;
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_EG}').innerHTML = DecimalToDollar(CoreShell_EG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_EG}').innerHTML = DecimalToDollar(TRCS_EG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TI_EG}').innerHTML = DecimalToDollar(TI_EG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Security_EG}').innerHTML = DecimalToDollar(Security_EG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_EG}').innerHTML = DecimalToDollar(Parking_EG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_EG}').innerHTML = DecimalToDollar(Total_EG);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_ET}').innerHTML = DecimalToDollar(CoreShell_ET);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_ET}').innerHTML = DecimalToDollar(TRCS_ET);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TI_ET}').innerHTML = DecimalToDollar(TI_ET);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Security_ET}').innerHTML = DecimalToDollar(Security_ET);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_ET}').innerHTML = DecimalToDollar(Parking_ET);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_ET}').innerHTML = DecimalToDollar(Total_ET);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T6}').innerHTML = DecimalToDollar(CoreShell_T6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T6}').innerHTML = DecimalToDollar(TRCS_T6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T6}').innerHTML = DecimalToDollar(TI_T6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T6}').innerHTML = DecimalToDollar(Security_T6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T6}').innerHTML =DecimalToDollar(Parking_T6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T6}').innerHTML = DecimalToDollar(Total_T6);
+        }
+        
+        function ComputeConstruction() {
+            
+            var CoreShell_CA = '0';
+            var TRCS_CA = '0';
+            var TI_CA = '0';
+            var Security_CA = '0';
+            var Parking_CA = '0';
+            var Total_CA = '0';
+            
+            var CoreShell_T8 = '0';
+            var TRCS_T8 = '0';
+            var TI_T8 = '0';
+            var Security_T8 = '0';
+            var Parking_T8 = '0';
+            var Total_T8 = '0';
+            
+            CoreShell_CA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T4}').innerHTML) * (1 + {!dblConstruct});
+            CoreShell_CA = CoreShell_CA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T4}').innerHTML);
+            
+            TRCS_CA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T4}').innerHTML) * (1 + {!dblConstruct});
+            TRCS_CA = TRCS_CA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T4}').innerHTML);
+            
+            TI_CA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T4}').innerHTML) * (1 + {!dblConstruct});
+            TI_CA = TI_CA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T4}').innerHTML);
+            
+            Security_CA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T4}').innerHTML) * (1 + {!dblConstruct});
+            Security_CA = Security_CA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T4}').innerHTML);
+            
+            Parking_CA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T4}').innerHTML) * (1 + {!dblConstruct});
+            Parking_CA = Parking_CA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T4}').innerHTML);
+            
+            Total_CA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T4}').innerHTML) * (1 + {!dblConstruct});
+            Total_CA = Total_CA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T4}').innerHTML);
+            
+            CoreShell_T8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T4}').innerHTML) + +CoreShell_CA;
+            TRCS_T8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T4}').innerHTML) + +TRCS_CA;
+            TI_T8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T4}').innerHTML) + +TI_CA;
+            Security_T8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T4}').innerHTML) + +Security_CA;
+            Parking_T8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T4}').innerHTML) + +Parking_CA;
+            Total_T8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T4}').innerHTML) + +Total_CA;
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_CA}').innerHTML = DecimalToDollar(CoreShell_CA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_CA}').innerHTML = DecimalToDollar(TRCS_CA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TI_CA}').innerHTML = DecimalToDollar(TI_CA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Security_CA}').innerHTML = DecimalToDollar(Security_CA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_CA}').innerHTML = DecimalToDollar(Parking_CA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_CA}').innerHTML = DecimalToDollar(Total_CA);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T8}').innerHTML = DecimalToDollar(CoreShell_T8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T8}').innerHTML = DecimalToDollar(TRCS_T8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T8}').innerHTML = DecimalToDollar(TI_T8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T8}').innerHTML = DecimalToDollar(Security_T8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T8}').innerHTML =DecimalToDollar(Parking_T8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T8}').innerHTML = DecimalToDollar(Total_T8);
+        }
+        
+        function ComputeArtinArch() {
+            
+            var CoreShell_AA = '0';
+            var TRCS_AA = '0';
+            var TI_AA = '0';
+            var Security_AA = '0';
+            var Parking_AA = '0';
+            var Total_AA = '0';
+            
+            var CoreShell_T5 = '0';
+            var TRCS_T5 = '0';
+            var TI_T5 = '0';
+            var Security_T5 = '0';
+            var Parking_T5 = '0';
+            var Total_T5 = '0';
+            
+            CoreShell_AA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T8}').innerHTML) * (1 + {!dblArt});
+            //CoreShell_AA = Number(CoreShell_AA) + (Number(CoreShell_AA) * Number({!dblArt}));
+            CoreShell_AA = CoreShell_AA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T8}').innerHTML);
+            
+            TRCS_AA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T8}').innerHTML) * (1 + {!dblArt});
+            //TRCS_CA = Number(TRCS_CA) + (Number(TRCS_CA) * Number({!dblArt}));
+            TRCS_AA = TRCS_AA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T8}').innerHTML);
+            
+            TI_AA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T8}').innerHTML) * (1 + {!dblArt});
+            //TI_CA = Number(TI_CA) + (Number(TI_CA) * Number({!dblArt}));
+            TI_AA = TI_AA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T8}').innerHTML);
+            
+            Security_AA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T8}').innerHTML) * (1 + {!dblArt});
+            //Security_CA = Number(Security_CA) + (Number(Security_CA) * Number({!dblArt}));
+            Security_AA = Security_AA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T8}').innerHTML);
+            
+            Parking_AA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T8}').innerHTML) * (1 + {!dblArt});
+            //Parking_CA = Number(Parking_CA) + (Number(Parking_CA) * Number({!dblArt}));
+            Parking_AA = Parking_AA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T8}').innerHTML);
+            
+            Total_AA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T8}').innerHTML) * (1 + {!dblArt});
+            //Total_CA = Number(Total_CA) + (Number(Total_CA) * Number({!dblArt}));
+            Total_AA = Total_AA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T8}').innerHTML);
+            
+            CoreShell_T5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T8}').innerHTML) + +CoreShell_AA;
+            TRCS_T5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T8}').innerHTML) + +TRCS_AA;
+            TI_T5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T8}').innerHTML) + +TI_AA;
+            Security_T5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T8}').innerHTML) + +Security_AA;
+            Parking_T5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T8}').innerHTML) + +Parking_AA;
+            Total_T5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T8}').innerHTML) + +Total_AA;
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_AA}').innerHTML = DecimalToDollar(CoreShell_AA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_AA}').innerHTML = DecimalToDollar(TRCS_AA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TI_AA}').innerHTML = DecimalToDollar(TI_AA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Security_AA}').innerHTML = DecimalToDollar(Security_AA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_AA}').innerHTML = DecimalToDollar(Parking_AA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_AA}').innerHTML = DecimalToDollar(Total_AA);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T5}').innerHTML = DecimalToDollar(CoreShell_T5);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T5}').innerHTML = DecimalToDollar(TRCS_T5);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T5}').innerHTML = DecimalToDollar(TI_T5);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T5}').innerHTML = DecimalToDollar(Security_T5);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T5}').innerHTML =DecimalToDollar(Parking_T5);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T5}').innerHTML = DecimalToDollar(Total_T5);
+        }
+        
+        function ComputeEscalations() {
+            
+            var CoreShell_MC = '0';
+            var TRCS_MC = '0';
+            var TI_MC = '0';
+            var Security_MC = '0';
+            var Parking_MC = '0';
+            var Total_MC = '0';
+            
+            var CoreShell_CP = '0';
+            var TRCS_CP = '0';
+            var TI_CP = '0';
+            var Security_CP = '0';
+            var Parking_CP = '0';
+            var Total_CP = '0';
+            
+            var CoreShell_T4 = '0';
+            var TRCS_T4 = '0';
+            var TI_T4 = '0';
+            var Security_T4 = '0';
+            var Parking_T4 = '0';
+            var Total_T4 = '0';
+           
+            CoreShell_MC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T3}').innerHTML) * {!dblEscMarkets};
+            TRCS_MC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T3}').innerHTML) * {!dblEscMarkets};
+            TI_MC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T3}').innerHTML) * {!dblEscMarkets};
+            Security_MC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T3}').innerHTML) * {!dblEscMarkets};
+            Parking_MC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T3}').innerHTML) * {!dblEscMarkets};
+            Total_MC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T3}').innerHTML) * {!dblEscMarkets};
+            
+            CoreShell_CP = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T3}').innerHTML) * {!dblEscCode};
+            TRCS_CP = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T3}').innerHTML) * {!dblEscCode};
+            TI_CP = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T3}').innerHTML) * {!dblEscCode};
+            Security_CP = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T3}').innerHTML) * {!dblEscCode};
+            Parking_CP = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T3}').innerHTML) * {!dblEscCode};
+            Total_CP = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T3}').innerHTML) * {!dblEscCode};
+            
+            CoreShell_T4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T3}').innerHTML) + +CoreShell_MC + +CoreShell_CP;
+            TRCS_T4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T3}').innerHTML) + +TRCS_MC + +TRCS_CP;
+            TI_T4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T3}').innerHTML) + TI_MC + TI_CP;
+            Security_T4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T3}').innerHTML) + +Security_MC + +Security_CP;
+            Parking_T4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T3}').innerHTML) + +Parking_MC + +Parking_CP;
+            Total_T4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T3}').innerHTML) + +Total_MC + +Total_CP;
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_MC}').innerHTML = DecimalToDollar(CoreShell_MC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_MC}').innerHTML = DecimalToDollar(TRCS_MC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TI_MC}').innerHTML = DecimalToDollar(TI_MC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Security_MC}').innerHTML = DecimalToDollar(Security_MC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_MC}').innerHTML = DecimalToDollar(Parking_MC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_MC}').innerHTML = DecimalToDollar(Total_MC);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_CP}').innerHTML = DecimalToDollar(CoreShell_CP);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_CP}').innerHTML = DecimalToDollar(TRCS_CP);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TI_CP}').innerHTML = DecimalToDollar(TI_CP);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Security_CP}').innerHTML = DecimalToDollar(Security_CP);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_CP}').innerHTML = DecimalToDollar(Parking_CP);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_CP}').innerHTML = DecimalToDollar(Total_CP);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T4}').innerHTML = DecimalToDollar(CoreShell_T4);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T4}').innerHTML = DecimalToDollar(TRCS_T4);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T4}').innerHTML = DecimalToDollar(TI_T4);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T4}').innerHTML = DecimalToDollar(Security_T4);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T4}').innerHTML =DecimalToDollar(Parking_T4);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T4}').innerHTML = DecimalToDollar(Total_T4);
+        }
+        
+        function ComputeGeneralConditions() {
+            
+            var CoreShell_GC = '0';
+            var TRCS_GC = '0';
+            var TI_GC = '0';
+            var Security_GC = '0';
+            var Parking_GC = '0';
+            var Total_GC = '0';
+            
+            var CoreShell_T3 = '0';
+            var TRCS_T3 = '0';
+            var TI_T3 = '0';
+            var Security_T3 = '0';
+            var Parking_T3 = '0';
+            var Total_T3 = '0';
+            
+            CoreShell_GC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T2}').innerHTML) * {!dblGeneral};
+            TRCS_GC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T2}').innerHTML) * {!dblGeneral};
+            TI_GC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T2}').innerHTML) * {!dblGeneral};
+            Security_GC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T2}').innerHTML) * {!dblGeneral};
+            Parking_GC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T2}').innerHTML) * {!dblGeneral};
+            Total_GC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T2}').innerHTML) * {!dblGeneral};
+            
+            CoreShell_T3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T2}').innerHTML) + +CoreShell_GC;
+            TRCS_T3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T2}').innerHTML) + +TRCS_GC;
+            TI_T3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T2}').innerHTML) + TI_GC;
+            Security_T3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T2}').innerHTML) + +Security_GC;
+            Parking_T3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T2}').innerHTML) + +Parking_GC;
+            Total_T3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T2}').innerHTML) + +Total_GC;
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_GC}').innerHTML = DecimalToDollar(CoreShell_GC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_GC}').innerHTML = DecimalToDollar(TRCS_GC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TI_GC}').innerHTML = DecimalToDollar(TI_GC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Security_GC}').innerHTML = DecimalToDollar(Security_GC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_GC}').innerHTML = DecimalToDollar(Parking_GC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_GC}').innerHTML = DecimalToDollar(Total_GC);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T3}').innerHTML = DecimalToDollar(CoreShell_T3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T3}').innerHTML = DecimalToDollar(TRCS_T3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T3}').innerHTML = DecimalToDollar(TI_T3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T3}').innerHTML = DecimalToDollar(Security_T3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T3}').innerHTML =DecimalToDollar(Parking_T3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T3}').innerHTML = DecimalToDollar(Total_T3);
+        }
+        
+        function ComputeDesignContigency() {
+            
+            var CoreShell_DC = '0';
+            var TRCS_DC = '0';
+            var TI_DC = '0';
+            var Security_DC = '0';
+            var Parking_DC = '0';
+            var Total_DC = '0';
+            
+            var CoreShell_T2 = '0';
+            var TRCS_T2 = '0';
+            var TI_T2 = '0';
+            var Security_T2 = '0';
+            var Parking_T2 = '0';
+            var Total_T2 = '0';
+            
+            //   alert({!dblDesign});
+            
+            CoreShell_DC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T1}').innerHTML) * {!dblDesign};
+            TRCS_DC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T1}').innerHTML) * {!dblDesign};
+            TI_DC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T1}').innerHTML) * {!dblDesign};
+            Security_DC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T1}').innerHTML) * {!dblDesign};
+            Parking_DC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T1}').innerHTML) * {!dblDesign};
+            Total_DC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T1}').innerHTML) * {!dblDesign};
+            
+            CoreShell_T2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T1}').innerHTML) + +CoreShell_DC;
+            TRCS_T2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T1}').innerHTML) + +TRCS_DC;
+            TI_T2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T1}').innerHTML) + TI_DC;
+            Security_T2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T1}').innerHTML) + +Security_DC;
+            Parking_T2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T1}').innerHTML) + +Parking_DC;
+            Total_T2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T1}').innerHTML) + +Total_DC;
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_DC}').innerHTML = DecimalToDollar(CoreShell_DC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_DC}').innerHTML = DecimalToDollar(TRCS_DC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TI_DC}').innerHTML = DecimalToDollar(TI_DC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Security_DC}').innerHTML = DecimalToDollar(Security_DC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_DC}').innerHTML = DecimalToDollar(Parking_DC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_DC}').innerHTML = DecimalToDollar(Total_DC);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T2}').innerHTML = DecimalToDollar(CoreShell_T2);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T2}').innerHTML = DecimalToDollar(TRCS_T2);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T2}').innerHTML = DecimalToDollar(TI_T2);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T2}').innerHTML = DecimalToDollar(Security_T2);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T2}').innerHTML =DecimalToDollar( Parking_T2);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T2}').innerHTML = DecimalToDollar(Total_T2);
+        }
+        
+        function CalculateTotals() {
+            var Amount = '0';
+            var CoreShell_T1 = '0';
+            var TRCS_T1 = '0';
+            var TI_T1 = '0';
+            var Security_T1 = '0';
+            var Parking_T1 = '0';
+            var Total_T1 = '0';
+            var ECCA = '0';
+            var ECC = '0';
+            
+            var elems = document.getElementsByTagName("*");            
+            for (var i=0, m=elems.length; i<m; i++) {
+                if (elems[i].id && elems[i].id.indexOf("NCMT_") != -1) {
+                    
+                    blnValidLease = 'true';
+                    Amount = document.getElementById(elems[i].id).innerHTML;                    
+                    Amount = DollarToDecimal(Amount);
+                    
+                    //Amount = Amount.replace('$','');
+                    //Amount = Amount.replace('$','').replace(',','').replace(',','').replace(',','').replace(' ',''); // Easy way to make sure that we handle big numbers, or more commas ...
+                }
+                
+                
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C5") != -1) {                    
+                    CoreShell_T1 = parseInt(CoreShell_T1, 10) + parseInt(Amount, 10);
+                    
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C6") != -1) {
+                    console.log("core",TRCS_T1);
+                    TRCS_T1 = parseInt(TRCS_T1, 10) + parseInt(Amount, 10);
+                    console.log("core1",TRCS_T1);
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C7") != -1) {
+                    TI_T1 = parseInt(TI_T1, 10) + parseInt(Amount, 10);
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C8") != -1) {
+                    Security_T1 = parseInt(Security_T1, 10) + parseInt(Amount, 10);
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C9") != -1) {
+                    Parking_T1 = parseInt(Parking_T1, 10) + parseInt(Amount, 10);
+                }
+                //Added line 2060 to exclude Moving cost from SUb total SFWS-2346/2398
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C10") != -1) {
+                    if(String(elems[i].id).includes('Move_NCMT_C10') == false){
+                        Total_T1 = parseInt(Total_T1, 10) + parseInt(Amount, 10);
+                        console.log('id = ' +elems[i].id +' amount = ' +Amount +' Total_T1 = ' +Total_T1);
+                    }
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C11") != -1) {
+                    //ECCA = parseInt(Total_T1, 10) + parseInt(Amount, 10);
+                    ECCA = parseInt(Total_T1, 10);
+                    //var ECCAMultiplier = Number({!dblDesign}) + Number({!dblGeneral}) + + Number({!dblEscMarkets});
+                    //ECCA = ECCA + (ECCA * ECCAMultiplier);
+                    ECCA = ECCA + (ECCA * Number({!dblDesign}));
+                    ECCA = ECCA + (ECCA * Number({!dblGeneral}));
+                    ECCA = ECCA + (ECCA * (Number({!dblEscMarkets}) + Number({!dblEscCode})));
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C12") != -1) {
+                    //ECC = parseInt(Total_T1, 10) + parseInt(Amount, 10);
+                    //var ECCMultiplier = '{!dblConstructArt}';
+                    //ECC = ECCA + (ECCA * ECCMultiplier);
+                    ECC = ECCA + (ECCA * Number({!dblConstruct}));
+                    ECC = ECC + (ECC * Number({!dblArt}));
+                }
+            }
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.CoreShell_T1}').innerHTML = DecimalToDollar(CoreShell_T1);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TRCS_T1}').innerHTML = DecimalToDollar(TRCS_T1);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TI_T1}').innerHTML = DecimalToDollar(TI_T1);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Security_T1}').innerHTML = DecimalToDollar(Security_T1);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Parking_T1}').innerHTML = DecimalToDollar(Parking_T1);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T1}').innerHTML = DecimalToDollar(Total_T1);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_ECCA}').innerHTML = DecimalToDollar(ECCA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_ECC}').innerHTML = DecimalToDollar(ECC);
+            
+        }
+        
+        function CalculateUOM() {
+            var elems = document.getElementsByTagName("*");
+            for (var i=0, m=elems.length; i<m; i++) {
+                if (elems[i].id && elems[i].id.indexOf("0:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'SFFP';
+                if (elems[i].id && elems[i].id.indexOf("1:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'CY';
+                if (elems[i].id && elems[i].id.indexOf("2:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'SFFA';
+                if (elems[i].id && elems[i].id.indexOf("3:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'SFSA';
+                if (elems[i].id && elems[i].id.indexOf("4:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'SFRA';
+                if (elems[i].id && elems[i].id.indexOf("5:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'GSF';
+                if (elems[i].id && elems[i].id.indexOf("6:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'FL';
+                if (elems[i].id && elems[i].id.indexOf("7:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'GSF';
+                if (elems[i].id && elems[i].id.indexOf("8:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'STP';
+                if (elems[i].id && elems[i].id.indexOf("9:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'FXT';
+                if (elems[i].id && elems[i].id.indexOf("10:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'TN';
+                if (elems[i].id && elems[i].id.indexOf("11:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'GSF';
+                if (elems[i].id && elems[i].id.indexOf("12:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'kW';
+                if (elems[i].id && elems[i].id.indexOf("13:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'GSF';
+                if (elems[i].id && elems[i].id.indexOf("14:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'GSF';
+                if (elems[i].id && elems[i].id.indexOf("15:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'GSF';
+                if (elems[i].id && elems[i].id.indexOf("16:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'SFFP';
+                if (elems[i].id && elems[i].id.indexOf("17:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'SFSA';
+                if (elems[i].id && elems[i].id.indexOf("18:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'GSF';
+                if (elems[i].id && elems[i].id.indexOf("19:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'SFFP';
+                if (elems[i].id && elems[i].id.indexOf("20:NCMT_C4") != -1)
+                    document.getElementById(elems[i].id).innerHTML = 'SFSA';
+            }
+        }
+        
+        function CalculateQTY() {
+            var elems = document.getElementsByTagName("*");
+            for (var i=0, m=elems.length; i<m; i++) { 
+                
+                if (elems[i].id && elems[i].id.indexOf("0:NCMT_C3") != -1)                    
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblFootPrintArea}').toFixed(0));                
+                if (elems[i].id && elems[i].id.indexOf("1:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!(dblBasementStoryHeight * dblBasementSF)/27}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("2:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!(dblBasementSF + dblElevatedFloorAreaSF + dblTotalRoofAreaSF)}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("3:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblCladdingSkinRatioSF}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("4:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblTotalRoofAreaSF}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("5:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblGross}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("6:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblStairAnalysisTotalFlights}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("7:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblGross}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("8:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblVertical}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("9:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblPlumbingFixturesEA}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("10:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblHVACCoolingLoadTons}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("11:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblGross}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("12:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblElectricalLoadkW}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("13:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblGross}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("14:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblGross}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("15:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblGross}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("16:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblFootPrintArea}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("17:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblFinSite}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("18:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblGross}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("19:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblFootPrintArea}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("20:NCMT_C3") != -1)
+                    document.getElementById(elems[i].id).innerHTML = DecimalwithComma((parseFloat('{!dblFinSite}').toFixed(0)));
+            }
+        }
+        
+        function trimParseInt(str){
+            console.log('str === ' +str);
+            return (typeof str == "string" ? parseInt(trim(str)) : str);
+        }
+        
+        function DecimalToDollar(Amount) {
+            Amount = parseFloat(Amount).toFixed(0);
+            return '$'+ Amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
+        function DecimalToDollar2(Amount) {
+            Amount = parseFloat(Amount).toFixed(2);
+            return '$'+ Amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
+        function DecimalwithComma(Amount) {
+            Amount = parseFloat(Amount).toFixed(0);
+            return Amount.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
+        function DecimalwithnoComma(Amount) {
+            Amount = Amount.replace('$','').replace(',','').replace(',','').replace(',','').replace(' ',''); // Easy way to make sure that we handle big numbers, or more commas ...
+            return Amount;
+        }
+        
+        function DollarToDecimal(Amount){
+            Amount = Amount.replace('$','');
+            Amount = Amount.replace('$','').replace(',','').replace(',','').replace(',','').replace(' ',''); // Easy way to make sure that we handle big numbers, or more commas ...
+            return Amount;
+        }
+        
+        function toggleLevel3(cat){
+            var elems = document.getElementsByClassName(cat +'-level3');
+            for (var i = 0; i < elems.length; i++) {
+                elems[i].style.display = (elems[i].style.display == 'none' ? '' : 'none');
+            }
+            elems = document.getElementsByClassName(cat +'-level3button');
+            for (var i = 0; i < elems.length; i++) {
+                console.log(elems[i].value);
+                elems[i].value = (elems[i].value == '+' ? '-' : '+');
+            }
+        }
+        </script>
+        
+    </apex:form>
+</apex:page>

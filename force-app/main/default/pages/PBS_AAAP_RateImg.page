@@ -1,0 +1,159 @@
+<apex:page showHeader="false" extensions="PBS_AAAP_ImageCntrl" standardController="PBS_AAAP_Rate__c" standardStylesheets="true" lightningStylesheets="true">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>  
+        <script src="//cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+    <apex:form id="frm">
+        
+        
+        <apex:actionFunction action="{!captureImage}" name="captureImage" rerender="frm" oncomplete="captureDone();">
+            <apex:param assignTo="{!strImageBlob}" name="imageBlob" value=""/>
+            <apex:param assignTo="{!strImagename}" name="imagename" value=""/>
+        </apex:actionFunction>
+        
+        <div id ="loadingdiv" style="display:none;">
+            <div class="waitingSearchDiv" id="el_loading" style="background-color: #fbfbfb; height:100%;opacity:0.65;width:100%;">
+                <div class="waitingHolder" style="top: 100px; width: 91px;">
+                    <img class="waitingImage" src="/img/loading.gif" title="Please Wait..." />
+                    <span class="waitingDescription" id="waitingDesc">Loading...</span>
+                    
+                </div>
+            </div>
+        </div>
+        
+        <div class="container" id="mapDiv">
+            <apex:detail relatedList="true"></apex:detail>
+        </div>
+        
+        
+        
+        <script type="text/javascript">            
+            window.onload = function(){
+                var recId = '{!JSENCODE($CurrentPage.parameters.id)}';
+                var preFix = recId.substring(0, 3);
+                if(preFix == '{!$Label.PBS_AAAP_OfferKeyPrefix}'){
+                    
+                    window.location.href = "/apex/PBS_AAAP_OfferImg?id={!JSENCODE($CurrentPage.parameters.id)}&current={!JSENCODE($CurrentPage.parameters.current)}&total={!JSENCODE($CurrentPage.parameters.total)}";  
+                }
+                else if(preFix == '{!$Label.PBS_AAAP_SpaceKeyPrefix}'){
+                     
+                    window.location.href = "/apex/PBS_AAAP_SpaceImg?id={!JSENCODE($CurrentPage.parameters.id)}&current={!JSENCODE($CurrentPage.parameters.current)}&total={!JSENCODE($CurrentPage.parameters.total)}";  
+                }
+                else if(preFix == '{!$Label.PBS_AAAP_RateKeyPrefix}'){
+                    takePic();   
+                }               
+            }        
+            var nextid = '';
+        
+            function takePic(){
+                html2canvas(document.body, 
+                        {
+                            useCORS: true,
+                            onrendered: function(canvas) 
+                            {
+                                var recId = '{!JSENCODE($CurrentPage.parameters.id)}';    
+                                var total = '{!JSENCODE($CurrentPage.parameters.total)}'; 
+                                var current = '{!JSENCODE($CurrentPage.parameters.current)}';                                 
+                                document.body.appendChild(canvas);
+                                document.getElementById("mapDiv").style.display = 'none';
+                                document.getElementById("loadingdiv").style.display = '';                               
+                                document.getElementById("waitingDesc").innerHTML = 'Taking '+current+' of '+total;
+                                captureImage(document.getElementsByTagName('canvas')[0].toDataURL(),recId);
+                                
+                            }
+                        });
+            return false;
+        }
+        
+        
+        function captureDone(){
+            debugger;
+            
+            var recId = '{!JSENCODE($CurrentPage.parameters.id)}';   
+            var total = '{!JSENCODE($CurrentPage.parameters.total)}';             
+            var current = '{!JSENCODE($CurrentPage.parameters.current)}';  
+            current = parseInt(current)+1;
+            
+            var ids = '';
+            var decodedCookie = {!JSENCODE('document.cookie')};
+            var ca = decodedCookie.split(';');
+            for(var j = 0; j <ca.length; j++) {
+                name = ca[j].split('=')[0];
+                value = ca[j].split('=')[1];
+                if(name.trim() == 'apex__offerIds'){
+                    ids = value;
+                }
+            }
+            
+            // checking if we have ids in cookie
+            if(ids != ''){
+                var allIds = ids.split(',');
+                var firstEle = allIds[0];
+                allIds.shift();
+                var stringArray = allIds.join();
+                
+                var preFix = firstEle.substring(0, 3);
+                
+                if(preFix == '{!$Label.PBS_AAAP_OfferKeyPrefix}'){                   
+                    ids = '';                        
+                        
+                    debugger;
+                    // opening the Form page
+                    decodedCookie = {!JSENCODE('document.cookie')};
+                    ca = decodedCookie.split(';');
+                    for(var j = 0; j <ca.length; j++) {
+                        name = ca[j].split('=')[0];
+                        value = ca[j].split('=')[1];
+                        if(name.trim() == 'apex__offerRecids'){
+                            ids = value;
+                        }
+                    }
+                    
+                    var allIds = ids.split(',');
+                    var firstEle = allIds[0];  
+                    //alert(firstEle);
+                    document.cookie = "apex__offerRecids="+(allIds.join()); 
+                    window.location.href = "/apex/PBS_AAAP_offerform1217_Image?formtype=offerform1217&offerId="+firstEle+'&current='+current+'&total='+total;
+                        
+                    }
+                    
+                    else if(preFix == '{!$Label.PBS_AAAP_SpaceKeyPrefix}'){
+                        document.cookie = "apex__offerIds="+stringArray; 
+                        window.location.href = "/apex/PBS_AAAP_SpaceImg?id="+firstEle+'&current='+current+'&total='+total;       
+                    }
+                    else if(preFix == '{!$Label.PBS_AAAP_RateKeyPrefix}'){
+                        document.cookie = "apex__offerIds="+stringArray; 
+                        window.location.href = "/apex/PBS_AAAP_RateImg?id="+firstEle+'&current='+current+'&total='+total;       
+                    }
+                }
+                else{
+                    debugger;
+                    // opening the Form page
+                    decodedCookie = {!JSENCODE('document.cookie')};
+                    ca = decodedCookie.split(';');
+                    for(var j = 0; j <ca.length; j++) {
+                        name = ca[j].split('=')[0];
+                        value = ca[j].split('=')[1];
+                        if(name.trim() == 'apex__offerRecids'){
+                            ids = value;
+                        }
+                    }
+                    
+                    var allIds = ids.split(',');
+                    if(allIds.length > 1)
+                        allIds.shift();
+                    
+                    var firstEle = allIds[0];           
+                    window.location.href = "/apex/PBS_AAAP_offerform1217_Image?formtype=offerform1217&offerId="+firstEle+'&current='+current+'&total='+total+'&isfirst=yes'; 
+                }
+            }
+            
+            function replaceAll(str, term, replacement) {
+              return str.replace(new RegExp(escapeRegExp(term), 'g'), replacement);
+            }
+            
+            function escapeRegExp(string){
+                return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            }        
+        
+        </script>
+    </apex:form>
+</apex:page>

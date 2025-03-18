@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>NCMT_DES_Items__c$Name</field>
+    </columns>
+    <columns>
+        <field>NCMT_DES_Items__c$Default_Hourly_Rate__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_DES_Items__c$Hourly_Rate__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_DES_Items__c$Default_Material_Unit_Cost__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_DES_Items__c$Material_Unit_Cost__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_DES_Items__c$Difficulty_Factor_Percent__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_DES_Items__c$Waste_Factor__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_DES_Items__c$Comments__c</field>
+    </columns>
+    <description>NCMT DES Reports</description>
+    <filter>
+        <criteriaItems>
+            <column>NCMT_DES_Items__c$NCMT_Project_Name__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>Demo DES 1209</value>
+        </criteriaItems>
+    </filter>
+    <format>Tabular</format>
+    <name>Project Audit Report</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>NCMT_DES_Items__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>NCMT_DES_Items__c$CreatedDate</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

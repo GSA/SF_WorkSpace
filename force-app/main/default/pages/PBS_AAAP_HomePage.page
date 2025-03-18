@@ -1,0 +1,268 @@
+<!-- 9-JUL-2020 acheslyn updated script for analytics for user story sfws 766 -->
+<apex:page Controller="PBS_AAAP_HomePageController" sidebar="false" standardStylesheets="false" showHeader="false"
+           cache="true" expires="60">
+
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+
+    <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+    
+    <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+    <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+    <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+    
+
+
+    <style>
+.errMessage {color:red; }
+
+
+
+.tab { margin-left: 40px; }
+
+
+
+h3.blue {padding-top:10px;}
+p, .formwrap td {font-size:12px;}
+.bucket {margin-top:10px;}
+    .redtitle {font-size:16px;color:red;font-weight:bold;}
+    .bluetitle {font-size:20px;color:#0023a7;font-weight:bold;}
+
+
+
+    </style>
+    <apex:outputText rendered="{!$Label.AAAP_PBS_ShowMessage}" >
+    <div style="width:980px;
+    margin:auto;
+    background-color:#fff;
+    border:1px solid #999;
+    position:relative;
+    margin-top:33px;
+    -moz-box-shadow: 0 0 10px 5px #ccc;
+    -webkit-box-shadow: 0 0 10px 5px #ccc;
+    padding-left: 10px;">
+        {!$Label.AAAP_PBS_Message}
+    </div>
+    </apex:outputText>
+    
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+        <ul>
+            <li><a href="/AAAP/PBS_AAAP_HomePage">Home</a></li>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>| {!$Label.site.logout}</li>
+            </apex:outputLink>
+            <li>|</li>
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>
+        </ul>
+    </div><!--/login-->
+
+
+    <div id="wrapper">
+        <!-- Header logo part starts Here -->
+    <!-- J. Rogers  Eliminate Headers
+        <h1 class="logo">GSA</h1>
+        <div id="nav">
+            <ul>
+                <li><a class="selected" href="/AAAP/PBS_AAAP_HomePage">Lease Offer Platform home</a></li>
+                <li><a href="/AAAP/PBS_AAAP_News_Updates">News &amp; Updates</a></li>
+                <li><a href="/AAAP/PBS_AAAP_About_AAAP">FAQs</a></li>
+                <li><a href="/AAAP/PBS_AAAP_Sitehelp">Help</a></li>
+                <li><a href="/AAAP/PBS_AAAP_UserRegistration">
+                        <font class="orange">Registration</font>
+                    </a></li>
+            </ul>
+        </div><!--/nav->
+
+
+        <div id="hero-int2">
+
+        </div><!--/hero-->
+        <!-- Header logo part ends Here -->
+        <!-- added by syam for the line
+
+
+        <h4 style="border-bottom: 2px solid #cccccc;padding-bottom: 2px;"></h4>
+        -->
+        <div id="content">
+            <div id="rightCol">
+                <!--h4 class="blue" style="padding-top: 8px;">GSA's Lease Offer Platform</h4-->
+                <p>
+
+
+                    <font class="bluetitle">GSA's Lease Offer Platform</font>
+                </p>
+                <h4 style="border-bottom: 1px solid #cccccc;padding-top: 2px;"></h4>
+
+
+                <!--   <p>
+
+
+                       <font class="redtitle">The Lease Offer Platform (LOP) is the new homepage for GSA's Automated Advanced Acquisition Program (AAAP).</font>
+                   </p> -->
+
+                <p>The <strong>Lease Offer Platform (LOP)</strong> provides the opportunity for building owners and
+                    building owner representatives to electronically offer building space to the Federal Government.
+                    The offer submission process is completely web-enabled, allowing all registered participants to
+                    submit and update offers for lease space to the Federal Government within specified
+                    timeframes, in response to a Request for Lease Proposal (RLP) package. The <strong>Lease Offer
+                        Platform</strong> consists of:</p>
+
+                <p class="tab"> The <a href="http://www.gsa.gov/aaap" target="_blank"> <strong>Automated Advanced
+                            Acquisition Program (AAAP)</strong></a> is a multiple award lease procurement tool. The AAAP
+                    allows the market to compete for multiple federal leases
+                    by submitting a single offer through a simple online portal. The AAAP collects best and final
+                    offers, for generic office space needs, that remain in a secure database
+                    throughout the fiscal year (Oct 1 - Sept 30). Offerors are encouraged to submit all available office
+                    space, for three lease term options, with consideration to GSA's
+                    minimum requirements. The AAAP positions the GSA to expeditiously address the future leasing needs
+                    of the Government.</p>
+
+                <p class="tab"><strong><font color="red">COMING SOON: </font></strong> The <strong>Requirement Specific
+                        Acquisition Program (RSAP)</strong> is a single award lease procurement tool. The RSAP migrates
+                    GSA's traditional lease procurement
+                    method to an e-commerce procurement and transaction tool, collecting online offers for a specific
+                    space requirement. The RSAP uses a single RLP for a specific space
+                    requirement and allows offerors to tailor initial offers by utilizing a streamlined workflow. The
+                    RSAP positions the GSA to address complex space requirements
+                    electronically.</p>
+
+
+                <!-- <p><strong>To register, please go to the <a href="/AAAP/PBS_AAAP_UserRegistration">offeror registration</a> page</strong>. &nbsp;&nbsp;For additional help, contact <a href="/AAAP/PBS_AAAP_ContactUs">AAAP.Manager@gsa.gov</a>.</p> -->
+
+
+                <p>
+                    <span style="font-size:120%;"> <strong>Who Are We?</strong></span>
+                </p>
+                <p>
+
+                    The General Services Administration (GSA) is the "business side" of the U.S. government.
+                    The GSA is an independent agency of the United States government, established in 1949 to help manage
+                    and support the basic functioning of federal agencies,
+                    to include leasing space for federal agencies, so that government employees have space to perform
+                    their work.
+                    Todayâ€™s GSA lease portfolio consists of more than 8,000 leases, consisting of about 192 million RSF
+                    with a total contract value exceeding 5.6 billion dollars in annual rent. </p>
+
+                <div class="greybox">
+                    <h4>View AAAP Solicitations for Offer Package</h4>
+                    <apex:form id="regionForm">
+
+
+                        <div>
+
+
+                            <apex:outputPanel id="other_rlp_data" layout="block">
+                                <h5 style="margin-bottom:10px;">Select a Region: <a class="popup"
+                                                                                    href="#Modal_Bldg_Home"><img
+                                                src="{!$Resource.Info_Icon}"/></a></h5>
+
+                                <div id="Modal_Bldg_Home"
+                                     style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:5px;">
+                                    <p>Identify your region based on your property location. For more information on the
+                                        GSA regions, go to the GSA Regions site</p>
+                                </div>
+
+                                <span id="regionerror" for="region"
+                                      style="color:red;display:none;font-family:Arial,Helvetica,sans-serif;font-size:12px;">Please select a region<br/></span>
+                                <apex:selectList value="{!selectedRegion}" id="region" size="1">
+                                    <apex:selectOptions value="{!regions}"/>
+                                </apex:selectList>
+                                <apex:commandButton value="View RLPs" action="{!actionShowRLPs}"
+                                                    onclick="return validate();"/>
+                            </apex:outputPanel>
+                        </div>
+
+
+                        <BR/>
+                    </apex:form>
+                    <img src="{!URLFOR($Resource.gsa_common, 'images/maps.gif')}" alt="Map showing different regions"/>
+                    <p>For more information about regions, go to the <a href="http://www.gsa.gov/portal/category/22227"
+                                                                        target="_new">GSA Regions</a> site.</p>
+                </div> <!--/greybox-->
+
+            </div> <!--/rightCol-->
+
+            <div id="sidebar" class="sb-hp">
+                <div class="bucket">
+                    <h4 style="font-size:96%;"><U>Lease Offer Platform Login</U></h4>
+                    <!--<p><strong>Current user?</strong>
+                        Please login.</p> -->
+
+                    <c:SiteLogin />
+                </div>  <!--/bucket-->
+
+                <div class="bucket">
+                    <h4>AAAP Resources</h4>
+                    <P>
+                        Check out these links for additional AAAP information
+                    </P>
+                    <ul>
+                        <li><a class="arrow-link" href="/AAAP/PBS_AAAP_About_AAAP">FAQ</a></li>
+                        <!--<li><a class="arrow-link" href="/AAAP/PBS_AAAP_Web_To_Lead">Register for AAAP Email List</a>
+                        </li>-->
+                        <li><a class="arrow-link" href="https://public.govdelivery.com/accounts/USGSA/subscriber/new?topic_id=USGSA_727" target="_blank">Register for AAAP Email List</a></li>
+                        <li><a class="arrow-link" href="https://www.fbo.gov/">FedBizOpps.gov</a></li>
+                        <li><a class="arrow-link" href="/AAAP/PBS_AAAP_AwardedOffersInfo">Awarded Offers</a></li>
+                    </ul>
+                    <!--<p>&nbsp;</p>-->
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                </div>  <!--/bucket-->
+
+                <div class="bucket">
+                    <!-- <h4>Contact Us</h4><!--webaaap.manager changed to AAAP.manager-->
+                    <p>For more information contact <a href="/AAAP/PBS_AAAP_ContactUs">AAAP.Manager@gsa.gov</a></p>
+                </div>  <!--/bucket-->
+
+
+                <div class="bucket">
+                    <h4>RSAP Resources</h4>
+                    <p>More information to come when RSAP goes live.<BR/> For more information contact <a
+                                href="mailto:LOP.Manager@gsa.gov">LOP.Manager@gsa.gov</a></p>
+                </div>  <!--/bucket-->
+
+
+            </div>  <!--/sidebar-->
+
+        </div>  <!--/content-->
+
+    </div><!-- /Wrapper -->
+
+    <script type="text/javascript">
+function validate(){    
+    var flag = true;
+    
+    var region   =   document.getElementById('{!$Component.regionForm.region}').value;  
+    if(region==""){
+        document.getElementById('regionerror').style.display = 'inline';            
+        flag = false;
+    }else{
+        document.getElementById('regionerror').style.display ='none';
+    }
+    return flag;
+}
+
+    //redirect to authoritative hostname (i.e. lop.gsa.gov) as appropriate
+    var authoritativeExternalHost = "{!$Label.AAAP_EXTERNAL_HOST}";
+    //alert("v4\nCurrent Url=["+window.location+"]\nCurrent Host=["+window.location.host+"]\nauthoritativeExternalHost=["+authoritativeExternalHost+"]");
+    if (authoritativeExternalHost!=null && authoritativeExternalHost.length > 1 && !window.location.href.includes('leasing')){
+        //var u = window.location;
+        //u = (""+u).replace(window.location.host, authoritativeExternalHost);
+        //alert("old => ["+window.location+"]\nnew => ["+u+"]");
+        //window.location.replace(u);
+        window.location.href = authoritativeExternalHost;
+    }
+
+
+
+    </script>
+    <c:SiteFooterUX ></c:SiteFooterUX>
+
+
+</apex:page>

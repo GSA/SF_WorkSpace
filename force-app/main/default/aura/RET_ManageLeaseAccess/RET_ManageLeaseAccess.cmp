@@ -1,0 +1,85 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" Controller="RET_LeaseShareUtility">
+    <aura:attribute name="leaseNumber" Type="String" Default=""/>
+    <aura:attribute name="LeaseAccessRecords" Type="List"/>
+    <aura:attribute name="selectedCount" type="integer" default="0"/>
+    <aura:attribute name="spinner" type="boolean" default="FALSE"/>
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+ 	<aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    
+     <div class="slds-p-top_medium">
+        <!--loading spinner start-->
+        <aura:if isTrue="{!v.spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+        <!-- Loading spinner end-->   
+    	<lightning:card class="slds-m-around_small" title="{!'List of Users With Lease Access (' + v.LeaseAccessRecords.length+')'}" iconName="standard:user">
+		    <aura:set attribute="actions">
+		        <lightning:button class="slds-theme_brand" variant="destructive" label="Revoke Access"  title="Revoke Access" onclick="{!c.revokeAccessForSelected}"  disabled="{!v.selectedCount==0}"/>
+		    </aura:set>
+		    <aura:if isTrue="{!!empty(v.LeaseAccessRecords)}" >
+                <div style="overflow:scroll">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered" width="700">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            
+                            <th style="width:3.25rem;" class="slds-text-align--right">
+                               <div class="slds-form-element">
+                                  <div class="slds-form-element__control">
+                                     <label class="slds-checkbox">
+                                        <!--header checkbox for select all-->
+                                        <ui:inputCheckbox aura:id="box3" change="{!c.selectAll}"/>
+                                        <span class="slds-checkbox--faux"></span>
+                                        <span class="slds-form-element__label text"></span>
+                                     </label>
+                                  </div>
+                               </div>
+                            </th>
+                             <th class="slds-text-title_caps" scope="col">
+                                <div class="slds-truncate" title="username">User Name</div>
+                            </th>
+                            
+                                                   
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.LeaseAccessRecords}" var="lease">
+                            <tr class="slds-hint-parent">
+                                    <td scope="row" class="slds-text-align--right" style="width:3.25rem;">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                                <label class="slds-checkbox">
+                                                    <ui:inputCheckbox text="{!lease.Id}" aura:id="boxPack" value="" change="{!c.checkboxSelect}"/>
+                                                    <span class="slds-checkbox--faux"></span>
+                                                    <span class="slds-form-element__label text"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                <th data-label="username" scope="row">
+                                    <div class="slds-truncate" title="User">{!lease.Requestor__r.Name}</div>
+                                </th>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+                </div>
+		    	
+		    	<aura:set attribute="else">
+		            <div class="slds-theme_info slds-notify slds-notify_alert " style="text-align: left; ">
+					    <lightning:icon class="slds-m-right_x-small" iconName="utility:info" size="xx-small" variant="inverse"></lightning:icon>
+					    <div>
+					       This lease record is currently not shared with any user. 
+					    </div>
+					</div>
+		        </aura:set>
+		    </aura:if>
+		</lightning:card>
+    </div>
+</aura:component>

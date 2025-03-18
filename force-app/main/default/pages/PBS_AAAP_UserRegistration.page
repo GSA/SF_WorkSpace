@@ -1,0 +1,1146 @@
+<!-- 9-JUL-2020 acheslyn added analytics script for user story sfws 766 -->
+<apex:page showHeader="false" controller="SiteRegisterController" title="{!$Label.site.register}"
+           standardStylesheets="false">
+
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+
+    
+    
+    <style type="text/css">
+    .multiSelectPicklistTable tr:first-child {display:none;}
+    .multiSelectPicklistTable tr td {padding-top:0px;}
+    .formwrap table tr:last-child td {vertical-align:top;}
+    #nav ul {
+        float: right;
+        list-style: none;
+        margin: 30px 0px 25px 20px;
+    }
+    h1.logo{clip: rect(0px,200px,70px,0px) !important;}
+
+        .text{
+            width: 210px !important;
+            background-position-y: -330px !important;
+        }
+        .messageTable li, .errorMsg{
+            color: red;
+        }
+        .messageCell{
+            color: red;
+        }
+        .messageCell h4{
+            color: red;
+            font-weight: normal;
+        }
+        .messageText{
+            padding-right: 100px;
+        }
+        .infopopup2 {
+              position:fixed !important;
+              display:inline-block;
+              top:78% !important;
+              left:65% !important;
+              //width:700px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+            //transform: translate(-50%, -50%); !important;
+            }
+    </style>
+    
+    <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+    <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+    <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+    <!-- Todd Brown added startUrl meta tag for Communities conversion.  -->
+    <meta name="salesforce-register-starturl-enabled" content="true" />
+    
+    <!-- <script src="https://jqueryjs.googlecode.com/files/jquery-3.4.1.min.js" type="text/javascript"></script>
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" type="text/javascript"></script> -->
+    <!-- *** Todd Brown updated above old JQuery v3.4.1 libs and below old v3.5.1 lib to below v3.6.0 lib 
+    <script src="{!$Label.AAAP_JQUERY_URL_V3_5_1}"></script> -->
+    <apex:includeScript value="{!URLFOR($Resource.JQueryLibs, 'JQueryLibs/' + $Label.JQueryCurrentVersion + '/scripts.js')}"/>    
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:includescript value="{!$Resource.showpopup}"/>
+
+    <!-- Todd Brown commented out for story SFWS-2355
+    <div id="login">
+        <ul>
+            <li><a id="link1" href="/">LOP Home</a></li>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>| {!$Label.site.logout}</li>
+            </apex:outputLink>
+            <li>|</li>
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>
+        </ul>
+
+    </div> -->
+    <div id="wrapper">
+        <!-- Header logo part starts Here -->
+        <!-- Todd Brown commented out for story SFWS-2355
+        <h1 class="logo">GSA</h1>
+        <div id="nav">
+            <ul>
+                <li><a id="link2" href="/AAAP/Help">AAAP Help</a></li>
+                <li><a id="link3" href="/RSAP/Help">RSAP Help</a></li>
+            </ul>
+        </div> 
+
+        <div id="hero-int2">
+            <h2>AAAP</h2>
+        </div><!--/hero-->
+        <!-- Header logo part ends Here -->
+    
+        <div id="content">
+            <apex:form id="registrationPanel" styleClass="formwrap" onkeypress="enterKeyListener(event)">
+                <h3 class="blue">Offeror Registration</h3>
+                <apex:pagemessages />
+
+                <apex:outputText rendered="{!$Label.AAAP_PBS_ShowUserRegIssues}" >
+                    <div style="color:red;font-weight:550;">{!$Label.AAAP_PBS_UserRegIssues}</div>
+                </apex:outputText>    
+            
+                 <apex:outputPanel id="userRegistrationForm" rendered="{!showRegistrationForm}">
+                    <apex:panelGrid columns="2" style="margin-top:1em;">
+                        <apex:outputPanel >
+                            <apex:outputText value="First Name"/>
+                            <span class="required">*</span></apex:outputPanel>
+                        <apex:inputField id="firstname" value="{!c.FirstName}" required="true" styleClass="text"/>
+
+                        <apex:outputPanel >
+                            <apex:outputText value="Last Name"/>
+                            <span class="required">*</span></apex:outputPanel>
+                        <apex:inputField id="lastname" value="{!c.LastName}" required="true" styleClass="text"/>
+
+                        <apex:outputPanel >
+                            <apex:outputText value="Company"/>
+                        </apex:outputPanel>
+                        <apex:inputField id="company" value="{!c.PBS_AAAP_Company__c}"/>
+
+                        <apex:outputPanel >
+                            <apex:outputText value="Title"/>
+                        </apex:outputPanel>
+                        <apex:inputField id="title" value="{!c.Title}"/>
+
+                        <apex:outputPanel >
+                            <apex:outputText value="Street Address"/>
+                            <span class="required">*</span>
+                        </apex:outputPanel>
+                        <apex:outputPanel >
+                        <!-- Todd Brown replaced the following inputText to skip ESRI search logic for story SFWS-2602   -->
+                        <!-- <apex:inputText value="{!c.MailingStreet}" id="mstreet" onblur="setTimeout(function () {jq('#searchResults').css('display', 'none');},100)" onkeydown="if(event.keyCode==13){this.blur();actionFunction();}else{streetAddressChanged(this, event);}" required="true"/> -->
+                        <apex:inputText value="{!c.MailingStreet}" id="mstreet" required="true"/>
+                        <!--                    <div style="display:none">
+                                                <div id="search"></div>
+                                                </div>
+                                                <div id="searchResults" style="border: 1px solid black; display:none" />  -->
+                            </apex:outputPanel>
+                        <apex:outputPanel >
+                            <apex:outputText value="Country"/>
+                            <span class="required">*</span></apex:outputPanel>
+                        <apex:inputField id="country" value="{!c.MailingCountry}" required="true"/>
+ 
+                        <apex:outputPanel >
+                            <apex:outputText value="City"/>
+                            <span class="required">*</span></apex:outputPanel>
+                        <!-- Todd Brown replaced the following inputText to skip ESRI search logic for story SFWS-2602   -->
+                        <!-- <apex:inputText value="{!c.Mailingcity}" id="mcity" onkeydown="if(event.keyCode==13){this.blur();actionFunction();}"/> -->
+                        <apex:inputText value="{!c.Mailingcity}" id="mcity" />
+
+                        <apex:outputPanel >
+                            <apex:outputText value="State"/>
+                            <span class="required">*</span></apex:outputPanel>
+                        <!-- Todd Brown replaced the following inputText to skip ESRI search logic for story SFWS-2602   -->
+                        <!-- <apex:inputText value="{!c.Mailingstate}" id="mstate" onkeydown="if(event.keyCode==13){this.blur();actionFunction();}" /> -->
+                        <apex:inputText value="{!c.Mailingstate}" id="mstate" />
+
+                        <apex:outputPanel >
+                            <apex:outputText value="9-Digit Zip Code"/>
+                            <span class="required">*</span></apex:outputPanel>
+                        <!-- Todd Brown replaced the following inputText to skip ESRI search logic for story SFWS-2602   -->
+                        <!-- <apex:inputText value="{!c.MailingPostalCode}" id="mzip" onkeydown="if(event.keyCode==13){this.blur();actionFunction();}" /> -->
+                        <apex:inputText value="{!c.MailingPostalCode}" id="mzip" />
+                        
+                        <apex:outputPanel >
+                            <apex:outputText value="Phone"/>
+                            <span class="required">*</span>
+                            <a class="popup" href="#Modal_Bldg_Ques14"><img src="{!$Resource.Info_Icon}" /></a>
+                            <div id="Modal_Bldg_Ques14" class="infopopup2" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                Do not include an extension number.  The format should be: 000-000-0000
+                            </div>
+                            <br />
+                        </apex:outputPanel>
+
+                        <!-- <apex:inputField id="phone" value="{!c.Phone}" required="true" /> -->
+                        <apex:inputField id="phone" value="{!c.Phone}" />
+
+                        <apex:outputText value="Phone Extension"/>
+                        <apex:inputField id="altphone" value="{!c.PBS_AAAP_Alternate_Phone__c}"/>
+
+                        <apex:outputPanel >
+                            <apex:outputText value="Email"/>
+                            <span class="required">*</span></apex:outputPanel>
+                        <apex:inputField value="{!c.Email}" id="email" required="true"/>
+ 
+                        <apex:outputPanel >
+                            <apex:outputText value="Re-enter Email"/>
+                            <span class="required">*</span></apex:outputPanel>
+                        <apex:inputText id="confirmTempEmail" value="{!confirmTempEmail}"/>
+                        <apex:outputText value="Website URL "/>
+                        <apex:inputField id="website" value="{!c.PBS_AAAP_Website__c}"/>
+
+                        <!-- <apex:outputLabel value="{!$Label.site.password}" for="password"/>
+                        <apex:inputSecret id="password" value="{!password}"/>
+                        <apex:outputLabel value="{!$Label.site.confirm_password}" for="confirmPassword"/>
+                        <apex:inputSecret id="confirmPassword" value="{!confirmPassword}"/> -->
+
+                        <!-- <apex:outputPanel >
+                            <apex:outputText value="States of Interest"/>
+                            <span class="required">*</span> </apex:outputPanel>
+                        <apex:inputField value="{!c.PBS_AAAP_StatesOfInterest__c}" required="true"/> -->
+                    </apex:panelGrid>
+                    
+                    <p>
+                     <!-- reCAPTCHA verification -->
+                    <script src='https://www.google.com/recaptcha/api.js'></script>
+                    <div id="g-recaptcha" class="g-recaptcha" data-sitekey="{!publicKey}"></div>
+                    <!-- end reCAPTCHA verification -->                    
+                    <br/>                    
+                    
+                    
+                       <a> By clicking the 'Register' button below, you confirm that you have read and agree with the </a> 
+                       <!-- Todd Brown replaced this link for new Communities page 
+                       <a target="_bank" href="/AAAP/Privacy_And_Security">Privacy and Security Policy</a> -->
+                       <a target="_bank" href="https://www.gsa.gov/website-information/website-policies">Privacy and Security Policy</a>
+                    </p>
+
+                    <apex:actionFunction name="registerJS" action="{!createPortaluser}" rerender="registrationPanel" oncomplete="onloadCallback();"/>
+                        <apex:param id="captchaSolve" name="captchaSolve" value="" />
+                    <!-- <apex:commandButton onclick="if(confirm('Are you sure you want to create this portal user in your org?')){registerJS();return false;} else return false;" value="Register" id="theButton"/>
+                    -->
+                    <br/>
+                    <apex:actionStatus id="stat">
+                        <apex:facet name="start">
+                            <!-- spinner goes here -->
+                            <div class="waitingSearchDiv" id="el_loading" style="background-color: #fbfbfb; height:100%;opacity:0.65;width:100%;">
+                                <div class="waitingHolder" style="top: 100px; width: 91px;">
+                                <img class="waitingImage" src="/img/loading.gif" title="Please Wait..." />
+                                <span class="waitingDescription">Loading...</span>
+                                </div>
+                            </div>
+                        </apex:facet>
+                        <!--<apex:facet name="stop">
+                            <!-- main page content here 
+                        </apex:facet>-->
+                    </apex:actionStatus>
+                    
+                   
+
+                    <apex:commandButton value="Register" action="{!actionChkTermsAndConds}" onclick="return callValidation();"
+                                        oncomplete="registerJS();"
+                                        rerender="registrationPanel" status="stat"/>
+                    <!-- onclick="validateterms('{!c.PBS_AAAP_Terms_and_Conditions__c}');"/> -->
+
+                    <apex:commandButton value="Reset" action="{!reset}" immediate="true" html-formnovalidate="formnovalidate" />
+
+                    <apex:actionFunction name="checkTerms" action="{!actionChkTermsAndConds}"
+                                         rerender="registrationPanel"/>
+
+                </apex:outputPanel>
+                <apex:outputPanel id="confirmationForm" rendered="{!!showRegistrationForm}"> 
+                    <apex:outputPanel id="conf1" rendered="{!conf1}">
+                        <apex:panelGroup >
+                            <br/>
+                            <!-- Todd Brown replaced for Communities
+                            <apex:outputText styleClass="title" value="{!$Label.site.thank_you_for_registering} "/> -->
+                            <apex:outputText styleClass="title" value="Thank you for registering. An email has been sent to you with your initial access link. "/>
+                            <br/>
+                            <apex:outputText styleClass="title"
+                                             value="If an email does not generate in 5 minutes, please check your SPAM folder or email LOP.Manager@gsa.gov."/>
+                            <br/>
+                            <br/>
+                            <!-- Todd Brown removed for Communities
+                            <apex:outputLink value="{!$Page.PBS_AAAP_LoginPage}" id="redirectLink"
+                                             rendered="{!$Site.LoginEnabled}">{!$Label.site.go_to_login_page}</apex:outputLink>  
+                            <br/>  -->
+                        </apex:panelGroup>
+                    </apex:outputPanel>
+                    <!-- Todd Brown replaced for Communities
+                    <apex:outputPanel id="conf2" rendered="{!conf2}">
+                        <apex:panelGroup >
+                            <br/>
+                            <div style="margin-right:5%">
+                            Your Lease Offer Platform account is now active. Please continue to log in with the credentials you 
+                            first established at RET.GSA.GOV, as both platforms share the same username/email and password. If 
+                            you have issues logging in to either application, please visit the <a href="/apex/ForgotPassword">reset password page</a>
+                            to generate a temporary password.
+                            </div>
+                            <br/>                            
+                        </apex:panelGroup>
+                    </apex:outputPanel> -->
+                    <apex:outputPanel id="conf2" rendered="{!conf2}">
+                        <apex:panelGroup >
+                            <br/>
+                            <div style="margin-right:5%">
+                            Your Lease Offer Platform account is now active. Please continue to log in with the credentials you 
+                            first established at RET.GSA.GOV, as both platforms share the same username/email and password. If 
+                            you have issues logging in to either application, please visit the <a href="{!$Label.LOP_Community_Base_URL}Forgot-Password">reset password page</a>
+                            to generate a temporary password.
+                            </div>
+                            <br/>                            
+                        </apex:panelGroup>
+                    </apex:outputPanel>         
+                   
+                </apex:outputPanel>
+            </apex:form>
+
+        </div><!-- /content -->
+    </div><!-- /Wrapper -->
+    <div id="popupContact">
+        <a id="popupContactClose">x</a>
+        <h1>Consent to Use Information</h1>
+        <p id="contactArea">
+            If you choose to create a user account within the Automated Advanced Acquisition
+            Program, you are also accepting the users of the information that we are requesting
+            on the following pages. You will be asked to provide personal information that we
+            need to establish your user account. You must agree to these uses before we can
+            register you as a qualified offeror. You will be given a chance to either accept or
+            decline the specific uses of the information that will be identified during registration.
+            However, if you decline you cannot be registered.
+            <br/><br/>
+        </p>
+        <p style="text-align: center;">
+            <input type="submit" value="Ok" onclick="disablePopup();registerJS();"/>
+            <input type="submit" value="Cancel" onclick="disablePopup(); return false;"/>
+        </p>
+    </div>
+    <div id="backgroundPopup"></div>
+        
+
+    <script type='text/javascript'>
+
+
+        function enterKeyListener(e){
+            var keynum = 0;
+            if (window.event){
+                keynum = window.event.keyCode;
+            }
+            else if (e.which){
+                keynum = e.which;
+            }
+    
+            // Here we check whether the Enter button was pressed
+            if (keynum == 13){
+                e.preventDefault();
+                console.log('****** Skipping action on Enter key press ******');
+            }
+        }
+    
+
+        function callValidation(){
+            console.log('****** running callValidation *****');
+            registerJS(grecaptcha.getResponse());
+            return true;
+        }
+
+        var onloadCallback = function() {  
+          console.log('******* running onloadCallback');
+          top.postMessage('Page Updated', document.location.origin);
+          window.scrollTo(0,0);
+          grecaptcha.render('g-recaptcha', {'data-sitekey' : '6LdFo-AUAAAAAC3kbBWLG5PnA8_sdrTzxsoK2oR1'});
+          JQ('iframe').each(function() {
+            console.log('-----  ' + this.src);
+          });
+        };        
+            
+        JQ  =  jQuery.noConflict();
+        JQ("[id*=phone]:first").on('keyup', function() {
+            limitText(this, 12)
+        });
+
+        JQ("[id*=altphone]:first").on('keyup', function() {
+            limitText(this, 8)
+        });
+
+        function limitText(field, maxChar){
+            console.log('--');
+            var ref = JQ(field),
+                    val = ref.val();
+            if ( val.length >= maxChar ){
+                ref.val(function() {
+                    console.log(val.substr(0, maxChar))
+                    return val.substr(0, maxChar);
+                });
+            }
+        }
+
+        JQ(document).ready(function () {
+            //var path = window.location.pathname;
+            // if(path == '/RSAP/UserRegistration'){
+            //    console.log('YESSS');
+            //    JQ('#link1').text('LOP Home');
+            //    JQ('#link1').attr('href','/');
+            //    JQ('#link2').text('AAAP Help');
+            //    JQ('#link2').attr('href','/AAAP/Help');
+            //    JQ('#link3').text('RSAP Help');
+            //    JQ('#link3').attr('href','/RSAP/Help');
+            //    JQ('[id$=redirectLink]').attr('href','/RSAP/LoginPage');
+            //}
+            //console.log('JQUERY RAN');
+        });
+
+        var jelStreet = JQ('input[id=' + "'{!$Component.registrationPanel.mstreet}'" + ']');
+        var jelCity = JQ('input[id=' + "'{!$Component.registrationPanel.mcity}'" + ']');
+        var jelState = JQ('input[id=' + "'{!$Component.registrationPanel.mstate}'" + ']');
+        var jelZip = JQ('input[id=' + "'{!$Component.registrationPanel.mzip}'" + ']');
+        //var jelCounty = jq('input[id=' + "'{!$Component.newOffer.bcounty}'" + ']');
+        
+        //Test ends here
+        var addressJqueryElements = [jelStreet, jelCity, jelState, jelZip];
+        function setAaapgmapAddrFields() {
+            AAAPGMAP.addrFields.street = jelStreet.val();
+            AAAPGMAP.addrFields.city = jelCity.val();
+            AAAPGMAP.addrFields.state = jelState.val();
+            AAAPGMAP.addrFields.zip = jelZip.val();
+            //AAAPGMAP.addrFields.county = jelCounty.val();
+        }
+
+        function addressFieldChanged() {
+            debugAlert("addressFieldChanged");
+            jq(AAAPGMAP.otherbldgdata).hide();
+            //jq("#validateAddressRow").show();
+        }
+
+        var search = null;
+
+        var lastStreetAddressChanged = null
+
+        function streetAddressChanged(el, e) {
+            setTimeout(function () {
+                var val = jq(el).val();
+                if (val == lastStreetAddressChanged) return;
+                lastStreetAddressChanged = val;
+                //jq("#search input").val(val);
+                search.suggest(val);
+            }, 1);
+        }
+
+        function validateSearchSuggestionAddress(el) {
+            var jel = jq(el);
+            var magicKey = jel.attr("magicKey");
+            var singleLineAddress = jel.text();
+            debugAlertObj("validateSearchSuggestionAddress", { magicKey: magicKey, singleLineAddress: singleLineAddress });
+            AAAPGMAP.initMap(magicKey, singleLineAddress);
+        }
+        
+        function suggestResultsReceived(e) {
+           // alert("suggestResultsReceived:\n"+JSON.stringify(e));
+            var h = "";
+            var suggestionCount = 0;
+            for (x in e.results) {
+                for (var y = 0; y < e.numResults; ++y) {
+                    var r = e.results[x][y];
+                    if (!isInRlp(r.text)) continue;
+                    if (++suggestionCount > 10) {
+                        debugAlert("suggestResultsReceived will break as we have enough results");
+                        break;
+                    }
+                    h += '<div class="addressSuggestionResult" magicKey="' + r.magicKey + '" onclick="validateSearchSuggestionAddress(this)">' + r.text + '</div>';
+                }
+            }
+            var jel = jq("#searchResults");
+            if (h == "") {
+                jel.css("display", "none");
+            }
+            else {
+                jel.html("<div>" + h + "</div>");
+                jel.css("display", "");
+            }
+        }
+
+        (function () {
+            var _buildingtype = document.querySelectorAll('[idJ$="buildingType"]')[0];
+            if (_buildingtype && !_buildingtype[0].value) {
+                _buildingtype.remove(0);
+            }
+            var _buildingcode = document.querySelectorAll('[idJ$="buildingCode"]')[0];
+            if (_buildingcode && !_buildingcode[0].value) {
+                _buildingcode.remove(0);
+            }
+            var _buildingcodeYear = document.querySelectorAll('[idJ$="buildingCodeYear"]')[0];
+            if (_buildingcodeYear && !_buildingcodeYear[0].value) {
+                _buildingcodeYear.remove(0);
+            }
+        })();
+
+        function getCurrentRlp() {
+            return jq('select[id=' + "'{!$Component.newOffer.chooseRLP}'" + ']').children(':selected').text();
+        }
+
+        function getCurrentRegion() {
+            return rlpRegionMap[getCurrentRlp()];
+        }
+
+        function rlpChanged() {
+            debugAlert("rlpChanged start");
+            var region = getCurrentRegion();
+            if (region == "Census" && !window.confirm("You have selected the Census 2020 RLP. Offers using this RLP will only apply to Census 2020 opportunities listed at https://www.gsa.gov/census2020.")) {
+                location.reload(true);
+            }
+            AAAPGMAP.initHide(false);
+            debugAlert("rlpChanged end");
+        }
+
+        function getLocatorUrl(state) {
+            var url = null;
+            state = (state + "").toUpperCase().trim();
+            switch (state) {
+                case "PR":
+                    url = "{!JSENCODE($Label.AAAP_ESRI_Locator_PR)}";
+                    break;
+                case "VI":
+                    url = "{!JSENCODE($Label.AAAP_ESRI_Locator_VI)}";
+                    break;
+                case "GU":
+                    url = "{!JSENCODE($Label.AAAP_ESRI_Locator_GU)}";
+                    break;
+                default:
+                    url = "{!JSENCODE($Label.AAAP_ESRI_Locator_USA)}";
+                    break;
+            }
+
+            url = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"; //jbt - this is the public url necessary for testing outside the firewall in development
+            debugAlert("ESRI URL getLocatorUrl for [" + state + "] => [" + url + "]");
+            return url;
+        }
+
+        function getStateFromAttributes(attrs) {
+            var state = attrs.RegionAbbr;
+            if (state == null || state == "") {
+                switch (attrs.Country) {
+                    case "PRI":
+                        state = "PR";
+                        break;
+                    case "GUM":
+                        state = "GU";
+                        break;
+                    case "VIR":
+                        state = "VI";
+                        break;
+                    default:
+                        state = "???";
+                        break;
+                }
+            }
+            return state;
+        }
+
+        function addressToLocationsCallback(a) {
+            debugAlert("in addressToLocationsCallback");
+            onAddressToLocationsCallback(a.candidates);
+            ignoreAjaxError = true;
+        }
+
+        var ignoreAjaxError = false;
+        var onAddressToLocationsCallback = null;
+
+        var METERTHRESHOLD = 804.672;
+        var AAAPGMAP = AAAPGMAP || {};         // define the applications namespace
+        AAAPGMAP.closeToMetro = false;
+        AAAPGMAP.quesbuildingLocated = false;
+        AAAPGMAP.formDiv = document.getElementById('{!$Component.newOffer}');
+        AAAPGMAP.mapDiv = document.getElementById('{!$Component.newOffer.map_canvas}');  // bind the map div
+        AAAPGMAP.tabDiv = document.getElementById('{!$Component.newOffer.table_canvas}');  // bind the table div
+        AAAPGMAP.addrFields = {
+            street: 'default street',
+            city: 'default city',
+            state: 'default state',
+            zip: 'default zip',
+            county: 'default county',
+            lat: 'default lat',
+            Lng: 'default Lng'
+        };
+
+        var successFunctionConseqFailCount = 0;
+        /* Todd Brown commented out AAAPGMAP.initMap and other functions using "jq" for story SFWS-2602 to prevent page refresh when "Enter" key is pressed
+        console.log('initMap');
+        // initialize the map
+        AAAPGMAP.initMap = function (magicKey, singleLineAddress) {
+            debugAlertMethodStart("initMap", { magicKey: magicKey, singleLineAddress: singleLineAddress });
+            console.log('JK here');
+            jq(AAAPGMAP.mapDiv).hide();
+            jq(AAAPGMAP.tabDiv).hide();
+
+            require([
+                "esri/map",
+                "esri/symbols/SimpleMarkerSymbol",
+                "esri/symbols/SimpleLineSymbol",
+                "esri/Color",
+                "esri/graphic",
+                "esri/InfoTemplate",
+                "esri/urlUtils",
+                "esri/tasks/locator",
+                "esri/geometry/Extent",
+                "esri/geometry/Point",
+                "esri/tasks/Geoprocessor",
+                "esri/graphicsUtils",
+                "esri/geometry/Multipoint",
+                "esri/geometry/webMercatorUtils",
+                "dojo/domReady!"
+            ], function (Map, SimpleMarkerSymbol, SimpleLineSymbol, Color, Graphic, InfoTemplate, urlUtils, Locator, Extent, Point, Geoprocessor, graphicsUtils, Multipoint, webMercatorUtils) {
+                debugAlertMethodStart("initMap.require");
+
+                if (AAAPGMAP.map == null) {
+                    debugAlert("initMap.require creating the map");
+                    AAAPGMAP.map = new Map(AAAPGMAP.mapDiv, {
+                        zoom: 4,
+                        basemap: "osm"
+                    });
+
+                    //start the map at US when it first displays instead of defaulting to Africa
+                    AAAPGMAP.map.setExtent(
+                        new Extent({
+                            xmin: -14177690,
+                            ymin: 2618510,
+                            xmax: -7084330,
+                            ymax: 6532090,
+                            spatialReference: {
+                                wkid: 102100
+                            }
+                        }), true);
+                }
+
+                if (typeof (AAAPGMAP.addressTable) !== "undefined" && AAAPGMAP.addressTable !== null) {
+                    debugAlert("initMap.require destroying old addressTable");
+                    AAAPGMAP.addressTable.destroy();
+                }
+
+                var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 15,
+                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([128, 0, 0]), 1),
+                    new Color([178, 34, 34]));
+
+                debugAlert("initMap require 2");
+
+                var locAddress = getLocatorUrl(AAAPGMAP.addrFields.state);
+
+                var locator = new Locator(locAddress);
+                var prefix = "{!JSENCODE($Label.AAAP_ESRI_URL_Prefix)}";
+                var prox = "{!JSENCODE($Label.AAAP_ESRI_External_Proxy_URL)}";
+
+                urlUtils.addProxyRule({
+                    urlPrefix: prefix,
+                    proxyUrl: prox
+                });
+
+                var geoProcessorAddress = "{!JSENCODE($Label.AAAP_ESRI_Geoprocessor_URL)}";
+                AAAPGMAP.closestStationGP = new Geoprocessor(geoProcessorAddress);
+                var multiAddress = null;
+                if (magicKey) {
+                    multiAddress = {
+                        SingleLine: singleLineAddress
+                    };
+                }
+                else {
+                    multiAddress = {
+                        Address: AAAPGMAP.addrFields.street.trim().toUpperCase(),
+                        City: AAAPGMAP.addrFields.city.trim().toUpperCase(),
+                        Region: AAAPGMAP.addrFields.state.trim().toUpperCase(),
+                        Postal: AAAPGMAP.addrFields.zip.trim().toUpperCase()
+                    };
+                }
+
+                debugAlert("initMap require 3");
+                var locationAddressParam = {
+                    magicKey: magicKey,
+                    address: multiAddress,
+                    categories: ["Address"],
+                    countryCode: "US",
+                    maxLocations: 7,
+                    outFields: ["StAddr", "City", "RegionAbbr", "Postal", "Country", "subregion", "magicKey"]
+                };
+
+                jq(AAAPGMAP.formDiv).LoadingOverlay("show", {
+                    imagePosition: "center center",
+                    maxSize: "75px"
+                });
+
+                jq(AAAPGMAP.mapDiv).hide();
+                jq(AAAPGMAP.tabDiv).hide();
+
+                // to force JSONP
+                //                esriConfig.defaults.io.corsEnabledServers = [];
+                var corsEnabledServers = esriConfig.defaults.io.corsEnabledServers;
+                var corsHost = /\/\/(.*?)\//.exec(locAddress)[1];
+                //                
+
+                debugAlert(JSON.stringify({
+                    urlPrefix: prefix,
+                    proxyUrl: prox,
+                    locAddress: locAddress,
+                    locationAddressParam: locationAddressParam,
+                    corsHost: corsHost,
+                    corsEnabledServers: corsEnabledServers
+                }, null, 4));
+
+
+                var successFunction = function (evt) {
+                    debugAlertObj("locator.addressToLocations: SUCCESS", evt);
+                    if (AAAPGMAP.map == null || AAAPGMAP.map.graphics == null) {
+                        debugAlert("SF map or graphic is null.  Problem will ensue");
+                    }
+                    try {
+                        jq(AAAPGMAP.formDiv).LoadingOverlay("hide");
+                        AAAPGMAP.addrRows = [];
+                        var multipoint = new Multipoint(AAAPGMAP.map.spatialReference);
+                        var seen = {};
+                        debugAlertObj("SF1", evt.length); //jbt
+                        if (evt.length > 0) {
+                            for (var i = 0; i < evt.length; i++) {
+                                var res = evt[i];
+                                debugAlertObj("SF1 Loop " + i + "/" + evt.length, res); //jbt
+                                var addr = {
+                                    street: res.attributes.StAddr,
+                                    city: res.attributes.City,
+                                    state: getStateFromAttributes(evt[i].attributes),
+                                    zip: res.attributes.Postal,
+                                    subregion: res.attributes.subregion,
+                                    truncX: res.location.x.toFixed(7),
+                                    truncY: res.location.y.toFixed(7),
+                                    X: res.location.x,
+                                    Y: res.location.y,
+                                    location: res.location
+                                };
+                                debugAlert("SF1 loop A");
+                                if (i === 0 && magicKey) {
+                                    jelStreet.val(addr.street);
+                                    jelCity.val(addr.city);
+                                    jelState.val(addr.state);
+                                    jelZip.val(addr.zip);
+                                }
+                                debugAlert("SF1 loop B");
+                                var hash = addr.street + "|" + addr.zip;
+                                if (seen[hash] === true) {
+                                    debugAlertObj("SF duplicate result found and discarded", hash);
+                                    continue;
+                                }
+                                seen[hash] = true;
+                                debugAlert("SF1 loop C");
+                                AAAPGMAP.addrRows.push(addr);
+
+                                debugAlert("SF1 loop D");
+                                var graphic = new Graphic(new Point([addr.X, addr.Y]), symbol);
+                                debugAlert("SF1 loop E");
+                                AAAPGMAP.map.graphics.add(graphic);
+                                debugAlert("SF1 loop F");
+                                multipoint.addPoint(new Point(webMercatorUtils.lngLatToXY(addr.X, addr.Y)));
+                                debugAlert("SF1 loop G");
+                                graphic.setAttributes({
+                                    addressRow: i,
+                                    infoTip: '<div style=\"font-size:8pt;padding: 0px 0px 0px 0px; \">' +
+                                        addr.street + ', ' +
+                                        addr.city + ', ' +
+                                        addr.state + ', ' +
+                                        addr.zip + '</div>'
+                                });
+                                debugAlert("SF1 loop finished");
+                            }
+                            debugAlert("SF looping over results complete");
+                            if (AAAPGMAP.addrRows.length === 1) {
+                                debugAlertObj("zooming and centering with single address", AAAPGMAP.addrRows[0]);
+                                var latlngToXY = new Point(AAAPGMAP.addrRows[0].location);
+                                AAAPGMAP.map.centerAndZoom(latlngToXY, 15);
+                            } else {
+                                debugAlertObj("zooming and centering with multiple addresses", AAAPGMAP.addrRows.length);
+                                var dx = Math.round(multipoint.getExtent().getWidth() / 1.5);
+                                var dy = Math.round(multipoint.getExtent().getHeight() / 4);
+                                var updatedExtent = multipoint.getExtent().offset(-dx, dy);
+                                AAAPGMAP.map.setExtent(updatedExtent, true);
+                            }
+                            jq(AAAPGMAP.mapDiv).show();
+                            AAAPGMAP.initTable();
+                            jq(AAAPGMAP.tabDiv).show();
+                            AAAPGMAP.map.graphics.on("mouse-over", function (e) {
+                                AAAPGMAP.map.infoWindow.setTitle('<div style=\"height:0px;\"></div>');
+                                AAAPGMAP.map.infoWindow.setContent(e.graphic.attributes.infoTip);
+                                AAAPGMAP.map.infoWindow.show(e.graphic.geometry);
+                                jq(jq("#addressTable tr")[e.graphic.attributes.addressRow + 1]).css("background-color", "#f7ff00");
+                            });
+                            AAAPGMAP.map.graphics.on("mouse-out", function (e) {
+                                AAAPGMAP.map.infoWindow.hide();
+                                jq(jq("#addressTable tr")[e.graphic.attributes.addressRow + 1]).css("background-color", "");
+                            });
+                            AAAPGMAP.map.graphics.on("click", function (e) {
+                                jq(jq("#addressTable tr")[e.graphic.attributes.addressRow + 1]).click();
+                            });
+                        }
+                        else {
+                            alert("No matches found. Please try again.");
+                            AAAPGMAP.initTable();
+                        }
+                        successFunctionConseqFailCount = 0;
+                    } catch (ex) {
+                        debugAlertObj("successFunctionFailure", ex);
+                        if (0 == successFunctionConseqFailCount++) {
+                            setTimeout(function () { successFunction(evt); }, 500);
+                            return;
+                        }
+                        alert("There was a problem rendering the address.  Please try again.");
+                    }
+                    debugAlert("SF done"); //jbt
+                };
+
+                debugAlert("initMap require 4");
+                locator.addressToLocations(locationAddressParam,
+                    successFunction, function (evt) {
+                        jq(AAAPGMAP.formDiv).LoadingOverlay("hide");
+                        alert("locator.addressToLocations: FAILURE!");
+                        debugAlertObj("locator.addressToLocation fail", evt);
+                    });
+                debugAlertMethodStop("initTable.require");
+            }); //end require
+            debugAlertMethodStop("initTable");
+        }  // end initMap
+
+
+        // initialize the table
+        AAAPGMAP.initTable = function () {
+            debugAlertMethodStart("initTable");
+
+            AAAPGMAP.addressTable = jq("#addressTable").DataTable({
+                "bPaginate": false,
+                "bSort": false,
+                "searching": false,
+                "data": AAAPGMAP.addrRows,
+                "retrieve": true,
+                "columns": [{
+                    "data": "street"
+                }, {
+                    "data": "city"
+                }, {
+                    "data": "state"
+                }, {
+                    "data": "zip"
+                }, {
+                    "data": "truncY"
+                }, {
+                    "data": "truncX"
+                }]
+            });
+            debugAlert("initTable 2");
+
+            jq('#addressTable tbody').off('click.rowClick').on('click.rowClick', 'tr', function () {
+                debugAlertMethodStart("initTable.RowClicked");
+                var addr = AAAPGMAP.addressTable.row(this).data();
+                var rlp = getCurrentRlp();
+                var inRlp = isInRlp(null, addr.state, addr.city, addr.subregion);
+
+                var confirmTxt = "Confirm Selected Address " + "\r" +
+                    "Are you sure you wish to confirm the following " + rlp + " address:" + "\r" +
+                    addr.street + ", " +
+                    addr.city + ", " +
+                    addr.state + ", " +
+                    addr.zip;
+                //confirmTxt+=" [sub="+sub+", inRlp="+inRlp+", region="+region+"]";
+                var confirmAddress = confirm(confirmTxt);
+
+                debugAlertObj("initTable.RowClicked postConfirm", { confirmAddress: confirmAddress, inRlp: inRlp });
+                if (confirmAddress && inRlp) {
+                    debugAlert("confirmed and in rlp");
+                    AAAPGMAP.addrFields.street = addr.street;
+                    AAAPGMAP.addrFields.city = addr.city;
+                    AAAPGMAP.addrFields.state = addr.state;
+                    AAAPGMAP.addrFields.zip = addr.zip;
+                    AAAPGMAP.addrFields.lat = addr.Y;
+                    AAAPGMAP.addrFields.lng = addr.X;
+
+                    jq('.map').hide();
+                    jq(AAAPGMAP.tabDiv).hide();
+                    jq(AAAPGMAP.otherbldgdata).show();
+                    refresh(AAAPGMAP.addrFields.street, AAAPGMAP.addrFields.city, AAAPGMAP.addrFields.state, AAAPGMAP.addrFields.zip, AAAPGMAP.addrFields.lat, AAAPGMAP.addrFields.lng, AAAPGMAP.closeToMetro);
+                    AAAPGMAP.getMetroData(AAAPGMAP.addrFields.lat, AAAPGMAP.addrFields.lng);
+                    //jq("#validateAddressRow").hide();
+                    console.log('****NIK***'+addr.state);
+                    jq('input[id=' + "'{!$Component.newOffer.bstate}'" + ']').val(addr.state);
+                } else {
+                    debugAlert("not confirmed or not in rlp");
+                    if (!inRlp) {
+                        alert("The address you selected is not in the given RLP.  Please enter a different property for consideration in " + rlp + ".");
+                    }
+                    jq(AAAPGMAP.mapDiv).hide();
+                    jq(AAAPGMAP.tabDiv).hide();
+                }
+                debugAlertMethodStop("initTable.RowClicked");
+            }); //end jq click
+            debugAlertMethodStop("initTable");
+        } // end initTable
+
+        AAAPGMAP.getMetroData = function (lat, lng) {
+            debugAlertMethodStart("getMetroData", { lat: lat, lng: lng });
+            require([
+                "esri/map",
+                "esri/urlUtils",
+                "esri/tasks/Geoprocessor",
+                "esri/tasks/FeatureSet",
+                "esri/geometry/Point",
+                "esri/SpatialReference",
+                "esri/config",
+                "esri/geometry/webMercatorUtils",
+                "dojo/domReady!"
+            ], function (Map, urlUtils, Geoprocessor, FeatureSet, Point, SpatialReference,
+                Config, WebMercatorUtils) {
+                    debugAlert("getMetroData 1");
+
+                    var latLngXY = WebMercatorUtils.lngLatToXY(lng, lat);
+                    var inputLocation = {
+                        displayFieldName: "",
+                        geometryType: "esriGeometryPoint",
+                        spatialReference: {
+                            "wkid": 102100
+                        },
+                        fields: [{
+                            name: "OBJECTID",
+                            type: "esriFieldTypeOID",
+                            alias: "OBJECTID"
+                        }],
+                        features: [{
+                            attributes: {
+                                OBJECTID: "1"
+                            },
+                            geometry: {
+                                x: latLngXY[0],
+                                y: latLngXY[1]
+                            }
+                        }],
+                        exceededTransferLimit: false
+                    };
+                    var bufferDistance = {
+                        distance: 0.75,
+                        units: "esriMiles"
+                    };
+                    var paramsGP = {
+                        Input_Features: JSON.stringify(inputLocation),
+                        Buffer_Distance: JSON.stringify(bufferDistance)
+                    };
+
+                    debugAlert("getMetroData 2");
+                    esri.config.defaults.io.timeout = 300000;
+                    var railQueryResult = AAAPGMAP.closestStationGP.execute(paramsGP, function (results, messages) {
+                        debugAlert("getMetroData SF 1");
+                        var distanceMeter = results[1].value.features[0].attributes.Total_Kilometers * 1000;
+                        console.log("KM: " + JSON.stringify(results[1].value.features[0].attributes.Total_Kilometers));
+                        if (distanceMeter <= METERTHRESHOLD) {
+                            AAAPGMAP.closeToMetro = true;
+
+                        }
+                        refresh(AAAPGMAP.addrFields.street, AAAPGMAP.addrFields.city, AAAPGMAP.addrFields.state, AAAPGMAP.addrFields.zip, AAAPGMAP.addrFields.lat, AAAPGMAP.addrFields.lng, AAAPGMAP.closeToMetro);
+                    }, function (err) {
+                        debugAlert("getMetroData EF 1");
+                        refresh(AAAPGMAP.addrFields.street, AAAPGMAP.addrFields.city, AAAPGMAP.addrFields.state, AAAPGMAP.addrFields.zip, AAAPGMAP.addrFields.lat, AAAPGMAP.addrFields.lng, AAAPGMAP.closeToMetro);
+                        console.log('No Results from Metro Service: ' + err.message);
+                    });//end execute
+
+                });//end require
+            debugAlertMethodStop("getMetroData");
+        }//end AAAPGMAP.getMetroData
+
+        // function to confirm the address
+        AAAPGMAP.getProperty = function () {
+            debugAlertMethodStart("getProperty");
+            jq(AAAPGMAP.otherbldgdata).hide();
+            setAaapgmapAddrFields();
+            console.log('street: ' + AAAPGMAP.addrFields.street + ' -- city: ' + AAAPGMAP.addrFields.city + ' -- state: ' + AAAPGMAP.addrFields.state + ' -- zip: ' + AAAPGMAP.addrFields.zip);
+            // weeding out empty values
+            var errs = [];
+            if (AAAPGMAP.addrFields.street == null || AAAPGMAP.addrFields.street == '') {
+                errs.push("- Street Address is required");
+            }
+            if (AAAPGMAP.addrFields.city == null || AAAPGMAP.addrFields.city == '') {
+                errs.push("- City is required");
+            }
+            if (AAAPGMAP.addrFields.state == null || AAAPGMAP.addrFields.state == '') {
+                errs.push("- State is required");
+            }
+            if (AAAPGMAP.addrFields.zip == null || AAAPGMAP.addrFields.zip == '') {
+                errs.push("- Zip Code is required");
+            }
+            if (errs.length > 0) {
+                alert(errs.join("\n"));
+                return;
+            }
+            AAAPGMAP.initMap(null, null);
+            debugAlertMethodStop("getProperty");
+        }  // end getProperty
+
+
+        // function to facillitate the initial hiding of all but the RLP selection
+        AAAPGMAP.initHide = function (initialLoad) {
+            debugAlertMethodStart("initHide", { initialLoad: initialLoad });
+
+            var oldrlp = document.getElementById("oldRLP").innerHTML;
+            var rlp = jq('select[id=' + "'{!$Component.newOffer.chooseRLP}'" + ']').children(':selected').val();
+
+            AAAPGMAP.bldgaddr = document.getElementById('{!$Component.newOffer.bld_addr_fields}');
+            AAAPGMAP.otherbldgdata = document.getElementById('{!$Component.newOffer.other_bldg_data}');
+            AAAPGMAP.msgErr = document.getElementById('{!$Component.newOffer.msgErr}');
+            AAAPGMAP.msgErr02 = document.getElementById('{!$Component.newOffer.msgErr02}');
+            AAAPGMAP.message = document.getElementById('{!$Component.newOffer.message}');
+            AAAPGMAP.btnSave = document.getElementById('{!$Component.newOffer.btnSave}');
+            AAAPGMAP.btnSaveForm = document.getElementById('{!$Component.newOffer.btnSaveForm}');
+            debugAlert("initHide 2");
+
+            if (rlp === '') {
+                debugAlert("initHide 3");
+                jq(AAAPGMAP.bldgaddr).hide();
+                jq(AAAPGMAP.otherbldgdata).hide();
+                jq(AAAPGMAP.msgErr02).text('');
+                jq(AAAPGMAP.msgErr).text(' Select RLP  and then click Save Form at the bottom of the page before proceeding.');
+                jq("#nonRlpInputSection").css("display", "none");
+            } else {
+                debugAlert("initHide 4");
+                if (oldrlp != '') {
+                    jq(AAAPGMAP.msgErr).text('');
+                    if ((oldrlp != rlp) && (jq(AAAPGMAP.message).text().length == 0)) {
+                        document.getElementById("oldRLP").innerHTML = rlp;
+                        jq(AAAPGMAP.btnSaveForm).click();
+                    }
+                }
+                debugAlert("initHide 5");
+                jq(AAAPGMAP.bldgaddr).show();
+                jq("#nonRlpInputSection").css("display", "");
+                if (initialLoad) {
+                    jq(AAAPGMAP.otherbldgdata).show();
+                } else {
+                    jq(AAAPGMAP.otherbldgdata).hide();
+                }
+            }    // end if
+            debugAlertMethodStop("initHide");
+        } // end initHide
+        function streetViewToggle() {
+            require([
+                "esri/map"
+            ], function (Map) {
+                AAAPGMAP.map.setBasemap("osm");
+                jq("#streetTab").css("font-weight", "bold");
+                jq("#satTab").css("font-weight", "normal");
+
+            });
+
+        } //end streetViewToggle
+        function satelliteViewToggle() {
+            require([
+                "esri/map"
+            ], function (Map) {
+                AAAPGMAP.map.setBasemap("hybrid");
+                jq("#satTab").css("font-weight", "bold");
+                jq("#streetTab").css("font-weight", "normal");
+            });
+
+        } // satelliteViewToggle
+        
+        */
+
+        //from SiteFooterUX
+        jQuery(document).ready(function () {
+            jQuery("input:submit,input:checkbox,input:text, input:password, input:button, button").uniform();
+            //added by syam to fix the calendar issue with the uniform style class to the select components. so we omitted calendar select fields from applying uniform style class.
+            jQuery("select").each(function () {
+                var el = jQuery(this);
+                var eid = el.prop('id');
+
+                if (eid != 'calMonthPicker' && eid != 'calYearPicker') {
+                    console.log('eid is ' + eid);
+                    el.uniform();
+                }
+            });
+        });
+    
+    </script>
+    <!--
+    <script>
+
+    //SETTING UP OUR POPUP
+    //0 means disabled; 1 means enabled;
+    var popupStatus = 0;
+
+    //loading popup with jQuery magic!
+    function loadPopup(){
+        //loads popup only if it is disabled
+        if(popupStatus==0){
+            jQuery("#backgroundPopup").css({
+                "opacity": "0.7"
+            });
+            jQuery("#backgroundPopup").fadeIn("slow");
+            jQuery("#popupContact").fadeIn("slow");
+            popupStatus = 1;
+        }
+    }
+
+    //disabling popup with jQuery magic!
+    function disablePopup(){
+        //disables popup only if it is enabled
+        if(popupStatus==1){
+            jQuery("#backgroundPopup").fadeOut("slow");
+            jQuery("#popupContact").fadeOut("slow");
+            popupStatus = 0;
+        }
+    }
+
+    //centering popup
+    function centerPopup(){
+        //request data for centering
+        var windowWidth = document.documentElement.clientWidth;
+        var windowHeight = document.documentElement.clientHeight;
+        var popupHeight = jQuery("#popupContact").height();
+        var popupWidth = jQuery("#popupContact").width();
+        //centering
+        jQuery("#popupContact").css({
+            "position": "absolute",
+            "top": windowHeight/2-popupHeight/2,
+            "left": windowWidth/2-popupWidth/2
+        });
+        //only need force for IE6
+
+        jQuery("#backgroundPopup").css({
+            "height": windowHeight
+        });
+
+    }
+
+
+    //CONTROLLING EVENTS IN jQuery
+    jQuery(document).ready(function(){
+
+        //LOADING POPUP
+        //Click the button event!
+       // jQuery("#button").click(function(){
+            //centering with css
+         //   centerPopup();
+            //load popup
+         //   loadPopup();
+       // });
+
+        //CLOSING POPUP
+        //Click the x event!
+        jQuery("#popupContactClose").click(function(){
+            disablePopup();
+        });
+
+        //Press Escape event!
+        jQuery(document).keypress(function(e){
+            if(e.keyCode==27 && popupStatus==1){
+                disablePopup();
+            }
+        });
+
+    });
+    </script>
+
+
+    <style>
+
+    </style> -->
+    <c:SiteFooterUX />
+
+</apex:page>

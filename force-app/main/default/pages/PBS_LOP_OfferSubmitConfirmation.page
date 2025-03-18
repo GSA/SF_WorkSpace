@@ -1,0 +1,107 @@
+<apex:page Controller="PBS_LOP_AttachmentsController"  sidebar="false" showHeader="false" standardStylesheets="false" cache="true">
+<apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/demo_page.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+<style type="text/css">
+.ui-dialog {
+    background:#fff;
+    padding:10px;
+    border:1px solid #999;
+}
+ 
+.ui-dialog a {
+    float:right;
+    font-weight:bold;
+    padding:3px;
+    color:#999;
+    text-transform:uppercase;
+    font-size:10px;
+} 
+
+#lean_overlay {
+    position: fixed;
+    z-index:100;
+    top: 0px;
+    left: 0px;
+    height:100%;
+    width:100%;
+    background:#000;
+    display: none;
+}
+
+.errMessage {color:red; }
+</style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script> 
+ <script src="{!URLFOR($Resource.modaljquery)}"></script>
+<script type="text/javascript">
+    //alert('test');
+    JQ  =  jQuery.noConflict();
+          JQ(document).ready(function(){ 
+              //added by syam display msg when submitted offer is saved.
+                 draftMsgFlag = JQ('input[id=' + "'{!$Component.newOffer.draftMsgFlag}'" + ']').val();
+              if(draftMsgFlag == 'true') {
+              var confirm1  =  JQ('<div></div>').html("Your offer is no longer submitted. Offer status is updated to 'Draft' status and needs to be submitted again.").dialog({
+                    autoOpen: false,
+                    title: '',
+                    modal: true,
+                    position: ['center', 'center'],
+                    buttons: { 'OK' : function(){ JQ(this).dialog('close');}
+                         }
+                    });
+                      
+                  confirm1.dialog('open');            
+                }
+          }); 
+</script>
+
+    
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+        <ul>
+            <li><a href="/RSAP/portalHome">RSAP Home</a> </li>
+            <li>|</li>
+            <li><a href="/AAAP/portalHome">AAAP</a></li>
+            <li>|</li>
+            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
+                <apex:outputLink value="/AAAP/home/home.jsp">
+                    <li>{!$Label.site.login_button}</li>
+                </apex:outputLink>
+                <li> |</li>
+                <apex:outputLink value="/AAAP/ForgotPassword">
+                    <li>{!$Label.site.forgot_your_password_q}</li>
+                </apex:outputLink>
+                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
+                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
+                    <li>{!$Label.site.new_user_q}</li>
+                </apex:outputLink>
+            </apex:panelGroup>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>{!$Label.site.logout}</li>
+            </apex:outputLink>
+        </ul>
+    </div -->
+<div id="wrapper">
+<c:lop_inside_header />
+<div id="content" Style="margin-right:80px"><!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
+ 
+     <apex:form id="newOffer" styleClass="formwrap"> 
+            
+         <!--<h5 id="page-title" class="blue">
+         Please check your email to confirm that your offer has been successfully received.  If you do not receive a confirmation email,
+         or you receive an email informing you of a service disruption, please return to the application and resubmit your offer.</h5>-->
+    
+         <p>Please check your email to confirm that your offer has been successfully received. If you do not receive a confirmation 
+          email, or you receive an email informing you of a service disruption, please return to the application and resubmit your offer.</p>
+         <br/>
+         <a style="color:mediumblue" target="_blank" href="https://feedback.gsa.gov/jfe/form/SV_ell9TWArJSrNo3A">Your feedback is important to us. Please click this link to share your comments, questions, and suggestions regarding GSA’s online leasing tools.</a>
+        <!-- <a style="color:blue" href="https://feedback.gsa.gov/jfe/form/SV_cusCYq3r2MMhyt0" target="_blank">
+             <p>Your feedback is important to us. Please click this link to share your comments, questions, and suggestions regarding <br/>GSA’s online leasing tools.</p></a>-->
+            
+            <!--<apex:commandButton value="Ok" action="{!redirectToHome}"/>-->
+            
+            </apex:form> 
+        </div>
+    </div>
+</apex:page>

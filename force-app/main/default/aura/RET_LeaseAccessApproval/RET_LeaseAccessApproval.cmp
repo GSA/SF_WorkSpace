@@ -1,0 +1,123 @@
+<aura:component controller="RET_LeaseAccessApprovalController">
+	<aura:attribute name="statusFilters" type="String[]" />
+	<aura:attribute name="leaseAccessList" type="List" />
+   	<aura:attribute name="selectedLsac" type="PBS_Lease_Access__c" default="{'sobjectType' : 'PBS_Lease_Access__c'}" />
+	<aura:attribute name="selectedPage" type="Integer" default="1" />
+	<aura:attribute name="pageSize" type="Integer" default="3" />
+	<aura:attribute name="totalPages" type="Integer" default="1" />
+	<aura:attribute name="totalLsAcs" type="Integer" default="0" />
+	<aura:attribute name="resultsHaveNext" type="Boolean" default="false" />
+	<aura:attribute name="resultsHavePrev" type="Boolean" default="false" />	
+	<aura:handler name="init" action="{!c.loadPendingApprovalLeases}" value="{!this}" />
+	<aura:handler name="change" value="{!v.statusFilters}" action="{!c.loadPendingApprovalLeases}" />
+
+    <aura:if isTrue="{!v.leaseAccessList.length > 0}">
+		<div class="ret-lease-access-table-container">
+			<table class="lease-list-table">
+				<thead>
+					<tr class="slds-text-title_caps">
+                        <th scope="col">Lease</th>
+					    <th scope="col">Building Name</th>
+						<th scope="col">Requestor Name</th>
+						<th scope="col">Requestor Email</th>
+						<th scope="col">Requestor Comments</th>
+						<th scope="col">Action to Take</th>
+						
+					</tr>
+				</thead>
+				<tbody>	
+					<aura:iteration items="{!v.leaseAccessList}" var="lsac" indexVar="indx">
+						<tr class="lease-information">
+                            <td scope="row" class="lease-number">{!lsac.PBS_Lease__r.Lease_Number__c}</td>
+                            <td>{!lsac.PBS_Lease__r.Building_Name__c}</td>
+							<td>{!lsac.Requestor__r.Name}</td>
+							<td>{!lsac.Requestor__r.Email}</td>
+							<td>{!lsac.Requestor_Comments__c}</td>
+                            <td class="lease-number">
+                                <a onclick="{!c.showApproveRejectPopup}" data-lsacid="{!lsac.Id}">Approve/Reject</a>
+                            </td>
+				<!--			<td>
+                                <div id="{!lsac.Id + 'plus' + indx}">
+		                            <ui:button class="slds-button slds-button_brand" press="{!c.showApproveRejectPopup}" label="Approve/Reject" labelClass="ApproveRejectBtn"/>
+                                </div>
+                            </td>
+				-->	
+						</tr>
+					</aura:iteration>
+				</tbody>
+			</table>
+			<div class="table-pagination">
+				<span class="navigate-left">
+					<aura:if isTrue="{!v.resultsHavePrev}">
+						<a onclick="{!c.navigateLeft}">
+							<lightning:icon iconName="utility:chevronleft" size="small" />
+						</a>
+						<aura:set attribute="else">
+							<lightning:icon iconName="utility:chevronleft" size="small" />
+						</aura:set>
+					</aura:if>
+				</span>
+				<span class="page-totals">
+					Showing page {!v.selectedPage} of {!v.totalPages} (Total {!v.totalLsAcs} pending approvals).
+					
+                    <span class="navigate-right">
+                        <aura:if isTrue="{!v.resultsHaveNext}">
+                            <a onclick="{!c.navigateRight}">
+                                <lightning:icon iconName="utility:chevronright" size="small" />
+                            </a>
+                            <aura:set attribute="else">
+                                <lightning:icon iconName="utility:chevronright" size="small" />
+                            </aura:set>
+                        </aura:if>
+                    </span>
+
+					<ui:inputSelect value="{!v.pageSize}" class="page-size-input" change="{!c.changePageSize}" label="Leases per page: ">
+						<ui:inputSelectOption text="3" label="3" value="{!v.pageSize == '3'}" />
+						<ui:inputSelectOption text="5" label="5" value="{!v.pageSize == '5'}" />
+						<ui:inputSelectOption text="10" label="10" value="{!v.pageSize == '10'}" />
+						<ui:inputSelectOption text="15" label="15" value="{!v.pageSize == '15'}" />
+						<ui:inputSelectOption text="20" label="20" value="{!v.pageSize == '20'}" />
+						<ui:inputSelectOption text="25" label="25" value="{!v.pageSize == '25'}" />
+						<ui:inputSelectOption text="30" label="30" value="{!v.pageSize == '30'}" />
+						<ui:inputSelectOption text="35" label="35" value="{!v.pageSize == '35'}" />
+						<ui:inputSelectOption text="40" label="40" value="{!v.pageSize == '40'}" />
+						<ui:inputSelectOption text="45" label="45" value="{!v.pageSize == '45'}" />
+						<ui:inputSelectOption text="50" label="50" value="{!v.pageSize == '50'}" />
+					</ui:inputSelect>
+				</span>
+			</div>
+		</div>
+        
+        <div id="access-approve-reject" class="ret-modal-container">
+            <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <span id="lease-header">Lease</span>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium ret-upload-container">
+                        <div class="slds-tile">
+                            <div class="slds-tile__detail">
+                            	<ui:inputText value="{!v.selectedLsac.Approver_Comments__c}" label="POC Comments" />
+                            </div>
+                        </div>	
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div id="edit-footer-buttons">
+                           <ui:button class="slds-button slds-button_neutral" press="{!c.cancelApproveReject}" label="Cancel" />
+                           <ui:button class="slds-button slds-button_brand" press="{!c.approveAccess}" label="Approve" />
+                           <ui:button class="slds-button slds-button_brand" press="{!c.rejectAccess}" label="Reject" />
+                           
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+
+		<aura:set attribute="else">
+			No pending approvals found.
+		</aura:set>
+	</aura:if>
+ 
+	
+</aura:component>

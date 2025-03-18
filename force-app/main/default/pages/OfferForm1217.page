@@ -1,0 +1,732 @@
+<!-- 7-JUL-2020 acheslyn updated head section with google analytics code snippet user story sfws 766-->
+<apex:page renderAs="pdf" controller="PBS_AAAP_OfferForm1217"  showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" action="{!isValidUserAction}">
+    <html>
+    <head>
+        <style>
+            /*@page :first {
+            @bottom-left {
+            content: "GENERAL SERVICES ADMINISTRATION";
+            font-weight:bold;
+
+            }
+            }
+            @page {
+            size: letter;
+            @bottom-right {
+            content: "GSA 1217 (REV. 11/2016) Page " counter(page);
+            font-weight:bold;
+            padding-bottom: 60px;
+            margin-bottom: 60px;
+            }
+            }*/
+            .page-break {
+                display:block;
+            }
+
+            body {
+                font-family: Times New Roman;
+            }
+
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            table.table1 td,th{
+                border:2px solid black;
+            }
+
+            table.table2 td,th{
+                border:1px solid #D3D3D3;
+            }
+
+            table.table3 td,th{
+                border:1px solid #D3D3D3;
+            }
+
+            table.table4 td,th{
+                border:2px solid black;
+            }
+
+            table tr td:last-child {
+                border-right: 0;
+            }
+
+            table tr td:first-child {
+                border-left: 0;
+            }
+
+            table.table4 tr th:first-child {
+                border-left: 0;
+            }
+
+            table.table4 tr th:last-child {
+                border-right: 0;
+            }
+
+            table tr td:first-child {
+                border-left: 0;
+            }
+
+            table tr:last-child td {
+                border-bottom: 0;
+            }
+
+            .font12px{
+                font-size: 12px;
+            }
+
+            .font10px{
+                font-size: 10px;
+            }
+
+            .padding4px{
+                padding : 4px;
+            }
+
+            .padding5px{
+                padding : 5px;
+            }
+
+            .paddingtop5px{
+                padding-top:5px;
+            }
+            .paddingleft10px{
+                padding-left : 10px;
+            }
+
+            .paddingleft15px{
+                padding-left : 15px;
+            }
+
+            .font14px{
+                font-size:14px;
+            }
+
+            .font10px{
+                font-size:10px;
+            }
+
+        </style>
+        <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+ 		<script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+        <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+
+    </head>
+    <body>
+    <apex:pageBlock >
+        <div style="page-break-after:always;border: 2px solid #B5B8B7;padding: 20px;padding-bottom: 35px;">
+
+            <table class="table1">
+                <tr>
+                    <td class="font12px padding4px" style="text-align:center;"><b>LESSOR'S ANNUAL COST STATEMENT</b><br/>
+                        <i>Important - Read attached "Instructions"</i>
+                    </td>
+                    <td class="font12px padding4px" style="border-right: 0;"> <b> OMB Control Number: 3090-0086</b>
+                        <br/><b>  Expiration Date: 11/30/2019</b>
+                    </td>
+                </tr>
+            </table>
+            <div style="padding-left:15px;padding-right:15px;padding-top:4px;padding-bottom:4px;" class="font10px">
+                Paperwork Reduction Act Statement - This information collection meets the requirements of 44 U.S.C. 5 3507, as amended by section 2 of the Paperwork Reduction Act of 1995. You do not need to answer these questions unless we display a valid Office of Management and Budget (OMB) control number. The OMB control number for this collection is 3090-0086. We estimate that it will take 2 hours to read the instructions, gather the facts, and answer the questions. Send only comments relating to our time estimate, including suggestions for reducing this burden, or any other aspects of this collection of information to: U.S. General Services Administration, Regulatory Secretariat Division (MI VI CB), 1800 F Street, NW, Washington, DC 20405.
+            </div>
+            <table class="table2">
+                <tr>
+                    <td colspan="2" class="font12px padding4px">
+                        1. Request for Lease Proposals (RLP)
+                        <br/><span style="margin-left: 25px;font-size:14px;">{!RLPNumber}</span>
+                    </td>
+                    <td colspan="1"  class="font12px padding4px" style="border-right: 0;">2. Statement Date
+                        <br/><span style="margin-left: 25px;font-size:14px;">{!sysDate}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="font12px padding4px" valign="top"> 3. Rental Area (Square Feet)</td>
+                    <td class="font12px padding4px" >3A. Entire Building
+                        <br/>
+                        <span style="margin-left: 30px;font-size:14px;">
+                            <apex:outputText value="{0, number, ###,###.00}">
+                                <apex:param value="{!opCost3}"/>
+                            </apex:outputText>
+                        </span>
+                    </td>
+                    <td class="font12px padding5px" valign="top" style="border-right: 0;">
+                        3B. Leased by Government
+                        <br/>
+                        <span style="margin-left: 30px;font-size:14px;">
+                            Determined at Lease Award
+                            <!--<apex:outputText value="{0, number, ###,###.00}">
+                                <apex:param value="{!opCost3A}"/>
+                            </apex:outputText>-->
+                        </span>
+                    </td>
+                </tr>
+            </table>
+
+
+            <div class="font12px padding4px">
+                4. Building Name and Address (Number, Street, City, State, and Zip Code) <br/>
+                <span style="margin-left: 15px;" class="font12px">{!bldgName}</span><br/>
+                <span style="margin-left: 15px;" class="font12px">{!bldgStreet}</span><br/>
+                <span style="margin-left: 15px;" class="font12px"> {!bldgCity}, {!bldgState}</span><br/>
+                <span style="margin-left: 15px;" class="font12px">{!bldgZip}</span><br/>
+            </div>
+
+            <table class="table4">
+                <tr><th style="text-align:center;font-size:14px;border-right: 0;"><b>SECTION I - ESTIMATED ANNUAL COST OF SERVICES AND UTILITIES </b><br/>
+                    <b>FURNISHED BY LESSOR AS PART OF RENTAL CONSIDERATION </b></th></tr>
+            </table>
+
+
+
+            <table class="table3" width="100%">
+                <tr>
+                    <td width="43%" rowspan="2" class="font12px" halign="center" style="text-align: center;">SERVICES AND UTILITIES</td>
+                    <td  colspan="2" class="font12px padding4px" style="text-align: center;">LESSOR'S ANNUAL COST FOR </td>
+                    <td width="17%" rowspan="2" style="font-weight:bold;text-align: center;border-right: 0;" class="font10px padding4px"><i>FOR GOVERNMENT USE ONLY</i></td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px" width="18%">(a) Entire Building</td>
+                    <td class="font10px padding4px" width="22%">(b)  Government-Leased Area</td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px"><b>A. CLEANING, JANITOR AND/OR CHAR SERVICE </b>
+                        <br/>
+                        <div class="paddingleft10px paddingtop5px font10px">5. Salaries</div> </td>
+                    <td class="font12px padding5px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost5}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov5}--></td>
+                    <td style="border-right: 0;"></td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">6. Supplies (Wax, cleaners, cloths, etc.)  </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost6}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov6}--></td>
+                    <td style="border-right: 0;"></td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">7. Contract Services (Window washing, waste and snow removal)</td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost7}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov7}--></td>
+                    <td style="border-right: 0;"></td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px"><b class="font12px">B. HEATING </b>
+                        <br/>
+                        <div class="paddingleft10px paddingtop5px">8. Salaries</div> </td>
+                    <td class="font12px padding5px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost8}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov8}--></td>
+                    <td style="border-right: 0;"></td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">9. Fuel&nbsp;("X" one)
+                        <span style="display: inline-block; width: 10px; height: 10px; border: 1px solid black;margin-left:10px;margin-right:5px;">{!oil}</span>Oil
+                        <span style="display: inline-block; width: 10px; height: 10px; border: 1px solid black;margin-right:5px;">{!gas}</span>Gas
+                        <span style="display: inline-block; width: 10px; height: 10px; border: 1px solid black;margin-right:5px;">{!coal}</span>Coal
+                        <span style="display: inline-block; width: 10px; height: 10px; border: 1px solid black;margin-right:5px;">{!electric}</span>Electric
+                    </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost9}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov9}--></td>
+                    <td style="border-right: 0;"></td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">10. System Maintenance and Repair </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost10}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov10}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px"><b>C. ELECTRICAL</b>
+                        <br/>
+                        <div class="paddingleft10px paddingtop5px font10px">11. Current for Light and Power</div>  </td>
+                    <td class="font12px padding5px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost11}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding5px"><!--${!opCostGov11}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">12. Replacement of Bulbs, Tubes, Starters  </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost12}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov12}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">13. Power for Special Equipment   </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost13}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov13}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">14. System Maintenance and Repair (Ballasts, Fixtures, etc.)  </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost14}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov14}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px"><b>D. PLUMBING</b>
+                        <br/>
+                        <div class="paddingleft10px paddingtop5px font10px">15. Water (For all purposes) (Include Sewage Charges)</div>   </td>
+                    <td class="font12px padding5px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost15}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding5px"><!--${!opCostGov15}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">16. Supplies (Soap, towels, tissues not in 6 above)   </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost16}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov16}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">17. System Maintenance and Repair   </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost17}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov17}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+
+                <tr>
+                    <td class="font10px padding4px"><b>E. AIR CONDITIONING </b>
+                        <br/>
+                        <div class="paddingleft10px paddingtop5px font10px">18. Utilities (Include electricity, if not in Cl1)</div>    </td>
+                    <td class="font12px padding5px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost18}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding5px"><!--${!opCostGov18}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">19. System Maintenance and Repair    </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost19}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov19}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px"><b>F. ELEVATORS</b>
+                        <br/>
+                        <div class="paddingleft10px paddingtop5px font10px">20. Salaries (Operators, starters, etc.)</div>     </td>
+                    <td class="font12px padding5px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost20}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding5px"><!--${!opCostGov20}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">21. System Maintenance and Repair   </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost21}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov21}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+            </table>
+            <div style="width=100%;border-top: 1px solid black;"></div>
+            <div class="font12px" style="float:left;"><b>GENERAL SERVICES ADMINISTRATION</b></div>
+            <div class="font12px" style="float:right;"><b>GSA 1217</b> (REV. 11/2016) <b>Page&nbsp;1</b></div>
+        </div>
+
+
+        <div style="page-break-after:always;border: 2px solid #B5B8B7;padding: 20px;padding-bottom: 35px;">
+            <table class="table3" width="100%">
+                <tr>
+                    <td width="43%" class="font10px padding5px"><b>G. MISCELLANEOUS (To the extent not included on Page 1)</b>
+                        <br/>
+                        <div class="paddingleft10px paddingtop5px font10px">22. Building Engineer and/or Manager</div>    </td>
+                    <td width="18%" class="font12px padding5px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost22}"/>
+                        </apex:outputText>
+                    </td>
+                    <td width="22%" class="font12px padding5px"><!--${!opCostGov22}--></td>
+                    <td width="17%" style="border-right: 0;"> </td>
+                </tr>
+
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">23. Security (Watchperson, guards, not janitors)   </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost23}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov23}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">24. Social Security Tax and Workperson's Compensation Insurance  </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost24}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov24}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">25. Lawn and Landscaping Maintenance  </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost25}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov25}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">26. Other (Explain on separate sheet)   </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost26}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov26}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold" class="font10px padding5px paddingleft15px"><b>27. TOTAL </b>  </td>
+                    <td style="font-weight:bold; text-align:right;" class="font12px padding5px"><b>$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost27}"/>
+                        </apex:outputText>
+                    </b></td>
+                    <td class="font12px padding4px"><!--${!opCostGov27}--></td>
+                    <td style="border-right: 0;"><!--$--></td>
+                </tr>
+
+                <tr style="border-top-style: solid !important; border-top-width: thick !important;">
+                    <td colspan="4" style="text-align:center;font-size:12px;border-right: 0;border-top:2px solid black;border-bottom:2px solid black"><b>SECTION II - ESTIMATED ANNUAL COST OF OWNERSHIP EXCLUSIVE OF CAPITAL CHARGES </b> </td>
+                </tr>
+
+
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">28. Real Estate Taxes  </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost28}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov28}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">29. Insurance (Hazard, Liability, etc.)   </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost29}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov29}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">30. Building Maintenance and Reserves for Replacement  </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost30}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov30}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">31. Lease Commission   </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost31}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov31}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+                <tr>
+                    <td class="font10px padding4px paddingleft15px">32. Management   </td>
+                    <td class="font12px padding4px" style="text-align: right;">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost32}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov32}--></td>
+                    <td style="border-right: 0;"> </td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold" class="font10px padding4px paddingleft15px">33. TOTAL   </td>
+                    <td style="font-weight:bold; text-align:right;" class="font12px padding4px">$
+                        <apex:outputText value="{0, number, ###,###.00}">
+                            <apex:param value="{!opCost33}"/>
+                        </apex:outputText>
+                    </td>
+                    <td class="font12px padding4px"><!--${!opCostGov33}--></td>
+                    <td style="border-right: 0;" class="font12px padding4px"><!--$--></td>
+                </tr>
+
+                <tr>
+                    <td class="font12px padding4px">LESSOR'S CERTIFICATION - The amounts entered in Columns (a)
+                        and (b) represent my best estimate as to the annual costs of
+                        services, utilities, and ownership.
+                    </td>
+                    <td class="font12px padding4px" style="border-right: 0;">
+                        34.&nbsp;&nbsp;Signature of:
+                    </td>
+
+                    <td style="text-align:left;border-right: 0;border-left: 0;" class="font12px">
+                        <span style="display: inline-block; width: 10px; height: 10px; border: 1px solid black;margin-left:10px;margin-right:5px;">{!xownerType}</span>Owner
+                    </td>
+                    <td style="text-align:left;border-right: 0;border-left: 0;" class="font12px">
+                        <span style="display: inline-block; width: 10px; height: 10px; border: 1px solid black;margin-left:10px;margin-right:5px;">{!legalAgentType}</span>Legal agent
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:center;" class="font12px padding4px">TYPED NAME AND TITLE  </td>
+                    <td style="text-align:center;" colspan="2" class="font12px padding4px">SIGNATURE</td>
+                    <td style="text-align:center;border-right: 0;" class="font12px padding4px">DATE   </td>
+                </tr>
+                <tr>
+                    <td class="font12px padding4px">34A.  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {!userdetail.Name} </td>
+                    <td colspan="2" class="font12px padding4px">34B.  &nbsp;&nbsp;&nbsp;&nbsp;   <i><b>{!if(sysDate!='',userdetail.Name,'')}</b></i></td>
+                    <td class="font12px padding4px" style="border-right: 0;">34C. {!if(sysDate!='','','')} {!sysDate}   </td>
+                </tr>
+                <tr>
+                    <td class="font12px padding4px">35A.  </td>
+                    <td colspan="2" class="font12px padding4px">35B. </td>
+                    <td class="font12px padding4px" style="border-right: 0;">35C.    </td>
+                </tr>                
+            </table>
+            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <br/><br/><br/><br/><br/><br/>
+            <div style="width=100%;border-top: 1px solid black;"></div>
+            <div class="font12px" style="width=100%;float:right;"><b>GSA 1217</b> (REV. 11/2016) <b>Page&nbsp;2</b></div>
+        </div>
+
+        <div style="border: 2px solid #B5B8B7;padding: 20px;padding-bottom: 35px;">
+            <center class="font12px padding4px"><b>INSTRUCTIONS</b></center>
+            <div class="font12px padding4px">In acquiring space by lease, it is the established policy of GSA to enter into leases only at rental charges which are consistent
+                with prevailing scales in the community for facilities.
+            </div>
+            <br/>
+            <center class="font12px padding4px"><b>ITEM NUMBER</b></center>
+            <br/>
+
+            <div class="font12px padding4px" style="font:10px !important;">
+                <table>
+                    <tr>
+                        <td valign="top">
+                            1.
+                        </td>
+                        <!--<td valign="top">
+
+                        </td>-->
+                        <td valign="top" colspan="2">
+                            Enter the Government lease or Request for Lease Proposals (RLP) number, if available.<br/><br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  valign="top">
+                            2.
+                        </td>
+                        <!--<td valign="top">
+
+                        </td>-->
+                        <td valign="top" colspan="2">
+                            Enter the date that your statement was prepared and signed.<br/><br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  valign="top">
+                            3.
+                        </td>
+                        <td valign="top">
+                            A.
+                        </td>
+                        <td valign="top">
+                            Enter in this block a computation of the rentable area (multiple tenancy basis) for the entire building. The rentable area shall be computed by
+                            measurement to the inside finish of permanent outer building walls to the inside finish of corridor walls (actual or proposed) or to other permanent
+                            partitions, or both. Rentable space is the area for which a tenant is charged rent. It is determined by the building owner and may vary by city or by
+                            building within the same city. The rentable space may include a share of building support/common areas such as elevator lobbies, building corridors,
+                            and floor service areas. Floor services areas typically include restrooms, janitor rooms, telephone closets, electrical closets, and mechanical rooms.
+                            The rentable space generally does not include the vertical building penetrations and their enclosing walls, such as stairs, elevator shafts, and vertical
+                            ducts.<br/><br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            3.
+                        </td>
+                        <td valign="top">
+                            B.
+                        </td>
+                        <td valign="top">
+                            Enter in this block a computation of the rentable area to be rented to the Government. For this area, follow the procedure as outlined above, except that
+                            measurements are to be made only to the center of the partitions which separate the area to be rented by the Government from adjoining rented or rentable areas.<br/><br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            4.
+                        </td>
+                        <!--<td valign="top">
+
+                        </td>-->
+                        <td valign="top" colspan="2">
+                            Identify the property by name and address.<br/><br/>
+                        </td>
+                    </tr>
+
+                </table>
+                <br/>
+            </div>
+            <center class="font12px padding4px"> <b>SECTION I</b></center>
+            <center class="font12px padding4px">ESTIMATED ANNUAL COST OF SERVICES AND UTILITIES</center>
+
+            <br/>
+
+            <div class="font12px padding4px" style="font:10px !important;">
+                <table>
+                    <tr>
+                        <td valign="top" width="6%">
+                            5. - 26.
+                        </td>
+                        <!--<td valign="top">
+
+                        </td>-->
+                        <td valign="top" colspan="2">
+                            The services and utilities listed in this section are required in most of our rented space whether furnished by the Government or
+                            the Lessor. <br/><br/>
+                            Carefully review the Request for Lease Proposals (RLP) and/or the proposed lease to identify those services and utilities to be furnished by you as
+                            part of the rental consideration. Then enter your best cost estimate, or the actual cost from the previous year, for each of these services and
+                            utilities in column (a) for the entire building and in column (b) for the area to be rented to the Government. If any service or utility furnished for the
+                            space rented by the Government is not furnished throughout the building, or the cost of a service or utility furnished to the Government space
+                            exceeds the cost of the same service or utility furnished to other rented space, explain on a separate sheet. For convenience, each major category
+                            has been divided into separate items such as salaries and supplies so that they may be entered when applicable. However, in the event that your
+                            records are not maintained for each item contained in Section l, 5 through 26, the total for a major category (A through F) may be entered under the
+                            category heading in columns (a) and (b) in lieu of the specific items. System maintenance and repairs includes the annual cost of such items as
+                            oiling, inspecting, cleaning, regulating, and routine replacement costs.
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <br/>
+
+            <center class="font12px padding4px"> <b>SECTION II</b></center>
+            <center class="font12px padding4px">ESTIMATED ANNUAL COST OF OWNERSHIP EXCLUSIVE OF CAPITAL CHARGES</center>
+
+
+            <div class="font12px padding4px" style="font:10px !important;">
+                Items 28 through 32 will be useful in the Government's determination of the fair market value of the space to be rented and shall be completed irrespective
+                of whether Section I is applicable, as follows:
+                <br/>
+                <br/>
+                <table>
+                    <tr>
+                        <td valign="top">
+                            28.
+                        </td>
+                        <td valign="top">
+                            Include all applicable real estate taxes imposed upon the property.<br/><br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            29.
+                        </td>
+                        <td valign="top">
+                            Enter the annual cost of fire, liability, and other insurance carried on the real estate.<br/><br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            30.
+                        </td>
+                        <td valign="top">
+                            Enter the annual cost of wages, materials, and outside services used in repairs and maintenance of the building itself and all similar repairs and
+                            maintenance of the building itself and all similar repairs and maintenance costs not included in Section I above (Heating, Electrical, Plumbing,
+                            Air Conditioning, and Elevators). This includes major repairs and changes in the nature of a permanent improvement such as annual cost to replace
+                            relatively short-lived items such as boiler, compressors, elevators, and roof coverings.<br/><br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            31.
+                        </td>
+                        <td valign="top">
+                            Enter any lease commission which you may be responsible for due to the Government leasing action.<br/><br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            32.
+                        </td>
+                        <td valign="top">
+                            Include administrative expenses such as agency fees, legal fees, auditing, and advertising. Do not include financial charges such as income or
+                            corporate taxes or organization expense.<br/><br/>
+                        </td>
+                    </tr>
+                </table>
+                34. - 35. Complete Lessor certification.
+            </div>
+            <br/>
+            <div style="width=100%;border-top: 1px solid black;"></div>
+            <div class="font12px" style="width=100%;float:right;"><b>GSA 1217</b> (REV. 11/2016) <b>Page&nbsp;3</b></div>
+        </div>
+    </apex:pageBlock>
+    </body>
+    </html>
+</apex:page>

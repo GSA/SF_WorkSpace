@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>GSA_Email_Notification</fullName>
+        <description>GSA Email Notification</description>
+        <protected>false</protected>
+        <recipients>
+            <field>GSA_Inbox__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>noreply-salesforce-ws@gsa.gov</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/RET_Case_Notification_GSA</template>
+    </alerts>
+    <alerts>
+        <fullName>RET_Case_Submission</fullName>
+        <description>RET Case Submission</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderAddress>noreply-salesforce-ws@gsa.gov</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/RET_Case_Notification_Lessor</template>
+    </alerts>
+    <rules>
+        <fullName>RET Case Submission</fullName>
+        <actions>
+            <name>GSA_Email_Notification</name>
+            <type>Alert</type>
+        </actions>
+        <actions>
+            <name>RET_Case_Submission</name>
+            <type>Alert</type>
+        </actions>
+        <active>false</active>
+        <criteriaItems>
+            <field>Case.Status</field>
+            <operation>equals</operation>
+            <value>Submitted</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Real Estate Taxes</value>
+        </criteriaItems>
+        <description>Email to send once case has been submitted</description>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+</Workflow>

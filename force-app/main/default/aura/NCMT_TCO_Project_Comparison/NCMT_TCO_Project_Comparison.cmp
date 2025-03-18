@@ -1,0 +1,173 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId,lightning:isUrlAddressable" access="global" controller="NCMT_TCOReportDataSelector">
+    <ltng:require scripts="{!$Resource.Chart_JS_2_9_3 +'/Chart.min.js'}"/>
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:handler name="render" value="{!this}" action="{!c.onRender}"/>
+
+    <aura:attribute name="comparisonData" type="NCMT_TCO_ReportData" />
+    <aura:attribute name="reportType" type="String" />
+    <aura:attribute name="urlReportType" type="String" />
+    <aura:attribute name="project1" type="String" />
+    <aura:attribute name="project1Name" type="String" />
+    <aura:attribute name="project2" type="String" />
+    <aura:attribute name="project2Name" type="String" />
+    <aura:attribute name="project3" type="String" />
+    <aura:attribute name="project3Name" type="String" />
+    <aura:attribute name="project4" type="String" />
+    <aura:attribute name="project4Name" type="String" />
+    <aura:attribute name="project5" type="String" />
+    <aura:attribute name="project5Name" type="String" />
+    <aura:attribute name="printMode" type="String" />
+    <aura:attribute name="isLoaded" type="Boolean" default="true"/>
+    <aura:attribute name="selectedLookUpRecords" type="sObject[]" default="[]"/>
+    <aura:attribute name="activeSections" type="List" default="[]"/>
+    <aura:attribute name="selectedCostType" type="String" />
+    <aura:attribute name="displayCostType" type="String" />
+
+    <aura:handler name="change" value="{!v.selectedLookUpRecords}" action="{!c.reportChange}"/>
+    <aura:attribute name="columns" type="List"/>
+
+    <lightning:card title="{!'TCO Project Comparison'}">
+    
+        <lightning:layout multipleRows="true" class="headerLayout">
+            <lightning:layoutItem padding="around-small" class="headerCol" size="6" >
+              <c:NCMT_MultiSelectLookup objectAPIName="NCMT_Project__c"
+                pageName='Project_Comparison'
+                IconName="standard:account"
+                lstSelectedRecords="{!v.selectedLookUpRecords}"
+                maxSelectedLength = '5'
+                label="Select Up To Five Projects To Compare"/>
+                
+              
+            </lightning:layoutItem>
+            
+
+            
+              <aura:if isTrue="{!v.printMode != 'true'}">
+                <lightning:layoutItem size="2" padding="around-small"  flexibility="auto, no-grow">
+                  <lightning:select name="reportType" label="Show" class="filterSelect" onchange="{!c.reportChange}" value="{!v.reportType}">
+                    <option value="BasicInputs">Basic Inputs</option>
+                    <option value="BasicCostOutputs">Basic Cost Outputs</option>
+                    <option value="DetailedCostOutputs">Detailed Cost Outputs</option>
+                    <option value="DetailedSummary">Detailed Summary</option>
+                    <option value="ExpenditureCurve">Expenditure Curve</option>
+                  </lightning:select>
+                
+                </lightning:layoutItem>
+              </aura:if>
+              <lightning:layoutItem size="2" padding="around-small"  flexibility="auto, no-grow">
+                <aura:if isTrue="{!v.printMode != 'true'}">
+                    <lightning:select name="costType" label="Display Cost" class="filterSelect" onchange="{!c.reportChange}" value="{!v.selectedCostType}">
+                        <option value="cost">Constant Dollar</option>
+                        <option value="escalatedCost">Escalated Cost</option>
+                        <option value="escalatedDiscountedCost">Escalated &amp; Discounted Cost</option>
+                    </lightning:select>
+                    
+                </aura:if> 
+                <aura:if isTrue="{!v.printMode == 'true'}">
+                    <h2 class="slds-text-heading_small" style="display:inline-block;">Cost Displayed:&nbsp;</h2> <lightning:formattedText value="{!v.displayCostType}"/>
+                </aura:if>
+              </lightning:layoutItem>
+
+              <lightning:layoutItem size="2" padding="around-small"  flexibility="auto, no-grow">
+                  <div style="max-height:80px;">
+                    <aura:if isTrue="{!and(v.printMode != 'true')}">
+                      <div style="height:25px;"/>
+                      <lightning:button variant="brand" onclick="{!c.printMe}" label="Print View" title="Print View"/>
+                     
+                    </aura:if>
+                    <aura:if isTrue="{!v.printMode == 'true'}">
+                
+                        <lightning:button variant="brand" onclick="{!c.funPrint}" label="Print Page" title="Print View"/>
+                    </aura:if>
+                  </div>
+              </lightning:layoutItem>
+          
+            
+        </lightning:layout>   
+    
+    </lightning:card>
+
+    <br/>
+    <aura:if isTrue="{! !v.isLoaded }">
+          <lightning:spinner alternativeText="Loading" />
+      </aura:if>
+
+    <lightning:card>
+      
+      <lightning:accordion allowMultipleSectionsOpen="true" activeSectionName="{!v.activeSections}">
+
+      <aura:iteration items="{!v.comparisonData.sections}" var="section">
+  
+        <lightning:accordionSection name="{!section.name}" label="{!section.headerLabel}">
+          <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+            <!--HEADER ROW-->
+            <thead>
+            <tr>
+              <th>
+                &nbsp;
+              </th>
+              <!--For now, all charts group projects so 1 column, tweak if charts displayed
+                side-by-side without isGroupdProjectRow, which works for the charts
+              -->
+              <!--<aura:if isTrue="{! section.charts.length == 0 }">-->
+                <aura:iteration items="{!v.comparisonData.headers}" var="project">
+                  <th class="slds-text-align_center">
+                    {!project}
+                  </th>
+                </aura:iteration>
+                <!--
+              </aura:if>
+              <aura:if isTrue="{! section.charts.length > 0 }">
+                <th class="slds-text-align_center" >
+                  <div style="width: 10em;">
+                    Projects
+                  </div>
+                </th>
+              </aura:if>-->
+            </tr>
+            </thead>
+            <tbody>
+              <aura:iteration items="{!section.rows}" var="row">
+                <tr>
+
+                  <!--HEADER COLUMN-->
+                  <td class="headerCol" >
+                    <b>{!row.headerCol}</b>
+                  </td>
+                
+                  <!--CHARTS-->
+                  <aura:iteration items="{!row.charts}" var="chart">
+                    <td colspan="{!(row.isGroupdProjectRow ? v.comparisonData.headers.length : 1)}">
+                      <div class="{!'chart-container-' +chart.uniqueId}" style="position: relative; height:50vh; width:60vw">
+                        <canvas id="{!chart.uniqueId}"></canvas>
+                      </div>
+                    </td>
+                  </aura:iteration>
+
+                  <!--PROJECT DATA CELLS-->
+                  <aura:iteration items="{!row.cells}" var="cell">
+                    <td>
+                      <div style="width: 5em;">
+                        <aura:if isTrue="{!row.valueMeta.dataType=='text'}">
+                          <lightning:formattedText value="{!cell.value}"/>
+                        </aura:if>
+                        <aura:if isTrue="{!row.valueMeta.dataType=='datetime'}">
+                          <lightning:formattedDateTime value="{!cell.value}" year="numeric" month="numeric" day="numeric" timeZone="UTC"/>
+                        </aura:if>
+                        <aura:if isTrue="{!row.valueMeta.dataType=='number'}">
+                          <lightning:formattedNumber value="{!cell.value}" style="{!row.valueMeta.numberStyle}" 
+                            maximumFractionDigits="{!row.valueMeta.maximumFractionDigits}" minimumFractionDigits="{!row.valueMeta.minimumFractionDigits}"/>
+                        </aura:if>
+                      </div>
+                    </td>
+                  </aura:iteration>
+                </tr>
+              </aura:iteration>
+            </tbody>
+          </table>
+        </lightning:accordionSection>
+      </aura:iteration>
+    </lightning:accordion>
+  </lightning:card>
+
+</aura:component>

@@ -1,0 +1,13 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global" >
+        <aura:attribute name="pageURL" type="String" />
+    	<aura:attribute name="urlParam" type="String" default="" />
+        <aura:handler name="init" value="{! this }" action="{! c.doInit }"/>
+	<div style="margin: 0px -28px 0px 0px;">
+        <iframe id="myIframe" src="{!$Label.c.LOP_Community_Base_URL+'sfsites/c/apex/'+v.pageURL+v.urlParam}" 
+            class="myIframe"
+            style="border:0px;background-color:#FFF;overflow:hidden;align:left"  
+            scrolling="no"
+            width="102%"            
+            onload="{! c.iframeLoad }" />
+    </div>
+</aura:component>

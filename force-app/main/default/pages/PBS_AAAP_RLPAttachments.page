@@ -1,0 +1,77 @@
+<apex:page StandardController="PBS_AAAP_RLP_Attachments__c" extensions="PBS_AAAP_RLPAttachmentsController">
+
+    <apex:pageMessages />
+    <apex:form id="newOffer" style="padding:100px 200px 100px 200px">
+
+
+        <apex:outputPanel id="RLPAttachments" layout="block">
+            <Table id="form2">
+                <tr>
+                    <td>
+                        <apex:outputLabel value="1. RLP:" for="fileName"/>
+                        <br/>
+                        <apex:outputText value="{!RLPattachment.PBS_AAAP_RLP__c}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <apex:outputLabel value="2. Title*:" for="fileName"/>
+                        <br/>
+                        <apex:inputField value="{!RLPattachment.PBS_AAAP_Title__c}" id="fileName"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <apex:outputLabel value="3. Upload Attachment*:" for="file"/>
+                        <br/>
+                        <apex:inputFile value="{!att.body}" filename="{!att.name}" id="file"/>
+                        <apex:commandButton action="{!upload}" value="Attach"/>
+                    </td>
+                </tr>
+            </Table>
+        </apex:outputPanel>
+        <apex:pageBlock >
+            <apex:pageBlockSection id="block2">
+                <apex:pageBlockTable value="{!attachmentsList}" var="ofratt" id="theTable" rowClasses="odd,even">
+                    <apex:column value="{!ofratt.Name}">
+                        <apex:facet name="header">Attachment #</apex:facet>
+                    </apex:column>
+                    <apex:column value="{!ofratt.PBS_AAAP_Title__c}">
+                        <apex:facet name="header">Attachment Type</apex:facet>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">Attachment Name</apex:facet>
+                        <apex:repeat value="{!ofratt.Attachments}" var="a">
+                            <apex:outputText value="{!a.Name}"/>
+                        </apex:repeat>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">Posted Date</apex:facet>
+                        <apex:repeat value="{!ofratt.Attachments}" var="a">
+                            <apex:outputText value="{0,date,MM/dd/yyyy}">
+                                <apex:param value="{!a.createddate}"/>
+                            </apex:outputText>
+                        </apex:repeat>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">View File</apex:facet>
+                        <apex:repeat value="{!ofratt.Attachments}" var="a">
+                            <apex:outputLink target="_blank" value="/servlet/servlet.FileDownload?file={!a.id}">
+                                <apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
+                                        style="align: right;" alt="Salesforce" title="Salesforce"/>
+                            </apex:outputLink>
+                        </apex:repeat>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">Delete File</apex:facet>
+                    </apex:column>
+
+                </apex:pageBlockTable>
+
+            </apex:pageBlockSection>
+
+        </apex:pageBlock>
+
+
+    </apex:form>
+</apex:page>

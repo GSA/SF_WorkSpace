@@ -1,0 +1,217 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId,lightning:isUrlAddressable" access="global" controller="NCMT_TriageRiskToolCtrl_LC">
+   
+    <aura:attribute name="today" type="Date" />
+    <aura:attribute name="project" type="NCMT_Project__c"/>
+    <aura:attribute name="deliverables" type="NCMT_Project_Deliverable__c[]"/>
+    <aura:attribute name="filterDeliverable" type="NCMT_Project_Deliverable__c"/>
+    <aura:attribute name="processing" type="Boolean"/>
+    <aura:attribute name="urlFunding" type="String"/>
+    <aura:attribute name="urlType" type="String"/>
+    <aura:attribute name="urlDeliv" type="String"/>
+    <aura:attribute name="urlBudget" type="String"/>
+    <aura:attribute name="printMode" type="String"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	
+    <div class="slds-page-header slds-container_xx-large">
+        
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-report" aria-hidden="true" title="Triage Project Deliverables">
+                            <lightning:icon class="slds-icon slds-page-header__icon" iconName="standard:report"/>
+                            <span class="slds-assistive-text">report</span>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate" title="Triage Project Deliverables Report">Triage Project Deliverables</span>
+                                    </h1>
+                            </div>
+                        </div>
+                        <p class="slds-page-header__name-meta">{!v.today}</p>
+                    </div>
+                </div>
+            </div>
+            <!-- PRINT BUTTON -->
+            <div class="prnheader">
+                <aura:if isTrue="{!and(v.printMode != 'true', v.deliverables.length!=0)}">
+               
+                    <button align="right" class="slds-button slds-button_brand" onclick="{!c.printMe}" id="prnBtn">Print View</button>
+                </aura:if>
+                <aura:if isTrue="{!v.printMode == 'true'}">
+               
+                    <button align="right" class="slds-button slds-button_brand" onclick="{!c.funPrint}" id="prnBtn">Print Page</button>
+                </aura:if>
+            </div>
+        </div>
+        
+    </div>
+    
+    <div class="slds-page-header slds-page-header_record-home" style="margin-top:5px;">
+        
+        <aura:if isTrue="{!or(v.project.Id!=null, v.printMode)}">
+            <div>
+                <table class="slds-table slds-no-row-hover slds-table_bordered" style="padding:.5rem">
+                    <tr>
+                        <td scope="row" data-label="Row1" WIDTH="25%">
+                            <aura:if isTrue="{!v.project.Id!=null}">
+                                <div class="slds-truncate" ><b>Project: </b>
+                                    <ui:outputURL label="{!v.project.Name}" value="{!'/' +v.project.Id}" target="_parent"/>
+                                </div>
+                            </aura:if>
+
+                            <div class="slds-truncate" ><b>Funding Type: </b>
+                                <ui:outputText value="{!v.filterDeliverable.Funding_Type__c}" />
+                            </div>
+                            <div class="slds-truncate" ><b>Project Delivery Method: </b>
+                                <ui:outputText value="{!v.filterDeliverable.Project_Delivery_Method__c}" />
+                            </div>
+                        </td>
+                        <td scope="row" data-label="Row1" WIDTH="25%">
+                            <aura:if isTrue="{!v.project.Id!=null}">
+                                <div class="slds-truncate" >
+                                    &nbsp;
+                                </div>
+                            </aura:if>
+                            <div class="slds-truncate" ><b>Project Type: </b>
+                                <ui:outputText value="{!v.filterDeliverable.Project_type__c}" />
+                            </div>
+                            <div class="slds-truncate" ><b>Project Budget: </b>
+                                <ui:outputText value="{!v.filterDeliverable.Project_Budget__c}" />
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </aura:if>
+
+        <aura:if isTrue="{!and(v.project.Id==null,!v.printMode)}">
+            <lightning:recordEditForm objectApiName="NCMT_Project_Deliverable__c"
+                onsubmit="{!c.handleFilter}" 
+            >
+                <lightning:layout horizontalAlign="spread" multipleRows="true">
+                    <lightning:layoutItem flexibility="grow" size="6" >
+                        <lightning:inputField fieldName="Funding_Type__c" value="{!v.filterDeliverable.Funding_Type__c}" required="true" />
+                    
+                    </lightning:layoutItem>
+        
+                    <lightning:layoutItem flexibility="grow" size="6">
+                        <lightning:inputField fieldName="Project_type__c" value="{!v.filterDeliverable.Project_type__c}" required="true"/>
+                    </lightning:layoutItem>
+                
+                    <lightning:layoutItem flexibility="grow" size="6">
+                        <lightning:inputField fieldName="Project_Delivery_Method__c" value="{!v.filterDeliverable.Project_Delivery_Method__c}" required="true"/>
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem flexibility="grow" size="6">
+                        <lightning:inputField fieldName="Project_Budget__c" value="{!v.filterDeliverable.Project_Budget__c}" required="true"/>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            
+                <lightning:layout horizontalAlign="center">
+                    <lightning:button type="submit" name="filter" label="Filter" />
+                </lightning:layout>
+            </lightning:recordEditForm>
+        </aura:if>
+    </div>
+    
+    <div class="item-container slds-form slds-width-fill slds-wrap" style="margin-top:5px;">
+        <div class="slds-form slds-width-fill">
+            
+            <article class="slds-card slds-container_xx-large">
+            	<div  style="{! and(!v.processing, v.deliverables.length==0) ? 'display:block;padding:5px;' : 'display:none;'}">
+                    No results
+                </div>
+                <div style="{! v.processing ? 'display:block;padding:5px;' : 'display:none;'}">
+                    Processing...
+                </div>
+            </article>
+            
+            
+            <article class="slds-card slds-container_xx-large" 
+            	style="{!v.deliverables.length==0 ? 'display:none;' : 'display:block;padding:5px;'}">
+                <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered" aria-multiselectable="true">
+                    <thead>
+                        <tr class="slds-form-element">
+                            <!-- PHASE -->
+                            <td>
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Phase</label>
+                                    
+                                </div>
+                            </td>
+                            <!-- SUBPHASE -->
+                            <td>
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">SubPhase</label>
+                                    
+                                </div>
+                            </td>
+                            <!-- DOCUMENT NAME -->
+                            <td>
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Document Name</label>
+                                    
+                                </div>
+                            </td>
+                            <!-- STATUS -->
+                            <td>
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Status</label>
+                                    
+                                </div>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.deliverables}" var="d">
+                            <tr class="slds-form-element" onchange='{!c.showChanged}'>
+                                <!-- PHASE -->
+                                <td>
+                                    <div class="slds-form-element">
+                                        
+                                        <div class="slds-form-element__control">
+                                           <lightning:formattedText title="Phase" value="{!d.Project_Phases__c}" /> 
+                                        </div>
+                                    </div>
+                                </td>
+                                <!-- SUBPHASE -->
+                                <td>
+                                    <div class="slds-form-element">
+                                        
+                                        <div class="slds-form-element__control">
+                                           <lightning:formattedText title="SubPhase" value="{!d.Project_SubPhase__c}" /> 
+                                        </div>
+                                    </div>
+                                </td>
+                                <!-- DOCUMENT NAME -->
+                                <td>
+                                    <div class="slds-form-element">
+                                        
+                                        <div class="slds-form-element__control">
+                                           <lightning:formattedText title="Document Name" value="{!d.Name}" /> 
+                                        </div>
+                                    </div>
+                                </td>
+                                <!-- STATUS -->
+                                <td>
+                                    <div class="slds-form-element">
+                                        
+                                        <div class="slds-form-element__control">
+                                           <lightning:formattedText title="Status" value="{!d.Status__c}" /> 
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </article>
+        </div>
+    </div>
+
+</aura:component>

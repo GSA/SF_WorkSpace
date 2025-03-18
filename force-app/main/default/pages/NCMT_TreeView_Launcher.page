@@ -1,0 +1,27 @@
+<apex:page showHeader="{!$CurrentPage.parameters.print!='true'}" standardController="NCMT_Tree_structure__c" extensions="NCMT_TreeStructure_CostSelection" lightningStylesheets="true">
+    <apex:slds />
+    <apex:includeLightning />
+    <div id="lightningPage"></div>
+     <script> 
+        var HTMLJSencodedRecId = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.id))}';
+        var HTMLJSencodedFile = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.fileType))}';
+        var HTMLJSencodedEstFormat = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.estFormat))}';
+
+        $Lightning.use("c:NCMT_TreeBranch_App", function(){
+            $Lightning.createComponent("c:NCMT_TreeBranch", {
+                "recordId" : HTMLJSencodedRecId,
+                "level" : 1,
+                "fiscalYear" : {!JSENCODE(fiscalYear)},
+                "fileType" : HTMLJSencodedFile,
+                //"estFormat" : "{!JSENCODE(NCMT_Tree_structure__c.Estimate_Format__c)}" +HTMLJSencodedEstFormat, //only one should have a value
+                "projectId" : "{!JSENCODE(NCMT_Tree_structure__c.Project_ID__c)}"
+            },
+            'lightningPage',
+                function(cmp){
+     
+                });
+        
+        });
+  </script> 
+    
+</apex:page>

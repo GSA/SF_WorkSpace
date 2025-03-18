@@ -1,0 +1,72 @@
+<aura:component>
+    <aura:attribute name='pcs' type='object' />
+
+    <article class="slds-card slds-container_xx-large">
+        <div class="slds-page-header">
+            <div class="slds-page-header__title slds-truncate">
+                <h1>
+                    <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Line Item Summary">
+                        <b>PROJECT COST SUMMARY </b>
+                    </span>
+                </h1>
+            </div>
+        </div>
+        <div class="slds-container_xx-large">
+            <table class="slds-table slds-no-row-hover slds-table_bordered slds-table_col-bordered">
+                <thead class="slds-text-title_caps">
+                    <tr class="slds-truncate slds-line-height_reset">
+                        <th scope="col">
+                            <div class="slds-truncate" title="WBS Code">WBS Code</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Uniformat System Elements">Uniformat System Elements</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Subtotal Direct Cost">Subtotal Direct Cost</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="ECC Cost">ECC Cost</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Direct Cost / GSF">Direct Cost / GSF</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.pcs}" var="p">
+                        <tr class="slds-form-element">
+                            <td scope="col">
+                                <div class="slds-truncate" title="WBS Code">
+                                    {!p.Cost_Category_Code__c}
+                                </div>
+                            </td>
+                            <td scope="col">
+                                <div class="slds-truncate" title="Uniformat System Elements">
+                                    {!p.Cost_Category_Description__c}
+                                </div>
+                            </td>
+                            <td scope="col">
+                                <div class="total-div slds-truncate" title="Subtotal Direct Cost">
+                                    <lightning:formattedNumber value="{!p.CEW_Total_Ditect_Cost__c}" style="currency" currencyCode="USD" />
+                                </div>
+                            </td>
+                            <td scope="col">
+                                <div class=" total-div slds-truncate" title="ECC Cost">
+                                    <lightning:formattedNumber value="{!p.CEW_ECC__c}" style="currency" currencyCode="USD" />
+                                </div>
+                            </td>
+                            <td scope="col">
+                                <div class="total-div slds-truncate" title="Direct Cost / GSF">
+                                    <lightning:formattedNumber value="{!p.CEW_Total_Cost_GSF__c}" style="currency" currencyCode="USD" />
+                                </div>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+        </div>
+    </article>
+    <!-- PAGE SEPARATOR FOR PDF -->
+    <div style="page-break-after: always; margin-top:50px;"></div>
+
+</aura:component>

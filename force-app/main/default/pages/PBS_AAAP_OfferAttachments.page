@@ -1,0 +1,745 @@
+<!-- This Visual Force Page was updated by Henry Dennis on 7/5/22 -->
+
+<apex:page Controller="PBS_AAAP_OfferAttachmentsController" sidebar="false" showHeader="false"
+           standardStylesheets="false" cache="true">
+    <c:PBS_AAAP_PortalPage_Begin ></c:PBS_AAAP_PortalPage_Begin>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/demo_page.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+    <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+    <script type="text/javascript"
+            src="{!$Label.AAAP_JQUERYUI_URL}"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+    <style>
+        .errMessage { color:red;}
+        .blueMessage
+            {
+                color: #002BAD;
+                font-weight: bold;
+            }
+            
+        .buttonyellow {
+            border: 2px solid yellow;
+            height: 19px !important;
+            display: inline-block !important;
+            margin: 0px 0px 0px !important;
+            color: black;
+            background-color: yellow !important;
+            border-radius: 5px !important;
+            padding: 6px;
+            background-position: -5px 145px;
+            color: #333333;
+            font-size: 12px;
+            text-decoration: none;
+            width: 130px;
+            height: 25px;
+            display: inline-block;
+            padding: 7px 10px;
+            text-align: center;
+            font-weight: normal;
+            font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+            -webkit-font-smoothing: antialiased;
+        }
+    
+        .button_example{
+             position: relative;
+             top:-2px;
+             width: 120px;
+             height: 21px;
+             text-align: center;
+             border:1px solid #a1a1a1;
+             -webkit-border-radius: 3px;
+             -moz-border-radius: 3px;
+             border-radius: 5px !important;
+             font-size:12px;
+             font-family:arial, helvetica, sans-serif;
+             padding: 7px 10px;
+             text-decoration:none;
+             display:inline-block;
+             /*text-shadow: -1px -1px 0 rgba(0,0,0,0.3); */
+             color: #333333;
+             background-color: #ffff00; background-image: -webkit-gradient(linear, left top, left bottom, from(#ffff00), to(#BFBF00));
+             background-image: -webkit-linear-gradient(top, #ffff00, #BFBF00);
+             background-image: -moz-linear-gradient(top, #ffff00, #BFBF00);
+             background-image: -ms-linear-gradient(top, #ffff00, #BFBF00);
+             background-image: -o-linear-gradient(top, #ffff00, #BFBF00);
+             background-image: linear-gradient(to bottom, #ffff00, #BFBF00);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#ffff00, endColorstr=#BFBF00);
+        }
+    
+        .button_example:hover{
+             border:1px solid #999900;
+             background-color: #cccc00; background-image: -webkit-gradient(linear, left top, left bottom, from(#cccc00), to(#8c8c00));
+             background-image: -webkit-linear-gradient(top, #cccc00, #8c8c00);
+             background-image: -moz-linear-gradient(top, #cccc00, #8c8c00);
+             background-image: -ms-linear-gradient(top, #cccc00, #8c8c00);
+             background-image: -o-linear-gradient(top, #cccc00, #8c8c00);
+             background-image: linear-gradient(to bottom, #cccc00, #8c8c00);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#cccc00, endColorstr=#8c8c00);
+        }
+
+    </style>
+    
+    <script type="text/javascript">
+    
+        $( document ).ready(function() {
+                 if('{!JSENCODE(pageURLForRedirection)}' == ''){
+            downloadFiles();
+                     }
+        });
+    
+    </script>
+    <head>
+
+        <style type="text/css">
+       
+         h4        {  font-weight:normal; color:#666666; font-size:12px; !imporant}
+
+        </style>
+
+
+        <style type="text/css">
+        #lean_overlay {
+            position: fixed;
+            z-index:100;
+            top: 0px;
+            left: 0px;
+            height:100%;
+            width:100%;
+            background:none;
+            display: none;
+        }
+    
+        .ui-dialog {
+            background:#fff;
+            padding:10px;
+            border:1px solid #999;
+        }
+        #form2 table td{
+            padding-left: 0px;
+        }
+        .apexp{
+            margin: 0px;
+        }
+         
+        .ui-dialog a {
+            float:right;
+            font-weight:bold;
+            padding:3px;
+            color:#999;
+            text-transform:uppercase;
+            font-size:10px;
+        } 
+        #Modal_Prop_Ques15{
+            width: 500px;
+        }
+    
+        .col1   {text-align: left;
+                 width: 400px;}
+        .col2   {text-align: center;
+                 width: 230px;}
+        .tabbed-table table td {background:#fff;}
+        h2        {color:#fff; font-size:80%; font-weight:bold; padding-left:40px; width:80%;}     
+       
+       .offerTitle{font-size:16px;
+            color:#002bad;
+            font-weight:bold;
+        }
+        p, .formwrap td {
+            padding-top: 10px; !important
+        }
+
+
+        </style>
+
+        <style type="text/css">
+        p.thick {color:red;font-weight:bold;}
+        
+       
+        #searchTable.tabbed-table h3 {float:none !important; font-size:20px;}
+        #searchTable.tabbed-table table {margin:0px;width:800px !important; border:0px;}
+        #searchTable.tabbed-table  {width:800px;padding:0px;margin-top:20px; border:0px;background:none;}
+        #searchTable.tabbed-table table tr {height:20px !important;}
+        #searchTable.tabbed-table table td.labelCol {background:#ccc; font-weight:bold;}
+        #searchTable.tabbed-table table td {width:25%;}
+        .tabbed-table table {width:800px !important;}
+        .tabbed-table {width:800px !important;}
+            .tabbed-table table th{
+                padding-left: 5px;
+            }
+
+        </style>
+        <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+        <script type="text/javascript"
+                src="{!$Label.AAAP_JQUERYUI_URL}"></script>
+        <script src="{!URLFOR($Resource.modaljquery)}"></script>
+        <apex:includescript value="{!$Resource.showpopup}"/>
+        <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+        
+        <script type="text/javascript">
+        console.log('{!pageURLForRedirection}');
+        if('{!JSENCODE(pageURLForRedirection)}' != ''){
+            window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
+			window.parent.document.body = document.createElement('body');            
+        }
+        else{
+            window.parent.document.body.scrollTop = 0;
+            window.parent.document.documentElement.scrollTop = 0;
+        }            
+
+            var j$ = jQuery.noConflict();
+
+            function showOtherDescription(fileNameField) {
+                var v = document.getElementById(fileNameField).value;
+                if (v === 'Other') {
+                    j$('#OtherDescriptionPanel').css('display', 'block');
+                } else{
+                    j$('#OtherDescriptionPanel').css('display', 'none');
+                }
+            }
+                        
+            function activateNext(){
+                console.log('DONE');
+                j$('#buttonsToActivate').css('visibility','visible');
+                j$('#loadingLoading').css('display','none');
+            }
+            
+            function exitOffer() {
+                var confirm1 = j$('<div></div>').html("Please make sure that, you have saved changes to the offer, before leaving from this page.").dialog({
+                    autoOpen: false,
+                    title: '',
+                    modal: true,
+                    position: ['center', 'center'],
+                    buttons: {
+                        'OK': function () {
+                            j$(this).dialog('close');
+                            actionCancel();
+                        },
+                        'Cancel': function () {
+                            j$(this).dialog('close');
+                        }
+                    }
+                });
+
+                confirm1.dialog('open');
+            }
+
+            j$(document).ready(function () {
+                
+                try{
+                j$(".fileName1 option[value='Lessors Annual Cost Statement (Form 1217 attachment)']").remove();
+                j$(".fileName1 option[value='Lessors Annual Cost Statement (Form 1217)']").remove();
+                j$(".fileName1 option[value='Offeror GSA Form 1364']").remove();
+                j$(".fileName1 option[value='Form 1364 AAAP']").remove();
+                j$(".fileName1 option[value='Other']").remove();
+                j$(".fileName1 option[value='Energy Star or Other Efficiency Improvements Supporting Documentation']").remove();
+                j$(".fileName1 option[value='Historic Property / Historic District Supporting Documentation']").remove();
+                j$(".fileName1 option[value='Security Unit Price List']").remove();
+                j$(".fileName1 option[value='Small Business Subcontracting Form']").remove();
+                j$(".fileName1 option[value='Proof of Ownership']").remove();
+                j$(".fileName1 option[value='Proof of Local Zoning Compliance']").remove();
+                j$(".fileName1 option[value='Conditional Commitment of Funds']").remove();
+                j$(".fileName1 option[value='Right to Represent Ownership']").remove();
+                j$(".fileName1 option[value='Certificate of Occupancy - Building']").remove();
+                j$(".fileName1 option[value='Foreign Ownership / Foreign Financing Representation']").remove();
+                j$(".fileName1 option[value='Brokerage Commission Agreement (if applicable)']").remove();
+                j$(".fileName1 option[value='LEED or Green Globes Supporting Documentation']").remove();
+                j$(".fileName1 option[value='Form 3517B - General Clauses']").remove();
+                j$(".fileName1 option[value='Offeror GSA Form 1364']").remove();
+                j$(".fileName1 option[value='Offeror Form 1217- Lessors Annual Cost Statement']").remove();
+                j$(".fileName1 option[value='Fire Life Safety Evaluation - Form 12000']").remove();
+                j$(".fileName1 option[value='Confirmation of Rent']").remove();
+                j$(".fileName1 option[value='Test Fit Layout']").remove();
+                j$(".fileName1 option[value='Conditional Commitment of Funds']").remove();
+                j$(".fileName1 option[value='Proof of Local Zoning Compliance']").remove();
+                j$(".fileName1 option[value='Proof of Property Ownership or Control']").remove();
+                j$(".fileName1 option[value='Historic Property / Historic District Supporting Documentation']").remove();
+                j$(".fileName1 option[value='Conflict of Interest Disclosure']").remove();
+                j$(".fileName1 option[value='Fire / Life Safety Supporting Documentation']").remove();
+                j$(".fileName1 option[value='Vending Facility Exclusivity Arrangements']").remove();
+                j$(".fileName1 option[value='Legal Description of Property']").remove();
+                j$(".fileName1 option[value='Parking Plan']").remove();
+                j$(".fileName1 option[value='Architectural Modernization Plans']").remove();
+                j$(".fileName1 option[value='Asbestos Management Plans']").remove();
+                j$(".fileName1 option[value='Scaled Floor Plans / CAD Drawings']").remove();
+                j$(".fileName1 option[value='Vending Facility Exclusivity Arrangements']").remove();
+                j$(".fileName1 option[value='Building Amenities Detail - Existing or Planned']").remove();
+                j$(".fileName1 option[value='Energy Star or Other Energy Efficiency Improvements Supporting Documentation']").remove();
+                j$(".fileName1 option[value='National Environmental Policy Act Documentation']").remove();
+                j$(".fileName1 option[value='National Historic Preservation Act Documentation']").remove();
+                j$(".fileName1 option[value='Small Business Subcontracting Form']").remove();
+                j$(".fileName1 option[value='Certificate of Occupancy - Building']").remove();
+                j$(".fileName1 option[value='Foreign Ownership / Foreign Financing Representation']").remove();
+                j$(".fileName1 option[value='LEED or Green Globes Supporting Documentation']").remove();
+                j$(".fileName1 option[value='Seismic Certificate']").remove();
+                //j$(".fileName1 option[value='Other]").remove();
+                //j$(".fileName1 option[value='Offeror Form 1217- Lessor's Annual Cost Statement Attachment']").remove();
+                
+                }
+                catch(ex){
+                    alert(ex);
+                }
+                
+                var v = j$('[id$="fileName"]').val();
+                console.log('Onload File type name selected value: "' + JSON.stringify(v) + '"');
+                if (v === 'Other') {
+                    console.log('about to make the Other Description field visible...');
+                    j$('#OtherDescriptionPanel').css('display', 'block');
+                }
+                
+                //added by syam display msg when submitted offer is saved.
+                draftMsgFlag = j$('input[id=' + "'{!$Component.offerattachmentsform.draftMsgFlag}'" + ']').val();
+                if (draftMsgFlag == 'true') {
+                    var confirm1 = j$('<div></div>').html("Your offer is no longer submitted. Offer status is updated to 'Draft' status and needs to be submitted again.").dialog({
+                        autoOpen: false,
+                        title: '',
+                        modal: true,
+                        position: ['center', 'center'],
+                        buttons: {
+                            'OK': function () {
+                                j$(this).dialog('close');
+                            }
+                        }
+                    });
+
+                    confirm1.dialog('open');
+                }
+
+
+                var addrFlag = sessionStorage.getItem("addrFlag");
+                j$('input[id=' + "'{!$Component.offerattachmentsform.addrFlag}'" + ']').val(addrFlag);
+                addrFlag = j$('input[id=' + "'{!$Component.offerattachmentsform.addrFlag}'" + ']').val();
+                j$(".tablesorter").dataTable({
+                    "sScrollY": "400px",
+                    "bAutoWidth": true,
+                    "bPaginate": true,
+                    "bJQueryUI": true,
+                    "bScrollCollapse": true
+
+                });
+                j$('.dataTables_length').css("display", "none");
+                j$('.myAppTable').find('.dataTables_filter').css("display", "none");
+                j$('.myAppTab').find('.dataTables_filter').css("display", "none");
+                j$(".tablesorter tr:odd").css("background-color", "#CFEEF8");
+                j$(".tablesorter tr:even").css("background-color", "#F3F3EC");
+
+
+            });
+
+
+        </script>
+    </head>
+
+    <div id="wrapper">
+          
+        <c:inside_header />
+        <div id="content" class="attachments"><!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
+            <apex:form id="dummy">          
+                <apex:actionFunction name="downloadFiles" action="{!DownloadAllFiles}" oncomplete="activateNext();"/>
+            </apex:form>
+            <apex:panelGrid rendered="{!!isValidUser}">
+                <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+
+                <apex:messages styleClass="errMessage" id="message"/>
+
+            </apex:panelGrid>
+            <apex:panelGroup rendered="{!isValidUser}">
+                <c:PBS_AAAP_ProgressBar myValue="{!submitOffer.Id}" step="6" />
+            </apex:panelGroup>
+
+            <apex:form id="offerattachmentsform" styleClass="formwrap" rendered="{!isValidUser}"
+                       style="margin-right: 50px;">
+                
+                <apex:actionFunction name="submitOffer" action="{!actionSaveAndSubmitOffer}">
+                </apex:actionFunction>
+                <apex:actionFunction name="checkErrors" action="{!actionCheckErrors}">
+                </apex:actionFunction>
+                <apex:actionFunction name="actionCancel" action="{!actionCancel}">
+                </apex:actionFunction>
+                
+
+                <apex:inputHidden id="draftMsgFlag" value="{!draftMsgFlag}"/>
+                <apex:inputHidden value="{!pageUrl}" id="pgUrl" />                   
+                
+                <apex:outputPanel rendered="{!showAttachmentsPage}"><h3 class="blue">Offer Attachments</h3>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!!showAttachmentsPage}"><h3 class="blue">Submit Offer </h3>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!!showSubmitOfferButton && showAttachmentsPage}">
+                    <apex:outputLabel styleClass="blueMessage"
+                                      value="**The open period is closed - You may create and save draft offers at this time; however you may not submit your offers until the next open period. The Submit Offer button will reappear during the next open period."/>
+                    <br/>
+                </apex:outputPanel>
+                <apex:outputPanel id="errPanel">
+                    <apex:messages styleClass="errMessage"/>
+                </apex:outputPanel>
+                <apex:inputHidden value="{!addrFlag}" id="addrFlag"/>
+                <apex:outputPanel id="AttachmentsForm1" layout="block" rendered="{!showAttachmentsPage}">
+                   
+
+                    <div id="Modal_Prop_Ques15" style="display:none; background:#eee; border:1px solid #666;
+                                           border-radius:5px; padding:15px;position:relative">
+                        <p>
+                            A floor plan of the offered space(s) is required in order to submit. If you have selected
+                            'Agent' or 'Other' under #8 of the Property Ownership page, an Authorization to Represent
+                            the Ownership document type is required. The SAM Registration, Seismic Certification (if
+                            applicable) and the Fire Life Safety Evaluation are not required to submit your offer, but
+                            are required prior to lease award.
+                        </p>
+                    </div>
+                    <Table id="form2" style="display: inline-block;">
+                        <tr>
+                            <td colspan="2">
+                                <apex:outputLabel style="font-size:16px;font-weight:bold;"
+                                                  value="Step 1: Select the attachment type:" for="fileName"/>
+                                <span class="required">*</span>&nbsp;&nbsp;<a class="popup" href="#Modal_Prop_Ques15"><img src="{!$Resource.Info_Icon}"/></a>
+                                <br/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td  style="width: 40%;">                            
+                                <!-- Henry Dennis replaced the following two lines of code 07/02/2022 for story SFWS-1720 with below modified code
+                                <apex:inputField value="{!offerattachment.PBS_AAAP_Attachment_Type__c}" id="fileName" styleClass="fileName1">
+                                </apex:inputField> -->
+                                
+                                <!--THE MODIFIED CODE-->
+                                <apex:inputField value="{!offerattachment.PBS_AAAP_Attachment_Type__c}" id="fileName" styleClass="fileName1" onchange="showOtherDescription('{! $Component.fileName }')">
+                                </apex:inputField>
+                            </td>
+                         <!--Commented by Ramya 07/22-->   
+                           <!-- <td style="width: 58%;">
+                                <div id="OtherDescriptionPanel" style="display: none; position: relative; margin-left: -60px;"> 
+                                    <apex:outputText id="otherDescrLabel" value="Other: " />
+                                    <apex:inputField id="otherDescrText" value="{!offerattachment.Document_Description__c}" style="font-size: 14px;" />
+                                </div>
+                            </td> -->                
+                            <!--END OF MODIFIED CODE-->                
+                            
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:70px;">
+                                <apex:outputLabel style="font-size:16px;font-weight:bold;"
+                                                  value="Step 2: Click the Choose File to find the file:" for="file"/>
+                                <span class="required">*</span><br/><br/>
+                                <apex:inputFile value="{!attbody}" filename="{!attname}" id="file"/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" style="height:4px;">
+                                <apex:outputLabel style="font-size:16px;font-weight:bold;"
+                                                  value="Step 3: Click attach:"/>
+                                <br/><br/>
+                                <apex:commandButton style="margin-top:2;" action="{!upload}" value="Attach"/>
+                                <br/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">
+
+                                <apex:outputPanel rendered="{!showAttachmentsPage}">
+                                    <apex:outputLabel ><font color="#002bad">
+                                            Successfully uploaded attachments will appear in the table below.
+                                            Follow steps 1 through 3 to add additional attachments.</font>
+                                    </apex:outputLabel>
+                                </apex:outputPanel>
+
+                            </td>
+                        </tr>
+                    </Table>
+
+
+                    <apex:pageBlock >
+                        <div id="searchTable" class="tabbed-table">
+                            <h3>Attachments List</h3>
+                            <apex:pageBlockTable value="{!seqNumList}" width="100%" var="ofratt" id="theTable" rowClasses="odd,even">
+                                <apex:column style="width: 14% !important;" value="{!ofratt.i}">
+                                    <apex:facet name="header">Attachment #</apex:facet>
+                                </apex:column>
+                                <apex:column style="width: 22% !important;" value="{!ofratt.offratts.PBS_AAAP_Attachment_Type__c}">
+                                    <apex:facet name="header">Attachment Type</apex:facet>
+                                </apex:column>
+                                <apex:column style="width: 21% !important;">
+                                    <apex:facet name="header">Attachment Name</apex:facet>
+                                    <!--<apex:repeat value="{!ofratt.offratts.Attachments}" var="a">-->
+                                        <apex:outputText value="{!ofratt.file.Name}"/>
+                                    <!--</apex:repeat>-->
+                                </apex:column>
+                                <apex:column style="width: 17% !important;">
+                                    <apex:facet name="header">Date Submitted</apex:facet>
+                                    <!--<apex:repeat value="{!ofratt.offratts.Attachments}" var="a">-->
+                                        <apex:outputText value="{0,date,MM/dd/yyyy}">
+                                            <apex:param value="{!ofratt.file.createddate}"/>
+                                        </apex:outputText>
+                                    <!--</apex:repeat>-->
+                                </apex:column>
+                                <apex:column style="width: 10% !important;">
+                                    <apex:facet name="header">View File</apex:facet>
+                                    <!--<apex:repeat value="{!ofratt.offratts.Attachments}" var="a">-->
+                                        <apex:outputLink target="_blank"
+                                                         value="{!ofratt.file.link}">
+                                            <apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
+                                                    style="align: right;" alt="Salesforce" title="Salesforce"/>
+                                        </apex:outputLink>
+                                    <!--</apex:repeat>-->
+                                </apex:column>
+                                <apex:column style="width: 11% !important;">
+                                    <apex:facet name="header">Delete File</apex:facet>
+
+                                    <apex:commandLink action="{!actionDeleteAttachment}"
+                                                      onclick="var con = confirm('Are you sure?');if(con==false)return false;"
+                                                      >
+                                        <apex:image url="{!URLFOR($Resource.gsa_common, '/images/delete-icon.png')}"
+                                                    style="align: right;" alt="delete" title="Delete"/>
+                                        <apex:Param assignTo="{!attachmentId}" name="attId"
+                                                    value="{!ofratt.offratts.Id}"/>
+                                    </apex:commandLink>
+
+                                </apex:column>
+
+                            </apex:pageBlockTable>
+                            <br/>
+                        </div>
+                    </apex:pageBlock>
+                    <br/>
+
+                    <apex:commandButton value="Back" action="{!actionBackToRatesAndSpaces}"/>
+                    <apex:commandButton value="Save Page" action="{!actionSavePage}" styleClass="btnJQSubmit" />
+                    <apex:commandButton value="Exit Offer" action="{!actionCancel}"
+                                        onclick="if(confirm('Please make sure that, you have saved changes to the offer, before leaving from this page.')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}AAAP-PortalHome';return false;} else return false;"/>
+                    
+                    <span style="padding-right:98px;">&nbsp;</span>
+                    <div id="loadingLoading" style="float:right;">
+                        Please wait...
+                    </div>
+                    <div id="buttonsToActivate" style="float:right;visibility:hidden;">
+                       
+                       <apex:commandButton value="View Offer" 
+                                            onclick="window.open('{!$Label.LOP_Community_Base_URL}AAAP-PreviewOfferPage?offerId={!JSENCODE(submitOffer.id)}','View Offer Screen','width=900, height=700,scrollbars=yes,resizable=yes,location=no');return false;"/>
+                        
+                        <apex:outputPanel rendered="{!showSubmitOfferButton}">
+    
+                             <a href="#" class="button_example" style="color:black;" id="submitoffer" onclick="submitOffer()">Review Final Offer</a>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!!showSubmitOfferButton}">
+                            <a href="#" class="buttongreen" id="submitoffer" onclick="checkErrors()">Check Errors</a>
+                        </apex:outputPanel>
+                    </div>
+
+                </apex:outputPanel>
+
+
+                <apex:outputPanel id="submitForm1" rendered="{!!showAttachmentsPage}" layout="block">
+
+
+                    <apex:pageBlock id="pblck_detail">
+                        <div class="tabbed-table"><br/>
+                            <div class="offerTitle">Offered Spaces </div>
+                            <div id="example_wrapper" style="margin-top:5px;" class="dataTables_wrapper" role="grid">
+                                <apex:pageBlockTable id="space_rates_table" var="detail" value="{!Details}">
+
+                                    <apex:column id="col_space_no" value="{!detail.spaceNo}">
+                                        <apex:facet name="header">Space #</apex:facet>
+                                    </apex:column>
+                                    <apex:column id="col_lease_type" value="{!detail.leaseType}">
+                                        <apex:facet name="header">Lease Type</apex:facet>
+                                    </apex:column>
+                                    <apex:column id="col_gsa_lease_no">{!IF(detail.GSALeaseNo = leaseDefault, '', detail.GSALeaseNo)}
+                                        <apex:facet name="header">GSA Lease #</apex:facet>
+                                    </apex:column>
+                                    <apex:column id="col_sqft_offer" value="{!detail.sqFtOffered}">
+                                        <apex:facet name="header">SF Offered</apex:facet>
+                                    </apex:column>
+                                    <apex:column id="col_25_16_fs" style="background-color: LightGrey;"
+                                                 rendered="{!regionCode == 'Census'}">
+                                        <apex:outputText id="col_25_16_fs_val" value="{0, number, '$'#0.00}">
+                                            <apex:param value="{!ROUND(detail.fiveYrFS, 2)}"></apex:param>
+                                        </apex:outputText>
+                                        <apex:facet name="header">25, 16 month FS</apex:facet>
+                                    </apex:column>
+                                    <apex:column id="col_19_11_fs" rendered="{!regionCode == 'Census'}">
+                                        <apex:outputText id="col_19_11_fs_val" value="{0, number, '$'#0.00}">
+                                            <apex:param value="{!ROUND(detail.fiveFiveYrFS, 2)}"></apex:param>
+                                        </apex:outputText>
+                                        <apex:facet name="header">19, 11 month FS</apex:facet>
+                                    </apex:column>
+                                    
+                                    <apex:column id="col_tem_five_fs" rendered="{!regionCode == '10/5 Term - All Regions'}">
+                                        <apex:outputText id="col_tem_five_fs_val" value="{0, number, '$'#0.00}">
+                                            <apex:param value="{!ROUND(detail.fiveFiveYrFS, 2)}"></apex:param>
+                                        </apex:outputText>
+                                        <apex:facet name="header">10, 5 YEAR FS</apex:facet>
+                                    </apex:column>
+
+                                    <apex:column id="col_five_fs" style="background-color: LightGrey;"
+                                                 rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                                        <apex:outputText id="col_five_fs_val" value="{0, number, '$'#0.00}">
+                                            <apex:param value="{!ROUND(detail.fiveYrFS, 2)}"></apex:param>
+                                        </apex:outputText>
+                                        <apex:facet name="header">{!leaseTerm15_10Header} </apex:facet>
+                                    </apex:column>
+
+                                    <apex:column id="col_five_five_fs" rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                                        <apex:outputText id="col_five_five_fs_val" value="{0, number, '$'#0.00}">
+                                            <apex:param value="{!ROUND(detail.fiveFiveYrFS, 2)}"></apex:param>
+                                        </apex:outputText>
+                                        <apex:facet name="header">{!leaseTerm10_5Header} </apex:facet>
+                                    </apex:column>
+
+                                    <apex:column id="col_ten_fs" style="background-color: LightGrey;"
+                                                 rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                                        <apex:outputText id="col_ten_fs_val" value="{0, number, '$'#0.00}">
+                                            <apex:param value="{!ROUND(detail.tenYrFS, 2)}"></apex:param>
+                                        </apex:outputText>
+                                        <apex:facet name="header">10, 8 Year FS </apex:facet>
+                                    </apex:column>
+
+                                </apex:pageBlockTable>
+                                <div class="clearfix">&nbsp;</div>
+                            </div><!-- /#example_wrapper -->
+
+                            <apex:outputLabel style="color:#002bad;font-size:13px;"> The fully serviced rate(s) in the
+                                table (above) reflect an estimated Tenant Improvement Allowance (TIA). Note that the TI
+                                rent to be used in the evaluation of offers and resulting Lease contract will be based
+                                on the actual TIA for the specific requirement. Reference section 3 of the RLP.
+                            </apex:outputLabel>
+                        </div>
+
+
+                        <table width="90%" border="1">
+                            <tr>
+                                <td colspan="2">
+                                    <apex:outputText style="font-size:14px;"
+                                                     value="{!$Label.PBS_AAAP_Submit_Offer_Term_1}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="80%">
+                                    <apex:outputText style="font-size:14px;"
+                                                     value="{!$Label.PBS_AAAP_Submit_Offer_Term_1_1}"></apex:outputText>
+                                </td>
+                                <td width="10%" align="right">
+                                    <apex:selectRadio value="{!termsandconditons}">
+                                        <apex:selectOptions value="{!items}"/>
+                                    </apex:selectRadio>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="80%" style="padding-bottom:5px;">
+                                    <apex:outputText style="font-size:14px;"
+                                                     value="{!$Label.PBS_AAAP_Submit_Offer_Term_2}"/>
+                                </td>
+                                <td width="10%" align="right">
+                                    <apex:selectRadio value="{!submitOffer.PBS_AAAP_ACK_LTR_COMPLETED__c}">
+                                        <apex:selectOptions value="{!items}"/>
+                                    </apex:selectRadio>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="80%" style="font-size:14px;padding-bottom:5px;">
+           <!-- SGanti changed 7/19/2021 
+                                        <apex:outputText style="font-size:14px;">
+                                        3. I am aware that, in addition to generic specifications and requirements
+                                        outlined in the RLP and attachments, there may be unique agency requirements,
+                                        as identified in a project specific advertisement posted on&nbsp;<apex:outputlink style="font-size:14px;" value="http://beta.sam.gov" target="_blank">beta.sam.gov
+                                        </apex:outputlink>
+                                        , that shall be used in evaluating and determining the eligibility of offers for
+                                        award.
+                                    </apex:outputText>
+                          -->  
+                          
+                                
+                     <!-- Updated on 6/29/22 by Henry Dennis -->
+                       <apex:outputText style="font-size:14px;">
+                                        3. I am aware that, in addition to generic specifications and requirements
+                                        outlined in the RLP and attachments, there may be unique agency requirements,
+                                        as identified in a project specific advertisement posted on&nbsp;<apex:outputlink style="font-size:14px;" value="http://sam.gov" target="_blank">sam.gov
+                                        </apex:outputlink>
+                                        , that shall be used in evaluating and determining the eligibility of offers for award.
+                                    </apex:outputText>             
+                                    
+                                    
+                                </td>
+                                <td width="10%" align="right">
+                                    <apex:selectRadio value="{!submitOffer.PBS_AAAP_ACK_REPRESENT_OTHERS__c}"
+                                                      id="submitOffer3">
+                                        <apex:actionSupport event="onchange" action="{!showMultiOwners}"
+                                                            rerender="SubmitSection"/>
+                                        <apex:selectOptions value="{!items}"/>
+                                    </apex:selectRadio>
+                                </td>
+                            </tr>
+
+                            <br></br>
+                            <tr>
+
+                                <td colspan="2" width="90%" style="padding-top: 30px;">
+                                    <apex:outputLabel style="font-size:15px;font-weight:bold;">By submitting this offer
+                                        to the GSA, I certify to the best of my knowledge that the information contained
+                                        in my offer is
+                                        accurate and complete.
+                                    </apex:outputLabel>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <apex:panelGrid columns="2">
+                            <apex:outputLabel style="font-size:15px;font-weight:bold;" value="First Name"/>
+                            <apex:inputText value="{!submitOffer.PBS_AAAP_Signature_First_Name__c }" disabled="true"/>
+                            <apex:outputLabel style="font-size:15px;font-weight:bold;" value="Last Name"/>
+                            <apex:inputText value="{!submitOffer.PBS_AAAP_SIGNATURE_LAST_NAME__c}" disabled="true"/>
+                            <apex:outputLabel style="font-size:15px;font-weight:bold;" value="Submission Date"/>
+                            <apex:inputText value="{!submissionDate}" disabled="true"/>
+                        </apex:panelGrid>
+                    </apex:pageBlock>
+                    <!-- J. Rogers   added to oncomplete  -->
+                    <apex:actionFunction name="submitOffer" action="{!actionSubmitOffer}" Rerender="statuses,errPanel" status="Status1" onComplete="callDownloadMethod();top.postMessage('Page Updated', document.location.origin);"/> <!-- onComplete="CallWebService_JS();" -->
+                    <apex:actionFunction action="{!DownloadAllFiles_00}" name="CallWebService_JS" status="Status2" reRender="statuses" onComplete="$('#submitoffer').show();redirectURL();" />
+                    
+                    <apex:outputPanel id="statuses">
+                        <apex:actionStatus id="Status1" startText="Loading..." />
+                        <apex:actionStatus id="Status2" startText="Submitting..." />
+                        
+                        <script>                            
+                            function callDownloadMethod(){ 
+                               
+                              if(!{!submitOffererror}){
+                                   // alert('Generate Document');
+                                    CallWebService_JS();
+                                }else{
+                                    
+                                    $('#submitoffer').show();
+                                    
+                                    
+                                }
+                                
+                            }                           
+                               
+                                
+                            
+                            function redirectURL() {
+                                let purl = '{!JSENCODE(pageURLForRedirection)}';
+                                window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';  
+                            }
+                        </script>
+                        
+                    </apex:outputPanel>
+                    
+                    <!--<apex:commandButton action="{!actionSubmitOffer}" value="Submit Offer"/>-->
+                    <a href="#" class="buttongreen" id="submitoffer" onclick="$('#submitoffer').hide();submitOffer()" style="margin-right:5px;position:relative;top:-2px;">Submit Offer</a>
+                    <apex:commandButton action="{!actionCancelSubmitOffer}" value="Cancel"/>
+
+                    <apex:commandButton value="View Offer" 
+                                            onclick="window.open('{!$Label.LOP_Community_Base_URL}AAAP-PreviewOfferPage?offerId={!JSENCODE(submitOffer.id)}','View Offer Screen','width=900, height=700,scrollbars=yes,resizable=yes,location=no');return false;"/>
+                        
+                </apex:outputPanel>
+
+
+            </apex:form>
+        </div><!--/content-->
+    </div><!-- /Wrapper -->
+    <c:SiteFooterUX />
+</apex:page>

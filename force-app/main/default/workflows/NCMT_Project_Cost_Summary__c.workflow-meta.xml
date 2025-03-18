@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <rules>
+        <fullName>NCMT Calculate ECC by Category</fullName>
+        <actions>
+            <name>NCMT_Calculate_Cost_Category</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>NCMT_Calculate_ECC_by_Category</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>RA_Security_Costs</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>User.CreatedDate</field>
+            <operation>greaterThan</operation>
+            <value>1/1/1900</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>NCMT_Project_Cost_Summary__c.RecordTypeId</field>
+            <operation>notEqual</operation>
+            <value>New Construction - DES</value>
+        </criteriaItems>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>NCMT RA Security Default Percentages</fullName>
+        <actions>
+            <name>RA_Security</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <description>NCMT RA Security Default Percentages</description>
+        <formula>TEXT(Project_Name__r.RA_Security__c)&lt;&gt; null</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>NCMT_SetExternalKeyOnCostSummary</fullName>
+        <actions>
+            <name>NCMT_SetExternalKeyOnCostSummary</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>NCMT_Project_Cost_Summary__c.CreatedDate</field>
+            <operation>greaterOrEqual</operation>
+            <value>1/1/1900</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>NCMT_Project_Cost_Summary__c.RecordTypeId</field>
+            <operation>notEqual</operation>
+            <value>New Construction - DES</value>
+        </criteriaItems>
+        <description>Set the external key as a composition of Project ID + Cost Category ID</description>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+</Workflow>

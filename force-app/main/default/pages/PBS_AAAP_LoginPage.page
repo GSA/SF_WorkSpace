@@ -1,0 +1,251 @@
+<!-- 9-JUL-2020 acheslyn added analytics script for user story sfws 766 -->
+<apex:page Controller="PBS_AAAP_HomePageController" sidebar="false" standardStylesheets="false" showHeader="false"
+           cache="true" expires="60">
+ 
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></apex:includeScript>
+    <!-- <script src="{!$Label.AAAP_jQuery_URL}"></script> -->
+    <!-- *** Todd Brown updated JQuery lib from v1.7.2 above to v3.5.1 below -->
+    <script src="{!$Label.AAAP_JQUERY_URL_V3_5_1}"></script>
+
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+
+    <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. --> 
+    <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+    <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+    
+	<style>
+.errMessage {color:red; }
+
+
+
+.tab { margin-left: 40px; }
+
+
+
+        h3.blue {padding-top:10px;}
+        p, .formwrap td {font-size:12px;}
+        .bucket {margin-top:10px;}
+            .redtitle {font-size:16px;color:red;font-weight:bold;}
+            .bluetitle {font-size:20px;color:#0023a7;font-weight:bold;}
+            
+    #nav ul {
+            float: right;
+            list-style: none;
+            margin: 30px 0px 25px 20px;
+        }
+
+        .bluelink {
+            color: blue !important; 
+        }
+
+		a.arrow-link:hover {
+            color: #F8BB1E;
+        }
+
+		#sidebar a:hover {
+			color: #ffffff; !important;
+			text-decoration: underline !important;
+		}
+		
+    </style>
+    <head>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-172142718-1"></script>
+    </head>
+    <script type="text/javascript">
+            console.log('pageURLForRedirection from portalHomePage ===> {!pageURLForRedirection}' );
+            if('{!JSENCODE(pageURLForRedirection)}' != ''){
+                window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
+            }
+            
+        </script>
+    <apex:outputText rendered="{!$Label.AAAP_PBS_ShowMessage}" >
+    <div style="width:980px;
+    margin:auto;
+    background-color:#fff;
+    border:1px solid #999;
+    position:relative;
+    margin-top:33px;
+    -moz-box-shadow: 0 0 10px 5px #ccc;
+    -webkit-box-shadow: 0 0 10px 5px #ccc;
+    padding-left: 10px;">
+        {!$Label.AAAP_PBS_Message}
+    </div>
+    </apex:outputText>
+    
+    <!-- Start of SFWS-2355 changes
+    <div id="login">
+        <ul>
+            <li><a href="#" onclick="window.parent.location.href = '{!$Label.LOP_Community_Base_URL}'">Leasing Home</a></li>
+            <li>| <a href="#" onclick="window.parent.location.href = '{!$Label.LOP_Community_Base_URL}RSAP-LoginPage'">RSAP Home</a></li>
+            <li>|</li>
+            <li><a href="http://www.gsa.gov/">ABOUT GSA</a></li>
+        </ul>
+    </div>
+    </apex:outputPanel>
+    end of SFWS-2355 changes -->
+
+    <div id="wrapper">
+        <!-- Header logo part starts Here -->
+        <!-- Start of SFWS-2355 changes
+        <div id="nav">
+            <ul>
+                <li style="font-size: 14px !important"><a style="font-weight:normal;background-image:linear-gradient(#f9e5b8,#f5b351);border-radius:5px;" href="#" onclick="window.parent.location.href = '{!$Label.LOP_Community_Base_URL}Registration'">
+                        <font class="orange" style="font-weight:normal;color:#000;">Registration</font>
+                    </a></li>
+            </ul>
+        </div>
+        end of SFWS-2355 changes ->
+
+        <div id="hero-int2">
+
+        </div><!--/hero-->
+        <!-- Header logo part ends Here -->
+        <!-- added by syam for the line
+
+
+        <h4 style="border-bottom: 2px solid #cccccc;padding-bottom: 2px;"></h4>
+        -->
+        <div id="content">
+            <div id="rightCol">
+                <!--h4 class="blue" style="padding-top: 8px;">GSA's Lease Offer Platform</h4>-->
+                <p>
+
+
+                    <font class="bluetitle">GSA's Automated Advanced Acquisition Platform</font>
+                </p>
+                <h4 style="border-bottom: 1px solid #cccccc;padding-top: 2px;"></h4>
+                
+                <p> The <a href="http://www.gsa.gov/lop" target="_blank"> <strong>Automated Advanced Acquisition Program (AAAP)</strong></a> is a 
+                multiple award lease procurement tool. The AAAP allows the market to compete for multiple federal leases by submitting a single 
+                offer through a simple online platform. The AAAP collects best and final offers, for generic office space needs, that remain in a 
+                secure database throughout the fiscal year (Oct 1 - Sept 30). Offerors are encouraged to submit all available office space, for three 
+                lease term options, with consideration to GSA's minimum requirements. The AAAP positions the GSA to expeditiously address the future 
+                leasing needs of the Government.</p>
+               
+               
+                <p>
+                    To view the Request for Lease Proposal Package for the region where your building is located, review the map below to identify your GSA Region #, Select the Region # from the dropdown, and click View RLP Package.
+                </p>
+
+                <div class="greybox">
+                    <h4>View AAAP Solicitations for Offer Package</h4>
+                    <apex:form id="regionForm">
+                        <div>
+                        <apex:outputPanel id="other_rlp_data" layout="block">
+                                <h5 style="margin-bottom:10px;">Select a Region: <a class="popup"
+                                                                                    href="#Modal_Bldg_Home"></a></h5>
+
+                               
+                                <span id="regionerror" for="region"
+                                      style="color:red;display:none;font-family:Arial,Helvetica,sans-serif;font-size:12px;">Please select a region<br/></span>
+                                <apex:selectList value="{!selectedRegion}" id="region" size="1">
+                                    <apex:selectOptions value="{!regions}"/>
+                                </apex:selectList>
+                                <apex:commandButton value="View RLP Package" action="{!actionShowRLPs}"
+                                                    onclick="return validate();"/>
+                            </apex:outputPanel>
+                        </div>
+
+
+                        <BR/>
+                    </apex:form>
+                    <img src="{!URLFOR($Resource.gsa_common, 'images/maps.gif')}" alt="Map showing different regions"/>
+                    <p>For more information about regions, go to the <a href="http://www.gsa.gov/portal/category/22227"
+                                                                        target="_new">GSA Regions</a> site.</p>
+                </div> <!--/greybox-->
+                
+                <p><strong>Helpful resources are available by clicking the “Help” link at the top of each page. For technical assistance, email <a class="bluelink" href = "mailto:LOP.help@gsa.gov" target="_blank">LOP.help@gsa.gov</a> or call 866-450-6588, option 7. For answers to program or policy questions, email <a class="bluelink" href = "mailto:AAAP.manager@gsa.gov" target="_blank">AAAP.manager@gsa.gov</a></strong>.</p>
+
+            </div> <!--/rightCol-->
+
+            <div id="sidebar" class="sb-hp" style="background: #0053A6;">
+                <!-- Start of changes to convert to Communities
+                <div class="bucket">
+                    <h4 style="font-size:96%;">Login</h4>
+                    <c:siteloginnew offType="AAAP"/>
+                </div> -->
+                <div id="nav" style="clear: both; margin-left: 0px; margin-top: 20px;">
+                    <a style="font-weight:normal; color: #ffffff;" href="#" onclick="window.parent.location.href = '{!$Label.LOP_Community_Base_URL}Registration'">
+                        <font style="font-size: 16px; font-weight:bold; color: #ffffff;">Registration</font></a>
+                </div>
+                <div class="bucket" style="font-size: 12px; color: #ffffff; line-height: 1.2; margin: 0px; padding: 0px;">
+                    Leasing Portal login credentials provide access to AAAP and RSAP. Use the links at the top of the page to navigate between the two. 
+                </div> 
+                <!-- <div class="bucket" style="font-size: 12px; color: orange;">
+                    Already registered? Click the 'Login' link in the upper right corner of this page. 
+                </div> -->
+                <!-- <div class = "bucket">
+                    <c:Leasing_Registration offType="AAAP" />
+                </div> -->
+                <!-- end of Communities changes -->
+
+                <div class="bucket">
+                    <h4 style="color: #FFFFFF; font-size: 16px; margin: 0;">Resources</h4>
+                    <!-- <P>
+                        Check out these links for additional AAAP information:
+                    </P> -->
+                    <ul style="margin: 0 0 60px 0;">
+                        <!--li><a class="arrow-link" href="/AAAP/About_AAAP">FAQ</a></li--><!--JK removed 3.1.21-->
+                        <!-- <li style="background: none; padding: 0;"><a class="arrow-link" href="{!$Resource.AAAP_FAQ}" target="_blank" style="color: #FFFFFF; font-size: 12px;">AAAP Help Page</a></li><!--Julia Kantarovsky new link 3.1.21-->
+                        <!--<li><a class="arrow-link" href="/AAAP/PBS_AAAP_Web_To_Lead">Register for AAAP Email List</a>
+                        </li>-->
+                        <li style="background: none; padding: 0;"><a class="arrow-link" target="_blank" href="{!$Label.LOP_Community_Base_URL}AAAP-AwardedOffersInfo" style="color: #FFFFFF; font-size: 12px;">Awarded Offers</a></li>
+                        <li style="background: none; padding: 0;"><a class="arrow-link" target="_blank" href="https://sam.gov/content/home" style="color: #FFFFFF; font-size: 12px;">Find Contract Opportunities</a></li>
+                        <li style="background: none; width:155px; padding: 0;"><a class="arrow-link" href="https://public.govdelivery.com/accounts/USGSA/signup/35365" target="_blank" style="color: #FFFFFF; font-size: 12px;">Sign Up for Email Newsletter</a></li>
+                    </ul>
+                </div>  <!--/bucket-->
+				
+                <div class="bucket">
+                    <h4 style="font-size: 16px; color: #FFFFFF; margin: 0;">Help</h4>
+                    <p style="margin: 0; padding: 0; font-size: 12px;"><a style="color: #FFFFFF; font-size: 12px;" href="mailto:LOP.help@gsa.gov" target="_blank">LOP.help@gsa.gov</a><br/>1-866-450-6588, Extension 7</p>
+                    <!-- <p><strong><b>Program/Policy Questions:</b></strong> <a style="text-decoration:underline" href="mailto:AAAP.manager@gsa.gov" target="_blank">AAAP.manager@gsa.gov</a></p>-->
+                </div>  <!--/bucket-->
+                
+            </div>  <!--/sidebar-->
+
+        </div>  <!--/content-->
+
+    </div><!-- /Wrapper -->
+
+    <script type="text/javascript">
+    console.log('**** from VF Page: '+ document.location.origin);
+    console.log('**** window.parent: ', window.parent.location);
+
+function validate(){    
+    var flag = true;
+    
+    var region   =   document.getElementById('{!$Component.regionForm.region}').value;  
+    if(region==""){
+        document.getElementById('regionerror').style.display = 'inline';            
+        flag = false;
+    }else{
+        document.getElementById('regionerror').style.display ='none';
+    }
+
+    top.postMessage('Page Updated', document.location.origin);
+    return flag;
+}
+
+    //redirect to authoritative hostname (i.e. lop.gsa.gov) as appropriate
+    var authoritativeExternalHost = "{!$Label.AAAP_EXTERNAL_HOST}";
+    //alert("v4\nCurrent Url=["+window.location+"]\nCurrent Host=["+window.location.host+"]\nauthoritativeExternalHost=["+authoritativeExternalHost+"]");
+    if (authoritativeExternalHost!=null && authoritativeExternalHost.length > 1 && !window.location.href.includes('leasing')){
+        //var u = window.location;
+        //u = (""+u).replace(window.location.host, authoritativeExternalHost);
+        //alert("old => ["+window.location+"]\nnew => ["+u+"]");
+        //window.location.replace(u);
+        window.location.href = authoritativeExternalHost;
+    }
+
+
+
+    </script>
+    <c:sitefooterhome ></c:sitefooterhome>
+
+
+</apex:page>

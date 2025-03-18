@@ -1,0 +1,23 @@
+<apex:page showHeader="{!$CurrentPage.parameters.print!='true'}" standardController="NCMT_Project__c" extensions="NCMT_TCOReportDataSelector" lightningStylesheets="true">
+    <apex:slds />
+    <apex:includeLightning />
+    <div id="lightningPage"></div>
+     <script> 
+        var HTMLJSencodedRecId = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.id))}';
+        var HTMLJSencodedReportType = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.reportType))}';
+        var HTMLJSencodedPrint = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.print))}';
+        $Lightning.use("c:NCMT_TCO_ProjectDetails_App", function(){
+            $Lightning.createComponent("c:NCMT_TCO_ProjectDetails", {
+                "id" : HTMLJSencodedRecId,
+                "urlReportType" : HTMLJSencodedReportType,
+                "printMode" : HTMLJSencodedPrint
+            },
+            'lightningPage',
+                function(cmp){
+     
+                });
+        
+        });
+  </script> 
+    
+</apex:page>

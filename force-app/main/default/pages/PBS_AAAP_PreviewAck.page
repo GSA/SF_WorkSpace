@@ -1,0 +1,351 @@
+<apex:page Controller="PBS_AAAP_OfferAttachmentsController" sidebar="false" showHeader="false"
+           standardStylesheets="false" cache="true">
+
+
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+    <style>
+.errMessage { color:red;}
+
+    </style>
+    <head>
+        <style type="text/css">
+        #lean_overlay {
+            position: fixed;
+            z-index:100;
+            top: 0px;
+            left: 0px;
+            height:100%;
+            width:100%;
+            background:none;
+            display: none;
+        }
+    
+        .ui-dialog {
+            background:#fff;
+            padding:10px;
+            border:1px solid #999;
+        }
+         
+        .ui-dialog a {
+            float:right;
+            font-weight:bold;
+            padding:3px;
+            color:#999;
+            text-transform:uppercase;
+            font-size:10px;
+        } 
+    
+        .col1   {text-align: left;
+                 width: 400px;}
+        .col2   {text-align: center;
+                 width: 230px;}
+        .tabbed-table table td {
+                background:#fff;}
+        h2        {color:#fff; font-size:80%; font-weight:bold; padding-left:40px; width:80%;}                 
+
+        </style>
+
+        <style type="text/css">
+        p.thick {color:red;font-weight:bold;}
+ 
+        #searchTable.tabbed-table h3 {float:none !important; font-size:20px;}
+        #searchTable.tabbed-table table {margin:0px;width:800px !important; border:0px;}
+        #searchTable.tabbed-table  {width:800px;padding:0px;margin-top:20px; border:0px;background:none;}
+        #searchTable.tabbed-table table tr {height:20px !important;}
+        #searchTable.tabbed-table table td.labelCol {background:#ccc; font-weight:bold;}
+        #searchTable.tabbed-table table td {width:25%;}
+        .tabbed-table table {width:800px !important;}
+        .tabbed-table {width:800px !important;}
+            
+
+        </style>
+        <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+        <script type="text/javascript"
+                src="{!$Label.AAAP_JQUERYUI_URL}"></script>
+        <script src="{!URLFOR($Resource.modaljquery)}"></script>
+        <apex:includescript value="{!$Resource.showpopup}"/>
+        <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+
+        <script>
+var j$ = jQuery.noConflict();  
+ j$(document).ready(function() {
+        //added by syam display msg when submitted offer is saved.
+                 draftMsgFlag = j$('input[id=' + "'{!$Component.offerattachmentsform.draftMsgFlag}'" + ']').val();
+     if(draftMsgFlag == 'true') {
+              var confirm1  =  j$('<div></div>').html("Your offer is no longer submitted. Offer status is updated to 'Draft' status and needs to be submitted again.").dialog({
+                    autoOpen: false,
+                    title: '',
+                    modal: true,
+                    position: ['center', 'center'],
+                    buttons: { 'OK' : function(){ j$(this).dialog('close');}
+                         }
+                    });
+                     
+                  confirm1.dialog('open');            
+                }
+
+     
+      var addrFlag = sessionStorage.getItem("addrFlag");
+      j$('input[id=' + "'{!$Component.offerattachmentsform.addrFlag}'" + ']').val(addrFlag);
+      addrFlag = j$('input[id=' + "'{!$Component.offerattachmentsform.addrFlag}'" + ']').val();
+ j$(".tablesorter").dataTable( {
+        "sScrollY": "400px",
+        "bAutoWidth": true,
+        "bPaginate": true,
+        "bJQueryUI": true,
+        "bScrollCollapse": true
+        
+     } );
+     j$('.dataTables_length').css("display", "none");
+      j$('.myAppTable').find('.dataTables_filter').css("display", "none");
+      j$('.myAppTab').find('.dataTables_filter').css("display", "none");
+    j$(".tablesorter tr:odd").css("background-color", "#CFEEF8");
+    j$(".tablesorter tr:even").css("background-color", "#F3F3EC");
+     
+      
+      
+});
+    
+     
+
+        </script>
+    </head>
+
+    <apex:outputPanel rendered="{!!offerSubmitFlag}"><b><font color="red">Offer is not yet submitted. You cannot view
+                this page unless it is submitted.</font></b></apex:outputPanel>
+    <apex:outputPanel rendered="{!offerSubmitFlag}">
+        <div id="wrapper">
+            <!--<c:inside_header />-->
+            <div id="content" class="attachments">
+                <!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
+
+
+                <apex:form id="offerattachmentsform" styleClass="formwrap">
+                    <apex:outputPanel rendered="{!offerFY}">
+                        <apex:inputHidden id="draftMsgFlag" value="{!draftMsgFlag}"/>
+                        <apex:outputPanel rendered="{!showAttachmentsPage}"><h3 class="blue">Offer Attachments</h3>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!!showAttachmentsPage}"><h3 class="blue">Submit Offer</h3>
+                        </apex:outputPanel>
+                        <!-- <apex:messages styleClass="errMessage"/> -->
+                        <apex:inputHidden value="{!addrFlag}" id="addrFlag"/>
+                        <apex:outputPanel id="AttachmentsForm1" layout="block" rendered="{!showAttachmentsPage}">
+
+
+                            <Table id="form2">
+
+                                <tr>
+                                    <td><h4>Building Address:</h4>
+                                        <apex:outputText value="{!submitedOffer.PBS_AAAP_Building_Name__c} : {!submitedOffer.PBS_AAAP_Street_Address__c} {!submitedOffer.PBS_AAAP_City__c}, {!submitedOffer.PBS_AAAP_State__c}"/>
+                                    </td>
+
+                                </tr>
+
+                            </Table>
+
+                            <apex:pageBlock >
+                                <div id="searchTable" class="tabbed-table">
+                                    <h3>Attachments List</h3>
+                                    <apex:pageBlockTable value="{!seqNumList}" var="ofratt" id="theTable"
+                                                         rowClasses="odd,even">
+                                        <apex:column value="{!ofratt.i}">
+                                            <apex:facet name="header">Attachment #</apex:facet>
+                                        </apex:column>
+                                        <apex:column value="{!ofratt.offratts.PBS_AAAP_Attachment_Type__c}">
+                                            <apex:facet name="header">Attachment Type</apex:facet>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:facet name="header">Attachment Name</apex:facet>
+                                            <apex:repeat value="{!ofratt.offratts.Attachments}" var="a">
+                                                <apex:outputText value="{!a.Name}"/>
+                                            </apex:repeat>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:facet name="header">Date Submitted</apex:facet>
+                                            <apex:repeat value="{!ofratt.offratts.Attachments}" var="a">
+                                                <apex:outputText value="{0,date,MM/dd/yyyy}">
+                                                    <apex:param value="{!a.createddate}"/>
+                                                </apex:outputText>
+                                            </apex:repeat>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:facet name="header">View File</apex:facet>
+                                            <apex:repeat value="{!ofratt.offratts.Attachments}" var="a">
+                                                <apex:outputLink target="_blank"
+                                                                 value="/servlet/servlet.FileDownload?file={!a.id}">
+                                                    <apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
+                                                            style="align: right;" alt="Salesforce" title="Salesforce"/>
+                                                </apex:outputLink>
+                                            </apex:repeat>
+                                        </apex:column>
+                                        <apex:column >
+
+
+                                        </apex:column>
+
+                                    </apex:pageBlockTable>
+                                    <br/>
+                                </div>
+                            </apex:pageBlock>
+                            <br/>
+
+
+                        </apex:outputPanel>
+                        <apex:outputPanel id="submitForm1" layout="block">
+
+
+                            <apex:panelGrid columns="1" id="SubmitSection">
+                                <apex:outputPanel >
+                                    <apex:outputText value="{!$Label.PBS_AAAP_Submit_Offer_1}"/>
+                                    <apex:PanelGrid columns="2" id="theGridsection2">
+                                        <apex:outputPanel >&nbsp;&nbsp;&nbsp;&nbsp;<apex:outputText value="A. RLP Number :  "/>
+                                            <apex:outputText value="[{!submitedOffer.PBS_AAAP_RLP_Number__r.PBS_AAAP_RLP_Number__c}]"/>&nbsp;&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputLabel value="{!IF(submitedOffer.PBS_AAAP_ACCEPTED_TERMS_AND_COND__c == true,'Yes', 'No')}"/>
+
+                                        <apex:outputPanel >&nbsp;&nbsp;&nbsp;&nbsp;<apex:outputText value="{!$Label.PBS_AAAP_Submit_Offer_1B}"/>&nbsp;&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputLabel value="{!submitedOffer.PBS_AAAP_ACCEPTED_PROV_FORM_3516__c}"/>
+                                        <apex:outputPanel >&nbsp;&nbsp;&nbsp;&nbsp;<apex:outputText value="{!$Label.PBS_AAAP_Submit_Offer_1C}"/>&nbsp;&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputLabel value="{!submitedOffer.PBS_AAAP_ACCEPTED_GEN_FORM_3517__c}"/>
+                                        <apex:outputPanel >&nbsp;&nbsp;&nbsp;&nbsp;<apex:outputText value="{!$Label.PBS_AAAP_Submit_Offer_1D}"/>&nbsp;&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputLabel value="{!submitedOffer.PBS_AAAP_ACCEPTED_REP_CERT_FORM_3518__c}"
+                                        / >
+                                    </apex:PanelGrid>
+                                </apex:outputPanel>
+                            </apex:panelGrid>
+                            <apex:panelGrid columns="2" style="width:90%">
+
+                                <apex:outputText value="{!$Label.PBS_AAAP_Submit_Offer_2}" style="text-wrap:normal"/>
+                                <apex:outputLabel value="{!submitedOffer.PBS_AAAP_ACK_LTR_COMPLETED__c}"/>
+                                <apex:outputText value="{!$Label.PBS_AAAP_Submit_Offer_3}"/>
+                                <apex:outputLabel value="{!submitedOffer.PBS_AAAP_ACK_REPRESENT_OTHERS__c}"/>
+                                <apex:outputPanel rendered="{!submitedOffer.PBS_AAAP_ACK_REPRESENT_OTHERS__c}">
+                                    <apex:outputText value="{!$Label.PBS_AAAP_Submit_Offer_4}"
+                                                     rendered="{!submitedOffer.PBS_AAAP_ACK_REPRESENT_OTHERS__c}"/>
+                                </apex:outputPanel>
+                                <apex:outputLabel value="{!submitedOffer.PBS_AAAP_ACK_REPRESENT_MULT_OWNERS__c}"
+                                                  rendered="{!submitedOffer.PBS_AAAP_ACK_REPRESENT_OTHERS__c}"/>
+                                <apex:outputText value="{!$Label.PBS_AAAP_Submit_Offer_5}"/>
+                                <apex:outputLabel value="{!submitedOffer.PBS_AAAP_FIRE_SAFETY_CERT__c}"/>
+                                <apex:outputText value="{!$Label.PBS_AAAP_Submit_Offer_6}"/>
+                                <apex:outputLabel value="{!submitedOffer.PBS_AAAP_FIRE_SAFETY_REQ_FLOORS1TO6__c}"/>
+                            </apex:panelGrid>
+                            <br/>
+                            <!-- <h1><b><apex:outputText value="Electronic Signature"/></b></h1> <br/> -->
+                            <apex:panelGrid columns="1">
+                                <apex:outputText value="First Name"/>
+                                <apex:inputText value="{!submitedOffer.PBS_AAAP_Signature_First_Name__c }"
+                                                disabled="true"/>
+                                <apex:outputText value="Last Name"/>
+                                <apex:inputText value="{!submitedOffer.PBS_AAAP_SIGNATURE_LAST_NAME__c}"
+                                                disabled="true"/>
+                                <apex:outputText value="Submission Date"/>
+                                <apex:inputText value="{!DateSubmitted}" disabled="true"/>
+                            </apex:panelGrid>
+                            <br/><br/>
+
+
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!!offerFY}">
+                        <apex:outputPanel >
+                            <h3 class="blue">Submit Offer</h3>
+                        </apex:outputPanel>
+                        <apex:pageBlock id="pblck_detail">
+                            <div class="tabbed-table"><br/>
+                                <div class="offerTitle">Offered Spaces</div>
+                                <div id="example_wrapper" style="margin-top:5px;" class="dataTables_wrapper"
+                                     role="grid">
+                                    <apex:pageBlockTable id="space_rates_table" var="detail" value="{!Details}">
+                                        <apex:column id="col_space_no" value="{!detail.spaceNo}">
+                                            <apex:facet name="header">Space #</apex:facet>
+                                        </apex:column>
+                                        <apex:column id="col_lease_type" value="{!detail.leaseType}">
+                                            <apex:facet name="header">Lease Type</apex:facet>
+                                        </apex:column>
+                                        <apex:column id="col_gsa_lease_no">{!IF(detail.GSALeaseNo = leaseDefault, '', detail.GSALeaseNo)}
+                                            <apex:facet name="header">GSA Lease #</apex:facet>
+                                        </apex:column>
+                                        <apex:column id="col_sqft_offer" value="{!detail.sqFtOffered}">
+                                            <apex:facet name="header">SF Offered</apex:facet>
+                                        </apex:column>
+                                        <apex:column id="col_25_16_fs" style="background-color: LightGrey;"
+                                                     rendered="{!regionCode == 'Census'}">
+                                            <apex:outputText id="col_25_16_fs_val" value="{0, number, '$'#0.00}">
+                                                <apex:param value="{!ROUND(detail.fiveYrFS, 2)}"></apex:param>
+                                            </apex:outputText>
+                                            <apex:facet name="header">25, 16 month FS</apex:facet>
+                                        </apex:column>
+                                        <apex:column id="col_19_11_fs" rendered="{!regionCode == 'Census'}">
+                                            <apex:outputText id="col_19_11_fs_val" value="{0, number, '$'#0.00}">
+                                                <apex:param value="{!ROUND(detail.fiveFiveYrFS, 2)}"></apex:param>
+                                            </apex:outputText>
+                                            <apex:facet name="header">19, 11 month FS</apex:facet>
+                                        </apex:column>
+                                        <apex:column id="col_five_fs" style="background-color: LightGrey;"
+                                                     rendered="{!regionCode != 'Census'}">
+                                            <apex:outputText id="col_five_fs_val" value="{0, number, '$'#0.00}">
+                                                <apex:param value="{!ROUND(detail.fiveYrFS, 2)}"></apex:param>
+                                            </apex:outputText>
+                                            <apex:facet name="header">{!leaseTerm15_10Header} 15, 10 Year FS
+                                            </apex:facet>
+                                        </apex:column>
+                                        <apex:column id="col_five_five_fs" rendered="{!regionCode != 'Census'}">
+                                            <apex:outputText id="col_five_five_fs_val" value="{0, number, '$'#0.00}">
+                                                <apex:param value="{!ROUND(detail.fiveFiveYrFS, 2)}"></apex:param>
+                                            </apex:outputText>
+                                            <apex:facet name="header">{!leaseTerm10_5Header} 10, 5 Year FS</apex:facet>
+                                        </apex:column>
+                                        <apex:column id="col_ten_fs" style="background-color: LightGrey;"
+                                                     rendered="{!regionCode != 'Census'}">
+                                            <apex:outputText id="col_ten_fs_val" value="{0, number, '$'#0.00}">
+                                                <apex:param value="{!ROUND(detail.tenYrFS, 2)}"></apex:param>
+                                            </apex:outputText>
+                                            <apex:facet name="header">10 Year FS</apex:facet>
+                                        </apex:column>
+                                    </apex:pageBlockTable>
+                                    <div class="clearfix">&nbsp;</div>
+                                </div><!-- /#example_wrapper -->
+                                <apex:outputLabel style="color:#002bad;font-size:13px;">
+                                    The fully serviced rate(s) in the table (above) reflect an estimated Tenant
+                                    Improvement Allowance (TIA).
+                                    Note that the TI rent to be used in the evaluation of offers and resulting Lease
+                                    contract will be based on the actual TIA for the specific requirement.
+                                    Reference section 3 of the RLP.
+                                </apex:outputLabel>
+                            </div><!-- /tabbed-table -->
+                            <apex:panelGrid columns="2">
+                                <apex:outputText value="{!$Label.PBS_AAAP_Submit_Offer_Term_1}"/>
+                                <apex:outputLabel value="{!submitedOffer.PBS_AAAP_ACK_LTR_COMPLETED__c}"/>
+                                <apex:outputText value="{!$Label.PBS_AAAP_Submit_Offer_Term_2}"/>
+                                <apex:outputLabel value="{!submitedOffer.PBS_AAAP_ACK_LTR_COMPLETED__c}"/>
+                                3. I am aware that, in addition to generic specifications and requirements outlined in
+                                the RLP and attachments,
+                                there may be unique agency requirements, as identified in a project specific
+                                advertisement posted on
+                                <ahref
+                                ="http://fbo.gov" target="_blank" style="font-size:14px;">fbo.gov</a>, that shall be
+                                used in evaluating and determining the eligibility of offers for award.
+                                <apex:outputLabel value="{!submitedOffer.PBS_AAAP_ACK_REPRESENT_OTHERS__c}"/>
+                            </apex:panelGrid>
+                            <apex:panelGrid columns="2">
+                                <apex:outputLabel style="font-size:15px;font-weight:bold;" value="First Name"/>
+                                <apex:inputText value="{!submitOffer.PBS_AAAP_Signature_First_Name__c }"
+                                                disabled="true"/>
+                                <apex:outputLabel style="font-size:15px;font-weight:bold;" value="Last Name"/>
+                                <apex:inputText value="{!submitOffer.PBS_AAAP_SIGNATURE_LAST_NAME__c}" disabled="true"/>
+                                <apex:outputLabel style="font-size:15px;font-weight:bold;" value="Submission Date"/>
+                                <apex:inputText value="{!DateSubmitted}" disabled="true"/>
+                            </apex:panelGrid>
+                        </apex:pageBlock>
+                    </apex:outputPanel>
+                </apex:form>
+            </div><!--/content-->
+        </div><!-- /Wrapper -->
+    </apex:outputPanel>
+    <c:SiteFooterUX />
+</apex:page>

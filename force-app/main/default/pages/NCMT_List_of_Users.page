@@ -1,0 +1,45 @@
+<apex:page Controller="NCMT_Permsetdata" Title="NCMT List Of Users" readonly="true" showheader="false" sidebar="false" cache="true" lightningStylesheets="true">
+    <apex:form > 
+    <apex:commandlink style="padding-left:90%;" value="Print" onclick="window.print();"/>
+    
+    <apex:pageBlock title="NCMT List Of Users" id="permissionSetAssignmentTable">
+      <apex:pageBlockTable value="{!fewpermsetinfo}" var="p">      
+                
+        <apex:column >
+                <apex:facet name="header">NCMT Region Code</apex:facet>
+                        {!p.NCMT_UserRegionCode__c}
+       </apex:column>
+        <apex:column >
+                <apex:facet name="header"> User Name</apex:facet>
+                        {!p.Name}
+       </apex:column>
+       <apex:column >
+                <apex:facet name="header">Email</apex:facet>
+                        {!p.Email}
+       </apex:column>
+       <apex:column >
+                <apex:facet name="header">Profile</apex:facet>
+                        {!p.Profile.Name}
+       </apex:column>       
+       <apex:column >
+                <apex:facet name="header">NCMT User Level</apex:facet>
+                        {!p.NCMT_User_Level__c}
+       </apex:column>
+       <apex:column >
+                <apex:facet name="header">Active</apex:facet>
+                        {!p.isActive}
+       </apex:column>
+       
+       <apex:column headervalue="Permission Sets Assigned">
+                    <apex:pageblocktable value="{!permissionSetAssignMap[p.Name]}" var="otm">
+                    <apex:column >
+                        <apex:facet name="header">Permission Sets</apex:facet>
+                                {!otm.PermissionSet.Name}
+                    </apex:column>                        
+                    </apex:pageblocktable>
+       </apex:column>
+                
+    </apex:pageBlockTable>
+  </apex:pageBlock>
+ </apex:form>  
+</apex:page>

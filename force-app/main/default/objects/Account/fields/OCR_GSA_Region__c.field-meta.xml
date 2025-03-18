@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OCR_GSA_Region__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF (
+OR(BillingState =&quot;AK&quot;, BillingState =&quot;WA&quot;, BillingState =&quot;OR&quot;, BillingState =&quot;ID&quot;), &quot;Northwest/Arctic Region (10)&quot;, 
+IF (OR(BillingState =&quot;NV&quot;, BillingState =&quot;CA&quot;, BillingState =&quot;AZ&quot;, BillingState =&quot;HI&quot;), &quot;Pacific Rim Region (9)&quot;, 
+IF (OR(BillingState =&quot;MT&quot;, BillingState =&quot;WY&quot;, BillingState =&quot;UT&quot;, BillingState =&quot;CO&quot;, BillingState =&quot;ND&quot;, BillingState =&quot;SD&quot;), &quot;Rocky Mountain Region (8)&quot;, 
+IF (OR(BillingState =&quot;NM&quot;, BillingState =&quot;TX&quot;, BillingState =&quot;OK&quot;, BillingState =&quot;AR&quot;, BillingState =&quot;LA&quot;), &quot;Greater Southwest Region (7)&quot;, 
+IF (OR (BillingState =&quot;NE&quot;, BillingState =&quot;KS&quot;, BillingState =&quot;IA&quot;, BillingState =&quot;MO&quot;), &quot;The Heartland Region (6)&quot;, 
+IF (OR(BillingState =&quot;MN&quot;, BillingState =&quot;WI&quot;, BillingState =&quot;IL&quot;, BillingState =&quot;MI&quot;, BillingState =&quot;IN&quot;, BillingState =&quot;OH&quot;), &quot;Great Lakes Region (5)&quot;, 
+IF (OR(BillingState =&quot;KY&quot;, BillingState =&quot;TN&quot;, BillingState =&quot;MS&quot;, BillingState =&quot;AL&quot;, BillingState =&quot;GA&quot;, BillingState =&quot;FL&quot;, BillingState =&quot;SC&quot;, BillingState =&quot;NC&quot;), &quot;Southeast Sunbelt Region (4)&quot;, 
+IF (OR(BillingState =&quot;WV&quot;, BillingState =&quot;VA&quot;, BillingState =&quot;PA&quot;, BillingState =&quot;DE&quot;, BillingState =&quot;MD&quot;), &quot;Mid-Atlantic Region (3)&quot;, 
+IF (OR(BillingState =&quot;NY&quot;, BillingState =&quot;NJ&quot;), &quot;Northeast and Caribbean Region (2)&quot;, 
+IF (OR(BillingState =&quot;VT&quot;, BillingState =&quot;NH&quot;, BillingState =&quot;MA&quot;, BillingState =&quot;ME&quot;, BillingState =&quot;RI&quot;, BillingState =&quot;CT&quot;), &quot;New England Region (1)&quot;, &quot;&quot;
+))))))))))</formula>
+    <label>GSA Region</label>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

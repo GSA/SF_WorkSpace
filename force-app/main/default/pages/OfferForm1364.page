@@ -1,0 +1,1194 @@
+<!-- 7-JUL-2020 acheslyn updated head section to include google analytics snippet user story sfws 766-->
+<apex:page controller="PBS_AAAP_OfferForm1364Controller" standardstylesheets="false" sidebar="false" renderas="pdf">
+
+
+    <head>
+
+        <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Tangerine'/>
+        <style type="text/css">
+
+span.cls_008{font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_008{font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+span.cls_005{font-family:Arial,serif;font-size:12.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_005{font-family:Arial,serif;font-size:12.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+span.cls_010{font-family:Arial,serif;font-size:10.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal}
+
+div.cls_010{font-family:Arial,serif;font-size:10.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal}
+
+span.cls_011{font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_011{font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+span.cls_006{font-family:Arial,serif;font-size:7.6px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_006{font-family:Arial,serif;font-size:7.6px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_009{font-family:"Wingdings",serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_009{font-family:"Wingdings",serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_012{font-family:Arial,serif;font-size:11.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_012{font-family:Arial,serif;font-size:11.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+span.cls_002{font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_002{font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_013{font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal}
+
+div.cls_013{font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal}
+
+div.cls_sign{font-family: Tangerine,serif;font-size:11.0px;color:rgb(255,0,0);font-weight:bold;font-style:italic}
+
+span.cls_014{font-family:Arial,serif;font-size:9.1px;color:rgb(255,0,0);font-weight:bold;font-style:normal}
+
+div.cls_014{font-family:Arial,serif;font-size:9.1px;color:rgb(255,0,0);font-weight:bold;font-style:normal}
+
+span.cls_015{font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:normal;font-style:normal}
+
+div.cls_015{font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:normal;font-style:normal}
+
+span.cls_003{font-family:Arial,serif;font-size:8.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_003{font-family:Arial,serif;font-size:8.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_004{font-family:Arial,serif;font-size:8.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_004{font-family:Arial,serif;font-size:8.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+span.cls_016{font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:italic}
+
+div.cls_016{font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:italic}
+
+span.cls_017{font-family:Arial,serif;font-size:10.0px;color:rgb(255,255,255);font-weight:bold;font-style:normal}
+
+div.cls_017{font-family:Arial,serif;font-size:10.0px;color:rgb(255,255,255);font-weight:bold;font-style:normal}
+
+span.cls_018{font-family:Arial,serif;font-size:8.1px;color:rgb(255,255,255);font-weight:bold;font-style:normal}
+
+div.cls_018{font-family:Arial,serif;font-size:8.1px;color:rgb(255,255,255);font-weight:bold;font-style:normal}
+
+span.cls_019{font-family:Times,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_019{font-family:Times,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+span.cls_033{font-family:Times,serif;font-size:10.0px;color:rgb(255,0,0);font-weight:normal;font-style:normal}
+
+div.cls_033{font-family:Times,serif;font-size:10.0px;color:rgb(255,0,0);font-weight:normal;font-style:normal}
+
+span.cls_020{font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:italic}
+
+div.cls_020{font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:italic}
+span.cls_021{font-family:Times,serif;font-size:10.0px;color:rgb(128,128,128);font-weight:normal;font-style:normal}
+
+div.cls_021{font-family:Times,serif;font-size:10.0px;color:rgb(128,128,128);font-weight:normal;font-style:normal}
+
+
+        </style>
+        <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+ 		<script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+        <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+
+    </head>
+
+    <body>
+    <apex:panelGrid rendered="{!!isValidUser}">
+        <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+        <apex:messages styleClass="errMessage" id="errmessage"/>
+    </apex:panelGrid>
+    <apex:panelGrid rendered="{!isValidUser}">
+        <div style="position:absolute;left:50%;margin-left:-306px;top:0px;width:612px;height:792px;border-style:outset;overflow:hidden">
+
+            <div style="position:absolute;left:0px;top:0px">
+
+                <img src="{!URLFOR($Resource.form1364, 'image001.jpg')}" width="612" height="792"/></div>
+
+            <div style="position:absolute;left:215.93px;top:35.40px" class="cls_008">REQUEST FOR</div>
+
+            <div style="position:absolute;left:19.08px;top:35.88px" class="cls_005">PROPOSAL TO LEASE SPACE</div>
+
+            <div style="position:absolute;left:215.93px;top:43.44px" class="cls_008">LEASE PROPOSALS</div>
+
+            <div style="position:absolute;left:349.03px;top:42.48px" class="cls_010">{!RLPNumber}</div>
+
+            <div style="position:absolute;left:468.82px;top:43.44px" class="cls_008">DATED</div>
+
+            <div style="position:absolute;left:526.80px;top:41.52px" class="cls_010">{!sysDate}</div>
+
+
+            <div style="position:absolute;left:215.93px;top:51.48px" class="cls_008">(RLP) NUMBER &rarr; <span
+                        class="cls_009">&#8594;</span></div>
+
+            <div style="position:absolute;left:193.85px;top:66.62px" class="cls_012">SECTION I - DESCRIPTION OF
+                PREMISES
+            </div>
+
+            <div style="position:absolute;left:19.08px;top:86.06px" class="cls_002">1. BUILDING</div>
+            <div style="position:absolute;left:26.08px;top:91.98px" class="cls_002">DESCRIPTION</div>
+
+            <div style="position:absolute;left:100.08px;top:86.06px" class="cls_002">a. BUILDING NAME</div>
+
+            <div style="position:absolute;left:301.63px;top:86.06px" class="cls_002">b. BUILDING STREET ADDRESS</div>
+
+            <div style="position:absolute;left:114.48px;top:96.98px" class="cls_013">{!buildingName}</div>
+
+            <div style="position:absolute;left:316.03px;top:96.98px" class="cls_013">{!address}</div>
+
+            <div style="position:absolute;left:19.08px;top:122.90px" class="cls_002">c. CITY</div>
+
+            <div style="position:absolute;left:252.41px;top:122.90px" class="cls_002">d. STATE</div>
+
+            <div style="position:absolute;left:301.63px;top:122.90px" class="cls_002">e.</div>
+
+            <div style="position:absolute;left:316.03px;top:122.90px" class="cls_002">9-DIGIT ZIP CODE</div>
+
+            <div style="position:absolute;left:447.58px;top:122.90px" class="cls_002">f. CONGRESSIONAL DISTRICT</div>
+
+            <div style="position:absolute;left:33.48px;top:133.82px" class="cls_013">{!city}</div>
+
+            <div style="position:absolute;left:266.81px;top:133.82px" class="cls_013">{!state}</div>
+
+            <div style="position:absolute;left:316.03px;top:133.82px" class="cls_013">{!zip}</div>
+
+            <div style="position:absolute;left:461.98px;top:133.58px"
+                 class="cls_014">{!offer.PBS_AAAP_Congressional_District__c}</div>
+
+            <div style="position:absolute;left:19.08px;top:150.02px" class="cls_002">2a. FLOORS OFFERED</div>
+
+            <div style="position:absolute;left:135.74px;top:150.02px" class="cls_002">2b. TOTAL NUMBER</div>
+
+            <div style="position:absolute;left:333.67px;top:153.38px" class="cls_002">3. TOTAL RENTABLE SPACE IN OFFERED
+                BUILDING
+            </div>
+
+            <div style="position:absolute;left:150.14px;top:158.06px" class="cls_002">OF FLOORS IN BUILDING</div>
+
+            <div style="position:absolute;left:252.41px;top:168.26px" class="cls_002">a. GENERAL PURPOSE</div>
+
+            <div style="position:absolute;left:369.07px;top:168.26px" class="cls_002">b. WAREHOUSE</div>
+
+            <div style="position:absolute;left:485.74px;top:168.26px" class="cls_002">c. OTHER</div>
+
+            <div style="position:absolute;left:266.81px;top:176.30px" class="cls_002">(Office)</div>
+
+            <div style="position:absolute;left:33.48px;top:187.22px" class="cls_013"> N/A</div>
+
+            <div style="position:absolute;left:150.14px;top:187.22px" class="cls_013">{!noOfFloors}</div>
+
+            <div style="position:absolute;left:266.81px;top:187.22px" class="cls_013">{!officeSpace}<span
+                        class="cls_002"> SF</span></div>
+
+            <div style="position:absolute;left:383.47px;top:187.22px" class="cls_013"> {!warehouseSpace} <span
+                        class="cls_002"> SF</span></div>
+
+            <div style="position:absolute;left:500.14px;top:187.22px" class="cls_013">{!otherSpace} <span
+                        class="cls_002"> SF</span></div>
+
+            <div style="position:absolute;left:19.08px;top:198.86px" class="cls_002">4.</div>
+
+            <div style="position:absolute;left:33.48px;top:198.86px" class="cls_002">LIVE FLOOR LOAD</div>
+
+            <div style="position:absolute;left:135.74px;top:198.86px" class="cls_002">5.</div>
+
+            <div style="position:absolute;left:150.14px;top:198.86px" class="cls_002">MEASUREMENT</div>
+
+            <div style="position:absolute;left:252.41px;top:198.86px" class="cls_002">6.</div>
+
+            <div style="position:absolute;left:266.81px;top:198.86px;white-space:nowrap;" class="cls_002">YEAR OF LAST
+            </div>
+
+            <div style="position:absolute;left:369.07px;top:198.86px" class="cls_002">7.</div>
+
+            <div style="position:absolute;left:383.47px;top:198.86px" class="cls_002">BUILDING AGE</div>
+
+            <div style="position:absolute;left:485.74px;top:198.86px" class="cls_002">8.</div>
+
+            <div style="position:absolute;left:500.14px;top:198.86px" class="cls_002">SITE SIZE</div>
+
+            <div style="position:absolute;left:150.14px;top:206.93px" class="cls_002">METHOD</div>
+
+            <div style="position:absolute;left:266.81px;top:206.93px" class="cls_002">MAJOR RENOVATION</div>
+
+            <div style="position:absolute;left:266.81px;top:214.97px" class="cls_002">(if applicable)</div>
+
+            <div style="position:absolute;left:33.48px;top:225.89px" class="cls_013">{!liveFloorLoad}<span
+                        class="cls_002"> Pounds per SF</span></div>
+
+            <div style="position:absolute;left:150.14px;top:226.01px" class="cls_002">ANSI/BOMA</div>
+
+            <div style="position:absolute;left:209.81px;top:226.01px" class="cls_002">[</div>
+            <div style="position:absolute;left:212.81px;top:226.01px" class="cls_013">{!ANSIBOMA}</div>
+
+            <div style="position:absolute;left:217.57px;top:226.01px" class="cls_002">]</div>
+
+            <div style="position:absolute;left:266.81px;top:225.89px" class="cls_013">{!renovationYr}</div>
+
+            <div style="position:absolute;left:383.47px;top:225.89px" class="cls_013">{!buildingAge}</div>
+
+            <div style="position:absolute;left:500.14px;top:225.89px" class="cls_013"> {!siteSize} <span
+                        class="cls_002"> SF</span></div>
+
+            <div style="position:absolute;left:150.14px;top:237.17px" class="cls_002">OTHER</div>
+
+            <div style="position:absolute;left:209.81px;top:237.17px" class="cls_002">[</div>
+
+            <div style="position:absolute;left:217.57px;top:237.17px" class="cls_002">]</div>
+
+            <div style="position:absolute;left:500.14px;top:237.17px" class="cls_015">{!siteSizeAcres}<span
+                        class="cls_002"> Acres</span></div>
+
+            <div style="position:absolute;left:188.69px;top:252.77px" class="cls_012">SECTION II - SPACE OFFERED AND
+                RATES
+            </div>
+
+            <div style="position:absolute;left:19.08px;top:279.77px" class="cls_002">9.</div>
+
+            <div style="position:absolute;left:33.48px;top:279.77px" class="cls_002">ANSI/BOMA OFFICE AREA</div>
+
+            <div style="position:absolute;left:162.02px;top:282.17px" class="cls_013">{!ansiBomaOffered}</div>
+
+            <div style="position:absolute;left:215.93px;top:283.73px" class="cls_002">10. RENTABLE SQUARE FEET (RSF)
+            </div>
+
+            <div style="position:absolute;left:355.27px;top:282.17px" class="cls_013"> {!ansiBomaRentable} </div>
+
+            <div style="position:absolute;left:405.58px;top:283.25px" class="cls_002">11. COMMON AREA FACTOR (CAF)</div>
+
+            <div style="position:absolute;left:552.96px;top:282.17px" class="cls_013">{!CAF}</div>
+
+            <div style="position:absolute;left:33.48px;top:287.81px" class="cls_002">SQUARE FEET (ABOA)</div>
+
+            <div style="position:absolute;left:19.08px;top:307.61px" class="cls_002">“Tenant Improvements” are all
+                alterations for the Government-demised area above the building shell buildout, excluding costs
+                identified as tenant improvements in the Security Unit Price
+            </div>
+
+            <div style="position:absolute;left:19.08px;top:315.65px;white-space:nowrap;" class="cls_002">List. Building
+                Specific Amortized Capital (BSAC) is the sum of costs identified as such in the Security Unit Price
+                List. Neither the Tenant Improvements as stated in Block 12, nor the
+            </div>
+
+            <div style="position:absolute;left:19.08px;top:323.69px;white-space:nowrap;" class="cls_002">BSAC as stated
+                in Block 13, are to be included in the shell rent. It is expected that the tenant buildout will be fully
+                amortized at the end of the firm term, and the rent will be reduced
+            </div>
+
+            <div style="position:absolute;left:19.08px;top:331.73px" class="cls_002">accordingly. Any desired rent
+                increases or decreases beyond the firm term of the lease should be reflected in the shell rate and fully
+                explained as part of this written proposal. If Tenant
+            </div>
+
+            <div style="position:absolute;left:19.08px;top:339.77px" class="cls_002">Improvements or BSAC improvements
+                are to be amortized beyond the firm term, those calculations must be itemized as part of this written
+                proposal. The Offeror may attach additional pages
+            </div>
+
+            <div style="position:absolute;left:19.08px;top:347.81px" class="cls_002">as necessary.</div>
+
+            <div style="position:absolute;left:19.08px;top:363.79px" class="cls_008"></div>
+
+            <div style="position:absolute;left:447.58px;top:362.35px" class="cls_002">Number of years each cost per
+                square foot is
+            </div>
+
+            <div style="position:absolute;left:19.08px;top:371.83px" class="cls_008"></div>
+
+            <div style="position:absolute;left:447.58px;top:370.51px" class="cls_002">in effect. State any</div>
+
+            <div style="position:absolute;left:519.84px;top:370.51px" class="cls_002">changes for any rent</div>
+
+            <div style="position:absolute;left:19.08px;top:379.87px;white-space:nowrap;" class="cls_008"></div>
+
+            <div style="position:absolute;left:447.58px;top:378.55px" class="cls_002">component.</div>
+
+            <div style="position:absolute;left:181.13px;top:396.55px" class="cls_002">a.</div>
+
+            <div style="position:absolute;left:256.73px;top:396.55px" class="cls_002">b.</div>
+
+            <div style="position:absolute;left:332.23px;top:396.55px" class="cls_002">c.</div>
+
+            <div style="position:absolute;left:404.98px;top:396.55px" class="cls_002">d.</div>
+
+            <div style="position:absolute;left:477.94px;top:396.55px" class="cls_002">e.</div>
+
+            <div style="position:absolute;left:557.04px;top:396.55px" class="cls_002">f.</div>
+
+            <div style="position:absolute;left:152.18px;top:407.59px" class="cls_002">BUILD-OUT COSTS</div>
+
+            <div style="position:absolute;left:233.21px;top:407.59px" class="cls_002">AMORTIZATION</div>
+
+            <div style="position:absolute;left:308.47px;top:407.59px" class="cls_002">AMORTIZATION</div>
+
+            <div style="position:absolute;left:383.23px;top:407.59px" class="cls_002">ANNUAL RENT</div>
+
+            <div style="position:absolute;left:456.22px;top:407.59px" class="cls_002">ANNUAL RENT</div>
+
+            <div style="position:absolute;left:528.72px;top:407.59px" class="cls_002">NO. YEARS RATE</div>
+
+            <div style="position:absolute;left:156.14px;top:415.63px" class="cls_002">PER CATEGORY</div>
+
+            <div style="position:absolute;left:249.77px;top:415.63px" class="cls_002">TERM</div>
+
+            <div style="position:absolute;left:300.91px;top:415.63px" class="cls_002">INTEREST RATE (%)</div>
+
+            <div style="position:absolute;left:535.44px;top:415.63px" class="cls_002">IS EFFECTIVE</div>
+
+            <div style="position:absolute;left:390.79px;top:418.63px" class="cls_002">$ PER RSF</div>
+
+            <div style="position:absolute;left:454.54px;top:418.63px" class="cls_002">$ PER ABOA SF</div>
+
+            <div style="position:absolute;left:20.16px;top:432.79px" class="cls_002">12. TENANT IMPROVEMENTS</div>
+
+            <div style="position:absolute;left:33.48px;top:440.83px" class="cls_002">(per RLP requirements)</div>
+
+            <div style="position:absolute;left:160.50px;top:443.35px" class="cls_013">{!field12a}</div>
+
+            <div style="position:absolute;left:234.13px;top:443.35px" class="cls_013">{!field12b}</div>
+
+            <div style="position:absolute;left:309.27px;top:443.35px" class="cls_013">{!field12c}</div>
+
+            <div style="position:absolute;left:379.15px;top:443.35px" class="cls_013">{!field12d}</div>
+
+            <div style="position:absolute;left:447.58px;top:443.35px" class="cls_013">{!field12e}</div>
+
+            <div style="position:absolute;left:525.00px;top:443.35px" class="cls_013">{!field12f}</div>
+
+            <div style="position:absolute;left:20.16px;top:453.91px" class="cls_002">13. BSAC</div>
+
+            <div style="position:absolute;left:33.48px;top:461.95px" class="cls_002">(per RLP requirements detailed
+            </div>
+
+            <div style="position:absolute;left:160.50px;top:471.79px" class="cls_002"><span
+                        class="cls_013">{!field13a}</span></div>
+
+            <div style="position:absolute;left:33.48px;top:469.99px" class="cls_002">on Security Unit Price List)</div>
+
+            <div style="position:absolute;left:234.13px;top:471.79px" class="cls_013">{!field13b}</div>
+
+            <div style="position:absolute;left:309.27px;top:471.79px" class="cls_013">{!field13c}</div>
+
+            <div style="position:absolute;left:379.15px;top:471.79px" class="cls_002"><span
+                        class="cls_013">{!field13d}</span></div>
+
+            <div style="position:absolute;left:447.58px;top:471.79px" class="cls_008"><span
+                        class="cls_013">{!field13e}</span></div>
+
+            <div style="position:absolute;left:525.00px;top:471.79px" class="cls_013">{!field13f}</div>
+
+            <div style="position:absolute;left:20.16px;top:482.83px" class="cls_002">14. SHELL BUILD-OUT</div>
+
+            <div style="position:absolute;left:33.48px;top:490.87px" class="cls_002">(per RLP requirements)</div>
+
+            <div style="position:absolute;left:160.50px;top:493.06px" class="cls_013">{!field14a}</div>
+
+            <div style="position:absolute;left:20.16px;top:509.86px" class="cls_002">15. TOTAL BUILD-OUT COSTS</div>
+
+            <div style="position:absolute;left:160.50px;top:517.90px" class="cls_013">{!field15a}</div>
+
+            <div style="position:absolute;left:20.16px;top:529.66px" class="cls_002">16. SHELL RENT (Including current
+            </div>
+
+            <div style="position:absolute;left:33.48px;top:537.70px" class="cls_002">real estate taxes. Refer to Line
+            </div>
+
+            <div style="position:absolute;left:379.15px;top:542.62px" class="cls_013">{!field16d}</div>
+
+            <div style="position:absolute;left:447.58px;top:542.62px" class="cls_013">{!field16e}</div>
+
+            <div style="position:absolute;left:525.00px;top:542.62px" class="cls_013">{!field16f}</div>
+
+            <div style="position:absolute;left:33.48px;top:545.74px" class="cls_002">28 on GSA Form 1217)</div>
+
+            <div style="position:absolute;left:20.16px;top:556.42px" class="cls_002">17. OPERATING COSTS (Refer to</div>
+
+            <div style="position:absolute;left:33.48px;top:564.22px" class="cls_002">Line 27 on GSA Form 1217)</div>
+
+            <div style="position:absolute;left:379.15px;top:568.66px" class="cls_013">{!field17d}</div>
+
+            <div style="position:absolute;left:447.58px;top:568.66px" class="cls_013">{!field17e}</div>
+
+            <div style="position:absolute;left:525.00px;top:568.66px" class="cls_013">{!field17f}</div>
+
+            <div style="position:absolute;left:20.16px;top:580.90px" class="cls_002">18. TOTAL RATE/SF</div>
+
+            <div style="position:absolute;left:379.15px;top:584.26px" class="cls_013">{!field18d}</div>
+
+            <div style="position:absolute;left:447.58px;top:584.26px" class="cls_013">{!field18e}</div>
+
+            <div style="position:absolute;left:525.00px;top:584.26px" class="cls_013">{!field18f}</div>
+
+            <div style="position:absolute;left:19.08px;top:605.14px" class="cls_002">19. TOTAL ANNUAL RENT</div>
+
+            <div style="position:absolute;left:379.15px;top:605.14px" class="cls_013">{!field19d}</div>
+
+            <div style="position:absolute;left:447.58px;top:605.14px" class="cls_013">{!field19e}</div>
+
+            <div style="position:absolute;left:525.00px;top:605.14px" class="cls_013">{!field19f}</div>
+
+            <div style="position:absolute;left:152.54px;top:622.90px" class="cls_002">PER SF RATE</div>
+
+            <div style="position:absolute;left:239.45px;top:622.90px" class="cls_002">FOR YEARS</div>
+
+            <div style="position:absolute;left:303.43px;top:622.90px" class="cls_002">PER SF RATE</div>
+
+            <div style="position:absolute;left:387.67px;top:622.90px" class="cls_002">FOR YEARS</div>
+
+            <div style="position:absolute;left:449.38px;top:622.90px" class="cls_002">PER SF RATE</div>
+
+            <div style="position:absolute;left:538.80px;top:622.90px" class="cls_002">FOR YEARS</div>
+
+            <div style="position:absolute;left:150.26px;top:641.16px" class="cls_002">$__________/RSF</div>
+
+            <div style="position:absolute;left:301.63px;top:641.16px" class="cls_002">$__________/RSF</div>
+
+            <div style="position:absolute;left:447.58px;top:641.16px" class="cls_002">$__________/RSF</div>
+            <div style="position:absolute;left:160.26px;top:639.16px" class="cls_015">{!field20a1}</div>
+
+            <div style="position:absolute;left:311.63px;top:639.16px" class="cls_015">{!field20c1}</div>
+
+            <div style="position:absolute;left:457.58px;top:639.16px" class="cls_015">{!field20e1}</div>
+
+            <div style="position:absolute;left:19.08px;top:646.08px" class="cls_002">20. STEP RENT (SHELL RATES)</div>
+
+            <div style="position:absolute;left:228.65px;top:650.16px" class="cls_002">___ Thru ___</div>
+
+            <div style="position:absolute;left:379.15px;top:649.20px" class="cls_002">___ Thru ___</div>
+
+            <div style="position:absolute;left:525.00px;top:649.20px" class="cls_002">___ Thru ___</div>
+            <div style="position:absolute;left:228.65px;top:647.16px" class="cls_015">{!field20b1}</div>
+
+            <div style="position:absolute;left:379.15px;top:647.20px" class="cls_015">{!field20d1}</div>
+
+            <div style="position:absolute;left:525.00px;top:647.20px" class="cls_015">{!field20f1}</div>
+            <div style="position:absolute;left:258.65px;top:647.16px" class="cls_015">{!field20b2}</div>
+
+            <div style="position:absolute;left:409.15px;top:647.20px" class="cls_015">{!field20d2}</div>
+
+            <div style="position:absolute;left:555.00px;top:647.20px" class="cls_015">{!field20f2}</div>
+
+            <div style="position:absolute;left:150.26px;top:657.24px" class="cls_002">$__________/ABOA</div>
+
+            <div style="position:absolute;left:301.63px;top:657.24px" class="cls_002">$__________/ABOA</div>
+
+            <div style="position:absolute;left:447.58px;top:657.24px" class="cls_002">$__________/ABOA</div>
+            <div style="position:absolute;left:160.26px;top:655.24px" class="cls_015">{!field20a2}</div>
+
+            <div style="position:absolute;left:311.63px;top:655.24px" class="cls_015">{!field20c2}</div>
+
+            <div style="position:absolute;left:457.58px;top:655.24px" class="cls_015">{!field20e2}</div>
+
+            <div style="position:absolute;left:82.34px;top:686.40px" class="cls_002">a. Number of parking spaces for the
+                entire building/ facility, which are under the control of the Offeror:
+            </div>
+            <div style="position:absolute;left:386.42px;top:686.40px" class="cls_015">{!surfParking}</div>
+            <div style="position:absolute;left:386.42px;top:686.40px" class="cls_015">________<span class="cls_002"> surface</span>
+            </div>
+
+            <div style="position:absolute;left:458.42px;top:686.40px" class="cls_015">{!structParking}</div>
+            <div style="position:absolute;left:458.42px;top:686.40px" class="cls_015">________<span class="cls_002"> structured</span>
+            </div>
+
+            <div style="position:absolute;left:528.42px;top:686.40px" class="cls_015">{!totalParking}</div>
+            <div style="position:absolute;left:528.42px;top:686.40px" class="cls_015">________<span class="cls_002"> Total</span>
+            </div>
+
+            <div style="position:absolute;left:18.12px;top:694.44px" class="cls_002">21. Parking</div>
+
+            <div style="position:absolute;left:82.34px;top:695.40px" class="cls_002">b. Number of parking spaces
+                required by local code:
+            </div>
+
+            <div style="position:absolute;left:386.42px;top:695.40px" class="cls_015">{!reqSurface}</div>
+            <div style="position:absolute;left:386.42px;top:695.40px" class="cls_015">________<span class="cls_002"> surface</span>
+            </div>
+
+            <div style="position:absolute;left:458.42px;top:695.40px" class="cls_015">{!reqStructured}</div>
+            <div style="position:absolute;left:458.42px;top:695.40px" class="cls_015">________<span class="cls_002"> structured</span>
+            </div>
+
+            <div style="position:absolute;left:528.42px;top:695.40px"
+                 class="cls_015">{!offer.PBS_AAAP_Total_Park_Spaces_Offered__c}</div>
+            <div style="position:absolute;left:528.42px;top:695.40px" class="cls_015">________<span class="cls_002"> Total</span>
+            </div>
+
+            <div style="position:absolute;left:82.34px;top:704.52px" class="cls_002">c. Number of parking spaces for
+                Employee/Visitor Use (per RLP):
+            </div>
+
+            <div style="position:absolute;left:406.42px;top:704.52px" class="cls_015">___{!visitorSurface}____<span
+                        class="cls_002"> surface</span></div>
+
+            <div style="position:absolute;left:478.42px;top:704.52px" class="cls_015">___{!visitorGarage}___<span
+                        class="cls_002"> structured</span></div>
+
+            <div style="position:absolute;left:82.34px;top:713.52px" class="cls_002">d. Number of parking spaces for
+                Official Government Vehicles (per RLP):
+            </div>
+
+            <div style="position:absolute;left:406.42px;top:713.52px" class="cls_015">____{!govSurface}____<span
+                        class="cls_002"> surface</span></div>
+
+            <div style="position:absolute;left:478.42px;top:713.52px" class="cls_015">____{!govGarage}____<span
+                        class="cls_002"> structured</span></div>
+
+            <div style="position:absolute;left:82.34px;top:724.56px" class="cls_002">{!Text21e}</div>
+            <div style="position:absolute;left:294.34px;top:724.56px" class="cls_015">{!field21eYes}</div>
+            <div style="position:absolute;left:325.34px;top:724.56px" class="cls_015">{!field21eNo}</div>
+
+            <div style="position:absolute;left:82.34px;top:735.48px;white-space:nowrap;"
+                 class="cls_002">{!Text21eNo}</div>
+
+            <!--<div style="position:absolute;left:170.69px;top:735.48px" class="cls_002">$  <span class="cls_015">_</span><span class="cls_013">_______</span><span class="cls_002"> Reserved surface</span></div>
+
+            <div style="position:absolute;left:270.26px;top:735.48px" class="cls_002">$ <span class="cls_015">________</span><span class="cls_002"> Reserved structured</span></div>
+
+            <div style="position:absolute;left:370.69px;top:735.48px" class="cls_002">$  <span class="cls_015">_</span><span class="cls_013">_______</span><span class="cls_002">Non-Reserved surface</span></div>
+
+            <div style="position:absolute;left:470.26px;top:735.48px" class="cls_002">$ <span class="cls_015">________</span><span class="cls_002">Non-Reserved structured</span></div>-->
+
+            <div style="position:absolute;left:158.69px;top:735.48px" class="cls_015">{!monthlyCostResSurf}</div>
+
+            <div style="position:absolute;left:248.26px;top:735.48px" class="cls_015">{!monthlyCostResGar}</div>
+
+            <div style="position:absolute;left:338.69px;top:735.48px" class="cls_015">{!monthlyCostNonResSurf}</div>
+
+            <div style="position:absolute;left:438.26px;top:735.48px" class="cls_015">{!monthlyCostNonResGar}</div>
+
+            <div style="position:absolute;left:18.00px;top:767.64px" class="cls_002">PAGE <span
+                        class="cls_003">1 of 3</span></div>
+
+            <div style="position:absolute;left:429.46px;top:767.64px" class="cls_004">GSA<span
+                        class="cls_003"> </span><span class="cls_002">FORM</span><span class="cls_003"> </span><span
+                        class="cls_004">1364C (REV 11/2016)</span></div>
+
+        </div>
+
+        <div style="position:absolute;left:50%;margin-left:-306px;top:1002px;width:612px;height:792px;border-style:outset;overflow:hidden">
+
+            <div style="position:absolute;left:0px;top:0px">
+
+                <img src="{!URLFOR($Resource.form1364, 'image002_lop.png')}" width="612" height="792"/></div>
+
+            <div style="position:absolute;left:178.85px;top:33.60px" class="cls_012">SECTION III - LEASE TERMS AND
+                CONDITIONS
+            </div>
+
+            <div style="position:absolute;left:19.08px;top:55.56px" class="cls_002">22.</div>
+            <div style="position:absolute;left:33.48px;top:55.56px" class="cls_002">INITIAL LEASE TERM</div>
+
+            <div style="position:absolute;left:301.63px;top:58.56px" class="cls_002">23. RENEWAL OPTIONS</div>
+
+            <div style="position:absolute;left:19.08px;top:63.60px" class="cls_002">(Full Term)</div>
+
+            <div style="position:absolute;left:19.08px;top:76.22px" class="cls_002">a. Number of Years</div>
+
+            <div style="position:absolute;left:110.18px;top:76.22px" class="cls_002">b. Years Firm</div>
+
+            <div style="position:absolute;left:201.29px;top:76.22px" class="cls_002">c. Number of Days</div>
+
+            <div style="position:absolute;left:301.63px;top:76.22px" class="cls_002">a. Shell Rate /</div>
+
+            <div style="position:absolute;left:365.47px;top:76.22px" class="cls_002">b. Years Each</div>
+
+            <div style="position:absolute;left:438.34px;top:76.22px" class="cls_002">c. Number of</div>
+
+            <div style="position:absolute;left:511.30px;top:76.22px" class="cls_002">d. Number of Days</div>
+
+            <div style="position:absolute;left:212.09px;top:84.26px" class="cls_002">Notice for Government to</div>
+
+            <div style="position:absolute;left:312.43px;top:84.26px" class="cls_002">RSF / Yr</div>
+
+            <div style="position:absolute;left:449.14px;top:84.26px" class="cls_002">Options</div>
+
+            <div style="position:absolute;left:522.12px;top:84.26px" class="cls_002">Notice to Exercise</div>
+
+            <div style="position:absolute;left:212.09px;top:92.30px" class="cls_002">Terminate Lease:</div>
+
+            <div style="position:absolute;left:522.12px;top:92.30px" class="cls_002">Renewal Option:</div>
+
+            <div style="position:absolute;left:22.20px;top:103.34px" class="cls_013">{!field22a}</div>
+
+            <div style="position:absolute;left:123.30px;top:103.34px" class="cls_013">{!field22b}</div>
+
+            <div style="position:absolute;left:228.97px;top:103.34px" class="cls_013">{!field22c}</div>
+
+            <div style="position:absolute;left:303.51px;top:103.46px" class="cls_013">{!field23a}</div>
+
+            <div style="position:absolute;left:369.47px;top:103.34px" class="cls_013">{!field23b}</div>
+
+            <div style="position:absolute;left:462.34px;top:103.34px" class="cls_013">{!field23c}</div>
+
+            <div style="position:absolute;left:535.16px;top:103.34px" class="cls_013">{!field23d}</div>
+
+            <div style="position:absolute;left:19.08px;top:117.98px" class="cls_002">24.</div>
+
+            <div style="position:absolute;left:33.48px;top:117.98px" class="cls_002">OFFER GOOD UNTIL AWARD</div>
+
+            <div style="position:absolute;left:301.63px;top:117.98px" class="cls_002">25. Space will be altered and
+                delivered in accordance with the Government's specifications
+            </div>
+
+            <!--div style="position:absolute;left:33.48px;top:126.14px" class="cls_002">(In accordance with Federal Acquisition Regulations 15.208)</div-->
+
+            <div style="position:absolute;left:316.03px;top:126.14px;white-space:nowrap;" class="cls_002">and
+                requirements in accordance with the Request for Lease Proposals (RLP) and the
+            </div>
+
+            <div style="position:absolute;left:316.03px;top:134.18px" class="cls_002">lease.</div>
+
+            <div style="position:absolute;left:19.08px;top:146.30px" class="cls_002">26.</div>
+            <div style="position:absolute;left:33.48px;top:146.30px" class="cls_002">COMMISSIONS--(If applicable),
+                ATTACH COMMISSION AGREEMENT
+            </div>
+
+            <div style="position:absolute;left:19.08px;top:162.02px" class="cls_002">a.</div>
+
+            <div style="position:absolute;left:33.48px;top:162.02px" class="cls_002">Tenant Representative Commission:
+            </div>
+
+            <div style="position:absolute;left:215.93px;top:162.02px" class="cls_002">b. Owner’s Representative
+                Commission:
+            </div>
+
+            <div style="position:absolute;left:405.58px;top:162.02px" class="cls_002">c. Schedule of Commission
+                payments:
+            </div>
+
+            <div style="position:absolute;left:33.48px;top:176.18px" class="cls_013"> {!field26a} <span class="cls_002"> %</span>
+            </div>
+
+            <div style="position:absolute;left:230.33px;top:176.18px" class="cls_013">{!field26b} <span class="cls_002"> %</span>
+            </div>
+
+            <div style="position:absolute;left:419.98px;top:176.18px" class="cls_013"> {!field26c1} <span
+                        class="cls_002"> % at lease award and </span><span class="cls_013"> {!field26c2} </span><span
+                        class="cls_002"> % at lease</span></div>
+
+            <div style="position:absolute;left:419.98px;top:184.34px" class="cls_002">occupancy</div>
+
+            <div style="position:absolute;left:19.08px;top:196.10px" class="cls_002">27.</div>
+
+            <div style="position:absolute;left:33.48px;top:196.10px" class="cls_002">OFFEROR’S TENANT IMPROVEMENT FEE
+                SCHEDULE
+            </div>
+            <div style="position:absolute;left:19.08px;top:207.17px" class="cls_013">{!Text27}</div>
+
+            <div style="position:absolute;left:301.63px;top:196.10px" class="cls_002">28. ADDITIONAL FINANCIAL ASPECTS
+                OF THE LEASE
+            </div>
+
+            <div style="position:absolute;left:316.03px;top:205.17px" class="cls_002">Adjustment for Vacant Premises:
+            </div>
+
+            <div style="position:absolute;left:420.66px;top:207.17px" class="cls_002">$<span
+                        class="cls_015">  {!vacantPremiseAdjustment}      </span><span
+                        class="cls_002"> per ABOA SF</span></div>
+
+            <div style="position:absolute;left:316.03px;top:216.21px" class="cls_002">HVAC Overtime Rate:</div>
+
+            <div style="position:absolute;left:385.66px;top:218.21px" class="cls_002">$ <span
+                        class="cls_015">{!field28HVACRt}</span><span class="cls_002"> per hour per [ ] zone [ ] floor [ ] space (choose one)</span>
+            </div>
+            <div style="position:absolute;left:445.66px;top:218.21px" class="cls_015">{!field28HVACzone}</div>
+            <div style="position:absolute;left:469.36px;top:218.21px" class="cls_015">{!field28HVACfloor}</div>
+            <div style="position:absolute;left:493.06px;top:218.21px" class="cls_015">{!field28HVACspace}</div>
+
+            <div style="position:absolute;left:33.48px;top:224.21px" class="cls_002">a. Architectural/Engineering fees
+                will be (choose one):<span class="cls_015">     </span></div>
+
+            <div style="position:absolute;left:50.48px;top:233.21px" class="cls_013">{!field27a1}</div>
+            <div style="position:absolute;left:79.78px;top:233.21px" class="cls_013">{!field27a1v}</div>
+            <div style="position:absolute;left:59.78px;top:233.21px" class="cls_002">1.</div>
+
+            <div style="position:absolute;left:69.50px;top:233.21px" class="cls_002">$ <span
+                        class="cls_013">______</span><span class="cls_002"> per ABOA SF</span></div>
+
+            <div style="position:absolute;left:316.03px;top:224.41px" class="cls_002">For rates based on a “per zone”
+                basis, provide the following:
+            </div>
+            <div style="position:absolute;left:316.03px;top:233.41px" class="cls_002">Number of zones in offered
+                Space:<span class="cls_015">__{!field28HVACZones}__</span></div>
+
+            <div style="position:absolute;left:316.03px;top:242.41px" class="cls_002">Areas requiring 24 hour HVAC (LAN,
+                etc.)
+            </div>
+
+            <div style="position:absolute;left:447.71px;top:242.41px" class="cls_002"><span
+                        class="cls_002">per </span><span class="cls_015"></span><span class="cls_002">ABOA SF</span>
+            </div>
+
+            <div style="position:absolute;left:50.48px;top:242.21px" class="cls_013">{!field27a2}</div>
+            <div style="position:absolute;left:69.78px;top:242.21px" class="cls_013">{!field27a2v}</div>
+            <div style="position:absolute;left:59.78px;top:242.21px" class="cls_002">2.</div>
+
+            <div style="position:absolute;left:69.50px;top:242.21px" class="cls_013">______<span class="cls_002">% of Total TI Construction Costs</span>
+            </div>
+
+            <div style="position:absolute;left:317.95px;top:260.33px;right: 4px" class="cls_008">*Only applies when the
+                Government requires separate reimbursement for 24 hour HVAC
+            </div>
+
+            <div style="position:absolute;left:50.48px;top:251.21px" class="cls_013">{!field27a3}</div>
+            <div style="position:absolute;left:79.78px;top:251.21px" class="cls_013">{!field27a3v}</div>
+            <div style="position:absolute;left:59.78px;top:251.21px" class="cls_002">3.</div>
+
+            <div style="position:absolute;left:69.50px;top:251.21px" class="cls_002">$ <span
+                        class="cls_013">_______    </span><span class="cls_002"> flat fee</span></div>
+
+            <div style="position:absolute;left:318.79px;top:267.37px;right: 4px" class="cls_008"> as described under
+                Section 1 of the Lease. Otherwise, include this cost in the operating rent, &nbsp;&nbsp;&nbsp;&nbsp; as
+                described under Section 6 of the Lease.
+            </div>
+
+            <div style="position:absolute;left:33.48px;top:265.37px" class="cls_002">b. Lessor’s Project Management fees
+                will be
+            </div>
+
+            <div style="position:absolute;left:194.09px;top:263.37px" class="cls_013">{!field27b}</div>
+            <div style="position:absolute;left:194.09px;top:265.37px" class="cls_013">______<span class="cls_002">  percent of   Total  TI</span>
+            </div>
+
+            <div style="position:absolute;left:318.79px;top:264.41px" class="cls_013"><i> </i></div>
+
+            <div style="position:absolute;left:33.48px;top:273.53px" class="cls_002">construction costs</div>
+
+            <div style="position:absolute;left:318.79px;top:272.45px" class="cls_013"></div>
+
+            <div style="position:absolute;left:316.03px;top:294.61px" class="cls_002">Building’s Normal Hours of HVAC
+                Operation:
+            </div>
+
+            <div style="position:absolute;left:33.48px;top:296.57px" class="cls_002">c. If other fees are applicable,
+                state as per ABOA square foot in the space
+            </div>
+
+
+            <div style="position:absolute;left:330.43px;top:305.65px" class="cls_002">Monday - Friday <span
+                        class="cls_015">_{!HVACwkStart}__</span><span class="cls_002">  to </span><span class="cls_015">__{!HVACwkEnd}
+                    __</span><span class="cls_002"> ;</span></div>
+
+            <div style="position:absolute;left:33.88px;top:304.61px" class="cls_002"> below, or if using a percentage,
+                the basis for determining the fee.
+            </div>
+            <div style="position:absolute;left:33.88px;top:314.61px" class="cls_015"> {!field27c}</div>
+            <div style="position:absolute;left:33.88px;top:334.61px" class="cls_015"> {!field27cLine2}</div>
+            <div style="position:absolute;left:33.88px;top:354.61px" class="cls_015"> {!field27cLine3}</div>
+
+            <div style="position:absolute;left:330.43px;top:313.69px" class="cls_002">Saturday <span
+                        class="cls_015">_{!HVACsatStart}__</span><span class="cls_002">  to </span><span
+                        class="cls_015">__{!HVACsatEnd}__</span><span class="cls_002">;</span></div>
+
+            <div style="position:absolute;left:47.88px;top:312.65px" class="cls_002"></div>
+
+            <div style="position:absolute;left:330.43px;top:321.73px" class="cls_002">Sunday</div>
+
+            <div style="position:absolute;left:359.95px;top:321.73px" class="cls_015">_{!HVACsunStart}__<span
+                        class="cls_002">  to </span><span class="cls_015">__{!HVACsunEnd}__</span><span
+                        class="cls_002"></span></div>
+
+            <div style="position:absolute;left:33.48px;top:376.69px" class="cls_008">The Government will add the cost of
+                the proposed TI fees to the net present
+            </div>
+
+            <div style="position:absolute;left:316.03px;top:332.77px" class="cls_002">Percent of Government Occupancy:
+            </div>
+
+            <div style="position:absolute;left:449.50px;top:327.77px" class="cls_015">  {!prcntGovOccupancy}  <span
+                        class="cls_002">%</span></div>
+
+            <div style="position:absolute;left:33.48px;top:384.73px;white-space:nowrap;" class="cls_008">value of the
+                offered rental rate as described in the RLP’s Present Value Price
+            </div>
+
+            <div style="position:absolute;left:316.03px;top:343.81px" class="cls_002">Current Year Taxes:</div>
+
+            <div style="position:absolute;left:445.66px;top:343.81px" class="cls_002">$<span
+                        class="cls_015">  {!currentYrTaxes}  </span></div>
+
+            <div style="position:absolute;left:33.48px;top:392.77px" class="cls_008"> Evaluation paragraph. This
+                schedule will be applicable for Tenant Improvements.
+            </div>
+
+            <div style="position:absolute;left:330.43px;top:352.87px" class="cls_002">Based on fully assessed value?
+            </div>
+
+            <div style="position:absolute;left:481.66px;top:349.87px" class="cls_002"> YES</div>
+
+            <div style="position:absolute;left:517.66px;top:349.87px" class="cls_002"> NO</div>
+            <div style="position:absolute;left:451.66px;top:349.87px;white-space:nowrap;"
+                 class="cls_015">   {!fullyAssessedYes}     </div>
+
+            <div style="position:absolute;left:507.66px;top:349.87px;white-space:nowrap;"
+                 class="cls_015">   {!fullyAssessedNo}      </div>
+
+
+            <div style="position:absolute;left:330.43px;top:361.03px" class="cls_002">Is the offered space part of
+                multiple tax bills?<span class="cls_015">   </span></div>
+
+            <div style="position:absolute;left:481.66px;top:361.03px;white-space:nowrap;" class="cls_002"><span
+                        class="cls_015">   {!multyTaxBillYes}  </span> YES
+            </div>
+
+            <div style="position:absolute;left:517.66px;top:361.03px;white-space:nowrap;" class="cls_002"><span
+                        class="cls_015">   {!multyTaxBillNo}  </span> NO
+            </div>
+
+            <div style="position:absolute;left:330.43px;top:372.07px" class="cls_002">If so, provide tax ID numbers and
+                square footage for each. Attach the legal
+            </div>
+
+            <div style="position:absolute;left:330.43px;top:380.11px" class="cls_002">description of the offered
+                property.
+            </div>
+
+            <div style="position:absolute;left:315.19px;top:389.11px" class="cls_002">If a site is offered, state the
+                total land costs:
+            </div>
+
+            <div style="position:absolute;left:453.61px;top:389.11px" class="cls_002">$<span
+                        class="cls_015">  {!totalLandCost}  </span></div>
+            <div style="position:absolute;left:19.08px;top:409.75px" class="cls_002">29.</div>
+            <div style="position:absolute;left:39.08px;top:409.75px" class="cls_002">FREE RENT INCLUDED IN OFFER <span
+                        class="cls_015">{!noOfMonthsFreeRentAAAP}</span></div>
+            <div style="position:absolute;left:39.08px;top:420.10px" class="cls_002">1. ______ months free rent
+                (includes shell, operating, TI and BSAC rent)
+            </div>
+            <div style="position:absolute;left:44.08px;top:418.10px" class="cls_015">{!noOfMonthsFreeRentLOP}</div>
+            <div style="position:absolute;left:39.08px;top:430.10px" class="cls_002">2. Other rental concessions
+                structured as follows ______
+            </div>
+            <div style="position:absolute;left:39.08px;top:440.10px" class="cls_002">3. None</div>
+
+            <div style="position:absolute;left:301.63px;top:409.75px" class="cls_002">30. LIST OF ATTACHMENTS SUBMITTED
+                WITH THIS OFFER
+            </div>
+
+            <div style="position:absolute;left:301.63px;top:417.79px" class="cls_016">(See RLP requirements)</div>
+
+            <div style="position:absolute;left:316.03px;top:426.67px" class="cls_013"></div>
+
+            <div style="position:absolute;left:19.08px;top:463.75px" class="cls_002">31. ADDITIONAL REMARKS OR
+                CONDITIONS WITH RESPECT TO THIS OFFER<span class="cls_013">  </span></div>
+            <div style="position:absolute;left:19.08px;top:473.75px" class="cls_015">{!additionalRemarks}</div>
+
+            <div style="position:absolute;left:142.82px;top:514.90px" class="cls_012">SECTION IV - OWNER IDENTIFICATION
+                AND CERTIFICATION
+            </div>
+
+            <div style="position:absolute;left:19.08px;top:536.26px" class="cls_002">32. RECORDED OWNER</div>
+
+            <div style="position:absolute;left:20.48px;top:551.34px" class="cls_002">a. Name</div>
+            <div style="position:absolute;left:20.48px;top:565.34px" class="cls_015">{!ownerName} </div>
+            <div style="position:absolute;left:120.48px;top:551.34px" class="cls_002">b. Address</div>
+            <div style="position:absolute;left:120.48px;top:565.34px" class="cls_015">{!ownerAddress} </div>
+            <div style="position:absolute;left:240.48px;top:551.34px" class="cls_002">c. City</div>
+            <div style="position:absolute;left:240.48px;top:565.34px" class="cls_015">{!ownerCity} </div>
+            <div style="position:absolute;left:335.48px;top:551.34px" class="cls_002">d. State</div>
+            <div style="position:absolute;left:335.48px;top:565.34px" class="cls_015">{!ownerState} </div>
+            <div style="position:absolute;left:400.48px;top:551.34px;white-space:nowrap;" class="cls_002">e. ZIP + 4
+            </div>
+            <div style="position:absolute;left:400.48px;top:565.34px;white-space:nowrap;"
+                 class="cls_015">{!ownerZip} </div>
+            <div style="position:absolute;left:503.48px;top:551.34px;white-space:nowrap;" class="cls_002"> f. DUNS
+                Number
+            </div>
+            <div style="position:absolute;left:503.48px;top:565.34px;white-space:nowrap;"
+                 class="cls_015">{!dunsNumber}</div>
+
+            <!--<div style="position:absolute;left:463.48px;top:551.34px;white-space:nowrap;" class="cls_002"> f. DUNS Number</div>
+<div style="position:absolute;left:463.48px;top:565.34px;white-space:nowrap;" class="cls_015">{!dunsNumber}</div>--->s
+
+            <div style="position:absolute;left:80.48px;top:561.34px" class="cls_015"></div>
+
+            <div style="position:absolute;left:19.08px;top:581.50px" class="cls_002">33. BY SUBMITTING THIS OFFER, THE
+                OFFEROR AGREES UPON ACCEPTANCE OF THIS PROPOSAL BY THE HEREIN SPECIFIED DATE, TO LEASE TO THE UNITED
+                STATES OF
+            </div>
+
+            <div style="position:absolute;left:33.48px;top:589.54px;white-space:nowrap;" class="cls_002">AMERICA, THE
+                PREMISES DESCRIBED, UPON THE TERMS AND CONDITIONS AS SPECIFIED HEREIN, IN FULL COMPLIANCE WITH AND
+                ACCEPTANCE OF
+            </div>
+
+            <div style="position:absolute;left:33.48px;top:597.58px" class="cls_002">THE AFOREMENTIONED RLP, WITH
+                ATTACHMENTS.
+            </div>
+            <div style="position:absolute;left:77.78px;top:610.08px" class="cls_015">{!acceptedTerms}</div>
+            <div style="position:absolute;left:95.48px;top:610.08px" class="cls_002">I have read the RLP with
+                attachments in its entirety and am requesting no deviations.
+            </div>
+
+            <div style="position:absolute;left:19.08px;top:626.42px" class="cls_002">34. OFFEROR’S INTEREST IN
+                PROPERTY
+            </div>
+
+            <div style="position:absolute;left:230.09px;top:626.42px" class="cls_002">OWNER</div>
+
+            <div style="position:absolute;left:339.67px;top:626.42px" class="cls_002">AGENT</div>
+
+            <div style="position:absolute;left:492.10px;top:626.42px" class="cls_002">OTHER <span class="cls_016"> (Specify):</span>
+            </div>
+
+            <!--div style="position:absolute;left:489.58px;top:633.58px" class="cls_016">(Specify):</div-->
+
+            <div style="position:absolute;left:239.21px;top:636.74px" class="cls_013">[ {!propOwner} ]</div>
+
+            <div style="position:absolute;left:347.47px;top:636.74px" class="cls_013">[ {!propAgent} ]</div>
+
+            <div style="position:absolute;left:483.34px;top:636.74px" class="cls_013">{!propOther} </div>
+
+            <div style="position:absolute;left:19.09px;top:653.76px" class="cls_002">35<span
+                        class="cls_008">.   OFFEROR</span></div>
+            <div style="position:absolute;left:99.09px;top:653.76px" class="cls_002">Check if same as Recorded Owner
+            </div>
+
+            <div style="position:absolute;left:33.48px;top:665.72px" class="cls_002">a. Name</div>
+            <div style="position:absolute;left:33.48px;top:677.84px" class="cls_013">{!userdetail.Name}</div>
+            <div style="position:absolute;left:133.48px;top:665.72px" class="cls_002">b. Address</div>
+            <div style="position:absolute;left:133.48px;top:677.80px" class="cls_013">{!userdetail.Street}</div>
+            <div style="position:absolute;left:303.48px;top:665.72px" class="cls_002">c. City</div>
+            <div style="position:absolute;left:303.88px;top:677.84px" class="cls_013">{!userdetail.City}</div>
+            <div style="position:absolute;left:453.48px;top:665.72px" class="cls_002">d. ST</div>
+            <div style="position:absolute;left:453.88px;top:677.84px" class="cls_013">{!userdetail.State}</div>
+            <div style="position:absolute;left:533.48px;top:665.72px" class="cls_002">e. ZIP</div>
+            <div style="position:absolute;left:533.88px;top:677.84px" class="cls_013">{!userdetail.PostalCode}</div>
+
+            <div style="position:absolute;left:33.48px;top:691.76px" class="cls_002">f. Title</div>
+            <div style="position:absolute;left:33.48px;top:701.76px" class="cls_013">N/A</div>
+            <div style="position:absolute;left:133.48px;top:691.08px" class="cls_002">g. E-Mail Address:</div>
+            <div style="position:absolute;left:133.48px;top:701.12px" class="cls_013">{!userdetail.Email}</div>
+            <div style="position:absolute;left:453.48px;top:691.76px" class="cls_002">h. Telephone Number</div>
+            <div style="position:absolute;left:453.48px;top:701.12px" class="cls_013">{!userdetail.Phone}
+                &nbsp;&nbsp;<span class="cls_002"> &nbsp;&nbsp;extension </span><span class="cls_013">__________</span>
+            </div>
+
+            <div style="position:absolute;left:33.48px;top:713.76px" class="cls_002">i. Offerror's Signature</div>
+            <div style="position:absolute;left:423.78px;top:713.76px" class="cls_002">j. Date Signed</div>
+
+            <div style="position:absolute;left:33.48px;top:723.64px"
+                 class="cls_sign">{!if(sysDate!='',userdetail.Name,'')}</div>
+            <!--div style="position:absolute;left:16.00px;top:715.64px" class="cls_015">{!if(sysDate!='','Accepted all the terms and conditions as specified herein, in full compliance with and acceptance of the aforementioned RLP, and attachments. ','')} </div-->
+            <div style="position:absolute;left:413.78px;top:723.64px"
+                 class="cls_015">{!if(sysDate!='','Signed and submitted on','')} {!sysDate} </div>
+            <!--<div style="position:absolute;left:430.18px;top:719.64px" class="cls_013">{!sysDate}</div>-->
+
+            <div style="position:absolute;left:18.00px;top:767.64px" class="cls_002">PAGE <span
+                        class="cls_003">2 of 3</span></div>
+
+            <div style="position:absolute;left:429.46px;top:767.64px" class="cls_004">GSA<span
+                        class="cls_003"> </span><span class="cls_002">FORM</span><span class="cls_003"> </span><span
+                        class="cls_004">1364C (REV 11/2016)</span></div>
+
+        </div>
+
+        <div style="position:absolute;left:50%;margin-left:-306px;top:2004px;width:612px;height:822px;border-style:outset;overflow:hidden">
+
+            <div style="position:absolute;left:0px;top:0px">
+
+                <img src="{!URLFOR($Resource.form1364, 'Page3.jpg')}" width="612" height="792"/></div>
+
+            <div style="position:absolute;left:18.00px;top:30.52px" class="cls_018">ATTACHMENT TO</div>
+
+            <div style="position:absolute;left:221.33px;top:32.52px" class="cls_018">REQUEST FOR LEASE PROPOSAL NO.
+            </div>
+
+            <div style="position:absolute;left:454.66px;top:32.52px" class="cls_018">DATE:</div>
+
+            <div style="position:absolute;left:18.00px;top:44.92px" class="cls_018">GSA FORM 1364C LEASE PROPOSAL DATA
+            </div>
+
+            <div style="position:absolute;left:25.80px;top:58.50px" class="cls_017">1</div>
+
+            <div style="position:absolute;left:50.76px;top:58.50px;white-space:nowrap;" class="cls_011">Offeror's
+                Interest in the Property:
+            </div>
+
+            <div style="position:absolute;left:50.76px;top:75.30px;white-space:pre;" class="cls_011">[<span
+                        style="white-space:pre;" class="cls_013">{!propOwner} </span>]<span class="cls_019">  Fee owner  [</span><span
+                        class="cls_013">{!propAgent}</span><span class="cls_019">]  Other:</span></div>
+
+            <div style="position:absolute;left:50.76px;top:90.26px" class="cls_011">Attach evidence of Offeror's
+                interest in property (e.g., deed) and representative's authority to bind Offeror.
+            </div>
+
+            <div style="position:absolute;left:25.80px;top:107.30px" class="cls_017">2</div>
+
+            <div style="position:absolute;left:50.76px;top:107.30px" class="cls_011">Flood Plains: (See RLP for minimum
+                requirements)
+            </div>
+
+            <div style="position:absolute;left:50.76px;top:120.98px;white-space:nowrap;" class="{!Class19_21}">The
+                Property is <span class="{!Class19_21}">[ {!floodPlain100Yrs} ]</span><span class="{!Class19_21}">  in a base (100-year) flood plain  </span><span
+                        class="{!Class19_21}">[ {!floodPlain500Yrs} ]</span><span class="{!Class19_21}">  in a 500-year flood plain </span><span
+                        class="{!Class19_21}">[ {!floodPlainNot} ]</span><span class="{!Class19_21}">  not in a flood plain.</span>
+            </div>
+
+            <!--div style="position:absolute;left:50.76px;top:137.18px" class="cls_020">(See RLP for minimum requirements)</div-->
+
+            <div style="position:absolute;left:25.80px;top:156.63px" class="cls_017">3</div>
+            <div style="position:absolute;left:50.76px;top:156.63px" class="cls_020">Seismic Requirements: (See RLP for
+                minimum requirements)
+            </div>
+            <div style="position:absolute;left:50.76px;top:171.81px;white-space:nowrap;" class="{!Class19_21}">
+                [ {!rlpNotSeismic} ]<span class="{!Class19_21}">  RLP does not contain seismic requirements.  No documentation required.</span>
+            </div>
+            <div style="position:absolute;left:50.76px;top:183.81px;white-space:nowrap;" class="{!Class19_21}">
+                [ {!rlpSeismic} ]<span class="{!Class19_21}">  RLP contains seismic requirements.  The Building</span>
+            </div>
+            <div style="position:absolute;left:60.76px;top:197.81px;white-space:nowrap;" class="{!Class19_21}">
+                [ {!seismicFull} ]<span class="{!Class19_21}">  Fully meets seismic requirements or meets an exemption under the RLP</span>
+            </div>
+            <div style="position:absolute;left:60.76px;top:209.81px;white-space:nowrap;" class="{!Class19_21}">
+                [ {!seismicNot} ]<span class="{!Class19_21}">  Does not meet seismic requirements, but will be retrofitted to meet seismic requirements</span>
+            </div>
+            <div style="position:absolute;left:60.76px;top:222.81px;white-space:nowrap;" class="{!Class19_21}">
+                [ {!seismicWill} ]<span class="{!Class19_21}">  Will be constructed to meet seismic requirements</span>
+            </div>
+            <div style="position:absolute;left:60.76px;top:235.81px;white-space:nowrap;" class="{!Class19_21}">
+                [ {!seismicWillNot} ]<span class="{!Class19_21}">  Will not meet seismic requirements</span></div>
+
+            <!--div style="position:absolute;left:50.76px;top:255.89px;white-space:nowrap;" class="{!Class19_21}">(See RLP for minimum requirements)</div-->
+
+            <div style="position:absolute;left:25.80px;top:272.81px" class="cls_017">4</div>
+
+            <div style="position:absolute;left:50.76px;top:272.81px;white-space:nowrap;" class="cls_011">Historic
+                Preference: The Building is a
+            </div>
+
+            <div style="position:absolute;left:50.76px;top:286.49px;white-space:nowrap;" class="cls_019">[<span
+                        style="white-space:pre;" class="cls_019">{!histPropHistDist}</span><span class="cls_019">]  Historic property within a historic district.</span>
+            </div>
+
+            <div style="position:absolute;left:50.76px;top:300.81px;white-space:nowrap;" class="cls_019">[<span
+                        style="white-space:pre;" class="cls_019">{!NhistPropHistDist} </span><span class="cls_019">]  Non-historic property within a historic district.</span>
+            </div>
+
+            <div style="position:absolute;left:50.76px;top:314.01px;white-space:nowrap;" class="cls_019">[<span
+                        style="white-space:pre;" class="cls_019">{!histPropNHistDist} </span><span class="cls_019">]  Historic property outside of a historic district.</span>
+            </div>
+
+            <div style="position:absolute;left:50.76px;top:325.33px;white-space:nowrap;" class="cls_019">[<span
+                        style="white-space:pre;" class="cls_019">{!NhistPropNHistDist} </span><span class="cls_019">]  None of the above.</span>
+            </div>
+
+            <div style="position:absolute;left:50.76px;top:343.43px" class="cls_020">(See RLP for minimum
+                requirements)
+            </div>
+
+            <div style="position:absolute;left:25.80px;top:360.35px" class="cls_017">5</div>
+
+            <div style="position:absolute;left:50.76px;top:360.35px" class="cls_011">Asbestos: (See RLP for minimum
+                requirements)
+            </div>
+
+            <div style="position:absolute;left:50.76px;top:375.03px;white-space:nowrap;" class="{!Class19_21}">
+                [ {!asbestosNot} ]<span class="{!Class19_21}">  Contains no ACM, or contains ACM in a stable, solid matrix that is not damaged or subject to damage.</span>
+            </div>
+
+            <div style="position:absolute;left:50.76px;top:388.35px;white-space:nowrap;" class="{!Class19_21}">
+                [ {!asbestosNotStable} ]<span class="{!Class19_21}">  Contains ACM not in a stable, solid matrix.</span>
+            </div>
+
+            <!--div style="position:absolute;left:50.76px;top:403.43px" class="cls_020">(See RLP minimum requirements)</div-->
+
+            <div style="position:absolute;left:25.80px;top:422.35px" class="cls_017">6</div>
+
+            <div style="position:absolute;left:50.76px;top:422.35px" class="cls_011">Fire/Life Safety: (See RLP for
+                minimum requirements)
+            </div>
+
+            <div style="position:absolute;left:50.76px;top:436.03px" class="{!Class19_21}">The Property <span
+                        class="{!Class19_21}">[ {!flsMet} ]</span><span class="{!Class19_21}">  Meets  </span><span
+                        class="{!Class19_21}">[ {!flsNot} ]</span><span class="{!Class19_21}">  Does not meet Lease fire/life safety standards.</span>
+            </div>
+
+            <!--div style="position:absolute;left:50.76px;top:450.26px" class="cls_020">(See RLP and Lease documents for minimum requirements)</div-->
+
+            <div style="position:absolute;left:25.80px;top:470.18px" class="cls_017">7</div>
+
+            <div style="position:absolute;left:50.76px;top:470.18px" class="cls_011">Accessibility: (See RLP for minimum
+                requirements)
+            </div>
+
+            <div style="position:absolute;left:50.76px;top:485.86px" class="{!Class19_21}">The Property <span
+                        class="{!Class19_21}">[ {!accessibilityMet} ]</span><span class="{!Class19_21}">  Meets  </span><span
+                        class="{!Class19_21}">[ {!accessibilityNot} ]</span><span class="{!Class19_21}">  Does not meet Lease accessibility standards.</span>
+            </div>
+
+            <!--div style="position:absolute;left:50.76px;top:505.94px" class="cls_020">(See RLP and Lease documents for minimum requirements)</div-->
+
+            <div style="position:absolute;left:25.80px;top:521.86px" class="cls_017">8</div>
+
+            <div style="position:absolute;left:50.76px;top:521.86px" class="cls_011">ENERGY STAR®: The Building</div>
+
+            <div style="position:absolute;left:50.76px;top:535.28px;white-space:nowrap;" class="cls_019">[<span
+                        style="white-space:pre;" class="cls_019">{!energyStarCerified}</span><span class="cls_019">]  Has received the ENERGY STAR® Label within the past twelve months. Date: </span><span
+                        class="cls_033">   {!energyStarCertDt}</span></div>
+
+            <div style="position:absolute;left:50.76px;top:547.50px;white-space:nowrap;" class="cls_019">[<span
+                        style="white-space:pre;" class="cls_019">{!energyStarNotCerified}</span><span class="cls_019">]  Has not received the ENERGY STAR® Label within the past twelve months; the Offeror has evaluated</span>
+            </div>
+
+            <div style="position:absolute;left:50.76px;top:560.00px" class="cls_011">energy savings measures and</div>
+
+            <div style="position:absolute;left:86.78px;top:572.22px;white-space:nowrap;" class="cls_019">[ &nbsp; ]<span
+                        class="cls_011">  Determined that none are cost effective.</span></div>
+
+            <div style="position:absolute;left:86.78px;top:585.54px" class="cls_019">[<span style="white-space:pre;"
+                                                                                            class="cls_013">{!energyStarNotCerified}</span><span
+                        class="cls_019" style="white-space:nowrap;">]  Determined that the following are cost effective (List):</span>
+            </div>
+            <div style="position:absolute;left:50.76px;top:600.74px" class="cls_019">{!energyStarExplanation}</div>
+            <div style="position:absolute;left:50.76px;top:650.00px" class="cls_020">(See RLP and Lease documents for
+                minimum requirements)
+            </div>
+
+            <div style="position:absolute;left:25.80px;top:672.86px" class="cls_017">9</div>
+
+            <div style="position:absolute;left:50.76px;top:672.86px;white-space:nowrap;" class="cls_011">Waiver of Price
+                Evaluation Preference. A HUBZone small business concern (SBC) Offeror may elect to waive the price
+            </div>
+
+            <div style="position:absolute;left:50.76px;top:684.82px;white-space:nowrap;" class="cls_011">evaluation
+                provided in Section 4 of the RLP. In such a case, no price evaluation preference shall apply to the
+                evaluation of the
+            </div>
+
+            <div style="position:absolute;left:50.76px;top:698.04px;white-space:nowrap;" class="cls_011">HUBZone SBC,
+                and the performance of work requirements set forth in Section 1 of the Lease shall not be applicable to
+                a
+            </div>
+
+            <div style="position:absolute;left:50.76px;top:711.04px;white-space:nowrap;" class="cls_011">lease awarded
+                to the HUBZone SBC Offeror under this solicitation. A HUBZone SBC desiring to waive the price evaluation
+            </div>
+
+            <div style="position:absolute;left:50.76px;top:724.04px;white-space:nowrap;" class="cls_011"> preference
+                should so indicate below.
+            </div>
+
+            <div style="position:absolute;left:55.76px;top:738.04px;white-space:nowrap;" class="cls_033">
+                [{!hubZoneOfferer}]<span class="cls_019"> I am a HUBZone SBC Offeror and I elect to waive the price evaluation preference.</span>
+            </div>
+
+            <div style="position:absolute;left:50.76px;top:752.04px" class="cls_011">(See RLP and Lease documents for
+                minimum requirements)
+            </div>
+
+            <div style="position:absolute;left:18.00px;top:797.64px" class="cls_002">PAGE <span
+                        class="cls_003">3 of 3</span></div>
+
+            <div style="position:absolute;left:429.46px;top:797.64px" class="cls_004">GSA<span
+                        class="cls_003"> </span><span class="cls_002">FORM</span><span class="cls_003"> </span><span
+                        class="cls_004">1364C (REV 11/2016)</span></div>
+
+        </div>
+
+    </apex:panelGrid>
+    </body>
+
+</apex:page>

@@ -1,0 +1,186 @@
+<!-- 9-JUL-2020 acheslyn added analytics script for user story sfws 766 -->
+<apex:page Controller="PBS_AAAP_PortalHomeController" sidebar="false" standardStylesheets="false" showHeader="false">
+
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/demo_page.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+
+    <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+    <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+    <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+
+    <!-- <c:EnrollCSS /> -->
+    <!--<c:jQueryInit bDataTables="true" /> -->
+    <style>
+        span.dropt {border-bottom: thin dotted; background: #ffeedd;}
+        span.dropt:hover {text-decoration: none; background: #fefefe; z-index: 6; }
+        span.dropt span {position: absolute; left: -9999px;
+            margin: 20px 0 0 0px; padding: 3px 3px 3px 3px;
+            border-style:solid; border-color:black; border-width:1px; z-index: 6;}
+        span.dropt:hover span {left: 2%; background:rgb(236, 236, 236);}
+        span.dropt span {position: absolute; left: -9999px;
+            margin: 4px; padding: 3px 3px 3px 3px; text-indent:0in;
+            border-style:solid; border-color:#666; border-width:1px;}
+        span.dropt:hover span {margin: 20px 0 0 170px; background:rgb(236, 236, 236); z-index:6;}
+
+        .sb-int {margin:10px;padding:10px;}
+        #rightCol {width:620px; padding-right:20px;}
+        .sb-int .bucket {margin-top:10px !important;}
+        h3.blue {padding-top:15px;}
+        .portalhome .apexp .selector {top:70px; left:0px;}
+        menu.table-options {top:40px;left:-350px;}
+        .tabbed-table table tr {height:35px;}
+        menu.table-options a {border:1px solid#666666; border-radius:3px;padding:6px;background-image:url(https://gsa--aaap--c.cs12.visual.force.com/resource/1334347636000/gsa_common/images/sprite.png);background-position:-5px 145px;color:#333333;font-size:12px;text-decoration:none;}
+
+        #lean_overlay {
+            position: fixed;
+            z-index:100;
+            top: 0px;
+            left: 0px;
+            height:100%;
+            width:100%;
+            background:none;
+            display: none;
+        }
+        #nav ul {
+            float: right;
+            list-style: none;
+            margin: 30px 0px 25px 20px;
+        }
+        
+        .bluelink {
+            color: blue !important; 
+            text-decoration-color: blue;
+            text-decoration: underline;
+        }
+        #nav ul li a:hover, #nav ul li a.selected {
+               background-color: #EEEEEE;
+               border-radius: 5px;
+               border: 1px solid #cccccc;
+            }
+            #nav ul li a {
+                text-decoration: none;
+                color: #666666;
+                padding: 8px 18px;
+                border: 1px solid #ffffff;
+           }
+    </style>
+    <apex:outputPanel rendered="{!!(ISPICKVAL($User.UserType,'Guest'))}">
+        <style>
+            #nav ul{
+                padding-bottom: 4px;            
+            }
+        </style>
+    </apex:outputPanel>
+
+    <div id="login">
+        <!-- J. Rogers  Comment out Header Links   
+        <ul>
+            <!--<apex:panelGroup rendered="{!!isLOP}">
+                <li><a href="/AAAP/portalHome">AAAP Home</a></li>
+            </apex:panelGroup>
+            <apex:panelGroup rendered="{!isLOP}">
+                <li><a href="/RSAP/portalHome">RSAP Home</a></li>
+            </apex:panelGroup>-->
+            <!--<li><a href="/">LOP Home</a></li>->
+            <apex:outputLink value="/RSAP/PortalHome" rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}"><li>RSAP Home</li></apex:outputLink>
+            <apex:outputLink value="/" rendered="{!(ISPICKVAL($User.UserType,'Guest'))}"><li>LOP Home</li></apex:outputLink>
+            <!--li><a href="/AAAP/PBS_AAAP_PortalHome">Home</a></li>
+            <li>|</li>
+            <li><a href="{!$Site.Prefix}/secur/logout.jsp">LOGOUT</a></li>->
+
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp" rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}"><li>| {!$Label.site.logout}</li></apex:outputLink>
+
+            <li>|</li>
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>
+        </ul>
+    -->
+    </div><!--/login-->
+
+
+    <div id="wrapper" class="portalhome">
+        <!--<c:inside_header rendered="{!!isLOP}"/>
+        <c:lop_inside_header rendered="{!isLOP}"/>-->
+
+         
+        <!-- J. Rogers  Comment out Header Links   
+        <h1 class="logo">GSA</h1>
+        <div id="nav">
+            <ul>
+                <apex:outputPanel rendered="{!(ISPICKVAL($User.UserType,'Guest'))}">
+                    <li style="margin-top: 4px;"><a href="/RSAP/LoginPage">
+                        <font class="grey">RSAP Home</font>
+                    </a></li>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                    <li><a href="/RSAP/PortalHome" style="margin-top: 4px;">
+                        <font class="grey">RSAP Home</font>
+                    </a></li>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                    <li><a href="/RSAP/userprofile" style="margin-top: 4px;">
+                        <font>Profile</font>
+                    </a></li>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!(ISPICKVAL($User.UserType,'Guest'))}">
+                    <li><a href="/RSAP/UserRegistration" style="font-weight:normal;background-image:linear-gradient(#f9e5b8,#f5b351);border-radius:5px;">
+                        <font class="orange" style="font-weight:normal;color:#000;">Registration</font>
+                    </a></li>
+                </apex:outputPanel>
+            </ul>
+        </div><!--/nav->
+
+        <div id="hero-int2">
+            <h2>AAAP</h2>
+        </div><!--/hero->
+        -->
+        <div id="content">
+
+            <apex:form styleClass="formwrap">
+
+                <span style="color: #073763; font-weight: bold; font-family: Arial; font-size:20px;">Requirement Specific Acquisition Platform (RSAP) Resources</span>
+                <br/>
+                <br/>
+				<a style="font-size: small; color: #1155cc;font-family: Arial; font-weight: bold;" href="https://www.youtube.com/watch?v=to_L2HbTsK0" target="_blank">RSAP Overview Video: RSAP is Changing the Way GSA Does Business</a>
+                <br/>
+                <br/>
+                <a style="font-size: small;font-family: Arial; color: #1155cc; font-weight: bold;" href="{!$Resource.RSAP_ReferenceGuideforOfferors}" target="_blank">RSAP Reference Guide for Offerors</a><br/><br/>
+                <span style="color: black; font-family: Arial; font-size:small;">This guide explains how to:<br/>
+                    <ul style="list-style-type:disc;margin-left:4%;font-size: 19px;">
+                    <li style="margin-bottom: -10px;"><span style="font-size: small;font-family: Arial;">Create a Leasing Portal account — which is required to access AAAP and RSAP</span></li>
+                    <li style="margin-bottom: -10px;"><span style="font-size: small;font-family: Arial;">Draft and submit an offer using RSAP</span></li>
+                    <li style="margin-bottom: -10px;"><span style="font-size: small;font-family: Arial;">Submit supplemental documents using RSAP</span></li>
+                </ul>
+                </span><br/>
+                <span style="color: black; font-family: Arial; font-size:small;">This guide also contains the entire list of questions in the RSAP workflow — so you can preview<br/> what will be asked of you prior to submitting an offer; helper text; and a crosswalk with GSA<br/> Form 1364 and GSA Form 1217. This guide also contains answers to frequently asked<br/> questions.
+               </span>
+                    <br/><br/>
+                
+                <span style="color:black;font-size: small; font-weight:bold;font-family: Arial;">GSA Leasing Video Tutorials</span>
+                <br/>
+                <a style="font-size: small; color: #1155cc;font-family: Arial;" href="https://www.youtube.com/watch?v=cGIHqOLYFco" target="_blank">Breaking Down the Rates</a>
+                <ul style="list-style-type:disc;margin-left:4%">
+                    <li><a style="font-size: small;font-family: Arial;color: #1155cc;" href="https://www.youtube.com/watch?v=SMH1cBesBFU" target="_blank">Shell Rent</a></li>
+                    <li><a style="font-size: small;font-family: Arial;color: #1155cc;" href="https://www.youtube.com/watch?v=EbG3fEtnGmY" target="_blank">Base Operating Rent</a></li>
+                    <li><a style="font-size: small;font-family: Arial;color: #1155cc;" href="https://www.youtube.com/watch?v=yEInw-MT5es" target="_blank">Tenant Improvement Rent</a></li>
+                    <li><a style="font-size: small;font-family: Arial;color: #1155cc;" href="https://www.youtube.com/watch?v=-gCvMaWKN7s&t=0s" target="_blank">Building Specific Amortized Capital Rent</a></li>
+                </ul>
+                <p style="font-weight:bold;font-family: Arial; font-size: small;">For technical assistance, email <a style="color: #1155cc;font-family: Arial;" href = "mailto:LOP.help@gsa.gov"  target="_blank">LOP.help@gsa.gov</a> or call 1-866-450-6588 and select option 7.
+                   
+                </p>
+
+            </apex:form>
+        </div><!--/content-->
+
+    </div><!-- /Wrapper -->
+    <script>
+        $(".popup").leanModal();
+
+    </script>
+    <c:SiteFooterUX ></c:SiteFooterUX>
+</apex:page>

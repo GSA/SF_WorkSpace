@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RET_Editable_by_Submitter__c</fullName>
+    <description>Indicates if this case should display with fields editable by the submitter.</description>
+    <externalId>false</externalId>
+    <formula>OR(
+NOT(ISPICKVAL(Status, &apos;Determination Made&apos;))
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Indicates if this case should display with fields editable by the submitter.</inlineHelpText>
+    <label>RET Editable by Submitter</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,165 @@
+<apex:page controller="PBS_AAAP_OfferForm1217" standardstylesheets="false" sidebar="false" showHeader="false">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+    <head>
+        <style type="text/css">
+            .homeTab .brdPalette { height:850px; }
+            span.cls_006{font-family:Arial,serif;font-size:6.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+            div.cls_006{font-family:Arial,serif;font-size:6.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+            span.cls_004{font-family:Arial,serif;font-size:10.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+            div.cls_004{font-family:Arial,serif;font-size:10.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+            span.cls_002{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+            div.cls_002{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+            span.cls_007{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:bold;font-style:italic}
+            div.cls_007{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:bold;font-style:italic}
+            span.cls_008{font-family:Arial,serif;font-size:6.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+            div.cls_008{font-family:Arial,serif;font-size:6.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+            span.cls_005{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+            div.cls_005{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+        </style>
+    </head>
+    <div id ="loadingdiv" style="display:none;">
+        <div class="waitingSearchDiv" id="el_loading" style="background-color: #fbfbfb; height:100%;opacity:0.65;width:100%;">
+            <div class="waitingHolder" style="top: 100px; width: 91px;">
+                <img class="waitingImage" src="/img/loading.gif" title="Please Wait..." />
+                <span class="waitingDescription" id="waitingDesc">Loading...</span>
+            </div>
+        </div>
+    </div>
+    <apex:form >
+        <apex:actionFunction action="{!captureImage}" name="captureImage" rerender="frm" oncomplete="captureDone();">
+            <apex:param assignTo="{!strImageBlob}" name="imageBlob" value=""/>
+            <apex:param assignTo="{!strImagename}" name="imagename" value=""/>
+        </apex:actionFunction>
+    </apex:form>
+    <div class="container" id="mapDiv">
+        <body>
+            <apex:panelGrid rendered="{!!isValidUser}">
+                <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+                <apex:messages styleClass="errMessage" id="errmessage"/>
+            </apex:panelGrid>
+            <apex:panelGrid rendered="{!isValidUser}">
+                <apex:form >
+                    <div style="position:absolute;left:50%;margin-left:-306px;top:0px;width:612px;height:792px;border-style:outset;overflow:hidden">
+                        <div style="position:absolute;left:0px;top:0px">
+                            <img src="{!$Resource.form1217attach}" width="612" height="792"/>
+                        </div>
+                        <div style="position:absolute;left:292.50px;top:31.38px" class="cls_006">SOLICITATION FOR
+                            OFFERS<br/><br/>{!RLPNumber}
+                        </div>
+                        <div style="position:absolute;left:472.55px;top:31.38px" class="cls_006">STATEMENT
+                            DATE<br/><br/>{!sysDate}
+                        </div>
+                        <div style="position:absolute;left:74.76px;top:34.32px" class="cls_004">ATTACHMENT TO GSA FORM 1217
+                        </div>
+                        <div style="position:absolute;left:292.50px;top:63.00px" class="cls_006">BUILDING NAME AND ADDRESS (No.,
+                            street, city, state, and zip code)<br/><br/>
+                            {!offer.PBS_AAAP_Building_Name__c}<br/>
+                            {!offer.PBS_AAAP_Street_Address__c}<br/>
+                            {!offer.PBS_AAAP_City__c}, {!offer.PBS_AAAP_State__c} - {!offer.PBS_AAAP_ZipCode__c}
+                        </div>
+                        <div style="position:absolute;left:83.16px;top:65.82px" class="cls_002">GENERAL SERVICES
+                            ADMINISTRATION
+                        </div>
+                        <div style="position:absolute;left:103.14px;top:84.00px" class="cls_002">PUBLIC BUILDINGS SERVICE</div>
+                        <div style="position:absolute;left:134.40px;top:127.32px" class="cls_002">CONTINUATION OF SECTION I -
+                            ESTIMATED ANNUAL COST OF SERVICES AND UTILITIES
+                        </div>
+                        <div style="position:absolute;left:182.52px;top:136.50px" class="cls_002">FURNISHED BY LESSOR AS PART OF
+                            RENTAL CONSIDERATION
+                        </div>
+                        <div style="position:absolute;left:293.70px;top:150.90px" class="cls_002">LESSOR'S ANNUAL COST FOR</div>
+                        <div style="position:absolute;left:478.98px;top:152.52px" class="cls_007">FOR GOVERNMENT</div>
+                        <div style="position:absolute;left:91.32px;top:162.54px" class="cls_002">SERVICES AND UTILITIES</div>
+                        <div style="position:absolute;left:496.62px;top:162.66px" class="cls_007">USE ONLY</div>
+                        <div style="position:absolute;left:271.98px;top:167.88px" class="cls_008">(a) ENTIRE BUILDING</div>
+                        <div style="position:absolute;left:364.88px;top:167.88px" class="cls_008">(b) GOVERNMENT-LEASED</div>
+                        <div style="position:absolute;left:395.76px;top:174.96px" class="cls_008">AREA</div>
+                        <div style="position:absolute;left:36.00px;top:185.64px" class="cls_005">G.26.</div>
+                        <div style="position:absolute;left:72.00px;top:185.64px" class="cls_005">EXPLANATION OF OTHER COSTS
+                        </div>
+                        <div style="position:absolute;left:36.00px;top:205.64px" class="cls_008"> {!otherCosts[0].field1}</div>
+                        <div style="position:absolute;left:271.98px;top:205.64px" class="cls_008">{!otherCosts[0].field2}</div>
+                        <div style="position:absolute;left:36.00px;top:222.64px" class="cls_008"> {!otherCosts[1].field1}</div>
+                        <div style="position:absolute;left:271.98px;top:222.64px" class="cls_008">{!otherCosts[1].field2}</div>
+                        <div style="position:absolute;left:36.00px;top:241.64px" class="cls_008"> {!otherCosts[2].field1}</div>
+                        <div style="position:absolute;left:271.98px;top:241.64px" class="cls_008">{!otherCosts[2].field2}</div>
+                        <div style="position:absolute;left:36.00px;top:260.64px" class="cls_008"> {!otherCosts[3].field1}</div>
+                        <div style="position:absolute;left:271.98px;top:260.64px" class="cls_008">{!otherCosts[3].field2}</div>
+                        <div style="position:absolute;left:36.00px;top:278.64px" class="cls_008"> {!otherCosts[4].field1}</div>
+                        <div style="position:absolute;left:271.98px;top:278.64px" class="cls_008">{!otherCosts[4].field2}</div>
+                        <div style="position:absolute;left:36.00px;top:296.64px" class="cls_008"> {!otherCosts[5].field1}</div>
+                        <div style="position:absolute;left:271.98px;top:296.64px" class="cls_008">{!otherCosts[5].field2}</div>
+                        <div style="position:absolute;left:36.00px;top:312.64px" class="cls_008"> {!otherCosts[6].field1}</div>
+                        <div style="position:absolute;left:271.98px;top:312.64px" class="cls_008">{!otherCosts[6].field2}</div>
+                        <div style="position:absolute;left:36.00px;top:330.64px" class="cls_008"> {!otherCosts[7].field1}</div>
+                        <div style="position:absolute;left:271.98px;top:330.64px" class="cls_008">{!otherCosts[7].field2}</div>
+                        <div style="position:absolute;left:36.00px;top:349.64px" class="cls_008"> {!otherCosts[8].field1}</div>
+                        <div style="position:absolute;left:271.98px;top:349.64px" class="cls_008">{!otherCosts[8].field2}</div>
+                        <div style="position:absolute;left:36.00px;top:368.64px" class="cls_008"> {!otherCosts[9].field1}</div>
+                        <div style="position:absolute;left:271.98px;top:368.64px" class="cls_008">{!otherCosts[9].field2}</div>
+                        <div style="position:absolute;left:72.00px;top:666.72px" class="cls_005">TOTAL</div>
+                        <div style="position:absolute;left:271.98px;top:666.72px"
+                            class="cls_005">{!offer.PBS_AAAP_TOTAL_OTHER_COSTS__c}</div>
+                        <div style="position:absolute;left:420.42px;top:760.62px" class="cls_002">ATTACHMENT TO GSA FORM 1217
+                            (6/04)
+                        </div>
+                    </div>
+                </apex:form>
+            </apex:panelGrid>
+        </body>
+    </div>
+    <script type="text/javascript">            
+        window.onload = function(){                     
+        document.body.style.zoom = "200%";  
+        takePic();
+        }        
+        
+        
+        function takePic(){
+        html2canvas(document.body, 
+                    {
+                        useCORS: true,
+                        onrendered: function(canvas) 
+                        {
+                            var recId = '{!JSENCODE($CurrentPage.parameters.offerId)}';     
+                            var total = '{!JSENCODE($CurrentPage.parameters.total)}'; 
+                            var current = '{!JSENCODE($CurrentPage.parameters.current)}';                                 
+                            document.body.appendChild(canvas);
+                            document.getElementById("mapDiv").style.display = 'none';
+                            document.getElementById("loadingdiv").style.display = '';                               
+                            document.getElementById("waitingDesc").innerHTML = 'Taking '+current+' of '+total;
+                            var pageName = '{!JSENCODE($CurrentPage.Name)}';
+                            captureImage(document.getElementsByTagName('canvas')[0].toDataURL(),(recId+'Form'+current));
+                            
+                        }
+                    });
+        return false;
+        }
+        
+        
+        function escapeRegExp(string){
+        return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        }
+        
+        function replaceAll(str, term, replacement) {
+        return str.replace(new RegExp(escapeRegExp(term), 'g'), replacement);
+        }
+        
+        function captureDone(){
+            debugger;
+            
+            
+            var recId = '{!JSENCODE($CurrentPage.parameters.offerId)}';   
+            var total = '{!JSENCODE($CurrentPage.parameters.total)}';  
+            var current = '{!JSENCODE($CurrentPage.parameters.current)}';  
+            current = parseInt(current)+1;
+            
+            window.location.href = "/apex/PBS_AAAP_offerform1364_Image?formtype=OfferForm1364&offerId="+recId+'&total='+total+'&current='+current;
+        
+        
+        
+        
+        }
+    </script>
+</apex:page>

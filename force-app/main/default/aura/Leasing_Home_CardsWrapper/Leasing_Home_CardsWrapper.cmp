@@ -1,0 +1,21 @@
+<aura:component
+  controller="PBS_AAAP_HomePageController" 
+  implements="forceCommunity:availableForAllPageTypes"
+  access="global"
+>
+
+  <aura:attribute name="cardDataMapped" type="List" />
+  <aura:attribute name="userType" type="String" />
+  
+  <aura:handler name="init" value="this" action="{!c.doInit}"></aura:handler>
+
+  <!-- UserType = {!v.userType} -->
+  <div class="wrapper">
+    <div class="grid-container">
+      <div class="grid-row">
+        <c:uswdsCardList cardData="{!v.cardDataMapped}" aura:id="cardList" />
+      </div>
+    </div>
+  </div>
+    
+</aura:component>

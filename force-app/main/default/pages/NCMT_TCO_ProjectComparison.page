@@ -1,0 +1,41 @@
+<apex:page showHeader="{!$CurrentPage.parameters.print!='true'}" standardController="NCMT_Project__c" extensions="NCMT_TCOReportDataSelector" lightningStylesheets="true">
+    <apex:slds />
+    <apex:includeLightning />
+    <div id="lightningPage"></div>
+     <script> 
+        $Lightning.use("c:NCMT_TCO_Project_Comparison_App", function(){
+            var HTMLJSencodedProj1 = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.project1))}';
+            var HTMLJSencodedProj1Name = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.project1Name))}';
+            var HTMLJSencodedProj2 = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.project2))}';
+            var HTMLJSencodedProj2Name = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.project2Name))}';
+            var HTMLJSencodedProj3 = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.project3))}';
+            var HTMLJSencodedProj3Name = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.project3Name))}';
+            var HTMLJSencodedProj4 = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.project4))}';
+            var HTMLJSencodedProj4Name = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.project4Name))}';
+            var HTMLJSencodedProj5 = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.project5))}';
+            var HTMLJSencodedProj5Name = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.project5Name))}';
+            var HTMLJSencodedReportType = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.reportType))}';
+            var HTMLJSencodedPrint = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.print))}';
+            $Lightning.createComponent("c:NCMT_TCO_Project_Comparison", {
+                "project1" : HTMLJSencodedProj1,
+                "project1Name" : HTMLJSencodedProj1Name,
+                "project2" : HTMLJSencodedProj2,
+                "project2Name" : HTMLJSencodedProj2Name,
+                "project3" : HTMLJSencodedProj3,
+                "project3Name" : HTMLJSencodedProj3Name,
+                "project4" : HTMLJSencodedProj4,
+                "project4Name" : HTMLJSencodedProj4Name,
+                "project5" : HTMLJSencodedProj5,
+                "project5Name" : HTMLJSencodedProj5Name,
+                "urlReportType" : HTMLJSencodedReportType,
+                "printMode" : HTMLJSencodedPrint
+            },
+            'lightningPage',
+                function(cmp){
+     
+                });
+        
+        });
+  </script> 
+    
+</apex:page>

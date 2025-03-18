@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>NCR_Offer</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>NCR Offer</label>
+        <sharedTo>
+            <roleAndSubordinatesInternal>AAAP_Manager_Region_11</roleAndSubordinatesInternal>
+        </sharedTo>
+        <booleanFilter>1 AND 2</booleanFilter>
+        <criteriaItems>
+            <field>PBS_AAAP_Offer_Status__c</field>
+            <operation>equals</operation>
+            <value>3,Submitted,7,Awarded/Submitted,Awarded</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>PBS_AAAP_RLP_Region__c</field>
+            <operation>equals</operation>
+            <value>National Capital Region</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+</SharingRules>

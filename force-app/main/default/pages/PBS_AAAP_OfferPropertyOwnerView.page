@@ -1,0 +1,237 @@
+<apex:page Controller="PBS_AAAP_OfferPropertyOwner" sidebar="false" showHeader="false"  standardStylesheets="true">
+
+    <style>
+.errMessage {color:red; }
+
+    </style>
+
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+    <apex:stylesheet value="{!$Resource.OutputFieldcss}"/>
+
+    <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+    <script type="text/javascript"
+            src="{!$Label.AAAP_JQUERYUI_URL}"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+
+
+    
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+        <ul>
+            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
+                <apex:outputLink value="/AAAP/home/home.jsp">
+                    <li>{!$Label.site.login_button}</li>
+                </apex:outputLink>
+                <li> |</li>
+                <apex:outputLink value="/AAAP/ForgotPassword">
+                    <li>{!$Label.site.forgot_your_password_q}</li>
+                </apex:outputLink>
+                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
+                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
+                    <li>{!$Label.site.new_user_q}</li>
+                </apex:outputLink>
+            </apex:panelGroup>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>{!$Label.site.logout}</li>
+            </apex:outputLink>
+            <li>|</li>
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>
+        </ul>
+
+    </div><!--/login-->
+    <div id="wrapper">
+        <c:inside_header />
+        <div id="content" class="property-owner">
+            <!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
+            <apex:panelGrid rendered="{!!isValidUser}">
+                <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+                <apex:messages styleClass="errMessage" id="errmessage"/>
+            </apex:panelGrid>
+            <apex:panelGroup rendered="{!isValidUser}">
+                <apex:panelGrid columns="2" style="float:right"><a href="#" onclick="window.print();">Click Here To
+                        Print This Page</a>
+                    <apex:outputLabel style="padding-right:47px"></apex:outputLabel>
+                </apex:panelGrid>
+                <c:PBS_AAAP_ProgressBarV myValue="{!offerPropOwner.Id}" linksToViewModePage="true" step="3" />
+            </apex:panelGroup>
+
+            <apex:form id="newOffer" styleClass="formwrap" rendered="{!isValidUser}" style="margin-right: 50px;">
+                <h3 class="blue">Property Owner</h3>
+                <apex:messages styleClass="errMessage"/>
+                <apex:panelGrid columns="2" id="theGridsection1">
+
+                    <apex:outputPanel >
+                        <apex:outputtext value="{!$Label.PBS_AAAP_Prop_Recorded_Ownr}"/>
+                        <span class="required">*</span></apex:outputPanel>
+                    <apex:outputText value="{!offerPropOwner.PBS_AAAP_Owner_Name__c}" id="propownername" styleClass="outputfield"/>
+
+                    <apex:outputPanel >
+                        <apex:outputtext value="2. Street Address:"/>
+                        <span class="required">*</span></apex:outputPanel>
+                    <apex:outputText value="{!offerPropOwner.PBS_AAAP_Owner_Address__c}" id="address" styleClass="outputfield"/>
+
+                    <apex:outputPanel >
+                        <apex:outputtext value="3. Country:"/>
+                        <span class="required">*</span></apex:outputPanel>
+                    <apex:outputText value="{!offerPropOwner.PBS_AAAP_Owner_Country__c}" id="country" styleClass="outputfield"/>
+
+                    <apex:outputPanel >
+                        <apex:outputtext value="4. City:"/>
+                        <span class="required">*</span></apex:outputPanel>
+                    <apex:outputText value="{!offerPropOwner.PBS_AAAP_Owner_City__c}" id="city" styleClass="outputfield"/>
+
+                    <apex:outputPanel >
+                        <apex:outputtext value="5. State:"/>
+                        <span class="required">*</span></apex:outputPanel>
+                    <apex:outputText value="{!offerPropOwner.PBS_AAAP_Owner_State__c}" id="state" styleClass="outputfield"/>
+
+                    <apex:outputPanel >
+                        <apex:outputtext value="6. Zip Code:"/>
+                        <span class="required">*</span></apex:outputPanel>
+                    <apex:outputText value="{!offerPropOwner.PBS_AAAP_Owner_Zip__c}" id="zip" styleClass="outputfield"/>
+
+                </apex:panelGrid>
+
+                <apex:panelGrid columns="1" id="theGridsection2">
+                    <apex:outputPanel >
+                        <apex:outputtext value="{!$Label.PBS_AAAP_Prop_Owner_Phone}"/>
+                        <span class="required">*</span><br/>
+                        <apex:outputText value="{!offerPropOwner.PBS_AAAP_Owner_Main_Phone__c}" id="phone" styleClass="outputfield"/> &nbsp;&nbsp;
+                        <apex:outputtext value="Ext: "/>
+                        <apex:outputText value="{!offerPropOwner.PBS_AAAP_Property_Phone_Extn__c}" styleClass="outputfield"/>
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        <apex:actionRegion >
+                            <apex:outputtext value="{!$Label.PBS_AAAP_Property_Owner_Relationship_as_Offeror}"/>
+                            <a class="popup" href="#infobutton"><img src="{!$Resource.Info_Icon}"/></a>
+                            <div id="infobutton"
+                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:500px;">
+                                <p>Offerors shall own the offered property or have authorization to represent the
+                                    ownership. Offerors selecting Agent or Other must upload documentation supporting a
+                                    formal, legally-binding agreement with the offered property’s ownership as the
+                                    ‘Authorization to Represent Ownership’ Attachment Type in the Attachments page.
+                                    <br/>
+                                    <br/>
+                                    If the Offeror does not yet have a vested interest in the Property, but rather has a
+                                    written agreement to acquire an interest,
+                                    then the Offeror shall submit a fully executed copy of the written agreement with
+                                    its offer, together with
+                                    a statement from the current owner that the agreement is in full force and effect
+                                    and that the Offeror has
+                                    performed all conditions precedent to closing, or other form of documentation
+                                    satisfactory to the
+                                    Government. These submittals must remain current. The Offeror is required to submit
+                                    updated documents
+                                    as required.
+                                </p>
+                            </div>
+                            <br/>
+
+                            <apex:outputText value="{!offerPropOwner.PBS_AAAP_OFFEROR_INTEREST__c}" styleClass="outputfield">
+                                <apex:actionSupport event="onchange" action="{!showOfferorRelationShipOther}"
+                                                    rerender="OtherRelationshipPanel"/>
+                            </apex:outputText>
+
+                        </apex:actionRegion>
+
+                        <apex:outputPanel id="OtherRelationshipPanel">
+                            &nbsp;&nbsp;
+                            <apex:outputText value="Other: " rendered="{!otherRelationShip}"/>
+                            <apex:outputText value="{!offerPropOwner.PBS_AAAP_OFFEROR_INTEREST_OTHER__c}"
+                                             rendered="{!otherRelationShip}" styleClass="outputfield"/>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+
+                    <!--commented by syam for FY16
+            <apex:outputPanel >
+            <apex:actionRegion >
+            <apex:outputtext value="{!$Label.PBS_AAAP_Property_Owner_type_of_recorded_relation}"/><span class="required">*</span><br/>
+             <apex:outputField value="{!offerPropOwner.PBS_AAAP_TYPE_OF_ORG__c}" id="relationship">
+                <apex:actionSupport event="onchange" action="{!showRecordOwnershipOther}" rerender="recordOwnershipPanel" />
+             </apex:outputField>
+             </apex:actionRegion>
+             <apex:outputPanel id="recordOwnershipPanel">
+             <apex:outputText value="{!$Label.PBS_AAAP_Property_Owner_Type_of_Recorded_Ownership} " rendered="{!recordOwnershipOther}"/>
+             <apex:outputField value="{!offerPropOwner.PBS_AAAP_TYPE_OF_ORG_OTHER__c}" rendered="{!recordOwnershipOther}"/>
+             </apex:outputPanel>
+            </apex:outputPanel>
+                           
+            <apex:outputPanel >                                             
+                <apex:outputtext value="{!$Label.PBS_AAAP_Prop_Owner_State_Registered}"/><span class="required">*</span><br/>
+                <apex:outputField value="{!offerPropOwner.PBS_AAAP_Owner_State_Reg__c}" id="statereg"/>                
+            </apex:outputPanel>
+            
+            <apex:outputPanel >
+                <apex:outputtext value="{!$Label.PBS_AAAP_Prop_Owner_Country_Registered}"/><span class="required">*</span><br/>
+                <apex:outputField value="{!offerPropOwner.PBS_AAAP_Owner_Country_Reg__c}" id="countryreg"/>                
+            </apex:outputPanel>
+            
+            <apex:outputPanel >
+                <apex:outputtext value="{!$Label.PBS_AAAP_Property_Owner_Ownership_Interest}"/><span class="required">*</span><br/>
+                <apex:outputField value="{!offerPropOwner.PBS_AAAP_PROPERTY_OWNER_TYPE__c}" id="interest"/>                
+            </apex:outputPanel>
+            
+            <apex:outputPanel >
+                <apex:outputtext value="{!$Label.PBS_AAAP_Prop_Owner_Common_Parent}"/><span class="required">*</span>
+                <apex:selectRadio styleClass="radioCell" value="{!offerPropOwner.PBS_AAAP_CONTROLLED_BY_PARENT__c}" id="commonparent" disabled="true">
+                <apex:actionSupport event="onchange" action="{!showPropertyOwnerCommonParentSection}" rerender="commonParentSection" />
+                    <apex:selectOptions value="{!items}"/>
+                </apex:selectRadio>                
+            </apex:outputPanel>
+                
+            <apex:outputPanel id="commonParentSection">
+                <apex:outputPanel rendered="{!parentName}">
+                <apex:outputtext value="{!$Label.PBS_AAAP_Prop_Owner_Common_Parent_Name} " />
+                <apex:outputField value="{!offerPropOwner.PBS_AAAP_PARENT_NAME__c}" rendered="{!parentName}"/><br/>
+                <apex:outputtext value="(b) What is the common Parent TIN " rendered="{!parentName}"/>
+                <apex:outputField value="{!offerPropOwner.PBS_AAAP_Common_Parent_TIN__c}" rendered="{!parentName}"/>
+                </apex:outputPanel>
+            </apex:outputPanel>
+            -->
+                    <apex:outputPanel >
+                        <apex:outputtext value="{!$Label.PBS_AAAP_Prop_Owner_DUNS}"/>
+                        <a class="popup" href="#Modal_Prop_Ques15"><img src="{!$Resource.Info_Icon}"/></a>
+                        <div id="Modal_Prop_Ques15"
+                             style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                            <p>
+                                Reference Form 3517B "General Clauses" section 17 for more information on DUNS.
+                            </p>
+                        </div>
+
+                        <apex:outputText value="{!offerPropOwner.PBS_AAAP_DUNS_Number__c}" id="duns" styleClass="outputfield"/>
+                    </apex:outputPanel>
+                    <!--commented by syam for FY16
+            <apex:outputPanel >
+                <apex:actionRegion >
+                <apex:outputtext value="{!$Label.PBS_AAAP_Property_Owner_TIN_Status}"/><span class="required">*</span>
+                <br/>
+                <apex:outputField value="{!offerPropOwner.PBS_AAAP_Owner_TIN_Status__c}" id="taxpayer">
+                    <apex:actionSupport event="onchange" action="{!showTINStatus}" rerender="statusTINPanel" />
+                </apex:outputField>
+                </apex:actionRegion><br/>
+                
+                <apex:outputPanel id="statusTINPanel">               
+                    <apex:outputtext value="{!$Label.PBS_AAAP_Property_Owner_TIN_Assigned}" rendered="{!tinStatusKnown}"/>
+                    <apex:outputField value="{!offerPropOwner.PBS_AAAP_Owner_TIN_Assigned__c}" rendered="{!tinStatusKnown}"/>
+                    <apex:outputtext value="{!$Label.PBS_AAAP_Property_Owner_TIN_not_required}" rendered="{!tinStatusNotRequired}"/>
+                    <apex:selectRadio value="{!offerPropOwner.PBS_AAAP_OWN_NOT_REQ_REASON__c}" layout="pageDirection" rendered="{!tinStatusNotRequired}" disabled="true">
+                        <apex:selectOptions value="{!TINNotRequiredReasonItems}"/>
+                    </apex:selectRadio>
+                </apex:outputPanel>
+            </apex:outputPanel>   
+-->
+                </apex:panelGrid>
+
+                <br/>
+                <apex:outputPanel >
+                    <apex:commandButton value="View Offer"
+                                        onclick="window.open('/AAAP/PBS_AAAP_PreviewOfferPage?offerId={!JSENCODE(offerPropOwner.id)}','View Offer Screen','width=900, height=700,scrollbars=yes,resizable=yes,location=no');return false;"/>
+                </apex:outputPanel>
+
+            </apex:form>
+        </div><!-- /content-->
+    </div><!-- /Wrapper -->
+    <c:SiteFooterUX />
+</apex:page>

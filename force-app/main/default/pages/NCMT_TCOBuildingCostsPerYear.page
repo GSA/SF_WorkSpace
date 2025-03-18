@@ -1,0 +1,32 @@
+<apex:page showHeader="{!JSENCODE(HTMLENCODE($CurrentPage.parameters.print)) !='true'}" standardController="NCMT_Project__c" extensions="NCMT_TCOBuildingCostsPerYear_LC" lightningStylesheets="true">
+    <apex:slds />
+    <apex:includeLightning />
+    <div id="lightningPage"></div>
+     <script> 
+    //!JSENCODE(HTMLENCODE($CurrentPage.parameters.print))
+        var HTMLJSencodedRecId = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.id))}';
+        var HTMLJSencodedcostType = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.costType))}';
+        var HTMLJSencodedgrouping = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.grouping))}';
+        var HTMLJSencodedcat = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.cat))}';
+        var HTMLJSencodedcostDetail = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.costDetail))}';
+        var HTMLJSencodedprint = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.print))}';
+    	var HTMLJSencodeProjectName = '{!JSENCODE(HTMLENCODE(NCMT_Project__c.Name))}';
+        $Lightning.use("c:NCMT_TCO_BuildingCosts_App", function(){
+            $Lightning.createComponent("c:NCMT_TCO_BuildingCosts", {
+                "recordId" : HTMLJSencodedRecId,
+                "projectName" : HTMLJSencodeProjectName,
+                "selectedCostType" : HTMLJSencodedcostType,
+                "selectedGrouping" : HTMLJSencodedgrouping,
+                "selectedCategory" : HTMLJSencodedcat,
+                "selectedCostDetail" : HTMLJSencodedcostDetail,
+                "printMode" : HTMLJSencodedprint
+            },
+            'lightningPage',
+                function(cmp){
+     
+                });
+        
+        });
+  </script> 
+    
+</apex:page>

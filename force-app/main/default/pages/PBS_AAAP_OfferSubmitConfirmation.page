@@ -1,0 +1,76 @@
+<apex:page Controller="PBS_AAAP_OfferAttachmentsController" sidebar="false" showHeader="false"
+           standardStylesheets="false">
+    <c:PBS_AAAP_PortalPage_Begin ></c:PBS_AAAP_PortalPage_Begin>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+
+    <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+    <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+    <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+        <style>
+        #hero-int {
+            margin-left: 6px !important;
+            border-top-style: solid !important;
+            border-top-width: thin !important;
+            border-top-color: black !important;
+            width: 99% !important;
+            height: 0px !important;
+        }
+
+        </style>
+    
+    <div id="wrapper">
+        <!-- J. Rogers - eliminate headers
+        <h1 class="logo">GSA</h1> 
+        <div id="nav" class="interior">
+            <ul>
+                <li><a href="#" onclick="window.parent.location.href = '{!$Label.LOP_Community_Base_URL}AAAP-portalHome'">AAAP Home</a></li>
+                <!--<li><a href="/AAAP/pbs_aaap_userprofile">User Profile</a></li>
+                <li><a href="#">Offer</a></li>
+                <li class="too-tall"><a href="/AAAP/PBS_AAAP_Search_RLP">RLP &amp; Lease<br/>Documents</a></li>
+                <li class="too-tall"><a href="#">News &amp;<br/>Updates</a></li>
+                <li><a href="#">Resources</a></li>->
+                <li style="left:600px;position:relative;"><a href="#" onclick="window.parent.location.href = '{!$Label.LOP_Community_Base_URL}AAAP-Help'">AAAP Help</a></li>
+                    </ul>
+                                
+               
+               </div><!--/nav->
+                   <br/><br/>
+                   <div id="hero-int" style="margin-left:6px !important;margin-top:32px;"></div>
+               
+       <!-- <div id="hero-int3" style="margin-left:35px">
+            <h2>AAAP</h2>div>--><!--/hero-->
+       
+              <div id="content">
+
+            <apex:form id="newOffer" styleClass="formwrap" style="margin-right: 55px ;text-align:justify">
+                
+               <h1 id="page-image" class="blue" style="color:#002BAD;font-weight: bold;border-bottom:none;font-size:25px;margin-top:10px;">GSA's Automated Advanced Aquisition Platform</h1>
+               
+                
+                <h5  class="blue">Your offer has been successfully submitted.</h5><br/>
+                    
+                <a style="color:mediumblue" target="_blank" href="https://feedback.gsa.gov/jfe/form/SV_ell9TWArJSrNo3A">Your feedback is important to us. Please click this link to share your comments, questions, and suggestions regarding GSA’s online leasing tools.</a>
+             
+                    <p>Offerors may view or edit submitted offers at any time, however edits to a submitted offer during the open period will
+                    remove the offer from "Submitted" status. Any changes to an offer must be re-submitted during an
+                    open period in order to be considered for a lease award.</p>
+
+                    <p>GSA may contact offerors for further information or clarification regarding an offer. Contact from a
+                    GSA representative does not imply consideration or selection for a lease award. AAAP awards can be
+                    found under Offeror’s Resources on the AAAP homepage.</p>
+
+              <!--  <p>Offerors may withdraw an offer at anytime.</p>-->
+
+               <!-- <p>Click OK to return to your welcome page.</p>
+
+                <br/>
+
+                <apex:commandButton value="Ok" action="{!redirectToHome}"/>-->
+
+            </apex:form>
+        </div> </div>
+                      
+    
+  
+</apex:page>

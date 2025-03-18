@@ -1,0 +1,251 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="RET_LeaseSearchController">
+	<aura:attribute name="lease" type="PBS_Lease__c" default="{'sobjectType' : 'PBS_Lease__c'}" />
+<!--  	<aura:attribute name="leaseResults" type="List" /> -->
+    <aura:attribute name="wrapperList" type="List" />
+	<aura:attribute name="buildingName" type="String" />
+	<aura:attribute name="buildingAddress" type="String" />
+	<aura:attribute name="buildingCity" type="String" />
+	<aura:attribute name="buildingState" type="String" />
+	<aura:attribute name="buildingZipCode" type="String" />
+	<aura:attribute name="selectedLeaseId" type="String" />
+	<aura:attribute name="selectedLeaseAccessStatus" type="String" />
+	<aura:attribute name="requestorComments" type="String" />
+	<aura:attribute name="selectedPage" type="Integer" default="1" />
+	<aura:attribute name="pageSize" type="Integer" default="10" />
+	<aura:attribute name="totalPages" type="Integer" default="1" />
+	<aura:attribute name="totalResults" type="Integer" default="0" />
+	<aura:attribute name="resultsHaveNext" type="Boolean" default="false" />
+	<aura:attribute name="resultsHavePrev" type="Boolean" default="false" />
+
+	<div id="lease-search">
+	
+		<aura:if isTrue="{!v.wrapperList.length == 0}">
+           <!-- Please enter in search criteria and click the "Search" button below in order to locate your lease.<br/>-->
+            Search for your lease using the fields below. You must enter at least one criteria to perform the search. If available, it is highly recommended you search just by your 5-digit lease number along with the State code in which the lease is located.<br/>
+			<span style="font-weight:bold">Note</span>: {!$Label.c.RET_Lease_Search_Help_Note }
+            <br /><br />
+			<div class="lease-search-container" id="search-col-left">
+				<ui:inputText value="{!v.lease.Short_Lease_Number__c}" label="Lease Number (Enter only the last 5 digits)" />
+				<ui:inputText value="{!v.lease.Lessor__c}" label="Lessor Name" />
+				<ui:inputDate value="{!v.lease.Lease_Effective_Date__c}" label="Effective Date" displayDatePicker="true" />
+				<ui:inputDate value="{!v.lease.Lease_Expiration_Date__c}" label="Expiration Date" displayDatePicker="true" />		
+
+			</div>
+
+			<div class="lease-search-container" id="search-col-right">
+				<ui:inputText value="{!v.buildingName}" label="Building Name" />
+				<ui:inputText value="{!v.buildingAddress}" label="Street Address" />
+				<div id="city-container">
+					<ui:inputText value="{!v.buildingCity}" label="City" maxlength="255" size="20" />
+				</div>
+				<div id="state-container">
+					<ui:inputText value="{!v.buildingState}" label="State" maxlength="2" size="2" />
+				</div>
+				<div id="zip-code-container">
+					<ui:inputText value="{!v.buildingZipCode}" label="Zip Code" maxlength="10" size="10" />
+				</div>
+			</div>
+
+			<div class="action-buttons-centered">
+				<ui:inputSelect value="{!v.pageSize}" class="page-size-input" label="Results Per Page: ">
+						<ui:inputSelectOption text="5" label="5" />
+						<ui:inputSelectOption text="10" label="10" />
+						<ui:inputSelectOption text="15" label="15" />
+						<ui:inputSelectOption text="20" label="20" />
+						<ui:inputSelectOption text="25" label="25" />
+						<ui:inputSelectOption text="30" label="30" />
+						<ui:inputSelectOption text="35" label="35" />
+						<ui:inputSelectOption text="40" label="40" />
+						<ui:inputSelectOption text="45" label="45" />
+						<ui:inputSelectOption text="50" label="50" />
+					</ui:inputSelect>
+				<ui:button label="Search" press="{!c.findLease}" />
+			</div>
+		</aura:if>
+
+
+		<aura:if isTrue="{!v.wrapperList.length > 0}">
+			Found a total of {!v.totalResults} leases matching your search criteria.<br />
+			Once you locate your lease, click on the lease number to start submitting tax information to GSA.
+			<table class="lease-search-results">
+				<tr>
+					<th class="lease-number-header">Lease Number</th>
+					<th>Building Name</th>
+					<th>Address</th>
+					<th>City</th>
+					<th>State</th>
+					<th>Zip Code</th>
+					<th>Lease Effective</th>
+					<th>Lease Expiration</th>
+					<th>Lessor Name</th>
+                    <th>Access Status</th>
+				</tr>
+				<aura:iteration items="{!v.wrapperList}" var="wrapper">
+					<tr>
+						<td class="lease-number">
+							<a onclick="{!c.confirmStartSubmission}" data-leaseid="{!wrapper.lease.Id}">
+								<lightning:icon iconName="utility:file" size="small" />
+								<!--{!wrapper.lease.Short_Lease_Number__c }-->
+                                {!wrapper.lease.Lease_Number__c}
+							</a>
+						</td>
+						<td>{!wrapper.lease.Building_Name__c}</td>
+						<td>{!wrapper.lease.Building_Street_Address__c}</td>
+						<td>{!wrapper.lease.Building_City__c}</td>
+						<td>{!wrapper.lease.Building_State_Code__c}</td>
+						<td>{!wrapper.lease.Building_Zip_Code__c}</td>
+						<td>{!wrapper.lease.Lease_Effective_Date__c}</td>
+						<td>{!wrapper.lease.Lease_Expiration_Date__c}</td>
+						<td>{!wrapper.lease.Lessor__c}</td> 
+                        <aura:renderIf isTrue="{!and(wrapper.leaseAccess != null, wrapper.leaseAccess.Status__c != '')}"> 
+                        	<td>{!wrapper.leaseAccess.Status__c}</td>
+                            <aura:set attribute="else">
+                        		<td>No Access</td>
+                            </aura:set> 
+                        </aura:renderIf>  
+		
+                    </tr>
+				</aura:iteration>
+			</table>
+
+			<div class="table-pagination">
+				<span class="navigate-left">
+					<aura:if isTrue="{!v.resultsHavePrev}">
+						<a onclick="{!c.navigateLeft}">
+							<lightning:icon iconName="utility:chevronleft" size="small" />
+						</a>
+						<aura:set attribute="else">
+							<lightning:icon iconName="utility:chevronleft" size="small" />
+						</aura:set>
+					</aura:if>
+				</span>
+				<span class="page-totals">
+					Showing page {!v.selectedPage} of {!v.totalPages}.
+				</span>
+				<span class="navigate-right">
+					<aura:if isTrue="{!v.resultsHaveNext}">
+						<a onclick="{!c.navigateRight}">
+							<lightning:icon iconName="utility:chevronright" size="small" />
+						</a>
+						<aura:set attribute="else">
+							<lightning:icon iconName="utility:chevronright" size="small" />
+						</aura:set>
+					</aura:if>
+				</span>
+			</div>
+
+			<div class="action-buttons-centered">
+				<ui:button label="Search for Another Lease" press="{!c.newSearch}" />
+			</div>			
+		</aura:if>
+
+	</div>
+
+    <div id="spinner" class="hidden">
+        <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+        </div>
+    </div>
+
+	<div id="confirm-create-submission" class="ret-modal-container">
+		<section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+			<div class="slds-modal__container">
+				<header class="slds-modal__header">
+                    <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.cancelTaxSubmission}">
+                        X<span class="slds-assistive-text">Cancel</span>
+                    </button>
+					<span id="lease-header">Lease</span>
+				</header>
+				<div class="slds-modal__content slds-p-around_medium ret-upload-container">
+					<div class="slds-tile ret-tile">
+					    <div class="slds-tile__detail">
+							<dl class="slds-list_horizontal slds-wrap">
+								<dt class="slds-item_label slds-text-color_weak">Lessor:</dt>
+						        <dd class="slds-item_detail slds-truncate" id="lease-lessor"></dd>
+								<dt class="slds-item_label slds-text-color_weak">Effective Date:</dt>
+						        <dd class="slds-item_detail slds-truncate" id="lease-effective-date"></dd>
+								<dt class="slds-item_label slds-text-color_weak">Expiration Date:</dt>
+						        <dd class="slds-item_detail slds-truncate" id="lease-expiration-date"></dd>
+							</dl>
+					    </div>
+					</div>	
+					<div class="slds-tile ret-tile">
+					    <div class="slds-tile__detail">
+							<dl class="slds-list_horizontal slds-wrap">
+								<dt class="slds-item_label slds-text-color_weak">Address:</dt>
+						        <dd class="slds-item_detail slds-truncate" id="lease-address"></dd>
+								<dt class="slds-item_label slds-text-color_weak">City:</dt>
+						        <dd class="slds-item_detail slds-truncate" id="lease-city"></dd>
+								<dt class="slds-item_label slds-text-color_weak">State:</dt>
+						        <dd class="slds-item_detail slds-truncate" id="lease-state"></dd>
+								<dt class="slds-item_label slds-text-color_weak">Zip Code:</dt>
+						        <dd class="slds-item_detail slds-truncate" id="lease-zip-code"></dd>
+							</dl>
+					    </div>
+					</div>	
+
+					<div class="create-tax-confirm ret-nohyphens">
+						{!$Label.c.RET_Confirm_Create_New_Case}
+					</div>
+
+				</div>
+				<footer class="slds-modal__footer">
+					<div id="edit-footer-buttons">
+						<ui:button class="slds-button slds-button_neutral" press="{!c.cancelTaxSubmission}" label="Cancel" />
+<!--	                  	<ui:button class="slds-button slds-button_brand" press="{!c.startTaxSubmission}" label="Create Tax Submission" labelClass="CreateTaxSubmission"/>
+    --> 
+                        <aura:renderIf isTrue="{!and(v.selectedLeaseAccessStatus != '', or(v.selectedLeaseAccessStatus == 'Approved', v.selectedLeaseAccessStatus == 'POC'))}"> 
+                      	 	<ui:button class="slds-button slds-button_brand" press="{!c.startTaxSubmission}" label="Create Tax Submission" labelClass="CreateTaxSubmission"/>
+                        </aura:renderIf>
+                        <aura:renderIf isTrue="{!and(v.selectedLeaseAccessStatus != '', v.selectedLeaseAccessStatus == 'Requested')}"> 
+                            <ui:button class="slds-button slds-button_brand" label="Requested" disabled="true" labelClass=""/>
+                        </aura:renderIf>
+                        <aura:renderIf isTrue="{!or(or(v.selectedLeaseAccessStatus == 'Denied', v.selectedLeaseAccessStatus == 'Revoked'), v.selectedLeaseAccessStatus == '') }"> 
+                            <ui:button class="slds-button slds-button_brand" press="{!c.requestLeaseAccess}" label="Request Access" labelClass="CreateTaxSubmission"/>
+                        </aura:renderIf>
+                   </div>
+				</footer>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+	</div>
+    
+    <div id="confirm-request-access"  class="ret-modal-container">
+        <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+			<div class="slds-modal__container">
+				<header class="slds-modal__header">
+                    <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.cancelRequestAccess}">
+                        X<span class="slds-assistive-text">Cancel</span>
+                    </button>
+					<span id="lease-confirm-request-access">Confirm Lease Request Access</span>
+				</header>
+				<div class="slds-modal__content slds-p-around_medium ret-upload-container">
+					<div class="slds-tile">
+                        <div class="slds-tile__detail">
+                            <dl class="slds-list_horizontal slds-wrap">
+                                <dt class="slds-item_label slds-text-color_weak">Lease:</dt>
+                                <dd class="slds-item_detail slds-truncate" id="lease-number"></dd>
+                                <dt class="slds-item_label slds-text-color_weak">Building Name:</dt>
+                                <dd class="slds-item_detail slds-truncate" id="lease-building-name"></dd>
+                                <dt class="slds-item_label slds-text-color_weak">Requestor Comments</dt>
+                                <dd class="slds-item_detail slds-truncate" id="lease-number">
+                                	<ui:inputText value="{!v.requestorComments}" />
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+					<div id="edit-footer-buttons">
+                        <ui:button class="slds-button slds-button_neutral" press="{!c.cancelRequestAccess}" label="Cancel" />
+                        <ui:button class="slds-button slds-button_brand" press="{!c.confirmRequestLeaseAccess}" label="Request Access" labelClass="CreateTaxSubmission"/>
+                    </div>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop--open"></div>
+    </div>
+
+</aura:component>

@@ -1,0 +1,613 @@
+<template>
+    <article class="slds-card">
+        <div class="slds-card__header slds-grid projectBody">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title" style="text-align:center">
+                        <span style="font-size: 23px;
+                font-weight: 600;
+                text-transform: uppercase;width:100%">Parametric Data Record</span>
+                    </h2>
+                </div>
+                <div class="slds-no-flex">
+                    <button class="slds-button slds-button_neutral hideButton" onclick={printPage} id="prnBtn">Print Page</button>
+                </div>
+            </header>
+        </div>
+        <template if:true={loaded}>
+            <div class="slds-card__body projectBody">
+                <div class="slds-form slds-grid">
+                    <div class="slds-col width50">
+                    <table class="projectTable" style="width:100%">
+                        <tr style="font-size: 15px;
+                        font-weight: 700;
+                        text-transform: uppercase;">
+                            <th colspan="3" style="border:none">Project Properties</th>
+                        </tr>
+                        <tr>
+                            <th style="width: 35%;">Project Title</th>
+                            <td colspan="2"><a onclick={redirectToProject}> <h1>{projectDetails.ProjectDetails.Name}</h1></a> </td>
+                        </tr>
+                        <tr>
+                            <th>Project Location:</th>
+                            <td colspan="2">{projectDetails.ProjectDetails.City__c},{projectDetails.ProjectDetails.State__c}</td>
+                        </tr>
+                        <tr>
+                            <th>GSA Region:</th>
+                            <td colspan="2">{projectDetails.ProjectDetails.RegionCode__c}</td>
+                        </tr>
+                        <tr>
+                            <th>GSA Project #:</th>
+                            <td colspan="2">{projectDetails.ProjectDetails.GSA_Project__c}</td>
+                        </tr>
+                        <tr>
+                            <th>Building Type:</th>
+                            <td colspan="2">{projectDetails.ProjectDetails.Building_Type__c},{projectDetails.ProjectDetails.Building_Cost_Type__c}</td>
+                        </tr>
+                        <tr>
+                            <th>Level of Protection:</th>
+                            <td colspan="2">{projectDetails.ProjectDetails.Level_of_Protection__c}</td>
+                        </tr>
+                        <tr>
+                            <th>Seismic Design Category:</th>
+                            <td colspan="2">{projectDetails.ProjectDetails.Project_Seismic_Design_Category__c}</td>
+                        </tr>
+                        <tr>
+                            <th>Building Height:</th>
+                            <td colspan="2">{projectDetails.ProjectDetails.Building_Heigtht__c}</td>
+                        </tr>
+                        <tr>
+                            <th>Building Quality:</th>
+                            <td colspan="2">{projectDetails.ProjectDetails.Building_Quality__c}</td>
+                        </tr>
+                        <tr>
+                            <th>Index Location:</th>
+                            <td colspan="2">{projectDetails.ProjectDetails.Location__r.Name},{projectDetails.ProjectDetails.State__c}</td>
+                        </tr>
+                        <tr>
+                            <th>Entry Type:</th>
+                            <td colspan="2">{projectDetails.ProjectDetails.Entry_Type__c}</td>
+                        </tr>
+                        </table>
+                        
+                    </div>
+                    <div class="slds-col width50" style="padding-left:10px">
+                        <div style="height: 18px;">
+                             
+                        </div>
+                        <div class="ProjectDescHeader">
+                            Project Description
+                        </div>
+                        <div class="ProjectDesc">
+                            {projectDetails.ProjectDetails.Brief_Narrative__c}
+                        </div>
+                        <table class="projectTable" style="width:100%">
+                            <tr>
+                                <th style="width: 35%;">Estimated Prepared by:</th>
+                                <td>{projectDetails.ProjectDetails.CreatedBy.Name}</td>
+                            </tr>
+                            <tr>
+                                <th>Project Status:</th>
+                                <td>{projectDetails.ProjectDetails.Project_Status__c}</td>
+                            </tr>
+                            <tr>
+                                <th>Requestor:</th>
+                                <td>{projectDetails.ProjectDetails.Requestor__c}</td>
+                            </tr>
+                            <tr>
+                                <th>Estimated Reviewer:</th>
+                                <td>{projectDetails.Reviewed_By}</td>
+                            </tr>
+                            <tr>
+                                <th>Estimated Approver:</th>
+                                <td>{projectDetails.Approved_By}</td>
+                            </tr>
+                            <tr>
+                                <th>Estimate Date:</th>
+                                <td>{projectDetails.ProjectDetails.Basis_Date_Of_Estimate__c}</td>
+                            </tr>
+                            <tr>
+                                <th>Contruction Start Date:</th>
+                                <td>{projectDetails.ProjectDetails.Start_Construction__c}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-card__body projectBody" style="margin-top:10px">
+                <div class="slds-form slds-grid">
+                    <div class="slds-col width50">
+                        <table class="projectParamterTable" style="width:100%">
+                            <tr style="font-size: 15px;
+                            font-weight: 700;
+                            text-transform: uppercase;border:none;">
+                                <td style="border:none" colspan="3">Project Parameters</td>
+                            </tr>
+                            <tr>
+                                <th style="width: 40%; background-color:lightgray">Building Parameters</th>
+                                <td style="background-color:lightgray"><b>Default Value</b></td>
+                                <td style="background-color:lightgray"><b>User Value</b></td>
+                            </tr>
+                            <tr style="height: 15px;">
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th style="background-color:lightgrey"><b>Floors</b></th>
+                            </tr>
+                            <tr>
+                                <th>Number of floors</th>
+                                <td>{projectDetails.PLPData.Default_Above_Ground__c} EA</td>
+                                <td>{projectDetails.PLPData.Above_Ground__c} EA</td>
+                            </tr>
+                            <tr>
+                                <th>Basement floors</th>
+                                <td>{projectDetails.PLPData.Default_Below_Ground__c} EA</td>
+                                <td>{projectDetails.PLPData.Below_Ground__c} EA</td>
+                            </tr>
+                            <tr style="height: 15px;">
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th style="background-color:lightgrey"><b>Areas</b></th>
+                            </tr> 
+                            <tr>
+                                <th>Building Gross Enclosed Area</th>
+                                <td><lightning-formatted-number value={projectDetails.ProjectDetails.Total_GSF__c}></lightning-formatted-number> SF</td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th>Footprint Area</th>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Default_Foot_Print_Area__c}></lightning-formatted-number> SF</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Foot_Print_Area__c}></lightning-formatted-number> SF</td>
+                            </tr>
+                            <tr>
+                                <th>Basement</th>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Default_Basement_SF__c}></lightning-formatted-number> SF</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Basement_SF__c}></lightning-formatted-number> SF</td>
+                            </tr>
+                            <tr>
+                                <th>Elevated Floor Area</th>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Default_Elevated_Floor_Area_SF__c}></lightning-formatted-number> SF</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Elevated_Floor_Area_SF__c}></lightning-formatted-number> SF</td>
+                            </tr>
+                            <tr>
+                                <th>Gross Site Area</th>
+                                <td><lightning-formatted-number value={projectDetails.ProjectDetails.Calculated_Site_Area__c}></lightning-formatted-number> SF</td>
+                                <td><lightning-formatted-number value={projectDetails.ProjectDetails.Override_Calculated_Site_Area__c}></lightning-formatted-number> SF</td>
+                            </tr>
+                            <tr>
+                                <th>Finished Site Area</th>
+                                <td><lightning-formatted-number value={projectDetails.siteData.Finished_Site__c}></lightning-formatted-number> SF</td>
+                                <td><lightning-formatted-number value={projectDetails.siteData.Finished_Site__c}></lightning-formatted-number> SF</td>
+                            </tr>
+                            <tr style="height: 15px;">
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th style="background-color:lightgrey"><b>Building Height</b></th>
+                            </tr>
+                            <tr>
+                                <th>Basement (Per Basement Floor)</th>
+                                <td>{projectDetails.PLPData.Default_Basement_Story_Height__c} FT</td>
+                                <td>{projectDetails.PLPData.Basement_Story_Height__c} FT</td>
+                            </tr>
+                            <tr>
+                                <th>Upper Floors (Average Per Floor)</th>
+                                <td>{projectDetails.PLPData.Default_Average_Story_Height__c} FT</td>
+                                <td>{projectDetails.PLPData.Average_Story_Height__c} FT</td>
+                            </tr>
+                            <tr class="rowHeight">
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th style="background-color:lightgrey"><b>Structural System</b></th>
+                            </tr>
+                            <tr>
+                                <th>Foundations</th>
+                                <td>{projectDetails.foundations}</td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th>Structural Frame</th>
+                                <td>{projectDetails.PLPData.Structural_Frame__c}</td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th>Typical Bay Size</th>
+                                <td>{projectDetails.PLPData.Average_Typical_Bay_Area__c}</td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th>Dead Load</th>
+                                <td>{projectDetails.PLPData.Default_Dead_Load__c} #/SF</td>
+                                <td>{projectDetails.PLPData.Dead_Load__c} #/SF</td>
+                            </tr>
+                            <tr>
+                                <th>Live Load</th>
+                                <td>{projectDetails.PLPData.Default_Live_Load__c} #/SF</td>
+                                <td>{projectDetails.PLPData.Live_Load__c} #/SF</td>
+                            </tr>
+                            <tr style="height: 15px;">
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th style="background-color:lightgrey"><b>Cladding</b></th>
+                            </tr>
+                            <tr>
+                                <th>Type</th>
+                                <td>{projectDetails.PLPData.Default_Cladding_Type__c}</td>
+                                <td>{projectDetails.PLPData.Cladding_Type__c}</td>
+                            </tr>
+                            <tr>
+                                <th>Quality</th>
+                                <td>{projectDetails.PLPData.Default_Cladding_Quality__c}</td>
+                                <td>{projectDetails.PLPData.Cladding_Quality__c}</td>
+                            </tr>
+                            <tr>
+                                <th>Skin Ratio</th>
+                                <td>{projectDetails.PLPData.Default_Skin_Ratio__c}</td>
+                                <td>{projectDetails.PLPData.Cladding_Skin_Ratio__c}</td>
+                            </tr>
+                            <tr>
+                                <th>Glazing Ratio (% of above-grade skin)</th>
+                                <td>{projectDetails.PLPData.Default_Glazing_Ratio__c}%</td>
+                                <td>{projectDetails.PLPData.Glazing_Ratio_of_above_grade_skin__c}%</td>
+                            </tr>
+                            <tr>
+                                <th>Total Wall Area</th>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Default_Total_Wall_Area_SF__c}></lightning-formatted-number> SF</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Cladding_Skin_Ratio_SF__c}></lightning-formatted-number> SF</td>
+                            </tr>
+                            <tr>
+                                <th>Finished Wall Area (Including Glazing)</th>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Default_Finished_Wall_Area_SF__c}></lightning-formatted-number> SF</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Finished_Wall_Area_SF__c}></lightning-formatted-number> SF</td>
+                            </tr>
+                            <tr>
+                                <th>Retaining Wall</th>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Default_Retaining_Wall_SF__c}></lightning-formatted-number> SF</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Cladding_Retaining_Wall_SF__c}></lightning-formatted-number> SF</td>
+                            </tr>
+                            <tr>
+                                <th>Finished Opaque Wall (Excl Glazing)</th>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Default_Finished_Opaque_Wall_SF__c}></lightning-formatted-number> SF</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Finished_Opaque_Wall_SF__c}></lightning-formatted-number> SF</td>
+                            </tr>
+                            <tr>
+                                <th>Glazing</th>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Default_Glazing_SF__c}></lightning-formatted-number> SF</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Glazing_Ratio_SF__c}></lightning-formatted-number> SF</td>
+                            </tr>
+                            <tr style="height: 15px;">
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th style="background-color:lightgrey"><b>Roofing</b></th>
+                            </tr>
+                            <tr>
+                                <th>Total roof area</th>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Default_Foot_Print_Area__c}></lightning-formatted-number> SF</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Total_Roof_Area_SF__c}></lightning-formatted-number> SF</td>
+                            </tr>
+                            <tr>
+                                <th>Basement roof</th>
+                                <td>0 SF</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Basement_Roof_SF__c}></lightning-formatted-number> SF</td>
+                            </tr>
+                            <tr>
+                                <th>Upper roof</th>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Default_Foot_Print_Area__c}></lightning-formatted-number> SF</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Upper_Roof_SF__c}></lightning-formatted-number> SF</td>
+                            </tr>
+                            <tr>
+                                <th>Sloped roof</th>
+                                <td>0 SF</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Sloped_Roof_SF__c}></lightning-formatted-number> SF</td>
+                            </tr>
+                            <tr>
+                                <th>Green roof</th>
+                                <td>0 SF</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Green_Roof_SF__c}></lightning-formatted-number> SF</td>
+                            </tr>
+                            <tr>
+                                <th>Flat roof</th>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Default_Foot_Print_Area__c}></lightning-formatted-number> SF</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Flat_Roof_SF__c}></lightning-formatted-number> SF</td>
+                            </tr>
+                            <tr>
+                                <th>Skylights</th>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Default_Roofing_Skylights__c}></lightning-formatted-number> SF</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Roofing_Skylights__c}></lightning-formatted-number> SF</td>
+                            </tr>
+
+                        </table>
+                        
+                    </div>
+                    <div class="slds-col width50" style="padding-left:10px">
+                        <div style="height: 20px;">
+                            
+                        </div>
+                        <br></br>
+                        <div class="ProjectDescHeader">
+                            Override Comments
+                        </div>
+                        <br></br>
+                        <br></br>
+                        <div style="padding-left: 10px;">
+                            <b><lightning-textarea name="input1" read-only value={projectDetails.PLPData.Massing_Override_Comments__c} label="Massing" ></lightning-textarea></b>
+                        </div>
+                        <br></br>
+                        <br></br>
+                        <div style="padding-left: 10px;">
+                            <b><lightning-textarea name="input1" read-only value={projectDetails.PLPData.Structure_Override_Comments__c} label="Structure" ></lightning-textarea></b>
+                        </div>
+                        <br></br>
+                        <div style="padding-left: 10px;">
+                            <b><lightning-textarea name="input1" read-only value={projectDetails.PLPData.Skin_System_Override_Comments__c} label="Skin" ></lightning-textarea></b>
+                        </div>
+                        <br></br>
+                        <div style="padding-left: 10px;">
+                            <b><lightning-textarea name="input1" read-only value={projectDetails.PLPData.Cladding_Override_Comments__c} label="Cladding" ></lightning-textarea></b>
+                        </div>
+                        <br></br>
+                        <div style="padding-left: 10px;">
+                            <b><lightning-textarea name="input1" read-only value={projectDetails.PLPData.Roof_System_Override_Comments__c} label="Roof System" ></lightning-textarea></b>
+                        </div>
+                        <br></br>
+                        <div style="padding-left: 10px;">
+                            <b><lightning-textarea name="input1" read-only value={projectDetails.PLPData.Roofing_Override_Comments__c} label="Roofing" ></lightning-textarea></b>
+                        </div>                   
+                    
+                    </div>
+                </div>
+            </div>
+            <div class="slds-card__body projectBody">
+                <div class="slds-form slds-grid">
+                    <div class="slds-col width50">
+                        <table class="projectParamterTable" style="width:100%">
+                            <tr>
+                                <th style="width: 40%;border:none"></th>
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr style="height: 15px;">
+                                <th style="border:none"></th>
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th style="background-color:lightgrey"><b>Site Conditions</b></th>
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th>Soil bearing capacity</th>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Soil_Bearing_Strength__c}></lightning-formatted-number> KSF</td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th>Site Access</th>
+                                <td>{projectDetails.PLPData.Site_Access__c}</td>
+                                <td>{projectDetails.PLPData.Site_Access_Cost_Impact__c}%</td>
+                            </tr>
+                            <tr>
+                                <th>Site Remoteness</th>
+                                <td>{projectDetails.PLPData.Site_Remoteness__c}</td>
+                                <td>{projectDetails.PLPData.SiteRemoteness_Cost_Impact__c}%</td>
+                            </tr>
+                            <tr>
+                                <th>Other Special Condition:</th>
+                                <td>{projectDetails.PLPData.Other_Special_Condition_Specify__c}</td>
+                                <td>{projectDetails.PLPData.Cost_Impact_Percent__c}%</td>
+                            </tr>
+                            <tr>
+                                <th>Freeze Depth/Footing depth</th>
+                                <td>{projectDetails.PLPData.Default_Freeze_Depth_Footing_Depth__c} Ft</td>
+                                <td>{projectDetails.PLPData.Freeze_Depth_Footing_Depth_BG__c} Ft</td>
+                            </tr>
+                            <tr>
+                                <th>Water table depth</th>
+                                <td>{projectDetails.PLPData.Default_Water_Table_Depth__c} Ft</td>
+                                <td>{projectDetails.PLPData.Water_Table_Depth__c} Ft</td>
+                            </tr>
+                            <tr>
+                                <th>Excavation: Percentage shored</th>
+                                <td>{projectDetails.PLPData.Excavation_Percentage_Shored_BG__c}%</td>
+                                <td>{projectDetails.PLPData.Excavation_Percent_Shored_BG__c}%</td>
+                            </tr>
+                            <tr style="height: 15px;">
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th style="background-color:lightgrey"><b>Interior Construction</b></th>
+                            </tr>
+                            <tr>
+                                <th>Core/Shell Partition Ratio</th>
+                                <td>{projectDetails.PLPData.Default_Core_Shell_Partition_Ratio__c}</td>
+                                <td>{projectDetails.PLPData.Int_Const_Core_Shell_Partition_ratio__c}</td>
+                            </tr>
+                            <tr style="height: 15px;">
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th style="background-color:lightgrey"><b>Vertical Conveyance</b></th>
+                            </tr>
+                            <tr>
+                                <th>Stairs - Flight</th>
+                                <td>{projectDetails.PLPData.Default_Stairs_Flight__c} EA</td>
+                                <td>{projectDetails.PLPData.Use_Stairs_Flight__c} EA</td>
+                            </tr> 
+                            <tr>
+                                <th>Elevators - Public</th>
+                                <td>{projectDetails.PLPData.Def_Vertical_Conveyance_Elevators_Stops__c} Stops</td>
+                                <td>{projectDetails.PLPData.Number_of_Stops__c} Stops</td>
+                            </tr> 
+                            <tr>
+                                <th>Elevators - Private</th>
+                                <td style="border:none"></td>
+                                <td>Incl. in TI</td>
+                            </tr> 
+                            <tr>
+                                <th>Escalators - Pairs</th>
+                                <td>0 EA</td>
+                                <td>{projectDetails.PLPData.Vertical_Conveyance_Escalators_PR__c} EA</td>
+                            </tr> 
+                            <tr style="height: 15px;">
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th style="background-color:lightgrey"><b>Plumbing</b></th>
+                            </tr>
+                            <tr>
+                                <th>Fixtures - Public Restrooms</th>
+                                <td>{projectDetails.PLPData.Default_Fixtures_Public_Restrooms__c} EA</td>
+                                <td>{projectDetails.PLPData.Use_Fixtures_Public_Restrooms__c} EA</td>
+                            </tr> 
+                            <tr>
+                                <th>Fixtures - Utility And Water Coolers</th>
+                                <td>{projectDetails.PLPData.Fixtures_Utility_Water_Coolers__c} EA</td>
+                                <td>{projectDetails.PLPData.Fixtures_Utility_Water_Coolers__c} EA</td>
+                            </tr> 
+                            <tr style="height: 15px;">
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th style="background-color:lightgrey"><b>HVAC</b></th>
+                            </tr>
+                            <tr>
+                                <th>Heating Load</th>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Default_Heating_Load_Mbtuh__c}></lightning-formatted-number> Mbtuh</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.HVAC_Heating_Load_Mbtu__c}></lightning-formatted-number> Mbtuh</td>
+                            </tr> 
+                            <tr>
+                                <th>Cooling Load</th>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Default_Cooling_Load__c}></lightning-formatted-number> TON</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.HVAC_Cooling_Load_Tons__c}></lightning-formatted-number> TON</td>
+                            </tr> 
+                            <tr>
+                                <th>AHU Load</th>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Default_AHU_Load__c}></lightning-formatted-number> CFM</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.HVAC_Air_Handling_Capacity_CFM__c}></lightning-formatted-number> CFM</td>
+                            </tr>
+                            <tr style="height: 15px;">
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th style="background-color:lightgrey"><b>Electrical</b></th>
+                            </tr>
+                            <tr>
+                                <th>Electrical Load - Primary</th>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Default_Electrical_Load_Primary_kW__c}></lightning-formatted-number> kW</td>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Electrical_Load_kW__c}></lightning-formatted-number> kW</td>
+                            </tr> 
+                            <tr>
+                                <th>Panelboards</th>
+                                <td><lightning-formatted-number value={projectDetails.PLPData.Panelboards__c}></lightning-formatted-number> EA</td>
+                                <td style="border:none"></td>
+                            </tr> 
+                            <tr>
+                                <th>Light Fixtures</th>
+                                <td><lightning-formatted-number value={projectDetails.hpData.Light_Fixtures__c}></lightning-formatted-number> EA</td>
+                                <td style="border:none"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="slds-col width50" style="padding-left:10px">
+                        <div style="height: 18px;">
+                            
+                        </div>
+                        <div class="ProjectDescHeader">
+                            Override Comments
+                        </div>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <div style="padding-left: 10px;">
+                            <b><lightning-textarea name="input1" read-only value={projectDetails.PLPData.Interior_Override_Comments__c} label="Interior" ></lightning-textarea></b>
+                        </div>
+                        <br></br>
+                        <div style="padding-left: 10px;">
+                            <b><lightning-textarea name="input1" read-only value={projectDetails.PLPData.Vertical_Transportation_Override_Comment__c} label="Vertical" ></lightning-textarea></b>
+                        </div>
+                        <br></br>
+                        <br></br>
+                        <div style="padding-left: 10px;">
+                            <b><lightning-textarea name="input1" read-only value={projectDetails.PLPData.MEP_Override_Comments__c} label="MEP" ></lightning-textarea></b>
+                        </div>                   
+                    
+                    </div>
+                </div>
+            </div>
+            <div class="slds-card__body projectBody">
+                <div class="slds-form slds-grid">
+                    <div class="slds-col width50">
+                        <table class="projectParamterTable" style="width:100%">
+                            <tr style="font-size: 15px;font-weight: 700;
+                                        text-transform: uppercase;border:none;">
+                                <td style="border:none" colspan="3">PROJECT PARAMETERS (continued)</td>
+                            </tr>
+                            <tr>
+                                <th style="width: 40%;border:none"></th>
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr style="height: 15px;">
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <tr>
+                                <th style="background-color:lightgrey"><b>Footprint Areas</b></th>
+                                <td style="border:none"></td>
+                                <td style="border:none"></td>
+                            </tr>
+                            <template for:each={projectDetails.bldgmassData} for:item="bldg">
+                            <tr key={bldg.Id}>
+                                <th>{bldg.Building_Massing_Area__c}</th>
+                                <td><lightning-formatted-number value={bldg.Default_Area_SF__c}></lightning-formatted-number> SF</td>
+                                <td><lightning-formatted-number value={bldg.Use_Area_SF__c}></lightning-formatted-number> SF</td>
+                            </tr> 
+                        </template>
+                        </table>
+                    </div>
+                    <div class="slds-col width50" style="padding-left:10px">
+                        <div style="height: 18px;">
+                            
+                        </div>
+                        <div class="ProjectDescHeader">
+                            Notes:
+                        </div>                  
+                    
+                    </div>
+                </div>
+            </div>               
+
+        </template>
+        <template if:true={showError}>
+            <p>NO RECORD TO DISPLAY</p>
+        </template>    
+
+    </article>
+</template>

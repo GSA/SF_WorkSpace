@@ -1,0 +1,195 @@
+<aura:component controller="RET_LeaseListController">
+	<aura:attribute name="statusFilters" type="String[]" />
+	<aura:attribute name="wrapperList" type="List" />
+	<aura:attribute name="selectedPage" type="Integer" default="1" />
+	<aura:attribute name="pageSize" type="Integer" default="3" />
+	<aura:attribute name="totalPages" type="Integer" default="1" />
+	<aura:attribute name="totalLeases" type="Integer" default="0" />
+	<aura:attribute name="totalCases" type="Integer" default="0" />
+	<aura:attribute name="resultsHaveNext" type="Boolean" default="false" />
+	<aura:attribute name="resultsHavePrev" type="Boolean" default="false" />
+    <aura:attribute name="manageAccessModalOpen" type="Boolean" default="false" />
+    <aura:attribute name="leaseNumber" type="String" default="" />
+	<aura:handler name="init" action="{!c.loadLeases}" value="{!this}" />
+	<aura:handler name="change" value="{!v.statusFilters}" action="{!c.loadLeases}" />
+	<aura:registerEvent name="caseSelected" type="c:RET_CaseSelected" />
+
+	<aura:if isTrue="{!v.wrapperList.length > 0}">
+		<div class="ret-lease-table-container">
+			<table class="lease-list-table">
+				<thead>
+					<tr class="slds-text-title_caps">
+						<th scope="col"></th>
+						<th scope="col">Lease</th>
+						<th scope="col">Effective Date</th>
+						<th scope="col">Expiration Date</th>
+						<th scope="col">Address</th>
+						<th scope="col">City</th>
+						<th scope="col">State</th>
+						<th scope="col">Zip Code</th>
+						<th scope="col">Lessor</th>
+                        <th scope="col">Access Status</th>
+						
+					</tr>
+				</thead>
+				<tbody>	
+					<aura:iteration items="{!v.wrapperList}" var="wrapper" indexVar="indx">
+						<tr class="lease-information">
+						<!--	<th scope="row" class="lease-number">{!wrapper.lease.Short_Lease_Number__c}</th>-->
+							<td>
+                                <div class="slds-m-top--xx-small slds-m-bottom--xx-small">
+                                    <div id="{!wrapper.lease.Id + 'plus' + indx}" class="slds-show" >
+                                    	<lightning:buttonicon tabindex="{!indx}" name="{!wrapper.lease.Id}" onclick="{!c.showHidePanel}" iconName="utility:add" size="x-small" alternativeText="Show row details"/>
+									</div>
+                                    <div id="{!wrapper.lease.Id + 'minus' + indx}" class="slds-hide">
+                                        <lightning:buttonicon tabindex="{!indx}" name="{!wrapper.lease.Id}" onclick="{!c.showHidePanel}" iconName="utility:dash" size="x-small" alternativeText="Hide row details"/>
+                                	</div>
+                            	</div>
+                            </td>
+							<th scope="row" class="lease-number">{!wrapper.lease.Lease_Number__c}</th>
+                            <td>{!wrapper.lease.Lease_Effective_Date__c}</td>
+							<td>{!wrapper.lease.Lease_Expiration_Date__c}</td>
+							<td>{!wrapper.lease.Building_Street_Address__c}</td>
+							<td>{!wrapper.lease.Building_City__c}</td>
+							<td>{!wrapper.lease.Building_State_Code__c}</td>
+							<td>{!wrapper.lease.Building_Zip_Code__c}</td>
+							<td>{!wrapper.lease.Lessor__c}</td>
+                            
+                            <aura:if isTrue="{!wrapper.leaseAccess.Status__c == 'POC'}">
+                            	<td>
+                                    <button type="button" onclick="{!c.manageAccess}" id="{!wrapper.lease.Lease_Number__c}" class="slds-button slds-button_brand">Manage</button> 
+                                </td>
+                                <aura:set attribute="else">
+                                	<td>{!wrapper.leaseAccess.Status__c}</td>
+                                </aura:set>
+                            </aura:if>
+                            
+						</tr>
+						<tr class="case-information" id="{!wrapper.lease.Id}" style="display:none;">
+							<td colspan="8" class="case-list-table">
+								<table>
+									<thead>
+										<tr>
+											<th scope="col">Tax Submission Number</th>
+											<th scope="col">Base Tax Year</th>
+											<th scope="col">Status</th>
+											<th scope="col">Initial Submitted Date</th>
+										</tr>
+									</thead>
+									<tbody>
+										<aura:iteration items="{!wrapper.caseList}" var="taxCase">									
+											<tr>
+												<td width="30%" class="case-number"><a onclick="{!c.goToCase}" data-case-id="{!taxCase.Id}">{!taxCase.CaseNumber}</a></td>
+												<td width="20%" class="case-tax-year">{!taxCase.RET_Base_Tax_Year__c}</td>
+												<td width="25%" class="case-status">{!taxCase.Status}</td>
+												<td width="25%" class="case-initial-date"><ui:outputDateTime value="{!taxCase.RET_Initial_Submission_Date__c}" format="MM/dd/yyyy" /></td>
+											</tr>
+										</aura:iteration>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					</aura:iteration>
+				</tbody>
+			</table>
+			<div class="table-pagination">
+				<span class="navigate-left">
+					<aura:if isTrue="{!v.resultsHavePrev}">
+						<a onclick="{!c.navigateLeft}">
+							<lightning:icon iconName="utility:chevronleft" size="small" />
+						</a>
+						<aura:set attribute="else">
+							<lightning:icon iconName="utility:chevronleft" size="small" />
+						</aura:set>
+					</aura:if>
+				</span>
+				<span class="page-totals">
+					Showing page {!v.selectedPage} of {!v.totalPages}
+					<aura:if isTrue="{!v.totalCases == 1}">
+							(Total 1 tax submission
+						<aura:set attribute="else">
+							(Total {!v.totalCases} tax submissions
+						</aura:set>
+					</aura:if>
+					for
+					<aura:if isTrue="{!v.totalLeases == 1}">
+							1 lease).
+						<aura:set attribute="else">
+							{!v.totalLeases} leases).
+						</aura:set>
+					</aura:if>
+                    <!--moved this to align the chevron - ramesh-->
+                    <span class="navigate-right">
+                        <aura:if isTrue="{!v.resultsHaveNext}">
+                            <a onclick="{!c.navigateRight}">
+                                <lightning:icon iconName="utility:chevronright" size="small" />
+                            </a>
+                            <aura:set attribute="else">
+                                <lightning:icon iconName="utility:chevronright" size="small" />
+                            </aura:set>
+                        </aura:if>
+                    </span>
+
+					<ui:inputSelect value="{!v.pageSize}" class="page-size-input" change="{!c.changePageSize}" label="Leases per page: ">
+						<ui:inputSelectOption text="3" label="3" value="{!v.pageSize == '3'}" />
+						<ui:inputSelectOption text="5" label="5" value="{!v.pageSize == '5'}" />
+						<ui:inputSelectOption text="10" label="10" value="{!v.pageSize == '10'}" />
+						<ui:inputSelectOption text="15" label="15" value="{!v.pageSize == '15'}" />
+						<ui:inputSelectOption text="20" label="20" value="{!v.pageSize == '20'}" />
+						<ui:inputSelectOption text="25" label="25" value="{!v.pageSize == '25'}" />
+						<ui:inputSelectOption text="30" label="30" value="{!v.pageSize == '30'}" />
+						<ui:inputSelectOption text="35" label="35" value="{!v.pageSize == '35'}" />
+						<ui:inputSelectOption text="40" label="40" value="{!v.pageSize == '40'}" />
+						<ui:inputSelectOption text="45" label="45" value="{!v.pageSize == '45'}" />
+						<ui:inputSelectOption text="50" label="50" value="{!v.pageSize == '50'}" />
+					</ui:inputSelect>
+				</span>
+
+			<!--	<span class="navigate-right">
+					<aura:if isTrue="{!v.resultsHaveNext}">
+						<a onclick="{!c.navigateRight}">
+							<lightning:icon iconName="utility:chevronright" size="small" />
+						</a>
+						<aura:set attribute="else">
+							<lightning:icon iconName="utility:chevronright" size="small" />
+						</aura:set>
+					</aura:if>
+				</span>-->
+			</div>
+		</div>
+
+		<aura:set attribute="else">
+			No tax submissions found.
+		</aura:set>
+	</aura:if>
+	
+    <aura:if isTrue="{!v.manageAccessModalOpen}">
+        <div role="dialog" tabindex="-1" aria-labelledby="header43" class="panel slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="width:75%!important;max-width:100%!important">
+				<div class="slds-modal__header">
+					<button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.closeModal}">
+						X<span class="slds-assistive-text">Cancel</span>
+					</button>
+					<h2 id="header43" class="slds-text-heading--medium">Manage Access For {!v.leaseNumber}</h2>
+				</div>
+                                           
+				<div class="slds-modal__content slds-p-around--medium ">
+					<div class="slds-clearfix slds-card inlineEditEnabled groupDependentFieldEnabled  allow-horizontal-form wide-input-break forceDetailPanelDesktop">
+						<c:RET_ManageLeaseAccess leaseNumber="{!v.leaseNumber}"/>
+					</div>
+				</div>
+                
+                <footer class="slds-modal__footer">
+                        <lightning:button variant="brand" 
+                                          label="Done"
+                                          title="Done"
+                                          onclick="{! c.closeModal }"/>
+               </footer>
+    		
+            </div>
+        </div>
+       
+        <div class="slds-backdrop slds-backdrop--open"></div>
+    </aura:if>
+	
+</aura:component>

@@ -1,0 +1,1856 @@
+<apex:page Controller="NCMT_ReportData" Title="Uniformat Cost Output" readonly="true" showheader="false" sidebar="false" cache="true">
+<apex:form id="rptUniformat">
+    <head>
+    <style>
+        table { border-collapse: collapse; }
+        .borderR{
+            border-Right: 1px solid;
+         }
+         .topBorder{
+            border-top: 1px solid;
+         }
+         .bottomBorder{
+         border-bottom: 1px solid;
+         }
+         .borderL{
+         border-left: 1px solid;
+         }   
+        .number {
+            font-size: 9px;
+            border-bottom: 1px solid;
+        }    
+     @page { 
+         size: landscape;;
+         margin: 1%;
+         font-size: 9px;
+         }
+        div.footer {
+            display: block;
+            padding: 1px;
+            position: running(footer);
+        }
+        div.header {
+            display: block;
+            padding: 1px;
+            position: running(header);
+        }
+    </style>
+    </head>
+    <div class="header"></div>
+    <div class="footer"></div>
+    <table border="0">
+        <tr>
+           <td style="width:100%" align="center">
+                <h1>
+                    <font color="darkred" size="2">
+                        <label id="labelHeader">Report Header</label>
+                    </font>
+                </h1>
+                <br/>
+                <h2 style='color:darkred'>
+                    Project Name: <a href="../{!strProjectID}">{!strProjectName}</a>&nbsp;&nbsp;&nbsp;&nbsp;Date:<apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!today()}"/></apex:outputText>
+                </h2>
+                <br/>
+           </td>
+           <td align="right" ><input type="button" onClick="funprint();" id="prnBtn" value="Print This Page" style="background: grey;"/></td>
+        </tr>
+        <!-- <tr>
+           <td colspan="2" align="center" class = "topBorder borderR bottomBorder borderL">
+                <h2><font color="darkred" size="2">
+                    Project Name: <a href="../{!strProjectID}">{!strProjectName}</a>&nbsp;&nbsp;&nbsp;&nbsp;Date:<apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!today()}"/></apex:outputText>
+                </font></h2>
+           </td>
+        </tr> -->
+    </table>
+        
+    <!--  **** Project Properties **** --> 
+    <table align="center" width = "100%" style="border:solid 1px;">
+        <tr>
+            <th style ="background-color: lightslategrey;" class = "number">Project Properties</th>
+            <td style ="background-color: lightslategrey;" class = "number">&nbsp;</td>
+            <td style ="background-color: lightslategrey;" class = "number">&nbsp;</td>
+            <td style ="background-color: lightslategrey;" class = "number">&nbsp;</td>
+        </tr>
+        <tr>
+            <td class = "number borderR">Project Type:&nbsp;&nbsp;{!strHPProjectType}, {!strBuildingtype}</td>
+            <td class = "number borderR">Project Location:&nbsp;&nbsp;{!strCity},{!strProjectState}</td>
+            <td class = "number borderR">Project Status:&nbsp;&nbsp;{!strProjectStatus}</td>
+            <td class = "number borderR">GSA Project#:&nbsp;&nbsp;{!strGSAProject}&nbsp;&nbsp;&nbsp;Region:&nbsp;&nbsp;&nbsp;{!strRegionCode}&nbsp;&nbsp;&nbsp;<apex:outputPanel layout="none" rendered="{!Not(IsNull(strPBSBuilding))}">PBS Building:&nbsp;&nbsp;&nbsp;{!strPBSBuilding}</apex:outputPanel></td>
+        </tr>
+        <tr>
+            <td class = "number borderR">Index Location:&nbsp;&nbsp;{!strProjectLocation},{!strProjectState}</td>
+            <td class = "number borderR">Level of Protection:&nbsp;&nbsp;{!strlvlofprotection}</td>
+            <td class = "number borderR">Building Height:&nbsp;&nbsp;{!strbuildingheight}</td> 
+            <td class = "number borderR">Project Seismic Design Category:&nbsp;&nbsp;{!strprojseismicdesigncat}</td>  
+         </tr>
+         <tr>
+             <td class = "number borderR">Building Quality:&nbsp;&nbsp;{!strbuildingquality}</td> 
+             <td class = "number borderR">Start Construction:&nbsp;&nbsp;<apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!startconsdate}"/></apex:outputText></td>     
+             <td class = "number borderR">Estimate Date:&nbsp;&nbsp;<apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!dateofestimate}"/></apex:outputText></td>              
+             <td class = "number borderR">Basis Date of Estimate:&nbsp;&nbsp;<apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!costparamdate}"/></apex:outputText></td>              
+         </tr>
+                  <tr>
+            <td class = "number borderR">Purpose of Estimate:&nbsp;&nbsp;{!strPurposeOfEstimate}</td>
+            <td class = "number borderR">Annual Market Escalation Rate:&nbsp;&nbsp;{!dblescrate}</td> 
+            <td class = "number borderR">Location Remoteness:&nbsp;&nbsp;{!strremoteness}</td> 
+            <td class = "number borderR">Building Efficiency Factor:&nbsp;&nbsp;{!dblUseableeff}</td> 
+            <td></td>
+        </tr>
+         <tr>
+             <td class = "number borderR">Estimate Prepared By:&nbsp;&nbsp;{!strcreatedby}</td>
+             <td class = "number borderR">Estimate Reviewed By:&nbsp;&nbsp;{!strpeerreviewer}</td> 
+             <td class = "number borderR">Estimate Approver:&nbsp;&nbsp;{!strRegionalPortfolio}</td> 
+             <td colspan="" class = "number" style="max-width:400px;">Brief Narrative:&nbsp;&nbsp;{!strbriefnarrative}</td>                            
+         </tr>
+    </table>
+
+    <apex:pageBlock html-style="font-size: 7px;" id="DataBlock" title="Work Item Report" rendered="{!If(DatasetProjectCostSummary!=null,TRUE,FALSE)}"> 
+        <table align="center" style="width: 100%; font-size: 9px;" border="1" cellspacing="0" id="ReportData">
+            <colgroup>
+                <col class="col1" style="background-color:White"/>
+                <col class="col2" style="background-color:White"/>
+                <col class="col3" style="background-color:White"/>
+                <col class="col4" style="background-color:White"/>
+                <col class="col5" style="background-color:White"/>
+                <col class="col6" style="background-color:White"/>
+                <col class="col7" style="background-color:White"/>
+                <col class="col8" style="background-color:White"/>
+                <col class="col9" style="background-color:White"/>
+                <col class="col10" style="background-color:White"/>
+                <col class="col11" style="background-color:White"/>
+                <col class="col12" style="background-color:White"/>
+                <col class="col13" style="background-color:White"/>
+                <col class="col14" style="background-color:White"/>
+                <col class="col15" style="background-color:White"/>
+                <col class="col16" style="background-color:White"/>
+                <col class="col17" style="background-color:White"/>
+                <col class="col18" style="background-color:White"/>
+                <col class="col19" style="background-color:White"/>
+                <col class="col20" style="background-color:White"/>
+                <col class="col21" style="background-color:White"/>
+                <col class="col22" style="background-color:White"/>
+            </colgroup>
+            <tr>
+                <td align="center"><b><label id="lblTotal">TOTAL COSTS</label></b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>UNIT COSTS</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>Profile of Cost</b></td>
+            </tr>
+            <tr>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>Parameter</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>Direct Costs</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+                <td align="center"><b>ECCA</b></td>
+                <td align="center"><b>ECC</b></td>
+                <td align="center"><b>ETPC</b></td>
+                <td align="center"><b>Direct Cost/GSF</b></td>
+                <td align="center"><b>ECC/GSF</b></td>
+                <td align="center"><b>ECC (Shell)/Parameter</b></td>
+                <td align="center"><b>ECCA/GSF</b></td>
+                <td align="center"><b>ECCA (Shell)/Parameter</b></td>
+                <td align="center"><b>ETPC/GSF</b></td>
+                <td align="center"><b>ETPC (Shell)/Parameter</b></td>
+                <td align="center"><b>&nbsp;</b></td>
+            </tr>
+            <tr>
+                <td align="Center" width="15%" style="background-color: lightslategrey;"><b>CODE</b></td>
+                <td align="Center" width="25%" style="background-color: lightslategrey;"><b>WORK DESCRIPTION</b></td>
+                <td align="Center" width="6%" style="background-color: lightslategrey;"><b>QUANTITY</b></td>
+                <td align="Center" width="6%" style="background-color: lightslategrey;"><b>UOM</b></td>
+                <td align="Center" width="6%" style="background-color: lightslategrey;"><b>Repair</b></td>
+                <td align="Center" width="6%" style="background-color: lightslategrey;"><b>Replacement</b></td>
+                <td align="Center" width="6%" style="background-color: lightslategrey;"><b>Building Shell</b></td>
+                <td align="Center" width="6%" style="background-color: lightslategrey;"><b>Parking</b></td>
+                <td align="Center" width="6%" style="background-color: lightslategrey;"><b>TI - Amortized</b></td>
+                <td align="Center" width="6%" style="background-color: lightslategrey;"><b>TI-RWA</b></td>
+                <td align="Center" width="6%" style="background-color: lightslategrey;"><b>TOTAL</b></td>
+                <td align="Center" width="6%"><b>&nbsp;</b></td>
+                <td align="Center" width="6%"><b>&nbsp;</b></td>
+                <td align="Center" width="6%"><b>&nbsp;</b></td>
+                <td align="Center" width="6%"><b>&nbsp;</b></td>
+                <td align="Center" width="6%"><b>&nbsp;</b></td>
+                <td align="Center" width="6%"><b>&nbsp;</b></td>
+                <td align="Center" width="6%"><b>&nbsp;</b></td>
+                <td align="Center" width="6%"><b>&nbsp;</b></td>
+                <td align="Center" width="6%"><b>&nbsp;</b></td>
+                <td align="Center" width="6%"><b>&nbsp;</b></td>
+                <td align="Center" width="6%"><b>&nbsp;</b></td>
+            </tr>
+
+            <apex:repeat value="{!DatasetProjectCostSummary}" var="CostSummary">
+                <tr style="display: {!IF((CostSummary.Repair_Cost__c == 0 && CostSummary.Replace_Cost__c == 0 && CostSummary.Other_Direct_Costs__c == 0), 'none', 'table-row')};">
+                    <td align="Left"><apex:outputText ID="NCMT_C1" value="{!CostSummary.Cost_Category_Code__c}"/></td>
+                    <td align="Left"><apex:outputText ID="NCMT_C2" value="{!CostSummary.Cost_Category_Description__c}"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C3" value="{!CostSummary.Quantity__c}"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C4" value="UOM"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C5" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.Repair_Cost__c}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C6" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.Replace_Cost__c}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C7" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.GSA_Costs__c + CostSummary.Other_Core_Shell_Cost__c}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C8" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.GSAPkg_Costs__c}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C9" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.Tenant_Amortized_Costs__c + CostSummary.Oth_TI_Cst__c}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C10" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.Tenant_RWA_Costs__c}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C11" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.Total_Cost_Adjusted__c}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C12" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.Total_RA_ECCA__c}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C13" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.RA_ECC__c}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C14" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.RA_ECC__c}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C15" value="{0, number, $###,###,##0.00}"><apex:param value="{!CostSummary.Direct_Cost_GSF__c}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C16" value="{0, number, $###,###,##0.00}"><apex:param value="{!CostSummary.ECC_GSF__c}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C17" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.GSA_Costs__c}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C18" value="{0, number, $###,###,##0.00}"><apex:param value="{!CostSummary.ECCA_GSF__c}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C19" value="{0, number, $###,###,##0.00}"><apex:param value="{!CostSummary.GSA_Costs__c}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C20" value="{0, number, $###,###,##0.00}"><apex:param value="{!CostSummary.ECCA_GSF__c}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C21" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.GSA_Costs__c}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_C22" value="{0, number, $###,###,##0}"><apex:param value="{!CostSummary.Total_RA_ECCA__c}" /></apex:outputText></td>
+                </tr>
+            </apex:repeat>
+
+                <tr style="display: none;">
+                    <td align="Left"><apex:outputText ID="OT_NCMT_C1"   value=""/></td>
+                    <td align="Left"><apex:outputText ID="OT_NCMT_C2"   value="Other Direct Construction Costs"/></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C3"  value="" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C4"  value="" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C5"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C6"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C7"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C8"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C9"  value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C10" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C11" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C12" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C13" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C14" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C15" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C16" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C17" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C18" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C19" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C20" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C21" value="0" /></td>
+                    <td align="Right"><apex:outputText ID="OT_NCMT_C22" value="0" /></td>
+                </tr>
+                <tr>
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;SubTotal</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="Repair_T1" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Replace_T1" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="GSACosts_T1" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="GSAPkg_T1" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TIAM_T1" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TIRWA_T1" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Total_T1" value=""/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;Design Contingency</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">{!dblDesign * 100}%</td>
+                    <td align="Right"><apex:outputText ID="Repair_DC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Replace_DC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="GSACosts_DC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="GSAPkg_DC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TIAM_DC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TIRWA_DC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_DC" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SubTotal</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="Repair_T2" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Replace_T2" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="GSACosts_T2" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="GSAPkg_T2" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TIAM_T2" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TIRWA_T2" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Total_T2" value=""/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;General Conditions and Profit</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">{!dblGeneral * 100}%</td>
+                    <td align="Right"><apex:outputText ID="Repair_GC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Replace_GC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="GSACosts_GC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="GSAPkg_GC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TIAM_GC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TIRWA_GC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_GC" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SubTotal CECA</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="Repair_T3" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Replace_T3" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="GSACosts_T3" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="GSAPkg_T3" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TIAM_T3" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TIRWA_T3" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Total_T3" value=""/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Market Escalation</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">{!dblEscMarkets * 100}%</td>
+                    <td align="Right"><apex:outputText ID="Repair_MC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Replace_MC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="GSACosts_MC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="GSAPkg_MC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TIAM_MC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TIRWA_MC" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_MC" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total ECCA</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="Repair_T4" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Replace_T4" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="GSACosts_T4" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="GSAPkg_T4" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TIAM_T4" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TIRWA_T4" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Total_T4" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Total_ECCA" value=""/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Construction Contingency</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">{!dblConstruct * 100}%</td>
+                    <td align="Right"><apex:outputText ID="Repair_CA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Replace_CA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="GSACosts_CA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="GSAPkg_CA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TIAM_CA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TIRWA_CA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_CA" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SubTotal ECC*</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="Repair_T8" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Replace_T8" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="GSACosts_T8" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="GSAPkg_T8" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TIAM_T8" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TIRWA_T8" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Total_T8" value=""/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Art-In-Architecture</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">{!dblArt * 100}%</td>
+                    <td align="Right"><apex:outputText ID="Repair_AA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Replace_AA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="GSACosts_AA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="GSAPkg_AA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TIAM_AA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TIRWA_AA" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_AA" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total ECC</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="Repair_T5" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Replace_T5" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="GSACosts_T5" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="GSAPkg_T5" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TIAM_T5" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TIRWA_T5" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Total_T5" value=""/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="Total_ECC" value=""/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EDRC: GSA</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">&nbsp;</td>
+                    <td align="Right"><apex:outputText ID="Repair_EG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Replace_EG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="GSACosts_EG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="GSAPkg_EG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TIAM_EG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TIRWA_EG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_EG" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EDRC: Tenant</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">&nbsp;</td>
+                    <td align="Right"><apex:outputText ID="Repair_ET" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Replace_ET" value=""/></td>
+                    <td align="Right"><apex:outputText ID="GSACosts_ET" value=""/></td>
+                    <td align="Right"><apex:outputText ID="GSAPkg_ET" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TIAM_ET" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TIRWA_ET" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_ET" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SubTotal EDRC</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="Repair_T6" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Replace_T6" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="GSACosts_T6" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="GSAPkg_T6" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TIAM_T6" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TIRWA_T6" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Total_T6" value=""/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EMIC: GSA</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">&nbsp;</td>
+                    <td align="Right"><apex:outputText ID="Repair_MG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Replace_MG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="GSACosts_MG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="GSAPkg_MG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TIAM_MG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TIRWA_MG" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_MG" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EMIC: Tenant</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right">&nbsp;</td>
+                    <td align="Right"><apex:outputText ID="Repair_MT" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Replace_MT" value=""/></td>
+                    <td align="Right"><apex:outputText ID="GSACosts_MT" value=""/></td>
+                    <td align="Right"><apex:outputText ID="GSAPkg_MT" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TIAM_MT" value=""/></td>
+                    <td align="Right"><apex:outputText ID="TIRWA_MT" value=""/></td>
+                    <td align="Right"><apex:outputText ID="Total_MT" value=""/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SubTotal EMIC</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="Repair_T7" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Replace_T7" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="GSACosts_T7" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="GSAPkg_T7" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TIAM_T7" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="TIRWA_T7" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="Total_T7" value=""/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr  style="display: none;">
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other Project Costs: GSA</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="OPCGSA" value="0.00"/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr style="display: none;">
+                    <td align="Left" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other Project Costs: Tenant</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><apex:outputText ID="OPCTenant" value="0.00"/></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Estimated Site and Other Costs</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="OPCTotal" value="0.00"/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total ETPC: GSA</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="TotalETPCGSA" value="0.00"/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total ETPC: Tenant</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="TotalETPCTenant" value="0.00"/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                    <td align="Left" colspan="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total ETPC</b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Right"><b><apex:outputText ID="TotalETPC" value="0.00"/></b></td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                    <td align="Left">&nbsp;</td>
+                </tr>
+                
+        </table>
+        <table>
+        <p> Note :</p>
+        <tr>
+         <td>1 CECC = Current Estimated Construction Cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+         <td>3 EDRC = Estimated Design and Review Cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+         <td>5 ESOC = Estimated Site and Other Cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+         </tr>
+         <tr>
+         <td>2 ECC = Estimated Construction Cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+         <td>4 EMIC = Estimated Management and Inspection Cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+         <td>6 ETPC = Estimated Total Project Cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+         </tr>
+        </table>
+    </apex:pageBlock>
+    
+    <script language = "Javascript">
+    
+        // Remember to save the sequence of functions ....
+        
+        LoadLast3Rows();
+        //CalculateQTY();
+        CalculateUOM();
+        CalculateTotals();
+        ComputeDesignContigency();
+        ComputeGeneralConditions();
+        ComputeEscalations();
+        ComputeConstruction();
+        ComputeArtinArch();
+        ComputeEDRC();
+        ComputeEMCI();
+        ComputeOPC();
+        ComputeETPCTotal();
+        ComputeETPCLineItems();
+        ComputeECCShellParameter();
+        ComputeECCAShellParameter();
+        ComputeETPCShellParameter();
+        ComputeProfileOfCost();
+        AdjustReportLayout();
+        
+        function funprint(){
+           document.getElementById('prnBtn').style.display='none';  
+           window.print();
+           document.getElementById('prnBtn').style.display='block'; 
+        }
+                
+        function LoadLast3Rows() {
+            var ECCAMultiplier = Number({!dblDesign}) + Number({!dblGeneral}) + + Number({!dblEscMarkets});
+            var ECCMultiplier = '{!dblConstructArt}';
+            var TotalCost;
+            var ECCA;
+            
+            //Other Direct Construction Costs
+            //ODC
+            var CoreShellODC = Number({!dblOtherDirectCostCoreShell}) + Number({!dblGSACosts}) + Number({!dblGSAPkgCosts});
+            var TIODC = Number({!dblOtherDirectCostTI}) + Number({!dblTIAMCosts}) + Number({!dblTIRWACosts}) + Number({!dblRepairCosts}) + Number({!dblReplaceCosts});
+            var TotalODC = Number(CoreShellODC) + Number(TIODC);
+            if (Number(TotalODC) <= 0.00) TotalOPC = 1;
+            var ProRatedODC = Number({!dblProRatedODC});
+            var CoreShellPercentODC = Number(CoreShellODC)/Number(TotalODC);
+            var TIPercentODC = Number(TIODC)/Number(TotalODC);
+            CoreShellODC = Number({!dblOtherDirectCostCoreShell});
+            TIODC = Number({!dblOtherDirectCostTI});
+            var GSAODC = Number(CoreShellODC) + (Number(CoreShellPercentODC) * Number(ProRatedODC));
+            var TenantODC = Number(TIODC) +  (Number(TIPercentODC) * Number(ProRatedODC));
+            var AdjustedODC = Number(GSAODC) + Number(TenantODC);
+            
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C7}').innerHTML = DecimalToDollar(GSAODC);
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C9}').innerHTML = DecimalToDollar(TenantODC);
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C11}').innerHTML = DecimalToDollar(AdjustedODC);
+            
+            TotalCost = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C11}').innerHTML);
+            //ECCA = parseFloat(TotalCost * ECCAMultiplier).toFixed(2);
+            ECCA = parseFloat((TotalCost * (1 + Number({!dblDesign}))) * (1 + Number({!dblGeneral})) * (1+ Number({!dblEscMarkets}) + Number({!dblEscCode}))).toFixed(2);
+            ECC = Number(ECCA) + (Number(ECCA) * ECCMultiplier); 
+            DirectCostGSF = Number(TotalCost)/Number({!dblGross});
+            document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C12}').innerHTML = DecimalToDollar(ECCA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C13}').innerHTML = DecimalToDollar(ECC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C14}').innerHTML = DecimalToDollar(ECC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C15}').innerHTML = DecimalToDollar2(DirectCostGSF);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C16}').innerHTML = DecimalToDollar2(Number(ECC)/Number({!dblGross}));
+            document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C18}').innerHTML = DecimalToDollar2(Number(ECCA)/Number({!dblGross}));
+            document.getElementById('{!$Component.rptUniformat.DataBlock.OT_NCMT_C22}').innerHTML = DecimalToDollar(ECCA);
+        }
+        
+        
+        function AdjustReportLayout() {
+            
+            // Report - UNIFORMAT COST OUTPUT - TOTAL PROJECT ECCA 
+            if (get('Rep') == 'V3'){
+                document.title = "IRIS COST OUTPUT - TOTAL PROJECT ECCA";
+                document.getElementById('labelHeader').innerHTML = 'IRIS COST OUTPUT - TOTAL PROJECT ECCA';
+                
+                show_hide_column(12, false);
+                show_hide_column(13, false);
+                    
+                show_hide_column(15, false);
+                show_hide_column(16, false);
+                show_hide_column(19, false);
+                show_hide_column(20, false);
+                
+                //Total Cost
+                document.getElementById('ReportData').rows[0].cells[0].colSpan = 12;
+                for (var rowcounter = 1; rowcounter <= 11; rowcounter++ ) {
+                    document.getElementById('ReportData').rows[0].cells[rowcounter].style.display = 'none';
+                }
+                
+                //Unit Cost
+                document.getElementById('ReportData').rows[0].cells[14].colSpan = 3;
+                document.getElementById('ReportData').rows[0].cells[17].style.display = 'none';
+                document.getElementById('ReportData').rows[0].cells[18].style.display = 'none';
+                
+                //Parameter
+                document.getElementById('ReportData').rows[1].cells[2].colSpan = 2;
+                document.getElementById('ReportData').rows[1].cells[3].style.display = 'none';
+                
+                //Direct Cost
+                document.getElementById('ReportData').rows[1].cells[4].colSpan = 7;
+                for (var rowcounter = 5; rowcounter <= 10; rowcounter++ ) {
+                    document.getElementById('ReportData').rows[1].cells[rowcounter].style.display = 'none';
+                }
+    
+                //Sub total Rows Merge
+                for (var rowcounter = 17; rowcounter <= 23; rowcounter++ ) {
+                    document.getElementById('ReportData').rows[rowcounter].cells[0].colSpan = 3;
+                    document.getElementById('ReportData').rows[rowcounter].cells[1].style.display = 'none';
+                    document.getElementById('ReportData').rows[rowcounter].cells[2].style.display = 'none';
+                }
+                
+                //Remove Rows
+                for (var rowcounter = 24; rowcounter <= 39; rowcounter++ ) {
+                    for (var colcounter = 0; colcounter <= 21; colcounter++ ) {
+                        document.getElementById('ReportData').rows[rowcounter].cells[colcounter].style.display = 'none';
+                    }   
+                }                
+            }
+            
+            // Report - UNIFORMAT COST OUTPUT - TOTAL PROJECT ECC
+            if (get('Rep') == 'V2'){
+                document.title = "IRIS COST OUTPUT - TOTAL PROJECT ECC";
+                document.getElementById('labelHeader').innerHTML = 'IRIS COST OUTPUT - TOTAL PROJECT ECC';
+                
+                show_hide_column(13, false);
+                // show_hide_column(17, false);
+                show_hide_column(18, false);
+                show_hide_column(19, false);
+                show_hide_column(20, false);
+                
+                //Total Cost
+                document.getElementById('ReportData').rows[0].cells[0].colSpan = 13;
+                for (var rowcounter = 1; rowcounter <= 12; rowcounter++ ) {
+                    document.getElementById('ReportData').rows[0].cells[rowcounter].style.display = 'none';
+                }
+                
+                //Unit Cost
+                document.getElementById('ReportData').rows[0].cells[14].colSpan = 3;
+                document.getElementById('ReportData').rows[0].cells[15].style.display = 'none';
+                document.getElementById('ReportData').rows[0].cells[16].style.display = 'none';
+                
+                //Parameter
+                document.getElementById('ReportData').rows[1].cells[2].colSpan = 2;
+                document.getElementById('ReportData').rows[1].cells[3].style.display = 'none';
+                
+                //Direct Cost
+                document.getElementById('ReportData').rows[1].cells[4].colSpan = 7;
+                for (var rowcounter = 5; rowcounter <= 10; rowcounter++ ) {
+                    document.getElementById('ReportData').rows[1].cells[rowcounter].style.display = 'none';
+                }
+    
+                //Sub total Rows Merge
+                for (var rowcounter = 17; rowcounter <= 27; rowcounter++ ) {
+                    document.getElementById('ReportData').rows[rowcounter].cells[0].colSpan = 3;
+                    document.getElementById('ReportData').rows[rowcounter].cells[1].style.display = 'none';
+                    document.getElementById('ReportData').rows[rowcounter].cells[2].style.display = 'none';
+                }
+                
+                //Remove Rows
+                for (var rowcounter = 28; rowcounter <= 39; rowcounter++ ) {
+                    for (var colcounter = 0; colcounter <= 21; colcounter++ ) {
+                        document.getElementById('ReportData').rows[rowcounter].cells[colcounter].style.display = 'none';
+                    }   
+                }
+            }
+            
+            // Report - UNIFORMAT COST OUTPUT - TOTAL PROJECT ETPC
+            if (get('Rep') == 'V1'){
+                document.title = "IRIS COST OUTPUT - TOTAL PROJECT ETPC";
+                document.getElementById('labelHeader').innerHTML = 'IRIS COST OUTPUT - TOTAL PROJECT ETPC';
+                
+                // show_hide_column(15, false);
+                show_hide_column(16, false);
+                // show_hide_column(17, false);
+                show_hide_column(18, false);
+                
+                //Total Cost
+                document.getElementById('ReportData').rows[0].cells[0].colSpan = 14;
+                for (var rowcounter = 1; rowcounter <= 13; rowcounter++ ) {
+                    document.getElementById('ReportData').rows[0].cells[rowcounter].style.display = 'none';
+                }
+                
+                //Unit Cost
+                document.getElementById('ReportData').rows[0].cells[14].colSpan = 3;
+                document.getElementById('ReportData').rows[0].cells[19].style.display = 'none';
+                document.getElementById('ReportData').rows[0].cells[20].style.display = 'none';
+                
+                //Parameter
+                document.getElementById('ReportData').rows[1].cells[2].colSpan = 2;
+                document.getElementById('ReportData').rows[1].cells[3].style.display = 'none';
+                
+                //Direct Cost
+                document.getElementById('ReportData').rows[1].cells[4].colSpan = 7;
+                for (var rowcounter = 5; rowcounter <= 10; rowcounter++ ) {
+                    document.getElementById('ReportData').rows[1].cells[rowcounter].style.display = 'none';
+                }
+                
+                //Sub total Rows Merge
+                for (var rowcounter = 17; rowcounter <= 39; rowcounter++ ) {
+                    document.getElementById('ReportData').rows[rowcounter].cells[0].colSpan = 3;
+                    document.getElementById('ReportData').rows[rowcounter].cells[1].style.display = 'none';
+                    document.getElementById('ReportData').rows[rowcounter].cells[2].style.display = 'none';
+                }
+            }
+
+        }
+        
+        function show_hide_column(col_no, do_show) {
+            var tbl = document.getElementById('ReportData');
+            var rows = tbl.getElementsByTagName('tr');
+        
+            for (var row = 0; row < rows.length; row++) {
+                var cols = rows[row].children;
+                if (col_no >= 0 && col_no < cols.length) {
+                    var cell = cols[col_no];
+                    if (cell.tagName == 'TD') cell.style.display = do_show ? 'block' : 'none';
+                }
+            }
+        }
+
+        function get(name){
+           if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+              return decodeURIComponent(name[1]);
+        }
+
+        function ComputeProfileOfCost() {
+            var SubTotalOfECCA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T4}').innerHTML);
+            
+            var elems = document.getElementsByTagName("*");
+            for (var i=0, m=elems.length; i<m; i++) {
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C22") != -1) { 
+                    POCLine = (DollarToDecimal(document.getElementById(elems[i].id).innerHTML) / SubTotalOfECCA) * 100;
+                    document.getElementById(elems[i].id).innerHTML = parseFloat(POCLine).toFixed(2) + '%';
+                }
+            }
+        }
+        
+        function ComputeETPCShellParameter(){ 
+            //ETPC(Shell)/Parameter = (Core Shell Adjusted *(Total ETPC/SubTotalOfTotal)/Qty))
+            
+            var ETPCTotal = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TotalETPC}').innerHTML);
+            var SubTotalOfTotal = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T1}').innerHTML);
+            var ETPCAdjustment = (ETPCTotal/SubTotalOfTotal);
+            var Qty = 0.00;
+            
+            var elems = document.getElementsByTagName("*");
+            for (var i=0, m=elems.length; i<m; i++) {
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C3") != -1) {
+                    Qty = '1.0';
+                    if (document.getElementById(elems[i].id).innerHTML){
+                        Qty = DecimalwithnoComma(document.getElementById(elems[i].id).innerHTML);
+                    }
+                    if ((Qty == '0') || (Qty == '0.0')){
+                        Qty = '1.0';
+                    }   
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C21") != -1) {
+                    //document.getElementById(elems[i].id).innerHTML = Qty; 
+                    ETPCShellLine = (DollarToDecimal(document.getElementById(elems[i].id).innerHTML) * ETPCAdjustment) / Qty;
+                    document.getElementById(elems[i].id).innerHTML = DecimalToDollar2(ETPCShellLine);
+                }
+            }
+        }
+        
+        function ComputeECCAShellParameter(){ 
+            //ECCA = (ECCA_Shell_Parameter__c)/Quantity
+            var Qty = 0.00;
+            
+            var elems = document.getElementsByTagName("*");
+            for (var i=0, m=elems.length; i<m; i++) {
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C3") != -1) {
+                    Qty = '1.0';
+                    if (document.getElementById(elems[i].id).innerHTML){
+                        Qty = DecimalwithnoComma(document.getElementById(elems[i].id).innerHTML);
+                    }
+                    if ((Qty == '0') || (Qty == '0.0')){
+                        Qty = '1.0';
+                    }   
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C19") != -1) {
+                    //document.getElementById(elems[i].id).innerHTML = Qty; 
+                    ECCAShellParameter = DollarToDecimal(document.getElementById(elems[i].id).innerHTML) / Qty;
+                    document.getElementById(elems[i].id).innerHTML = DecimalToDollar2(ECCAShellParameter);
+                }
+            }
+            
+        }
+        
+        function ComputeECCShellParameter() {
+            var ETPCTotal = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TotalETPC}').innerHTML);
+            var SubTotalOfTotal = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T1}').innerHTML);
+            var ETPCAdjustment = (ETPCTotal/SubTotalOfTotal);
+            var Qty = 0.00;
+            
+            var elems = document.getElementsByTagName("*");
+            for (var i=0, m=elems.length; i<m; i++) {
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C3") != -1) {
+                    Qty = '1.0';
+                    if (document.getElementById(elems[i].id).innerHTML){
+                        Qty = DecimalwithnoComma(document.getElementById(elems[i].id).innerHTML);
+                    }
+                    if ((Qty == '0') || (Qty == '0.0')){
+                        Qty = '1.0';
+                    }   
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C17") != -1) {
+                    //document.getElementById(elems[i].id).innerHTML = Qty; 
+                    ECCShellLine = (DollarToDecimal(document.getElementById(elems[i].id).innerHTML) * ETPCAdjustment) / Qty;
+                    document.getElementById(elems[i].id).innerHTML = DecimalToDollar2(ECCShellLine);
+                }
+            }
+        }
+        
+        function ComputeETPCLineItems() {
+            //ETPC = ((ECC Adjusted) * (ETPC Total/Total ECC)) 
+            //ETPC/GSF = ((ECC Adjusted ROW) * (ETPC Total/Total ECC)) / GSF 
+            
+            var ETPCLine = '0';
+            var ETPCTotal = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TotalETPC}').innerHTML);
+            var ECCTotal = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_ECC}').innerHTML);
+            var ETPCAdjustment = (ETPCTotal/ECCTotal);
+            var GrossSqFt = {!dblGross};
+            
+            var elems = document.getElementsByTagName("*");
+            for (var i=0, m=elems.length; i<m; i++) {
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C14") != -1) { 
+                    ETPCLine = DollarToDecimal(document.getElementById(elems[i].id).innerHTML) * ETPCAdjustment;
+                    document.getElementById(elems[i].id).innerHTML = DecimalToDollar(ETPCLine);
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C20") != -1) {
+                    ETPCGSF = ETPCLine/GrossSqFt;
+                    document.getElementById(elems[i].id).innerHTML = DecimalToDollar2(ETPCGSF);
+                }
+            }
+        }
+        
+        function ComputeETPCTotal() {
+            
+            var TotalETPCGSA = '0';
+            var TotalETPCTen = '0';
+            var TotalETPC = '0';
+                        
+            TotalETPCGSA = (+ DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T5}').innerHTML) + 
+                            + DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T5}').innerHTML) +
+                            + DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_EG}').innerHTML) +
+                            + DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_MG}').innerHTML) +
+                            + DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.OPCTotal}').innerHTML)
+                           );
+            TotalETPCTen = (+ DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T5}').innerHTML) +
+                            + DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T5}').innerHTML) +
+                            + DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_ET}').innerHTML) +
+                            + DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_MT}').innerHTML) +
+                            + DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.OPCTenant}').innerHTML)
+                           );
+                           
+            TotalETPC = +TotalETPCGSA + +TotalETPCTen;
+                                        
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TotalETPCGSA}').innerHTML = DecimalToDollar(TotalETPCGSA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TotalETPCTenant}').innerHTML = DecimalToDollar(TotalETPCTen);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TotalETPC}').innerHTML = DecimalToDollar(TotalETPC);
+        }
+        
+        
+        function ComputeOPC() {
+            
+            //ODC
+            var CoreShellODC = Number({!dblOtherDirectCostCoreShell}) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T1}').innerHTML)) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T1}').innerHTML));
+            var TIODC = Number({!dblOtherDirectCostTI}) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T1}').innerHTML)) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T1}').innerHTML)) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T1}').innerHTML)) 
+                        + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T1}').innerHTML));
+            var TotalODC = Number(CoreShellODC) + Number(TIODC);
+            if (Number(TotalODC) <= 0.00) TotalOPC = 1;
+            var ProRatedODC = Number({!dblProRatedODC});
+            var CoreShellPercentODC = Number(CoreShellODC)/Number(TotalODC);
+            var TIPercentODC = Number(TIODC)/Number(TotalODC);
+            CoreShellODC = Number({!dblOtherDirectCostCoreShell});
+            TIODC = Number({!dblOtherDirectCostTI});
+            var varGSAODC = Number(CoreShellODC) + (Number(CoreShellPercentODC) * Number(ProRatedODC));
+            var varTenantODC = Number(TIODC) + (Number(TIPercentODC) * Number(ProRatedODC));
+
+            //OPC
+            var CoreShellOPC = Number({!dblCoreShellOPC}) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T1}').innerHTML)) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T1}').innerHTML));
+            var TIOPC = Number({!dblTIOPC}) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T1}').innerHTML)) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T1}').innerHTML)) + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T1}').innerHTML))
+                + Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T1}').innerHTML));
+            var TotalOPC = Number(CoreShellOPC) + Number(TIOPC);
+            if (Number(TotalOPC) <= 0.00) TotalOPC = 1;
+            var ProRatedOPC = Number({!dblProRatedOPC});
+            var CoreShellPercentOPC = Number(CoreShellOPC)/Number(TotalOPC);
+            var TIPercentOPC = Number(TIOPC)/Number(TotalOPC);
+            CoreShellOPC =  Number({!dblCoreShellOPC});
+            TIOPC = Number({!dblTIOPC});
+            var varGSAOPC = Number(CoreShellOPC) +  (Number(CoreShellPercentOPC) * Number(ProRatedOPC));
+            var varTenantOPC = Number(TIOPC) + (Number(ProRatedOPC) * Number(TIPercentOPC));
+            
+            ///Total
+            //varOtherCostGSA = varGSAODC + varGSAOPC;
+            //varOtherCostTenant = varTenantODC + varTenantOPC;
+            varOtherCostGSA = varGSAOPC;
+            varOtherCostTenant = varTenantOPC;
+
+            //varOtherCostTotal = varOtherCostGSA + varOtherCostTenant;
+            var varOtherCostTotal = Number({!dbltotalotherprojectcosts});
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.OPCGSA}').innerHTML = DecimalToDollar(varOtherCostGSA);
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.OPCTenant}').innerHTML = DecimalToDollar(varOtherCostTenant);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.OPCTotal}').innerHTML = DecimalToDollar(varOtherCostTotal);
+        }
+        
+        function ComputeEMCI() {
+            
+            var Repair_MG = '0';
+            var Replace_MG = '0';
+            var GSACosts_MG = '0';
+            var GSAPkg_MG = '0';
+            var TIAM_MG = '0';
+            var TIRWA_MG = '0';
+            var Total_MG = '0';
+            
+            var Repair_MT = '0';
+            var Replace_MT = '0';
+            var GSACosts_MT = '0';
+            var GSAPkg_MT = '0';
+            var TIAM_MT = '0';
+            var TIRWA_MT = '0';
+            var Total_MT = '0';
+            
+            var Repair_T7 = '0';
+            var Replace_T7 = '0';
+            var GSACosts_T7 = '0';
+            var GSAPkg_T7 = '0';
+            var TIAM_T7 = '0';
+            var TIRWA_T7 = '0';
+            var Total_T7 = '0';
+
+            Repair_MG = 0.00;//DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T5}').innerHTML) * {!dblEMIC};
+            Replace_MG = 0.00;
+            GSACosts_MG = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T5}').innerHTML) * {!dblEMIC}; //0.00;
+            GSAPkg_MG = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T5}').innerHTML) * {!dblEMIC};  //0.00;
+            TIAM_MG = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T5}').innerHTML) * {!dblEMIC};
+            TIRWA_MG = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T5}').innerHTML) * {!dblEMIC};
+            Total_MG = +Repair_MG + +Replace_MG + +GSACosts_MG + +GSAPkg_MG + +TIAM_MG + +TIRWA_MG ;
+            
+            Repair_MT = 0.00;
+            Replace_MT = 0.00;//DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T5}').innerHTML) * {!dblEMIC};
+            GSACosts_MT = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T5}').innerHTML) * {!dblEMIC};
+            GSAPkg_MT = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T5}').innerHTML) * {!dblEMIC};
+            TIAM_MT = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T5}').innerHTML) * {!dblEMIC};  //0.00;
+            TIRWA_MT = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T5}').innerHTML) * {!dblEMIC}; //0.00;
+            Total_MT = +Repair_MT + +Replace_MT + +GSACosts_MT + +GSAPkg_MT + +TIAM_MT + +TIRWA_MT;
+            
+            Repair_T7 = +Repair_MG + +Repair_MT;
+            Replace_T7 = +Replace_MG + +Replace_MT;
+            GSACosts_T7 =  +GSACosts_MG + +GSACosts_MT;
+            GSAPkg_T7 = +GSAPkg_MG + +GSAPkg_MT;
+            TIAM_T7 = +TIAM_MG + +TIAM_MT;
+            TIRWA_T7 = +TIRWA_MG + +TIRWA_MT;
+            Total_T7 = +Total_MG + +Total_MT;
+                
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_MG}').innerHTML = DecimalToDollar(Repair_MG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_MG}').innerHTML = DecimalToDollar(Replace_MG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_MG}').innerHTML = DecimalToDollar(GSACosts_MG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_MG}').innerHTML = DecimalToDollar(GSAPkg_MG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_MG}').innerHTML = DecimalToDollar(TIAM_MG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_MG}').innerHTML = DecimalToDollar(TIRWA_MG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_MG}').innerHTML = DecimalToDollar(Total_MG);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_MT}').innerHTML = DecimalToDollar(Repair_MT);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_MT}').innerHTML = DecimalToDollar(Replace_MT);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_MT}').innerHTML = DecimalToDollar(GSACosts_MT);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_MT}').innerHTML = DecimalToDollar(GSAPkg_MT);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_MT}').innerHTML = DecimalToDollar(TIAM_MT);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_MT}').innerHTML = DecimalToDollar(TIRWA_MT);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_MT}').innerHTML = DecimalToDollar(Total_MT);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T7}').innerHTML = DecimalToDollar(Repair_T7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T7}').innerHTML = DecimalToDollar(Replace_T7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T7}').innerHTML = DecimalToDollar(GSACosts_T7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T7}').innerHTML = DecimalToDollar(GSAPkg_T7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T7}').innerHTML =DecimalToDollar(TIAM_T7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T7}').innerHTML =DecimalToDollar(TIRWA_T7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T7}').innerHTML = DecimalToDollar(Total_T7);
+        }
+        
+        function ComputeEDRC() {
+            
+            var Repair_EG = '0';
+            var Replace_EG = '0';
+            var GSACosts_EG = '0';
+            var GSAPkg_EG = '0';
+            var TIAM_EG = '0';
+            var TIRWA_EG = '0';
+            var Total_EG = '0';
+            
+            var Repair_ET = '0';
+            var Replace_ET = '0';
+            var GSACosts_ET = '0';
+            var GSAPkg_ET = '0';
+            var TIAM_ET = '0';
+            var TIRWA_ET = '0';
+            var Total_ET = '0';
+            
+            var Repair_T6 = '0';
+            var Replace_T6 = '0';
+            var GSACosts_T6 = '0';
+            var GSAPkg_T6 = '0';
+            var TIAM_T6 = '0';
+            var TIRWA_T6 = '0';
+            var Total_T6 = '0';
+
+            Repair_EG = 0.00; //DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T5}').innerHTML) * {!dblEDRC};
+            Replace_EG =0.00; //DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T5}').innerHTML) * {!dblEDRC} * 0.35;
+            GSACosts_EG = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T5}').innerHTML) * {!dblEDRC} * 0.35;
+            GSAPkg_EG = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T5}').innerHTML) * {!dblEDRC} * 0.35;
+            TIAM_EG = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T5}').innerHTML) * {!dblEDRC};
+            TIRWA_EG = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T5}').innerHTML) * {!dblEDRC};
+            Total_EG = +Repair_EG + +Replace_EG + +GSACosts_EG + +GSAPkg_EG + +TIAM_EG + +TIRWA_EG ;
+            
+            Repair_ET = 0.00;
+            Replace_ET = 0.00; //DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T5}').innerHTML) * {!dblEDRC} * 0.65;
+            GSACosts_ET = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T5}').innerHTML) * {!dblEDRC} * 0.65;
+            GSAPkg_ET = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T5}').innerHTML) * {!dblEDRC} * 0.65;
+            TIAM_ET = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T5}').innerHTML) * {!dblEDRC};  //0.00;
+            TIRWA_ET = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T5}').innerHTML) * {!dblEDRC}; //0.00;
+            Total_ET = +Repair_ET + +Replace_ET + +GSACosts_ET + +GSAPkg_ET + +TIAM_ET + +TIRWA_ET;
+            
+            Repair_T6 = +Repair_EG + +Repair_ET;
+            Replace_T6 = +Replace_EG + +Replace_ET;
+            GSACosts_T6 =  +GSACosts_EG + +GSACosts_ET;
+            GSAPkg_T6 = +GSAPkg_EG + +GSAPkg_ET;
+            TIAM_T6 = +TIAM_EG + +TIAM_ET;
+            TIRWA_T6 = +TIRWA_EG + +TIRWA_ET;
+            Total_T6 = +Total_EG + +Total_ET;
+                
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_EG}').innerHTML = DecimalToDollar(Repair_EG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_EG}').innerHTML = DecimalToDollar(Replace_EG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_EG}').innerHTML = DecimalToDollar(GSACosts_EG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_EG}').innerHTML = DecimalToDollar(GSAPkg_EG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_EG}').innerHTML = DecimalToDollar(TIAM_EG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_EG}').innerHTML = DecimalToDollar(TIRWA_EG);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_EG}').innerHTML = DecimalToDollar(Total_EG);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_ET}').innerHTML = DecimalToDollar(Repair_ET);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_ET}').innerHTML = DecimalToDollar(Replace_ET);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_ET}').innerHTML = DecimalToDollar(GSACosts_ET);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_ET}').innerHTML = DecimalToDollar(GSAPkg_ET);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_ET}').innerHTML = DecimalToDollar(TIAM_ET);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_ET}').innerHTML = DecimalToDollar(TIRWA_ET);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_ET}').innerHTML = DecimalToDollar(Total_ET);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T6}').innerHTML = DecimalToDollar(Repair_T6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T6}').innerHTML = DecimalToDollar(Replace_T6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T6}').innerHTML = DecimalToDollar(GSACosts_T6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T6}').innerHTML = DecimalToDollar(GSAPkg_T6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T6}').innerHTML =DecimalToDollar(TIAM_T6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T6}').innerHTML =DecimalToDollar(TIRWA_T6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T6}').innerHTML = DecimalToDollar(Total_T6);
+        }
+        
+        function ComputeConstruction() {
+            
+            var Repair_CA = '0';
+            var Replace_CA = '0';
+            var GSACosts_CA = '0';
+            var GSAPkg_CA = '0';
+            var TIAM_CA = '0';
+            var TIRWA_CA = '0';
+            var Total_CA = '0';
+            
+            var Repair_T8 = '0';
+            var Replace_T8 = '0';
+            var GSACosts_T8 = '0';
+            var GSAPkg_T8 = '0';
+            var TIAM_T8 = '0';
+            var TIRWA_T8 = '0';
+            var Total_T8 = '0';
+
+            Repair_CA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T4}').innerHTML) * (1 + {!dblConstruct});
+            //Repair_CA = Number(Repair_CA) + (Number(Repair_CA) * Number({!dblArt}));
+            Repair_CA = Repair_CA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T4}').innerHTML);
+            
+            Replace_CA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T4}').innerHTML) * (1 + {!dblConstruct});
+            //Replace_CA = Number(Replace_CA) + (Number(Replace_CA) * Number({!dblArt}));
+            Replace_CA = Replace_CA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T4}').innerHTML);
+            
+            GSACosts_CA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T4}').innerHTML) * (1 + {!dblConstruct});
+           
+            //GSACosts_CA = Number(GSACosts_CA) + (Number(GSACosts_CA) * Number({!dblArt}));
+            GSACosts_CA = GSACosts_CA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T4}').innerHTML);
+            
+            GSAPkg_CA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T4}').innerHTML) * (1 + {!dblConstruct});
+            //GSAPkg_CA = Number(GSAPkg_CA) + (Number(GSAPkg_CA) * Number({!dblArt}));
+            GSAPkg_CA = GSAPkg_CA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T4}').innerHTML);
+            
+            TIAM_CA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T4}').innerHTML) * (1 + {!dblConstruct});
+            //TIAM_CA = Number(TIAM_CA) + (Number(TIAM_CA) * Number({!dblArt}));
+            TIAM_CA = TIAM_CA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T4}').innerHTML);
+            
+            TIRWA_CA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T4}').innerHTML) * (1 + {!dblConstruct});
+            //TIRWA_CA = Number(TIRWA_CA) + (Number(TIRWA_CA) * Number({!dblArt}));
+            TIRWA_CA = TIRWA_CA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T4}').innerHTML);
+            
+            Total_CA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T4}').innerHTML) * (1 + {!dblConstruct});
+            //Total_CA = Number(Total_CA) + (Number(Total_CA) * Number({!dblArt}));
+            Total_CA = Total_CA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T4}').innerHTML);
+
+            Repair_T8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T4}').innerHTML) + +Repair_CA;
+            Replace_T8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T4}').innerHTML) + +Replace_CA;
+            GSACosts_T8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T4}').innerHTML) + +GSACosts_CA;
+            GSAPkg_T8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T4}').innerHTML) + +GSAPkg_CA;
+            TIAM_T8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T4}').innerHTML) + +TIAM_CA;
+            TIRWA_T8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T4}').innerHTML) + +TIRWA_CA;
+            Total_T8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T4}').innerHTML) + +Total_CA;
+                
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_CA}').innerHTML = DecimalToDollar(Repair_CA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_CA}').innerHTML = DecimalToDollar(Replace_CA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_CA}').innerHTML = DecimalToDollar(GSACosts_CA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_CA}').innerHTML = DecimalToDollar(GSAPkg_CA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_CA}').innerHTML = DecimalToDollar(TIAM_CA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_CA}').innerHTML = DecimalToDollar(TIRWA_CA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_CA}').innerHTML = DecimalToDollar(Total_CA);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T8}').innerHTML = DecimalToDollar(Repair_T8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T8}').innerHTML = DecimalToDollar(Replace_T8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T8}').innerHTML = DecimalToDollar(GSACosts_T8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T8}').innerHTML = DecimalToDollar(GSAPkg_T8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T8}').innerHTML =DecimalToDollar(TIAM_T8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T8}').innerHTML =DecimalToDollar(TIRWA_T8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T8}').innerHTML = DecimalToDollar(Total_T8);
+        }
+        
+        function ComputeArtinArch() {
+                       
+            var Repair_AA = '0';
+            var Replace_AA = '0';
+            var GSACosts_AA = '0';
+            var GSAPkg_AA = '0';
+            var TIAM_AA = '0';
+            var TIRWA_AA = '0';
+            var Total_AA = '0';
+            
+            var Repair_T5 = '0';
+            var Replace_T5 = '0';
+            var GSACosts_T5 = '0';
+            var GSAPkg_T5 = '0';
+            var TIAM_T5 = '0';
+            var TIRWA_T5 = '0';
+            var Total_T5 = '0';
+
+            Repair_AA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T8}').innerHTML) * (1 + {!dblArt});
+            Repair_AA = Repair_AA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T8}').innerHTML);
+            
+            Replace_AA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T8}').innerHTML) * (1 + {!dblArt});
+            Replace_AA = Replace_AA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T8}').innerHTML);
+            
+            GSACosts_AA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T8}').innerHTML) * (1 + {!dblArt});
+            GSACosts_AA = GSACosts_AA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T8}').innerHTML);
+            
+            GSAPkg_AA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T8}').innerHTML) * (1 + {!dblArt});
+            GSAPkg_AA = GSAPkg_AA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T8}').innerHTML);
+            
+            TIAM_AA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T8}').innerHTML) * (1 + {!dblArt});
+            TIAM_AA = TIAM_AA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T8}').innerHTML);
+            
+            TIRWA_AA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T8}').innerHTML) * (1 + {!dblArt});
+            TIRWA_AA = TIRWA_AA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T8}').innerHTML);
+            
+            Total_AA = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T8}').innerHTML) * (1 + {!dblArt});
+            Total_AA = Total_AA - DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T8}').innerHTML);
+            
+            Repair_T5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T8}').innerHTML) + +Repair_AA;
+            Replace_T5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T8}').innerHTML) + +Replace_AA;
+            GSACosts_T5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T8}').innerHTML) + +GSACosts_AA;
+            GSAPkg_T5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T8}').innerHTML) + +GSAPkg_AA;
+            TIAM_T5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T8}').innerHTML) + +TIAM_AA;
+            TIRWA_T5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T8}').innerHTML) + +TIRWA_AA;
+            Total_T5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T8}').innerHTML) + +Total_AA;
+                
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_AA}').innerHTML = DecimalToDollar(Repair_AA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_AA}').innerHTML = DecimalToDollar(Replace_AA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_AA}').innerHTML = DecimalToDollar(GSACosts_AA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_AA}').innerHTML = DecimalToDollar(GSAPkg_AA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_AA}').innerHTML = DecimalToDollar(TIAM_AA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_AA}').innerHTML = DecimalToDollar(TIRWA_AA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_AA}').innerHTML = DecimalToDollar(Total_AA);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T5}').innerHTML = DecimalToDollar(Repair_T5);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T5}').innerHTML = DecimalToDollar(Replace_T5);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T5}').innerHTML = DecimalToDollar(GSACosts_T5);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T5}').innerHTML = DecimalToDollar(GSAPkg_T5);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T5}').innerHTML =DecimalToDollar(TIAM_T5);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T5}').innerHTML =DecimalToDollar(TIRWA_T5);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T5}').innerHTML = DecimalToDollar(Total_T5);
+        }
+        
+        function ComputeEscalations() {
+            
+            var Repair_MC = '0';
+            var Replace_MC = '0';
+            var GSACosts_MC = '0';
+            var GSAPkg_MC = '0';
+            var TIAM_MC = '0';
+            var TIRWA_MC = '0';
+            var Total_MC = '0';
+                        
+            var Repair_T4 = '0';
+            var Replace_T4 = '0';
+            var GSACosts_T4 = '0';
+            var GSAPkg_T4 = '0';
+            var TIAM_T4 = '0';
+            var TIRWA_T4 = '0';
+            var Total_T4 = '0';
+
+            Repair_MC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T3}').innerHTML) * {!dblEscMarkets};
+            Replace_MC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T3}').innerHTML) * {!dblEscMarkets};
+            GSACosts_MC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T3}').innerHTML) * {!dblEscMarkets};
+            GSAPkg_MC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T3}').innerHTML) * {!dblEscMarkets};
+            TIAM_MC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T3}').innerHTML) * {!dblEscMarkets};
+            TIRWA_MC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T3}').innerHTML) * {!dblEscMarkets};
+            Total_MC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T3}').innerHTML) * {!dblEscMarkets};
+                        
+            Repair_T4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T3}').innerHTML) + +Repair_MC ;
+            Replace_T4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T3}').innerHTML) + +Replace_MC ;
+            GSACosts_T4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T3}').innerHTML) + +GSACosts_MC ;
+            GSAPkg_T4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T3}').innerHTML) + +GSAPkg_MC;
+            TIAM_T4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T3}').innerHTML) + +TIAM_MC ;
+            TIRWA_T4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T3}').innerHTML) + +TIRWA_MC;
+            Total_T4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T3}').innerHTML) + +Total_MC;
+                
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_MC}').innerHTML = DecimalToDollar(Repair_MC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_MC}').innerHTML = DecimalToDollar(Replace_MC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_MC}').innerHTML = DecimalToDollar(GSACosts_MC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_MC}').innerHTML = DecimalToDollar(GSAPkg_MC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_MC}').innerHTML = DecimalToDollar(TIAM_MC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_MC}').innerHTML = DecimalToDollar(TIRWA_MC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_MC}').innerHTML = DecimalToDollar(Total_MC);
+                        
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T4}').innerHTML = DecimalToDollar(Repair_T4);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T4}').innerHTML = DecimalToDollar(Replace_T4);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T4}').innerHTML = DecimalToDollar(GSACosts_T4);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T4}').innerHTML = DecimalToDollar(GSAPkg_T4);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T4}').innerHTML =DecimalToDollar(TIAM_T4);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T4}').innerHTML =DecimalToDollar(TIRWA_T4);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T4}').innerHTML = DecimalToDollar(Total_T4);
+        }
+        
+        function ComputeGeneralConditions() {
+            
+            var Repair_GC = '0';
+            var Replace_GC = '0';
+            var GSACosts_GC = '0';
+            var GSAPkg_GC = '0';
+            var TIAM_GC = '0';
+            var TIRWA_GC = '0';
+            var Total_GC = '0';
+            
+            var Repair_T3 = '0';
+            var Replace_T3 = '0';
+            var GSACosts_T3 = '0';
+            var GSAPkg_T3 = '0';
+            var TIAM_T3 = '0';
+            var TIRWA_T3 = '0';
+            var Total_T3 = '0';
+
+            Repair_GC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T2}').innerHTML) * {!dblGeneral};
+            Replace_GC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T2}').innerHTML) * {!dblGeneral};
+            GSACosts_GC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T2}').innerHTML) * {!dblGeneral};
+            GSAPkg_GC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T2}').innerHTML) * {!dblGeneral};
+            TIAM_GC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T2}').innerHTML) * {!dblGeneral};
+            TIRWA_GC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T2}').innerHTML) * {!dblGeneral};
+            Total_GC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T2}').innerHTML) * {!dblGeneral};
+            
+            Repair_T3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T2}').innerHTML) + +Repair_GC;
+            Replace_T3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T2}').innerHTML) + +Replace_GC;
+            GSACosts_T3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T2}').innerHTML) + +GSACosts_GC;
+            GSAPkg_T3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T2}').innerHTML) + +GSAPkg_GC;
+            TIAM_T3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T2}').innerHTML) + +TIAM_GC;
+            TIRWA_T3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T2}').innerHTML) + +TIRWA_GC;
+            Total_T3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T2}').innerHTML) + +Total_GC;
+                
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_GC}').innerHTML = DecimalToDollar(Repair_GC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_GC}').innerHTML = DecimalToDollar(Replace_GC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_GC}').innerHTML = DecimalToDollar(GSACosts_GC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_GC}').innerHTML = DecimalToDollar(GSAPkg_GC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_GC}').innerHTML = DecimalToDollar(TIAM_GC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_GC}').innerHTML = DecimalToDollar(TIRWA_GC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_GC}').innerHTML = DecimalToDollar(Total_GC);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T3}').innerHTML = DecimalToDollar(Repair_T3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T3}').innerHTML = DecimalToDollar(Replace_T3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T3}').innerHTML = DecimalToDollar(GSACosts_T3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T3}').innerHTML = DecimalToDollar(GSAPkg_T3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T3}').innerHTML =DecimalToDollar(TIAM_T3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T3}').innerHTML =DecimalToDollar(TIRWA_T3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T3}').innerHTML = DecimalToDollar(Total_T3);
+        }
+        
+        function ComputeDesignContigency() {
+            
+            var Repair_DC = '0';
+            var Replace_DC = '0';
+            var GSACosts_DC = '0';
+            var GSAPkg_DC = '0';
+            var TIAM_DC = '0';
+            var TIRWA_DC = '0';
+            var Total_DC = '0';
+            
+            var Repair_T2 = '0';
+            var Replace_T2 = '0';
+            var GSACosts_T2 = '0';
+            var GSAPkg_T2 = '0';
+            var TIAM_T2 = '0';
+            var TIRWA_T2 = '0';
+            var Total_T2 = '0';
+
+            Repair_DC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T1}').innerHTML) * {!dblDesign};
+            Replace_DC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T1}').innerHTML) * {!dblDesign};
+            GSACosts_DC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T1}').innerHTML) * {!dblDesign};
+            GSAPkg_DC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T1}').innerHTML) * {!dblDesign};
+            TIAM_DC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T1}').innerHTML) * {!dblDesign};
+            TIRWA_DC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T1}').innerHTML) * {!dblDesign};
+            Total_DC = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T1}').innerHTML) * {!dblDesign};
+            
+            Repair_T2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T1}').innerHTML) + +Repair_DC;
+            Replace_T2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T1}').innerHTML) + +Replace_DC;
+            GSACosts_T2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T1}').innerHTML) + GSACosts_DC;
+            GSAPkg_T2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T1}').innerHTML) + +GSAPkg_DC;
+            TIAM_T2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T1}').innerHTML) + +TIAM_DC;
+            TIRWA_T2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T1}').innerHTML) + +TIRWA_DC;
+            Total_T2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T1}').innerHTML) + +Total_DC;
+                
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_DC}').innerHTML = DecimalToDollar(Repair_DC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_DC}').innerHTML = DecimalToDollar(Replace_DC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_DC}').innerHTML = DecimalToDollar(GSACosts_DC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_DC}').innerHTML = DecimalToDollar(GSAPkg_DC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_DC}').innerHTML = DecimalToDollar(TIAM_DC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_DC}').innerHTML = DecimalToDollar(TIRWA_DC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_DC}').innerHTML = DecimalToDollar(Total_DC);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T2}').innerHTML = DecimalToDollar(Repair_T2);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T2}').innerHTML = DecimalToDollar(Replace_T2);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T2}').innerHTML = DecimalToDollar(GSACosts_T2);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T2}').innerHTML = DecimalToDollar(GSAPkg_T2);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T2}').innerHTML =DecimalToDollar(TIAM_T2);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T2}').innerHTML =DecimalToDollar(TIRWA_T2);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T2}').innerHTML = DecimalToDollar(Total_T2);
+        }
+        
+        function CalculateTotals() {
+            var Amount = '0';
+            var Repair_T1 = '0';
+            var Replace_T1 = '0';
+            var GSACosts_T1 = '0';
+            var GSAPkg_T1 = '0';
+            var TIAM_T1 = '0';
+            var TIRWA_T1 = '0';
+            var Total_T1 = '0';
+            var ECCA = '0';
+            var ECCA = '0';
+            
+            var elems = document.getElementsByTagName("*");
+            for (var i=0, m=elems.length; i<m; i++) {
+                if (elems[i].id && elems[i].id.indexOf("NCMT_") != -1) {
+                    Amount = document.getElementById(elems[i].id).innerHTML;
+                    Amount = DollarToDecimal(Amount);
+                }
+                
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C5") != -1) {
+                    Repair_T1 = parseInt(Repair_T1, 10) + parseInt(Amount, 10);
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C6") != -1) {
+                    Replace_T1 = parseInt(Replace_T1, 10) + parseInt(Amount, 10);
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C7") != -1) {
+                    GSACosts_T1 = parseInt(GSACosts_T1, 10) + parseInt(Amount, 10);
+                    //alert('GSACosts_T1=='+ GSACosts_T1);
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C8") != -1) {
+                    GSAPkg_T1 = parseInt(GSAPkg_T1, 10) + parseInt(Amount, 10);
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C9") != -1) {
+                    TIAM_T1 = parseInt(TIAM_T1, 10) + parseInt(Amount, 10);
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C10") != -1) {
+                    TIRWA_T1 = parseInt(TIRWA_T1, 10) + parseInt(Amount, 10);
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C11") != -1) {
+                    Total_T1 = parseInt(Total_T1, 10) + parseInt(Amount, 10);
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C12") != -1) {
+                    //ECCA = parseInt(Total_T1, 10) + parseInt(Amount, 10);
+                    ECCA = parseInt(Total_T1, 10);
+                    //var ECCAMultiplier = Number({!dblDesign}) + Number({!dblGeneral}) + + Number({!dblEscMarkets});
+                    //ECCA = ECCA + (ECCA * ECCAMultiplier);
+                    ECCA = ECCA + (ECCA * Number({!dblDesign}));
+                    ECCA = ECCA + (ECCA * Number({!dblGeneral}));
+                    ECCA = ECCA + (ECCA * (Number({!dblEscMarkets}) + Number({!dblEscCode})));
+                }
+                if (elems[i].id && elems[i].id.indexOf("NCMT_C13") != -1) {
+                    //ECC = parseInt(Total_T1, 10) + parseInt(Amount, 10);
+                    //var ECCMultiplier = '{!dblConstructArt}';
+                    //ECC = ECCA + (ECCA * ECCMultiplier);
+                    ECC = ECCA + (ECCA * Number({!dblConstruct}));
+                    ECC = ECC + (ECC * Number({!dblArt}));
+                }
+            }
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Repair_T1}').innerHTML = DecimalToDollar(Repair_T1);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Replace_T1}').innerHTML = DecimalToDollar(Replace_T1);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSACosts_T1}').innerHTML = DecimalToDollar(GSACosts_T1);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.GSAPkg_T1}').innerHTML = DecimalToDollar(GSAPkg_T1);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIAM_T1}').innerHTML = DecimalToDollar(TIAM_T1);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.TIRWA_T1}').innerHTML = DecimalToDollar(TIRWA_T1);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_T1}').innerHTML = DecimalToDollar(Total_T1);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_ECCA}').innerHTML = DecimalToDollar(ECCA);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.Total_ECC}').innerHTML = DecimalToDollar(ECC);
+            
+        }
+        
+        function CalculateUOM() {
+            var elems = document.getElementsByTagName("*");
+            for (var i=0, m=elems.length; i<m; i++) {
+                if (elems[i].id && elems[i].id.indexOf("0:NCMT_C4") != -1) 
+                    document.getElementById(elems[i].id).innerHTML = 'SFSA';
+                if (elems[i].id && elems[i].id.indexOf("1:NCMT_C4") != -1) 
+                    document.getElementById(elems[i].id).innerHTML = 'SFRA';
+                if (elems[i].id && elems[i].id.indexOf("2:NCMT_C4") != -1) 
+                    document.getElementById(elems[i].id).innerHTML = 'GSF';
+                if (elems[i].id && elems[i].id.indexOf("3:NCMT_C4") != -1) 
+                    document.getElementById(elems[i].id).innerHTML = 'kW';
+                if (elems[i].id && elems[i].id.indexOf("4:NCMT_C4") != -1) 
+                    document.getElementById(elems[i].id).innerHTML = 'GSF';
+                if (elems[i].id && elems[i].id.indexOf("5:NCMT_C4") != -1) 
+                    document.getElementById(elems[i].id).innerHTML = 'GSF';
+                if (elems[i].id && elems[i].id.indexOf("6:NCMT_C4") != -1) 
+                    document.getElementById(elems[i].id).innerHTML = 'STP';
+                if (elems[i].id && elems[i].id.indexOf("7:NCMT_C4") != -1) 
+                    document.getElementById(elems[i].id).innerHTML = 'TN';
+                if (elems[i].id && elems[i].id.indexOf("8:NCMT_C4") != -1) 
+                    document.getElementById(elems[i].id).innerHTML = 'FXT';
+                if (elems[i].id && elems[i].id.indexOf("9:NCMT_C4") != -1) 
+                    document.getElementById(elems[i].id).innerHTML = 'SFSA';
+                if (elems[i].id && elems[i].id.indexOf("10:NCMT_C4") != -1) 
+                    document.getElementById(elems[i].id).innerHTML = 'GSF';
+                if (elems[i].id && elems[i].id.indexOf("11:NCMT_C4") != -1) 
+                    document.getElementById(elems[i].id).innerHTML = 'GSF';
+                if (elems[i].id && elems[i].id.indexOf("12:NCMT_C4") != -1) 
+                    document.getElementById(elems[i].id).innerHTML = 'GSF';
+            }   
+        }
+        
+        function CalculateQTY() {
+            var elems = document.getElementsByTagName("*");
+            for (var i=0, m=elems.length; i<m; i++) {
+                if (elems[i].id && elems[i].id.indexOf("0:NCMT_C3") != -1) 
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblFinSite}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("1:NCMT_C3") != -1) 
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblTotalRoofAreaSF}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("2:NCMT_C3") != -1) 
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblGross}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("3:NCMT_C3") != -1) 
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblElectricalLoadkW}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("4:NCMT_C3") != -1) 
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblGross}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("5:NCMT_C3") != -1) 
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblGross}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("6:NCMT_C3") != -1) 
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblVertical}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("7:NCMT_C3") != -1) 
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblHVACCoolingLoadTons}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("8:NCMT_C3") != -1) 
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblPlumbingFixturesEA}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("9:NCMT_C3") != -1) 
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblCladdingSkinRatioSF}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("10:NCMT_C3") != -1) 
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblGross}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("11:NCMT_C3") != -1) 
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblGross}').toFixed(0));
+                if (elems[i].id && elems[i].id.indexOf("12:NCMT_C3") != -1) 
+                    document.getElementById(elems[i].id).innerHTML =  DecimalwithComma(parseFloat('{!dblGross}').toFixed(0));
+            } 
+        }
+        
+        function DecimalToDollar(Amount) {
+            Amount = parseFloat(Amount).toFixed(0);
+            return '$'+ Amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
+        function DecimalToDollar2(Amount) {
+            Amount = parseFloat(Amount).toFixed(2);
+            return '$'+ Amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
+        function DecimalwithComma(Amount) {
+            Amount = parseFloat(Amount).toFixed(0);
+            return Amount.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function DecimalwithnoComma(Amount) {
+            Amount = Amount.replace('$','').replace(',','').replace(',','').replace(',','').replace(' ',''); // Easy way to make sure that we handle big numbers, or more commas ...
+            return Amount;
+        }
+        
+        function DollarToDecimal(Amount){
+            Amount = Amount.replace('$','');
+            Amount = Amount.replace('$','').replace(',','').replace(',','').replace(',','').replace(' ',''); // Easy way to make sure that we handle big numbers, or more commas ...
+            return Amount;      
+        }
+        
+    </script>
+    
+</apex:form>    
+</apex:page>

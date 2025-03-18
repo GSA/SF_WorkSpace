@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>End_of_Maintenance_Operations__c</fullName>
+    <externalId>false</externalId>
     <formula>Date( Year(Start_for_Maintenance_Operations__c) + Number_of_Years_of_Operation__c, Month(Start_for_Maintenance_Operations__c), Day(Start_for_Maintenance_Operations__c) )</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>End of Maintenance Operations</label>

@@ -1,0 +1,44 @@
+<aura:component controller="RET_LeaseShareUtility" implements="forceCommunity:availableForAllPageTypes" access="global">
+	<aura:attribute name="errors" type="String" />
+	<aura:attribute name="userType" type="String" />
+   	<aura:handler name="init" action="{!c.userType}" value="{!this}" />
+	<aura:handler name="caseSelected" event="c:RET_CaseSelected" action="{!c.goToCase}" />
+
+	<div id="ret-dashboard-content">
+		<aura:if isTrue="{!not(empty(v.errors))}">
+			<ui:message title="Error:" severity="error" closable="false">
+				{!v.errors}
+			</ui:message>
+		</aura:if>
+        <aura:if isTrue="{!v.userType == 'POC'}">
+        	<h2>Pending Lease Access Approvals</h2> 
+            <c:RET_LeaseAccessApproval statusFilters="['Requested']" />
+            <br/><br/>
+        </aura:if>
+        
+        <h2>All Leases</h2>
+		<c:RET_LeaseList statusFilters="['Draft', 'Submitted', 'Pending', 'Under Review']" />
+		<!--
+		<h2>Completed Tax Submissions</h2>
+		<c:RET_LeaseList statusFilters="['Determination Made']" />
+		-->
+		<br />
+        
+        <h2>Create New Tax Submission</h2>
+			If your lease is not listed in the table above, you can search for a lease and create a tax submission
+			by clicking the button below.<br /><br />
+		<div class="action-buttons-centered">
+			<ui:button label="Create New Tax Submission" press="{!c.findLease}" />
+		</div>
+
+	</div>
+
+    <div id="spinner" class="hidden">
+        <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+        </div>
+    </div>
+
+</aura:component>

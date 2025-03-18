@@ -1,0 +1,89 @@
+<apex:page StandardController="NCMT_Project__c"  standardStylesheets="false"
+    lightningStylesheets="true" showheader="false" sidebar="false" title="{!projectName}" extensions="NCMT_ParametricDataRecord_Controller">
+    <style>
+        #parametricDataRecord {
+            margin:1.0%; 
+            font-size:100%;
+        }
+        
+        /* Footer stylings to appear on printed pages ONLY */
+        .page-footer {display: none;}
+        
+        @media print {
+            #parametricDataRecord {
+                size:landscape;
+                zoom:100%;
+                margin:2%;
+        	}
+        	.print-margin {margin-top:75px;}
+        
+            @page {
+                size: landscape;
+                font-size: 9px;
+            }           
+            .page-footer {
+                //position: fixed;
+                display: block;
+                margin: 1%;
+                bottom: 0mm;
+                width: 95%;
+            }
+            .page-footer-space {
+            	height:50px;
+            }
+            .slds-icon {display:none;margin-left:-3rem;}
+            thead {display: table-header-group;}
+            tfoot {display: table-footer-group;}
+            button {display: none;}
+        
+            #header {
+        	    display: none;
+            }
+        }
+        
+        div.footer {
+            display: block;
+            padding: 1px;
+            position: running(footer);
+        }
+        div.prnheader {
+            display: block;
+            padding: 1px;
+            position: running(header);
+            float:right;
+        }
+        .divCtr{
+            margin-top:25px;
+            margin-bottom:25px;
+            text-align:center;	
+        }
+        .page-footer-space {
+        	height: 100px;
+        }
+    </style>
+
+    <apex:includeLightning />
+    
+    <div id="header" style="text-align:center;font-size:15px">
+         {!projectName}
+    </div>
+    
+    <div id='parametricDataRecord'></div>
+
+    <script>
+       var projectid = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.projectId))}';
+    //'{!JSENCODE(HTMLENCODE($CurrentPage.parameters.projectId))}';
+        //alert('projectid ==='+projectid);
+        $Lightning.use('c:NCMT_ParametricData_Record_App', function () {
+            $Lightning.createComponent('c:NCMT_Parametric_Data_Record', {
+                projectId : projectid 
+                },
+
+                'parametricDataRecord',
+                function (cmp) {
+                    console.log("Lightning Web Component created Successfully!!");
+                });
+
+        });
+    </script>
+</apex:page>

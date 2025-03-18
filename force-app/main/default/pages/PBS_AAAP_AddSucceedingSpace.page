@@ -1,0 +1,60 @@
+<apex:page controller="PBS_AAAP_ControllerSpacesAndRates">
+    <head>
+    </head>
+    <body>
+    <apex:form id="form">
+
+        <apex:panelGrid id="pangrid_newSpace" columns="2">
+            <apex:outputText id="txt_q3" value="{!QLabels.spaceQ3Succ}"></apex:outputText>
+            <br></br>
+            <apex:inputText id="q3_gsa_lease" value="{!space.PBS_AAAP_GSA_EXPIRE_LEASE_NUMBER__c}"></apex:inputText>
+            <br></br>
+            <apex:selectRadio id="q3_opts" value="{!SfOfferedType}">
+                <apex:selectOptions id="sopts_q3" value="{!SpaceOpts}"></apex:selectOptions>
+            </apex:selectRadio>
+            <br></br>
+            <br></br>
+            <apex:outputText id="txt_q4" value="{!QLabels.spaceQ4New}"></apex:outputText>
+            <br></br>
+            <apex:panelGroup id="pgrp_q4">
+                <apex:inputField id="q4_min" value="{!space.PBS_AAAP_MIN_OFFERABLE_SPACE__c}"></apex:inputField>
+                <apex:outputText id="txt_q4_spacer"> to</apex:outputText>
+                <apex:inputField id="q4_max" value="{!space.PBS_AAAP_MAX_OFFERABLE_SPACE__c}"></apex:inputField>
+            </apex:panelGroup>
+            <br></br>
+            <br></br>
+            <apex:outputText id="txt_q5" value="{!QLabels.spaceQ5}"></apex:outputText>
+            <br></br>
+            <apex:inputField id="q5" value="{!space.PBS_AAAP_DATE_SPACE_AVAILABILITY__c}"></apex:inputField>
+            <br></br>
+            <br></br>
+            <apex:outputText id="txt_q6" value="{!QLabels.spaceQ6}"></apex:outputText>
+            <br></br>
+            <apex:inputField id="q6" value="{!space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c}"></apex:inputField>
+            <br></br>
+            <br></br>
+            <apex:outputText id="txt_q7" value="{!QLabels.spaceQ7}"></apex:outputText>
+            <br></br>
+            <apex:inputField id="q7" value="{!space.PBS_AAAP_GC_CONDITIONS__c}"></apex:inputField>
+            <br></br>
+            <br></br>
+            <apex:outputText id="txt_q8" value="{!QLabels.spaceQ8}"></apex:outputText>
+            <br></br>
+            <apex:panelGroup id="pgrp_q8">
+                <apex:selectCheckboxes id="q8_opts" value="{!FeePrcntgOrDollar}">
+                    <apex:selectOptions id="sopts_q8" value="{!FeeOpts}"></apex:selectOptions>
+                </apex:selectCheckboxes>
+                <apex:inputField id="q8" value="{!space.PBS_AAAP_ARCH_ENG_FEES__c}"></apex:inputField>
+            </apex:panelGroup>
+            <br></br>
+            <br></br>
+            <apex:outputText id="txt_q9" value="{!QLabels.spaceQ9}"></apex:outputText>
+            <br></br>
+            <apex:inputField id="q9" value="{!space.PBS_AAAP_TOTAL_MARKUP__c}"></apex:inputField>
+            <br></br>
+            <br></br>
+        </apex:panelGrid>
+
+    </apex:form>
+    </body>
+</apex:page>

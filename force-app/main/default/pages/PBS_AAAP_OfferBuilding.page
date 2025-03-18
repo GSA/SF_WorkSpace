@@ -1,0 +1,765 @@
+<apex:page Controller="PBS_AAAP_OfferBuildingController" sidebar="false" showHeader="false" standardStylesheets="true" cache="true" docType="html-5.0">
+    <c:PBS_AAAP_PortalPage_Begin ></c:PBS_AAAP_PortalPage_Begin>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}" />
+    <apex:stylesheet value="{!$Resource.showpopupcss}" />
+    <apex:includescript value="{!$Resource.showpopup}" />
+    <apex:includescript value="{!URLFOR($Resource.uniform)}" />
+    <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+    <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+    <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+    <!-- Load jQuery resources -->   
+    <!-- JQuery Data Table plug-in library from Sprymedia -->   
+    <apex:stylesheet value="{!URLFOR($Resource.JQueryDataTable, '/JQueryDataTable/css/jquery.dataTables.css')}" />
+    <apex:includescript value="{!URLFOR($Resource.JQueryDataTable,'/JQueryDataTable/js/jquery.dataTables.min.js')}" />
+    <!-- JQuery Overlay plug-in library from https://gasparesganga.com/labs/jquery-loading-overlay -->
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_JQueryOverlay,'/JQueryOverlay/loadingoverlay.min.js')}" />
+    <!--JQuery Modal plug-in library from Ray Stone at http://leanmodal.finelysliced.com.au -->
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <!-- Load BluebirdJS required by IE11 -->
+    <apex:includescript value="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.5.5/bluebird.core.min.js" />
+    
+    <!--Julia Kantarovsky Load ESRI ArcGIS JS API v.4.19 5.6.21
+    <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/themes/light/main.css"/>
+    <script src="https://js.arcgis.com/4.19/"></script>
+    <apex:stylesheet value="{!URLFOR($Resource.PBS_AAAP_OfferBuilding_419, 'PBS_AAAP_OfferBuilding_419.css')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_OfferBuilding_419, 'PBS_AAAP_Common_Map_Service.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_OfferBuilding_419, 'ArcGIS_v4_19_Utility.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_OfferBuilding_419, 'ArcGIS_Interface_OfferBuilding.js')}" /> -->
+    <!-- *** Todd Brown 03/10/2022 SFWS-1598 replaced above ArcGIS 4.19 resources with newer resources that use GSA's OnPrem ArcGIS Service -->
+    <!-- *** Todd Brown 02/27/2023 SFWS-1298 replaced PBS_AAAP_ArcGIS_OnPrem static resource with PBS_AAAP_OnPrem_wLayers static resource with layer buttons support  -->
+    <!-- <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/themes/light/main.css"/>
+    <script src="https://js.arcgis.com/4.19/"></script> -->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.23/esri/themes/light/main.css"/>
+    <script src="https://js.arcgis.com/4.23/"></script>
+    <!-- <apex:stylesheet value="{!URLFOR($Resource.PBS_AAAP_ArcGIS_OnPrem, 'PBS_AAAP_OfferBuilding_419.css')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_ArcGIS_OnPrem, 'PBS_AAAP_Common_Map_Service.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_ArcGIS_OnPrem, 'ArcGIS_v4_19_Utility.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_ArcGIS_OnPrem, 'ArcGIS_Interface_OfferBuilding.js')}" /> -->
+    <apex:stylesheet value="{!URLFOR($Resource.PBS_AAAP_ArcGIS_OnPrem_wLayers, 'PBS_AAAP_OfferBuilding.css')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_ArcGIS_OnPrem_wLayers, 'PBS_AAAP_Common_Map_Service.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_ArcGIS_OnPrem_wLayers, 'ArcGIS_Utility.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_ArcGIS_OnPrem_wLayers, 'ArcGIS_Interface_OfferBuilding.js')}" />
+
+    <script type="text/javascript">
+        /**
+        * Transfer data values from the Salesforce variables to
+        * to global JS variables so they can be accessed in the
+        * static JS files.
+        *
+        * DO NOT WRITE JS HERE!!!
+        * If you need to add JS functionality to the page, do so
+        * in the static resource files above.
+        */
+        
+        var areas = eval("{!JSENCODE(areaJson)}".replace('\\"','"'));
+        var rlpRegionArr = eval("{!JSENCODE(regionCensusMapJson)}".replace('\\"','"'));
+        var rlpRegionMap = {};
+        for (var z=0;z<rlpRegionArr.length;++z){
+            var o = rlpRegionArr[z];
+            rlpRegionMap[o.k]=o.v;
+        }
+        
+        /*Todd Brown 03/10/2022 SFWS-1598 replaced SF_Label variable definition for upgrade to ArcGIS OnPrem version
+          var SF_Label = {
+          urlPrefix: '{!$Label.AAAP_ESRI_URL_Prefix}',
+          proxyUrl: '{!$Label.AAAP_ESRI_External_Proxy_URL}',
+          locatorUrl: '{!$Label.AAAP_ESRI_Geoprocessor_URL}',
+          locator: {
+                PR: "{!JSENCODE($Label.AAAP_ESRI_Locator_PR)}",
+                VI: "{!JSENCODE($Label.AAAP_ESRI_Locator_VI)}",
+                GU: "{!JSENCODE($Label.AAAP_ESRI_Locator_GU)}",
+                USA: "{!JSENCODE($Label.AAAP_ESRI_Locator_USA)}",
+                WORLD: "{!JSENCODE($Label.AAAP_ESRI_Locator_World)}",
+                CBD: "{!JSENCODE($Label.AAAP_ESRI_CBD_Layer)}"
+          }
+        } */
+        var SF_Label = {
+            "urlPrefix": "{!JSENCODE(myGisUrlPrefix)}",
+            "locatorUrl": "{!JSENCODE(myGisLocatorUrl)}",
+            "locator": {
+                "WORLD": "{!JSENCODE(myGisLocator)}"
+            },
+            "gisToken": "{!JSENCODE(myGisToken)}"
+        }
+
+        //console.log('SF_Label ' + JSON.stringify(SF_Label));
+        
+        var SF_RemoteActions = {
+            checkisValidRegion: '{!$RemoteAction.PBS_AAAP_OfferBuildingController.checkisValidRegion}'   
+        }
+        
+    </script>
+    <style>
+    	.delete_btn:hover{
+        	text-decoration: none;
+            color: white;
+        }
+        
+        .infopopup {
+              position:fixed !important;
+              top:96% !important;
+              left:48% !important;   
+              margin-left:-350px !important;
+              margin-top:-350px !important;                     
+           }
+        
+        .infopopup1 {
+              background-color:white !important;
+              position:fixed !important;
+              display:inline-block;
+              top:calc(26% + 200px)!important;
+              left:41% !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+              //transform: translate(-50%, -50%); !important;
+                     
+           }
+        
+        .infopopup2 {
+              position:fixed !important;
+              display:inline-block;
+              top:40% !important;
+              left:43% !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;               
+           }
+        
+        .infopopup3 {
+              position:fixed !important;
+              display:inline-block;
+              top:50% !important;
+              left:43% !important; 
+              margin-left:-350px !important;
+              margin-top:-350px !important;   
+           
+           }
+        
+        .infopopup6 {
+              position:fixed !important;
+              display:inline-block;
+              top:60% !important;
+              left:43% !important; 
+              margin-left:-350px !important;
+              margin-top:-350px !important;   
+           
+           }
+        
+        .infopopup4 {
+              position:fixed !important;
+              display:inline-block;
+              top:80% !important;
+              left:43% !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;            
+           
+           }
+        
+        .infopopup5 {
+              position:fixed !important;
+              display:inline-block;
+              top:105% !important;
+              left:50% !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;            
+           
+           }
+    </style>
+
+    <body onload="init()"/>   
+         
+    <!-- Begin page wrapper -->
+    <div id="wrapper">
+        <c:inside_header offerId="{!offerBuilding.Id}" />
+        <div id="content" class="building">
+            <apex:panelGrid rendered="{!!isValidUser}">
+                <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+                <apex:messages styleClass="errMessage" id="errmessage" />
+            </apex:panelGrid>
+            <apex:panelGroup rendered="{!isValidUser}">
+                <c:PBS_AAAP_ProgressBar myValue="{!offerBuilding.Id}" step="0" />
+            </apex:panelGroup>
+            
+            <apex:form id="newOffer" styleClass="mainForm">
+                <apex:actionFunction name="updateOffer" action="{!updateOfferDetails}" oncomplete=""/>
+                <apex:actionRegion rendered="{!isValidUser}">
+                <apex:inputHidden value="{!pageUrl}" id="pgUrl" />   
+                    <apex:actionFunction name="refresh" action="{!refreshPanel}" rerender="refreshPanelSection">
+                        <apex:param name="street" assignTo="{!offerBuilding.PBS_AAAP_Street_Address__c}" value=""></apex:param>
+                        <apex:param name="city" assignTo="{!offerBuilding.PBS_AAAP_City__c}" value=""></apex:param>
+                        <apex:param name="state" assignTo="{!offerBuilding.PBS_AAAP_State__c}" value=""></apex:param>
+                        <apex:param name="zip" assignTo="{!offerBuilding.PBS_AAAP_ZipCode__c}" value=""></apex:param>
+                        <apex:param name="latitude" assignTo="{!offerBuilding.PBS_AAAP_X_CO_ORD__c}" value=""></apex:param>
+                        <apex:param name="longitude" assignTo="{!offerBuilding.PBS_AAAP_Y_CO_ORD__c}" value=""></apex:param>
+                        <apex:param name="metrowalk" assignTo="{!metroWalkable}" value=""></apex:param>
+                    </apex:actionFunction>
+                    <apex:actionFunction name="deleteOffer" action="{!actionDeleteOffer}"></apex:actionFunction>
+                    <apex:outputPanel id="thePanelform1" layout="block" styleClass="formwrap">
+                        <div class="hr" id="pageHeading">Building Fundamentals</div>
+                        <apex:inputHidden value="{!buildingValidationMsg}" id="bldMsg" />
+                        <apex:inputHidden id="bcounty" value="{!offerCounty}" />
+                        <apex:messages styleClass="errMessage" id="message" />
+                        <apex:outputPanel rendered="{!buildingValidationMsg != ''}">
+                            <apex:outputLabel id="msgErr2" styleClass="errMessage" value="{!buildingValidationMsg}" />
+                        </apex:outputPanel>
+                        <apex:inputHidden id="draftMsgFlag" value="{!draftMsgFlag}" />
+                        <apex:outputPanel rendered="{!isCopy}">
+                            <apex:outputLabel value="The offer has been successfully copied and you are now looking at the new offer created with 'DRAFT' status. " />
+                            <BR />
+                            <apex:outputLabel id="msgErr0" styleClass="errMessage" value="**Select new RLP then click Save Form located at the bottom of the page." />
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!isModify}">
+                            <apex:outputLabel value="The offer has been successfully copied and you are now looking at the new offer created with 'PENDING MODIFICATION' Status. " />
+                            <BR />
+                            <apex:outputLabel id="msgErr01" styleClass="errMessage" value="**Save your copied offer before proceeding." />
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!(!isModify && !isCopy && showSubmitMesg)}">
+                            <apex:outputLabel id="msgErr" styleClass="errMessage" value="" />
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!(!isModify && !isCopy && showSubmitMesg)}">
+                            <apex:outputLabel id="msgErr3" styleClass="blueMessage" value="**The open period for this month has ended - You may create and save
+                            draft offers at this time; however you may not submit your offers until the next open period. The Submit Offer button will reappear
+                            during the next open period." />
+                        </apex:outputPanel>
+                        <apex:outputPanel >
+                            <apex:outputLabel id="msgErr02" styleClass="errMessage" value="" />
+                        </apex:outputPanel>
+                        <apex:panelGrid columns="1" id="rlp_selectiongrid">
+                            <apex:outputPanel id="rlp_selection" layout="block">
+                                <apex:outputPanel >
+                                    <apex:outputtext value="1. Select a Request for Lease Proposals (RLP):" /><!--Julia Kantarovsky changed July 2021-->
+                                    <span class="required">*</span>
+                                </apex:outputPanel>
+                                <apex:selectList id="chooseRLP" value="{!selectRLP}" size="1" disabled="{!isPendingModfication}" tabindex="1">
+                                    <!-- weston -->
+                                    &nbsp;
+                                    <apex:selectOptions value="{!rlps}" />
+                                </apex:selectList>
+                                <span id="rlperror" for="rlp" style="color:red;display:none;font-family:Arial,Helvetica,sans-serif;font-size:12px;">Error: RLP is Required<br /></span>
+                                <span id="oldRLP" for="rlp" style="display:none;">{!oldRLP}</span>
+                            </apex:outputPanel>
+                            <span class="instructions">
+                                The RLP Package can be found by clicking 
+                                <a href='#' style="display:inline-block;" onclick="window.open('{!$Label.LOP_Community_Base_URL}AAAP-Search-RLP', 'RLP Screen', 'width=900, height=700, scrollbars=yes, resizable=yes, location=no')">
+                                    RLP &amp; LEASE DOCUMENTS
+                                </a>&nbsp;at the top of the page. Please review the RLP Package before
+                                proceeding with offer submission.
+                            </span>
+                        </apex:panelGrid>
+                       
+                        <div id="nonRlpInputSection" style="display:none">
+                            <apex:outputPanel id="refreshPanelSection" layout="block"></apex:outputPanel>
+                            
+                            <!-- START building location -->
+                            <apex:outputPanel id="bld_addr_fields" layout="block">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td width="175">
+                                                2. Building Name
+                                                <span class="required">*</span>
+                                            </td>
+                                            <td>
+                                                <apex:inputText id="bname"
+                                                    value="{!offerBuilding.PBS_AAAP_Building_Name__c}"  
+                                                    disabled="{!isPendingModfication}" 
+                                                    onkeydown="if(event.keyCode == 13){ this.blur(); actionFunction(); }" tabindex="2" 
+                                                />
+                                            </td>
+                                        </tr>
+
+                                            <tr>
+                                            <td>
+                                                3. Building Address <!--JK changed-->
+                                                <span class="required">*</span>
+                                                <a class="popup"  href="#Modal_Bldg_Ques3"  ><img src="{!$Resource.Info_Icon}" /></a>
+                                                <div id="Modal_Bldg_Ques3" class="infopopup1" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px; width:85%;" >
+                                                
+                                                    Tips for establishing your building address and location:<br/>
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                            1.
+                                                            </td>
+                                                            <td>
+                                                                Begin entering your building address and click on the provided autocomplete option that matches your building’s address. If none are presented that match your location, finish typing the full address then click the Submit link next to the field.
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                            2.
+                                                            </td>
+                                                            <td>
+                                                                If the map plots a location that is not correct, but the full address is stated correctly in the #3 Building Address field, click on the link to manually enter the latitude and longitude then click the Submit link after entering the correct information. (Example: Latitude 30.123456, Longitude -70.123456)
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                            3.
+                                                            </td>
+                                                            <td>
+                                                                If the above solutions do not result in an accurate location, you can manually navigate the map on the page and double click on your building within the map to place a marker on the location of your building. Note that the address that populates may not be precise or formatted correctly, but this can be remedied at a later date. It is more important to have an accurate location established up front.
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                            4.
+                                                            </td>
+                                                            <td>
+                                                                Use the street address of the building you are proposing to lease. Do not use the mailing address of a different location, a street corner, the building name, or some other description such as a post office box number.
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                   
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <!-- J. Rogers - Added onclick to remove scroll bar -->
+                                                <div id="address-container" onclick="top.postMessage('Page Updated', document.location.origin);">
+                                                    <div class="suggestive-search">
+                                                        <label for="singleLineAddress" style="display:block;padding:3px;">Full Address (street, city, state, zip)</label>
+                                                        <apex:inputText value="{!fullAddress}"
+                                                            id="baddress" styleClass="suggestive-search--input address"
+                                                            disabled="{!isPendingModfication}"  
+                                                            onkeydown="if(event.keyCode == 13){ this.blur(); actionFunction(); }" tabindex="3"
+                                                        />
+                                                        <a id="submit-address" href="javascript:">Submit</a>
+                                                        <a id="show-map" href="javascript:" style="display:none;">Show Map</a>
+                                                    </div>
+                                                    <ul class="suggestive-search--results suggestive-search--address-results"></ul>
+                                                </div>
+                                                <!-- J. Rogers - Added onclick to remove scroll bar -->
+                                                <div id="coordinate-container" onclick="top.postMessage('Page Updated', document.location.origin);">
+                                                    <span class="suggestive-search">
+                                                        <label for="Latitude" style="display:block;padding:3px;">Latitude</label>
+                                                        <apex:inputText id="blat" label="Latitude" styleClass="suggestive-search--input--latitude" />
+                                                    </span>
+                                                    <span class="suggestive-search">
+                                                        <label for="Longitude" style="display:block;padding:3px;">Longitude</label>
+                                                        <apex:inputText id="blon" label="longitude" styleClass="suggestive-search--input--longitude" />
+                                                    </span>
+                                                    <ul class="suggestive-search--results suggestive-search--coordinate-results"></ul>
+                                                    <a id="submit-coordinates" href="javascript:">Submit</a>
+                                                    <a id="cancel-coordinates" href="javascript:" style="margin-left: 5px;">Cancel</a>
+                                                    <a id="show-map" href="javascript:" style="display:none;">Show Map</a>
+                                                </div>
+                                                
+                                                <!-- Start hidden address form fields -->
+                                                <apex:inputHidden id="bdistrict" value="{!offerBuilding.PBS_AAAP_Congressional_District__c}" />
+                                                <apex:inputHidden id="bstreet" value="{!offerBuilding.PBS_AAAP_Street_Address__c}" />
+                                                <apex:inputHidden id="bcity" value="{!offerBuilding.PBS_AAAP_City__c}"  />
+                                                <apex:inputHidden id="bstate" value="{!offerBuilding.PBS_AAAP_State__c}" />
+                                                <apex:inputHidden id="bzip" value="{!offerBuilding.PBS_AAAP_ZipCode__c}" />
+                                                <apex:inputHidden id="bYCood" value="{!offerBuilding.PBS_AAAP_Y_CO_ORD__c}" />
+                                                <apex:inputHidden id="bXCood" value="{!offerBuilding.PBS_AAAP_X_CO_ORD__c}" />
+                                                <!-- End hidden address form fields -->
+                                            </td>
+                                        </tr>
+                                        
+                                        <apex:outputText rendered="{!$Label.AAAP_PBS_ShowEsriMessage}" >
+                                            <tr>
+                                                <td/>
+                                                <td style="color:#DC143C;font-weight:550;">{!$Label.AAAP_PBS_EsriMessage}</td>
+                                            </tr>
+                                        </apex:outputText>    
+                                        
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                Address not showing in the correct location? 
+                                                <!-- J. Rogers - Added div with onclick to remove scroll bar -->
+                                                <div onclick="top.postMessage('Page Updated', document.location.origin);">
+                                                <a id="show-latlon" href="javascript:">
+                                                    Click here to enter Latitude/Longitude.
+                                                </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </apex:outputPanel>
+                            <!-- END building location -->
+                            
+                            <!-- START address table results -->
+                            <apex:outputPanel id="table_canvas" layout="block" style="display:none;margin-top:20px;">
+                                <table id="addressTable" cellspacing="0" align="left">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: left;padding-left: 11px;">Street</th>
+                                            <th style="text-align: left;padding-left: 11px;">City</th>
+                                            <th style="text-align: left;padding-left: 11px;">State</th>
+                                            <th style="text-align: left;padding-left: 11px;">Zip</th>
+                                            <th style="text-align: left;padding-left: 11px;">County</th>
+                                            <th style="text-align: left;padding-left: 11px;">Latitude</th>
+                                            <th style="text-align: left;padding-left: 11px;">Longitude</th>
+                                            <th style="text-align: left;padding-left: 11px;"></th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </apex:outputPanel>
+                            <!-- END address table results -->
+
+                            <!-- START map area -->
+                            <apex:outputPanel id="map_canvas" layout="block" styleClass="map">
+                                <table class="map--view-menu">
+                                    <tr>
+                                        <td id="view-street" class="map--view-item">Street</td>
+                                        <td id="view-satellite" class="map--view-item">Satellite</td>
+                                    </tr>
+                                </table>
+                                <table class="map--layer-menu">
+                                    <tr>
+                                        <td id="layer-flood" class="map--layer-item">Flood Plain Layer</td>
+                                        <td id="layer-seismic" class="map--layer-item">Seismic Layer</td>
+                                    </tr>
+                                </table>   
+                            </apex:outputPanel>
+                            <!-- END map area -->
+
+                            <apex:outputPanel id="other_bldg_data" layout="block">
+                                <apex:panelGrid columns="1" id="theGridsection2">
+                                    <apex:outputPanel >
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Building_Gen_Purpose_Rentable}" />
+                                        <span class="required">*</span>
+                                        <a class="popup" href="#Modal_Bldg_Ques13"><img src="{!$Resource.Info_Icon}" /></a>
+                                        <div id="Modal_Bldg_Ques13" class="infopopup2" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:80%">
+                                            Rentable square feet is the area for which a tenant is charged rent. It is determined by the building owner and may vary by city or by building within the same city. The rentable space may include a share of building support/common areas such as elevator lobbies, building corridors, and floor service areas. Floor service areas typically include restrooms, janitor rooms, telephone closets, electrical closets, and mechanical rooms. 
+                                            The rentable space does not include vertical building penetrations and their enclosing walls, such as stairs, elevator shafts, and vertical ducts.
+                                            <br /><br />
+                                            Refer to section 2 DEFINITIONS AND GENERAL TERMS of the lease
+                                        </div>
+                                        <br />
+                                        <apex:actionRegion >      
+                                            <apex:inputField value="{!offerBuilding.PBS_AAAP_GEN_PURPOSE_RENTABLE__c}" id="brsf">
+                                                <apex:actionSupport action="{!recalcCAF}" event="onchange" reRender="CAFId" />
+                                            </apex:inputField>
+                                        </apex:actionRegion>
+
+                                        <table>
+                                            <tr>
+                                                <th style="text-align:center">&nbsp;</th>
+                                                <th style="text-align:center">RSF</th>
+                                                <th style="text-align:center">
+                                                    <apex:outputPanel rendered="{!percentage}">%</apex:outputPanel>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">
+                                                    <apex:outputText value="General Purpose (Office): " />
+                                                </td>
+                                                <td>
+                                                    <apex:inputField value="{!offerBuilding.PBS_AAAP_OFFICE_SPACE_RSF__c}" />
+                                                </td>
+                                                <td>
+                                                    <apex:outputPanel id="officePercent">
+                                                        <apex:outputText value="{!officePercent}" />
+                                                    </apex:outputPanel>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">
+                                                    <apex:outputText value="Warehouse: " />
+                                                </td>
+                                                <td>
+                                                    <apex:inputField value="{!offerBuilding.PBS_AAAP_RETAIL_SPACE_RSF__c}" />
+                                                </td>
+                                                <td>
+                                                    <apex:outputPanel id="retailPercent">
+                                                        <apex:outputText value="{!retailPercent}" />
+                                                    </apex:outputPanel>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">
+                                                    <apex:outputText value="Other: " />
+                                                </td>
+                                                <td>
+                                                    <apex:inputField value="{!offerBuilding.PBS_AAAP_GARAGE_SPACE_RSF__c}" />
+                                                </td>
+                                                <td>
+                                                    <apex:outputPanel id="garagePercent">
+                                                        <apex:outputText value="{!garagePercent}" />
+                                                    </apex:outputPanel>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        
+                                    </apex:outputPanel>
+
+                                    <apex:outputPanel >
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Building_ANSI_BOMA}" />
+                                        <span class="required">*</span>
+                                        <a class="popup" href="#Modal_Bldg_Ques14"><img src="{!$Resource.Info_Icon}" /></a>
+                                        <div id="Modal_Bldg_Ques14" class="infopopup3" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:80%">
+                                            The government recognizes the American National Standards Institute/Building Owners and Managers Association (ANSI/BOMA) international standard (Z65.1-2017) definition for Occupant Area, which means “the total aggregated area used by an Occupant before Load Factors are applied, consisting of Tenant Area and Tenant Ancillary Area.” The Method A – Multiple Load Factor Method shall apply. References to ABOA mean ANSI/BOMA Occupant Area. 
+                                            <br /><br />
+                                            Refer to section 2 DEFINITIONS AND GENERAL TERMS of the lease
+                                        </div>
+                                        <br />
+                                        <apex:actionRegion >      
+                                            <apex:inputField value="{!offerBuilding.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c}" id="ansiboma">
+                                                <apex:actionSupport action="{!recalcCAF}" event="onchange" reRender="CAFId" />
+                                            </apex:inputField>
+                                        </apex:actionRegion>
+                                    </apex:outputPanel>
+                                </apex:panelGrid>
+
+                                <apex:panelGrid columns="1">
+                                    <apex:outputPanel id="CAFId">
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Building_Common_Area_Factor}" />
+                                        <a class="popup" href="#Modal_Bldg_Ques6"><img src="{!$Resource.Info_Icon}" /></a>
+                                        <div id="Modal_Bldg_Ques6" class="infopopup6" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:80%">
+                                            The Common Area Factor (CAF) is a conversion factor determined by the building owner and applied by the owner to the ABOA SF to determine the RSF for the leased space. The CAF is expressed as a percentage of the difference between the amount of rentable SF and ABOA SF, divided by the ABOA SF. 
+                                            For example 11,500 RSF and 10,000 ABOA SF will have a CAF of 15% [(11,500 RSF-10,000 ABOA SF)/10,000 ABOA SF]. For the purposes of this solicitation, the CAF shall be determined in accordance with the applicable ANSI/BOMA standard for the type of space to which the CAF shall apply.
+                                         </div>
+                                        <br/>
+                                        <apex:outputText style="color:blue; font-weight:bold;" value="{!CAF}"></apex:outputText>
+                                    </apex:outputPanel>
+
+                                    <apex:outputPanel >
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Building_Number_of_Floors}" />
+                                        <span class="required">*</span><br />
+                                        <apex:inputField value="{!offerBuilding.PBS_AAAP_Number_of_floors__c}"
+                                                         id="bnumfloors" />
+
+                                    </apex:outputPanel>
+
+                                </apex:panelGrid>
+                                <apex:panelGrid columns="1">
+                                    <apex:outputPanel >
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Building_Constructed_Year}" /><!--JK this is: 12. Year the building constructed?-->
+                                        <span class="required">*</span>
+                                        <br />
+                                        <apex:inputText value="{!offerBuilding.PBS_AAAP_Year_Built__c}" maxLength="4" id="yearconstructed" styleClass="number" />
+                                    </apex:outputPanel>
+
+
+                                    <apex:outputPanel >
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Building_Recent_Renovated_Year} " />
+                                        <span class="required">*</span><br />
+                                        <!--apex:inputField value="{!offerBuilding.PBS_AAAP_Renovation_Year__c}" /--><!--JK removed this small input and replaced with text area below 7/2021-->
+                                        <apex:inputTextarea id="renoYearTA" value="{!offerBuilding.PBS_AAAP_Renovation_Year__c}" styleClass="aaapTextArea" html-maxlength="250" onkeyup="updateRenoYearTACounter()" /><br/>
+                                        <apex:outputText id="renoYearTACounter" />&#160;Characters Used
+                                    </apex:outputPanel>
+
+                                    <apex:outputPanel id="HVAC">
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Hours_of_HVAC}" />
+                                        <span class="required">*</span>
+                                        <a class="popup" href="#Modal_HVAC_Hours">
+                                            <img src="{!$Resource.Info_Icon}" />
+                                        </a>
+                                        <div id="Modal_HVAC_Hours" class="infopopup4"
+                                             style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px; width:80%">
+                                            <p>For lease requirements related to provision of services, access, and normal hours refer to section 6 PROVISION OF
+                                                SERVICES, ACCESS, AND NORMAL HOURS of the lease.<br/><br/>
+                                                For HVAC requirements refer to section 6 HEATING AND AIR CONDITIONING (AAAP VARIATION) of the lease. <br/><br/>
+                                                For information about providing HVAC services outside normal hours of operations, refer to section 6 OVERTIME HVAC USAGE of the lease.
+                                            </p>
+                                        </div>
+                                        <Table>
+                                            <tr style="width: 40px">
+                                                <td align="right">
+                                                    <apex:outputText value="{!$Label.PBS_AAAP_Mon_Fri_Hours_Start}" />
+                                                </td>
+
+                                                <td>
+                                                    <apex:inputField value="{!offerBuilding.PBS_AAAP_HVAC_HRS_MON_TO_FRI_START__c}"
+                                                                     id="hvachrs" />
+                                                </td>
+
+                                                <td align="right">
+                                                    <apex:outputText value="{!$Label.PBS_AAAP_Building_Hours_End}" />
+                                                </td>
+                                                <td>
+                                                    <apex:inputField value="{!offerBuilding.PBS_AAAP_HVAC_HRS_MON_TO_FRI_END__c}" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">
+                                                    <apex:outputText value="{!$Label.PBS_AAAP_SAT_Hours_Start}" />
+                                                </td>
+                                                <td>
+                                                    <apex:inputField value="{!offerBuilding.PBS_AAAP_HVAC_HRS_ON_SAT_START__c}" />
+                                                </td>
+                                                <td align="right">
+                                                    <apex:outputText value="{!$Label.PBS_AAAP_Building_Hours_End}" />
+                                                </td>
+                                                <td>
+                                                    <apex:inputField value="{!offerBuilding.PBS_AAAP_HVAC_HRS_ON_SAT_END__c}" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">
+                                                    <apex:outputText value="{!$Label.PBS_AAAP_SUN_Hours_Start}" />
+                                                </td>
+                                                <td>
+                                                    <apex:inputField value="{!offerBuilding.PBS_AAAP_HVAC_HRS_ON_SUN_START__c}" />
+                                                </td>
+                                                <td align="right">
+                                                    <apex:outputText value="{!$Label.PBS_AAAP_Building_Hours_End}" />
+                                                </td>
+                                                <td>
+                                                    <apex:inputField value="{!offerBuilding.PBS_AAAP_HVAC_HRS_ON_SUN_END__c}" />
+                                                </td>
+                                            </tr>
+                                        </Table>
+                                    </apex:outputPanel>
+
+                                    <!--<apex:outputText value="{!$Label.PBS_AAAP_Building_Annual_Figures}" />-->
+                                    <apex:outputText value="Items 11 through 15 will be useful in the Government's determination of the fair market value of the leased space. Please enter total annual figures for the entire building for questions 11 through 15."/>
+                                    <!--<apex:outputText value="Refer to section 2 ESTIMATED ANNUAL COST OF OWNERSHIP
+                                    EXCLUSIVE OF CAPITAL CHARGES of the GSA Form 1217" />-->
+                                    <!-- <apex:panelGrid columns="1"> -->
+                                    <apex:outputPanel id="realEstate">
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Real_Estate_Taxes_Question}" />
+                                        <span class="required">*</span>
+                                        <a class="popup" href="#Modal_Tax" style="text-decoration: none;">
+                                            <img src="{!$Resource.Info_Icon}" />
+                                        </a>
+                                        <div id="Modal_Tax" class="infopopup"
+                                             style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px; width:700px;">
+                                            <p>
+                                                Include all applicable real estate taxes imposed upon the property. This total cost shall be accounted for when defining the shell rent per ABOA SF under the Space &amp; Rates page and shall NOT be priced into the operating costs or elsewhere.
+                                                <br /><br />
+                                                Refer to section 2 REAL ESTATE TAX ADJUSTMENT of the lease. Offerors in California using the Region 9 RLP should refer to section 2 REAL ESTATE TAX ADJUSTMENT (CALIFORNIA VARIATION) of the lease.
+
+                                            </p>
+                                        </div><br />
+                                        <apex:outputText >$</apex:outputText>
+                                        <apex:inputField value="{!offerBuilding.PBS_AAAP_REAL_ESTATE_TAXES__c}"
+                                                         id="realestatetax" />
+                                    </apex:outputPanel>
+                                    <apex:outputPanel id="insurance">
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Annual_Insurance_Question}" />
+                                        <span class="required">*</span>
+                                        <a class="popup" href="#Modal_Bldg_Ques16" style="text-decoration: none;">
+                                            <img src="{!$Resource.Info_Icon}" />
+                                        </a>
+                                        <div id="Modal_Bldg_Ques16" class="infopopup"
+                                             style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                            <p>Enter the annual cost of fire, liability, and other insurance carried on the entire building in which the offered space is located. This total cost shall be accounted for when defining the shell rent per ABOA SF under the Space &amp; Rates page and shall NOT be priced into the operating costs or elsewhere.
+                                                <br/><br/>
+                                                Refer to section 3 BUILDING SHELL REQUIREMENTS of the lease
+                                            </p>
+                                        </div>
+                                        <br />
+                                        <apex:outputText >$</apex:outputText>
+                                        <apex:inputField value="{!offerBuilding.PBS_AAAP_INSURANCE__c}"
+                                                         id="insuranceamount" />
+                                    </apex:outputPanel>
+                                    <apex:outputPanel id="BuildingMaintenance">
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Building_Maintenance_Question}" />
+                                        <span class="required">*</span>
+                                        <a class="popup" href="#Modal_Bldg_Ques17" style="text-decoration: none;">
+                                            <img src="{!$Resource.Info_Icon}" />
+                                        </a>
+                                        <div id="Modal_Bldg_Ques17" class="infopopup"
+                                             style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                            <p>Enter the annual cost of wages, materials, and outside services used in repairs and maintenance of the building itself and all similar repairs and maintenance costs NOT including items already considered elsewhere such as heating, electrical, plumbing, air conditioning, and elevators. 
+                                                This includes major repairs and changes in the nature of a permanent improvement such as annual cost to replace relatively short-lived items such as boilers, compressors, elevators, and roof coverings. This total cost shall be accounted for when defining the shell rent per ABOA SF under 
+                                                the Space &amp; Rates page and shall NOT be priced into the operating costs or elsewhere.<br/><br/>
+                                                Refer to section 3 BUILDING SHELL REQUIREMENTS of the lease
+                                            </p>
+                                        </div>
+                                        <br />
+                                        <apex:outputText >$</apex:outputText>
+                                        <apex:inputField value="{!offerBuilding.PBS_AAAP_BUILDING_MAINTENANCE__c}"
+                                                         id="Maintenanceamount" />
+                                    </apex:outputPanel>
+                                    <apex:outputPanel id="leaseCommision">
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Lease_Commission_question}" />
+                                        <span class="required">*</span>
+                                        <a class="popup" href="#Modal_Bldg_Ques18" style="text-decoration: none;">
+                                            <img src="{!$Resource.Info_Icon}" />
+                                        </a>
+                                        <div id="Modal_Bldg_Ques18" class="infopopup5"
+                                             style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                            <p>Enter any lease commission cost for which the lessor may be responsible due to this government leasing action. This total cost shall be accounted for when defining the shell rent per ABOA SF under the Space &amp; Rates page and shall NOT be priced into the operating costs or elsewhere.
+                                                <br/><br/>
+                                                Refer to section 3 BUILDING SHELL REQUIREMENTS of the lease
+                                            </p>
+                                        </div>
+                                        <br />
+                                        <apex:outputText >$</apex:outputText>
+                                        <apex:inputField value="{!offerBuilding.PBS_AAAP_LEASE_COMMISSION__c}"
+                                                         id="leasecommission" />
+                                    </apex:outputPanel>
+                                    <apex:outputPanel id="Management">
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Building_Management_Question}" />
+                                        <span class="required">*</span>
+                                        <a class="popup" href="#Modal_Bldg_Ques19" style="text-decoration: none;">
+                                            <img src="{!$Resource.Info_Icon}" />
+                                        </a>
+                                        <div id="Modal_Bldg_Ques19" class="infopopup5"
+                                             style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                            <p>Include annual administrative expenses such as agency fees, legal fees, auditing, and advertising. Do not include financial charges such as income or corporate taxes or organization expenses. Tenant improvement management fees shall not be included here and will be priced under the Space &amp; Rates section. 
+                                                This total cost shall be accounted for when defining the shell rent per ABOA SF under the Space &amp; Rates page and shall NOT be priced into the operating costs or elsewhere.
+                                                <br /><br />
+                                                Refer to section 3 BUILDING SHELL REQUIREMENTS of the lease 
+
+                                            </p>
+                                        </div>
+                                        <br />
+                                        <apex:outputText >$</apex:outputText>
+                                        <apex:inputField value="{!offerBuilding.PBS_AAAP_MANAGEMENT__c}"
+                                                         id="managementanswer" />
+                                    </apex:outputPanel>
+
+                                    <apex:panelGrid columns="1">
+                                        <apex:outputPanel >
+                                            <apex:commandButton id="btnSaveForm" value="Save Page" styleClass="btnSave" style="margin-left:2px" action="{!actionSaveBuildingInfo}" />
+                                            <apex:commandButton id="btnSave" value="Next" action="{!saveBuilding}" styleClass="btnJQSubmit" />
+                                            <apex:commandButton value="Exit Offer"
+                                                onclick="if(confirm('Please make sure that, you have saved changes to the offer, before leaving from this page.')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}AAAP-PortalHome';return false;} else {return false;}" 
+                                             />
+                                            <span style="padding-right:250px;">&nbsp;</span>
+
+                                            <a href="#" class="buttonred delete_btn" id="view"
+                                                onclick="if(confirm('Are you sure you want to permanently delete your offer?  If so, click OK.  Click Cancel to return to the page.')){deleteOffer(); return true;} else return false;"
+                                            >Delete Offer</a>
+
+                                        </apex:outputPanel>
+                                    </apex:panelGrid>
+                                </apex:panelGrid>
+
+                            </apex:outputPanel>
+
+                        </div>
+
+                    </apex:outputPanel>
+
+                </apex:actionRegion>
+            </apex:form>
+        </div>
+        <!--/content-->
+    </div>
+
+    <c:PBS_AAAP_PortalPage_End />
+
+    <script type="text/javascript">
+        console.log('{!pageURLForRedirection}');
+        if('{!JSENCODE(pageURLForRedirection)}' != ''){
+            window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
+            window.parent.document.body = document.createElement('body');
+        }
+    	else{
+        	window.parent.document.body.scrollTop = 0;
+  			window.parent.document.documentElement.scrollTop = 0;
+        }
+        function init() {
+        
+            updateRenoYearTACounter();  
+                  
+        }
+
+        function updateRenoYearTACounter() {
+        
+            var cnt = document.getElementById('{!$Component.newOffer.renoYearTA}').value.length;
+            var c = cnt + '/250';
+            document.getElementById('{!$Component.newOffer.renoYearTACounter}').innerText = c;
+
+        }   
+        
+    </script>
+               
+</apex:page>

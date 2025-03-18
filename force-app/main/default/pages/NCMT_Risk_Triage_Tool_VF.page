@@ -1,0 +1,31 @@
+<apex:page showHeader="{!$CurrentPage.parameters.print!='true'}" controller="NCMT_TriageRiskToolCtrl_LC" lightningStylesheets="true">
+    <apex:slds />
+    <apex:includeLightning />
+    <div id="lightningPage"></div>
+     <script> 
+        var HTMLJSencodedRecId = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.id))}';
+        var HTMLJSencodedPrint = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.print))}';
+        var HTMLJSencodedFunding = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.funding))}';
+        var HTMLJSencodedBudget = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.budget))}';
+        var HTMLJSencodedDeliv = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.deliv))}';
+        var HTMLJSencodedUrlType = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.type))}';
+
+        $Lightning.use("c:NCMT_TriageRiskTool_App", function(){
+            
+            $Lightning.createComponent("c:NCMT_TriageRiskTool", {
+                "recordId" : HTMLJSencodedRecId,
+                "printMode" : HTMLJSencodedPrint,
+                "urlFunding" : HTMLJSencodedFunding,
+                "urlBudget" : HTMLJSencodedBudget,
+                "urlDeliv" : HTMLJSencodedDeliv,
+                "urlType" : HTMLJSencodedUrlType
+            },
+            'lightningPage',
+                function(cmp){
+     
+                });
+        
+        });
+  </script> 
+    
+</apex:page>

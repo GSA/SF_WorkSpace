@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>ECC__c</fullName>
+    <externalId>false</externalId>
     <formula>IF( RecordType.Name ==&apos;DES O&amp;P Project Markup&apos;,( ECCA__c  * (1+ Construction_Contingency__c )),((( ECCA__c  * (1+ Construction_Contingency__c ))* (1+ Art_In_Architecture__c ))))</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>ECC</label>

@@ -1,0 +1,118 @@
+<apex:page controller="NCMT_ReportsLandingPage" title="NCMT Reports" sidebar="false">
+
+
+    <table align="center">
+        <tr>
+            <td><h1><font color="darkred" size="+2">NCMT Reports</font></h1><br/><br/></td>
+        </tr>
+    </table>
+    
+    <apex:form id="frmList">
+        <table border="0" align="center" width="98%">
+            <tr valign="top">
+            
+                <td width="50%">
+                    <apex:pageBlock id="LookUps">
+                        <font size="+1"><b>Cost Parameters<br/><br/></b></font>
+                        
+                        <b>Fiscal Year: </b>&nbsp;
+                        <apex:selectList value="{!CurrentFY}" multiselect="false" size="1" id="cmbFiscalyear">
+                            <apex:selectOptions value="{!FiscalYears}"/>
+                        </apex:selectList><p/>
+                    
+                        <apex:dataTable value="{!ProjectLookUpReports}" var="Report" cellPadding="4" border="0">
+                            <apex:column ><a onClick="fnFiscalYear('{!Report.ID}')" ID="{!Report.ID}" href="../{!Report.ID}">{!Report.Name}</a></apex:column>
+                        </apex:dataTable>
+                    </apex:pageBlock>             
+                
+                   <apex:pageBlock id="NCMTUsersList">
+                        <font size="+1"><b>NCMT Users List<br/><br/></b></font>
+                        <a onClick="fnPermsetusers('NCMT_List_of_Users')" ID="NCMT_List_of_Users" href="NCMT_List_of_Users">NCMT List Of Users (HTML)</a>&nbsp;
+                        <a onClick="fnPermsetusers('NCMT_List_of_Users_Excel')" ID="NCMT_List_of_Users_Excel" href="NCMT_List_of_Users_Excel">(Excel)</a><br/>
+                    </apex:pageBlock>    
+               </td>
+                
+                <td width="50%">
+                    <apex:pageBlock id="Projects">
+                        <font size="+1"><b>Projects<br/><br/></b></font>
+                        <b>NCMT Project:</b> &nbsp;
+                        <apex:inputText size="30" id="txtProject"/>&nbsp;&nbsp;&nbsp;<p/>
+                         
+                        <apex:dataTable value="{!ProjectReports}" var="Report" cellPadding="4" border="0">
+                            <apex:column ><a onClick="fnProject('{!Report.ID}')" ID="{!Report.ID}" href="../{!Report.ID}">{!Report.Name}</a></apex:column>
+                        </apex:dataTable>
+                        <br/>
+                        
+                        <table border="0">
+                            <tr>
+                                <td>
+                                    <a onClick="fnProjectCustom('rpt1')" ID="rpt1" href="ncmt_uniformatcostoutput?Rep=V1">UNIFORMAT COST OUTPUT - TOTAL PROJECT ETPC</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+                                    <a onClick="fnProjectCustom('rpt2')" ID="rpt2" href="ncmt_uniformatcostoutput?Rep=V2">UNIFORMAT COST OUTPUT - TOTAL PROJECT ECC</a><br/>
+                                    <a onClick="fnProjectCustom('rpt3')" ID="rpt3" href="ncmt_uniformatcostoutput?Rep=V3">UNIFORMAT COST OUTPUT - TOTAL PROJECT ECCA</a><br/>
+                                    <a onClick="fnProjectCustom2('rpt4')" ID="rpt4" href="ncmt_buildingcostsummary">BUILDING COST SUMMARY</a><br/>
+                                    <a onClick="fnProjectCustom2('rpt5')" ID="rpt5" href="NCMT_Lease_Scoring_Report">PROJECT SUMMARY REPORT</a><br/>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </apex:pageBlock>
+                </td>
+                
+           </tr>
+        </table>
+    </apex:form>
+    
+    <script language = "Javascript">
+    
+        function fnFiscalYear(strURLID){
+            var strFY = document.getElementById({!JSENCODE("'{!$Component.frmList.LookUps.cmbFiscalyear}').value")});
+            linkHref = document.getElementById(strURLID).getAttribute('href');
+            document.getElementById(strURLID).setAttribute('href', linkHref + '?pv0=' + strFY);
+        }
+        
+        function fnProject(strURLID){
+             var strProject = document.getElementById({!JSENCODE  ("'{!$Component.frmList.Projects.txtProject}').value" )} ) ;
+            linkHref = document.getElementById(strURLID).getAttribute('href');
+            document.getElementById(strURLID).setAttribute('href', linkHref + '?pv0=' + strProject);
+        }
+        
+        function fnProjectCustom(strURLID){
+             var strProject = document.getElementById({!JSENCODE  ("'{!$Component.frmList.Projects.txtProject}').value" )} ) ;
+            linkHref = document.getElementById(strURLID).getAttribute('href');
+            document.getElementById(strURLID).setAttribute('href', linkHref + '&ProjectID=' + strProject);
+        }
+        
+        function fnProjectCustom2(strURLID){
+           var strProject = document.getElementById({!JSENCODE  ("'{!$Component.frmList.Projects.txtProject}').value" )} ) ;
+            linkHref = document.getElementById(strURLID).getAttribute('href');
+            document.getElementById(strURLID).setAttribute('href', linkHref + '?ProjectID=' + strProject);
+        }
+        
+        function fnPermsetUsers(strURLID){
+            linkHref = document.getElementById(strURLID).getAttribute('href');
+            document.getElementById(strURLID).setAttribute('href', linkHref);
+        }
+
+        function fnSetDateFormat(oDateFormat){
+            oDateFormat['FullYear'];        //Example = 2007
+            oDateFormat['Year'];            //Example = 07
+            oDateFormat['FullMonthName'];   //Example = January
+            oDateFormat['MonthName'];       //Example = Jan
+            oDateFormat['Month'];           //Example = 01
+            oDateFormat['Date'];            //Example = 01
+            oDateFormat['FullDay'];         //Example = Sunday
+            oDateFormat['Day'];             //Example = Sun
+            oDateFormat['Hours'];           //Example = 01
+            oDateFormat['Minutes'];         //Example = 01
+            oDateFormat['Seconds'];         //Example = 01
+            var sDateString;                
+            
+            // Use MM/DD/YYYY format
+            sDateString = oDateFormat['Month'] + "/" + oDateFormat['Date'] + "/" + oDateFormat['FullYear'];
+            return sDateString; 
+        }
+
+
+    </script>
+    
+</apex:page>

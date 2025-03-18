@@ -1,0 +1,75 @@
+<aura:component implements="forceCommunity:themeLayout" access="global" controller="RET_ThemeController" description="Real Estate Taxes Community Theme">
+    <aura:attribute name="profileMenu" type="Aura.Component[]" required="false" />
+    <aura:attribute name="userType" type="String" required="false" />
+    <aura:attribute name="pathname" type="String" required="false" />
+    <aura:attribute name="pageName" type="String" required="false" />
+    <aura:handler event="aura:locationChange" action="{!c.locationChanged}"/>
+    <aura:handler name="init" action="{!c.getThemeData}" value="{!this}" />
+    <ltng:require scripts="/resource/JQueryLibs/JQueryLibs/Version_3_6_0/scripts.js,
+                           /resource/RET_Resources/js/ret-scripts.js?v=1"
+				  afterScriptsLoaded="{!c.jsInit}" />
+	<link rel="stylesheet" type="text/css" href="/realestatetaxes/resource/RET_Resources/css/ret-styles.css?v=1" />
+ 
+    <div id="ret-main-content">
+  		<div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left hidden"
+  			role="tooltip"
+  			id="help">
+			<div id="help-text" class="slds-popover__body"></div>
+		</div>
+		<div id="login">
+		    <ul>
+		        <li><a href="/realestatetaxes/s/">Home</a></li>
+		        <li>|</li>
+		        <li><a href="http://www.gsa.gov/" target="_blank">About GSA</a></li>
+		        <li class="profileMenu">{!v.profileMenu}</li>
+		    </ul>  
+		</div>
+
+		<div id="wrapper">
+			<div id="header">
+			    <h1 class="logo">GSA</h1>
+			    <div id="nav">
+			        <ul>
+			            <li><a id="ret-home" href="/realestatetaxes/s/">Real Estate Taxes Home</a></li>
+			            <li><a id="ret-news" href="/realestatetaxes/s/news-and-updates">News &amp; Updates</a></li>
+			            <li><a id="ret-faqs" class="" href="/realestatetaxes/s/frequently-asked-questions">FAQs</a></li>
+			            <li><a id="ret-help" class="" href="/realestatetaxes/s/help">Help</a></li>
+			            <aura:if isTrue="{!v.userType == 'Guest'}">
+                            <aura:if isTrue="{!v.pageName != 'Register'}">
+                                <aura:if isTrue="{!v.pageName != 'Login'}">
+                                    <aura:if isTrue="{!v.pageName != 'Forgot Password'}">
+                                        <aura:if isTrue="{!v.pageName != 'Check Password'}">
+			            			<li>
+                                    	<a href="/realestatetaxes/s/login/SelfRegister">
+			                			<span class="orange">Registration</span>
+                                    </a>
+			            			</li>
+                                    	</aura:if>
+                                	</aura:if>
+                                </aura:if>
+                            </aura:if>
+			            </aura:if>                      
+			        </ul>
+			    </div>
+			    <div class="clear"></div>
+			</div>
+		
+		    <div id="content">
+				<div id="ret-page-content" role="main">
+					{!v.body}
+				</div>
+			</div>
+
+		</div>
+	
+		<div id="footer">
+			<ul>
+				<li><a href="/realestatetaxes/s/privacy-policy">Privacy and Security Policy</a>&nbsp;&nbsp;|</li> 
+                <li><a target="_bank" href="https://www.gsa.gov/website-information/accessibility-statement">Accessibility Statement</a></li>
+			</ul>
+		</div>
+
+
+	</div>
+	
+</aura:component>

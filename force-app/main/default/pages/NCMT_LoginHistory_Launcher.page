@@ -1,0 +1,87 @@
+<apex:page Controller="NCMT_LoginHistoryController" standardStylesheets="false"
+    lightningStylesheets="true" showheader="false" sidebar="false" title="NCMT_LoginHistory_Report">
+    <style>
+        #lightningPage {
+        margin:1.0%; 
+        font-size:100%;
+        }
+        
+         /* Footer stylings to appear on printed pages ONLY */
+        .page-footer {display: none;}
+      
+        @media print {
+            #lightningPage {
+                size:landscape;
+                zoom:40%;
+                margin:2%;
+            }
+            .print-margin {margin-top:75px;}
+
+           @page {
+               size: landscape;
+               margin: 1%;
+               font-size: 9px;
+            }
+           
+            .page-footer {
+        //position: fixed;
+                display: block;
+                margin: 1%;
+                bottom: 0mm;
+                width: 95%;
+             }
+            .page-footer-space {
+                height:50px;
+            }
+            .slds-icon {display:none;margin-left:-3rem;}
+        
+        }
+        
+        thead {display: table-header-group;}
+        tfoot {display: table-footer-group;}
+        button {display: none;}
+        }
+        
+        div.footer {
+            display: block;
+            padding: 1px;
+            position: running(footer);
+        }
+        div.prnheader {
+            display: block;
+            padding: 1px;
+            position: running(header);
+            float:right;
+        }
+            .divCtr{
+                margin-top:25px;
+                margin-bottom:25px;
+                text-align:center;  
+            }
+        .page-footer-space {
+            height: 100px;
+        }
+    </style>
+
+    <apex:includeLightning />
+    <div id='LoginHistoryReport'></div>
+
+    <script>
+       var numdays = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.numdays))}';
+    //'{!JSENCODE(HTMLENCODE($CurrentPage.parameters.numdays))}';
+        //alert('numdays ==='+numdays);
+        $Lightning.use('c:NCMT_LoginHistory_Report_App', function () {
+            $Lightning.createComponent('c:NCMT_LoginHistory_Report', {
+                numdays : numdays
+                },
+
+                'LoginHistoryReport',
+                function (cmp) {
+                    console.log("Lightning Web Component created Successfully!!");
+                });
+
+        });
+    </script>
+
+
+</apex:page>

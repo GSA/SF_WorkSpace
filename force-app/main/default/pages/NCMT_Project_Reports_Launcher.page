@@ -1,0 +1,92 @@
+<apex:page standardController="NCMT_Project__c" lightningStyleSheets="true" readonly="true" showheader="false" sidebar="false"
+           title="{!projectData.CUI_Header__c}" extensions="NCMT_Project_Details_ctrl">
+    <style>
+        #lightningPage {
+            margin:1.0%; 
+            font-size:100%;
+        }
+        
+        /* Footer stylings to appear on printed pages ONLY */
+        .page-footer {display: none;}
+        
+        @media print {
+            #lightningPage {
+                size:landscape;
+                zoom:100%;
+                margin:2%;
+        	}
+        	.print-margin {margin-top:75px;}
+        
+            @page {
+                size: landscape;
+                font-size: 9px;
+            }           
+            .page-footer {
+                //position: fixed;
+                display: block;
+                margin: 1%;
+                bottom: 0mm;
+                width: 95%;
+            }
+            .page-footer-space {
+            	height:50px;
+            }
+            .slds-icon {display:none;margin-left:-3rem;}
+            thead {display: table-header-group;}
+            tfoot {display: table-footer-group;}
+            button {display: none;}
+        
+            #header {
+        	    display: none;
+            }
+        }
+        
+        div.footer {
+            display: block;
+            padding: 1px;
+            position: running(footer);
+        }
+        div.prnheader {
+            display: block;
+            padding: 1px;
+            position: running(header);
+            float:right;
+        }
+        .divCtr{
+            margin-top:25px;
+            margin-bottom:25px;
+            text-align:center;	
+        }
+        .page-footer-space {
+        	height: 100px;
+        }
+    </style>
+    
+    <apex:includeLightning />
+    
+    <div id="header" style="text-align:center;font-size:15px">
+        {!projectData.CUI_Header__c}
+    </div>
+    
+    <div id='lightningPage'></div>
+    
+    <script>    
+    var HTMLJSencodedReportType = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.reportType))}';
+    var HTMLJSencodedCategoriesReport = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.categoriesReport))}';
+    var userId = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.id))}'; 
+    $Lightning.use('c:NCMT_Project_ReportsApp', function(){
+        $Lightning.createComponent('c:NCMT_Project_Reports', {
+            
+            //'recordId' : '{!$CurrentPage.parameters.id}',
+            'recordId' : userId,
+            'reportType' : HTMLJSencodedReportType,
+            'categoriesReport': HTMLJSencodedCategoriesReport
+            
+            // "recordId" : "{!$CurrentPage.parameters.id}"
+        },
+                                   'lightningPage',
+                                   function(cmp){
+                                   });
+    });
+    </script>    
+</apex:page>

@@ -1,0 +1,1126 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="NCMT_Project_Details_ctrl">
+    
+    <aura:attribute name='recordId' type='string' />
+    <aura:attribute name="today" type="Date" />
+    
+    <aura:handler name='init' value='{!this}' action='{!c.doInit}'/>
+    <aura:attribute name="project" type="object"/>
+    <aura:attribute name="isOandP" type="boolean" />
+    
+    <aura:attribute name="treeValues" type="object"/>
+    
+    <aura:attribute name="markup" type="NCMT_Project_Markup__c" 
+                    default="{ 'sobjectType': 'NCMT_Project_Markup__c' }"/>       
+    <aura:attribute name="markuppctnts" type="object"/>
+    
+    <aura:attribute name="trees" type="NCMT_Tree_structure__c[]" />    
+    <aura:attribute name = 'treeObj' type = 'Object'/>
+    <aura:attribute name="treeStrucTotal" type="object" />
+    
+    <aura:attribute name="reportType" type="string" />
+    <aura:attribute name="reportVar" type="string" />
+    
+    <aura:attribute name="categoriesReport" type="boolean" />
+    <aura:attribute name="safeReportType" type="string" />
+    <aura:attribute name="safeCategoriesReport" type="boolean" />
+    <aura:attribute name="footerNotes" type="String[]" default="['CECC = Current Estimated Construction Cost', 'ECC = Estimated Construction Cost', 'EDRC = Estimated Design and Review Cost', 'EMIC = Estimated Management and Inspection Cost', 'ESOC = Estimated Site and Other Cost', 'ETPC = Estimated Total Project Cost', 'TRCS = Tenant Related Core Shell']" />
+    
+    <aura:attribute name="catsUsed" type="Object" />
+    
+    <div class="slds-page-header slds-container_xx-large">
+        <!-- PRINT BUTTON -->
+         <div class="prnheader">
+            <button align="right" class="slds-button slds-button_brand" onclick="{!c.funPrint}" id="prnBtn">Print Page</button>
+        </div>
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-report" aria-hidden="true" title="Project Detail Report">
+                            <lightning:icon class="slds-icon slds-page-header__icon" iconName="standard:report"/>
+                            <span class="slds-assistive-text">report</span>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <a onclick='{!c.redirectToProject }'> <h1>
+                                    <span class="slds-page-header__title slds-truncate" title="Project Detail Report">{!v.project.Name}</span>
+                                    </h1></a>
+                            </div>
+                        </div>
+                        <p class="slds-page-header__name-meta">  {!v.today}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <article class="slds-card slds-container_xx-large" style="margin-top:5px;">
+        <div class="slds-page-header">
+            <div class="slds-page-header__title slds-truncate">
+                <h1>
+                    <span class="slds-page-header__title slds-truncate slds-text-title_caps"
+                          title="Project Properties">
+                        <b>Project Properties</b>
+                    </span>
+                </h1>
+            </div>
+        </div>
+        <div>
+            <table class="slds-table slds-no-row-hover slds-table_bordered" style="padding:.5rem">
+                <tr>
+                    <td scope="row" data-label="Row1" WIDTH="25%">
+                        <div class="slds-truncate" title="Project Type"><b>Project Name: </b>
+                            <ui:outputText value="{!v.project.Name}" />
+                        </div>
+                        <div class="slds-truncate" title="ProjectLocation"><b>Location: </b>
+                            <ui:outputText value="{!v.project.location}" />
+                        </div>
+                        <div class="slds-truncate" title="IndexLocation"><b>Index Location: </b>
+                            <ui:outputText value="{!v.project.indexLocation}" />
+                        </div>
+                        <div class="slds-truncate" title="RegionCode"><b>Region: </b>
+                            <ui:outputText value="{!v.project.RegionCode__c}" />
+                            <aura:if isTrue="{!v.project.PBS_Building__c != null}">
+                                <div style="display:inline-block;padding-left:20px;">
+                                    <b>PBS Building: </b>
+                                    <ui:outputText value="{!v.project.PBS_Building__r.Location_Code_Plus__c}" />
+                                </div>
+                            </aura:if>
+                        </div>
+                        <div class="slds-truncate" title="Prepared By"><b>Estimate Prepared By: </b>
+                            <ui:outputText value="{!v.project.CreatedBy.Name}" />
+                        </div>
+                    </td>
+                    <td scope="row" data-label="Row2">
+                        <div class="slds-truncate" title="Project Status"><b>Project Status: </b>
+                            <ui:outputText value="{!v.project.Project_Status__c}" />
+                        </div>
+                        <div class="slds-truncate" title="Requestor"><b>Requestor: </b>
+                            <ui:outputText value="{!v.project.Requestor__c}" />
+                        </div>
+                        <div class="slds-truncate" title="Reviwed By"><b>Estimate Reviewer: </b>
+                            <ui:outputText value="{!v.project.Estimate_Reviewed_By__r.Name}" />
+                        </div>
+                        <div class="slds-truncate" title="Approved By"><b>Estimate Approver: </b>
+                            <ui:outputText value="{!v.project.Estimate_Approved_By__r.Name}" />
+                        </div>
+                        <aura:if isTrue="{!v.project.Sign_this_Project__c}">
+                            <div class="slds-truncate" title="Signed By"><b>Signed By: </b>
+                                <ui:outputText value="{!v.project.Signed_By__c }" />
+                            </div>
+                        </aura:if> 
+                    </td>
+                    <td scope="row" data-label="Row3">
+                        <div class="slds-truncate" title="BasisDateOfEstimate"><b>Basis Date Of Estimate: </b>
+                            <ui:outputText value="{!v.project.Basis_Date_Of_Estimate__c}" />
+                        </div>
+                        <div class="slds-truncate" title="EstimateDate"><b>Estimate Preparation Date: </b>
+                            <ui:outputDate value="{!v.project.CreatedDate}" />
+                        </div>
+                        <div class="slds-truncate" title="PreparedBy"><b>Revision Date: </b>
+                            <ui:outputText value="" />
+                        </div>
+                        <div class="slds-truncate" title="StartConstruction"><b>Mid Point of Construction: </b>
+                            <ui:outputText value="{!v.project.Mid_Point_of_Construction__c }" />
+                        </div>
+                        <aura:if isTrue="{!v.project.Sign_this_Project__c}">
+                            <div class="slds-truncate" title="Signed Date"><b>Signed Date: </b>
+                                <ui:outputText value="{!v.project.Signed_Date__c}" />
+                            </div>
+                        </aura:if>   
+                    </td>
+                    <td scope="row" data-label="Row4">
+                        <div class="slds-truncate" title="Proj.DeliveryMethod"><b>Project Delivery Method: </b>
+                            <ui:outputText value="{!v.project.Project_Delivery_Method__c}" />
+                        </div>
+                        <div class="slds-truncate" title="Project Type"><b>Project Type: </b>
+                            <ui:outputText value="{!v.project.Project_type__c}" />
+                            
+                        </div>
+                        <div class="slds-truncate" title="ProjectPhases"><b>Project Phase: </b>
+                            <ui:outputText value="{!v.project.Project_Phases__c}" />
+                        </div>
+                        <div class="slds-truncate" title="ProjectPhases"><b>SubPhases: </b>
+                            <ui:outputText value="{!v.project.Project_SubPhases__c}" />
+                        </div>
+                    </td>
+                </tr>
+                <tr  class='slds-bg-gray'>
+                    <td colspan="4">
+                        <div class="slds-truncate" title="Proj.DeliveryMethod"><b>Brief Narrative: </b> <br/>
+                            <ui:outputText value="{!v.project.Brief_Narrative__c}" />
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </article>
+    <!-- <article class="slds-card slds-container_xx-large">
+        <div class="slds-page-header">
+            <div class="slds-page-header__title slds-truncate">
+                <h1>
+                <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Line Item Summary">
+                <b>Tree Structure</b>
+                </span>
+                </h1>
+            </div>
+        </div>
+        <div class="slds-container_xx-large">
+            <c:NCMT_TreeRelatedList recordId='{!v.recordId}' isReports='true' />
+        </div>
+    </article> -->
+    
+    <!-- ### START DETAIL REPORTS SECTION ### -->
+    
+    <aura:if isTrue="{!and(and(v.reportVar == 'detail', v.treeObj), !v.isOandP)}">
+        <c:NCMT_Detail_Reports  reportType='{!v.safeReportType}' markup='{!v.markup}' markuppctnts="{!v.markuppctnts}" treeObj='{!v.treeObj}' catsUsed='{!v.catsUsed}'/>
+    </aura:if>
+    
+    <aura:if isTrue="{!and(and(v.reportVar == 'detail', v.treeObj), v.isOandP)}">
+        <c:NCMT_OP_Detail_Reports  reportType='{!v.safeReportType}' markup='{!v.markup}'  markuppctnts="{!v.markuppctnts}" treeObj='{!v.treeObj}' catsUsed='{!v.catsUsed}'/>
+    </aura:if>
+    <!-- ### END DETAIL REPORTS SECTION ### -->
+    
+    <!-- ### START SUMMARY REPORTS SECTION ### -->
+    <aura:if isTrue="{!and(and(v.reportVar == 'summary', v.treeObj), !v.isOandP)}">
+        <c:NCMT_Summary_Reports reportType='{!v.safeReportType}' treeTotalObj='{!v.treeStrucTotal}' markup='{!v.markup}' isOandP='{!v.isOandP}' treeObj='{!v.treeObj}'/>
+    </aura:if>
+    <aura:if isTrue="{!and(and(v.reportVar == 'summary', v.treeObj), v.isOandP)}">
+        <c:NCMT_OP_Summary_Reports  reportType='{!v.safeReportType}' treeTotalObj='{!v.treeStrucTotal}' markup='{!v.markup}' treeObj='{!v.treeObj}'/>
+    </aura:if>
+    
+    <!-- ### END SUMMARY REPORTS SECTION ### -->
+    
+    
+    <!-- PAGE SEPARATOR FOR PDF -->
+    
+    <aura:if isTrue="{!v.reportType != 'detailC'}">
+        <div style="page-break-after: always; margin-top:50px;"></div>
+        <article class="slds-card slds-container_xx-large">
+            <div class="slds-page-header" style="background:#e9eaec;">
+                <div class="slds-page-header__title slds-truncate">
+                    <h1>
+                        <span class="slds-page-header__title slds-truncate slds-text-title_caps">
+                            <b>Total Cost Summary</b>
+                        </span>
+                    </h1>
+                </div>
+            </div>
+            <div>
+                <table class="slds-table slds-no-row-hover slds-table_bordered slds-table_cell-buffer slds-table_col-bordered">
+                    <thead class="slds-text-title_caps">
+                        <tr class="slds-truncate slds-line-height_reset" >
+                            <th  scope="col">
+                                <div class="slds-truncate pcnt-div" title="Item Category"></div>
+                            </th>
+                            <aura:if isTrue="{!!v.isOandP}">
+                                <th>
+                                    <div class="slds-truncate pcnt-div" title="Markup">Markup </div>
+                                </th>
+                                <th>
+                                    <div class="slds-truncate pcnt-div" title="Self Work Markup ">Self Performed Work Markup </div>
+                                </th>
+                            </aura:if>
+                            
+                            <th scope="col">
+                                <div class="slds-truncate pcnt-div" title="Self Work">Self Performed Work</div>
+                            </th>
+                            <aura:if isTrue="{!!v.isOandP}">
+                                <th>
+                                    <div class="slds-truncate pcnt-div" title="Outsourced Work Markup">Outsourced Work Markup </div>
+                                </th>
+                            </aura:if>
+                            
+                            <th scope="col">
+                                <div class="slds-truncate pcnt-div" title="Outsourced Work">Outsourced Work </div>
+                            </th>
+                            <aura:if isTrue="{!v.isOandP}">
+                                <th>
+                                    <div class="slds-truncate pcnt-div" title="Markup">Markup </div>
+                                </th>
+                            </aura:if>
+                            
+                            <th scope="col">
+                                <div class="slds-truncate pcnt-div" title="Total">Total</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="slds-hint-parent slds-light-blue slds-text-title_caps">
+                            <td  data-label="column" scope="row">Total Direct Cost – Base Line</td> <!--formerly initial cost -->
+                            <aura:if isTrue="{!!v.isOandP}">
+                                <td></td>
+                                <td></td>
+                            </aura:if>      
+                            <td data-label="w/o Subcontactor" >
+                                <div class="slds-truncate slds-text total-div" >
+                                    <lightning:formattedNumber value="{!v.markup.Total_Cost_w_o_SubCon_Markups__c}" style="currency" currencyCode="USD"/>
+                                </div>
+                            </td>
+                            <aura:if isTrue="{!!v.isOandP}">
+                                <td>    </td>
+                            </aura:if>     
+                            <td data-label="w/ Subcontactor">
+                                <div class="slds-truncate slds-text total-div" >
+                                    <lightning:formattedNumber value="{!v.markup.Total_Cost_w_Subcon_Markups__c}" style="currency" currencyCode="USD"/>
+                                </div>
+                            </td>
+                            <aura:if isTrue="{!v.isOandP}">
+                                <td></td>
+                            </aura:if>    
+                            <td data-label="total">
+                                <div class="slds-truncate slds-text total-div" >
+                                    <lightning:formattedNumber value="{!v.markup.Total_Cost_w_Subcon_Markups__c + v.markup.Total_Cost_w_o_SubCon_Markups__c}" style="currency" currencyCode="USD"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <aura:if isTrue="{!!v.isOandP}">
+                            <tr class="slds-hint-parent">
+                                <td data-label="column" scope="row">
+                                    <div class="slds-truncate" title="Site and Design Contingency">
+                                        <div class="slds-truncate slds-text-title_caps" title="Site and Design Contingency">
+                                            <b>Site and Design Contingency&nbsp;</b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Site_Design_Contingency__c}"  style="percent"  minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td></td>
+                                
+                                <td data-label="w/o Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.SubTotal_w_o_SubCon__c - v.markup.Total_Cost_w_o_SubCon_Markups__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                                <td></td>
+                                
+                                <td data-label="w Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.SubTotal_with_SubCon__c - v.markup.Total_Cost_w_Subcon_Markups__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.SubTotal__c - (v.markup.Total_Cost_w_Subcon_Markups__c + v.markup.Total_Cost_w_o_SubCon_Markups__c)}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                            </tr> 
+                            
+                            <tr class="slds-hint-parent slds-light-blue slds-text-title_caps">
+                                <td data-label="column" scope="row">
+                                    <div class="slds-truncate" title="SubTotal">
+                                        <div class="slds-truncate slds-text-title_caps" title="SubTotal">
+                                            <b>SubTotal</b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                
+                                <td data-label="w/o Subcontactor">
+                                    <div class="slds-truncate slds-text-title_caps total-div" >
+                                        <b><lightning:formattedNumber value="{!v.markup.SubTotal_w_o_SubCon__c}" style="currency" currencyCode="USD"/></b>
+                                    </div>
+                                </td>
+                                <td></td>
+                                
+                                <td data-label="w/o Subcontactor">
+                                    <div class="slds-truncate slds-text-title_caps total-div" >
+                                        <b><lightning:formattedNumber value="{!v.markup.SubTotal_with_SubCon__c}" style="currency" currencyCode="USD"/></b>
+                                    </div>
+                                </td>
+                                
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate slds-text-title_caps total-div" >
+                                        <b><lightning:formattedNumber value="{!v.markup.SubTotal__c}" style="currency" currencyCode="USD"/></b>
+                                    </div>
+                                </td>
+                            </tr> 
+                            <tr class="slds-hint-parent">
+                                <td data-label="column" scope="row">
+                                    <div class="slds-truncate" title="Home-Office Overhead">
+                                        <div class="slds-truncate slds-text-title_caps" title="Home-Office Overhead">
+                                            <b>Home-Office Overhead</b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Prime_Con_SelfWork_HomeOff_Overhead__c}" style="percent"  minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.Self_Work_Home_Office_Impact__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Prime_Con_OSWork_Homeoff_Overhead__c}" style="percent"  minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.OS_Work_Home_Office_Impact__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.OS_Work_Home_Office_Impact__c + v.markup.Self_Work_Home_Office_Impact__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                            </tr> 
+                            <tr class="slds-hint-parent">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Jobsite Overhead (Gen Conditions)">
+                                        <div class="slds-truncate slds-text-title_caps" title="Jobsite Overhead (Gen Conditions)">
+                                            <b>Jobsite Overhead (Gen Conditions)</b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td data-label="w/o Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Prime_Con_SelfWork_JobSiteOverhead__c}" style="percent"  minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td data-label="w/o Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.Self_Work_Jobsite_Impact__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                                <td data-label="w/ Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Prime_Con_OSWork_Jobsite_Overhead__c}"  style="percent"   minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td data-label="w/ Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.OS_Work_Jobsite_Overhead_Impact__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.Self_Work_Jobsite_Impact__c + v.markup.OS_Work_Jobsite_Overhead_Impact__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                            </tr> 
+                            <tr class="slds-hint-parent">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Profit">
+                                        <div class="slds-truncate slds-text-title_caps" title="Profit">
+                                            <b>Profit</b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td data-label="w/o Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Prime_Con_SelfWork_Profit__c}" style="percent"  minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td data-label="w/o Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.Self_Work_Profit_Impact__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                                <td data-label="w/ Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Prime_Con_OSWork_Profit__c}"  style="percent"   minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td data-label="w/ Subcontactor">
+                                    <div class="slds-truncate  total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.OS_Work_Profit_Impact__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.Self_Work_Profit_Impact__c + v.markup.OS_Work_Profit_Impact__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>                     
+                            </tr> 
+                            <tr class="slds-hint-parent">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Commission">
+                                        <div class="slds-truncate slds-text-title_caps" title="Commission">
+                                            <b>Commission </b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td data-label="w/o Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Prime_Con_SelfWork_Commission__c }" style="percent"  minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td data-label="w/o Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.Self_Work_Commission_Impact__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                                <td data-label="w/ Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Prime_Con_OSWork_Commission__c}"  style="percent"   minimumFractionDigits="2"/> 
+                                    </div>
+                                </td>
+                                <td data-label="w/ Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.OS_Work_Commission_Impact__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.Self_Work_Commission_Impact__c + v.markup.OS_Work_Commission_Impact__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>                         
+                            </tr> 
+                            <tr class="slds-hint-parent">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Bond">
+                                        <div class="slds-truncate slds-text-title_caps" title="Bond">
+                                            <b>Bond &amp; Insurance</b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td data-label="w/o Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Prime_Con_SelfWork_Bond__c }" style="percent"  minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td data-label="w/o Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.Self_Work_Bond_Impact__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                                <td data-label="w/ Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Prime_Con_OSWork_Bond__c}"  style="percent"   minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td data-label="w/ Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.OS_Work_Bond_Impact__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.Self_Work_Bond_Impact__c + v.markup.OS_Work_Bond_Impact__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>  
+                            </tr> 
+                            <tr class="slds-hint-parent">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Bond">
+                                        <div class="slds-truncate slds-text-title_caps" title="Bond">
+                                            <b>Professional Services</b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td data-label="w/o Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Professional_Services_Fees_SelfWork__c }" style="percent"  minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td data-label="w/o Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.Self_Work_Pro_Services_Impact__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                                <td data-label="w/ Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Professional_Services_Fees_OSWork__c}"  style="percent"   minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                                <td data-label="w/ Subcontactor">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.OS_Work_Pro_Services_Impact__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.Self_Work_Pro_Services_Impact__c + v.markup.OS_Work_Pro_Services_Impact__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>  
+                            </tr> 
+                            <tr class="slds-hint-parent slds-light-blue slds-text-title_caps">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="CECA">
+                                        <div class="slds-truncate slds-text-title_caps" title="CECA">
+                                            <b>CECA</b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td data-label="w/o Subcontactor">
+                                    <div class="slds-truncate slds-text-title_caps total-div" >
+                                        <b><lightning:formattedNumber value="{!v.markup.SubTotal_SelfPerformedWork__c}" style="currency" currencyCode="USD"/></b>
+                                        
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td data-label="w/ Subcontactor">
+                                    <div class="slds-truncate slds-text-title_caps total-div" >
+                                        <b><lightning:formattedNumber value="{!v.markup.SubTotal_Out_SourcedWork__c}" style="currency" currencyCode="USD"/></b>
+                                    </div>
+                                </td>                
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate slds-text-title_caps total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.Subtotal_OS_Self__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr class="slds-bg-gray">
+                                <td colspan="7"> <!-- THIS ROW IS INTENTIONALLY BLANK --> </td>
+                            </tr>
+                            
+                            <tr class="slds-text-title_caps slds-truncate slds-line-height_reset">
+                                <th scope="col">
+                                </th>
+                                <th scope="col">
+                                </th>
+                                <th scope="col">
+                                </th>
+                                <th scope="col">
+                                </th>
+                                <th scope="col">
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate pcnt-div slds-custom-header-row" title="Markup">Markup</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate pcnt-div slds-custom-header-row" title="Total">Total</div>
+                                </th>
+                            </tr>
+                            <aura:if isTrue="{!v.markuppctnts.CMc__c != 0}">
+                                <tr class="slds-hint-parent">
+                                    <td data-label="column1" scope="row">
+                                        <div class="slds-truncate" title="Developer Fee">
+                                            <div class="slds-truncate slds-text-title_caps" title="Developer Fee">
+                                                <b>CMc Contingency Allowance</b>
+                                            </div>
+                                        </div>
+                                    </td>   
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>                            
+                                    <td class="pcnt-div">
+                                        <lightning:formattedNumber value="{!v.markuppctnts.CMc__c}"  style="percent"  minimumFractionDigits="2"/>
+                                    </td>   
+                                    <td data-label="subtotal">
+                                        <div class="slds-truncate total-div" >
+                                            <lightning:formattedNumber value="{!v.markup.CMC_Impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                        </div>
+                                    </td>
+                                </tr> 
+                            </aura:if>
+                            <aura:if isTrue="{!v.markuppctnts.Professional_Services_Fees_Preconst__c != 0}">
+                                <tr class="slds-hint-parent ">
+                                    <td data-label="column1" scope="row">
+                                        <div class="slds-truncate" title="Developer Professional Services">
+                                            <div class="slds-truncate slds-text-title_caps" title="Developer Professional Services">
+                                                <b>Prof. Services Fees (Preconst. Phase)</b>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="pcnt-div">
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Professional_Services_Fees_Preconst__c}"  style="percent" minimumFractionDigits="2"/>
+                                    </td>  
+                                    <td data-label="subtotal">
+                                        <div class="slds-truncate total-div" >
+                                            <lightning:formattedNumber value="{!v.markup.Pro_Services_Pre_Const_Impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                        </div>
+                                    </td>
+                                </tr> 
+                            </aura:if>
+                            <aura:if isTrue="{!v.markup.SubTotal_CMc_f__c != 0}">
+                                <tr class="slds-hint-parent slds-light-blue slds-text-title_caps">
+                                    <td data-label="column1" scope="row">
+                                        <div class="slds-truncate" title="SubTotal - Developer">
+                                            <div class="slds-truncate slds-text-title_caps" title="SubTotal - Developer">
+                                                <b>SubTotal - CMc</b>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>     
+                                    <td></td>
+                                    <td></td>           
+                                    <td data-label="subtotal">
+                                        <div class="slds-truncate slds-text-title_caps total-div" >
+                                            <lightning:formattedNumber value="{!v.markup.SubTotal_CMc_f__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                        </div>
+                                    </td>
+                                </tr> 
+                            </aura:if>
+                            <aura:if isTrue="{!AND((v.markuppctnts.Developer_Fee__c != 0),(v.markup.SubTotal_CMc_f__c == 0))}">
+                                <tr class="slds-hint-parent">
+                                    <td data-label="column1" scope="row">
+                                        <div class="slds-truncate" title="Developer Fee">
+                                            <div class="slds-truncate slds-text-title_caps" title="Developer Fee">
+                                                <b>Developer Fee</b>
+                                            </div>
+                                        </div>
+                                    </td>   
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>                            
+                                    <td class="pcnt-div">
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Developer_Fee__c}"  style="percent"   minimumFractionDigits="2"/>
+                                    </td>   
+                                    <td data-label="subtotal">
+                                        <div class="slds-truncate total-div" >
+                                            
+                                            <lightning:formattedNumber value="{!(v.markup.SubTotal_Out_SourcedWork__c + v.markup.SubTotal_SelfPerformedWork__c) * v.markuppctnts.Developer_Fee__c}" style="currency" currencyCode="USD"  minimumFractionDigits="2"/>
+                                            
+                                        </div>
+                                    </td>
+                                </tr> 
+                            </aura:if>
+                            <aura:if isTrue="{!AND((v.markuppctnts.Developer_Fee__c != 0),(v.markup.SubTotal_CMc_f__c != 0))}">>
+                                <tr class="slds-hint-parent">
+                                    <td data-label="column1" scope="row">
+                                        <div class="slds-truncate" title="Developer Fee">
+                                            <div class="slds-truncate slds-text-title_caps" title="Developer Fee">
+                                                <b>Developer Fee</b>
+                                            </div>
+                                        </div>
+                                    </td>   
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>                            
+                                    <td class="pcnt-div">
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Developer_Fee__c}"  style="percent"   minimumFractionDigits="2"/>
+                                    </td>   
+                                    <td data-label="subtotal">
+                                        <div class="slds-truncate total-div" >
+                                            
+                                            <lightning:formattedNumber value="{!v.markup.Developer_Fee_Impact__c}" style="currency" currencyCode="USD"  minimumFractionDigits="2"/>
+                                            
+                                        </div>
+                                    </td>
+                                </tr> 
+                            </aura:if>                       
+                            <aura:if isTrue="{!AND((v.markuppctnts.Professional_Services_Developer_Fee__c != 0),(v.markup.SubTotal_CMc_f__c != 0))}">
+                                <tr class="slds-hint-parent ">
+                                    <td data-label="column1" scope="row">
+                                        <div class="slds-truncate" title="Developer Professional Services">
+                                            <div class="slds-truncate slds-text-title_caps" title="Developer Professional Services">
+                                                <b>Developer Professional Services (AE, CM, Comm)</b>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="pcnt-div">
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Professional_Services_Developer_Fee__c}"  style="percent"   minimumFractionDigits="2"/>
+                                    </td>  
+                                    <td data-label="subtotal">
+                                        <div class="slds-truncate total-div" >
+                                            <lightning:formattedNumber value="{!v.markup.Developer_Professional_Services_Impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                        </div>
+                                    </td>
+                                </tr> 
+                            </aura:if>
+                            <aura:if isTrue="{!AND((v.markuppctnts.Professional_Services_Developer_Fee__c != 0),(v.markup.SubTotal_CMc_f__c == 0))}">
+                                <tr class="slds-hint-parent ">
+                                    <td data-label="column1" scope="row">
+                                        <div class="slds-truncate" title="Developer Professional Services">
+                                            <div class="slds-truncate slds-text-title_caps" title="Developer Professional Services">
+                                                <b>Developer Professional Services (AE, CM, Comm)</b>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="pcnt-div">
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Professional_Services_Developer_Fee__c}"  style="percent"   minimumFractionDigits="2"/>
+                                    </td>  
+                                    <td data-label="subtotal">
+                                        <div class="slds-truncate total-div" >
+                                            <lightning:formattedNumber value="{!((((v.markup.SubTotal_Out_SourcedWork__c + v.markup.SubTotal_SelfPerformedWork__c) * v.markuppctnts.Developer_Fee__c) + v.markup.Subtotal_OS_Self__c) * v.markuppctnts.Professional_Services_Developer_Fee__c)}" style="currency" currencyCode="USD"  minimumFractionDigits="2"/>
+                                            <!--<lightning:formattedNumber value="{!v.markup.Developer_Professional_Services_Impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>-->
+                                        </div>
+                                    </td>
+                                </tr> 
+                            </aura:if>
+                            <aura:if isTrue="{!v.markup.SubTotal_Developer_f__c != 0}">
+                                <tr class="slds-hint-parent slds-light-blue slds-text-title_caps">
+                                    <td data-label="column1" scope="row">
+                                        <div class="slds-truncate" title="SubTotal - Developer">
+                                            <div class="slds-truncate slds-text-title_caps" title="SubTotal - Developer">
+                                                <b>SubTotal - Developer</b>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>     
+                                    <td></td>
+                                    <td></td>           
+                                    <td data-label="subtotal">
+                                        <div class="slds-truncate slds-text-title_caps total-div" >
+                                            <lightning:formattedNumber value="{!v.markup.SubTotal_Developer_f__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                        </div>
+                                    </td>
+                                </tr> 
+                            </aura:if>
+                            <aura:if isTrue="{!v.markuppctnts.Lessor_Fee__c != 0}">
+                                <tr class="slds-hint-parent">
+                                    <td>
+                                        <div class="slds-truncate" title="Lessor Fee">
+                                            <div class="slds-truncate slds-text-title_caps" title="Lessor Fee">
+                                                <b>Lessor Fee</b>
+                                            </div>
+                                        </div>
+                                    </td> 
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="pcnt-div">
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Lessor_Fee__c}"  style="percent" minimumFractionDigits="2"/>
+                                    </td>                                
+                                    <td data-label="subtotal">
+                                        <div class="slds-truncate total-div" >
+                                            <lightning:formattedNumber value="{!v.markup.Lessor_Fee_impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                        </div>
+                                    </td>
+                                </tr> 
+                            </aura:if>
+                            <aura:if isTrue="{!v.markuppctnts.Professional_Services_Lessor_Fee__c != 0}">
+                                <tr class="slds-hint-parent">
+                                    <td data-label="column1" scope="row">
+                                        <div class="slds-truncate" title="Lessor Professional Services">
+                                            <div class="slds-truncate slds-text-title_caps" title="Lessor Professional Services">
+                                                <b>Lessor Professional Services (AE, CM, Comm)</b>
+                                            </div>
+                                        </div>
+                                    </td>         
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="pcnt-div">
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Professional_Services_Lessor_Fee__c}"  style="percent"   minimumFractionDigits="2"/>
+                                    </td>  
+                                    <td data-label="subtotal">
+                                        <div class="slds-truncate total-div" >
+                                            <lightning:formattedNumber value="{!v.markup.Lessor_Professional_Services_Impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                        </div>
+                                    </td>
+                                </tr> 
+                            </aura:if>
+                            <aura:if isTrue="{!v.markup.SubTotal_Lessor_f__c != 0}">
+                                <tr class="slds-hint-parent slds-light-blue slds-text-title_caps">
+                                    <td data-label="column1" scope="row">
+                                        <div class="slds-truncate" title="Sub Total - Lessor">
+                                            <div class="slds-truncate slds-text-title_caps" title="Sub Total - Lessor">
+                                                <b>Sub Total - Lessor</b>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                    </td>                
+                                    <td data-label="subtotal">
+                                        <div class="slds-truncate slds-text-title_caps total-div" >
+                                            <lightning:formattedNumber value="{!v.markup.SubTotal_Lessor_f__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                        </div>
+                                    </td>
+                                </tr> 
+                            </aura:if>
+                            <aura:if isTrue="{!v.markuppctnts.Gross_Receipt_State_Construction__c != 0}">
+                                <tr class="slds-hint-parent">
+                                    <td data-label="column1" scope="row">
+                                        <div class="slds-truncate" title="Gross Receipt/State Cons. Tax">
+                                            <div class="slds-truncate slds-text-title_caps" title="Gross Receipt/State Cons. Tax">
+                                                <b>Gross Receipt/State Cons. Tax </b>
+                                            </div>
+                                        </div>
+                                    </td>            
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="pcnt-div">
+                                        <lightning:formattedNumber value="{!v.markuppctnts.Gross_Receipt_State_Construction__c}"  style="percent"  minimumFractionDigits="2"/>
+                                    </td>    
+                                    <td data-label="subtotal">
+                                        <div class="slds-truncate total-div" >
+                                            <lightning:formattedNumber value="{!v.markup.Gross_Receipts_Impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                        </div>
+                                    </td>
+                                </tr> 
+                            </aura:if>
+                            <tr class="slds-hint-parent slds-light-blue slds-text-title_caps">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Total CECA">
+                                        <div class="slds-truncate" title="Total CECA">
+                                            <b>Total CECA</b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>             
+                                <td></td>
+                                <td></td>           
+                                <td data-label="subtotal">
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.Total_CECCA__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                            </tr>         
+                        </aura:if>
+                        
+                        <!-- <aura:if isTrue="{!v.markuppctnts.Bid_Factor__c != 0}"> -->
+                        <aura:if isTrue="{!and (v.isOandP, v.markuppctnts.Bid_Factor__c!= 0)}">
+                            
+                            <tr class="slds-hint-parent  slds-light-blue  slds-text-title_caps">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Bid Factor">
+                                        <div class="slds-truncate slds-text-title_caps" title="Bid Factor">
+                                            <b>Total Direct Cost with Bid Factor</b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>                            
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!v.markuppctnts.Bid_Factor__c}"  style="percent"  minimumFractionDigits="2"/>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.Bid_Factor_Impact__c}" style="currency" currencyCode="USD"  minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                            </tr> 
+                        </aura:if>
+                        
+                        <aura:if isTrue="{!v.markuppctnts.Market_Escalation__c != 0}">
+                            <tr class="slds-hint-parent">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Market Escalation">
+                                        <div class="slds-truncate slds-text-title_caps" title="Market Escalation">
+                                            <b>Market Escalation </b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <aura:if isTrue="{!!v.isOandP}">
+                                    <td></td>
+                                    <td></td>
+                                </aura:if>
+                                
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!v.markuppctnts.Market_Escalation__c}"  style="percent"  minimumFractionDigits="4"/>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.Market_Escalation_Markup_Impact__c}" style="currency" currencyCode="USD"  minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                            </tr> 
+                        </aura:if>
+                        <tr class="slds-hint-parent  slds-light-blue  slds-text-title_caps">
+                            <td>
+                                <div class="slds-truncate" title="ECCA">
+                                    <div class="slds-truncate slds-text-title_caps" title="ECCA">
+                                        <b>ECCA  </b>
+                                    </div>
+                                </div>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <aura:if isTrue="{!!v.isOandP}">
+                                <td></td>
+                                <td></td>
+                            </aura:if>
+                            <td>
+                                <div class="slds-truncate slds-text-title_caps total-div" >
+                                    <lightning:formattedNumber value="{!v.markup.ECCA__c}" style="currency" currencyCode="USD"   minimumFractionDigits="2"/>
+                                </div>
+                            </td>
+                        </tr>            
+                        <aura:if isTrue="{!v.markuppctnts.Construction_Contingency__c != 0}">
+                            <tr class="slds-hint-parent">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Construction Contingency">
+                                        <div class="slds-truncate slds-text-title_caps" title="Construction Contingency">
+                                            <b>Construction Contingency </b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <aura:if isTrue="{!!v.isOandP}">
+                                    <td></td>
+                                    <td></td>
+                                </aura:if>
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!v.markuppctnts.Construction_Contingency__c}"  style="percent"  minimumFractionDigits="2"/>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.Construction_Contingency_Markup_Impact__c }" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                            </tr> 
+                        </aura:if>
+                        
+                        <aura:if isTrue="{!and (!v.isOandP, v.markuppctnts.Art_In_Architecture__c!= 0)}">
+                            <tr class="slds-hint-parent">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="Art in Archtecture">
+                                        <div class="slds-truncate slds-text-title_caps" title="Art in Archtecture">
+                                            <b>Art in Architecture</b>
+                                        </div>
+                                    </div>
+                                </td>
+                                
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="pcnt-div">
+                                    <lightning:formattedNumber value="{!v.markuppctnts.Art_In_Architecture__c}"  style="percent"  minimumFractionDigits="2"/>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate slds-text-title_caps total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.Art_In_Architecture_Markup_Impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                            </tr> 
+                        </aura:if>
+                        <tr class="slds-hint-parent slds-light-blue slds-text-title_caps">
+                            <td data-label="column1" scope="row">
+                                <div class="slds-truncate" title="ECC">
+                                    <div class="slds-truncate slds-text-title_caps" title="ECC">
+                                        <b>ECC</b>
+                                    </div>
+                                </div>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <aura:if isTrue="{!!v.isOandP}">
+                                <td></td>
+                                <td></td>
+                            </aura:if>
+                            <td>
+                                <div class="slds-truncate slds-text-title_caps total-div" >
+                                    <lightning:formattedNumber value="{!v.markup.ECC__c }" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                </div>
+                            </td>
+                        </tr> 
+                        <!-- hide etpc calculations and etpc is O and P report -->
+                        <aura:if isTrue="{!!v.isOandP}">
+                            <aura:if isTrue="{!v.markuppctnts.EDRC_Estimated_Design_and_Review_Cost__c != 0}">
+                                <tr class="slds-hint-parent">
+                                    <td data-label="column1" scope="row">
+                                        <div class="slds-truncate" title="EDRC">
+                                            <div class="slds-truncate slds-text-title_caps" title="EDRC">
+                                                <b>EDRC</b>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="pcnt-div">
+                                        <lightning:formattedNumber value="{!v.markuppctnts.EDRC_Estimated_Design_and_Review_Cost__c}"  style="percent"  minimumFractionDigits="2"/>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate total-div" >
+                                            <lightning:formattedNumber value="{!v.markup.EDRC_Impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                        </div>
+                                    </td>
+                                </tr> 
+                            </aura:if>
+                            <aura:if isTrue="{!v.markuppctnts.EMIC_Estimated_Management_Inspection_Co__c != 0}">
+                                <tr class="slds-hint-parent">
+                                    <td data-label="column1" scope="row">
+                                        <div class="slds-truncate" title="EMIC">
+                                            <div class="slds-truncate slds-text-title_caps" title="EMIC">
+                                                <b>EMIC</b>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="pcnt-div">
+                                        <lightning:formattedNumber value="{!v.markuppctnts.EMIC_Estimated_Management_Inspection_Co__c}"  style="percent"  minimumFractionDigits="2"/>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate total-div" >
+                                            <lightning:formattedNumber value="{!v.markup.EMIC_Impact__c}" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                        </div>
+                                    </td>
+                                </tr> 
+                            </aura:if>
+                            <tr class="slds-hint-parent slds-light-blue slds-text-title_caps">
+                                <td data-label="column1" scope="row">
+                                    <div class="slds-truncate" title="ETPC">
+                                        <div class="slds-truncate slds-text-title_caps" title="ETPC">
+                                            <b>ETPC</b>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <div class="slds-truncate slds-text-title_caps total-div" >
+                                        <lightning:formattedNumber value="{!v.markup.ETPC__c }" style="currency" currencyCode="USD" minimumFractionDigits="2"/>
+                                    </div>
+                                </td>
+                            </tr> 
+                        </aura:if>
+                    </tbody>
+                </table>
+            </div>
+            
+        </article>
+    </aura:if><br/>
+    <div class="page-footer-space">
+        <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+            <aura:iteration items="{!v.footerNotes}"  var="item" indexVar="index">
+                <div class="slds-size_1-of-2"> <li>{!item}</li> </div>
+            </aura:iteration>
+        </div>
+    </div>    
+</aura:component>

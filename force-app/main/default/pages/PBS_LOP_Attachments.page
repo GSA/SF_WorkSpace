@@ -1,0 +1,712 @@
+<apex:page Controller="PBS_LOP_AttachmentsController" sidebar="false" showHeader="false" standardStylesheets="false"
+           cache="true" action="{!refreshForms}">  <!-- -->
+
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+    <style>
+        .errMessage {
+            color: red;
+        }
+
+        .hiddenHeader {
+            display: none;
+        }
+    </style>
+    <script type="text/javascript">
+            console.log('**** pageUrlForRedirection: {!pageURLForRedirection}');
+            if('{!JSENCODE(pageURLForRedirection)}' != ''){
+                window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
+                window.parent.document.body = document.createElement('body');
+            }
+            else{
+            window.parent.document.body.scrollTop = 0;
+            window.parent.document.documentElement.scrollTop = 0;
+            }
+    </script>
+    <head>
+        <style type="text/css">
+
+
+            #lean_overlay {
+                position: fixed;
+                z-index: 100;
+                top: 0px;
+                left: 0px;
+                height: 100%;
+                width: 100%;
+                background: none;
+                display: none;
+            }
+
+            .ui-dialog {
+                background: #fff;
+                padding: 10px;
+                border: 1px solid #999;
+            }
+
+            .ui-dialog a {
+                float: right;
+                font-weight: bold;
+                padding: 3px;
+                color: #999;
+                text-transform: uppercase;
+                font-size: 10px;
+            }
+
+            .col1 {
+                text-align: left;
+                width: 400px;
+            }
+
+            .col2 {
+                text-align: center;
+                width: 230px;
+            }
+
+            .tabbed-table table td {
+                background: #fff;
+            }
+
+            h2 {
+                color: #fff;
+                font-size: 80%;
+                font-weight: bold;
+                padding-left: 40px;
+                width: 80%;
+            }
+
+            .h33 {
+                font-size: 20px;
+                font-weight: bold;
+                padding-left: 0px;
+                color: #000;
+            }
+
+        </style>
+
+        <style type="text/css">
+            p.thick {
+                color: red;
+                font-weight: bold;
+            }
+
+            .tabbed-table h3 {
+                float: none !important;
+                font-size: 20px;
+                width: 800px;
+                color: #000;
+            }
+
+            #searchTable.tabbed-table h3 {
+                float: none !important;
+                font-size: 20px;
+            }
+
+            #searchTable.tabbed-table table {
+                margin: 0px;
+                width: 150px !important;
+                border: 0px;
+            }
+
+            #searchTable.tabbed-table {
+                width: 130px;
+                padding: 0px;
+                margin-top: 20px;
+                border: 0px;
+                background: none;
+            }
+
+            #searchTable.tabbed-table table tr {
+                height: 20px !important;
+            }
+
+            #searchTable.tabbed-table table td.labelCol {
+                background: #ccc;
+                font-weight: bold;
+            }
+
+            #searchTable.tabbed-table table td {
+                width: 25%;
+            }
+
+            #searchTable2.tabbed-table h3 {
+                float: none !important;
+                font-size: 20px;
+                width: 225px;
+            }
+
+            #searchTable2.tabbed-table table {
+                margin: 0px;
+                width: 80px !important;
+                border: 0px;
+            }
+
+            #searchTable2.tabbed-table {
+                width: 80px;
+                padding: 0px;
+                margin-top: 20px;
+                border: 0px;
+                background: none;
+            }
+
+            #searchTable2.tabbed-table table tr {
+                height: 20px !important;
+            }
+
+            #searchTable2.tabbed-table table td.labelCol {
+                background: #ccc;
+                font-weight: bold;
+            }
+
+            #searchTable2.tabbed-table table td {
+                width: 25%;
+            }
+
+            .tabbed-table table {
+                width: 130px !important;
+            }
+
+            .tabbed-table {
+                width: 130px !important;
+            }
+
+            .attach.tabbed-table h3 {
+                float: none !important;
+                font-size: 20px;
+                width: 225px;
+            }
+
+            .attach.tabbed-table table {
+                margin: 0px;
+                width: 80px !important;
+                border: 0px;
+            }
+
+            .attach.tabbed-table {
+                width: 80px;
+                padding: 0px;
+                margin-top: 20px;
+                border: 0px;
+                background: none;
+            }
+
+            .attach.tabbed-table table tr {
+                height: 20px !important;
+            }
+
+            .attach.tabbed-table table td.labelCol {
+                background: #ccc;
+                font-weight: bold;
+            }
+
+            .attach.tabbed-table table td {
+                width: 500px;
+            }
+
+            .attach table td {
+                width: 500px;
+            }
+            .doc_des:focus{
+                border: 2px #cccccc solid !important;
+            }
+            .list tbody table td{
+                border: none;
+            }
+            .list tbody table thead{
+                height:0px;
+            }
+            td{
+                padding: 0px;
+            }
+            #searchTable.tabbed-table table, .tabbed-table{
+                width: 97.5% !important;
+                margin-left: 0px;
+            }
+            .tabbed-table table th, .tabbed-table table td {
+                padding:5px;
+            }
+            
+            .tabbed-table table {
+                width: 97.5% !important;
+                margin-left: 0px;
+            }
+            .tabbed-table table tr {
+                height: 40px;
+            }
+            #form2 table td{
+                padding-left: 0px;
+            }
+            .apexp{
+                margin: 0px;
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript"
+                src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+        <script src="{!URLFOR($Resource.modaljquery)}"></script>
+        <apex:includescript value="{!$Resource.showpopup}"/>
+        <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+
+        <script>
+
+            var j$ = jQuery.noConflict();
+
+            function exitOffer() {
+                var confirm1 = j$('<div></div>').html("Please make sure to hit save page before exiting your offer.  Changes will not be saved unless you hit Save Page.").dialog({
+                    autoOpen: false,
+                    title: '',
+                    modal: true,
+                    position: ['center', 'center'],
+                    buttons: {
+                        'OK': function () {
+                            j$(this).dialog('close');
+                            actionCancel();
+                        },
+                        'Cancel': function () {
+                            j$(this).dialog('close');
+                        }
+                    }
+                });
+
+                confirm1.dialog('open');            
+                top.postMessage('Page Updated', document.location.origin);
+            }
+
+            j$(document).ready(function () {
+                console.log('**** jQuery Ready function executing ***');
+                    handleStep1aHideShow();
+                    j$("[id*=fileName] option[value='Architectural Modernization Plans']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Asbestos Management Plans']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Authorization to Represent Ownership Entity']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Building Amenities Detail - Existing or Planned']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Confirmation of Rent']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Conflict of Interest Disclosure']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Energy Star or Other Energy Efficiency Improvements Supporting Documentation']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Fire Life Safety Evaluation']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Fire / Life Safety Supporting Documentation']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Legal Description of Property']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='National Environmental Policy Act Documentation']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='National Historic Preservation Act Documentation']").wrap('<span/>');
+                j$("[id*=fileName] option[value='Form 1364 AAAP']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Parking Plan']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Proof of Property Ownership or Control']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='SAM Registration']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Scaled Floor Plans / CAD Drawings']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Seismic Safety Offer Forms']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Test Fit Layout']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Lessors Annual Cost Statement (Form 1217 attachment)']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Lessors Annual Cost Statement (Form 1217)']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Vending Facility Exclusivity Arrangements']").wrap('<span/>');
+
+                    j$("[id*=fileName] option[value='Offeror Form 1217- Lessors Annual Cost Statement']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Offeror GSA Form 1364']").wrap('<span/>');
+                    j$("[id*=fileName] option[value='Authorization to Represent Ownership']").wrap('<span/>');
+
+
+
+                    //added by syam display msg when submitted offer is saved.
+                    draftMsgFlag = j$('input[id=' + "'{!$Component.offerattachmentsform.draftMsgFlag}'" + ']').val();
+                    if (draftMsgFlag == 'true') {
+                        var confirm1 = j$('<div></div>').html("Your offer is no longer submitted. Offer status is updated to 'Draft' status and needs to be submitted again.").dialog({
+                            autoOpen: false,
+                            title: '',
+                            modal: true,
+                            position: ['center', 'center'],
+                            buttons: {
+                                'OK': function () {
+                                    j$(this).dialog('close');
+                                }
+                            }
+                        });
+
+                        confirm1.dialog('open');
+                    }
+
+
+                    var addrFlag = sessionStorage.getItem("addrFlag");
+                    j$('input[id=' + "'{!$Component.offerattachmentsform.addrFlag}'" + ']').val(addrFlag);
+                    addrFlag = j$('input[id=' + "'{!$Component.offerattachmentsform.addrFlag}'" + ']').val();
+                    j$(".tablesorter").dataTable({
+                        "sScrollY": "400px",
+                        "bAutoWidth": true,
+                        "bPaginate": true,
+                        "bJQueryUI": true,
+                        "bScrollCollapse": true
+
+                    });
+                    j$('.dataTables_length').css("display", "none");
+                    j$('.myAppTable').find('.dataTables_filter').css("display", "none");
+                    j$('.myAppTab').find('.dataTables_filter').css("display", "none");
+                    j$(".tablesorter tr:odd").css("background-color", "#CFEEF8");
+                    j$(".tablesorter tr:even").css("background-color", "#F3F3EC");
+
+            });
+            function handleStep1aHideShow(){
+                if(j$("[id*=fileName] option:selected").text() == "Other"){
+                    console.log('tets');
+                    j$("#step1a").show();
+                }else{
+                    j$("#step1a").hide();
+                }
+            }
+
+
+        </script>
+    </head>
+
+    
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+        <ul>
+            <li><a href="/RSAP/portalHome">RSAP Home</a> </li>
+            <li>|</li>
+            <li><a href="/AAAP/portalHome">AAAP</a></li>
+            <li>|</li>
+            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
+                <apex:outputLink value="/AAAP/home/home.jsp">
+                    <li>{!$Label.site.login_button}</li>
+                </apex:outputLink>
+                <li> |</li>
+                <apex:outputLink value="/AAAP/ForgotPassword">
+                    <li>{!$Label.site.forgot_your_password_q}</li>
+                </apex:outputLink>
+                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
+                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
+                    <li>{!$Label.site.new_user_q}</li>
+                </apex:outputLink>
+            </apex:panelGroup>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>{!$Label.site.logout}</li>
+            </apex:outputLink>
+        </ul>
+    </div -->
+    <div id="wrapper">
+        <c:lop_inside_header />
+        <div id="content" class="attachments-lop">
+            <!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
+            <apex:panelGrid rendered="{!!isValidUser}">
+                <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+                <apex:messages styleClass="errMessage" id="errmessage"/>
+            </apex:panelGrid>
+            <apex:panelGroup rendered="{!isValidUser}">
+                <apex:panelGrid columns="2" style="float:right"><a href="#" onclick="window.print();"></a>
+                    <apex:outputLabel style="padding-right:47px"></apex:outputLabel>
+                </apex:panelGrid>
+                <br/>
+                <c:lopHeader myOffer="{!submitOffer}" myProject="{!project}" offerDueDate=""/>
+
+                <c:PBS_LOP_ProgressBar src="attachments" myValue="{!submitOffer.Id}" step="6" linksToViewModePage="{!isEditable}"/>
+            </apex:panelGroup>
+
+
+            <apex:form id="offerattachmentsform" styleClass="formwrap" style="height: auto !important;" rendered="{!isValidUser}">
+                <!--<apex:actionFunction name="upload" action="{!upload}">
+        </apex:actionFunction>  -->
+                <apex:actionFunction name="submitOffer" action="{!actionSaveAndSubmitOffer}">
+                </apex:actionFunction>
+
+                <apex:actionFunction name="actionCancel" action="{!actionCancel}">
+                </apex:actionFunction>
+
+                <apex:inputHidden id="draftMsgFlag" value="{!draftMsgFlag}"/>
+                <apex:inputHidden id="pgUrl" value="{!pageUrl}"/>
+                <apex:outputPanel rendered="{!showAttachmentsPage}"><h3 class="blue">Offer Attachments</h3>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!!showAttachmentsPage}"><h3 class="blue">Submit Offer</h3>
+                </apex:outputPanel>
+                <apex:messages styleClass="errMessage"/>
+                <apex:inputHidden value="{!addrFlag}" id="addrFlag"/>
+                <apex:outputPanel rendered="{!viewOnly}">
+                    <apex:outputLabel id="msgview" styleClass="errMessage" value="{!viewMsg}"/>
+                </apex:outputPanel>
+                <div style="overflow: auto;">
+                    <apex:outputPanel id="AttachmentsForm1" rendered="{!showAttachmentsPage}">
+
+                    <!-- NEW TABLE-->
+                    <div style="overflow: auto;">
+                    <apex:pageBlock >
+                        <!--<apex:pageBlockSection  columns="1">-->
+
+                        <div id="searchTable" class="tabbed-table">
+                            <!--<apex:outputPanel rendered="{!seqNumList2.size>0}">-->
+                            <apex:outputPanel rendered="{!displayattachment}">
+                                <div style="float: left;margin-left:0px">
+                                    <h3>Attachments Already Sent in Previous Submissions</h3>
+                                </div>
+                                
+                                <apex:variable var="rowNum" value="{!0}"/>
+                                <apex:pageBlockTable value="{!previousSubmissionAttachmentsMap}" var="ofratt" id="theTable"
+                                                     rowClasses="odd,even" width="100%">
+
+
+                                    <apex:column headerValue="No #" style="width: 5% !important;">
+                                        <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+                                            {!rowNum}
+                                    </apex:column>
+
+                                    <apex:column style="width: 16% !important;" value="{!ofratt} ">
+                                        <apex:facet name="header">Attachment Type</apex:facet>
+                                    </apex:column>
+
+                                    <apex:column style="width: 20% !important;" styleClass="attach">
+                                        <apex:facet name="header">Attachment Name</apex:facet>
+                                        <apex:pageBlockTable value="{!mapType_attachment[ofratt]}" var="a" rowClasses="odd,even"
+                                                             headerClass="hiddenHeader">
+                                            <apex:column >
+                                                <apex:outputText value="{!a.file.Name}"/>
+                                            </apex:column>
+
+                                        </apex:pageBlockTable>
+                                    </apex:column>
+
+                                    <apex:column style="width: 9% !important;">
+                                        <apex:facet name="header">View File</apex:facet>
+                                        <apex:pageBlockTable value="{!mapType_attachment[ofratt]}" var="a" columns="1"
+                                                             rowClasses="odd,even" headerClass="hiddenHeader">
+                                            <apex:column >
+                                                <apex:outputLink target="_blank"
+                                                             value="{!a.file.link}">
+                                                <apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
+                                                        style="align: right;" alt="Salesforce" title="Salesforce"/>
+                                            </apex:outputLink>
+                                            </apex:column>
+                                        </apex:pageBlockTable>
+                                    </apex:column>
+
+
+                                    <apex:column style="width: 10% !important;">
+                                        <apex:facet name="header">Date Uploaded</apex:facet>
+                                        <apex:pageBlockTable value="{!mapType_attachment[ofratt]}" var="a" rowClasses="odd,even"
+                                                             headerClass="hiddenHeader">
+
+                                            <apex:column value="{!a.creatDate}"/>
+                                        </apex:pageBlockTable>
+                                    </apex:column>
+                                    <apex:column style="width: 13% !important;">
+                                        <apex:facet name="header">Date/Time Submitted</apex:facet>
+                                        <apex:pageBlockTable value="{!mapType_attachment[ofratt]}" var="a" columns="1"
+                                                             rowClasses="odd,even" headerClass="hiddenHeader">
+                                            <apex:column value="{!a.offratts.PBS_AAAP_Date_sent_to_GREX__c}"/>
+                                        </apex:pageBlockTable>
+                                    </apex:column>
+
+                                </apex:pageBlockTable>
+                                
+                            <br/>
+                            </apex:outputPanel>
+                        </div>
+                        <!--</apex:pageBlockSection>-->
+                    </apex:pageBlock>
+                    </div>
+
+                    <!--END NEW TABLE-->
+                    <div style="overflow: auto;">
+                    <apex:pageBlock html-style="margin-left:0px">   <!-- J. Rogers added margin-left for alignment -->
+
+                        <!--
+                        <Table id="form2">
+                            <tr>
+                                <td><font class="h33">Auto Generated Forms</font></td>
+                                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td>
+                                    <apex:commandButton value="{!if(formSeqNumList.size > 0,'Refresh Forms','Generate Forms')}"
+                                                        action="{!refreshForms}"/>
+                                    <br/><br/></td>
+                            </tr>
+                        </Table>
+                        -->
+
+                        <div id="formTable" class="tabbed-table" style="padding-bottom:0px">
+                            <div style="float: left;margin-left:0px">
+                            <h3>Auto Generated Forms</h3> 
+                            </div>
+                            <div>
+                            <!--<apex:commandButton value="{!if(formSeqNumList.size > 0,'Refresh Forms','Generate Forms')}"
+                                                                             action="{!refreshForms}"/>--></div>
+                            <apex:pageBlockTable value="{!formSeqNumList}" border="1" var="ofratt" id="theTable"
+                                                 width="100%" rowClasses="odd,even" >
+                                <apex:column value="{!ofratt.i}" rendered="{!ofratt.isDisplay}" width="8%">
+                                    <apex:facet name="header">Attachment #</apex:facet>
+                                </apex:column>
+                                <apex:column rendered="{!ofratt.isDisplay}" style="width: 50% !important;">
+                                    <apex:facet name="header">Attachment Name</apex:facet>                                   
+                                        <apex:outputText value="{!ofratt.file.Name}"/>                                    
+                                </apex:column>
+                                <apex:column rendered="{!ofratt.isDisplay}" style="width: 11% !important;">
+                                    <apex:facet name="header">Date Uploaded</apex:facet>                                    
+                                        <apex:outputText value="{0,date,MM/dd/yyyy}">
+                                            <apex:param value="{!ofratt.file.createddate}"/>
+                                        </apex:outputText>                                    
+                                </apex:column>
+                                <apex:column rendered="{!ofratt.isDisplay}" style="width: 8% !important;">
+                                    <apex:facet name="header">View File</apex:facet>                                    
+                                        <apex:outputLink target="_blank"
+                                                         value="{!ofratt.file.link}">
+                                            <apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
+                                                        style="align: right;" alt="Salesforce" title="Salesforce"/>
+                                        </apex:outputLink>                                   
+                                </apex:column>
+
+                            </apex:pageBlockTable>
+
+                        </div>                       
+                    </apex:pageBlock>
+                    </div>
+                    <br/>
+
+
+                    <div style="overflow: auto;">
+                        <span style="font-weight: bold; font-size: larger">Manual Attachment Uploads</span>
+                        <Table id="form2">
+                            <tr>
+                                <td>
+                                    <table style="width: 100%;">
+                                        <tr>
+                                            <td style="width: 42%;">
+                                                <apex:outputLabel value="Step 1: Select the attachment type:" for="fileName" style="font-weight:bold"/>
+                                                <span class="required">*</span><br/><br/>
+                                                <apex:inputField value="{!offerattachment.PBS_AAAP_Attachment_Type__c}" onchange="handleStep1aHideShow(); return false;" id="fileName"/>
+                                            </td>
+                                            <td style="width: 58%;">
+                                                <div id="step1a">
+                                                    <apex:outputLabel value="Step 1a: Enter the document Description:" for="file" style="font-weight:bold"/>
+                                                    <span class="required">*</span><br/><br/>
+                                                    <apex:inputField value="{!offerattachment.Document_Description__c}" styleClass="uniform" style="box-shadow: -1px -1px #b7b3b3;width: 415px;font-weight: normal;height: 25px;background: #dcdcdc;border: 1px solid #a9a7a7;" />
+                                                 </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <apex:outputLabel value="Step 2: Click the chose file to find the file:" for="file" style="font-weight:bold"/>
+                                    <span class="required">*</span><br/><br/>
+                                    <apex:inputFile value="{!attbody}" filename="{!attname}" id="file"/><br/><br/>
+                                    <apex:outputLabel value="Step 3: Click attach:"  style="font-weight:bold"/><br/><br/>
+                                    <apex:commandButton action="{!upload}" value="Attach" rendered="{!!viewOnly}"/><br/><br/>
+                                    <span style="font-size: small; color: #002BAD">Successfully uploaded attachments will appear in the table below. Follow steps 1 through 3 to add additional attachments. </span>
+                                </td>
+                            </tr>
+                        </Table>
+                        <br/>
+                    </div>
+
+
+                    <div style="overflow: auto;">
+                    <apex:pageBlock id="last" html-style="margin-left:0px"> <!-- J. Rogers added margin-left for alignment -->
+                        <!--<apex:pageBlockSection  columns="1">-->
+
+                        <div id="searchTable" class="tabbed-table" style="padding-bottom:0px">
+
+
+                            <h3>Attachments Ready for Submission</h3>
+                            <apex:pageBlockTable value="{!seqNumList}" width="100%" var="ofratt" id="theTable1" rowClasses="odd,even" >
+                                <apex:column value="{!ofratt.i}" style="width: 5% !important;">
+                                    <apex:facet name="header">No #</apex:facet>
+                                </apex:column>
+                                <apex:column style="width: 16% !important;" value="{!ofratt.offratts.PBS_AAAP_Attachment_Type__c}">
+                                    <apex:facet name="header">Attachment Type</apex:facet>
+                                </apex:column>
+                                <apex:column style="width: 38% !important;" styleClass="attach">
+                                    <apex:facet name="header">Attachment Name</apex:facet>
+                                    <apex:outputPanel >{!ofratt.file.Name}</apex:outputPanel>
+                                    <!--
+                                    <apex:pageBlockTable value="{!ofratt.attachmentsList}" var="a" rowClasses="odd,even"
+                             columnsWidth=""                            headerClass="hiddenHeader">
+                                        <apex:column >
+                                            <apex:outputText value="{!ofratt.file.Name}"/>
+                                        </apex:column>
+                                    </apex:pageBlockTable>
+                                    -->
+                                </apex:column>
+                                <apex:column style="width: 10% !important;">
+                                    <apex:facet name="header">View File</apex:facet>
+                                    <apex:outputLink target="_blank"
+                                                         value="{!ofratt.file.link}">
+                                            <apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
+                                                    style="align: right;" alt="Salesforce" title="Salesforce"/>
+                                        </apex:outputLink>
+                                    <!--
+                                    <apex:pageBlockTable value="{!ofratt.attachmentsList}" var="a" columns="1"
+                                                         rowClasses="odd,even" headerClass="hiddenHeader">
+                                        <apex:column >
+                                            <apex:outputLink target="_blank"
+                                                         value="{!ofratt.file.link}">
+                                                <apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
+                                                        style="align: right;" alt="Salesforce" title="Salesforce"/>
+                                            </apex:outputLink>
+                                        </apex:column>
+                                    </apex:pageBlockTable>-->
+                                </apex:column>
+                                <apex:column style="width: 6% !important;" rendered="{!!viewOnly}">
+                                    <apex:facet name="header">Delete</apex:facet>
+                                    <apex:commandLink action="{!actionDeleteAttachment}"
+                                                      onclick="var con = confirm('Are you sure?');if(con==false)return false;"
+                                                      >
+                                        <apex:image url="{!URLFOR($Resource.gsa_common, '/images/delete-icon.png')}"
+                                                    style="align: right;" alt="delete" title="Delete"/>
+                                        <apex:Param assignTo="{!attachmentId}" name="attId"
+                                                    value="{!ofratt.offratts.Id}"/>
+                                    </apex:commandLink>
+                                    <!--
+                                    <apex:pageBlockTable value="{!ofratt.attachmentsList}" var="a" rowClasses="odd,even"
+                                                         headerClass="hiddenHeader">
+                                        <apex:column >
+                                            <apex:commandLink action="{!actionDeleteAttachment}"
+                                                              onclick="var con = confirm('Are you sure?');if(con==false)return false;"
+                                                              rendered="{!!viewOnly}">
+                                                <apex:image url="{!URLFOR($Resource.gsa_common, '/images/delete-icon.png')}"
+                                                        style="align: right;" alt="delete" title="Delete"/>
+                                                <apex:Param assignTo="{!attachmentId}" name="attId" value="{!a.Id}"/>
+                                                </apex:commandLink>
+                                        </apex:column>
+                                    </apex:pageBlockTable> -->
+                                </apex:column>
+                                    
+
+
+                                <apex:column style="width: 12% !important;">
+                                    <apex:facet name="header">Date Uploaded</apex:facet>
+                                    <apex:outputText value="{0,date,MM/dd/yyyy}">
+                                                <apex:param value="{!ofratt.file.createddate}"/>
+                                            </apex:outputText>
+                                    <!--
+                                    <apex:pageBlockTable value="{!ofratt.attachmentsList}" var="a" rowClasses="odd,even"
+                                                         headerClass="hiddenHeader">
+                                        <apex:column >
+                                            <apex:outputText value="{0,date,MM/dd/yyyy}">
+                                                <apex:param value="{!a.createddate}"/>
+                                            </apex:outputText>
+                                        </apex:column>
+                                    </apex:pageBlockTable>
+                                    -->
+                                </apex:column>
+                            </apex:pageBlockTable>
+                            <br/>
+                        </div>
+                        <!--</apex:pageBlockSection>-->
+                    </apex:pageBlock>
+                    </div>
+                    </apex:outputPanel>
+                </div>
+
+                <div>
+                <apex:outputPanel rendered="{!!viewOnly}"><!--{!!viewOnly}-->
+                    <apex:commandButton value="Back" action="{!actionBackToRatesAndSpaces}"/>
+                    <apex:commandButton value="Save Page" action="{!actionSavePage}" styleClass="btnJQSubmit"/>
+                    <apex:commandButton value="Exit Offer" onclick="exitOffer();return false;"/>
+                </apex:outputPanel>
+                <span style="padding-right:130px;">&nbsp;</span>
+
+                <apex:outputPanel rendered="{!(!viewOnly && !pastDueDate)}">
+                    <a href="#" class="buttongreen" id="submitoffer" onclick="submitOffer()">Certify Offer</a>
+                </apex:outputPanel>
+                </div>
+
+            </apex:form>
+        </div><!--/content-->
+    </div><!-- /Wrapper -->
+    <c:SiteFooterUX />
+</apex:page>

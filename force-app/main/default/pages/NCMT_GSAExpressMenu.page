@@ -1,0 +1,24 @@
+<apex:page showHeader="{!$CurrentPage.parameters.print!='true'}" standardController="NCMT_Tree_structure__c" extensions="NCMT_GSAExpressMenu_LC" lightningStylesheets="true">
+    <apex:slds />
+    <apex:includeLightning />
+    <div id="lightningPage"></div>
+     <script> 
+        var HTMLJSencodedRecId = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.id))}';
+        
+
+        $Lightning.use("c:NCMT_TreeBranch_App", function(){
+            
+            $Lightning.createComponent("c:NCMT_TreeBranch", {
+                "recordId" : HTMLJSencodedRecId,
+                "level" : 1,
+                "fiscalYear" : {!JSENCODE(fiscalYear)}
+            },
+            'lightningPage',
+                function(cmp){
+     
+                });
+        
+        });
+  </script> 
+    
+</apex:page>

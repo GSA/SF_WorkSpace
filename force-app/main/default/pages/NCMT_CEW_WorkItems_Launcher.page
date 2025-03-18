@@ -1,0 +1,29 @@
+<apex:page StandardController="NCMT_CEW_Work_Item__c" recordSetVar="items" standardStylesheets="false" lightningStylesheets="true" title="CEW Work Items" showHeader="false">
+    <style>
+        #cewItems{
+            -webkit-box-shadow: 0 0 2px 36px #1797C0;
+        margin: 1%;
+}
+
+    </style>
+<apex:slds />
+<apex:includeLightning />
+        <div id='cewItems'></div>
+
+    <script>
+    
+    $Lightning.use('c:NCMT_CEW_WorkItems_App', function(){
+        $Lightning.createComponent('c:NCMT_CEW_WorkItems', 
+                                   {
+                                        "pcsId" :"{!$CurrentPage.parameters.id}"
+                                    },                       
+        'cewItems',
+        function(cmp){
+                //nothing to see here
+            });
+    
+    });
+    </script>
+    
+    
+</apex:page>

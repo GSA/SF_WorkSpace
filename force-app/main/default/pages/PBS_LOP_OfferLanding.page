@@ -1,0 +1,232 @@
+<apex:page Controller="PBS_LOP_OfferLandingController" sidebar="false" showHeader="false" standardStylesheets="false"
+           cache="true" doctype="html-5.0">
+
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+     
+
+    <style>
+        .ui-dialog {
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #999;
+        }
+
+        .ui-dialog a {
+            float: right;
+            font-weight: bold;
+            padding: 3px;
+            color: #999;
+            text-transform: uppercase;
+            font-size: 10px;
+        }
+
+        .errMessage {
+            color: red;
+        }
+
+        #lean_overlay {
+            position: fixed;
+            z-index: 100;
+            top: 0px;
+            left: 0px;
+            height: 100%;
+            width: 100%;
+            background: none;
+            display: none;
+        }
+
+        input.text, input.email, input.password, textarea.uniform {
+            font-size: 12px;
+            font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+            font-weight: normal;
+            padding: 3px 10px 3px 10px;
+            color: #000;
+            background: url({!URLFOR($Resource.gsa_common, 'images/sprite.png')}) no-repeat 0px -331px;
+            border: none;
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            border-radius: 2px;
+            outline: 0;
+            height: 18px;
+            width: 223px;
+        }
+
+        .custPopup{
+            background-color: rgb(238, 238, 238);
+            border: 1px solid rgb(102, 102, 102);
+            border-radius: 5px;
+            z-index: 9999;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            /* These are the 3 css properties you will need to change so the popup
+            displays in the center of the screen. First set the width. Then set
+            margin-left to negative half of what the width is. You can add
+            the height property for a fixed size pop up if you want.*/
+            width: 500px;
+            margin-left: -250px;
+            top:100px;
+        }
+        .popupBackground{
+            background-color:black;
+            opacity: 0.20;
+            filter: alpha(opacity = 20);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9998;
+        }
+
+    </style>
+
+
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+      <script type="text/javascript"
+            src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <script type="text/javascript">
+        
+        //alert('test');
+        JY = jQuery.noConflict();
+        JY(document).ready(function () {
+            //added by syam display msg when submitted offer is saved.
+            draftMsgFlag = JY('input[id=' + "'{!$Component.newOffer.draftMsgFlag}'" + ']').val();
+            if (draftMsgFlag == 'true') {
+                var confirm1 = JY('<div></div>').html("Your offer is no longer submitted. Offer status is updated to 'Draft' status and needs to be submitted again.").dialog({
+                    autoOpen: false,
+                    title: '',
+                    modal: true,
+                    position: ['center', 'center'],
+                    buttons: {
+                        'OK': function () {
+                            JY(this).dialog('close');
+                        }
+                    }
+                });
+
+                confirm1.dialog('open');
+            }
+
+        });
+
+        function clearSol(){
+            JY('[id*=projectID]').val('');
+        }
+    </script>
+     
+    
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+        <ul>
+            <li><a href="/RSAP/portalHome">RSAP Home</a> </li>
+            <li>|</li>
+            <li><a href="/AAAP/portalHome">AAAP</a></li>
+            <li>|</li>
+            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
+                <apex:outputLink value="/AAAP/home/home.jsp">
+                    <li>{!$Label.site.login_button}</li>
+                </apex:outputLink>
+                <li> |</li>
+                <apex:outputLink value="/AAAP/ForgotPassword">
+                    <li>{!$Label.site.forgot_your_password_q}</li>
+                </apex:outputLink>
+                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
+                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
+                    <li>{!$Label.site.new_user_q}</li>
+                </apex:outputLink>
+            </apex:panelGroup>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>{!$Label.site.logout}</li>
+            </apex:outputLink>
+        </ul>
+    </div -->
+    <div id="wrapper">
+        <c:lop_inside_header />
+        <div id="content" class="property-owner">
+            <!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
+            <apex:panelGrid rendered="{!!isValidUser}">
+                <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+                <apex:messages styleClass="errMessage" id="message"/>
+            </apex:panelGrid>
+
+            <apex:form id="newOffer" styleClass="formwrap" rendered="{!isValidUser}">
+                <!--div id="heading"  style="color:#002BAE;font-size:24px;font-weight:bold;">GSA's Traditional Lease Acquisition Program</div>-->
+                <h3 class="blue">Create Offer</h3>
+                <apex:outputPanel id="messages">
+                    <apex:messages styleClass="errMessage"/>
+                </apex:outputPanel>
+                <apex:inputHidden id="draftMsgFlag" value="{!draftMsgFlag}"/>
+                <apex:panelGrid columns="5" id="theGridsection1">
+
+                    <apex:outputPanel style="font-weight:bold;">
+                        <apex:outputtext value="Enter Solicitation Number:" />
+                        <span class="required">*</span></apex:outputPanel>
+                    <apex:outputPanel >
+                        <apex:inputText value="{!solicitationId}" id="projectID"/>
+                    </apex:outputPanel>
+
+                    <apex:commandButton id="newOffer" Value="Create Offer" action="{!showPopup}"/>
+
+                    <apex:outputPanel id="tstpopup">
+                        <script type="text/javascript">
+                        if('{!JSENCODE(pageURLForRedirection)}' != ''){
+            			window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
+                        }
+                      </script>
+                        <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopUp}"/>
+                        <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayPopUp}">
+                            <apex:outputPanel rendered="{!noSolicitation}">
+                                Please enter a valid Solicitation Number
+                                <br/><br/><br/>
+                                <apex:commandButton value="OK" onclick="clearSol();" action="{!closePopup}" rerender="tstpopup"/>
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!wrongSolicitaion}">
+                                Solicitation number is incorrect or the window for submitting an offer has expired. See below for additional guidance.
+                                <br/><br/><br/>
+                                <apex:commandButton value="OK" onclick="clearSol();" action="{!closePopup}" rerender="tstpopup"/>
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!showConfirmation}">
+                                You are about to enter in an offer for solicitation number {!solicitationId}, seeking offers for space in {!city}, {!state}. Do you want to proceed?
+                                <br/><br/><br/>
+                                <apex:commandButton value="Yes" action="{!createEditOffer}" rerender="tstpopup"/>
+                                <apex:commandButton value="No" onclick="clearSol();" action="{!closePopup}" rerender="tstpopup"/>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+
+
+                </apex:panelGrid>
+                <p>
+                    <font color="black">
+                        If you receive an error message, make sure you are entering a solicitation number for an RSAP project — this page is for RSAP projects only. If you wish to submit an offer for a AAAP project, go to <a href="#" onclick="window.parent.location.href = '{!$Label.LOP_Community_Base_URL}AAAP-PortalHome'" style="color:blue;">https://leasing.gsa.gov/leasing/s/AAAP-PortalHome</a>.   
+                        <br/><br/>
+                        If you have questions regarding the RSAP solicitation number, contact the Leasing Specialist or Lease Contracting Officer assigned to the project.
+                        <br/><br/>
+                        For further technical assistance, email <a href="mailto:LOP.help@gsa.gov"  target="_blank" style="color:blue;">LOP.help@gsa.gov</a> or call 1-866-450-6588 and select option 7.
+                        <br/><br/>
+                        For answers to RSAP program or policy questions, email <a href="mailto:RSAP.manager@gsa.gov"  target="_blank" style="color:blue;">RSAP.manager@gsa.gov</a>.
+                                             
+                    </font>
+                </p>
+
+
+            </apex:form>
+        </div><!-- /content-->
+    </div><!-- /Wrapper -->
+
+    <c:SiteFooterUX />
+      <script type="text/javascript">
+        if('{!JSENCODE(pageURLForRedirection)}' != ''){
+            window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
+        }
+      </script>
+
+</apex:page>

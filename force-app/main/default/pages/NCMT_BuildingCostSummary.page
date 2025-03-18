@@ -1,0 +1,863 @@
+<apex:page Controller="NCMT_ReportData" title="{!strCUIHeader}" readonly="true" showHeader="false" sidebar="false" cache="true" lightningStylesheets="true">
+    <head>
+        <style>        
+            table {
+            border-collapse: collapse; 
+            }
+            .borderR {
+            border-Right: 1px solid;
+            }
+            .topBorder {
+            border-top: 1px solid;
+            }
+            .bottomBorder {
+            border-bottom: 1px solid;
+            }
+            .borderL {
+            border-left: 1px solid;
+            }
+            .number {
+            font-size: 12px;
+            border-bottom: 1px solid;
+            }
+            
+            @media print {
+                .print-margin {margin-top:75px !important;}
+                .screen-only { display: none !important; }
+                
+            @page { 
+                    size: landscape !important;                    
+                    font-size: 9px !important;                    
+                }            
+            }
+            
+            div.footer {
+            display: block;
+            padding: 1px;
+            position: running(footer);
+            }
+            #ReportData td, tr{
+            padding:.1%;
+            }
+            .screen-only {
+              font-size: 1.5rem;
+              color: darkred;
+              text-align: center;
+            }
+            
+        </style>
+    </head>     
+    <apex:form id="rptUniformat">
+        <div class="screen-only">
+            {!strCUIHeader}
+        </div>
+        <div class="footer"></div>
+        <table border="0">
+            <tr>
+                <td style="width:100%" align="center" >
+                    <h1><font color="darkred" size="+1">
+                        <label id="labelHeader">BUILDING COST SUMMARY</label>
+                        </font>
+                    </h1>
+                    <h2 style='color:darkred'>
+                        <!--SFWS-2246:URLProjectID added -->
+                        Project Name: <a href="../{!URLProjectID}">{!strProjectName}</a>&nbsp;&nbsp;&nbsp;&nbsp;Date:<apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!today()}"/></apex:outputText>
+                    </h2>       
+                    <br/>
+                </td>
+                <td align="right" ><input type="button" onClick="funprint();" id="prnBtn" value="Print This Page" style="background: grey;"/></td>
+            </tr>
+            <!-- <tr>
+<td colspan="2" style="width:100%" align="center" class = "topBorder borderR bottomBorder borderL">
+<h2 style='color:darkred; border-bottom: 2px solid darkred;'><font size="+1">
+Project Name: <a href="../{!strProjectID}" style='color:darkred;'>{!strProjectName}</a>&nbsp;&nbsp;&nbsp; Date:<apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!today()}"/></apex:outputText>
+</font></h2>
+</td>
+</tr> -->
+        </table>
+        
+        <!--  **** Project Properties **** --> 
+        <table align="center" width = "100%" style="border:solid 1px;">
+            <tr>
+                <th style ="background-color: lightslategrey;" colspan='12' class= "number">Project Properties</th>
+                <!-- <td class = "number">&nbsp;</td>
+<td class = "number">&nbsp;</td>
+<td class = "number">&nbsp;</td>
+-->
+            </tr>
+            <tr>
+                <td class = "number borderR">Project Type:&nbsp;&nbsp;{!strHPProjectType}, {!strBuildingtype}</td>
+                <td class = "number borderR">Project Location:&nbsp;&nbsp;{!strCity},{!strProjectState}</td>
+                <td class = "number borderR">Project Status:&nbsp;&nbsp;{!strProjectStatus}</td>
+                <td class = "number borderR">GSA Project#:&nbsp;&nbsp;{!strGSAProject}&nbsp;Region:&nbsp;&nbsp;{!strRegionCode}&nbsp;&nbsp;&nbsp;<apex:outputPanel layout="none" rendered="{!Not(IsNull(strPBSBuilding))}">PBS Building:&nbsp;&nbsp;&nbsp;{!strPBSBuilding}</apex:outputPanel></td>
+            </tr>
+            <tr>
+                <td class = "number borderR">Index Location:&nbsp;&nbsp;{!strProjectLocation},{!strProjectState}</td>
+                <td class = "number borderR">Level of Protection:&nbsp;&nbsp;{!strlvlofprotection}</td>
+                <td class = "number borderR">Building Height:&nbsp;&nbsp;{!strbuildingheight}</td> 
+                <td class = "number borderR">Project Seismic Design Category:&nbsp;&nbsp;{!strprojseismicdesigncat}</td>  
+            </tr>
+            <tr>
+                <td class = "number borderR">Building Quality:&nbsp;&nbsp;{!strbuildingquality}</td> 
+                <td class = "number borderR">Start Construction:&nbsp;&nbsp;<apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!startconsdate}"/></apex:outputText></td>     
+                <td class = "number borderR">Estimate Date:&nbsp;&nbsp;<apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!dateofestimate}"/></apex:outputText></td>              
+                <td class = "number borderR">Basis Date of Estimate:&nbsp;&nbsp;<apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!costparamdate}"/></apex:outputText></td>              
+            </tr>
+            <tr>
+                <td class = "number borderR">Purpose of Estimate:&nbsp;&nbsp;{!strPurposeOfEstimate}</td>
+                <td class = "number borderR">Market Escalation:&nbsp;&nbsp;{!dblescrate}</td> 
+                <td class = "number borderR">Location Remoteness:&nbsp;&nbsp;{!strremoteness}</td> 
+                <td class = "number borderR">Building Efficiency Factor:&nbsp;&nbsp;{!dblUseableeff}</td> 
+                <td></td>
+            </tr>
+            <tr>
+                <td class = "number borderR">Estimate Prepared By:&nbsp;&nbsp;{!strcreatedby}</td>
+                <td class = "number borderR">Requestor:&nbsp;&nbsp;{!strRequestor}</td> 
+                <td class = "number borderR">Estimate Reviewer:&nbsp;&nbsp;{!strpeerreviewer}</td> 
+                <td class = "number borderR">Estimate Approver:&nbsp;&nbsp;{!strRegionalPortfolio}</td>                            
+            </tr>
+            <tr>
+                <td class = "number borderR">Project Status:&nbsp;&nbsp;{!strProjectStatus}</td>
+                <td colspan="3" class = "number borderR" style="max-width:400px;">Brief Narrative:&nbsp;&nbsp;{!strbriefnarrative}</td> 
+            </tr>
+        </table>
+        
+        <apex:pageBlock id="DataBlock" title=""> 
+            <table border="1" cellspacing="0" width="100%" id="ReportData">
+                <colgroup>
+                    <col class="col1" style="background-color:White"/>
+                    <col class="col2" style="background-color:White"/>
+                    <col class="col3" style="background-color:White"/>
+                    <col class="col4" style="background-color:White"/>
+                    <col class="col5" style="background-color:White"/>
+                    <col class="col6" style="background-color:White"/>
+                    <col class="col7" style="background-color:White"/>
+                    <col class="col8" style="background-color:White"/>
+                    <col class="col9" style="background-color:White"/>
+                    <col class="col10" style="background-color:White"/>
+                    
+                </colgroup>
+                <tr>
+                    <td align="Left" width="12%"><b>Bulding Construction Cost</b></td>
+                    <td align="Center" width="3%"><b>&nbsp;</b></td>
+                    <td align="Center" width="6%"><b><b>CECC</b></b></td>
+                    <td align="Center" width="6%"><b>CECC/GSF</b></td>
+                    <td align="Center" width="6%"><b>CECC/USF</b></td>
+                    <td align="Center" width="6%"><b>Market Escalation</b></td>
+                    <td align="Center" width="6%"><b>Code and Practice Escalation</b></td>
+                    <td align="Center" width="6%"><b>ECC</b></td>
+                    <td align="Center" width="6%"><b>ECC/GSF</b></td>
+                    <td align="Center" width="6%"><b>ECC/USF</b></td>
+                    
+                </tr>
+                <tr>
+                    <td align="Left"><apex:outputText ID="NCMT_R1C1" value="Core/Shell"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R1C2" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R1C3" value="{0, number, $###,###,##0.00}"><apex:param value="{!dblCoreShellCosts}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R1C4" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R1C5" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R1C6" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R1C7" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R1C8" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R1C9" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R1C10" value="0.00"/></td>
+                    
+                </tr>
+                <tr>
+                    <td align="Left"><apex:outputText ID="NCMT_R2C1" value="Tenant Related Core/Shell Impact"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R2C2" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R2C3" value="{0, number, $###,###,##0.00}"><apex:param value="{!dblTRCSCosts}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R2C4" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R2C5" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R2C6" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R2C7" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R2C8" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R2C9" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R2C10" value="0.00"/></td>
+                    
+                </tr>
+                <tr>
+                    <td align="Left"><apex:outputText ID="NCMT_R3C1" value="Tenant Improvements"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R3C2" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R3C3" value="{0, number, $###,###,##0.00}"><apex:param value="{!dblTICosts}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R3C4" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R3C5" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R3C6" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R3C7" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R3C8" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R3C9" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R3C10" value="0.00"/></td>
+                    
+                </tr>
+                <tr>
+                    <td align="Left"><apex:outputText ID="NCMT_R4C1" value="Security Costs"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R4C2" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R4C3" value="{0, number, $###,###,##0.00}"><apex:param value="{!dblSecurityCosts}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R4C4" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R4C5" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R4C6" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R4C7" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R4C8" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R4C9" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R4C10" value="0.00"/></td>
+                    
+                </tr>
+                <tr>
+                    <td colspan="10">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align="Left"><b><apex:outputText ID="NCMT_T1C1" value="Subtotal Building Construction Cost - Base Model"/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T1C2" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T1C3" value="0.00"/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T1C4" value="0.00"/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T1C5" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T1C6" value="0.00"/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T1C7" value="0.00"/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T1C8" value="0.00"/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T1C9" value="0.00"/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T1C10" value=""/></b></td>
+                    
+                </tr>
+                <tr>
+                    <td align="Left" colspan="10"><b><apex:outputText ID="NCMT_LabelOther" value="Other Construction Costs"/></b></td>
+                </tr>
+                <tr>
+                    <td align="Left"><apex:outputText ID="NCMT_R9C1" value="Core/Shell"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R9C2" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R9C3" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R9C4" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R9C5" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R9C6" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R9C7" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R9C8" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R9C9" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R9C10" value=""/></td>
+                    
+                </tr>
+                <tr>
+                    <td align="Left"><apex:outputText ID="NCMT_R10C1" value="Tenant"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R10C2" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R10C3" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R10C4" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R10C5" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R10C6" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R10C7" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R10C8" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R10C9" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R10C10" value=""/></td>
+                    
+                </tr>
+                
+                <tr>
+                    <td align="Left"><b><apex:outputText ID="NCMT_T4C1" value="Total: Building Construction Cost - Including Other Direct Costs"/></b></td>
+                    <td align="Right"><apex:outputText ID="NCMT_T4C2" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_T4C3" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_T4C4" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_T4C5" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_T4C6" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_T4C7" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_T4C8" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_T4C9" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_T4C10" value=""/></td>
+                    
+                    
+                </tr>
+                <tr>
+                    <td colspan="10">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align="Left"><apex:outputText ID="NCMT_R5C1" value="Secured Interior Parking"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R5C2" value="{0, number, ###,###,##0}"><apex:param value="{!dblenclosedparking}" /></apex:outputText> SF</td>
+                    <td align="Right"><apex:outputText ID="NCMT_R5C3" value="{0, number, $###,###,##0}"><apex:param value="{!dblParkingCosts}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R5C4" value="0.00"/></td>
+                    <td align="Left"><apex:outputText ID="NCMT_R5C5" value="* $/SF of int pkg"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R5C6" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R5C7" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R5C8" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R5C9" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R5C10" value=""/></td>
+                    
+                </tr>
+                <tr>
+                    <td align="Left"><apex:outputText ID="NCMT_R6C1" value="Structured Parking"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R6C2" value="{0, number, ###,###,##0}"><apex:param value="{!dblsiteinfostrucparking}" /></apex:outputText> SF</td>
+                    <td align="Right"><apex:outputText ID="NCMT_R6C3" value="{0, number, $###,###,##0}"><apex:param value="{!dbllsstructuredparkingcost}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R6C4" value="0.00"/></td>
+                    <td align="Left"><apex:outputText ID="NCMT_R6C5" value="* $/SF of struct pkg"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R6C6" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R6C7" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R6C8" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R6C9" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R6C10" value=""/></td>
+                    
+                </tr>
+                <tr>
+                    <td align="Left" colspan="10"><b><apex:outputText ID="NCMT_LabelSite" value="Site"/></b></td>
+                </tr>
+                <tr>
+                    <td align="Left"><apex:outputText ID="NCMT_R7C1" value="Surface Parking"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R7C2" value="{0, number, ###,###,##0}"><apex:param value="{!dblsiteinfosurfaceparking}" /></apex:outputText> SF</td>
+                    <td align="Right"><apex:outputText ID="NCMT_R7C3" value="{0, number, $###,###,##0}"><apex:param value="{!dbllssurfaceparkingcost}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R7C4" value="0.00"/></td>
+                    <td align="Left"><apex:outputText ID="NCMT_R7C5" value="* $/SF of surface pkg"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R7C6" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R7C7" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R7C8" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R7C9" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R7C10" value=""/></td>
+                    
+                </tr>
+                <tr>
+                    <td align="Left"><apex:outputText ID="NCMT_R8C1" value="Non-Building Related Site Cost"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R8C2" value="{0, number, ###,###,##0}"><apex:param value="{!dblFinSite}"/></apex:outputText> SF</td>
+                    <td align="Right"><apex:outputText ID="NCMT_R8C3" value="{0, number, $###,###,##0.00}"><apex:param value="{!dblNonBuildingRelatedSiteCost}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R8C4" value="0.00"/></td>
+                    <td align="Left"><apex:outputText ID="NCMT_R8C5" value="* $/SF of finished site"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R8C6" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R8C7" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R8C8" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R8C9" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R8C10" value=""/></td>
+                    
+                </tr>
+                
+                <tr>
+                    <td colspan="10">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align="Left"><b><apex:outputText ID="NCMT_T2C1" value="Total: Construction Cost - Building and Site"/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T2C2" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T2C3" value="0.00"/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T2C4" value="0.00"/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T2C5" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T2C6" value="0.00"/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T2C7" value="0.00"/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T2C8" value="0.00"/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T2C9" value="0.00"/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T2C10" value=""/></b></td>
+                    
+                </tr>
+                <tr>
+                    <td colspan="10">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align="Left"><apex:outputText ID="NCMT_R11C1" value="EDRC"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R11C2" value="{0, number, ###,###,##0.00%}"><apex:param value="{!dblEDRC}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R11C3" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R11C4" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R11C5" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R11C6" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R11C7" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R11C8" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R11C9" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R11C10" value=""/></td>
+                    
+                </tr>
+                <tr>
+                    <td align="Left"><apex:outputText ID="NCMT_R12C1" value="EMIC"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R12C2" value="{0, number, ###,###,##0.00%}"><apex:param value="{!dblEMIC}" /></apex:outputText></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R12C3" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R12C4" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R12C5" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R12C6" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R12C7" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R12C8" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R12C9" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R12C10" value=""/></td>
+                    
+                </tr>
+                <tr>
+                    <td align="Left"><apex:outputText ID="NCMT_R13C1" value="ESOC"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R13C2" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R13C3" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R13C4" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R13C5" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R13C6" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R13C7" value=""/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R13C8" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R13C9" value="0.00"/></td>
+                    <td align="Right"><apex:outputText ID="NCMT_R13C10" value=""/></td>
+                    
+                </tr>
+                <tr>
+                    <td colspan="10">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align="Left"><b><apex:outputText ID="NCMT_T3C1" value="ETPC"/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T3C2" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T3C3" value="0.00"/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T3C4" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T3C5" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T3C6" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T3C7" value=""/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T3C8" value="0.00"/></b></td>
+                    <td align="Right"><b><apex:outputText ID="NCMT_T3C9" value="0.00"/></b></td>
+                    <td align="Right"><apex:outputText ID="NCMT_T3C10" value=""/></td>
+                    
+                </tr>
+            </table>
+            
+            <table>
+                <p> Note :</p>
+                <tr>
+                    <td>1 CECC = Current Estimated Construction Cost&nbsp;&nbsp;&nbsp;</td>
+                    <td>3 EDRC = Estimated Design and Review Cost&nbsp;&nbsp;&nbsp;</td>
+                    <td>5 ESOC = Estimated Site and Other Cost&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>7 TRCS = Tenant Related Core Shell&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>2 ECC = Estimated Construction Cost&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>4 EMIC = Estimated Management and Inspection Cost&nbsp;&nbsp;&nbsp;</td>
+                    <td>6 ETPC = Estimated Total Project Cost&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                </tr>
+            </table>
+        </apex:pageBlock>
+        
+        <script language = "Javascript">
+        
+        //To be called in this sequence ONLY ...
+        AdjustCoreShell();
+        AdjustOtherAmounts();
+        CalculateOtherConstructionCosts();
+        ComputeHorizontalColumns();
+        CalculateTotals();
+        ComputeEDRCAndEMIC();
+        ComputeETPC();
+        
+        
+        function funprint(){
+            document.getElementById('prnBtn').style.display='none';  
+            window.print();
+            document.getElementById('prnBtn').style.display='block'; 
+        }
+        
+        function AdjustCoreShell(){
+            console.log('hell0');
+            var AdjustmentMultiplier1 = Number({!dblDesign});
+            var AdjustmentMultiplier2 = Number({!dblGeneral});
+            var AdjustmentMultiplier3 = Number({!dblConstruct});
+            var AdjustmentMultiplier4 = Number({!dblArt});
+            
+            var AdjustedAmount = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C3}').innerHTML) - {!dblNonBuildingRelatedSiteCost};
+            AdjustedAmount = AdjustedAmount + (Number(AdjustedAmount) * Number(AdjustmentMultiplier1));
+            AdjustedAmount = AdjustedAmount + (Number(AdjustedAmount) * Number(AdjustmentMultiplier2));
+            AdjustedAmount = AdjustedAmount + (Number(AdjustedAmount) * Number(AdjustmentMultiplier3));
+            AdjustedAmount = AdjustedAmount + (Number(AdjustedAmount) * Number(AdjustmentMultiplier4));
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C3}').innerHTML = DecimalToDollar0(AdjustedAmount);
+            
+        }
+        
+        function AdjustOtherAmounts(){
+            var AdjustmentMultiplier1 = Number({!dblDesign});
+            var AdjustmentMultiplier2 = Number({!dblGeneral});
+            var AdjustmentMultiplier3 = Number({!dblConstruct});
+            var AdjustmentMultiplier4 = Number({!dblArt});
+            
+            var Amount = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C3}').innerHTML);
+            Amount = Number(Amount) + (Number(Amount) * Number(AdjustmentMultiplier1));
+            Amount = Number(Amount) + (Number(Amount) * Number(AdjustmentMultiplier2));
+            Amount = Number(Amount) + (Number(Amount) * Number(AdjustmentMultiplier3));
+            Amount = Number(Amount) + (Number(Amount) * Number(AdjustmentMultiplier4));
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C3}').innerHTML = DecimalToDollar0(Amount);
+            
+            var Amount = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C3}').innerHTML);
+            Amount = Number(Amount) + (Number(Amount) * Number(AdjustmentMultiplier1));
+            Amount = Number(Amount) + (Number(Amount) * Number(AdjustmentMultiplier2));
+            Amount = Number(Amount) + (Number(Amount) * Number(AdjustmentMultiplier3));
+            Amount = Number(Amount) + (Number(Amount) * Number(AdjustmentMultiplier4));
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C3}').innerHTML = DecimalToDollar0(Amount);
+            
+            var Amount = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C3}').innerHTML);
+            Amount = Number(Amount) + (Number(Amount) * Number(AdjustmentMultiplier1));
+            Amount = Number(Amount) + (Number(Amount) * Number(AdjustmentMultiplier2));
+            Amount = Number(Amount) + (Number(Amount) * Number(AdjustmentMultiplier3));
+            Amount = Number(Amount) + (Number(Amount) * Number(AdjustmentMultiplier4));
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C3}').innerHTML = DecimalToDollar0(Amount);
+            
+            var Amount = DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C3}').innerHTML);
+            Amount = Number(Amount) + (Number(Amount) * Number(AdjustmentMultiplier1));
+            Amount = Number(Amount) + (Number(Amount) * Number(AdjustmentMultiplier2));
+            Amount = Number(Amount) + (Number(Amount) * Number(AdjustmentMultiplier3));
+            Amount = Number(Amount) + (Number(Amount) * Number(AdjustmentMultiplier4));
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C3}').innerHTML = DecimalToDollar0(Amount);
+        }
+        
+        function ComputeETPC(){
+            var dblMult = parseFloat('{!dblMult}').toFixed(2);
+            if ((dblMult == '0') || (dblMult == '0.0'))
+                dblMult = '1.0';
+            
+            var T3C3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T2C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R11C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R12C3}').innerHTML);
+            var T3C8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T2C8}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R11C8}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R12C8}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R13C8}').innerHTML);
+            var T3C8GSF = Number(T3C8)/Number(dblMult);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T3C3}').innerHTML = DecimalToDollar0(T3C3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T3C8}').innerHTML = DecimalToDollar0(T3C8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T3C9}').innerHTML = DecimalToDollar(T3C8GSF);
+        }
+        
+        function ComputeEDRCAndEMIC(){
+            var dblMult = parseFloat('{!dblMult}').toFixed(2);
+            if ((dblMult == '0') || (dblMult == '0.0'))
+                dblMult = '1.0';
+            var dblEDRC = parseFloat('{!dblEDRC}').toFixed(4);
+            var dblEMIC = parseFloat('{!dblEMIC}').toFixed(4);
+            
+            var CECPercentageEDRC = Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T2C3}').innerHTML)) * dblEDRC;
+            var CECPercentageEMIC = Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T2C3}').innerHTML)) * dblEMIC;
+            var ECCPercentageEDRC = Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T2C8}').innerHTML)) * dblEDRC;
+            var ECCPercentageEMIC = Number(DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T2C8}').innerHTML)) * dblEMIC;
+            var ECCGSFEDRC = Number(ECCPercentageEDRC) / Number(dblMult);
+            var ECCGSFEMIC = Number(ECCPercentageEMIC) / Number(dblMult);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R11C3}').innerHTML = DecimalToDollar0(CECPercentageEDRC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R12C3}').innerHTML = DecimalToDollar0(CECPercentageEMIC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R11C8}').innerHTML = DecimalToDollar0(ECCPercentageEDRC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R12C8}').innerHTML = DecimalToDollar0(ECCPercentageEMIC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R11C9}').innerHTML = DecimalToDollar(ECCGSFEDRC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R12C9}').innerHTML = DecimalToDollar(ECCGSFEMIC);
+        }
+        
+        function CalculateOtherConstructionCosts(){
+            var dblMult = parseFloat('{!dblMult}').toFixed(2);
+            if ((dblMult == '0') || (dblMult == '0.0'))
+                dblMult = '1.0';
+            
+            //ODC
+            var CoreShellODC = Number({!dblOtherDirectCostCoreShell}) + Number({!dblCoreShellCosts}) + Number({!dblParkingCosts});
+            console.log(CoreShellODC, 'CoreShellODC')
+            var TIODC = Number({!dblOtherDirectCostTI}) + Number({!dblTRCSCosts}) + Number({!dblTICosts}) + Number({!dblSecurityCosts});
+            console.log(TIODC, 'TIODC')
+            
+            var TotalODC = Number(CoreShellODC) + Number(TIODC);
+            
+            if (Number(TotalODC) <= 0.00) TotalOPC = 1;
+            var ProRatedODC = Number({!dblProRatedODC});
+            console.log(ProRatedODC, 'ProRatedODC')
+            
+            var CoreShellPercentODC = Number(CoreShellODC)/Number(TotalODC);
+            console.log(CoreShellPercentODC, 'CoreShellPercentODC')
+            
+            var TIPercentODC = Number(TIODC)/Number(TotalODC);
+            console.log(TIPercentODC, 'TIPercentODC')
+            
+            CoreShellODC = Number({!dblOtherDirectCostCoreShell});
+            CoreShellODC = CoreShellODC + (CoreShellODC * Number({!dblDesign}));
+            CoreShellODC = CoreShellODC + (CoreShellODC * Number({!dblGeneral}));
+            CoreShellODC = CoreShellODC + (CoreShellODC * Number({!dblConstruct}));
+            CoreShellODC = CoreShellODC + (CoreShellODC * Number({!dblArt}));
+            
+            TIODC = Number({!dblOtherDirectCostTI});
+            TIODC = TIODC + (TIODC * Number({!dblDesign}));
+            TIODC = TIODC + (TIODC * Number({!dblGeneral}));
+            TIODC = TIODC + (TIODC * Number({!dblConstruct}));
+            TIODC = TIODC + (TIODC * Number({!dblArt}));
+            
+            ProRatedODC = ProRatedODC + (ProRatedODC * Number({!dblDesign}));
+            ProRatedODC = ProRatedODC + (ProRatedODC * Number({!dblGeneral}));
+            ProRatedODC = ProRatedODC + (ProRatedODC * Number({!dblConstruct}));
+            ProRatedODC = ProRatedODC + (ProRatedODC * Number({!dblArt}));
+            
+            var GSAODC = Number(CoreShellODC) + (Number(CoreShellPercentODC) * Number(ProRatedODC));
+            var TenantODC = Number(TIODC) +  (Number(TIPercentODC) * Number(ProRatedODC));
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C3}').innerHTML = DecimalToDollar0(GSAODC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C3}').innerHTML = DecimalToDollar0(TenantODC);
+            
+            //OPC
+            var CoreShellOPC =  Number({!dblCoreShellOPC}) + Number({!dblCoreShellCosts}) + Number({!dblParkingCosts});
+            var TIOPC =  Number({!dblTIOPC}) + Number({!dblTRCSCosts}) + Number({!dblTICosts}) + Number({!dblSecurityCosts});
+            var TotalOPC = Number(CoreShellOPC) + Number(TIOPC);
+            if (Number(TotalOPC) <= 0.00) TotalOPC = 1;
+            var ProRatedOPC = Number({!dblProRatedOPC});
+            var CoreShellPercentOPC = Number(CoreShellOPC)/Number(TotalOPC);
+            var TIPercentOPC = Number(TIOPC)/Number(TotalOPC);
+            CoreShellOPC =  Number({!dblCoreShellOPC});
+            TIOPC = Number({!dblTIOPC}) ;
+            var GSAOPC = Number(CoreShellOPC) +  (Number(CoreShellPercentOPC) * Number(ProRatedOPC));
+            var TenantOPC = Number(TIOPC) +  (Number(TIPercentOPC) * Number(ProRatedOPC));
+            
+            //var CombinedOPC =  Number(GSAOPC) +  Number(TenantOPC);
+            
+            var CombinedOPC = Number({!dbltotalotherprojectcosts});
+            var CombinedOPCSqFt = Number(CombinedOPC)/Number(dblMult);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R13C8}').innerHTML = DecimalToDollar0(CombinedOPC);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R13C9}').innerHTML = DecimalToDollar(CombinedOPCSqFt);
+        }
+        
+        function ComputeHorizontalColumns() {
+            
+            var dblMult = parseFloat('{!dblMult}').toFixed(2);
+            var dblGross = parseFloat('{!dblGross}').toFixed(2);
+            //alert('mult is ' +dblMult +' gross is ' +dblGross);
+            var dblFinSite = parseFloat('{!dblFinSite}').toFixed(2);
+            var dblenclosedparking = parseFloat('{!dblenclosedparking}').toFixed(0);
+            var dblsiteinfostrucparking = parseFloat('{!dblsiteinfostrucparking}').toFixed(0);
+            var dblsiteinfosurfaceparking = parseFloat('{!dblsiteinfosurfaceparking}').toFixed(0);
+            
+            var dblTotalUSF = parseFloat('{!dblTotalUSF}').toFixed(2);
+            var dblEscMarkets = parseFloat('{!dblEscMarkets}').toFixed(4);
+            var dblEscCode = parseFloat('{!dblEscCode}').toFixed(4);
+            
+            if ((dblGross == '0') || (dblGross == '0.00'))
+                dblGross = '1.0';
+            if ((dblMult == '0') || (dblMult == '0.00'))
+                dblMult = '1.0';
+            if ((dblFinSite == '0') || (dblFinSite == '0.00'))
+                dblFinSite = '1.0';   
+            if ((dblTotalUSF == '0') || (dblTotalUSF == '0.00'))
+                dblTotalUSF = '1.0'; 
+            if ((dblenclosedparking == '0') || (dblenclosedparking == '0.0'))
+                dblenclosedparking = '1.0';  
+            if ((dblsiteinfostrucparking == '0') || (dblsiteinfostrucparking == '0.0'))
+                dblsiteinfostrucparking = '1.0';
+            if ((dblsiteinfosurfaceparking == '0') || (dblsiteinfosurfaceparking == '0.0'))
+                dblsiteinfosurfaceparking = '1.0';             
+            
+            var CECCGSFR1 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C3}').innerHTML)/dblGross;
+            var CECCGSFR2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C3}').innerHTML)/dblGross;
+            var CECCGSFR3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C3}').innerHTML)/dblGross;
+            var CECCGSFR4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C3}').innerHTML)/dblGross;
+            var CECCGSFR5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C3}').innerHTML)/dblenclosedparking;
+            var CECCGSFR6 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C3}').innerHTML)/dblsiteinfostrucparking;
+            var CECCGSFR7 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C3}').innerHTML)/dblsiteinfosurfaceparking;
+            var CECCGSFR8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C3}').innerHTML)/dblFinSite;
+            var CECCGSFR9 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C3}').innerHTML)/dblGross;
+            var CECCGSFR10 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C3}').innerHTML)/dblGross;
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C4}').innerHTML = DecimalToDollar(CECCGSFR1);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C4}').innerHTML = DecimalToDollar(CECCGSFR2);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C4}').innerHTML = DecimalToDollar(CECCGSFR3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C4}').innerHTML = DecimalToDollar(CECCGSFR4);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C4}').innerHTML = DecimalToDollar(CECCGSFR5);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C4}').innerHTML = DecimalToDollar(CECCGSFR6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C4}').innerHTML = DecimalToDollar(CECCGSFR7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C4}').innerHTML = DecimalToDollar(CECCGSFR8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C4}').innerHTML = DecimalToDollar(CECCGSFR9);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C4}').innerHTML = DecimalToDollar(CECCGSFR10);
+            
+            var CECCUSFR1 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C3}').innerHTML)/dblTotalUSF;
+            var CECCUSFR2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C3}').innerHTML)/dblTotalUSF;
+            var CECCUSFR3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C3}').innerHTML)/dblTotalUSF;
+            var CECCUSFR4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C3}').innerHTML)/dblTotalUSF;
+            var CECCUSFR5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C3}').innerHTML)/dblTotalUSF;
+            var CECCUSFR6 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C3}').innerHTML)/dblTotalUSF;
+            var CECCUSFR7 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C3}').innerHTML)/dblTotalUSF;
+            //var CECCUSFR8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C3}').innerHTML)/dblTotalUSF;
+            var CECCUSFR9 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C3}').innerHTML)/dblTotalUSF;
+            var CECCUSFR10 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C3}').innerHTML)/dblTotalUSF;
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C5}').innerHTML = DecimalToDollar(CECCUSFR1);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C5}').innerHTML = DecimalToDollar(CECCUSFR2);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C5}').innerHTML = DecimalToDollar(CECCUSFR3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C5}').innerHTML = DecimalToDollar(CECCUSFR4);
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C5}').innerHTML = DecimalToDollar(CECCUSFR5);
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C5}').innerHTML = DecimalToDollar(CECCUSFR6);
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C5}').innerHTML = DecimalToDollar(CECCUSFR7);
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C5}').innerHTML = DecimalToDollar(CECCUSFR8);
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C5}').innerHTML = DecimalToDollar(CECCUSFR9);
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C5}').innerHTML = DecimalToDollar(CECCUSFR10);
+            
+            var MarketR1 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C3}').innerHTML) * dblEscMarkets;
+            var MarketR2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C3}').innerHTML) * dblEscMarkets;
+            var MarketR3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C3}').innerHTML) * dblEscMarkets;
+            var MarketR4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C3}').innerHTML) * dblEscMarkets;
+            var MarketR5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C3}').innerHTML) * dblEscMarkets;
+            var MarketR6 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C3}').innerHTML) * dblEscMarkets;
+            var MarketR7 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C3}').innerHTML) * dblEscMarkets;
+            var MarketR8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C3}').innerHTML) * dblEscMarkets;
+            var MarketR9 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C3}').innerHTML) * dblEscMarkets;
+            var MarketR10 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C3}').innerHTML) * dblEscMarkets;
+            
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C6}').innerHTML = DecimalToDollar0(MarketR1);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C6}').innerHTML = DecimalToDollar0(MarketR2);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C6}').innerHTML = DecimalToDollar0(MarketR3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C6}').innerHTML = DecimalToDollar0(MarketR4);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C6}').innerHTML = DecimalToDollar0(MarketR5);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C6}').innerHTML = DecimalToDollar0(MarketR6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C6}').innerHTML = DecimalToDollar0(MarketR7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C6}').innerHTML = DecimalToDollar0(MarketR8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C6}').innerHTML = DecimalToDollar0(MarketR9);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C6}').innerHTML = DecimalToDollar0(MarketR10);
+            
+            var CodeAndPracR1 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C3}').innerHTML) * dblEscCode;
+            var CodeAndPracR2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C3}').innerHTML) * dblEscCode;
+            var CodeAndPracR3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C3}').innerHTML) * dblEscCode;
+            var CodeAndPracR4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C3}').innerHTML) * dblEscCode;
+            var CodeAndPracR5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C3}').innerHTML) * dblEscCode;
+            var CodeAndPracR6 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C3}').innerHTML) * dblEscCode;
+            var CodeAndPracR7 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C3}').innerHTML) * dblEscCode;
+            var CodeAndPracR8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C3}').innerHTML) * dblEscCode;
+            var CodeAndPracR9 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C3}').innerHTML) * dblEscCode;
+            var CodeAndPracR10 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C3}').innerHTML) * dblEscCode;
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C7}').innerHTML = DecimalToDollar0(CodeAndPracR1);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C7}').innerHTML = DecimalToDollar0(CodeAndPracR2);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C7}').innerHTML = DecimalToDollar0(CodeAndPracR3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C7}').innerHTML = DecimalToDollar0(CodeAndPracR4);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C7}').innerHTML = DecimalToDollar0(CodeAndPracR5);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C7}').innerHTML = DecimalToDollar0(CodeAndPracR6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C7}').innerHTML = DecimalToDollar0(CodeAndPracR7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C7}').innerHTML = DecimalToDollar0(CodeAndPracR8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C7}').innerHTML = DecimalToDollar0(CodeAndPracR9);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C7}').innerHTML = DecimalToDollar0(CodeAndPracR10);
+            
+            var ECCR1 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C7}').innerHTML);
+            var ECCR2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C7}').innerHTML);
+            var ECCR3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C7}').innerHTML);
+            var ECCR4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C7}').innerHTML);
+            var ECCR5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C7}').innerHTML);
+            var ECCR6 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C7}').innerHTML);
+            var ECCR7 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C7}').innerHTML);
+            var ECCR8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C7}').innerHTML);
+            var ECCR9 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C7}').innerHTML);
+            var ECCR10 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C7}').innerHTML);
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C8}').innerHTML = DecimalToDollar0(ECCR1);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C8}').innerHTML = DecimalToDollar0(ECCR2);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C8}').innerHTML = DecimalToDollar0(ECCR3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C8}').innerHTML = DecimalToDollar0(ECCR4);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C8}').innerHTML = DecimalToDollar0(ECCR5);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C8}').innerHTML = DecimalToDollar0(ECCR6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C8}').innerHTML = DecimalToDollar0(ECCR7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C8}').innerHTML = DecimalToDollar0(ECCR8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C8}').innerHTML = DecimalToDollar0(ECCR9);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C8}').innerHTML = DecimalToDollar0(ECCR10);
+            
+            var ECCGSFR1 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C8}').innerHTML)/dblGross;
+            var ECCGSFR2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C8}').innerHTML)/dblGross;
+            var ECCGSFR3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C8}').innerHTML)/dblGross;
+            var ECCGSFR4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C8}').innerHTML)/dblGross;
+            var ECCGSFR5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C8}').innerHTML)/dblenclosedparking;
+            var ECCGSFR6 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C8}').innerHTML)/dblsiteinfostrucparking;
+            var ECCGSFR7 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C8}').innerHTML)/dblsiteinfosurfaceparking;
+            var ECCGSFR8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C8}').innerHTML)/dblFinSite;
+            var ECCGSFR9 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C8}').innerHTML)/dblGross;
+            var ECCGSFR10 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C8}').innerHTML)/dblGross;
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C9}').innerHTML = DecimalToDollar(ECCGSFR1);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C9}').innerHTML = DecimalToDollar(ECCGSFR2);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C9}').innerHTML = DecimalToDollar(ECCGSFR3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C9}').innerHTML = DecimalToDollar(ECCGSFR4);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C9}').innerHTML = DecimalToDollar(ECCGSFR5);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C9}').innerHTML = DecimalToDollar(ECCGSFR6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C9}').innerHTML = DecimalToDollar(ECCGSFR7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C9}').innerHTML = DecimalToDollar(ECCGSFR8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C9}').innerHTML = DecimalToDollar(ECCGSFR9);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C9}').innerHTML = DecimalToDollar(ECCGSFR10);
+            
+            
+            var ECCUSFR1 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C8}').innerHTML)/dblTotalUSF;
+            var ECCUSFR2 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C8}').innerHTML)/dblTotalUSF;
+            var ECCUSFR3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C8}').innerHTML)/dblTotalUSF;
+            var ECCUSFR4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C8}').innerHTML)/dblTotalUSF;
+            var ECCUSFR5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C8}').innerHTML)/dblTotalUSF;
+            var ECCUSFR6 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C8}').innerHTML)/dblTotalUSF;
+            var ECCUSFR7 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C8}').innerHTML)/dblTotalUSF;
+            //va CECCUSFR8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C3}').innerHTML)/dblTotalUSF;
+            var ECCUSFR9 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C8}').innerHTML)/dblTotalUSF;
+            var ECCUSFR10 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C8}').innerHTML)/dblTotalUSF;
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C10}').innerHTML = DecimalToDollar(ECCUSFR1);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C10}').innerHTML = DecimalToDollar(ECCUSFR2);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C10}').innerHTML = DecimalToDollar(ECCUSFR3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C10}').innerHTML = DecimalToDollar(ECCUSFR4);
+            
+            
+        }
+        
+        function CalculateTotals() {
+            var dblGross = parseFloat('{!dblGross}').toFixed(2);
+            
+            var T1C3 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C3}').innerHTML);
+            var T1C4 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C4}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C4}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C4}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C4}').innerHTML);
+            //var T1C5 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C5}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C5}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C5}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C5}').innerHTML);
+            var T1C6 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C6}').innerHTML);
+            var T1C7 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C7}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C7}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C7}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C7}').innerHTML);
+            var T1C8 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C8}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C8}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C8}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C8}').innerHTML);
+            var T1C9 = +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R1C9}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R2C9}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R3C9}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R4C9}').innerHTML);
+            //added T4C3 (Total: Building Construction Cost - Including Other Direct Costs)
+            var T4C3 = +T1C3 + (+DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C3}').innerHTML));
+            var T4C4 = +T1C4 + (+DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C4}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C4}').innerHTML));
+            var T4C6 = +T1C6 + (+DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C6}').innerHTML));
+            var T4C7 = +T1C7 + (+DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C7}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C7}').innerHTML));
+            var T4C8 = +T1C8 + (+DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C8}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C8}').innerHTML));
+            var T4C9 = +T1C9 + (+DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C9}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C9}').innerHTML));
+            
+            
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T1C3}').innerHTML = DecimalToDollar0(T1C3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T1C4}').innerHTML = DecimalToDollar(T1C4);
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T1C5}').innerHTML = DecimalToDollar(T1C5);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T1C6}').innerHTML = DecimalToDollar0(T1C6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T1C7}').innerHTML = DecimalToDollar0(T1C7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T1C8}').innerHTML = DecimalToDollar0(T1C8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T1C9}').innerHTML = DecimalToDollar(T1C9);
+            
+            
+            //set NCMT_T4C3 (Total: Building Construction Cost - Including Other Direct Costs)
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T4C3}').innerHTML = DecimalToDollar0(T4C3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T4C4}').innerHTML = DecimalToDollar(T4C4);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T4C6}').innerHTML = DecimalToDollar0(T4C6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T4C7}').innerHTML = DecimalToDollar0(T4C7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T4C8}').innerHTML = DecimalToDollar0(T4C8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T4C9}').innerHTML = DecimalToDollar0(T4C9);
+            
+            // changed t2c3 to include NCMT_T4C3 (Total: Building Construction Cost - Including Other Direct Costs instead of NCMT_R9C3(Other Construction Costs core/shell) and NCMT_R10C3(Other Construction Costs tenant)
+            var T2C3 = +T4C3 + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C3}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C3}').innerHTML);
+            //var T2C4 = +T1C4 + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C4}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C4}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C4}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C4}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C4}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C4}').innerHTML);
+            var T2C4 = T2C3 / dblGross;
+            //var T2C5 = +T1C5 + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C5}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C5}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C5}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C5}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C5}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C5}').innerHTML);
+            var T2C6 = +T1C6 + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C6}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C6}').innerHTML);
+            var T2C7 = +T1C7 + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C7}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C7}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C7}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C7}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C7}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C7}').innerHTML);
+            var T2C8 = +T1C8 + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C8}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C8}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C8}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C8}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C8}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C8}').innerHTML);
+            //var T2C9 = +T1C9 + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R5C9}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R6C9}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R7C9}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R8C9}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R9C9}').innerHTML) + +DollarToDecimal(document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_R10C9}').innerHTML);
+            var T2C9 = T2C8 / dblGross;
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T2C3}').innerHTML = DecimalToDollar0(T2C3);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T2C4}').innerHTML = DecimalToDollar(T2C4);
+            //document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T2C5}').innerHTML = DecimalToDollar(T2C5);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T2C6}').innerHTML = DecimalToDollar0(T2C6);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T2C7}').innerHTML = DecimalToDollar0(T2C7);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T2C8}').innerHTML = DecimalToDollar0(T2C8);
+            document.getElementById('{!$Component.rptUniformat.DataBlock.NCMT_T2C9}').innerHTML = DecimalToDollar(T2C9);
+        }
+        
+        
+        function show_hide_column(col_no, do_show) {
+            var tbl = document.getElementById('ReportData');
+            var rows = tbl.getElementsByTagName('tr');
+            
+            for (var row = 0; row < rows.length; row++) {
+                var cols = rows[row].children;
+                if (col_no >= 0 && col_no < cols.length) {
+                    var cell = cols[col_no];
+                    if (cell.tagName == 'TD') cell.style.display = do_show ? 'block' : 'none';
+                }
+            }
+        }
+        
+        function get(name){
+            if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+                return decodeURIComponent(name[1]);
+        }
+        
+        function DecimalToDollar(Amount) {
+            Amount = parseFloat(Amount).toFixed(2);
+            return '$'+ Amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
+        function DecimalToDollar0(Amount) {
+            Amount = parseFloat(Amount).toFixed(0);
+            return '$'+ Amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
+        function DollarToDecimal(Amount){
+            Amount = Amount.replace('$','');
+            Amount = Amount.replace('$','').replace(',','').replace(',','').replace(',','').replace(' ',''); // Easy way to make sure that we handle big numbers, or more commas ...
+            return Amount;      
+        }
+        
+        </script>
+        
+    </apex:form>    
+</apex:page>

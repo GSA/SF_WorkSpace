@@ -1,0 +1,294 @@
+<!-- 9-JUL-2020 acheslyn added analytics script for user story sfws 766 -->
+<apex:page sidebar="false" standardStylesheets="false" showHeader="false">
+
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/demo_page.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+
+    <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+    <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+    <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+
+    <!-- <c:EnrollCSS /> -->
+    <!--<c:jQueryInit bDataTables="true" /> -->
+    <style>
+span.dropt {border-bottom: thin dotted; background: #ffeedd;}
+span.dropt:hover {text-decoration: none; background: #fefefe; z-index: 6; }
+span.dropt span {position: absolute; left: -9999px;
+  margin: 20px 0 0 0px; padding: 3px 3px 3px 3px;
+  border-style:solid; border-color:black; border-width:1px; z-index: 6;}
+span.dropt:hover span {left: 2%; background:rgb(236, 236, 236);} 
+span.dropt span {position: absolute; left: -9999px;
+  margin: 4px; padding: 3px 3px 3px 3px; text-indent:0in;
+  border-style:solid; border-color:#666; border-width:1px;}
+span.dropt:hover span {margin: 20px 0 0 170px; background:rgb(236, 236, 236); z-index:6;} 
+
+.sb-int {margin:10px;padding:10px;}
+#rightCol {width:620px; padding-right:20px;}
+.sb-int .bucket {margin-top:10px !important;}
+h3.blue {padding-top:15px;}
+.portalhome .apexp .selector {top:70px; left:0px;}
+menu.table-options {top:40px;left:-350px;}
+.tabbed-table table tr {height:35px;}
+menu.table-options a {border:1px solid#666666; border-radius:3px;padding:6px;background-image:url(https://gsa--aaap--c.cs12.visual.force.com/resource/1334347636000/gsa_common/images/sprite.png);background-position:-5px 145px;color:#333333;font-size:12px;text-decoration:none;}
+
+#lean_overlay {
+    position: fixed;
+    z-index:100;
+    top: 0px;
+    left: 0px;
+    height:100%;
+    width:100%;
+    background:none;
+    display: none;
+}
+
+    </style>
+
+
+    
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+        <ul>
+            <li><a href="/AAAP/PBS_AAAP_HomePage">Home</a></li>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>| {!$Label.site.logout}</li>
+            </apex:outputLink>
+            <li>|</li>
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>
+        </ul>
+    </div><!--/login-->
+
+
+    <div id="wrapper">
+        <!-- Header logo part starts Here -->
+        <h1 class="logo">GSA</h1>
+        <div id="nav">
+            <ul>
+                <li><a class="selected" href="/AAAP/PBS_AAAP_HomePage">AAAP Home</a></li>
+                <li><a href="/apex/news_updates_ux">News &amp; Updates</a></li>
+                <li><a href="/AAAP/PBS_AAAP_About_AAAP">FAQs</a></li>
+                <li><a href="/apex/help">Help</a></li>
+                <li><a href="/AAAP/PBS_AAAP_UserRegistration">Registration</a></li>
+            </ul>
+        </div><!--/nav-->
+
+        <div id="hero-int">
+            <h2>AAAP</h2>
+        </div><!--/hero-->
+        <!-- Header logo part ends Here -->
+        <div id="content">
+
+            <apex:form styleClass="formwrap">
+                <div style="margin:20px !important;">
+
+                    <!--/Page begins here -->
+                    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+
+                        <tr valign="top">
+
+                            <td>
+
+                                <h3 id="page-title" class="blue">Automated Advanced Acquisition Program (AAAP) Terms and
+                                    Conditions</h3>
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td align="left">
+
+                                <!-- ----------------------------------------------------------------------- -->
+
+                                <p>
+
+                                    <span style="font-weight:bold;">Automated Advanced Acquisition Program.</span> The
+                                    Automated Advanced
+
+                                    Acquisition Program site offers people and businesses the opportunity to
+
+                                    electronically offer building space for lease to the Federal Government.
+
+                                    The offer submission process is completely web-enabled, allowing all
+
+                                    registered participants to submit and update offers to lease space to
+
+                                    the Federal Government within specified timeframes, in response to a
+
+                                    Request for Lease Proposals (RLP). Participants may choose only to browse
+
+                                    through RLPs on this site or may choose to register as offerors and
+
+                                    submit offers.
+
+                                </p>
+
+                                <p>
+
+                                    <span style="font-weight:bold;">The Information That We Are Requesting Is Not Voluntary.</span>
+
+                                    To register as a user you must provide us with the mandatory information
+
+                                    in the form that follows. This information will be used to establish
+
+                                    your account within the AAAP, register you as a qualified user, and
+
+                                    allow you to make offers in response to posted Request for Lease Proposals.
+
+                                    We will also use this information for other statutorily mandated uses
+
+                                    and authorized routine uses under the Privacy Act. You are granting
+
+                                    consent for us to use this mandatory information when you click on the
+
+                                    <span style="font-weight:bold;">I Accept</span> button at the end of this page. If
+                                    you click on
+
+                                    <span style="font-weight:bold;">I Dont Accept</span> you will be returned to your
+                                    previous page.
+
+                                </p>
+
+                                <p>
+
+                                    <span style="font-weight:bold;">Privacy Act Information.</span> Personally
+                                    identifiable information
+
+                                    that we collect (e.g., name, home address, social security number,
+
+                                    taxpayer identification number, etc.) is subject to the Privacy Act.
+
+                                    This information is maintained by name or personal identifier.
+
+                                    This information has been described in a Privacy Act system of records.
+
+                                    The following Privacy Act Statement applies:
+
+                                </p>
+
+                                <p>
+
+                                    The information collection requirements that are not required by the
+
+                                    regulation, have been approved by the Office of Management and Budget
+
+                                    pursuant to the Paperwork Reduction Act and assigned the OMB Control
+
+                                    No. 3090-0163. This information will be used to establish your
+
+                                    credentials for making offers to lease space to the Federal Government.
+
+                                    Providing this information is mandatory if you want to be qualified to
+
+                                    make such offers. If you do not provide all of the requested
+
+                                    information, you will not be accepted as a qualified offeror in the
+
+                                    Automated Advanced Acquisition Program.
+
+                                </p>
+
+                                <p>
+
+                                    <span style="font-weight:bold;">Automatically Collected Information (Site Management Data).</span>
+                                    For
+
+                                    site security purposes and to ensure that this service remains available
+
+                                    to all users, this Government computer system employs software programs
+
+                                    to monitor network traffic to identify unauthorized attempts to upload
+
+                                    or change information, or otherwise cause damage.
+
+                                </p>
+
+                                <p>
+
+                                    <span style="font-weight:bold;">Offer Submission.</span> Offerors can submit offers
+                                    beginning with the
+
+                                    1st day of the open period every month through the last day of the open
+
+                                    period every month. Typically, the last day of the open period will be
+
+                                    the 7th day of every month. Offers submitted during any monthly open
+
+                                    period will not be effective until the day after an open period closes.
+
+                                    GSA will only evaluate offers after the close of the open period every month.
+
+                                    During the open period, offerors may submit new offers and update existing
+
+                                    offers (which may involve such actions as increasing or decreasing the
+
+                                    square footage or rental rate offered). After the close of the open period
+
+                                    each month, offerors may only reduce square footage offered and/or add
+
+                                    or delete attachments. Offerors are not allowed to revise rental rates
+
+                                    or increase square footage offered after the close of the open period each month.
+
+                                    Offerors may withdraw their offers at anytime prior to lease award.
+
+                                </p>
+
+                                <p>
+
+                                    <span style="font-weight:bold;">Acceptance of Terms and Conditions.</span> Any offer
+                                    electronically
+
+                                    submitted using the U.S. General Services Administration, Public
+
+                                    Buildings Service's Automated Advanced Acquisition Program Website, is subject to
+                                    these Automated Advanced Acquisition Program
+
+                                    Online Lease Terms and Conditions and to the terms and conditions
+
+                                    identified in the Request for Lease Proposals (RLP), Solicitation Provisions
+
+                                    (GSA Form 3516A), General Clauses (GSA Form 3517), and the
+
+                                    Representations and Certifications (GSA Form 3518).
+
+                                </p>
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+                    <!--/Page ends here-->
+
+                </div><!-- end rightcol -->
+                <INPUT TYPE="button" VALUE="Close" onClick="window.close();"/>
+
+            </apex:form>
+        </div><!--/content-->
+
+    </div><!-- /Wrapper -->
+    <c:SiteFooterUX />
+    <script>
+   $(".popup").leanModal();
+
+    </script>
+
+</apex:page>

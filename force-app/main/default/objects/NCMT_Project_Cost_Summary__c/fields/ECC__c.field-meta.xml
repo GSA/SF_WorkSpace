@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>ECC__c</fullName>
+    <externalId>false</externalId>
     <formula>IF( TEXT(Project_Name__r.Project_type__c) != &apos;Repair &amp; Alteration - Work Item Detail&apos;,((ECCA__c *(1+ Project_Name__r.Construction_Contingency__c))*(1+ Project_Name__r.Art_In_Architecture__c)), ((RA_ECCA__c *(1+ Project_Name__r.Construction_Contingency__c))*(1+ Project_Name__r.Art_In_Architecture__c)) )</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>ECC</label>

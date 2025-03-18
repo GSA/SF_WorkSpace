@@ -1,0 +1,858 @@
+<apex:page controller="PBS_AAAP_OfferForm1364Controller" standardstylesheets="false" sidebar="false" renderas="pdf">
+
+
+
+<head>
+
+<link  rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Tangerine'/>
+<style type="text/css">
+
+span.cls_008{font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_008{font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+span.cls_005{font-family:Arial,serif;font-size:12.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_005{font-family:Arial,serif;font-size:12.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+span.cls_010{font-family:Arial,serif;font-size:10.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal}
+
+div.cls_010{font-family:Arial,serif;font-size:10.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal}
+
+span.cls_011{font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_011{font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+span.cls_006{font-family:Arial,serif;font-size:7.6px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_006{font-family:Arial,serif;font-size:7.6px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_009{font-family:"Wingdings",serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_009{font-family:"Wingdings",serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_012{font-family:Arial,serif;font-size:11.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_012{font-family:Arial,serif;font-size:11.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+span.cls_002{font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_002{font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_013{font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal}
+
+div.cls_013{font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal}
+
+div.cls_sign{font-family: Tangerine,serif;font-size:11.0px;color:rgb(255,0,0);font-weight:bold;font-style:italic}
+
+span.cls_014{font-family:Arial,serif;font-size:9.1px;color:rgb(255,0,0);font-weight:bold;font-style:normal}
+
+div.cls_014{font-family:Arial,serif;font-size:9.1px;color:rgb(255,0,0);font-weight:bold;font-style:normal}
+
+span.cls_015{font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:normal;font-style:normal}
+
+div.cls_015{font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:normal;font-style:normal}
+
+span.cls_003{font-family:Arial,serif;font-size:8.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_003{font-family:Arial,serif;font-size:8.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_004{font-family:Arial,serif;font-size:8.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_004{font-family:Arial,serif;font-size:8.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+span.cls_016{font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:italic}
+
+div.cls_016{font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:italic}
+
+span.cls_017{font-family:Arial,serif;font-size:10.0px;color:rgb(255,255,255);font-weight:bold;font-style:normal}
+
+div.cls_017{font-family:Arial,serif;font-size:10.0px;color:rgb(255,255,255);font-weight:bold;font-style:normal}
+
+span.cls_018{font-family:Arial,serif;font-size:8.1px;color:rgb(255,255,255);font-weight:bold;font-style:normal}
+
+div.cls_018{font-family:Arial,serif;font-size:8.1px;color:rgb(255,255,255);font-weight:bold;font-style:normal}
+
+span.cls_019{font-family:Times,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_019{font-family:Times,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+span.cls_033{font-family:Times,serif;font-size:10.0px;color:rgb(255,0,0);font-weight:normal;font-style:normal}
+
+div.cls_033{font-family:Times,serif;font-size:10.0px;color:rgb(255,0,0);font-weight:normal;font-style:normal}
+
+span.cls_020{font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:italic}
+
+div.cls_020{font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:italic}
+span.cls_021{font-family:Times,serif;font-size:10.0px;color:rgb(128,128,128);font-weight:normal;font-style:normal}
+
+div.cls_021{font-family:Times,serif;font-size:10.0px;color:rgb(128,128,128);font-weight:normal;font-style:normal}
+
+</style>
+</head>
+
+<body>
+  <apex:panelGrid rendered="{!!isValidUser}" >
+        <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+        <apex:messages styleClass="errMessage" id="errmessage"/> 
+    </apex:panelGrid>    
+<apex:panelGrid rendered="{!isValidUser}">  
+<div style="position:absolute;left:50%;margin-left:-306px;top:0px;width:612px;height:792px;border-style:outset;overflow:hidden">
+
+<div style="position:absolute;left:0px;top:0px">
+
+<img src="{!URLFOR($Resource.form1364, 'image001.jpg')}" width="612" height="792" /></div>
+
+<div style="position:absolute;left:215.93px;top:35.40px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">REQUEST FOR</div>
+
+<div style="position:absolute;left:19.08px;top:35.88px;font-family:Arial,serif;font-size:12.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal">PROPOSAL TO LEASE SPACE</div>
+
+<div style="position:absolute;left:215.93px;top:43.44px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">LEASE PROPOSALS </div>
+
+<div style="position:absolute;left:349.03px;top:42.48px;font-family:Arial,serif;font-size:10.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!RLPNumber}</div>
+
+<div style="position:absolute;left:468.82px;top:43.44px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">DATED</div>
+
+<div style="position:absolute;left:526.80px;top:41.52px;font-family:Arial,serif;font-size:10.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!sysDate}</div>
+
+
+<div style="position:absolute;left:215.93px;top:51.48px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">(RLP) NUMBER &rarr;  <span class="cls_009">&#8594;</span></div>
+
+<div style="position:absolute;left:193.85px;top:66.62px;font-family:Arial,serif;font-size:11.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal">SECTION I  -  DESCRIPTION OF PREMISES</div>
+
+<div style="position:absolute;left:19.08px;top:86.06px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">1a.  BUILDING NAME</div>
+
+<div style="position:absolute;left:301.63px;top:86.06px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">1b.  BUILDING STREET ADDRESS</div>
+
+<div style="position:absolute;left:33.48px;top:96.98px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!offer.PBS_AAAP_Building_Name__c}</div>
+
+<div style="position:absolute;left:316.03px;top:96.98px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!offer.PBS_AAAP_Street_Address__c}</div>
+
+<div style="position:absolute;left:19.08px;top:122.90px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">1c.  CITY</div>
+
+<div style="position:absolute;left:252.41px;top:122.90px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">1d.  STATE</div>
+
+<div style="position:absolute;left:301.63px;top:122.90px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">1e.</div>
+
+<div style="position:absolute;left:316.03px;top:122.90px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">9-DIGIT ZIP CODE</div>
+
+<div style="position:absolute;left:447.58px;top:122.90px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">1f.   CONGRESSIONAL DISTRICT</div>
+
+<div style="position:absolute;left:33.48px;top:133.82px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!offer.PBS_AAAP_City__c}</div>
+
+<div style="position:absolute;left:266.81px;top:133.82px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!offer.PBS_AAAP_State__c}</div>
+
+<div style="position:absolute;left:316.03px;top:133.82px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!offer.PBS_AAAP_ZipCode__c}</div>
+
+<div style="position:absolute;left:461.98px;top:133.58px" class="cls_014">{!offer.PBS_AAAP_Congressional_District__c}</div>
+
+<div style="position:absolute;left:19.08px;top:150.02px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">2a.  FLOORS OFFERED</div>
+
+<div style="position:absolute;left:135.74px;top:150.02px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">2b.  TOTAL NUMBER</div>
+
+<div style="position:absolute;left:333.67px;top:153.38px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">3.   TOTAL RENTABLE SPACE IN OFFERED BUILDING</div>
+
+<div style="position:absolute;left:150.14px;top:158.06px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">OF FLOORS IN BUILDING</div>
+
+<div style="position:absolute;left:252.41px;top:168.26px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">a.   GENERAL PURPOSE</div>
+
+<div style="position:absolute;left:369.07px;top:168.26px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">b.   WAREHOUSE</div>
+
+<div style="position:absolute;left:485.74px;top:168.26px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">c.   OTHER</div>
+
+<div style="position:absolute;left:266.81px;top:176.30px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">(Office)</div>
+
+<div style="position:absolute;left:33.48px;top:187.22px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal"> N/A </div>
+
+<div style="position:absolute;left:150.14px;top:187.22px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!noOfFloors}</div>
+
+<div style="position:absolute;left:266.81px;top:187.22px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!officeSpace}<span class="cls_002"> SF</span></div>
+
+<div style="position:absolute;left:383.47px;top:187.22px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal"> {!warehouseSpace} <span class="cls_002"> SF</span></div>
+
+<div style="position:absolute;left:500.14px;top:187.22px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!otherSpace} <span class="cls_002"> SF</span></div>
+
+<div style="position:absolute;left:19.08px;top:198.86px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">4.</div>
+
+<div style="position:absolute;left:33.48px;top:198.86px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">LIVE FLOOR LOAD</div>
+
+<div style="position:absolute;left:135.74px;top:198.86px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">5.</div>
+
+<div style="position:absolute;left:150.14px;top:198.86px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">MEASUREMENT</div>
+
+<div style="position:absolute;left:252.41px;top:198.86px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">6.</div>
+
+<div style="position:absolute;left:266.81px;top:198.86px;white-space:nowrap;;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">YEAR OF LAST</div>
+
+<div style="position:absolute;left:369.07px;top:198.86px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">7.</div>
+
+<div style="position:absolute;left:383.47px;top:198.86px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">BUILDING AGE</div>
+
+<div style="position:absolute;left:485.74px;top:198.86px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">8.</div>
+
+<div style="position:absolute;left:500.14px;top:198.86px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">SITE SIZE</div>
+
+<div style="position:absolute;left:150.14px;top:206.93px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">METHOD</div>
+
+<div style="position:absolute;left:266.81px;top:206.93px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">MAJOR RENOVATION</div>
+
+<div style="position:absolute;left:266.81px;top:214.97px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">(if applicable)</div>
+
+<div style="position:absolute;left:33.48px;top:225.89px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!liveFloorLoad}<span class="cls_002"> Pounds per SF</span></div>
+
+<div style="position:absolute;left:150.14px;top:226.01px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">ANSI/BOMA</div>
+
+<div style="position:absolute;left:209.81px;top:226.01px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">[</div>
+<div style="position:absolute;left:212.81px;top:226.01px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!ANSIBOMA}</div>
+
+<div style="position:absolute;left:217.57px;top:226.01px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">]</div>
+
+<div style="position:absolute;left:266.81px;top:225.89px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!offer.PBS_AAAP_Renovation_Year__c}</div>
+
+<div style="position:absolute;left:383.47px;top:225.89px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!buildingAge}</div>
+
+<div style="position:absolute;left:500.14px;top:225.89px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal"> {!siteSize} <span class="cls_002"> SF</span></div>
+
+<div style="position:absolute;left:150.14px;top:237.17px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">OTHER</div>
+
+<div style="position:absolute;left:209.81px;top:237.17px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">[</div>
+
+<div style="position:absolute;left:217.57px;top:237.17px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">]</div>
+
+<div style="position:absolute;left:500.14px;top:237.17px" class="cls_015">{!siteSizeAcres}<span class="cls_002"> Acres</span></div>
+
+<div style="position:absolute;left:188.69px;top:252.77px;font-family:Arial,serif;font-size:11.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal">SECTION II  -  SPACE OFFERED AND RATES</div>
+
+<div style="position:absolute;left:19.08px;top:279.77px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">9.</div>
+
+<div style="position:absolute;left:33.48px;top:279.77px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">ANSI/BOMA OFFICE AREA</div>
+
+<div style="position:absolute;left:162.02px;top:282.17px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">__N/A___</div>
+
+<div style="position:absolute;left:215.93px;top:283.73px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">10.  RENTABLE SQUARE FEET (RSF)</div>
+
+<div style="position:absolute;left:355.27px;top:282.17px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal"> N/A </div>
+
+<div style="position:absolute;left:405.58px;top:283.25px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">11.  COMMON AREA FACTOR (CAF)</div>
+
+<div style="position:absolute;left:552.96px;top:282.17px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!CAF}</div>
+
+<div style="position:absolute;left:33.48px;top:287.81px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">SQUARE FEET (ABOA)</div>
+
+<div style="position:absolute;left:19.08px;top:307.61px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">“Tenant Improvements” are all alterations for the Government-demised area above the building shell buildout, excluding costs identified as tenant improvements in the Security Unit Price</div>
+
+<div style="position:absolute;left:19.08px;top:315.65px;white-space:nowrap;;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">List.  Building Specific Amortized Capital (BSAC) is the sum of costs identified as such in the Security Unit Price List.  Neither the Tenant Improvements as stated in Block 12, nor the </div>
+
+<div style="position:absolute;left:19.08px;top:323.69px;white-space:nowrap;;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">BSAC as stated in Block 13, are to be included in the shell rent. It is expected that the tenant buildout will be fully amortized at the end of the firm term, and the rent will be reduced</div>
+
+<div style="position:absolute;left:19.08px;top:331.73px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">accordingly. Any desired rent increases or decreases beyond the firm term of the lease should be reflected in the shell rate and fully explained as part of this written proposal. If Tenant</div>
+
+<div style="position:absolute;left:19.08px;top:339.77px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Improvements or BSAC improvements are to be amortized beyond the firm term, those calculations must be itemized as part of this written proposal.  The Offeror may attach additional pages</div>
+
+<div style="position:absolute;left:19.08px;top:347.81px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">as necessary.</div>
+
+<div style="position:absolute;left:19.08px;top:363.79px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal"></div>
+
+<div style="position:absolute;left:447.58px;top:362.35px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Number of years each cost per square foot is</div>
+
+<div style="position:absolute;left:19.08px;top:371.83px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal"></div>
+
+<div style="position:absolute;left:447.58px;top:370.51px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">in  effect.  State  any</div>
+
+<div style="position:absolute;left:519.84px;top:370.51px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">changes  for  any  rent</div>
+
+<div style="position:absolute;left:19.08px;top:379.87px;white-space:nowrap;;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal"></div>
+
+<div style="position:absolute;left:447.58px;top:378.55px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">component.</div>
+
+<div style="position:absolute;left:181.13px;top:396.55px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">a.</div>
+
+<div style="position:absolute;left:256.73px;top:396.55px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">b.</div>
+
+<div style="position:absolute;left:332.23px;top:396.55px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">c.</div>
+
+<div style="position:absolute;left:404.98px;top:396.55px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">d.</div>
+
+<div style="position:absolute;left:477.94px;top:396.55px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">e.</div>
+
+<div style="position:absolute;left:557.04px;top:396.55px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">f.</div>
+
+<div style="position:absolute;left:152.18px;top:407.59px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">BUILD-OUT COSTS</div>
+
+<div style="position:absolute;left:233.21px;top:407.59px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">AMORTIZATION</div>
+
+<div style="position:absolute;left:308.47px;top:407.59px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">AMORTIZATION</div>
+
+<div style="position:absolute;left:383.23px;top:407.59px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">ANNUAL RENT</div>
+
+<div style="position:absolute;left:456.22px;top:407.59px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">ANNUAL RENT</div>
+
+<div style="position:absolute;left:528.72px;top:407.59px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">NO.  YEARS RATE</div>
+
+<div style="position:absolute;left:156.14px;top:415.63px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">PER CATEGORY</div>
+
+<div style="position:absolute;left:249.77px;top:415.63px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">TERM</div>
+
+<div style="position:absolute;left:300.91px;top:415.63px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">INTEREST RATE (%)</div>
+
+<div style="position:absolute;left:535.44px;top:415.63px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">IS EFFECTIVE</div>
+
+<div style="position:absolute;left:390.79px;top:418.63px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$ PER RSF</div>
+
+<div style="position:absolute;left:454.54px;top:418.63px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$ PER ABOA SF</div>
+
+<div style="position:absolute;left:20.16px;top:432.79px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">12. TENANT IMPROVEMENTS</div>
+
+<div style="position:absolute;left:33.48px;top:440.83px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">(per RLP requirements)</div>
+
+<div style="position:absolute;left:160.50px;top:443.35px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:234.13px;top:443.35px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:309.27px;top:443.35px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:379.15px;top:443.35px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:447.58px;top:443.35px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:525.00px;top:443.35px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:20.16px;top:453.91px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">13. BSAC</div>
+
+<div style="position:absolute;left:33.48px;top:461.95px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">(per RLP requirements detailed</div>
+
+<div style="position:absolute;left:160.50px;top:471.79px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal"> <span class="cls_013">See Rate Structure</span></div>
+
+<div style="position:absolute;left:33.48px;top:469.99px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">on Security Unit Price List)</div>
+
+<div style="position:absolute;left:234.13px;top:471.79px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:309.27px;top:471.79px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:379.15px;top:471.79px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal"> <span class="cls_013">See Rate Structure</span></div>
+
+<div style="position:absolute;left:447.58px;top:471.79px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal"><span class="cls_013">See Rate Structure</span></div>
+
+<div style="position:absolute;left:525.00px;top:471.79px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:20.16px;top:482.83px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">14. SHELL BUILD-OUT</div>
+
+<div style="position:absolute;left:33.48px;top:490.87px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">(per RLP requirements)</div>
+
+<div style="position:absolute;left:160.50px;top:493.06px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:20.16px;top:509.86px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">15. TOTAL BUILD-OUT COSTS</div>
+
+<div style="position:absolute;left:160.50px;top:517.90px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:20.16px;top:529.66px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">16. SHELL RENT (Including current</div>
+
+<div style="position:absolute;left:33.48px;top:537.70px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">real estate taxes.  Refer to Line</div>
+
+<div style="position:absolute;left:379.15px;top:542.62px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:447.58px;top:542.62px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:525.00px;top:542.62px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:33.48px;top:545.74px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">28 on GSA Form 1217)</div>
+
+<div style="position:absolute;left:20.16px;top:556.42px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">17. OPERATING COSTS (Refer to</div>
+
+<div style="position:absolute;left:33.48px;top:564.22px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Line 27 on GSA Form 1217</div>
+
+<div style="position:absolute;left:379.15px;top:568.66px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:447.58px;top:568.66px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:525.00px;top:568.66px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:20.16px;top:580.90px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">18. TOTAL RATE/SF</div>
+
+<div style="position:absolute;left:379.15px;top:584.26px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:447.58px;top:584.26px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:525.00px;top:584.26px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:19.08px;top:605.14px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">19.  TOTAL ANNUAL RENT</div>
+
+<div style="position:absolute;left:379.15px;top:605.14px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:447.58px;top:605.14px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:525.00px;top:605.14px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:152.54px;top:622.90px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">PER SF RATE</div>
+
+<div style="position:absolute;left:239.45px;top:622.90px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">FOR YEARS</div>
+
+<div style="position:absolute;left:303.43px;top:622.90px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">PER SF RATE</div>
+
+<div style="position:absolute;left:387.67px;top:622.90px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">FOR YEARS</div>
+
+<div style="position:absolute;left:449.38px;top:622.90px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">PER SF RATE</div>
+
+<div style="position:absolute;left:538.80px;top:622.90px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">FOR YEARS</div>
+
+<div style="position:absolute;left:150.26px;top:641.16px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$__________RSF</div>
+
+<div style="position:absolute;left:301.63px;top:641.16px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$__________RSF</div>
+
+<div style="position:absolute;left:447.58px;top:641.16px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$__________RSF</div>
+
+<div style="position:absolute;left:19.08px;top:646.08px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">20. STEP RENT (SHELL RATES)</div>
+
+<div style="position:absolute;left:228.65px;top:650.16px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">_____ Thru _____</div>
+
+<div style="position:absolute;left:379.15px;top:649.20px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">_____ Thru ____</div>
+
+<div style="position:absolute;left:525.00px;top:649.20px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">_____ Thru _____</div>
+
+<div style="position:absolute;left:150.26px;top:657.24px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$__________ABOA</div>
+
+<div style="position:absolute;left:301.63px;top:657.24px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$__________ABOA</div>
+
+<div style="position:absolute;left:447.58px;top:657.24px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$__________ABOA</div>
+
+<div style="position:absolute;left:82.34px;top:686.40px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">a.  Number of parking spaces for the entire building/ facility, which are under the control of the Offeror:</div>
+<div style="position:absolute;left:386.42px;top:686.40px" class="cls_015">{!surfParking}</div>
+<div style="position:absolute;left:386.42px;top:686.40px" class="cls_015">________<span class="cls_002"> surface</span></div>
+
+<div style="position:absolute;left:458.42px;top:686.40px" class="cls_015">{!structParking}</div>
+<div style="position:absolute;left:458.42px;top:686.40px" class="cls_015">________<span class="cls_002"> structured</span></div>
+
+<div style="position:absolute;left:528.42px;top:686.40px" class="cls_015">{!totalParking}</div>
+<div style="position:absolute;left:528.42px;top:686.40px" class="cls_015">________<span class="cls_002"> Total</span></div>
+
+<div style="position:absolute;left:18.12px;top:694.44px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">21.</div>
+
+<div style="position:absolute;left:82.34px;top:695.40px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">b.  Number of parking spaces required by local code:</div>
+
+<div style="position:absolute;left:386.42px;top:695.40px" class="cls_015">{!offer.PBS_AAAP_Total_Surf_Park_Space_Offered__c}</div>
+<div style="position:absolute;left:386.42px;top:695.40px" class="cls_015">________<span class="cls_002"> surface</span></div>
+
+<div style="position:absolute;left:458.42px;top:695.40px" class="cls_015">{!offer.PBS_AAAP_Total_Struct_Park_Space_Offered__c}</div>
+<div style="position:absolute;left:458.42px;top:695.40px" class="cls_015">________<span class="cls_002"> structured</span></div>
+
+<div style="position:absolute;left:528.42px;top:695.40px" class="cls_015">{!offer.PBS_AAAP_Total_Park_Spaces_Offered__c}</div>
+<div style="position:absolute;left:528.42px;top:695.40px" class="cls_015">________<span class="cls_002"> Total</span></div>
+
+<div style="position:absolute;left:82.34px;top:704.52px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">c.  Number of parking spaces for Employee/Visitor Use (per RLP):</div>
+
+<div style="position:absolute;left:406.42px;top:704.52px" class="cls_015">___N/A____<span class="cls_002"> surface</span></div>
+
+<div style="position:absolute;left:478.42px;top:704.52px" class="cls_015">____N/A___<span class="cls_002"> structured</span></div>
+
+<div style="position:absolute;left:82.34px;top:713.52px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">d.  Number of parking spaces for Official Government Vehicles (per RLP):</div>
+
+<div style="position:absolute;left:406.42px;top:713.52px" class="cls_015">____N/A____<span class="cls_002"> surface</span></div>
+
+<div style="position:absolute;left:478.42px;top:713.52px" class="cls_015">____N/A____<span class="cls_002"> structured</span></div>
+
+<div style="position:absolute;left:82.34px;top:724.56px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">e.  What is the monthly amount ($) to be charged for?</div>
+
+<div style="position:absolute;left:82.34px;top:735.48px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Monthly cost per space:</div>
+
+<div style="position:absolute;left:170.69px;top:735.48px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$  <span class="cls_015">_</span><span class="cls_013">_______</span><span class="cls_002"> Reserved surface</span></div>
+
+<div style="position:absolute;left:270.26px;top:735.48px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$ <span class="cls_015">________</span><span class="cls_002"> Reserved structured</span></div>
+
+<div style="position:absolute;left:370.69px;top:735.48px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$  <span class="cls_015">_</span><span class="cls_013">_______</span><span class="cls_002">Non-Reserved surface</span></div>
+
+<div style="position:absolute;left:470.26px;top:735.48px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$ <span class="cls_015">________</span><span class="cls_002">Non-Reserved structured</span></div>
+
+<div style="position:absolute;left:178.69px;top:735.48px" class="cls_015">{!monthlyCostResSurf}</div>
+
+<div style="position:absolute;left:278.26px;top:735.48px" class="cls_015">{!monthlyCostResGar}</div>
+
+<div style="position:absolute;left:378.69px;top:735.48px" class="cls_015">{!monthlyCostNonResSurf}</div>
+
+<div style="position:absolute;left:478.26px;top:735.48px" class="cls_015">{!monthlyCostNonResGar}</div>
+
+<div style="position:absolute;left:18.00px;top:767.64px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">PAGE <span class="cls_003">1 of 3</span></div>
+
+<div style="position:absolute;left:429.46px;top:767.64px" class="cls_004">GSA<span class="cls_003"> </span><span class="cls_002">FORM</span><span class="cls_003"> </span><span class="cls_004">1364C (Rev 09/14)</span></div>
+
+</div>
+
+<div style="position:absolute;left:50%;margin-left:-306px;top:1002px;width:612px;height:792px;border-style:outset;overflow:hidden">
+
+<div style="position:absolute;left:0px;top:0px">
+
+<img src="{!URLFOR($Resource.form1364, 'image002_lop.png')}" width="612" height="792" /></div>
+
+<div style="position:absolute;left:178.85px;top:33.60px;font-family:Arial,serif;font-size:11.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal">SECTION III  -  LEASE TERMS AND CONDITIONS</div>
+
+<div style="position:absolute;left:112.22px;top:55.56px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">22.   INITIAL LEASE TERM</div>
+
+<div style="position:absolute;left:405.46px;top:58.56px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">23.   RENEWAL OPTIONS</div>
+
+<div style="position:absolute;left:137.78px;top:63.60px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">(Full Term)</div>
+
+<div style="position:absolute;left:19.08px;top:76.22px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">a.  Number of Years</div>
+
+<div style="position:absolute;left:110.18px;top:76.22px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">b.  Years Firm</div>
+
+<div style="position:absolute;left:201.29px;top:76.22px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">c.  Number of Days</div>
+
+<div style="position:absolute;left:301.63px;top:76.22px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">a.  Shell Rate /</div>
+
+<div style="position:absolute;left:365.47px;top:76.22px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">b.  Years Each</div>
+
+<div style="position:absolute;left:438.34px;top:76.22px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">c.  Number of</div>
+
+<div style="position:absolute;left:511.30px;top:76.22px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">d.  Number of Days</div>
+
+<div style="position:absolute;left:212.09px;top:84.26px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Notice for Government to</div>
+
+<div style="position:absolute;left:312.43px;top:84.26px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">RSF / Yr</div>
+
+<div style="position:absolute;left:449.14px;top:84.26px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">options</div>
+
+<div style="position:absolute;left:522.12px;top:84.26px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Notice to Exercise</div>
+
+<div style="position:absolute;left:212.09px;top:92.30px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Terminate Lease:</div>
+
+<div style="position:absolute;left:522.12px;top:92.30px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Renewal Option:</div>
+
+<div style="position:absolute;left:22.20px;top:103.34px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:123.30px;top:103.34px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:228.97px;top:103.34px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">N/A</div>
+
+<div style="position:absolute;left:303.51px;top:103.46px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">N/A</div>
+
+<div style="position:absolute;left:369.47px;top:103.34px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">N/A</div>
+
+<div style="position:absolute;left:462.34px;top:103.34px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">N/A</div>
+
+<div style="position:absolute;left:535.16px;top:103.34px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">N/A</div>
+
+<div style="position:absolute;left:19.08px;top:117.98px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">24.</div>
+
+<div style="position:absolute;left:33.48px;top:117.98px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">OFFER GOOD UNTIL AWARD</div>
+
+<div style="position:absolute;left:301.63px;top:117.98px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">25.  Space will be altered and delivered in accordance with the Government's specifications</div>
+
+<!--div style="position:absolute;left:33.48px;top:126.14px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">(In accordance with Federal Acquisition Regulations 15.208)</div-->
+
+<div style="position:absolute;left:316.03px;top:126.14px;white-space:nowrap;;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">and requirements in accordance with the Request for Lease Proposals (RLP) and the</div>
+
+<div style="position:absolute;left:316.03px;top:134.18px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">lease.</div>
+
+<div style="position:absolute;left:182.09px;top:146.30px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">26.   COMMISSIONS--IF APPLICABLE, ATTACH COMMISSION AGREEMENT</div>
+
+<div style="position:absolute;left:19.08px;top:162.02px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">a.</div>
+
+<div style="position:absolute;left:33.48px;top:162.02px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Tenant Representative Commission:</div>
+
+<div style="position:absolute;left:215.93px;top:162.02px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">b.   Owner’s Representative Commission:</div>
+
+<div style="position:absolute;left:405.58px;top:162.02px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">c.   Schedule of Commission payments:</div>
+
+<div style="position:absolute;left:33.48px;top:176.18px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal"> N/A <span class="cls_002"> %</span></div>
+
+<div style="position:absolute;left:230.33px;top:176.18px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal"> N/A <span class="cls_002"> %</span></div>
+
+<div style="position:absolute;left:419.98px;top:176.18px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal"> N/A <span class="cls_002"> % at lease award and </span><span class="cls_013"> N/A </span><span class="cls_002"> % at lease</span></div>
+
+<div style="position:absolute;left:419.98px;top:184.34px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">occupancy</div>
+
+<div style="position:absolute;left:19.08px;top:196.10px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">27.</div>
+
+<div style="position:absolute;left:33.48px;top:196.10px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">OFFEROR’S TENANT IMPROVEMENT FEE SCHEDULE</div>
+<div style="position:absolute;left:33.48px;top:207.17px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">See Rate Structure</div>
+
+<div style="position:absolute;left:301.63px;top:196.10px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">28.  ADDITIONAL  FINANCIAL ASPECTS OF THE OFFER</div>
+
+<div style="position:absolute;left:316.03px;top:207.17px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Adjustment for Vacant Premises:</div>
+
+<div style="position:absolute;left:420.66px;top:207.17px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$<span class="cls_015">  {!vacantPremiseAdjustment}      </span><span class="cls_002"> per ABOA sf</span></div>
+
+<div style="position:absolute;left:316.03px;top:218.21px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">HVAC Overtime Rate:</div>
+
+<div style="position:absolute;left:420.66px;top:218.21px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$<span class="cls_015">see Rate Structure</span><span class="cls_002"> per hour per [ ] zone [ ] floor [ ] space</span></div>
+
+<div style="position:absolute;left:33.48px;top:224.21px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">a.   Architectural/Engineering fees will be (choose one):<span class="cls_015">   N/A   </span></div>
+
+<div style="position:absolute;left:59.78px;top:233.21px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">1.</div>
+
+<div style="position:absolute;left:69.50px;top:233.21px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$ <span class="cls_013">______</span><span class="cls_002"> per ABOA square foot</span></div>
+
+<div style="position:absolute;left:316.03px;top:237.41px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Areas requiring 24 hour HVAC (LAN, etc.)</div>
+
+<div style="position:absolute;left:447.71px;top:237.41px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$<span class="cls_002">per </span><span class="cls_015">   </span><span class="cls_002">ABOA</span><span class="cls_015"> </span><span class="cls_002">SF</span></div>
+
+<div style="position:absolute;left:59.78px;top:242.21px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">2.</div>
+
+<div style="position:absolute;left:69.50px;top:242.21px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">______<span class="cls_002">% of Total Construction Costs</span></div>
+
+<div style="position:absolute;left:317.95px;top:248.33px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal"><i>*Only applies when the Government requires separate reimbursement for 24 hour HVAC</i></div>
+
+<div style="position:absolute;left:59.78px;top:251.21px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">3.</div>
+
+<div style="position:absolute;left:69.50px;top:251.21px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$ <span class="cls_013">  N/A  </span><span class="cls_002"> flat fee</span></div>
+
+<div style="position:absolute;left:318.79px;top:256.37px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal"><i>as described under Section 1 of the Lease.  Otherwise, include this cost in the operating rent, as described under Section 6 of the Lease. </i></div>
+
+<div style="position:absolute;left:33.48px;top:265.37px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">b.   Lessor’s  Project  Management fees  will  be</div>
+
+<div style="position:absolute;left:194.09px;top:265.37px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">______<span class="cls_002">  percent of   Total  TI</span></div>
+
+<div style="position:absolute;left:318.79px;top:264.41px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal"><i> </i></div>
+
+<div style="position:absolute;left:33.48px;top:273.53px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">construction costs</div>
+
+<div style="position:absolute;left:318.79px;top:272.45px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal"></div>
+
+<div style="position:absolute;left:316.03px;top:283.61px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Building’s Normal Hours of HVAC Operation:</div>
+
+<div style="position:absolute;left:33.48px;top:296.57px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">c.   If other fees are applicable, state what they are in terms of a per usable</div>
+
+<div style="position:absolute;left:330.43px;top:294.65px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Mon-- Fri <span class="cls_015">_{!offer.PBS_AAAP_HVAC_HRS_MON_TO_FRI_START__c}__</span><span class="cls_002"> AM to </span><span class="cls_015">__{!offer.PBS_AAAP_HVAC_HRS_MON_TO_FRI_END__c}__</span><span class="cls_002"> PM;</span></div>
+
+<div style="position:absolute;left:47.88px;top:304.61px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">square foot amount, or if using a percentage, what is the basis for determining</div>
+
+<div style="position:absolute;left:330.43px;top:305.69px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Saturday <span class="cls_015">_{!offer.PBS_AAAP_HVAC_HRS_ON_SAT_START__c}__</span><span class="cls_002"> AM to </span><span class="cls_015">__{!offer.PBS_AAAP_HVAC_HRS_ON_SAT_END__c}__</span><span class="cls_002">PM;</span></div>
+
+<div style="position:absolute;left:47.88px;top:312.65px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">the fee.</div>
+
+<div style="position:absolute;left:330.43px;top:316.73px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Sunday</div>
+
+<div style="position:absolute;left:359.95px;top:316.73px" class="cls_015">_{!offer.PBS_AAAP_HVAC_HRS_ON_SUN_START__c}__<span class="cls_002"> AM to </span><span class="cls_015">__{!offer.PBS_AAAP_HVAC_HRS_ON_SUN_END__c}__</span><span class="cls_002">PM</span></div>
+
+<div style="position:absolute;left:33.48px;top:326.69px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">The Government will add the cost of the proposed fees to the net present</div>
+
+<div style="position:absolute;left:316.03px;top:327.77px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Percent of Government Occupancy:</div>
+
+<div style="position:absolute;left:449.50px;top:327.77px" class="cls_015">  N/A  <span class="cls_002">%</span></div>
+
+<div style="position:absolute;left:33.48px;top:334.73px;white-space:nowrap;;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">value of the offered rental rate as described in the RLP’s Present Value Price</div>
+
+<div style="position:absolute;left:316.03px;top:338.81px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Current Year Taxes:</div>
+
+<div style="position:absolute;left:445.66px;top:338.81px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$<span class="cls_015">  N/A  </span></div>
+
+<div style="position:absolute;left:33.48px;top:342.77px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal"> Evaluation paragraph.  This schedule will be applicable for Tenant Improvements.</div>
+
+<div style="position:absolute;left:330.43px;top:349.87px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Based on fully assessed value?<span class="cls_015">  N/A  </span></div>
+
+<div style="position:absolute;left:481.66px;top:349.87px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">YES</div>
+
+<div style="position:absolute;left:517.66px;top:349.87px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">NO</div>
+
+
+<div style="position:absolute;left:330.43px;top:361.03px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">Is the offered space part of multiple tax bills?<span class="cls_015">  N/A  </span></div>
+
+<div style="position:absolute;left:481.66px;top:361.03px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">YES</div>
+
+<div style="position:absolute;left:517.66px;top:361.03px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">NO</div>
+
+<div style="position:absolute;left:330.43px;top:372.07px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">If so, provide tax ID numbers and square footage for each.  Attach the legal</div>
+
+<div style="position:absolute;left:330.43px;top:380.11px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">description of the offered property.</div>
+
+<div style="position:absolute;left:315.19px;top:389.11px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">If a site is offered, state the total land costs:</div>
+
+<div style="position:absolute;left:453.61px;top:389.11px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">$<span class="cls_015">  N/A  </span></div>
+
+<div style="position:absolute;left:301.63px;top:409.75px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">29.  LIST OF ATTACHMENTS SUBMITTED WITH THIS OFFER</div>
+
+<div style="position:absolute;left:301.63px;top:417.79px" class="cls_016">(See RLP requirements)</div>
+
+<div style="position:absolute;left:316.03px;top:426.67px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">  </div>
+
+<div style="position:absolute;left:19.08px;top:463.75px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">30.  ADDITIONAL REMARKS OR CONDITIONS WITH RESPECT TO THIS OFFER<span class="cls_013">  </span></div>
+
+<div style="position:absolute;left:142.82px;top:514.90px;font-family:Arial,serif;font-size:11.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal">SECTION IV  -  OWNER IDENTIFICATION AND CERTIFICATION</div>
+
+<div style="position:absolute;left:19.08px;top:536.26px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">31.  RECORDED OWNER <span class="cls_016">(Name and address including ZIP code)</span></div>
+
+<div style="position:absolute;left:33.48px;top:546.34px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">NAME </div>
+<div style="position:absolute;left:80.48px;top:546.34px" class="cls_015">{!offer.PBS_AAAP_Owner_Name__c} </div>
+
+<div style="position:absolute;left:33.48px;top:554.38px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">STREET </div>
+<div style="position:absolute;left:80.48px;top:554.38px" class="cls_015">{!offer.PBS_AAAP_Owner_Address__c} </div>
+
+<div style="position:absolute;left:33.48px;top:562.42px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">CITY<span class="cls_008">, </span><span class="cls_002">ST  ZIP</span></div>
+<div style="position:absolute;left:80.48px;top:562.42px" class="cls_015">{!offer.PBS_AAAP_Owner_City__c}  {!offer.PBS_AAAP_Owner_State__c}  {!offer.PBS_AAAP_Owner_Zip__c} </div>
+
+<div style="position:absolute;left:19.08px;top:581.50px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">32.  BY SUBMITTING THIS OFFER, THE OFFEROR AGREES UPON ACCEPTANCE OF THIS PROPOSAL BY THE HEREIN SPECIFIED DATE, TO LEASE TO THE UNITED</div>
+
+<div style="position:absolute;left:33.48px;top:589.54px;white-space:nowrap;;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">STATES OF AMERICA, THE PREMISES DESCRIBED, UPON THE TERMS AND CONDITIONS AS SPECIFIED HEREIN, IN FULL COMPLIANCE WITH AND ACCEPTANCE OF</div>
+
+<div style="position:absolute;left:33.48px;top:597.58px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">THE AFOREMENTIONED REQUEST FOR LEASE PROPOSALS, WITH ATTACHMENTS.</div>
+
+<div style="position:absolute;left:19.08px;top:610.42px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">33.  OFFEROR’S INTEREST IN PROPERTY</div>
+
+<div style="position:absolute;left:230.09px;top:610.42px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">OWNER</div>
+
+<div style="position:absolute;left:339.67px;top:610.42px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">AGENT</div>
+
+<div style="position:absolute;left:492.10px;top:610.42px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">OTHER</div>
+
+<div style="position:absolute;left:489.58px;top:618.58px" class="cls_016">(Specify):</div>
+
+<div style="position:absolute;left:239.21px;top:626.74px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">[ {!propOwner} ]</div>
+
+<div style="position:absolute;left:347.47px;top:626.74px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">[ {!propAgent} ]</div>
+
+<div style="position:absolute;left:483.34px;top:626.74px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!propOther} </div>
+
+<div style="position:absolute;left:281.09px;top:644.76px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">34<span class="cls_008">.   OFFEROR</span></div>
+
+<div style="position:absolute;left:33.48px;top:660.72px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">a.  NAME     </div>
+<div style="position:absolute;left:95.48px;top:660.72px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!userdetail.Name}</div>
+<div style="position:absolute;left:415.78px;top:658.08px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">b.   E-MAIL ADDRESS:</div>
+
+<div style="position:absolute;left:33.48px;top:668.76px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">TITLE</div>
+<div style="position:absolute;left:95.88px;top:668.76px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">N/A</div>
+<div style="position:absolute;left:430.18px;top:669.12px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!userdetail.Email}</div>
+
+<div style="position:absolute;left:33.48px;top:676.80px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">STREET   </div>
+<div style="position:absolute;left:95.48px;top:676.80px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!userdetail.Street}</div>
+<div style="position:absolute;left:33.48px;top:684.84px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">CITY , ST  ZIP  </div>
+<div style="position:absolute;left:95.88px;top:684.84px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!userdetail.City} {!userdetail.State} {!userdetail.PostalCode}</div>
+<div style="position:absolute;left:415.78px;top:683.16px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">c.   TELEPHONE NUMBER <span class="cls_016">(Including area code)</span></div>
+
+<div style="position:absolute;left:430.18px;top:690.96px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!userdetail.Phone}&nbsp;&nbsp;<span class="cls_002"> &nbsp;&nbsp;extension </span><span class="cls_013">__________</span></div>
+
+<div style="position:absolute;left:33.48px;top:704.76px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">d.   SIGNATURE</div>
+
+<div style="position:absolute;left:415.78px;top:704.76px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">e.   DATE SIGNED</div>
+
+<div style="position:absolute;left:94.18px;top:703.76px" class="cls_sign">{!if(sysDate!='',userdetail.Name,'')}</div>
+<div style="position:absolute;left:16.00px;top:715.64px" class="cls_015">{!if(sysDate!='','Accepted all the terms and conditions as specified herein, in full compliance with and acceptance of the aforementioned RLP, and attachments. ','')} </div>
+<div style="position:absolute;left:16.00px;top:723.64px" class="cls_015">{!if(sysDate!='','Signed and submitted on','')} {!sysDate} </div>
+<div style="position:absolute;left:430.18px;top:719.64px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!sysDate}</div>
+
+<div style="position:absolute;left:18.00px;top:767.64px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">PAGE <span class="cls_003">2 of 3</span></div>
+
+<div style="position:absolute;left:429.46px;top:767.64px" class="cls_004">GSA<span class="cls_003"> </span><span class="cls_002">FORM</span><span class="cls_003"> </span><span class="cls_004">1364C (Rev 09/14)</span></div>
+
+</div>
+
+<div style="position:absolute;left:50%;margin-left:-306px;top:2004px;width:612px;height:822px;border-style:outset;overflow:hidden">
+
+<div style="position:absolute;left:0px;top:0px">
+
+<img src="{!URLFOR($Resource.form1364, 'Page3.jpg')}"  width="612" height="792" /></div>
+
+<div style="position:absolute;left:18.00px;top:30.52px" class="cls_018">ATTACHMENT TO</div>
+
+<div style="position:absolute;left:221.33px;top:32.52px" class="cls_018">REQUEST FOR LEASE PROPOSAL NO.</div>
+
+<div style="position:absolute;left:454.66px;top:32.52px" class="cls_018">DATE:</div>
+
+<div style="position:absolute;left:18.00px;top:44.92px" class="cls_018">GSA FORM 1364C LEASE PROPOSAL DATA</div>
+
+<div style="position:absolute;left:25.80px;top:58.50px" class="cls_017">1</div>
+
+<div style="position:absolute;left:50.76px;top:58.50px;white-space:nowrap;;font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">Offeror's Interest in the Property:</div>
+
+<div style="position:absolute;left:50.76px;top:75.30px;white-space:pre;;font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">[<span style="white-space:pre;;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!propOwner} </span>]<span class="cls_011">  Fee owner  [</span><span class="cls_013">{!propAgent}</span><span class="cls_011">]  Other:</span></div>
+
+<div style="position:absolute;left:50.76px;top:90.26px;font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">Attach evidence of Offeror's interest in property (e.g., deed) and representative's authority to bind Offeror.</div>
+
+<div style="position:absolute;left:25.80px;top:107.30px" class="cls_017">2</div>
+
+<div style="position:absolute;left:50.76px;top:107.30px;font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">Flood Plains: (See RLP for minimum requirements)</div>
+
+<div style="position:absolute;left:50.76px;top:120.98px;white-space:nowrap;" class="cls_021">The Property is <span class="cls_021">[ &nbsp; ]</span><span class="cls_021">  in a base (100-year) flood plain  </span><span class="cls_021">[ &nbsp; ]</span><span class="cls_021">  in a 500-year flood plain </span><span class="cls_021">[ &nbsp; ]</span><span class="cls_021">  not in a flood plain.</span></div>
+
+<!--div style="position:absolute;left:50.76px;top:137.18px" class="cls_020">(See RLP for minimum requirements)</div-->
+
+<div style="position:absolute;left:25.80px;top:156.63px" class="cls_017">3</div>
+<div style="position:absolute;left:50.76px;top:156.63px" class="cls_020">Seismic Requirements: (See RLP for minimum requirements)</div>
+<div style="position:absolute;left:50.76px;top:171.81px;white-space:nowrap;" class="cls_021">[ &nbsp; ]<span class="cls_021">  RLP does not contain seismic requirements.  No documentation required.</span></div>
+<div style="position:absolute;left:50.76px;top:183.81px;white-space:nowrap;" class="cls_021">[ &nbsp; ]<span class="cls_021">  RLP contains seismic requirements.  The Building</span></div>
+<div style="position:absolute;left:60.76px;top:197.81px;white-space:nowrap;" class="cls_021">[ &nbsp; ]<span class="cls_021">  Fully meets seismic requirements or meets an exemption under the RLP</span></div>
+<div style="position:absolute;left:60.76px;top:209.81px;white-space:nowrap;" class="cls_021">[ &nbsp; ]<span class="cls_021">  Does not meet seismic requirements, but will be retrofitted to meet seismic requirements</span></div>
+<div style="position:absolute;left:60.76px;top:222.81px;white-space:nowrap;" class="cls_021">[ &nbsp; ]<span class="cls_021">  Will be constructed to meet seismic requirements</span></div>
+<div style="position:absolute;left:60.76px;top:235.81px;white-space:nowrap;" class="cls_021">[ &nbsp; ]<span class="cls_021">  Will not meet seismic requirements</span></div>
+
+<!--div style="position:absolute;left:50.76px;top:255.89px;white-space:nowrap;" class="cls_021">(See RLP for minimum requirements)</div-->
+
+<div style="position:absolute;left:25.80px;top:272.81px" class="cls_017">4</div>
+
+<div style="position:absolute;left:50.76px;top:272.81px;white-space:nowrap;;font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">Historic Preference:  The Building is a</div>
+
+<div style="position:absolute;left:50.76px;top:286.49px;white-space:nowrap;" class="cls_019">[<span style="white-space:pre;;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!histPropHistDist}</span><span class="cls_011">]  Historic property within a historic district.</span></div>
+
+<div style="position:absolute;left:50.76px;top:300.81px;white-space:nowrap;" class="cls_019">[<span style="white-space:pre;;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!NhistPropHistDist} </span><span class="cls_011">]  Non-historic property within a historic district.</span></div>
+
+<div style="position:absolute;left:50.76px;top:314.01px;white-space:nowrap;" class="cls_019">[<span style="white-space:pre;;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!histPropNHistDist} </span><span class="cls_011">]  Historic property outside of a historic district.</span></div>
+
+<div style="position:absolute;left:50.76px;top:325.33px;white-space:nowrap;" class="cls_019">[<span style="white-space:pre;;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!NhistPropNHistDist} </span><span class="cls_011">]  None of the above.</span></div>
+
+<div style="position:absolute;left:50.76px;top:343.43px" class="cls_020">(See RLP for minimum requirements)</div>
+
+<div style="position:absolute;left:25.80px;top:360.35px" class="cls_017">5</div>
+
+<div style="position:absolute;left:50.76px;top:360.35px;font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">Asbestos:  (See RLP for minimum requirements)</div>
+
+<div style="position:absolute;left:50.76px;top:375.03px;white-space:nowrap;" class="cls_021">[ &nbsp; ]<span class="cls_021">  Contains no ACM, or contains ACM in a stable, solid matrix that is not damaged or subject to damage.</span></div>
+
+<div style="position:absolute;left:50.76px;top:388.35px;white-space:nowrap;" class="cls_021">[ &nbsp; ]<span class="cls_021">  Contains ACM not in a stable, solid matrix.</span></div>
+
+<!--div style="position:absolute;left:50.76px;top:403.43px" class="cls_020">(See RLP minimum requirements)</div-->
+
+<div style="position:absolute;left:25.80px;top:422.35px" class="cls_017">6</div>
+
+<div style="position:absolute;left:50.76px;top:422.35px;font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">Fire/Life Safety: (See RLP for minimum requirements)</div>
+
+<div style="position:absolute;left:50.76px;top:436.03px" class="cls_021">The Property <span class="cls_021">[ &nbsp; ]</span><span class="cls_021">  Meets  </span><span class="cls_021">[ &nbsp; ]</span><span class="cls_021">  Does not meet Lease fire/life safety standards.</span></div>
+
+<!--div style="position:absolute;left:50.76px;top:450.26px" class="cls_020">(See RLP and Lease documents for minimum requirements)</div-->
+
+<div style="position:absolute;left:25.80px;top:470.18px" class="cls_017">7</div>
+
+<div style="position:absolute;left:50.76px;top:470.18px;font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">Accessibility: (See RLP for minimum requirements)</div>
+
+<div style="position:absolute;left:50.76px;top:485.86px" class="cls_021">The Property <span class="cls_021">[ &nbsp; ]</span><span class="cls_021">  Meets  </span><span class="cls_021">[ &nbsp; ]</span><span class="cls_021">  Does not meet Lease accessibility standards.</span></div>
+
+<!--div style="position:absolute;left:50.76px;top:505.94px" class="cls_020">(See RLP and Lease documents for minimum requirements)</div-->
+
+<div style="position:absolute;left:25.80px;top:521.86px" class="cls_017">8</div>
+
+<div style="position:absolute;left:50.76px;top:521.86px;font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">ENERGY STAR®:  The Building</div>
+
+<div style="position:absolute;left:50.76px;top:535.28px;white-space:nowrap;" class="cls_019">[<span style="white-space:pre;;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!energyStarCerified}</span><span class="cls_011">]  Has received the ENERGY STAR® Label within the past twelve months. Date: </span><span class="cls_033">   {!energyStarCertDt}</span></div>
+
+<div style="position:absolute;left:50.76px;top:547.50px;white-space:nowrap;" class="cls_019">[<span style="white-space:pre;;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!energyStarNotCerified}</span><span class="cls_011">]  Has not received the ENERGY STAR® Label within the past twelve months; the Offeror has evaluated</span></div>
+
+<div style="position:absolute;left:50.76px;top:560.00px;font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">energy savings measures and</div>
+
+<div style="position:absolute;left:86.78px;top:572.22px;white-space:nowrap;" class="cls_019">[ &nbsp; ]<span class="cls_011">  Determined that none are cost effective.</span></div>
+
+<div style="position:absolute;left:86.78px;top:585.54px" class="cls_019">[<span style="white-space:pre;;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!energyStarNotCerified}</span><span class="cls_011" style="white-space:nowrap;" >]  Determined that the following are cost effective (List):</span></div>
+<div style="position:absolute;left:50.76px;top:600.74px;font-family:Arial,serif;font-size:7.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal">{!energyStarExplanation}</div>
+<div style="position:absolute;left:50.76px;top:650.00px" class="cls_020">(See RLP and Lease documents for minimum requirements)</div>
+
+<div style="position:absolute;left:25.80px;top:672.86px" class="cls_017">9</div>
+
+<div style="position:absolute;left:50.76px;top:672.86px;white-space:nowrap;;font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">Waiver of Price Evaluation Preference.  A HUBZone small business concern (SBC) Offeror may elect to waive the price </div>
+
+<div style="position:absolute;left:50.76px;top:684.82px;white-space:nowrap;;font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">evaluation provided in Section 4 of the RLP.  In such a case, no price evaluation preference shall apply to the evaluation of the </div>
+
+<div style="position:absolute;left:50.76px;top:698.04px;white-space:nowrap;;font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">HUBZone SBC, and the performance of work requirements set forth in Section 1 of the Lease shall not be applicable to a </div>
+
+<div style="position:absolute;left:50.76px;top:711.04px;white-space:nowrap;;font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">lease awarded to the HUBZone SBC Offeror under this solicitation. A HUBZone SBC desiring to waive the price evaluation </div>
+
+<div style="position:absolute;left:50.76px;top:724.04px;white-space:nowrap;;font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal"> preference should so indicate below.</div>
+
+<div style="position:absolute;left:55.76px;top:738.04px;white-space:nowrap;" class="cls_033">[{!hubZoneOfferer}]<span class="cls_011"> I am a HUBZone SBC Offeror and I elect to waive the price evaluation preference.</span> </div>
+
+<div style="position:absolute;left:50.76px;top:752.04px;font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal">(See RLP and Lease documents for minimum requirements)</div>
+
+<div style="position:absolute;left:18.00px;top:797.64px;font-family:Arial,serif;font-size:7.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal">PAGE <span class="cls_003">3 of 3</span></div>
+
+<div style="position:absolute;left:429.46px;top:797.64px" class="cls_004">GSA<span class="cls_003"> </span><span class="cls_002">FORM</span><span class="cls_003"> </span><span class="cls_004">1364C (Rev 09/14)</span></div>
+
+</div>
+
+    </apex:panelGrid>
+</body>
+
+</apex:page>

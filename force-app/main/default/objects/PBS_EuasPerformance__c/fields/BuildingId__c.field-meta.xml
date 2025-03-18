@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BuildingId__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>The PBS Building associated with this record.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>The PBS Building associated with this record.</inlineHelpText>
+    <label>Building ID</label>
+    <referenceTo>PBS_Building__c</referenceTo>
+    <relationshipLabel>EUAS Performance Readings</relationshipLabel>
+    <relationshipName>L_PBS_EuasPerformance_2_PBS_Building</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

@@ -1,0 +1,2167 @@
+<!-- 7-JUL-2020 acheslyn updated head section to include google analytics snippet user story sfws 766-->
+<apex:page controller="PBS_AAAP_OfferForm1364RateStructure" action="{!isValidUserAction}" standardstylesheets="false" sidebar="false" renderAs="pdf">
+
+    <head>
+        <style type="text/css">
+
+.homeTab .brdPalette { height:2600px; }
+
+@page {
+/* Landscape orientation */
+size:landscape;
+} 
+
+span.cls_005{font-family:Arial,serif;font-size:11.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_005{font-family:Arial,serif;font-size:11.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+span.cls_002{font-family:Arial,serif;font-size:7.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_002{font-family:Arial,serif;font-size:7.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_003{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_003{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_004{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_004{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+
+        </style>
+        <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+ 		<script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+        <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+
+    </head>
+
+    <body>
+    <apex:panelGrid rendered="{!!isValidUser}">
+        <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+        <apex:messages styleClass="errMessage" id="errmessage"/>
+    </apex:panelGrid>
+    <apex:panelGrid rendered="{!isValidUser && regionCode !='Census'}">
+        <div style="position:absolute;left:50%;margin-left:-396px;top:0px;width:792px;height:612px;border-style:outset;overflow:hidden">
+
+            <div style="position:absolute;left:0px;top:0px">
+
+                <img src="{!URLFOR($Resource.form1364RateStructure, 'image001_092316.jpg')}" width="792" height="612"/>
+            </div>
+
+            <div style="position:absolute;left:310.53px;top:21.03px" class="cls_005">SECTION III - RATE STRUCTURE</div>
+
+            <div style="position:absolute;left:22.07px;top:228.81px" class="cls_002">Block#</div>
+
+            <div style="position:absolute;left:47.44px;top:172.81px" class="cls_002">Lease Type</div>
+            <div style="position:absolute;left:46.63px;top:180.23px" class="cls_002">(New (N) or</div>
+            <div style="position:absolute;left:48.41px;top:188.65px" class="cls_002">Continuing</div>
+            <div style="position:absolute;left:55.89px;top:196.08px" class="cls_002">(C))</div>
+            <div style="position:absolute;left:52.95px;top:204.50px" class="cls_002">If "C",</div>
+            <div style="position:absolute;left:51.41px;top:212.93px" class="cls_002">Identify</div>
+            <div style="position:absolute;left:47.41px;top:220.80px" class="cls_002">GSA Lease</div>
+            <div style="position:absolute;left:50.78px;top:228.81px" class="cls_002">Number.</div>
+
+            <div style="position:absolute;left:96.41px;top:220.80px" class="cls_002">Lease Term (in</div>
+            <div style="position:absolute;left:96.78px;top:228.81px" class="cls_002">Years)</div>
+
+            <div style="position:absolute;left:145.41px;top:212.93px" class="cls_002">Amount</div>
+            <div style="position:absolute;left:145.41px;top:220.80px" class="cls_002">of Space</div>
+            <div style="position:absolute;left:143.78px;top:228.81px" class="cls_002">(ABOA SF)</div>
+
+            <div style="position:absolute;left:190.41px;top:220.80px" class="cls_002">Shell Rate (per</div>
+            <div style="position:absolute;left:190.78px;top:228.81px" class="cls_002">ABOA SF)</div>
+
+            <div style="position:absolute;left:240.41px;top:212.80px" class="cls_002">Base Year</div>
+            <div style="position:absolute;left:240.78px;top:220.81px" class="cls_002">Opearting Cost</div>
+            <div style="position:absolute;left:240.78px;top:228.81px" class="cls_002">(per ABOA SF)</div>
+
+            <div style="position:absolute;left:288.78px;top:148.81px" class="cls_002">TENANT IMPROVEMENTS:</div>
+            <div style="position:absolute;left:288.78px;top:156.81px" class="cls_002">Annual % Interest Rate AND</div>
+            <div style="position:absolute;left:288.78px;top:164.81px" class="cls_002">Annual Cost ($) to Amortize</div>
+            <div style="position:absolute;left:288.78px;top:172.81px" class="cls_002">${!newTIUsed}/ABOA of TI for New
+                or
+            </div>
+            <div style="position:absolute;left:288.78px;top:180.81px" class="cls_002">${!sucTIUsed}/ABOA of TI for</div>
+            <div style="position:absolute;left:288.78px;top:188.81px" class="cls_002">Continuing Lease</div>
+
+            <div style="position:absolute;left:295.78px;top:218.81px" class="cls_002">APR (%)</div>
+            <div style="position:absolute;left:335.78px;top:218.81px" class="cls_002">Cost/ABOA($)</div>
+
+            <div style="position:absolute;left:386.78px;top:148.81px" class="cls_002">BUILDING SPECIFIC</div>
+            <div style="position:absolute;left:382.78px;top:156.81px" class="cls_002">AMORTIZED CAPITAL(BSAC):</div>
+            <div style="position:absolute;left:386.78px;top:164.81px" class="cls_002">Annual % Interest Rate and</div>
+            <div style="position:absolute;left:386.78px;top:172.81px" class="cls_002">Anuual Cost ($) to Amortize</div>
+            <div style="position:absolute;left:386.78px;top:180.81px" class="cls_002">${!BSACUsed}/ABOA of TI for New
+                or
+            </div>
+            <div style="position:absolute;left:386.78px;top:188.81px" class="cls_002">Continuing Lease</div>
+            <div style="position:absolute;left:390.78px;top:218.81px" class="cls_002">APR (%)</div>
+            <div style="position:absolute;left:430.78px;top:218.81px" class="cls_002">Cost/ABOA($)</div>
+
+            <!--<div style="position:absolute;left:480.78px;top:124.81px" class="cls_002">FULLY</div>
+<div style="position:absolute;left:480.78px;top:132.81px" class="cls_002">SERVICED </div>    
+<div style="position:absolute;left:480.78px;top:140.81px" class="cls_002">LEASE RATE</div>    
+<div style="position:absolute;left:480.78px;top:148.81px" class="cls_002">(per ABOA SF)</div>    
+<div style="position:absolute;left:486.78px;top:156.81px" class="cls_002">based on </div>    
+<div style="position:absolute;left:480.78px;top:164.81px" class="cls_002">${!newTIUsed}/ABOA </div>    
+<div style="position:absolute;left:480.78px;top:172.81px" class="cls_002">TI for New and</div>    
+<div style="position:absolute;left:480.78px;top:180.81px" class="cls_002">${!sucTIUsed}/ABOA </div>    
+<div style="position:absolute;left:480.78px;top:188.81px" class="cls_002">TI for Cont </div> 
+<div style="position:absolute;left:480.78px;top:196.81px" class="cls_002">Leases and </div>    
+<div style="position:absolute;left:480.78px;top:204.81px" class="cls_002">${!BSACUsed}/ABOA </div>    
+<div style="position:absolute;left:480.78px;top:212.81px" class="cls_002">for BSAC for</div>    
+<div style="position:absolute;left:480.78px;top:220.81px" class="cls_002">New and Cont</div>    
+<div style="position:absolute;left:480.78px;top:228.81px" class="cls_002">Leases</div>    -->
+            <div style="position:absolute;left:480.78px;top:204.81px" class="cls_002">FULLY</div>
+            <div style="position:absolute;left:480.78px;top:212.81px" class="cls_002">SERVICED</div>
+            <div style="position:absolute;left:480.78px;top:220.81px" class="cls_002">LEASE RATE</div>
+            <div style="position:absolute;left:480.78px;top:228.81px" class="cls_002">(per ABOA SF)</div>
+
+            <div style="position:absolute;left:530.78px;top:188.81px" class="cls_002">Step Shell Rate</div>
+            <div style="position:absolute;left:530.78px;top:196.81px" class="cls_002">per ABOA SF</div>
+            <div style="position:absolute;left:530.78px;top:204.81px" class="cls_002">for the soft</div>
+            <div style="position:absolute;left:530.78px;top:212.81px" class="cls_002">term (years</div>
+            <div style="position:absolute;left:530.78px;top:220.81px" class="cls_002">6-10 OR years</div>
+            <div style="position:absolute;left:530.78px;top:228.81px" class="cls_002">11- 15)</div>
+
+            <div style="position:absolute;left:580.78px;top:212.81px" class="cls_002">Free Rent</div>
+            <div style="position:absolute;left:580.78px;top:220.81px" class="cls_002">FIRM TERM</div>
+            <div style="position:absolute;left:580.78px;top:228.81px" class="cls_002"># of months</div>
+
+            <div style="position:absolute;left:630.78px;top:212.81px" class="cls_002">HVAC</div>
+            <div style="position:absolute;left:630.78px;top:220.81px" class="cls_002">Overtime</div>
+            <div style="position:absolute;left:630.78px;top:228.81px" class="cls_002">Rate</div>
+
+
+            <div style="position:absolute;left:675.78px;top:220.81px" class="cls_002">Lessor PM</div>
+            <div style="position:absolute;left:675.78px;top:228.81px" class="cls_002">Fees (%)</div>
+
+            <div style="position:absolute;left:720.78px;top:212.81px" class="cls_002">A&amp;E Fees</div>
+            <div style="position:absolute;left:720.78px;top:220.81px" class="cls_002">($ ABOA SF</div>
+            <div style="position:absolute;left:720.78px;top:228.81px" class="cls_002">or %)</div>
+
+            <div style="position:absolute;left:765.78px;top:220.81px" class="cls_002">$ or</div>
+            <div style="position:absolute;left:765.78px;top:228.81px" class="cls_002">%</div>
+
+            <div style="position:absolute;left:675.78px;top:180.81px" class="cls_002">Tenant Improvement</div>
+            <div style="position:absolute;left:675.78px;top:188.81px" class="cls_002">Fee Schedule</div>
+
+            <!--<div style="position:absolute;left:97.67px;top:42.81px" class="cls_002">Lease Term (in</div>
+
+        <div style="position:absolute;left:138.80px;top:42.81px" class="cls_002">Amount of</div>
+
+        <div style="position:absolute;left:162.42px;top:42.81px" class="cls_002">Shell Rate</div>
+
+        <div style="position:absolute;left:208.07px;top:42.81px" class="cls_002">Base Year</div>
+
+        <div style="position:absolute;left:294.75px;top:42.81px" class="cls_002">Tenant  Improvements (TI)</div>
+
+        <div style="position:absolute;left:429.10px;top:42.81px" class="cls_002">Annual interest</div>
+
+        <div style="position:absolute;left:485.32px;top:42.83px" class="cls_002">Free Rent</div>
+
+        <div style="position:absolute;left:535.82px;top:42.86px" class="cls_002">Free Rent</div>
+
+        <div style="position:absolute;left:575.96px;top:42.89px" class="cls_002">Fully Serviced</div>
+
+        <div style="position:absolute;left:630.76px;top:42.90px" class="cls_002">Shell Rate</div>
+
+        <div style="position:absolute;left:675.10px;top:42.93px" class="cls_002">Annualized Present</div>
+
+        <div style="position:absolute;left:29.74px;top:51.23px" class="cls_002">#</div>
+
+
+
+        <div style="position:absolute;left:99.06px;top:51.23px" class="cls_002">Term</div>
+
+        <div style="position:absolute;left:124.86px;top:51.23px" class="cls_002">Space (ABOA)</div>
+
+        <div style="position:absolute;left:172.38px;top:51.23px" class="cls_002">(per</div>
+
+        <div style="position:absolute;left:209.02px;top:51.23px" class="cls_002">Operating</div>
+
+        <div style="position:absolute;left:429.10px;top:50.81px" class="cls_002">rate(%) and cost</div>
+
+        <div style="position:absolute;left:483.37px;top:50.84px" class="cls_002">(Number of</div>
+
+        <div style="position:absolute;left:543.75px;top:50.87px" class="cls_002">As a</div>
+
+        <div style="position:absolute;left:579.19px;top:50.89px" class="cls_002">Lease Rate</div>
+
+        <div style="position:absolute;left:637.03px;top:50.91px" class="cls_002">per</div>
+
+        <div style="position:absolute;left:682.51px;top:50.94px" class="cls_002">Value (PV) per</div>
+
+        <div style="position:absolute;left:48.41px;top:59.65px" class="cls_002">Continuing</div>
+        -->
+            <!-- commented by syam on 08/01/2016<div style="position:absolute;left:103.32px;top:59.65px" class="cls_002">(in</div>-->
+
+            <!-- commented by syam on 08/01/2016<div style="position:absolute;left:121.74px;top:59.65px" class="cls_002">(ABOA)</div>-->
+            <!--
+<div style="position:absolute;left:167.69px;top:59.65px" class="cls_002">ABOA)</div>
+
+<div style="position:absolute;left:208.21px;top:59.65px" class="cls_002">Costs (per</div>
+
+<div style="position:absolute;left:427.83px;top:58.81px" class="cls_002">to amortize up to</div>
+
+<div style="position:absolute;left:477.70px;top:58.84px" class="cls_002">Months) based</div>
+
+<div style="position:absolute;left:535.63px;top:58.87px" class="cls_002">Percentage</div>
+
+<div style="position:absolute;left:579.54px;top:58.90px" class="cls_002">(per ABOA)</div>
+
+<div style="position:absolute;left:622.72px;top:58.91px" class="cls_002">ANSI/BOMA </div>
+
+<div style="position:absolute;left:680.36px;top:58.94px" class="cls_002">ABOA based on</div>
+
+
+
+<div style="position:absolute;left:96.92px;top:68.08px" class="cls_002">Years)</div>
+
+<div style="position:absolute;left:213.51px;top:68.08px" class="cls_002">ABOA)</div>
+
+<div style="position:absolute;left:436.39px;top:66.81px" class="cls_002">$6/ABOA </div>
+
+<div style="position:absolute;left:479.24px;top:66.84px" class="cls_002">on ${!newTIUsed} per</div>
+
+<div style="position:absolute;left:545.49px;top:66.87px" class="cls_002">of</div>
+
+<div style="position:absolute;left:579.29px;top:66.90px" class="cls_002">based on</div>
+
+<div style="position:absolute;left:626.13px;top:66.91px" class="cls_002">Office Area</div>
+
+<div style="position:absolute;left:668.83px;top:66.94px" class="cls_002">${!newTIUsed} per ABOA TI for</div>
+
+
+
+<div style="position:absolute;left:436.39px;top:74.82px" class="cls_002">of BSAC</div>
+
+<div style="position:absolute;left:481.96px;top:74.85px" class="cls_002">ABOA TI for</div>
+
+<div style="position:absolute;left:534.14px;top:74.87px" class="cls_002">Full Service </div>
+
+<div style="position:absolute;left:578.45px;top:74.90px" class="cls_002">${!newTIUsed} per</div>
+
+<div style="position:absolute;left:625.28px;top:74.92px" class="cls_002">square foot</div>
+
+<div style="position:absolute;left:672.57px;top:74.94px" class="cls_002">New Leases and ${!sucTIUsed}</div>
+
+
+
+<div style="position:absolute;left:432.10px;top:82.82px" class="cls_002">for a new and</div>
+
+<div style="position:absolute;left:481.65px;top:82.85px" class="cls_002">New Leases</div>
+
+<div style="position:absolute;left:543.97px;top:82.88px" class="cls_002">Rent</div>
+
+<div style="position:absolute;left:580.45px;top:82.90px" class="cls_002">ABOA TI for</div>
+
+<div style="position:absolute;left:629.66px;top:82.92px" class="cls_002">(ABOA)</div>
+
+<div style="position:absolute;left:680.55px;top:82.95px" class="cls_002">per ABOA TI for</div>
+
+
+
+<div style="position:absolute;left:429.39px;top:90.82px" class="cls_002">continuing lease</div>
+
+<div style="position:absolute;left:480.17px;top:90.85px" class="cls_002">and ${!sucTIUsed} per</div>
+
+
+
+<div style="position:absolute;left:578.94px;top:90.90px" class="cls_002">New Leases-</div>
+
+<div style="position:absolute;left:629.94px;top:90.92px" class="cls_002"> for years</div>
+
+<div style="position:absolute;left:674.90px;top:90.95px" class="cls_002">Continuing Leases</div>
+
+
+
+
+
+<div style="position:absolute;left:481.96px;top:98.85px" class="cls_002">ABOA TI for</div>
+
+
+
+<div style="position:absolute;left:575.08px;top:98.92px" class="cls_002">and ${!sucTIUsed} per</div>
+
+<div style="position:absolute;left:627.08px;top:98.92px" class="cls_002">6-10, if any</div>
+
+
+
+<div style="position:absolute;left:482.59px;top:106.86px" class="cls_002">Continuing</div>
+
+
+
+<div style="position:absolute;left:580.60px;top:106.93px" class="cls_002">ABOA TI for</div>
+
+
+
+<div style="position:absolute;left:489.61px;top:114.86px" class="cls_002">Leases</div>
+
+
+<div style="position:absolute;left:580.11px;top:114.93px" class="cls_002">Continuing</div>
+
+
+
+
+<div style="position:absolute;left:580.03px;top:122.93px" class="cls_002">Leases</div>
+
+
+<div style="position:absolute;left:580.85px;top:130.94px" class="cls_002"><B>LEASE</B></div>
+
+<div style="position:absolute;left:431.40px;top:140.37px" class="cls_002"></div>
+<div style="position:absolute;left:580.85px;top:140.38px" class="cls_002"><B>TERM</B></div>
+
+<div style="position:absolute;left:257.93px;top:163.31px" class="cls_002">Annual %</div>
+
+<div style="position:absolute;left:294.52px;top:163.33px" class="cls_002">Annual Cost/</div>
+
+<div style="position:absolute;left:347.95px;top:163.34px" class="cls_002">Annual</div>
+
+<div style="position:absolute;left:383.33px;top:163.36px" class="cls_002">Total Cost Of</div>
+
+<div style="position:absolute;left:436.77px;top:163.38px" class="cls_002">APR</div>
+
+<div style="position:absolute;left:456.77px;top:163.38px" class="cls_002">Cost/</div>
+
+<div style="position:absolute;left:478.62px;top:163.38px" class="cls_002">Firm Term</div>
+
+
+<div style="position:absolute;left:528.12px;top:163.38px" class="cls_002">Firm Term %</div>
+
+
+<div style="position:absolute;left:684.41px;top:163.40px" class="cls_002">Lease Term</div>
+
+
+<div style="position:absolute;left:250.91px;top:171.31px" class="cls_002">Interest Rate</div>
+
+<div style="position:absolute;left:292.95px;top:171.33px" class="cls_002">ABOA to</div>
+
+<div style="position:absolute;left:340.93px;top:171.34px" class="cls_002">Percentage</div>
+
+<div style="position:absolute;left:384.35px;top:171.36px" class="cls_002">Construction</div>
+
+<div style="position:absolute;left:436.77px;top:171.38px" class="cls_002">(%)</div>
+
+<div style="position:absolute;left:456.77px;top:171.38px" class="cls_002">ABOA</div>
+
+
+
+<div style="position:absolute;left:247.72px;top:179.32px" class="cls_002">to Amortize</div>
+
+<div style="position:absolute;left:299.80px;top:179.33px" class="cls_002">Amortize</div>
+
+<div style="position:absolute;left:338.74px;top:179.35px" class="cls_002">Interest Rate</div>
+
+<div style="position:absolute;left:390.60px;top:179.37px" class="cls_002">Markups</div>
+
+<div style="position:absolute;left:456.77px;top:179.38px" class="cls_002">($)</div>
+
+
+<div style="position:absolute;left:247.08px;top:187.32px" class="cls_002">${!newTIUsed}/ABOA</div>
+
+<div style="position:absolute;left:292.86px;top:187.33px" class="cls_002">${!newTIUsed}/ABOA</div>
+
+<div style="position:absolute;left:341.10px;top:187.35px" class="cls_002">to Amortize</div>
+
+<div style="position:absolute;left:389.60px;top:187.37px" class="cls_002">based on</div>
+
+
+<div style="position:absolute;left:248.74px;top:195.32px" class="cls_002">of TI for New</div>
+
+<div style="position:absolute;left:295.79px;top:195.34px" class="cls_002">of TI for New</div>
+
+<div style="position:absolute;left:339.60px;top:195.35px" class="cls_002">Over ${!newTIUsed}</div>
+
+<div style="position:absolute;left:387.27px;top:195.37px" class="cls_002">${!newTIUsed} per</div>
+
+
+<div style="position:absolute;left:246.80px;top:203.33px" class="cls_002">&amp; ${!sucTIUsed} per</div>
+
+<div style="position:absolute;left:295.70px;top:203.34px" class="cls_002">&amp; ${!sucTIUsed} per</div>
+
+<div style="position:absolute;left:339.23px;top:203.35px" class="cls_002">or ${!sucTIUsed}and</div>
+
+<div style="position:absolute;left:390.19px;top:203.37px" class="cls_002">ABOA TI</div>
+
+
+<div style="position:absolute;left:247.09px;top:211.33px" class="cls_002">ABOA of TI</div>
+<div style="position:absolute;left:294.09px;top:211.33px" class="cls_002">ABOA of TI</div>
+
+<div style="position:absolute;left:348.11px;top:211.36px" class="cls_002">up to</div>
+<div style="position:absolute;left:394.11px;top:211.36px" class="cls_002">for new,</div>
+
+
+<div style="position:absolute;left:247.09px;top:219.33px" class="cls_002">for Continuing</div>
+<div style="position:absolute;left:294.09px;top:219.33px" class="cls_002">for Continuing</div>
+<div style="position:absolute;left:345.11px;top:219.36px" class="cls_002">${!maxTIUsed}</div>
+<div style="position:absolute;left:382.91px;top:219.36px" class="cls_002">${!sucTIUsed}/ABOA</div>
+
+<div style="position:absolute;left:247.09px;top:227.33px" class="cls_002">Lease</div>
+<div style="position:absolute;left:294.09px;top:227.33px" class="cls_002">Lease</div>
+<div style="position:absolute;left:338.11px;top:227.36px" class="cls_002">/ABOA of TI</div>
+<div style="position:absolute;left:391.51px;top:227.36px" class="cls_002">for cont.</div>
+-- end syam -->
+
+            <div style="position:absolute;left:30.33px;top:243.03px" class="cls_002">1</div>
+
+            <div style="position:absolute;left:55.44px;top:243.03px" class="cls_002">{!spaceandrate[0].field1}</div>
+            <div style="position:absolute;left:102.84px;top:243.04px" class="cls_002">{!spaceandrate[0].field2}</div>
+            <div style="position:absolute;left:153.80px;top:243.03px" class="cls_002">{!spaceandrate[0].field3}</div>
+            <div style="position:absolute;left:202.42px;top:243.03px" class="cls_002">{!spaceandrate[0].field4}</div>
+            <!-- base year -->
+            <div style="position:absolute;left:247.07px;top:243.03px" class="cls_002">{!spaceandrate[0].field5}</div>
+            <div style="position:absolute;left:295.00px;top:243.03px" class="cls_002">{!spaceandrate[0].field6}</div>
+            <div style="position:absolute;left:340.79px;top:243.03px" class="cls_002">{!spaceandrate[0].field7}</div>
+            <!-- commented by syam on 08/02/2016 these values may not be needed ,unable to map with new template -->
+            <!--<div style="position:absolute;left:341.00px;top:243.03px" class="cls_002">{!spaceandrate[0].field8}</div>
+-->
+            <div style="position:absolute;left:400.40px;top:243.03px" class="cls_002">{!spaceandrate[0].field10}</div>
+            <div style="position:absolute;left:441.32px;top:243.03px" class="cls_002">{!spaceandrate[0].field11}</div>
+            <!-- fully serviced rent -->
+            <div style="position:absolute;left:490.96px;top:243.03px" class="cls_002">{!spaceandrate[0].field16}</div>
+            <!-- step shell rate -->
+            <div style="position:absolute;left:538.00px;top:243.03px" class="cls_002">{!spaceandrate[0].field17}</div>
+            <!-- total cost of construction markup -->
+            <div style="position:absolute;left:582.50px;top:243.03px" class="cls_002">{!spaceandrate[0].field9}</div>
+            <!-- HVAC Over time field to be updated!!!!!SYAM-->
+            <div style="position:absolute;left:627.50px;top:243.03px" class="cls_002">{!spaceandrate[0].field23}</div>
+            <!-- Free rent no of months based -->
+            <!--<div style="position:absolute;left:687.63px;top:243.03px" class="cls_002">{!spaceandrate[0].field12}</div>
+<!-- Free rent as a % of full service rent -->
+            <!--<div style="position:absolute;left:737.12px;top:243.03px" class="cls_002">{!spaceandrate[0].field14}</div>
+-->
+            <div style="position:absolute;left:687.63px;top:243.03px" class="cls_002">{!spaceandrate[0].field24}</div>
+            <div style="position:absolute;left:727.41px;top:243.03px" class="cls_002">{!spaceandrate[0].field25}</div>
+            <div style="position:absolute;left:767.41px;top:243.03px" class="cls_002">{!spaceandrate[0].field26}</div>
+
+            <!--  div style="position:absolute;left:694.11px;top:243.03px" class="cls_002">{!spaceandrate[0].field19}</div-->
+            <!--  div style="position:absolute;left:720.65px;top:243.03px" class="cls_002">{!spaceandrate[0].field23}</div-->
+
+            <!-- second row -->
+
+            <div style="position:absolute;left:30.33px;top:277.03px" class="cls_002">1</div>
+            <div style="position:absolute;left:55.44px;top:277.03px" class="cls_002">{!spaceandrate[1].field1}</div>
+            <div style="position:absolute;left:102.84px;top:277.03px" class="cls_002">{!spaceandrate[1].field2}</div>
+            <div style="position:absolute;left:153.80px;top:277.03px" class="cls_002">{!spaceandrate[1].field3}</div>
+            <div style="position:absolute;left:202.42px;top:277.03px" class="cls_002">{!spaceandrate[1].field4}</div>
+            <!-- base year -->
+            <div style="position:absolute;left:247.07px;top:277.03px" class="cls_002">{!spaceandrate[1].field5}</div>
+            <div style="position:absolute;left:295.00px;top:277.03px" class="cls_002">{!spaceandrate[1].field6}</div>
+            <div style="position:absolute;left:340.79px;top:277.03px" class="cls_002">{!spaceandrate[1].field7}</div>
+            <div style="position:absolute;left:400.40px;top:277.03px" class="cls_002">{!spaceandrate[1].field10}</div>
+            <div style="position:absolute;left:441.32px;top:277.03px" class="cls_002">{!spaceandrate[1].field11}</div>
+            <!-- fully serviced rent -->
+            <div style="position:absolute;left:490.96px;top:277.03px" class="cls_002">{!spaceandrate[1].field16}</div>
+            <!-- step shell rate -->
+            <div style="position:absolute;left:538.00px;top:277.03px" class="cls_002">{!spaceandrate[1].field17}</div>
+            <!-- total cost of construction markup -->
+            <div style="position:absolute;left:582.50px;top:277.03px" class="cls_002">{!spaceandrate[1].field9}</div>
+            <!-- HVAC Over time field to be updated!!!!!SYAM-->
+            <div style="position:absolute;left:627.50px;top:277.03px" class="cls_002">{!spaceandrate[1].field23}</div>
+            <div style="position:absolute;left:687.63px;top:277.03px" class="cls_002">{!spaceandrate[1].field24}</div>
+            <div style="position:absolute;left:727.41px;top:277.03px" class="cls_002">{!spaceandrate[1].field25}</div>
+            <div style="position:absolute;left:767.41px;top:277.03px" class="cls_002">{!spaceandrate[1].field26}</div>
+            <!-- third row -->
+            <div style="position:absolute;left:30.33px;top:310.78px" class="cls_002">1</div>
+            <div style="position:absolute;left:55.44px;top:310.78px" class="cls_002">{!spaceandrate[2].field1}</div>
+            <div style="position:absolute;left:102.84px;top:310.78px" class="cls_002">{!spaceandrate[2].field2}</div>
+            <div style="position:absolute;left:153.80px;top:310.78px" class="cls_002">{!spaceandrate[2].field3}</div>
+            <div style="position:absolute;left:202.42px;top:310.78px" class="cls_002">{!spaceandrate[2].field4}</div>
+            <!-- base year -->
+            <div style="position:absolute;left:247.07px;top:310.78px" class="cls_002">{!spaceandrate[2].field5}</div>
+            <div style="position:absolute;left:295.00px;top:310.78px" class="cls_002">{!spaceandrate[2].field6}</div>
+            <div style="position:absolute;left:340.79px;top:310.78px" class="cls_002">{!spaceandrate[2].field7}</div>
+            <div style="position:absolute;left:400.40px;top:310.78px" class="cls_002">{!spaceandrate[2].field10}</div>
+            <div style="position:absolute;left:441.32px;top:310.78px" class="cls_002">{!spaceandrate[2].field11}</div>
+            <!-- fully serviced rent -->
+            <div style="position:absolute;left:490.96px;top:310.78px" class="cls_002">{!spaceandrate[2].field16}</div>
+            <!-- step shell rate -->
+            <div style="position:absolute;left:538.00px;top:310.78px" class="cls_002">{!spaceandrate[2].field17}</div>
+            <!-- total cost of construction markup -->
+            <div style="position:absolute;left:582.50px;top:310.78px" class="cls_002">{!spaceandrate[2].field9}</div>
+            <!-- HVAC Over time field to be updated!!!!!SYAM-->
+            <div style="position:absolute;left:627.50px;top:310.78px" class="cls_002">{!spaceandrate[2].field23}</div>
+            <div style="position:absolute;left:687.63px;top:310.78px" class="cls_002">{!spaceandrate[2].field24}</div>
+            <div style="position:absolute;left:727.41px;top:310.78px" class="cls_002">{!spaceandrate[2].field25}</div>
+            <div style="position:absolute;left:767.41px;top:310.78px" class="cls_002">{!spaceandrate[2].field26}</div>
+
+            <!--
+<div style="position:absolute;left:30.33px;top:277.03px" class="cls_002">1</div>
+<div style="position:absolute;left:45.44px;top:277.03px" class="cls_002">{!spaceandrate[1].field1}</div>
+<div style="position:absolute;left:95.34px;top:277.04px" class="cls_002">{!spaceandrate[1].field2}</div>    
+<div style="position:absolute;left:118.80px;top:277.03px" class="cls_002">{!spaceandrate[1].field3}</div>
+<div style="position:absolute;left:162.42px;top:277.03px" class="cls_002">{!spaceandrate[1].field4}</div>
+<div style="position:absolute;left:210.07px;top:277.03px" class="cls_002">{!spaceandrate[1].field5}</div>
+<div style="position:absolute;left:250.00px;top:277.03px" class="cls_002">{!spaceandrate[1].field6}</div>
+<div style="position:absolute;left:300.79px;top:277.03px" class="cls_002">{!spaceandrate[1].field7}</div>
+<div style="position:absolute;left:341.00px;top:277.03px" class="cls_002">{!spaceandrate[1].field8}</div>
+<div style="position:absolute;left:385.50px;top:277.03px" class="cls_002">{!spaceandrate[1].field9}</div>
+<div style="position:absolute;left:434.40px;top:277.03px" class="cls_002">{!spaceandrate[1].field10}</div>
+<div style="position:absolute;left:456.32px;top:277.03px" class="cls_002">{!spaceandrate[1].field11}</div>
+<div style="position:absolute;left:498.63px;top:277.03px" class="cls_002">{!spaceandrate[1].field12}</div>
+<div style="position:absolute;left:548.12px;top:277.03px" class="cls_002">{!spaceandrate[1].field14}</div>
+<div style="position:absolute;left:581.96px;top:277.03px" class="cls_002">{!spaceandrate[1].field16}</div>
+<div style="position:absolute;left:627.00px;top:277.03px" class="cls_002">{!spaceandrate[1].field17}</div>
+<div style="position:absolute;left:694.41px;top:277.03px" class="cls_002">{!spaceandrate[1].field18}</div>
+
+
+<div style="position:absolute;left:30.33px;top:310.78px" class="cls_002">1</div>
+<div style="position:absolute;left:45.44px;top:310.78px" class="cls_002">{!spaceandrate[2].field1}</div>
+<div style="position:absolute;left:118.80px;top:310.78px" class="cls_002">{!spaceandrate[2].field3}</div>
+<div style="position:absolute;left:162.42px;top:310.78px" class="cls_002">{!spaceandrate[2].field4}</div>
+<div style="position:absolute;left:210.07px;top:310.78px" class="cls_002">{!spaceandrate[2].field5}</div>
+<div style="position:absolute;left:250.00px;top:310.78px" class="cls_002">{!spaceandrate[2].field6}</div>
+<div style="position:absolute;left:300.79px;top:310.78px" class="cls_002">{!spaceandrate[2].field7}</div>
+<div style="position:absolute;left:341.00px;top:310.78px" class="cls_002">{!spaceandrate[2].field8}</div>
+<div style="position:absolute;left:388.50px;top:310.78px" class="cls_002">{!spaceandrate[2].field9}</div>
+<div style="position:absolute;left:431.40px;top:310.78px" class="cls_002">{!spaceandrate[2].field10}</div>
+<div style="position:absolute;left:456.32px;top:310.78px" class="cls_002">{!spaceandrate[2].field11}</div>
+<div style="position:absolute;left:498.63px;top:310.78px" class="cls_002">{!spaceandrate[2].field12}</div>
+
+<div style="position:absolute;left:548.12px;top:310.78px" class="cls_002">{!spaceandrate[2].field14}</div>
+<div style="position:absolute;left:581.96px;top:310.78px" class="cls_002">{!spaceandrate[2].field16}</div>
+<div style="position:absolute;left:627.00px;top:310.78px" class="cls_002">{!spaceandrate[2].field17}</div>
+<div style="position:absolute;left:694.41px;top:310.78px" class="cls_002">{!spaceandrate[2].field18}</div>
+
+<div style="position:absolute;left:30.33px;top:346.59px" class="cls_002">2</div>
+<div style="position:absolute;left:45.44px;top:346.59px" class="cls_002">{!spaceandrate[3].field1}</div>
+<div style="position:absolute;left:118.80px;top:346.59px" class="cls_002">{!spaceandrate[3].field3}</div>
+<div style="position:absolute;left:162.42px;top:346.59px" class="cls_002">{!spaceandrate[3].field4}</div>
+<div style="position:absolute;left:210.07px;top:346.59px" class="cls_002">{!spaceandrate[3].field5}</div>
+<div style="position:absolute;left:250.00px;top:346.59px" class="cls_002">{!spaceandrate[3].field6}</div>
+<div style="position:absolute;left:300.79px;top:346.59px" class="cls_002">{!spaceandrate[3].field7}</div>
+<div style="position:absolute;left:341.00px;top:346.59px" class="cls_002">{!spaceandrate[3].field8}</div>
+<div style="position:absolute;left:388.50px;top:346.59px" class="cls_002">{!spaceandrate[3].field9}</div>
+<div style="position:absolute;left:431.40px;top:346.59px" class="cls_002">{!spaceandrate[3].field10}</div>
+<div style="position:absolute;left:456.32px;top:346.59px" class="cls_002">{!spaceandrate[3].field11}</div>
+<div style="position:absolute;left:498.63px;top:346.59px" class="cls_002">{!spaceandrate[3].field12}</div>
+<div style="position:absolute;left:548.12px;top:346.59px" class="cls_002">{!spaceandrate[3].field14}</div>
+<div style="position:absolute;left:581.96px;top:346.59px" class="cls_002">{!spaceandrate[3].field16}</div>
+<div style="position:absolute;left:627.00px;top:346.59px" class="cls_002">{!spaceandrate[3].field17}</div>
+<div style="position:absolute;left:694.41px;top:346.59px" class="cls_002">{!spaceandrate[3].field18}</div>
+<div style="position:absolute;left:95.84px;top:346.60px" class="cls_002">{!spaceandrate[3].field2}</div>
+-->
+            <div style="position:absolute;left:30.33px;top:346.59px" class="cls_002">2</div>
+            <div style="position:absolute;left:55.44px;top:346.59px" class="cls_002">{!spaceandrate[3].field1}</div>
+            <div style="position:absolute;left:102.84px;top:346.59px" class="cls_002">{!spaceandrate[3].field2}</div>
+            <div style="position:absolute;left:153.80px;top:346.59px" class="cls_002">{!spaceandrate[3].field3}</div>
+            <div style="position:absolute;left:202.42px;top:346.59px" class="cls_002">{!spaceandrate[3].field4}</div>
+            <div style="position:absolute;left:247.07px;top:346.59px" class="cls_002">{!spaceandrate[3].field5}</div>
+            <div style="position:absolute;left:295.00px;top:346.59px" class="cls_002">{!spaceandrate[3].field6}</div>
+            <div style="position:absolute;left:340.79px;top:346.59px" class="cls_002">{!spaceandrate[3].field7}</div>
+            <div style="position:absolute;left:400.40px;top:346.59px" class="cls_002">{!spaceandrate[3].field10}</div>
+            <div style="position:absolute;left:441.32px;top:346.59px" class="cls_002">{!spaceandrate[3].field11}</div>
+            <div style="position:absolute;left:490.96px;top:346.59px" class="cls_002">{!spaceandrate[3].field16}</div>
+            <div style="position:absolute;left:538.00px;top:346.59px" class="cls_002">{!spaceandrate[3].field17}</div>
+            <div style="position:absolute;left:582.50px;top:346.59px" class="cls_002">{!spaceandrate[3].field9}</div>
+            <div style="position:absolute;left:627.50px;top:346.59px" class="cls_002">{!spaceandrate[3].field23}</div>
+            <div style="position:absolute;left:687.63px;top:346.59px" class="cls_002">{!spaceandrate[3].field24}</div>
+            <div style="position:absolute;left:727.41px;top:346.59px" class="cls_002">{!spaceandrate[3].field25}</div>
+            <div style="position:absolute;left:767.41px;top:346.59px" class="cls_002">{!spaceandrate[3].field26}</div>
+
+
+            <div style="position:absolute;left:30.33px;top:380.59px" class="cls_002">2</div>
+            <div style="position:absolute;left:55.44px;top:380.59px" class="cls_002">{!spaceandrate[4].field1}</div>
+            <div style="position:absolute;left:102.84px;top:380.59px" class="cls_002">{!spaceandrate[4].field2}</div>
+            <div style="position:absolute;left:153.80px;top:380.59px" class="cls_002">{!spaceandrate[4].field3}</div>
+            <div style="position:absolute;left:202.42px;top:380.59px" class="cls_002">{!spaceandrate[4].field4}</div>
+            <div style="position:absolute;left:247.07px;top:380.59px" class="cls_002">{!spaceandrate[4].field5}</div>
+            <div style="position:absolute;left:295.00px;top:380.59px" class="cls_002">{!spaceandrate[4].field6}</div>
+            <div style="position:absolute;left:340.79px;top:380.59px" class="cls_002">{!spaceandrate[4].field7}</div>
+            <div style="position:absolute;left:400.40px;top:380.59px" class="cls_002">{!spaceandrate[4].field10}</div>
+            <div style="position:absolute;left:441.32px;top:380.59px" class="cls_002">{!spaceandrate[4].field11}</div>
+            <div style="position:absolute;left:490.96px;top:380.59px" class="cls_002">{!spaceandrate[4].field16}</div>
+            <div style="position:absolute;left:538.00px;top:380.59px" class="cls_002">{!spaceandrate[4].field17}</div>
+            <div style="position:absolute;left:582.50px;top:380.59px" class="cls_002">{!spaceandrate[4].field9}</div>
+            <div style="position:absolute;left:627.50px;top:380.59px" class="cls_002">{!spaceandrate[4].field23}</div>
+            <div style="position:absolute;left:687.63px;top:380.59px" class="cls_002">{!spaceandrate[4].field24}</div>
+            <div style="position:absolute;left:727.41px;top:380.59px" class="cls_002">{!spaceandrate[4].field25}</div>
+            <div style="position:absolute;left:767.41px;top:380.59px" class="cls_002">{!spaceandrate[4].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:414.27px" class="cls_002">2</div>
+            <div style="position:absolute;left:55.44px;top:414.27px" class="cls_002">{!spaceandrate[5].field1}</div>
+            <div style="position:absolute;left:102.84px;top:414.27px" class="cls_002">{!spaceandrate[5].field2}</div>
+            <div style="position:absolute;left:153.80px;top:414.27px" class="cls_002">{!spaceandrate[5].field3}</div>
+            <div style="position:absolute;left:202.42px;top:414.27px" class="cls_002">{!spaceandrate[5].field4}</div>
+            <div style="position:absolute;left:247.07px;top:414.27px" class="cls_002">{!spaceandrate[5].field5}</div>
+            <div style="position:absolute;left:295.00px;top:414.27px" class="cls_002">{!spaceandrate[5].field6}</div>
+            <div style="position:absolute;left:340.79px;top:414.27px" class="cls_002">{!spaceandrate[5].field7}</div>
+            <div style="position:absolute;left:400.40px;top:414.27px" class="cls_002">{!spaceandrate[5].field10}</div>
+            <div style="position:absolute;left:441.32px;top:414.27px" class="cls_002">{!spaceandrate[5].field11}</div>
+            <div style="position:absolute;left:490.96px;top:414.27px" class="cls_002">{!spaceandrate[5].field16}</div>
+            <div style="position:absolute;left:538.00px;top:414.27px" class="cls_002">{!spaceandrate[5].field17}</div>
+            <div style="position:absolute;left:582.50px;top:414.27px" class="cls_002">{!spaceandrate[5].field9}</div>
+            <div style="position:absolute;left:627.50px;top:414.27px" class="cls_002">{!spaceandrate[5].field23}</div>
+            <div style="position:absolute;left:687.63px;top:414.27px" class="cls_002">{!spaceandrate[5].field24}</div>
+            <div style="position:absolute;left:727.41px;top:414.27px" class="cls_002">{!spaceandrate[5].field25}</div>
+            <div style="position:absolute;left:767.41px;top:414.27px" class="cls_002">{!spaceandrate[5].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:450.31px" class="cls_002">3</div>
+            <div style="position:absolute;left:55.44px;top:450.31px" class="cls_002">{!spaceandrate[6].field1}</div>
+            <div style="position:absolute;left:102.84px;top:450.31px" class="cls_002">{!spaceandrate[6].field2}</div>
+            <div style="position:absolute;left:153.80px;top:450.31px" class="cls_002">{!spaceandrate[6].field3}</div>
+            <div style="position:absolute;left:202.42px;top:450.31px" class="cls_002">{!spaceandrate[6].field4}</div>
+            <div style="position:absolute;left:247.07px;top:450.31px" class="cls_002">{!spaceandrate[6].field5}</div>
+            <div style="position:absolute;left:295.00px;top:450.31px" class="cls_002">{!spaceandrate[6].field6}</div>
+            <div style="position:absolute;left:340.79px;top:450.31px" class="cls_002">{!spaceandrate[6].field7}</div>
+            <div style="position:absolute;left:400.40px;top:450.31px" class="cls_002">{!spaceandrate[6].field10}</div>
+            <div style="position:absolute;left:441.32px;top:450.31px" class="cls_002">{!spaceandrate[6].field11}</div>
+            <div style="position:absolute;left:490.96px;top:450.31px" class="cls_002">{!spaceandrate[6].field16}</div>
+            <div style="position:absolute;left:538.00px;top:450.31px" class="cls_002">{!spaceandrate[6].field17}</div>
+            <div style="position:absolute;left:582.50px;top:450.31px" class="cls_002">{!spaceandrate[6].field9}</div>
+            <div style="position:absolute;left:627.50px;top:450.31px" class="cls_002">{!spaceandrate[6].field23}</div>
+            <div style="position:absolute;left:687.63px;top:450.31px" class="cls_002">{!spaceandrate[6].field24}</div>
+            <div style="position:absolute;left:727.41px;top:450.31px" class="cls_002">{!spaceandrate[6].field25}</div>
+            <div style="position:absolute;left:767.41px;top:450.31px" class="cls_002">{!spaceandrate[6].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:483.99px" class="cls_002">3</div>
+            <div style="position:absolute;left:55.44px;top:483.99px" class="cls_002">{!spaceandrate[7].field1}</div>
+            <div style="position:absolute;left:102.84px;top:483.99px" class="cls_002">{!spaceandrate[7].field2}</div>
+            <div style="position:absolute;left:153.80px;top:483.99px" class="cls_002">{!spaceandrate[7].field3}</div>
+            <div style="position:absolute;left:202.42px;top:483.99px" class="cls_002">{!spaceandrate[7].field4}</div>
+            <div style="position:absolute;left:247.07px;top:483.99px" class="cls_002">{!spaceandrate[7].field5}</div>
+            <div style="position:absolute;left:295.00px;top:483.99px" class="cls_002">{!spaceandrate[7].field6}</div>
+            <div style="position:absolute;left:340.79px;top:483.99px" class="cls_002">{!spaceandrate[7].field7}</div>
+            <div style="position:absolute;left:400.40px;top:483.99px" class="cls_002">{!spaceandrate[7].field10}</div>
+            <div style="position:absolute;left:441.32px;top:483.99px" class="cls_002">{!spaceandrate[7].field11}</div>
+            <div style="position:absolute;left:490.96px;top:483.99px" class="cls_002">{!spaceandrate[7].field16}</div>
+            <div style="position:absolute;left:538.00px;top:483.99px" class="cls_002">{!spaceandrate[7].field17}</div>
+            <div style="position:absolute;left:582.50px;top:483.99px" class="cls_002">{!spaceandrate[7].field9}</div>
+            <div style="position:absolute;left:627.50px;top:483.99px" class="cls_002">{!spaceandrate[7].field23}</div>
+            <div style="position:absolute;left:687.63px;top:483.99px" class="cls_002">{!spaceandrate[7].field24}</div>
+            <div style="position:absolute;left:727.41px;top:483.99px" class="cls_002">{!spaceandrate[7].field25}</div>
+            <div style="position:absolute;left:767.41px;top:483.99px" class="cls_002">{!spaceandrate[7].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:517.83px" class="cls_002">3</div>
+            <div style="position:absolute;left:55.44px;top:517.83px" class="cls_002">{!spaceandrate[8].field1}</div>
+            <div style="position:absolute;left:102.84px;top:517.83px" class="cls_002">{!spaceandrate[8].field2}</div>
+            <div style="position:absolute;left:153.80px;top:517.83px" class="cls_002">{!spaceandrate[8].field3}</div>
+            <div style="position:absolute;left:202.42px;top:517.83px" class="cls_002">{!spaceandrate[8].field4}</div>
+            <div style="position:absolute;left:247.07px;top:517.83px" class="cls_002">{!spaceandrate[8].field5}</div>
+            <div style="position:absolute;left:295.00px;top:517.83px" class="cls_002">{!spaceandrate[8].field6}</div>
+            <div style="position:absolute;left:340.79px;top:517.83px" class="cls_002">{!spaceandrate[8].field7}</div>
+            <div style="position:absolute;left:400.40px;top:517.83px" class="cls_002">{!spaceandrate[8].field10}</div>
+            <div style="position:absolute;left:441.32px;top:517.83px" class="cls_002">{!spaceandrate[8].field11}</div>
+            <div style="position:absolute;left:490.96px;top:517.83px" class="cls_002">{!spaceandrate[8].field16}</div>
+            <div style="position:absolute;left:538.00px;top:517.83px" class="cls_002">{!spaceandrate[8].field17}</div>
+            <div style="position:absolute;left:582.50px;top:517.83px" class="cls_002">{!spaceandrate[8].field9}</div>
+            <div style="position:absolute;left:627.50px;top:517.83px" class="cls_002">{!spaceandrate[8].field23}</div>
+            <div style="position:absolute;left:687.63px;top:517.83px" class="cls_002">{!spaceandrate[8].field24}</div>
+            <div style="position:absolute;left:727.41px;top:517.83px" class="cls_002">{!spaceandrate[8].field25}</div>
+            <div style="position:absolute;left:767.41px;top:517.83px" class="cls_002">{!spaceandrate[8].field26}</div>
+
+            <div style="position:absolute;left:84.48px;top:574.58px" class="cls_003">INITIALS:</div>
+
+            <div style="position:absolute;left:200.63px;top:574.58px" class="cls_003">&amp;</div>
+
+            <div style="position:absolute;left:21.34px;top:580.65px" class="cls_002">PAGE 1 OF 4</div>
+
+            <div style="position:absolute;left:577.13px;top:579.69px" class="cls_004">Attachment to GSA FORM 1364-A (REV
+                6/04)
+            </div>
+
+            <div style="position:absolute;left:124.48px;top:583.76px" class="cls_003">LESSOR</div>
+
+            <div style="position:absolute;left:210.84px;top:583.76px" class="cls_003">GOVERNMENT</div>
+
+        </div>
+
+        <div style="position:absolute;left:50%;margin-left:-396px;top:722px;width:792px;height:612px;border-style:outset;overflow:hidden">
+
+            <div style="position:absolute;left:0px;top:0px">
+
+                <img src="{!URLFOR($Resource.form1364RateStructure, 'image002_092316.jpg')}" width="792" height="612"/>
+            </div>
+
+            <div style="position:absolute;left:30.33px;top:22.66px" class="cls_002">4</div>
+            <div style="position:absolute;left:55.44px;top:22.66px" class="cls_002">{!spaceandrate[9].field1}</div>
+            <div style="position:absolute;left:102.84px;top:22.66px" class="cls_002">{!spaceandrate[9].field2}</div>
+            <div style="position:absolute;left:153.80px;top:22.66px" class="cls_002">{!spaceandrate[9].field3}</div>
+            <div style="position:absolute;left:202.42px;top:22.66px" class="cls_002">{!spaceandrate[9].field4}</div>
+            <div style="position:absolute;left:247.07px;top:22.66px" class="cls_002">{!spaceandrate[9].field5}</div>
+            <div style="position:absolute;left:295.00px;top:22.66px" class="cls_002">{!spaceandrate[9].field6}</div>
+            <div style="position:absolute;left:340.79px;top:22.66px" class="cls_002">{!spaceandrate[9].field7}</div>
+            <div style="position:absolute;left:400.40px;top:22.66px" class="cls_002">{!spaceandrate[9].field10}</div>
+            <div style="position:absolute;left:441.32px;top:22.66px" class="cls_002">{!spaceandrate[9].field11}</div>
+            <div style="position:absolute;left:490.96px;top:22.66px" class="cls_002">{!spaceandrate[9].field16}</div>
+            <div style="position:absolute;left:538.00px;top:22.66px" class="cls_002">{!spaceandrate[9].field17}</div>
+            <div style="position:absolute;left:582.50px;top:22.66px" class="cls_002">{!spaceandrate[9].field9}</div>
+            <div style="position:absolute;left:627.50px;top:22.66px" class="cls_002">{!spaceandrate[9].field23}</div>
+            <div style="position:absolute;left:687.63px;top:22.66px" class="cls_002">{!spaceandrate[9].field24}</div>
+            <div style="position:absolute;left:727.41px;top:22.66px" class="cls_002">{!spaceandrate[9].field25}</div>
+            <div style="position:absolute;left:767.41px;top:22.66px" class="cls_002">{!spaceandrate[9].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:56.25px" class="cls_002">4</div>
+            <div style="position:absolute;left:55.44px;top:56.25px" class="cls_002">{!spaceandrate[10].field1}</div>
+            <div style="position:absolute;left:102.84px;top:56.25px" class="cls_002">{!spaceandrate[10].field2}</div>
+            <div style="position:absolute;left:153.80px;top:56.25px" class="cls_002">{!spaceandrate[10].field3}</div>
+            <div style="position:absolute;left:202.42px;top:56.25px" class="cls_002">{!spaceandrate[10].field4}</div>
+            <div style="position:absolute;left:247.07px;top:56.25px" class="cls_002">{!spaceandrate[10].field5}</div>
+            <div style="position:absolute;left:295.00px;top:56.25px" class="cls_002">{!spaceandrate[10].field6}</div>
+            <div style="position:absolute;left:340.79px;top:56.25px" class="cls_002">{!spaceandrate[10].field7}</div>
+            <div style="position:absolute;left:400.40px;top:56.25px" class="cls_002">{!spaceandrate[10].field10}</div>
+            <div style="position:absolute;left:441.32px;top:56.25px" class="cls_002">{!spaceandrate[10].field11}</div>
+            <div style="position:absolute;left:490.96px;top:56.25px" class="cls_002">{!spaceandrate[10].field16}</div>
+            <div style="position:absolute;left:538.00px;top:56.25px" class="cls_002">{!spaceandrate[10].field17}</div>
+            <div style="position:absolute;left:582.50px;top:56.25px" class="cls_002">{!spaceandrate[10].field9}</div>
+            <div style="position:absolute;left:627.50px;top:56.25px" class="cls_002">{!spaceandrate[10].field23}</div>
+            <div style="position:absolute;left:687.63px;top:56.25px" class="cls_002">{!spaceandrate[10].field24}</div>
+            <div style="position:absolute;left:727.41px;top:56.25px" class="cls_002">{!spaceandrate[10].field25}</div>
+            <div style="position:absolute;left:767.41px;top:56.25px" class="cls_002">{!spaceandrate[10].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:90.34px" class="cls_002">4</div>
+            <div style="position:absolute;left:55.44px;top:90.34px" class="cls_002">{!spaceandrate[11].field1}</div>
+            <div style="position:absolute;left:102.84px;top:90.34px" class="cls_002">{!spaceandrate[11].field2}</div>
+            <div style="position:absolute;left:153.80px;top:90.34px" class="cls_002">{!spaceandrate[11].field3}</div>
+            <div style="position:absolute;left:202.42px;top:90.34px" class="cls_002">{!spaceandrate[11].field4}</div>
+            <div style="position:absolute;left:247.07px;top:90.34px" class="cls_002">{!spaceandrate[11].field5}</div>
+            <div style="position:absolute;left:295.00px;top:90.34px" class="cls_002">{!spaceandrate[11].field6}</div>
+            <div style="position:absolute;left:340.79px;top:90.34px" class="cls_002">{!spaceandrate[11].field7}</div>
+            <div style="position:absolute;left:400.40px;top:90.34px" class="cls_002">{!spaceandrate[11].field10}</div>
+            <div style="position:absolute;left:441.32px;top:90.34px" class="cls_002">{!spaceandrate[11].field11}</div>
+            <div style="position:absolute;left:490.96px;top:90.34px" class="cls_002">{!spaceandrate[11].field16}</div>
+            <div style="position:absolute;left:538.00px;top:90.34px" class="cls_002">{!spaceandrate[11].field17}</div>
+            <div style="position:absolute;left:582.50px;top:90.34px" class="cls_002">{!spaceandrate[11].field9}</div>
+            <div style="position:absolute;left:627.50px;top:90.34px" class="cls_002">{!spaceandrate[11].field23}</div>
+            <div style="position:absolute;left:687.63px;top:90.34px" class="cls_002">{!spaceandrate[11].field24}</div>
+            <div style="position:absolute;left:727.41px;top:90.34px" class="cls_002">{!spaceandrate[11].field25}</div>
+            <div style="position:absolute;left:767.41px;top:90.34px" class="cls_002">{!spaceandrate[11].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:125.97px" class="cls_002">5</div>
+            <div style="position:absolute;left:55.44px;top:125.97px" class="cls_002">{!spaceandrate[12].field1}</div>
+            <div style="position:absolute;left:102.84px;top:125.97px" class="cls_002">{!spaceandrate[12].field2}</div>
+            <div style="position:absolute;left:153.80px;top:125.97px" class="cls_002">{!spaceandrate[12].field3}</div>
+            <div style="position:absolute;left:202.42px;top:125.97px" class="cls_002">{!spaceandrate[12].field4}</div>
+            <div style="position:absolute;left:247.07px;top:125.97px" class="cls_002">{!spaceandrate[12].field5}</div>
+            <div style="position:absolute;left:295.00px;top:125.97px" class="cls_002">{!spaceandrate[12].field6}</div>
+            <div style="position:absolute;left:340.79px;top:125.97px" class="cls_002">{!spaceandrate[12].field7}</div>
+            <div style="position:absolute;left:400.40px;top:125.97px" class="cls_002">{!spaceandrate[12].field10}</div>
+            <div style="position:absolute;left:441.32px;top:125.97px" class="cls_002">{!spaceandrate[12].field11}</div>
+            <div style="position:absolute;left:490.96px;top:125.97px" class="cls_002">{!spaceandrate[12].field16}</div>
+            <div style="position:absolute;left:538.00px;top:125.97px" class="cls_002">{!spaceandrate[12].field17}</div>
+            <div style="position:absolute;left:582.50px;top:125.97px" class="cls_002">{!spaceandrate[12].field9}</div>
+            <div style="position:absolute;left:627.50px;top:125.97px" class="cls_002">{!spaceandrate[12].field23}</div>
+            <div style="position:absolute;left:687.63px;top:125.97px" class="cls_002">{!spaceandrate[12].field24}</div>
+            <div style="position:absolute;left:727.41px;top:125.97px" class="cls_002">{!spaceandrate[12].field25}</div>
+            <div style="position:absolute;left:767.41px;top:125.97px" class="cls_002">{!spaceandrate[12].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:159.81px" class="cls_002">5</div>
+            <div style="position:absolute;left:55.44px;top:159.81px" class="cls_002">{!spaceandrate[13].field1}</div>
+            <div style="position:absolute;left:102.84px;top:159.81px" class="cls_002">{!spaceandrate[13].field2}</div>
+            <div style="position:absolute;left:153.80px;top:159.81px" class="cls_002">{!spaceandrate[13].field3}</div>
+            <div style="position:absolute;left:202.42px;top:159.81px" class="cls_002">{!spaceandrate[13].field4}</div>
+            <div style="position:absolute;left:247.07px;top:159.81px" class="cls_002">{!spaceandrate[13].field5}</div>
+            <div style="position:absolute;left:295.00px;top:159.81px" class="cls_002">{!spaceandrate[13].field6}</div>
+            <div style="position:absolute;left:340.79px;top:159.81px" class="cls_002">{!spaceandrate[13].field7}</div>
+            <div style="position:absolute;left:400.40px;top:159.81px" class="cls_002">{!spaceandrate[13].field10}</div>
+            <div style="position:absolute;left:441.32px;top:159.81px" class="cls_002">{!spaceandrate[13].field11}</div>
+            <div style="position:absolute;left:490.96px;top:159.81px" class="cls_002">{!spaceandrate[13].field16}</div>
+            <div style="position:absolute;left:538.00px;top:159.81px" class="cls_002">{!spaceandrate[13].field17}</div>
+            <div style="position:absolute;left:582.50px;top:159.81px" class="cls_002">{!spaceandrate[13].field9}</div>
+            <div style="position:absolute;left:627.50px;top:159.81px" class="cls_002">{!spaceandrate[13].field23}</div>
+            <div style="position:absolute;left:687.63px;top:159.81px" class="cls_002">{!spaceandrate[13].field24}</div>
+            <div style="position:absolute;left:727.41px;top:159.81px" class="cls_002">{!spaceandrate[13].field25}</div>
+            <div style="position:absolute;left:767.41px;top:159.81px" class="cls_002">{!spaceandrate[13].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:193.65px" class="cls_002">5</div>
+            <div style="position:absolute;left:55.44px;top:193.65px" class="cls_002">{!spaceandrate[14].field1}</div>
+            <div style="position:absolute;left:102.84px;top:193.65px" class="cls_002">{!spaceandrate[14].field2}</div>
+            <div style="position:absolute;left:153.80px;top:193.65px" class="cls_002">{!spaceandrate[14].field3}</div>
+            <div style="position:absolute;left:202.42px;top:193.65px" class="cls_002">{!spaceandrate[14].field4}</div>
+            <div style="position:absolute;left:247.07px;top:193.65px" class="cls_002">{!spaceandrate[14].field5}</div>
+            <div style="position:absolute;left:295.00px;top:193.65px" class="cls_002">{!spaceandrate[14].field6}</div>
+            <div style="position:absolute;left:340.79px;top:193.65px" class="cls_002">{!spaceandrate[14].field7}</div>
+            <div style="position:absolute;left:400.40px;top:193.65px" class="cls_002">{!spaceandrate[14].field10}</div>
+            <div style="position:absolute;left:441.32px;top:193.65px" class="cls_002">{!spaceandrate[14].field11}</div>
+            <div style="position:absolute;left:490.96px;top:193.65px" class="cls_002">{!spaceandrate[14].field16}</div>
+            <div style="position:absolute;left:538.00px;top:193.65px" class="cls_002">{!spaceandrate[14].field17}</div>
+            <div style="position:absolute;left:582.50px;top:193.65px" class="cls_002">{!spaceandrate[14].field9}</div>
+            <div style="position:absolute;left:627.50px;top:193.65px" class="cls_002">{!spaceandrate[14].field23}</div>
+            <div style="position:absolute;left:687.63px;top:193.65px" class="cls_002">{!spaceandrate[14].field24}</div>
+            <div style="position:absolute;left:727.41px;top:193.65px" class="cls_002">{!spaceandrate[14].field25}</div>
+            <div style="position:absolute;left:767.41px;top:193.65px" class="cls_002">{!spaceandrate[14].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:229.53px" class="cls_002">6</div>
+            <div style="position:absolute;left:55.44px;top:229.53px" class="cls_002">{!spaceandrate[15].field1}</div>
+            <div style="position:absolute;left:102.84px;top:229.53px" class="cls_002">{!spaceandrate[15].field2}</div>
+            <div style="position:absolute;left:153.80px;top:229.53px" class="cls_002">{!spaceandrate[15].field3}</div>
+            <div style="position:absolute;left:202.42px;top:229.53px" class="cls_002">{!spaceandrate[15].field4}</div>
+            <div style="position:absolute;left:247.07px;top:229.53px" class="cls_002">{!spaceandrate[15].field5}</div>
+            <div style="position:absolute;left:295.00px;top:229.53px" class="cls_002">{!spaceandrate[15].field6}</div>
+            <div style="position:absolute;left:340.79px;top:229.53px" class="cls_002">{!spaceandrate[15].field7}</div>
+            <div style="position:absolute;left:400.40px;top:229.53px" class="cls_002">{!spaceandrate[15].field10}</div>
+            <div style="position:absolute;left:441.32px;top:229.53px" class="cls_002">{!spaceandrate[15].field11}</div>
+            <div style="position:absolute;left:490.96px;top:229.53px" class="cls_002">{!spaceandrate[15].field16}</div>
+            <div style="position:absolute;left:538.00px;top:229.53px" class="cls_002">{!spaceandrate[15].field17}</div>
+            <div style="position:absolute;left:582.50px;top:229.53px" class="cls_002">{!spaceandrate[15].field9}</div>
+            <div style="position:absolute;left:627.50px;top:229.53px" class="cls_002">{!spaceandrate[15].field23}</div>
+            <div style="position:absolute;left:687.63px;top:229.53px" class="cls_002">{!spaceandrate[15].field24}</div>
+            <div style="position:absolute;left:727.41px;top:229.53px" class="cls_002">{!spaceandrate[15].field25}</div>
+            <div style="position:absolute;left:767.41px;top:229.53px" class="cls_002">{!spaceandrate[15].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:263.37px" class="cls_002">6</div>
+            <div style="position:absolute;left:55.44px;top:263.37px" class="cls_002">{!spaceandrate[16].field1}</div>
+            <div style="position:absolute;left:102.84px;top:263.37px" class="cls_002">{!spaceandrate[16].field2}</div>
+            <div style="position:absolute;left:153.80px;top:263.37px" class="cls_002">{!spaceandrate[16].field3}</div>
+            <div style="position:absolute;left:202.42px;top:263.37px" class="cls_002">{!spaceandrate[16].field4}</div>
+            <div style="position:absolute;left:247.07px;top:263.37px" class="cls_002">{!spaceandrate[16].field5}</div>
+            <div style="position:absolute;left:295.00px;top:263.37px" class="cls_002">{!spaceandrate[16].field6}</div>
+            <div style="position:absolute;left:340.79px;top:263.37px" class="cls_002">{!spaceandrate[16].field7}</div>
+            <div style="position:absolute;left:400.40px;top:263.37px" class="cls_002">{!spaceandrate[16].field10}</div>
+            <div style="position:absolute;left:441.32px;top:263.37px" class="cls_002">{!spaceandrate[16].field11}</div>
+            <div style="position:absolute;left:490.96px;top:263.37px" class="cls_002">{!spaceandrate[16].field16}</div>
+            <div style="position:absolute;left:538.00px;top:263.37px" class="cls_002">{!spaceandrate[16].field17}</div>
+            <div style="position:absolute;left:582.50px;top:263.37px" class="cls_002">{!spaceandrate[16].field9}</div>
+            <div style="position:absolute;left:627.50px;top:263.37px" class="cls_002">{!spaceandrate[16].field23}</div>
+            <div style="position:absolute;left:687.63px;top:263.37px" class="cls_002">{!spaceandrate[16].field24}</div>
+            <div style="position:absolute;left:727.41px;top:263.37px" class="cls_002">{!spaceandrate[16].field25}</div>
+            <div style="position:absolute;left:767.41px;top:263.37px" class="cls_002">{!spaceandrate[16].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:297.21px" class="cls_002">6</div>
+            <div style="position:absolute;left:55.44px;top:297.21px" class="cls_002">{!spaceandrate[17].field1}</div>
+            <div style="position:absolute;left:102.84px;top:297.21px" class="cls_002">{!spaceandrate[17].field2}</div>
+            <div style="position:absolute;left:153.80px;top:297.21px" class="cls_002">{!spaceandrate[17].field3}</div>
+            <div style="position:absolute;left:202.42px;top:297.21px" class="cls_002">{!spaceandrate[17].field4}</div>
+            <div style="position:absolute;left:247.07px;top:297.21px" class="cls_002">{!spaceandrate[17].field5}</div>
+            <div style="position:absolute;left:295.00px;top:297.21px" class="cls_002">{!spaceandrate[17].field6}</div>
+            <div style="position:absolute;left:340.79px;top:297.21px" class="cls_002">{!spaceandrate[17].field7}</div>
+            <div style="position:absolute;left:400.40px;top:297.21px" class="cls_002">{!spaceandrate[17].field10}</div>
+            <div style="position:absolute;left:441.32px;top:297.21px" class="cls_002">{!spaceandrate[17].field11}</div>
+            <div style="position:absolute;left:490.96px;top:297.21px" class="cls_002">{!spaceandrate[17].field16}</div>
+            <div style="position:absolute;left:538.00px;top:297.21px" class="cls_002">{!spaceandrate[17].field17}</div>
+            <div style="position:absolute;left:582.50px;top:297.21px" class="cls_002">{!spaceandrate[17].field9}</div>
+            <div style="position:absolute;left:627.50px;top:297.21px" class="cls_002">{!spaceandrate[17].field23}</div>
+            <div style="position:absolute;left:687.63px;top:297.21px" class="cls_002">{!spaceandrate[17].field24}</div>
+            <div style="position:absolute;left:727.41px;top:297.21px" class="cls_002">{!spaceandrate[17].field25}</div>
+            <div style="position:absolute;left:767.41px;top:297.21px" class="cls_002">{!spaceandrate[17].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:333.03px" class="cls_002">7</div>
+            <div style="position:absolute;left:55.44px;top:333.03px" class="cls_002">{!spaceandrate[18].field1}</div>
+            <div style="position:absolute;left:102.84px;top:333.03px" class="cls_002">{!spaceandrate[18].field2}</div>
+            <div style="position:absolute;left:153.80px;top:333.03px" class="cls_002">{!spaceandrate[18].field3}</div>
+            <div style="position:absolute;left:202.42px;top:333.03px" class="cls_002">{!spaceandrate[18].field4}</div>
+            <div style="position:absolute;left:247.07px;top:333.03px" class="cls_002">{!spaceandrate[18].field5}</div>
+            <div style="position:absolute;left:295.00px;top:333.03px" class="cls_002">{!spaceandrate[18].field6}</div>
+            <div style="position:absolute;left:340.79px;top:333.03px" class="cls_002">{!spaceandrate[18].field7}</div>
+            <div style="position:absolute;left:400.40px;top:333.03px" class="cls_002">{!spaceandrate[18].field10}</div>
+            <div style="position:absolute;left:441.32px;top:333.03px" class="cls_002">{!spaceandrate[18].field11}</div>
+            <div style="position:absolute;left:490.96px;top:333.03px" class="cls_002">{!spaceandrate[18].field16}</div>
+            <div style="position:absolute;left:538.00px;top:333.03px" class="cls_002">{!spaceandrate[18].field17}</div>
+            <div style="position:absolute;left:582.50px;top:333.03px" class="cls_002">{!spaceandrate[18].field9}</div>
+            <div style="position:absolute;left:627.50px;top:333.03px" class="cls_002">{!spaceandrate[18].field23}</div>
+            <div style="position:absolute;left:687.63px;top:333.03px" class="cls_002">{!spaceandrate[18].field24}</div>
+            <div style="position:absolute;left:727.41px;top:333.03px" class="cls_002">{!spaceandrate[18].field25}</div>
+            <div style="position:absolute;left:767.41px;top:333.03px" class="cls_002">{!spaceandrate[18].field26}</div>
+
+
+            <div style="position:absolute;left:30.33px;top:366.87px" class="cls_002">7</div>
+            <div style="position:absolute;left:55.44px;top:366.87px" class="cls_002">{!spaceandrate[19].field1}</div>
+            <div style="position:absolute;left:102.84px;top:366.87px" class="cls_002">{!spaceandrate[19].field2}</div>
+            <div style="position:absolute;left:153.80px;top:366.87px" class="cls_002">{!spaceandrate[19].field3}</div>
+            <div style="position:absolute;left:202.42px;top:366.87px" class="cls_002">{!spaceandrate[19].field4}</div>
+            <div style="position:absolute;left:247.07px;top:366.87px" class="cls_002">{!spaceandrate[19].field5}</div>
+            <div style="position:absolute;left:295.00px;top:366.87px" class="cls_002">{!spaceandrate[19].field6}</div>
+            <div style="position:absolute;left:340.79px;top:366.87px" class="cls_002">{!spaceandrate[19].field7}</div>
+            <div style="position:absolute;left:400.40px;top:366.87px" class="cls_002">{!spaceandrate[19].field10}</div>
+            <div style="position:absolute;left:441.32px;top:366.87px" class="cls_002">{!spaceandrate[19].field11}</div>
+            <div style="position:absolute;left:490.96px;top:366.87px" class="cls_002">{!spaceandrate[19].field16}</div>
+            <div style="position:absolute;left:538.00px;top:366.87px" class="cls_002">{!spaceandrate[19].field17}</div>
+            <div style="position:absolute;left:582.50px;top:366.87px" class="cls_002">{!spaceandrate[19].field9}</div>
+            <div style="position:absolute;left:627.50px;top:366.87px" class="cls_002">{!spaceandrate[19].field23}</div>
+            <div style="position:absolute;left:687.63px;top:366.87px" class="cls_002">{!spaceandrate[19].field24}</div>
+            <div style="position:absolute;left:727.41px;top:366.87px" class="cls_002">{!spaceandrate[19].field25}</div>
+            <div style="position:absolute;left:767.41px;top:366.87px" class="cls_002">{!spaceandrate[19].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:400.71px" class="cls_002">7</div>
+            <div style="position:absolute;left:55.44px;top:400.71px" class="cls_002">{!spaceandrate[20].field1}</div>
+            <div style="position:absolute;left:102.84px;top:400.71px" class="cls_002">{!spaceandrate[20].field2}</div>
+            <div style="position:absolute;left:153.80px;top:400.71px" class="cls_002">{!spaceandrate[20].field3}</div>
+            <div style="position:absolute;left:202.42px;top:400.71px" class="cls_002">{!spaceandrate[20].field4}</div>
+            <div style="position:absolute;left:247.07px;top:400.71px" class="cls_002">{!spaceandrate[20].field5}</div>
+            <div style="position:absolute;left:295.00px;top:400.71px" class="cls_002">{!spaceandrate[20].field6}</div>
+            <div style="position:absolute;left:340.79px;top:400.71px" class="cls_002">{!spaceandrate[20].field7}</div>
+            <div style="position:absolute;left:400.40px;top:400.71px" class="cls_002">{!spaceandrate[20].field10}</div>
+            <div style="position:absolute;left:441.32px;top:400.71px" class="cls_002">{!spaceandrate[20].field11}</div>
+            <div style="position:absolute;left:490.96px;top:400.71px" class="cls_002">{!spaceandrate[20].field16}</div>
+            <div style="position:absolute;left:538.00px;top:400.71px" class="cls_002">{!spaceandrate[20].field17}</div>
+            <div style="position:absolute;left:582.50px;top:400.71px" class="cls_002">{!spaceandrate[20].field9}</div>
+            <div style="position:absolute;left:627.50px;top:400.71px" class="cls_002">{!spaceandrate[20].field23}</div>
+            <div style="position:absolute;left:687.63px;top:400.71px" class="cls_002">{!spaceandrate[20].field24}</div>
+            <div style="position:absolute;left:727.41px;top:400.71px" class="cls_002">{!spaceandrate[20].field25}</div>
+            <div style="position:absolute;left:767.41px;top:400.71px" class="cls_002">{!spaceandrate[20].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:436.59px" class="cls_002">8</div>
+            <div style="position:absolute;left:55.44px;top:436.59px" class="cls_002">{!spaceandrate[21].field1}</div>
+            <div style="position:absolute;left:102.84px;top:436.59px" class="cls_002">{!spaceandrate[21].field2}</div>
+            <div style="position:absolute;left:153.80px;top:436.59px" class="cls_002">{!spaceandrate[21].field3}</div>
+            <div style="position:absolute;left:202.42px;top:436.59px" class="cls_002">{!spaceandrate[21].field4}</div>
+            <div style="position:absolute;left:247.07px;top:436.59px" class="cls_002">{!spaceandrate[21].field5}</div>
+            <div style="position:absolute;left:295.00px;top:436.59px" class="cls_002">{!spaceandrate[21].field6}</div>
+            <div style="position:absolute;left:340.79px;top:436.59px" class="cls_002">{!spaceandrate[21].field7}</div>
+            <div style="position:absolute;left:400.40px;top:436.59px" class="cls_002">{!spaceandrate[21].field10}</div>
+            <div style="position:absolute;left:441.32px;top:436.59px" class="cls_002">{!spaceandrate[21].field11}</div>
+            <div style="position:absolute;left:490.96px;top:436.59px" class="cls_002">{!spaceandrate[21].field16}</div>
+            <div style="position:absolute;left:538.00px;top:436.59px" class="cls_002">{!spaceandrate[21].field17}</div>
+            <div style="position:absolute;left:582.50px;top:436.59px" class="cls_002">{!spaceandrate[21].field9}</div>
+            <div style="position:absolute;left:627.50px;top:436.59px" class="cls_002">{!spaceandrate[21].field23}</div>
+            <div style="position:absolute;left:687.63px;top:436.59px" class="cls_002">{!spaceandrate[21].field24}</div>
+            <div style="position:absolute;left:727.41px;top:436.59px" class="cls_002">{!spaceandrate[21].field25}</div>
+            <div style="position:absolute;left:767.41px;top:436.59px" class="cls_002">{!spaceandrate[21].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:470.43px" class="cls_002">8</div>
+            <div style="position:absolute;left:55.44px;top:470.43px" class="cls_002">{!spaceandrate[22].field1}</div>
+            <div style="position:absolute;left:102.84px;top:470.43px" class="cls_002">{!spaceandrate[22].field2}</div>
+            <div style="position:absolute;left:153.80px;top:470.43px" class="cls_002">{!spaceandrate[22].field3}</div>
+            <div style="position:absolute;left:202.42px;top:470.43px" class="cls_002">{!spaceandrate[22].field4}</div>
+            <div style="position:absolute;left:247.07px;top:470.43px" class="cls_002">{!spaceandrate[22].field5}</div>
+            <div style="position:absolute;left:295.00px;top:470.43px" class="cls_002">{!spaceandrate[22].field6}</div>
+            <div style="position:absolute;left:340.79px;top:470.43px" class="cls_002">{!spaceandrate[22].field7}</div>
+            <div style="position:absolute;left:400.40px;top:470.43px" class="cls_002">{!spaceandrate[22].field10}</div>
+            <div style="position:absolute;left:441.32px;top:470.43px" class="cls_002">{!spaceandrate[22].field11}</div>
+            <div style="position:absolute;left:490.96px;top:470.43px" class="cls_002">{!spaceandrate[22].field16}</div>
+            <div style="position:absolute;left:538.00px;top:470.43px" class="cls_002">{!spaceandrate[22].field17}</div>
+            <div style="position:absolute;left:582.50px;top:470.43px" class="cls_002">{!spaceandrate[22].field9}</div>
+            <div style="position:absolute;left:627.50px;top:470.43px" class="cls_002">{!spaceandrate[22].field23}</div>
+            <div style="position:absolute;left:687.63px;top:470.43px" class="cls_002">{!spaceandrate[22].field24}</div>
+            <div style="position:absolute;left:727.41px;top:470.43px" class="cls_002">{!spaceandrate[22].field25}</div>
+            <div style="position:absolute;left:767.41px;top:470.43px" class="cls_002">{!spaceandrate[22].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:504.27px" class="cls_002">8</div>
+            <div style="position:absolute;left:55.44px;top:504.27px" class="cls_002">{!spaceandrate[23].field1}</div>
+            <div style="position:absolute;left:102.84px;top:504.27px" class="cls_002">{!spaceandrate[23].field2}</div>
+            <div style="position:absolute;left:153.80px;top:504.27px" class="cls_002">{!spaceandrate[23].field3}</div>
+            <div style="position:absolute;left:202.42px;top:504.27px" class="cls_002">{!spaceandrate[23].field4}</div>
+            <div style="position:absolute;left:247.07px;top:504.27px" class="cls_002">{!spaceandrate[23].field5}</div>
+            <div style="position:absolute;left:295.00px;top:504.27px" class="cls_002">{!spaceandrate[23].field6}</div>
+            <div style="position:absolute;left:340.79px;top:504.27px" class="cls_002">{!spaceandrate[23].field7}</div>
+            <div style="position:absolute;left:400.40px;top:504.27px" class="cls_002">{!spaceandrate[23].field10}</div>
+            <div style="position:absolute;left:441.32px;top:504.27px" class="cls_002">{!spaceandrate[23].field11}</div>
+            <div style="position:absolute;left:490.96px;top:504.27px" class="cls_002">{!spaceandrate[23].field16}</div>
+            <div style="position:absolute;left:538.00px;top:504.27px" class="cls_002">{!spaceandrate[23].field17}</div>
+            <div style="position:absolute;left:582.50px;top:504.27px" class="cls_002">{!spaceandrate[23].field9}</div>
+            <div style="position:absolute;left:627.50px;top:504.27px" class="cls_002">{!spaceandrate[23].field23}</div>
+            <div style="position:absolute;left:687.63px;top:504.27px" class="cls_002">{!spaceandrate[23].field24}</div>
+            <div style="position:absolute;left:727.41px;top:504.27px" class="cls_002">{!spaceandrate[23].field25}</div>
+            <div style="position:absolute;left:767.41px;top:504.27px" class="cls_002">{!spaceandrate[23].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:540.15px" class="cls_002">9</div>
+            <div style="position:absolute;left:55.44px;top:540.15px" class="cls_002">{!spaceandrate[24].field1}</div>
+            <div style="position:absolute;left:102.84px;top:540.15px" class="cls_002">5</div>
+            <div style="position:absolute;left:153.80px;top:540.15px" class="cls_002">{!spaceandrate[24].field3}</div>
+            <div style="position:absolute;left:202.42px;top:540.15px" class="cls_002">{!spaceandrate[24].field4}</div>
+            <div style="position:absolute;left:247.07px;top:540.15px" class="cls_002">{!spaceandrate[24].field5}</div>
+            <div style="position:absolute;left:295.00px;top:540.15px" class="cls_002">{!spaceandrate[24].field6}</div>
+            <div style="position:absolute;left:340.79px;top:540.15px" class="cls_002">{!spaceandrate[24].field7}</div>
+            <div style="position:absolute;left:400.40px;top:540.15px" class="cls_002">{!spaceandrate[24].field10}</div>
+            <div style="position:absolute;left:441.32px;top:540.15px" class="cls_002">{!spaceandrate[24].field11}</div>
+            <div style="position:absolute;left:490.96px;top:540.15px" class="cls_002">{!spaceandrate[24].field16}</div>
+            <div style="position:absolute;left:538.00px;top:540.15px" class="cls_002">{!spaceandrate[24].field17}</div>
+            <div style="position:absolute;left:582.50px;top:540.15px" class="cls_002">{!spaceandrate[24].field9}</div>
+            <div style="position:absolute;left:627.50px;top:540.15px" class="cls_002">{!spaceandrate[24].field23}</div>
+            <div style="position:absolute;left:687.63px;top:540.15px" class="cls_002">{!spaceandrate[24].field24}</div>
+            <div style="position:absolute;left:727.41px;top:540.15px" class="cls_002">{!spaceandrate[24].field25}</div>
+            <div style="position:absolute;left:767.41px;top:540.15px" class="cls_002">{!spaceandrate[24].field26}</div>
+
+            <div style="position:absolute;left:23.73px;top:578.55px" class="cls_002">PAGE 2 OF 4</div>
+
+            <div style="position:absolute;left:86.22px;top:576.97px" class="cls_003">INITIALS:</div>
+
+            <div style="position:absolute;left:202.38px;top:576.97px" class="cls_003">&amp;</div>
+
+            <div style="position:absolute;left:580.52px;top:578.55px" class="cls_004">Attachment to GSA FORM 1364-A (REV
+                6/04)
+            </div>
+
+            <div style="position:absolute;left:126.22px;top:586.15px" class="cls_003">LESSOR</div>
+
+            <div style="position:absolute;left:212.59px;top:586.15px" class="cls_003">GOVERNMENT</div>
+
+        </div>
+
+        <div style="position:absolute;left:50%;margin-left:-396px;top:1444px;width:792px;height:612px;border-style:outset;overflow:hidden">
+
+            <div style="position:absolute;left:0px;top:0px">
+
+                <img src="{!URLFOR($Resource.form1364RateStructure, 'image003_092316.jpg')}" width="792" height="612"/>
+            </div>
+
+            <div style="position:absolute;left:30.33px;top:20.87px" class="cls_002">9</div>
+            <div style="position:absolute;left:55.44px;top:20.87px" class="cls_002">{!spaceandrate[25].field1}</div>
+            <div style="position:absolute;left:102.84px;top:20.87px" class="cls_002">5 + 5</div>
+            <div style="position:absolute;left:153.80px;top:20.87px" class="cls_002">{!spaceandrate[25].field3}</div>
+            <div style="position:absolute;left:202.42px;top:20.87px" class="cls_002">{!spaceandrate[25].field4}</div>
+            <div style="position:absolute;left:247.07px;top:20.87px" class="cls_002">{!spaceandrate[25].field5}</div>
+            <div style="position:absolute;left:295.00px;top:20.87px" class="cls_002">{!spaceandrate[25].field6}</div>
+            <div style="position:absolute;left:340.79px;top:20.87px" class="cls_002">{!spaceandrate[25].field7}</div>
+            <div style="position:absolute;left:400.40px;top:20.87px" class="cls_002">{!spaceandrate[25].field10}</div>
+            <div style="position:absolute;left:441.32px;top:20.87px" class="cls_002">{!spaceandrate[25].field11}</div>
+            <div style="position:absolute;left:490.96px;top:20.87px" class="cls_002">{!spaceandrate[25].field16}</div>
+            <div style="position:absolute;left:538.00px;top:20.87px" class="cls_002">{!spaceandrate[25].field17}</div>
+            <div style="position:absolute;left:582.50px;top:20.87px" class="cls_002">{!spaceandrate[25].field9}</div>
+            <div style="position:absolute;left:627.50px;top:20.87px" class="cls_002">{!spaceandrate[25].field23}</div>
+            <div style="position:absolute;left:687.63px;top:20.87px" class="cls_002">{!spaceandrate[25].field24}</div>
+            <div style="position:absolute;left:727.41px;top:20.87px" class="cls_002">{!spaceandrate[25].field25}</div>
+            <div style="position:absolute;left:767.41px;top:20.87px" class="cls_002">{!spaceandrate[25].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:54.71px" class="cls_002">9</div>
+            <div style="position:absolute;left:55.44px;top:54.71px" class="cls_002">{!spaceandrate[26].field1}</div>
+            <div style="position:absolute;left:102.84px;top:54.71px" class="cls_002">10</div>
+            <div style="position:absolute;left:153.80px;top:54.71px" class="cls_002">{!spaceandrate[26].field3}</div>
+            <div style="position:absolute;left:202.42px;top:54.71px" class="cls_002">{!spaceandrate[26].field4}</div>
+            <div style="position:absolute;left:247.07px;top:54.71px" class="cls_002">{!spaceandrate[26].field5}</div>
+            <div style="position:absolute;left:295.00px;top:54.71px" class="cls_002">{!spaceandrate[26].field6}</div>
+            <div style="position:absolute;left:340.79px;top:54.71px" class="cls_002">{!spaceandrate[26].field7}</div>
+            <div style="position:absolute;left:400.40px;top:54.71px" class="cls_002">{!spaceandrate[26].field10}</div>
+            <div style="position:absolute;left:441.32px;top:54.71px" class="cls_002">{!spaceandrate[26].field11}</div>
+            <div style="position:absolute;left:490.96px;top:54.71px" class="cls_002">{!spaceandrate[26].field16}</div>
+            <div style="position:absolute;left:538.00px;top:54.71px" class="cls_002">{!spaceandrate[26].field17}</div>
+            <div style="position:absolute;left:582.50px;top:54.71px" class="cls_002">{!spaceandrate[26].field9}</div>
+            <div style="position:absolute;left:627.50px;top:54.71px" class="cls_002">{!spaceandrate[26].field23}</div>
+            <div style="position:absolute;left:687.63px;top:54.71px" class="cls_002">{!spaceandrate[26].field24}</div>
+            <div style="position:absolute;left:727.41px;top:54.71px" class="cls_002">{!spaceandrate[26].field25}</div>
+            <div style="position:absolute;left:767.41px;top:54.71px" class="cls_002">{!spaceandrate[26].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:90.53px" class="cls_002">10</div>
+            <div style="position:absolute;left:55.44px;top:90.53px" class="cls_002">{!spaceandrate[27].field1}</div>
+            <div style="position:absolute;left:102.84px;top:90.53px" class="cls_002">5</div>
+            <div style="position:absolute;left:153.80px;top:90.53px" class="cls_002">{!spaceandrate[27].field3}</div>
+            <div style="position:absolute;left:202.42px;top:90.53px" class="cls_002">{!spaceandrate[27].field4}</div>
+            <div style="position:absolute;left:247.07px;top:90.53px" class="cls_002">{!spaceandrate[27].field5}</div>
+            <div style="position:absolute;left:295.00px;top:90.53px" class="cls_002">{!spaceandrate[27].field6}</div>
+            <div style="position:absolute;left:340.79px;top:90.53px" class="cls_002">{!spaceandrate[27].field7}</div>
+            <div style="position:absolute;left:400.40px;top:90.53px" class="cls_002">{!spaceandrate[27].field10}</div>
+            <div style="position:absolute;left:441.32px;top:90.53px" class="cls_002">{!spaceandrate[27].field11}</div>
+            <div style="position:absolute;left:490.96px;top:90.53px" class="cls_002">{!spaceandrate[27].field16}</div>
+            <div style="position:absolute;left:538.00px;top:90.53px" class="cls_002">{!spaceandrate[27].field17}</div>
+            <div style="position:absolute;left:582.50px;top:90.53px" class="cls_002">{!spaceandrate[27].field9}</div>
+            <div style="position:absolute;left:627.50px;top:90.53px" class="cls_002">{!spaceandrate[27].field23}</div>
+            <div style="position:absolute;left:687.63px;top:90.53px" class="cls_002">{!spaceandrate[27].field24}</div>
+            <div style="position:absolute;left:727.41px;top:90.53px" class="cls_002">{!spaceandrate[27].field25}</div>
+            <div style="position:absolute;left:767.41px;top:90.53px" class="cls_002">{!spaceandrate[27].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:124.37px" class="cls_002">10</div>
+            <div style="position:absolute;left:55.44px;top:124.37px" class="cls_002">{!spaceandrate[28].field1}</div>
+            <div style="position:absolute;left:102.84px;top:124.37px" class="cls_002">5 + 5</div>
+            <div style="position:absolute;left:153.80px;top:124.37px" class="cls_002">{!spaceandrate[28].field3}</div>
+            <div style="position:absolute;left:202.42px;top:124.37px" class="cls_002">{!spaceandrate[28].field4}</div>
+            <div style="position:absolute;left:247.07px;top:124.37px" class="cls_002">{!spaceandrate[28].field5}</div>
+            <div style="position:absolute;left:295.00px;top:124.37px" class="cls_002">{!spaceandrate[28].field6}</div>
+            <div style="position:absolute;left:340.79px;top:124.37px" class="cls_002">{!spaceandrate[28].field7}</div>
+            <div style="position:absolute;left:400.40px;top:124.37px" class="cls_002">{!spaceandrate[28].field10}</div>
+            <div style="position:absolute;left:441.32px;top:124.37px" class="cls_002">{!spaceandrate[28].field11}</div>
+            <div style="position:absolute;left:490.96px;top:124.37px" class="cls_002">{!spaceandrate[28].field16}</div>
+            <div style="position:absolute;left:538.00px;top:124.37px" class="cls_002">{!spaceandrate[28].field17}</div>
+            <div style="position:absolute;left:582.50px;top:124.37px" class="cls_002">{!spaceandrate[28].field9}</div>
+            <div style="position:absolute;left:627.50px;top:124.37px" class="cls_002">{!spaceandrate[28].field23}</div>
+            <div style="position:absolute;left:687.63px;top:124.37px" class="cls_002">{!spaceandrate[28].field24}</div>
+            <div style="position:absolute;left:727.41px;top:124.37px" class="cls_002">{!spaceandrate[28].field25}</div>
+            <div style="position:absolute;left:767.41px;top:124.37px" class="cls_002">{!spaceandrate[28].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:158.21px" class="cls_002">10</div>
+            <div style="position:absolute;left:55.44px;top:158.21px" class="cls_002">{!spaceandrate[29].field1}</div>
+            <div style="position:absolute;left:102.84px;top:158.21px" class="cls_002">10</div>
+            <div style="position:absolute;left:153.80px;top:158.21px" class="cls_002">{!spaceandrate[29].field3}</div>
+            <div style="position:absolute;left:202.42px;top:158.21px" class="cls_002">{!spaceandrate[29].field4}</div>
+            <div style="position:absolute;left:247.07px;top:158.21px" class="cls_002">{!spaceandrate[29].field5}</div>
+            <div style="position:absolute;left:295.00px;top:158.21px" class="cls_002">{!spaceandrate[29].field6}</div>
+            <div style="position:absolute;left:340.79px;top:158.21px" class="cls_002">{!spaceandrate[29].field7}</div>
+            <div style="position:absolute;left:400.40px;top:158.21px" class="cls_002">{!spaceandrate[29].field10}</div>
+            <div style="position:absolute;left:441.32px;top:158.21px" class="cls_002">{!spaceandrate[29].field11}</div>
+            <div style="position:absolute;left:490.96px;top:158.21px" class="cls_002">{!spaceandrate[29].field16}</div>
+            <div style="position:absolute;left:538.00px;top:158.21px" class="cls_002">{!spaceandrate[29].field17}</div>
+            <div style="position:absolute;left:582.50px;top:158.21px" class="cls_002">{!spaceandrate[29].field9}</div>
+            <div style="position:absolute;left:627.50px;top:158.21px" class="cls_002">{!spaceandrate[29].field23}</div>
+
+            <div style="position:absolute;left:687.63px;top:158.21px" class="cls_002">{!spaceandrate[29].field24}</div>
+            <div style="position:absolute;left:727.41px;top:158.21px" class="cls_002">{!spaceandrate[29].field25}</div>
+            <div style="position:absolute;left:767.41px;top:158.21px" class="cls_002">{!spaceandrate[29].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:194.09px" class="cls_002">11</div>
+            <div style="position:absolute;left:55.44px;top:194.09px" class="cls_002">{!spaceandrate[30].field1}</div>
+            <div style="position:absolute;left:102.84px;top:194.09px" class="cls_002">5</div>
+            <div style="position:absolute;left:153.80px;top:194.09px" class="cls_002">{!spaceandrate[30].field3}</div>
+            <div style="position:absolute;left:202.42px;top:194.09px" class="cls_002">{!spaceandrate[30].field4}</div>
+            <div style="position:absolute;left:247.07px;top:194.09px" class="cls_002">{!spaceandrate[30].field5}</div>
+            <div style="position:absolute;left:295.00px;top:194.09px" class="cls_002">{!spaceandrate[30].field6}</div>
+            <div style="position:absolute;left:340.79px;top:194.09px" class="cls_002">{!spaceandrate[30].field7}</div>
+            <div style="position:absolute;left:400.40px;top:194.09px" class="cls_002">{!spaceandrate[30].field10}</div>
+            <div style="position:absolute;left:441.32px;top:194.09px" class="cls_002">{!spaceandrate[30].field11}</div>
+            <div style="position:absolute;left:490.96px;top:194.09px" class="cls_002">{!spaceandrate[30].field16}</div>
+            <div style="position:absolute;left:538.00px;top:194.09px" class="cls_002">{!spaceandrate[30].field17}</div>
+            <div style="position:absolute;left:582.50px;top:194.09px" class="cls_002">{!spaceandrate[30].field9}</div>
+            <div style="position:absolute;left:627.50px;top:194.09px" class="cls_002">{!spaceandrate[30].field23}</div>
+            <div style="position:absolute;left:687.63px;top:194.09px" class="cls_002">{!spaceandrate[30].field24}</div>
+            <div style="position:absolute;left:727.41px;top:194.09px" class="cls_002">{!spaceandrate[30].field25}</div>
+            <div style="position:absolute;left:767.41px;top:194.09px" class="cls_002">{!spaceandrate[30].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:227.93px" class="cls_002">11</div>
+            <div style="position:absolute;left:55.44px;top:227.93px" class="cls_002">{!spaceandrate[31].field1}</div>
+            <div style="position:absolute;left:102.84px;top:227.93px" class="cls_002">5 + 5</div>
+            <div style="position:absolute;left:153.80px;top:227.93px" class="cls_002">{!spaceandrate[31].field3}</div>
+            <div style="position:absolute;left:202.42px;top:227.93px" class="cls_002">{!spaceandrate[31].field4}</div>
+            <div style="position:absolute;left:247.07px;top:227.93px" class="cls_002">{!spaceandrate[31].field5}</div>
+            <div style="position:absolute;left:295.00px;top:227.93px" class="cls_002">{!spaceandrate[31].field6}</div>
+            <div style="position:absolute;left:340.79px;top:227.93px" class="cls_002">{!spaceandrate[31].field7}</div>
+            <div style="position:absolute;left:400.40px;top:227.93px" class="cls_002">{!spaceandrate[31].field10}</div>
+            <div style="position:absolute;left:441.32px;top:227.93px" class="cls_002">{!spaceandrate[31].field11}</div>
+            <div style="position:absolute;left:490.96px;top:227.93px" class="cls_002">{!spaceandrate[31].field16}</div>
+            <div style="position:absolute;left:538.00px;top:227.93px" class="cls_002">{!spaceandrate[31].field17}</div>
+            <div style="position:absolute;left:582.50px;top:227.93px" class="cls_002">{!spaceandrate[31].field9}</div>
+            <div style="position:absolute;left:627.50px;top:227.93px" class="cls_002">{!spaceandrate[31].field23}</div>
+            <div style="position:absolute;left:687.63px;top:227.93px" class="cls_002">{!spaceandrate[31].field24}</div>
+            <div style="position:absolute;left:727.41px;top:227.93px" class="cls_002">{!spaceandrate[31].field25}</div>
+            <div style="position:absolute;left:767.41px;top:227.93px" class="cls_002">{!spaceandrate[31].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:261.77px" class="cls_002">11</div>
+            <div style="position:absolute;left:55.44px;top:261.77px" class="cls_002">{!spaceandrate[32].field1}</div>
+            <div style="position:absolute;left:102.84px;top:261.77px" class="cls_002">10</div>
+            <div style="position:absolute;left:153.80px;top:261.77px" class="cls_002">{!spaceandrate[32].field3}</div>
+            <div style="position:absolute;left:202.42px;top:261.77px" class="cls_002">{!spaceandrate[32].field4}</div>
+            <div style="position:absolute;left:247.07px;top:261.77px" class="cls_002">{!spaceandrate[32].field5}</div>
+            <div style="position:absolute;left:295.00px;top:261.77px" class="cls_002">{!spaceandrate[32].field6}</div>
+            <div style="position:absolute;left:340.79px;top:261.77px" class="cls_002">{!spaceandrate[32].field7}</div>
+            <div style="position:absolute;left:400.40px;top:261.77px" class="cls_002">{!spaceandrate[32].field10}</div>
+            <div style="position:absolute;left:441.32px;top:261.77px" class="cls_002">{!spaceandrate[32].field11}</div>
+            <div style="position:absolute;left:490.96px;top:261.77px" class="cls_002">{!spaceandrate[32].field16}</div>
+            <div style="position:absolute;left:538.00px;top:261.77px" class="cls_002">{!spaceandrate[32].field17}</div>
+            <div style="position:absolute;left:582.50px;top:261.77px" class="cls_002">{!spaceandrate[32].field9}</div>
+            <div style="position:absolute;left:627.50px;top:261.77px" class="cls_002">{!spaceandrate[32].field23}</div>
+            <div style="position:absolute;left:687.63px;top:261.77px" class="cls_002">{!spaceandrate[32].field24}</div>
+            <div style="position:absolute;left:727.41px;top:261.77px" class="cls_002">{!spaceandrate[32].field25}</div>
+            <div style="position:absolute;left:767.41px;top:261.77px" class="cls_002">{!spaceandrate[32].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:297.65px" class="cls_002">12</div>
+            <div style="position:absolute;left:55.44px;top:297.65px" class="cls_002">{!spaceandrate[33].field1}</div>
+            <div style="position:absolute;left:102.84px;top:297.65px" class="cls_002">5</div>
+            <div style="position:absolute;left:153.80px;top:297.65px" class="cls_002">{!spaceandrate[33].field3}</div>
+            <div style="position:absolute;left:202.42px;top:297.65px" class="cls_002">{!spaceandrate[33].field4}</div>
+            <div style="position:absolute;left:247.07px;top:297.65px" class="cls_002">{!spaceandrate[33].field5}</div>
+            <div style="position:absolute;left:295.00px;top:297.65px" class="cls_002">{!spaceandrate[33].field6}</div>
+            <div style="position:absolute;left:340.79px;top:297.65px" class="cls_002">{!spaceandrate[33].field7}</div>
+            <div style="position:absolute;left:400.40px;top:297.65px" class="cls_002">{!spaceandrate[33].field10}</div>
+            <div style="position:absolute;left:441.32px;top:297.65px" class="cls_002">{!spaceandrate[33].field11}</div>
+            <div style="position:absolute;left:490.96px;top:297.65px" class="cls_002">{!spaceandrate[33].field16}</div>
+            <div style="position:absolute;left:538.00px;top:297.65px" class="cls_002">{!spaceandrate[33].field17}</div>
+            <div style="position:absolute;left:582.50px;top:297.65px" class="cls_002">{!spaceandrate[33].field9}</div>
+            <div style="position:absolute;left:627.50px;top:297.65px" class="cls_002">{!spaceandrate[33].field23}</div>
+            <div style="position:absolute;left:687.63px;top:297.65px" class="cls_002">{!spaceandrate[33].field24}</div>
+            <div style="position:absolute;left:727.41px;top:297.65px" class="cls_002">{!spaceandrate[33].field25}</div>
+            <div style="position:absolute;left:767.41px;top:297.65px" class="cls_002">{!spaceandrate[33].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:331.49px" class="cls_002">12</div>
+            <div style="position:absolute;left:55.44px;top:331.49px" class="cls_002">{!spaceandrate[34].field1}</div>
+            <div style="position:absolute;left:102.84px;top:331.49px" class="cls_002">5 + 5</div>
+            <div style="position:absolute;left:153.80px;top:331.49px" class="cls_002">{!spaceandrate[34].field3}</div>
+            <div style="position:absolute;left:202.42px;top:331.49px" class="cls_002">{!spaceandrate[34].field4}</div>
+            <div style="position:absolute;left:247.07px;top:331.49px" class="cls_002">{!spaceandrate[34].field5}</div>
+            <div style="position:absolute;left:295.00px;top:331.49px" class="cls_002">{!spaceandrate[34].field6}</div>
+            <div style="position:absolute;left:340.79px;top:331.49px" class="cls_002">{!spaceandrate[34].field7}</div>
+            <div style="position:absolute;left:400.40px;top:331.49px" class="cls_002">{!spaceandrate[34].field10}</div>
+            <div style="position:absolute;left:441.32px;top:331.49px" class="cls_002">{!spaceandrate[34].field11}</div>
+            <div style="position:absolute;left:490.96px;top:331.49px" class="cls_002">{!spaceandrate[34].field16}</div>
+            <div style="position:absolute;left:538.00px;top:331.49px" class="cls_002">{!spaceandrate[34].field17}</div>
+            <div style="position:absolute;left:582.50px;top:331.49px" class="cls_002">{!spaceandrate[34].field9}</div>
+            <div style="position:absolute;left:627.50px;top:331.49px" class="cls_002">{!spaceandrate[34].field23}</div>
+            <div style="position:absolute;left:687.63px;top:331.49px" class="cls_002">{!spaceandrate[34].field24}</div>
+            <div style="position:absolute;left:727.41px;top:331.49px" class="cls_002">{!spaceandrate[34].field25}</div>
+            <div style="position:absolute;left:767.41px;top:331.49px" class="cls_002">{!spaceandrate[34].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:365.33px" class="cls_002">12</div>
+            <div style="position:absolute;left:55.44px;top:365.33px" class="cls_002">{!spaceandrate[35].field1}</div>
+            <div style="position:absolute;left:102.84px;top:365.33px" class="cls_002">10</div>
+            <div style="position:absolute;left:153.80px;top:365.33px" class="cls_002">{!spaceandrate[35].field3}</div>
+            <div style="position:absolute;left:202.42px;top:365.33px" class="cls_002">{!spaceandrate[35].field4}</div>
+            <div style="position:absolute;left:247.07px;top:365.33px" class="cls_002">{!spaceandrate[35].field5}</div>
+            <div style="position:absolute;left:295.00px;top:365.33px" class="cls_002">{!spaceandrate[35].field6}</div>
+            <div style="position:absolute;left:340.79px;top:365.33px" class="cls_002">{!spaceandrate[35].field7}</div>
+            <div style="position:absolute;left:400.40px;top:365.33px" class="cls_002">{!spaceandrate[35].field10}</div>
+            <div style="position:absolute;left:441.32px;top:365.33px" class="cls_002">{!spaceandrate[35].field11}</div>
+            <div style="position:absolute;left:490.96px;top:365.33px" class="cls_002">{!spaceandrate[35].field16}</div>
+            <div style="position:absolute;left:538.00px;top:365.33px" class="cls_002">{!spaceandrate[35].field17}</div>
+            <div style="position:absolute;left:582.50px;top:365.33px" class="cls_002">{!spaceandrate[35].field9}</div>
+            <div style="position:absolute;left:627.50px;top:365.33px" class="cls_002">{!spaceandrate[35].field23}</div>
+
+            <div style="position:absolute;left:687.63px;top:365.33px" class="cls_002">{!spaceandrate[35].field24}</div>
+            <div style="position:absolute;left:727.41px;top:365.33px" class="cls_002">{!spaceandrate[35].field25}</div>
+            <div style="position:absolute;left:767.41px;top:365.33px" class="cls_002">{!spaceandrate[35].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:401.15px" class="cls_002">13</div>
+            <div style="position:absolute;left:55.44px;top:401.15px" class="cls_002">{!spaceandrate[36].field1}</div>
+            <div style="position:absolute;left:102.84px;top:401.15px" class="cls_002">5</div>
+            <div style="position:absolute;left:153.80px;top:401.15px" class="cls_002">{!spaceandrate[36].field3}</div>
+            <div style="position:absolute;left:202.42px;top:401.15px" class="cls_002">{!spaceandrate[36].field4}</div>
+            <div style="position:absolute;left:247.07px;top:401.15px" class="cls_002">{!spaceandrate[36].field5}</div>
+            <div style="position:absolute;left:295.00px;top:401.15px" class="cls_002">{!spaceandrate[36].field6}</div>
+            <div style="position:absolute;left:340.79px;top:401.15px" class="cls_002">{!spaceandrate[36].field7}</div>
+            <div style="position:absolute;left:400.40px;top:401.15px" class="cls_002">{!spaceandrate[36].field10}</div>
+            <div style="position:absolute;left:441.32px;top:401.15px" class="cls_002">{!spaceandrate[36].field11}</div>
+            <div style="position:absolute;left:490.96px;top:401.15px" class="cls_002">{!spaceandrate[36].field16}</div>
+            <div style="position:absolute;left:538.00px;top:401.15px" class="cls_002">{!spaceandrate[36].field17}</div>
+            <div style="position:absolute;left:582.50px;top:401.15px" class="cls_002">{!spaceandrate[36].field9}</div>
+            <div style="position:absolute;left:627.50px;top:401.15px" class="cls_002">{!spaceandrate[36].field23}</div>
+            <div style="position:absolute;left:687.63px;top:401.15px" class="cls_002">{!spaceandrate[36].field24}</div>
+            <div style="position:absolute;left:727.41px;top:401.15px" class="cls_002">{!spaceandrate[36].field25}</div>
+            <div style="position:absolute;left:767.41px;top:401.15px" class="cls_002">{!spaceandrate[36].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:434.99px" class="cls_002">13</div>
+            <div style="position:absolute;left:55.44px;top:434.99px" class="cls_002">{!spaceandrate[37].field1}</div>
+            <div style="position:absolute;left:102.84px;top:434.99px" class="cls_002">5 + 5</div>
+            <div style="position:absolute;left:153.80px;top:434.99px" class="cls_002">{!spaceandrate[37].field3}</div>
+            <div style="position:absolute;left:202.42px;top:434.99px" class="cls_002">{!spaceandrate[37].field4}</div>
+            <div style="position:absolute;left:247.07px;top:434.99px" class="cls_002">{!spaceandrate[37].field5}</div>
+            <div style="position:absolute;left:295.00px;top:434.99px" class="cls_002">{!spaceandrate[37].field6}</div>
+            <div style="position:absolute;left:340.79px;top:434.99px" class="cls_002">{!spaceandrate[37].field7}</div>
+            <div style="position:absolute;left:400.40px;top:434.99px" class="cls_002">{!spaceandrate[37].field10}</div>
+            <div style="position:absolute;left:441.32px;top:434.99px" class="cls_002">{!spaceandrate[37].field11}</div>
+            <div style="position:absolute;left:490.96px;top:434.99px" class="cls_002">{!spaceandrate[37].field16}</div>
+            <div style="position:absolute;left:538.00px;top:434.99px" class="cls_002">{!spaceandrate[37].field17}</div>
+            <div style="position:absolute;left:582.50px;top:434.99px" class="cls_002">{!spaceandrate[37].field9}</div>
+            <div style="position:absolute;left:627.50px;top:434.99px" class="cls_002">{!spaceandrate[37].field23}</div>
+            <div style="position:absolute;left:687.63px;top:434.99px" class="cls_002">{!spaceandrate[37].field24}</div>
+            <div style="position:absolute;left:727.41px;top:434.99px" class="cls_002">{!spaceandrate[37].field25}</div>
+            <div style="position:absolute;left:767.41px;top:434.99px" class="cls_002">{!spaceandrate[37].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:468.83px" class="cls_002">13</div>
+            <div style="position:absolute;left:55.44px;top:468.83px" class="cls_002">{!spaceandrate[38].field1}</div>
+            <div style="position:absolute;left:102.84px;top:468.83px" class="cls_002">10</div>
+            <div style="position:absolute;left:153.80px;top:468.83px" class="cls_002">{!spaceandrate[38].field3}</div>
+            <div style="position:absolute;left:202.42px;top:468.83px" class="cls_002">{!spaceandrate[38].field4}</div>
+            <div style="position:absolute;left:247.07px;top:468.83px" class="cls_002">{!spaceandrate[38].field5}</div>
+            <div style="position:absolute;left:295.00px;top:468.83px" class="cls_002">{!spaceandrate[38].field6}</div>
+            <div style="position:absolute;left:340.79px;top:468.83px" class="cls_002">{!spaceandrate[38].field7}</div>
+            <div style="position:absolute;left:400.40px;top:468.83px" class="cls_002">{!spaceandrate[38].field10}</div>
+            <div style="position:absolute;left:441.32px;top:468.83px" class="cls_002">{!spaceandrate[38].field11}</div>
+            <div style="position:absolute;left:490.96px;top:468.83px" class="cls_002">{!spaceandrate[38].field16}</div>
+            <div style="position:absolute;left:538.00px;top:468.83px" class="cls_002">{!spaceandrate[38].field17}</div>
+            <div style="position:absolute;left:582.50px;top:468.83px" class="cls_002">{!spaceandrate[38].field9}</div>
+            <div style="position:absolute;left:627.50px;top:468.83px" class="cls_002">{!spaceandrate[38].field23}</div>
+            <div style="position:absolute;left:687.63px;top:468.83px" class="cls_002">{!spaceandrate[38].field24}</div>
+            <div style="position:absolute;left:727.41px;top:468.83px" class="cls_002">{!spaceandrate[38].field25}</div>
+            <div style="position:absolute;left:767.41px;top:468.83px" class="cls_002">{!spaceandrate[38].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:504.71px" class="cls_002">14</div>
+            <div style="position:absolute;left:55.44px;top:504.71px" class="cls_002">{!spaceandrate[39].field1}</div>
+            <div style="position:absolute;left:102.84px;top:504.71px" class="cls_002">5</div>
+            <div style="position:absolute;left:153.80px;top:504.71px" class="cls_002">{!spaceandrate[39].field3}</div>
+            <div style="position:absolute;left:202.42px;top:504.71px" class="cls_002">{!spaceandrate[39].field4}</div>
+            <div style="position:absolute;left:247.07px;top:504.71px" class="cls_002">{!spaceandrate[39].field5}</div>
+            <div style="position:absolute;left:295.00px;top:504.71px" class="cls_002">{!spaceandrate[39].field6}</div>
+            <div style="position:absolute;left:340.79px;top:504.71px" class="cls_002">{!spaceandrate[39].field7}</div>
+            <div style="position:absolute;left:400.40px;top:504.71px" class="cls_002">{!spaceandrate[39].field10}</div>
+            <div style="position:absolute;left:441.32px;top:504.71px" class="cls_002">{!spaceandrate[39].field11}</div>
+            <div style="position:absolute;left:490.96px;top:504.71px" class="cls_002">{!spaceandrate[39].field16}</div>
+            <div style="position:absolute;left:538.00px;top:504.71px" class="cls_002">{!spaceandrate[39].field17}</div>
+            <div style="position:absolute;left:582.50px;top:504.71px" class="cls_002">{!spaceandrate[39].field9}</div>
+            <div style="position:absolute;left:627.50px;top:504.71px" class="cls_002">{!spaceandrate[39].field23}</div>
+            <div style="position:absolute;left:687.63px;top:504.71px" class="cls_002">{!spaceandrate[39].field24}</div>
+            <div style="position:absolute;left:727.41px;top:504.71px" class="cls_002">{!spaceandrate[39].field25}</div>
+            <div style="position:absolute;left:767.41px;top:504.71px" class="cls_002">{!spaceandrate[39].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:538.55px" class="cls_002">14</div>
+            <div style="position:absolute;left:55.44px;top:538.55px" class="cls_002">{!spaceandrate[40].field1}</div>
+            <div style="position:absolute;left:102.84px;top:538.55px" class="cls_002">5 + 5</div>
+            <div style="position:absolute;left:153.80px;top:538.55px" class="cls_002">{!spaceandrate[40].field3}</div>
+            <div style="position:absolute;left:202.42px;top:538.55px" class="cls_002">{!spaceandrate[40].field4}</div>
+            <div style="position:absolute;left:247.07px;top:538.55px" class="cls_002">{!spaceandrate[40].field5}</div>
+            <div style="position:absolute;left:295.00px;top:538.55px" class="cls_002">{!spaceandrate[40].field6}</div>
+            <div style="position:absolute;left:340.79px;top:538.55px" class="cls_002">{!spaceandrate[40].field7}</div>
+            <div style="position:absolute;left:400.40px;top:538.55px" class="cls_002">{!spaceandrate[40].field10}</div>
+            <div style="position:absolute;left:441.32px;top:538.55px" class="cls_002">{!spaceandrate[40].field11}</div>
+            <div style="position:absolute;left:490.96px;top:538.55px" class="cls_002">{!spaceandrate[40].field16}</div>
+            <div style="position:absolute;left:538.00px;top:538.55px" class="cls_002">{!spaceandrate[40].field17}</div>
+            <div style="position:absolute;left:582.50px;top:538.55px" class="cls_002">{!spaceandrate[40].field9}</div>
+            <div style="position:absolute;left:627.50px;top:538.55px" class="cls_002">{!spaceandrate[40].field23}</div>
+            <div style="position:absolute;left:687.63px;top:538.55px" class="cls_002">{!spaceandrate[40].field24}</div>
+            <div style="position:absolute;left:727.41px;top:538.55px" class="cls_002">{!spaceandrate[40].field25}</div>
+            <div style="position:absolute;left:767.41px;top:538.55px" class="cls_002">{!spaceandrate[40].field26}</div>
+
+            <div style="position:absolute;left:23.29px;top:579.95px" class="cls_002">PAGE 3 OF 4</div>
+
+            <div style="position:absolute;left:85.78px;top:576.53px" class="cls_003">INITIALS:</div>
+
+            <div style="position:absolute;left:201.94px;top:576.53px" class="cls_003">&amp;</div>
+
+            <div style="position:absolute;left:580.09px;top:578.99px" class="cls_004">Attachment to GSA FORM 1364-A (REV
+                6/04)
+            </div>
+
+            <div style="position:absolute;left:125.45px;top:585.71px" class="cls_003">LESSOR</div>
+
+            <div style="position:absolute;left:211.82px;top:585.71px" class="cls_003">GOVERNMENT</div>
+
+        </div>
+
+        <div style="position:absolute;left:50%;margin-left:-396px;top:2166px;width:792px;height:612px;border-style:outset;overflow:hidden">
+
+            <div style="position:absolute;left:0px;top:0px">
+
+                <img src="{!URLFOR($Resource.form1364RateStructure, 'image004_092316.jpg')}" width="792" height="612"/>
+            </div>
+
+            <div style="position:absolute;left:30.33px;top:23.96px" class="cls_002">14</div>
+            <div style="position:absolute;left:55.44px;top:23.96px" class="cls_002">{!spaceandrate[41].field1}</div>
+            <div style="position:absolute;left:102.84px;top:23.96px" class="cls_002">10</div>
+            <div style="position:absolute;left:153.80px;top:23.96px" class="cls_002">{!spaceandrate[41].field3}</div>
+            <div style="position:absolute;left:202.42px;top:23.96px" class="cls_002">{!spaceandrate[41].field4}</div>
+            <div style="position:absolute;left:247.07px;top:23.96px" class="cls_002">{!spaceandrate[41].field5}</div>
+            <div style="position:absolute;left:295.00px;top:23.96px" class="cls_002">{!spaceandrate[41].field6}</div>
+            <div style="position:absolute;left:340.79px;top:23.96px" class="cls_002">{!spaceandrate[41].field7}</div>
+            <div style="position:absolute;left:400.40px;top:23.96px" class="cls_002">{!spaceandrate[41].field10}</div>
+            <div style="position:absolute;left:441.32px;top:23.96px" class="cls_002">{!spaceandrate[41].field11}</div>
+            <div style="position:absolute;left:490.96px;top:23.96px" class="cls_002">{!spaceandrate[41].field16}</div>
+            <div style="position:absolute;left:538.00px;top:23.96px" class="cls_002">{!spaceandrate[41].field17}</div>
+            <div style="position:absolute;left:582.50px;top:23.96px" class="cls_002">{!spaceandrate[41].field9}</div>
+            <div style="position:absolute;left:627.50px;top:23.96px" class="cls_002">{!spaceandrate[41].field23}</div>
+            <div style="position:absolute;left:687.63px;top:23.96px" class="cls_002">{!spaceandrate[41].field24}</div>
+            <div style="position:absolute;left:727.41px;top:23.96px" class="cls_002">{!spaceandrate[41].field25}</div>
+            <div style="position:absolute;left:767.41px;top:23.96px" class="cls_002">{!spaceandrate[41].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:59.84px" class="cls_002">15</div>
+            <div style="position:absolute;left:55.44px;top:59.84px" class="cls_002">{!spaceandrate[42].field1}</div>
+            <div style="position:absolute;left:102.84px;top:59.84px" class="cls_002">5</div>
+            <div style="position:absolute;left:153.80px;top:59.84px" class="cls_002">{!spaceandrate[42].field3}</div>
+            <div style="position:absolute;left:202.42px;top:59.84px" class="cls_002">{!spaceandrate[42].field4}</div>
+            <div style="position:absolute;left:247.07px;top:59.84px" class="cls_002">{!spaceandrate[42].field5}</div>
+            <div style="position:absolute;left:295.00px;top:59.84px" class="cls_002">{!spaceandrate[42].field6}</div>
+            <div style="position:absolute;left:340.79px;top:59.84px" class="cls_002">{!spaceandrate[42].field7}</div>
+            <div style="position:absolute;left:400.40px;top:59.84px" class="cls_002">{!spaceandrate[42].field10}</div>
+            <div style="position:absolute;left:441.32px;top:59.84px" class="cls_002">{!spaceandrate[42].field11}</div>
+            <div style="position:absolute;left:490.96px;top:59.84px" class="cls_002">{!spaceandrate[42].field16}</div>
+            <div style="position:absolute;left:538.00px;top:59.84px" class="cls_002">{!spaceandrate[42].field17}</div>
+            <div style="position:absolute;left:582.50px;top:59.84px" class="cls_002">{!spaceandrate[42].field9}</div>
+            <div style="position:absolute;left:627.50px;top:59.84px" class="cls_002">{!spaceandrate[42].field23}</div>
+            <div style="position:absolute;left:687.63px;top:59.84px" class="cls_002">{!spaceandrate[42].field24}</div>
+            <div style="position:absolute;left:727.41px;top:59.84px" class="cls_002">{!spaceandrate[42].field25}</div>
+            <div style="position:absolute;left:767.41px;top:59.84px" class="cls_002">{!spaceandrate[42].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:93.68px" class="cls_002">15</div>
+            <div style="position:absolute;left:55.44px;top:93.68px" class="cls_002">{!spaceandrate[43].field1}</div>
+            <div style="position:absolute;left:102.84px;top:93.68px" class="cls_002">5 + 5</div>
+            <div style="position:absolute;left:153.80px;top:93.68px" class="cls_002">{!spaceandrate[43].field3}</div>
+            <div style="position:absolute;left:202.42px;top:93.68px" class="cls_002">{!spaceandrate[43].field4}</div>
+            <div style="position:absolute;left:247.07px;top:93.68px" class="cls_002">{!spaceandrate[43].field5}</div>
+            <div style="position:absolute;left:295.00px;top:93.68px" class="cls_002">{!spaceandrate[43].field6}</div>
+            <div style="position:absolute;left:340.79px;top:93.68px" class="cls_002">{!spaceandrate[43].field7}</div>
+            <div style="position:absolute;left:400.40px;top:93.68px" class="cls_002">{!spaceandrate[43].field10}</div>
+            <div style="position:absolute;left:441.32px;top:93.68px" class="cls_002">{!spaceandrate[43].field11}</div>
+            <div style="position:absolute;left:490.96px;top:93.68px" class="cls_002">{!spaceandrate[43].field16}</div>
+            <div style="position:absolute;left:538.00px;top:93.68px" class="cls_002">{!spaceandrate[43].field17}</div>
+            <div style="position:absolute;left:582.50px;top:93.68px" class="cls_002">{!spaceandrate[43].field9}</div>
+            <div style="position:absolute;left:627.50px;top:93.68px" class="cls_002">{!spaceandrate[43].field23}</div>
+            <div style="position:absolute;left:687.63px;top:93.68px" class="cls_002">{!spaceandrate[43].field24}</div>
+            <div style="position:absolute;left:727.41px;top:93.68px" class="cls_002">{!spaceandrate[43].field25}</div>
+            <div style="position:absolute;left:767.41px;top:93.68px" class="cls_002">{!spaceandrate[43].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:127.52px" class="cls_002">15</div>
+            <div style="position:absolute;left:55.44px;top:127.52px" class="cls_002">{!spaceandrate[44].field1}</div>
+            <div style="position:absolute;left:102.84px;top:127.52px" class="cls_002">10</div>
+            <div style="position:absolute;left:153.80px;top:127.52px" class="cls_002">{!spaceandrate[44].field3}</div>
+            <div style="position:absolute;left:202.42px;top:127.52px" class="cls_002">{!spaceandrate[44].field4}</div>
+            <div style="position:absolute;left:247.07px;top:127.52px" class="cls_002">{!spaceandrate[44].field5}</div>
+            <div style="position:absolute;left:295.00px;top:127.52px" class="cls_002">{!spaceandrate[44].field6}</div>
+            <div style="position:absolute;left:340.79px;top:127.52px" class="cls_002">{!spaceandrate[44].field7}</div>
+            <div style="position:absolute;left:400.40px;top:127.52px" class="cls_002">{!spaceandrate[44].field10}</div>
+            <div style="position:absolute;left:441.32px;top:127.52px" class="cls_002">{!spaceandrate[44].field11}</div>
+            <div style="position:absolute;left:490.96px;top:127.52px" class="cls_002">{!spaceandrate[44].field16}</div>
+            <div style="position:absolute;left:538.00px;top:127.52px" class="cls_002">{!spaceandrate[44].field17}</div>
+            <div style="position:absolute;left:582.50px;top:127.52px" class="cls_002">{!spaceandrate[44].field9}</div>
+            <div style="position:absolute;left:627.50px;top:127.52px" class="cls_002">{!spaceandrate[44].field23}</div>
+            <div style="position:absolute;left:687.63px;top:127.52px" class="cls_002">{!spaceandrate[44].field24}</div>
+            <div style="position:absolute;left:727.41px;top:127.52px" class="cls_002">{!spaceandrate[44].field25}</div>
+            <div style="position:absolute;left:767.41px;top:127.52px" class="cls_002">{!spaceandrate[44].field26}</div>
+
+            <div style="position:absolute;left:91.98px;top:573.44px" class="cls_003">INITIALS:</div>
+
+            <div style="position:absolute;left:208.15px;top:573.44px" class="cls_003">&amp;</div>
+
+            <div style="position:absolute;left:20.20px;top:583.04px" class="cls_002">PAGE 4 OF 4</div>
+
+            <div style="position:absolute;left:131.32px;top:582.62px" class="cls_003">LESSOR</div>
+
+            <div style="position:absolute;left:217.69px;top:582.62px" class="cls_003">GOVERNMENT</div>
+
+            <div style="position:absolute;left:577.00px;top:582.08px" class="cls_004">Attachment to GSA FORM 1364-A (REV
+                6/04)
+            </div>
+
+        </div>
+    </apex:panelGrid>
+
+    <!-- added by syam k ganna for census region on 01/16/2016 -->
+    <apex:panelGrid rendered="{!isValidUser && regionCode =='Census'}">
+        <div style="position:absolute;left:50%;margin-left:-396px;top:0px;width:792px;height:612px;border-style:outset;overflow:hidden">
+
+            <div style="position:absolute;left:0px;top:0px">
+
+                <img src="{!URLFOR($Resource.form1364RateStructure, 'image001_092316.jpg')}" width="792" height="612"/>
+            </div>
+
+            <div style="position:absolute;left:310.53px;top:21.03px" class="cls_005">SECTION III - RATE STRUCTURE</div>
+
+            <div style="position:absolute;left:22.07px;top:228.81px" class="cls_002">Block#</div>
+
+            <div style="position:absolute;left:47.44px;top:172.81px" class="cls_002">Lease Type</div>
+            <div style="position:absolute;left:46.63px;top:180.23px" class="cls_002">(New (N) or</div>
+            <div style="position:absolute;left:48.41px;top:188.65px" class="cls_002">Continuing</div>
+            <div style="position:absolute;left:55.89px;top:196.08px" class="cls_002">(C))</div>
+            <div style="position:absolute;left:52.95px;top:204.50px" class="cls_002">If "C",</div>
+            <div style="position:absolute;left:51.41px;top:212.93px" class="cls_002">Identify</div>
+            <div style="position:absolute;left:47.41px;top:220.80px" class="cls_002">GSA Lease</div>
+            <div style="position:absolute;left:50.78px;top:228.81px" class="cls_002">Number.</div>
+
+            <div style="position:absolute;left:96.41px;top:220.80px" class="cls_002">Lease Term (in</div>
+            <div style="position:absolute;left:96.78px;top:228.81px" class="cls_002">Years)</div>
+
+            <div style="position:absolute;left:145.41px;top:212.93px" class="cls_002">Amount</div>
+            <div style="position:absolute;left:145.41px;top:220.80px" class="cls_002">of Space</div>
+            <div style="position:absolute;left:143.78px;top:228.81px" class="cls_002">(ABOA SF)</div>
+
+            <div style="position:absolute;left:190.41px;top:220.80px" class="cls_002">Shell Rate (per</div>
+            <div style="position:absolute;left:190.78px;top:228.81px" class="cls_002">ABOA SF)</div>
+
+            <div style="position:absolute;left:240.41px;top:212.80px" class="cls_002">Base Year</div>
+            <div style="position:absolute;left:240.78px;top:220.81px" class="cls_002">Opearting Cost</div>
+            <div style="position:absolute;left:240.78px;top:228.81px" class="cls_002">(per ABOA SF)</div>
+
+            <div style="position:absolute;left:288.78px;top:148.81px" class="cls_002">TENANT IMPROVEMENTS:</div>
+            <div style="position:absolute;left:288.78px;top:156.81px" class="cls_002">Annual % Interest Rate AND</div>
+            <div style="position:absolute;left:288.78px;top:164.81px" class="cls_002">Annual Cost ($) to Amortize</div>
+            <div style="position:absolute;left:288.78px;top:172.81px" class="cls_002">${!newTIUsed}/ABOA of TI for New
+                or
+            </div>
+            <div style="position:absolute;left:288.78px;top:180.81px" class="cls_002">${!sucTIUsed}/ABOA of TI for</div>
+            <div style="position:absolute;left:288.78px;top:188.81px" class="cls_002">Continuing Lease</div>
+
+            <div style="position:absolute;left:295.78px;top:218.81px" class="cls_002">APR (%)</div>
+            <div style="position:absolute;left:335.78px;top:218.81px" class="cls_002">Cost/ABOA($)</div>
+
+            <div style="position:absolute;left:386.78px;top:148.81px" class="cls_002">BUILDING SPECIFIC</div>
+            <div style="position:absolute;left:382.78px;top:156.81px" class="cls_002">AMORTIZED CAPITAL(BSAC):</div>
+            <div style="position:absolute;left:386.78px;top:164.81px" class="cls_002">Annual % Interest Rate and</div>
+            <div style="position:absolute;left:386.78px;top:172.81px" class="cls_002">Anuual Cost ($) to Amortize</div>
+            <div style="position:absolute;left:386.78px;top:180.81px" class="cls_002">${!BSACUsed}/ABOA of TI for New
+                or
+            </div>
+            <div style="position:absolute;left:386.78px;top:188.81px" class="cls_002">Continuing Lease</div>
+            <div style="position:absolute;left:390.78px;top:218.81px" class="cls_002">APR (%)</div>
+            <div style="position:absolute;left:430.78px;top:218.81px" class="cls_002">Cost/ABOA($)</div>
+
+            <!--<div style="position:absolute;left:480.78px;top:124.81px" class="cls_002">FULLY</div>
+<div style="position:absolute;left:480.78px;top:132.81px" class="cls_002">SERVICED </div>    
+<div style="position:absolute;left:480.78px;top:140.81px" class="cls_002">LEASE RATE</div>    
+<div style="position:absolute;left:480.78px;top:148.81px" class="cls_002">(per ABOA SF)</div>    
+<div style="position:absolute;left:486.78px;top:156.81px" class="cls_002">based on </div>    
+<div style="position:absolute;left:480.78px;top:164.81px" class="cls_002">${!newTIUsed}/ABOA </div>    
+<div style="position:absolute;left:480.78px;top:172.81px" class="cls_002">TI for New and</div>    
+<div style="position:absolute;left:480.78px;top:180.81px" class="cls_002">${!sucTIUsed}/ABOA </div>    
+<div style="position:absolute;left:480.78px;top:188.81px" class="cls_002">TI for Cont </div> 
+<div style="position:absolute;left:480.78px;top:196.81px" class="cls_002">Leases and </div>    
+<div style="position:absolute;left:480.78px;top:204.81px" class="cls_002">${!BSACUsed}/ABOA </div>    
+<div style="position:absolute;left:480.78px;top:212.81px" class="cls_002">for BSAC for</div>    
+<div style="position:absolute;left:480.78px;top:220.81px" class="cls_002">New and Cont</div>    
+<div style="position:absolute;left:480.78px;top:228.81px" class="cls_002">Leases</div>    -->
+            <div style="position:absolute;left:480.78px;top:204.81px" class="cls_002">FULLY</div>
+            <div style="position:absolute;left:480.78px;top:212.81px" class="cls_002">SERVICED</div>
+            <div style="position:absolute;left:480.78px;top:220.81px" class="cls_002">LEASE RATE</div>
+            <div style="position:absolute;left:480.78px;top:228.81px" class="cls_002">(per ABOA SF)</div>
+
+            <div style="position:absolute;left:530.78px;top:188.81px" class="cls_002">Step Shell Rate</div>
+            <div style="position:absolute;left:530.78px;top:196.81px" class="cls_002">per ABOA SF</div>
+            <div style="position:absolute;left:530.78px;top:204.81px" class="cls_002">for the soft</div>
+            <div style="position:absolute;left:530.78px;top:212.81px" class="cls_002">term (years</div>
+            <div style="position:absolute;left:530.78px;top:220.81px" class="cls_002">6-10 OR years</div>
+            <div style="position:absolute;left:530.78px;top:228.81px" class="cls_002">11- 15)</div>
+
+            <div style="position:absolute;left:580.78px;top:212.81px" class="cls_002">Free Rent</div>
+            <div style="position:absolute;left:580.78px;top:220.81px" class="cls_002">FIRM TERM</div>
+            <div style="position:absolute;left:580.78px;top:228.81px" class="cls_002"># of months</div>
+
+            <div style="position:absolute;left:630.78px;top:212.81px" class="cls_002">HVAC</div>
+            <div style="position:absolute;left:630.78px;top:220.81px" class="cls_002">Overtime</div>
+            <div style="position:absolute;left:630.78px;top:228.81px" class="cls_002">Rate</div>
+
+
+            <div style="position:absolute;left:675.78px;top:220.81px" class="cls_002">Lessor PM</div>
+            <div style="position:absolute;left:675.78px;top:228.81px" class="cls_002">Fees (%)</div>
+
+            <div style="position:absolute;left:720.78px;top:212.81px" class="cls_002">A&amp;E Fees</div>
+            <div style="position:absolute;left:720.78px;top:220.81px" class="cls_002">($ ABOA SF</div>
+            <div style="position:absolute;left:720.78px;top:228.81px" class="cls_002">or %)</div>
+
+            <div style="position:absolute;left:765.78px;top:220.81px" class="cls_002">$ or</div>
+            <div style="position:absolute;left:765.78px;top:228.81px" class="cls_002">%</div>
+
+            <div style="position:absolute;left:675.78px;top:180.81px" class="cls_002">Tenant Improvement</div>
+            <div style="position:absolute;left:675.78px;top:188.81px" class="cls_002">Fee Schedule</div>
+
+
+            <div style="position:absolute;left:30.33px;top:243.03px" class="cls_002">1</div>
+
+            <div style="position:absolute;left:55.44px;top:243.03px" class="cls_002">{!spaceandrate[0].field1}</div>
+            <div style="position:absolute;left:97.84px;top:243.04px" class="cls_002">{!spaceandrate[0].field2}</div>
+            <div style="position:absolute;left:153.80px;top:243.03px" class="cls_002">{!spaceandrate[0].field3}</div>
+            <div style="position:absolute;left:202.42px;top:243.03px" class="cls_002">{!spaceandrate[0].field4}</div>
+            <!-- base year -->
+            <div style="position:absolute;left:247.07px;top:243.03px" class="cls_002">{!spaceandrate[0].field5}</div>
+            <div style="position:absolute;left:295.00px;top:243.03px" class="cls_002">{!spaceandrate[0].field6}</div>
+            <div style="position:absolute;left:340.79px;top:243.03px" class="cls_002">{!spaceandrate[0].field7}</div>
+            <!-- commented by syam on 08/02/2016 these values may not be needed ,unable to map with new template -->
+            <!--<div style="position:absolute;left:341.00px;top:243.03px" class="cls_002">{!spaceandrate[0].field8}</div>
+-->
+            <div style="position:absolute;left:400.40px;top:243.03px" class="cls_002">{!spaceandrate[0].field10}</div>
+            <div style="position:absolute;left:441.32px;top:243.03px" class="cls_002">{!spaceandrate[0].field11}</div>
+            <!-- fully serviced rent -->
+            <div style="position:absolute;left:490.96px;top:243.03px" class="cls_002">{!spaceandrate[0].field16}</div>
+            <!-- step shell rate -->
+            <div style="position:absolute;left:538.00px;top:243.03px" class="cls_002">{!spaceandrate[0].field17}</div>
+            <!-- total cost of construction markup -->
+            <div style="position:absolute;left:582.50px;top:243.03px" class="cls_002">{!spaceandrate[0].field9}</div>
+            <!-- HVAC Over time field to be updated!!!!!SYAM-->
+            <div style="position:absolute;left:627.50px;top:243.03px" class="cls_002">{!spaceandrate[0].field23}</div>
+            <!-- Free rent no of months based -->
+            <!--<div style="position:absolute;left:687.63px;top:243.03px" class="cls_002">{!spaceandrate[0].field12}</div>
+<!-- Free rent as a % of full service rent -->
+            <!--<div style="position:absolute;left:737.12px;top:243.03px" class="cls_002">{!spaceandrate[0].field14}</div>
+-->
+            <div style="position:absolute;left:687.63px;top:243.03px" class="cls_002">{!spaceandrate[0].field24}</div>
+            <div style="position:absolute;left:727.41px;top:243.03px" class="cls_002">{!spaceandrate[0].field25}</div>
+            <div style="position:absolute;left:767.41px;top:243.03px" class="cls_002">{!spaceandrate[0].field26}</div>
+
+            <!--  div style="position:absolute;left:694.11px;top:243.03px" class="cls_002">{!spaceandrate[0].field19}</div-->
+            <!--  div style="position:absolute;left:720.65px;top:243.03px" class="cls_002">{!spaceandrate[0].field23}</div-->
+
+            <!-- second row -->
+
+            <div style="position:absolute;left:30.33px;top:277.03px" class="cls_002">1</div>
+            <div style="position:absolute;left:55.44px;top:277.03px" class="cls_002">{!spaceandrate[1].field1}</div>
+            <div style="position:absolute;left:97.84px;top:277.03px" class="cls_002">{!spaceandrate[1].field2}</div>
+            <div style="position:absolute;left:153.80px;top:277.03px" class="cls_002">{!spaceandrate[1].field3}</div>
+            <div style="position:absolute;left:202.42px;top:277.03px" class="cls_002">{!spaceandrate[1].field4}</div>
+            <!-- base year -->
+            <div style="position:absolute;left:247.07px;top:277.03px" class="cls_002">{!spaceandrate[1].field5}</div>
+            <div style="position:absolute;left:295.00px;top:277.03px" class="cls_002">{!spaceandrate[1].field6}</div>
+            <div style="position:absolute;left:340.79px;top:277.03px" class="cls_002">{!spaceandrate[1].field7}</div>
+            <div style="position:absolute;left:400.40px;top:277.03px" class="cls_002">{!spaceandrate[1].field10}</div>
+            <div style="position:absolute;left:441.32px;top:277.03px" class="cls_002">{!spaceandrate[1].field11}</div>
+            <!-- fully serviced rent -->
+            <div style="position:absolute;left:490.96px;top:277.03px" class="cls_002">{!spaceandrate[1].field16}</div>
+            <!-- step shell rate -->
+            <div style="position:absolute;left:538.00px;top:277.03px" class="cls_002">{!spaceandrate[1].field17}</div>
+            <!-- total cost of construction markup -->
+            <div style="position:absolute;left:582.50px;top:277.03px" class="cls_002">{!spaceandrate[1].field9}</div>
+            <!-- HVAC Over time field to be updated!!!!!SYAM-->
+            <div style="position:absolute;left:627.50px;top:277.03px" class="cls_002">{!spaceandrate[1].field23}</div>
+            <div style="position:absolute;left:687.63px;top:277.03px" class="cls_002">{!spaceandrate[1].field24}</div>
+            <div style="position:absolute;left:727.41px;top:277.03px" class="cls_002">{!spaceandrate[1].field25}</div>
+            <div style="position:absolute;left:767.41px;top:277.03px" class="cls_002">{!spaceandrate[1].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:346.59px" class="cls_002">2</div>
+            <div style="position:absolute;left:55.44px;top:346.59px" class="cls_002">{!spaceandrate[3].field1}</div>
+            <div style="position:absolute;left:97.84px;top:346.59px" class="cls_002">{!spaceandrate[3].field2}</div>
+            <div style="position:absolute;left:153.80px;top:346.59px" class="cls_002">{!spaceandrate[3].field3}</div>
+            <div style="position:absolute;left:202.42px;top:346.59px" class="cls_002">{!spaceandrate[3].field4}</div>
+            <div style="position:absolute;left:247.07px;top:346.59px" class="cls_002">{!spaceandrate[3].field5}</div>
+            <div style="position:absolute;left:295.00px;top:346.59px" class="cls_002">{!spaceandrate[3].field6}</div>
+            <div style="position:absolute;left:340.79px;top:346.59px" class="cls_002">{!spaceandrate[3].field7}</div>
+            <div style="position:absolute;left:400.40px;top:346.59px" class="cls_002">{!spaceandrate[3].field10}</div>
+            <div style="position:absolute;left:441.32px;top:346.59px" class="cls_002">{!spaceandrate[3].field11}</div>
+            <div style="position:absolute;left:490.96px;top:346.59px" class="cls_002">{!spaceandrate[3].field16}</div>
+            <div style="position:absolute;left:538.00px;top:346.59px" class="cls_002">{!spaceandrate[3].field17}</div>
+            <div style="position:absolute;left:582.50px;top:346.59px" class="cls_002">{!spaceandrate[3].field9}</div>
+            <div style="position:absolute;left:627.50px;top:346.59px" class="cls_002">{!spaceandrate[3].field23}</div>
+            <div style="position:absolute;left:687.63px;top:346.59px" class="cls_002">{!spaceandrate[3].field24}</div>
+            <div style="position:absolute;left:727.41px;top:346.59px" class="cls_002">{!spaceandrate[3].field25}</div>
+            <div style="position:absolute;left:767.41px;top:346.59px" class="cls_002">{!spaceandrate[3].field26}</div>
+
+
+            <div style="position:absolute;left:30.33px;top:380.59px" class="cls_002">2</div>
+            <div style="position:absolute;left:55.44px;top:380.59px" class="cls_002">{!spaceandrate[4].field1}</div>
+            <div style="position:absolute;left:97.84px;top:380.59px" class="cls_002">{!spaceandrate[4].field2}</div>
+            <div style="position:absolute;left:153.80px;top:380.59px" class="cls_002">{!spaceandrate[4].field3}</div>
+            <div style="position:absolute;left:202.42px;top:380.59px" class="cls_002">{!spaceandrate[4].field4}</div>
+            <div style="position:absolute;left:247.07px;top:380.59px" class="cls_002">{!spaceandrate[4].field5}</div>
+            <div style="position:absolute;left:295.00px;top:380.59px" class="cls_002">{!spaceandrate[4].field6}</div>
+            <div style="position:absolute;left:340.79px;top:380.59px" class="cls_002">{!spaceandrate[4].field7}</div>
+            <div style="position:absolute;left:400.40px;top:380.59px" class="cls_002">{!spaceandrate[4].field10}</div>
+            <div style="position:absolute;left:441.32px;top:380.59px" class="cls_002">{!spaceandrate[4].field11}</div>
+            <div style="position:absolute;left:490.96px;top:380.59px" class="cls_002">{!spaceandrate[4].field16}</div>
+            <div style="position:absolute;left:538.00px;top:380.59px" class="cls_002">{!spaceandrate[4].field17}</div>
+            <div style="position:absolute;left:582.50px;top:380.59px" class="cls_002">{!spaceandrate[4].field9}</div>
+            <div style="position:absolute;left:627.50px;top:380.59px" class="cls_002">{!spaceandrate[4].field23}</div>
+            <div style="position:absolute;left:687.63px;top:380.59px" class="cls_002">{!spaceandrate[4].field24}</div>
+            <div style="position:absolute;left:727.41px;top:380.59px" class="cls_002">{!spaceandrate[4].field25}</div>
+            <div style="position:absolute;left:767.41px;top:380.59px" class="cls_002">{!spaceandrate[4].field26}</div>
+
+
+            <div style="position:absolute;left:30.33px;top:450.31px" class="cls_002">3</div>
+            <div style="position:absolute;left:55.44px;top:450.31px" class="cls_002">{!spaceandrate[6].field1}</div>
+            <div style="position:absolute;left:97.84px;top:450.31px" class="cls_002">{!spaceandrate[6].field2}</div>
+            <div style="position:absolute;left:153.80px;top:450.31px" class="cls_002">{!spaceandrate[6].field3}</div>
+            <div style="position:absolute;left:202.42px;top:450.31px" class="cls_002">{!spaceandrate[6].field4}</div>
+            <div style="position:absolute;left:247.07px;top:450.31px" class="cls_002">{!spaceandrate[6].field5}</div>
+            <div style="position:absolute;left:295.00px;top:450.31px" class="cls_002">{!spaceandrate[6].field6}</div>
+            <div style="position:absolute;left:340.79px;top:450.31px" class="cls_002">{!spaceandrate[6].field7}</div>
+            <div style="position:absolute;left:400.40px;top:450.31px" class="cls_002">{!spaceandrate[6].field10}</div>
+            <div style="position:absolute;left:441.32px;top:450.31px" class="cls_002">{!spaceandrate[6].field11}</div>
+            <div style="position:absolute;left:490.96px;top:450.31px" class="cls_002">{!spaceandrate[6].field16}</div>
+            <div style="position:absolute;left:538.00px;top:450.31px" class="cls_002">{!spaceandrate[6].field17}</div>
+            <div style="position:absolute;left:582.50px;top:450.31px" class="cls_002">{!spaceandrate[6].field9}</div>
+            <div style="position:absolute;left:627.50px;top:450.31px" class="cls_002">{!spaceandrate[6].field23}</div>
+            <div style="position:absolute;left:687.63px;top:450.31px" class="cls_002">{!spaceandrate[6].field24}</div>
+            <div style="position:absolute;left:727.41px;top:450.31px" class="cls_002">{!spaceandrate[6].field25}</div>
+            <div style="position:absolute;left:767.41px;top:450.31px" class="cls_002">{!spaceandrate[6].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:483.99px" class="cls_002">3</div>
+            <div style="position:absolute;left:55.44px;top:483.99px" class="cls_002">{!spaceandrate[7].field1}</div>
+            <div style="position:absolute;left:97.84px;top:483.99px" class="cls_002">{!spaceandrate[7].field2}</div>
+            <div style="position:absolute;left:153.80px;top:483.99px" class="cls_002">{!spaceandrate[7].field3}</div>
+            <div style="position:absolute;left:202.42px;top:483.99px" class="cls_002">{!spaceandrate[7].field4}</div>
+            <div style="position:absolute;left:247.07px;top:483.99px" class="cls_002">{!spaceandrate[7].field5}</div>
+            <div style="position:absolute;left:295.00px;top:483.99px" class="cls_002">{!spaceandrate[7].field6}</div>
+            <div style="position:absolute;left:340.79px;top:483.99px" class="cls_002">{!spaceandrate[7].field7}</div>
+            <div style="position:absolute;left:400.40px;top:483.99px" class="cls_002">{!spaceandrate[7].field10}</div>
+            <div style="position:absolute;left:441.32px;top:483.99px" class="cls_002">{!spaceandrate[7].field11}</div>
+            <div style="position:absolute;left:490.96px;top:483.99px" class="cls_002">{!spaceandrate[7].field16}</div>
+            <div style="position:absolute;left:538.00px;top:483.99px" class="cls_002">{!spaceandrate[7].field17}</div>
+            <div style="position:absolute;left:582.50px;top:483.99px" class="cls_002">{!spaceandrate[7].field9}</div>
+            <div style="position:absolute;left:627.50px;top:483.99px" class="cls_002">{!spaceandrate[7].field23}</div>
+            <div style="position:absolute;left:687.63px;top:483.99px" class="cls_002">{!spaceandrate[7].field24}</div>
+            <div style="position:absolute;left:727.41px;top:483.99px" class="cls_002">{!spaceandrate[7].field25}</div>
+            <div style="position:absolute;left:767.41px;top:483.99px" class="cls_002">{!spaceandrate[7].field26}</div>
+
+
+            <div style="position:absolute;left:84.48px;top:574.58px" class="cls_003">INITIALS:</div>
+
+            <div style="position:absolute;left:200.63px;top:574.58px" class="cls_003">&amp;</div>
+
+            <div style="position:absolute;left:21.34px;top:580.65px" class="cls_002">PAGE 1 OF 4</div>
+
+            <div style="position:absolute;left:577.13px;top:579.69px" class="cls_004">Attachment to GSA FORM 1364-A (REV
+                6/04)
+            </div>
+
+            <div style="position:absolute;left:124.48px;top:583.76px" class="cls_003">LESSOR</div>
+
+            <div style="position:absolute;left:210.84px;top:583.76px" class="cls_003">GOVERNMENT</div>
+
+        </div>
+
+        <div style="position:absolute;left:50%;margin-left:-396px;top:722px;width:792px;height:612px;border-style:outset;overflow:hidden">
+
+            <div style="position:absolute;left:0px;top:0px">
+
+                <img src="{!URLFOR($Resource.form1364RateStructure, 'image002_092316.jpg')}" width="792" height="612"/>
+            </div>
+
+            <div style="position:absolute;left:30.33px;top:22.66px" class="cls_002">4</div>
+            <div style="position:absolute;left:55.44px;top:22.66px" class="cls_002">{!spaceandrate[9].field1}</div>
+            <div style="position:absolute;left:97.84px;top:22.66px" class="cls_002">{!spaceandrate[9].field2}</div>
+            <div style="position:absolute;left:153.80px;top:22.66px" class="cls_002">{!spaceandrate[9].field3}</div>
+            <div style="position:absolute;left:202.42px;top:22.66px" class="cls_002">{!spaceandrate[9].field4}</div>
+            <div style="position:absolute;left:247.07px;top:22.66px" class="cls_002">{!spaceandrate[9].field5}</div>
+            <div style="position:absolute;left:295.00px;top:22.66px" class="cls_002">{!spaceandrate[9].field6}</div>
+            <div style="position:absolute;left:340.79px;top:22.66px" class="cls_002">{!spaceandrate[9].field7}</div>
+            <div style="position:absolute;left:400.40px;top:22.66px" class="cls_002">{!spaceandrate[9].field10}</div>
+            <div style="position:absolute;left:441.32px;top:22.66px" class="cls_002">{!spaceandrate[9].field11}</div>
+            <div style="position:absolute;left:490.96px;top:22.66px" class="cls_002">{!spaceandrate[9].field16}</div>
+            <div style="position:absolute;left:538.00px;top:22.66px" class="cls_002">{!spaceandrate[9].field17}</div>
+            <div style="position:absolute;left:582.50px;top:22.66px" class="cls_002">{!spaceandrate[9].field9}</div>
+            <div style="position:absolute;left:627.50px;top:22.66px" class="cls_002">{!spaceandrate[9].field23}</div>
+            <div style="position:absolute;left:687.63px;top:22.66px" class="cls_002">{!spaceandrate[9].field24}</div>
+            <div style="position:absolute;left:727.41px;top:22.66px" class="cls_002">{!spaceandrate[9].field25}</div>
+            <div style="position:absolute;left:767.41px;top:22.66px" class="cls_002">{!spaceandrate[9].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:56.25px" class="cls_002">4</div>
+            <div style="position:absolute;left:55.44px;top:56.25px" class="cls_002">{!spaceandrate[10].field1}</div>
+            <div style="position:absolute;left:97.84px;top:56.25px" class="cls_002">{!spaceandrate[10].field2}</div>
+            <div style="position:absolute;left:153.80px;top:56.25px" class="cls_002">{!spaceandrate[10].field3}</div>
+            <div style="position:absolute;left:202.42px;top:56.25px" class="cls_002">{!spaceandrate[10].field4}</div>
+            <div style="position:absolute;left:247.07px;top:56.25px" class="cls_002">{!spaceandrate[10].field5}</div>
+            <div style="position:absolute;left:295.00px;top:56.25px" class="cls_002">{!spaceandrate[10].field6}</div>
+            <div style="position:absolute;left:340.79px;top:56.25px" class="cls_002">{!spaceandrate[10].field7}</div>
+            <div style="position:absolute;left:400.40px;top:56.25px" class="cls_002">{!spaceandrate[10].field10}</div>
+            <div style="position:absolute;left:441.32px;top:56.25px" class="cls_002">{!spaceandrate[10].field11}</div>
+            <div style="position:absolute;left:490.96px;top:56.25px" class="cls_002">{!spaceandrate[10].field16}</div>
+            <div style="position:absolute;left:538.00px;top:56.25px" class="cls_002">{!spaceandrate[10].field17}</div>
+            <div style="position:absolute;left:582.50px;top:56.25px" class="cls_002">{!spaceandrate[10].field9}</div>
+            <div style="position:absolute;left:627.50px;top:56.25px" class="cls_002">{!spaceandrate[10].field23}</div>
+            <div style="position:absolute;left:687.63px;top:56.25px" class="cls_002">{!spaceandrate[10].field24}</div>
+            <div style="position:absolute;left:727.41px;top:56.25px" class="cls_002">{!spaceandrate[10].field25}</div>
+            <div style="position:absolute;left:767.41px;top:56.25px" class="cls_002">{!spaceandrate[10].field26}</div>
+
+
+            <div style="position:absolute;left:30.33px;top:125.97px" class="cls_002">5</div>
+            <div style="position:absolute;left:55.44px;top:125.97px" class="cls_002">{!spaceandrate[12].field1}</div>
+            <div style="position:absolute;left:97.84px;top:125.97px" class="cls_002">{!spaceandrate[12].field2}</div>
+            <div style="position:absolute;left:153.80px;top:125.97px" class="cls_002">{!spaceandrate[12].field3}</div>
+            <div style="position:absolute;left:202.42px;top:125.97px" class="cls_002">{!spaceandrate[12].field4}</div>
+            <div style="position:absolute;left:247.07px;top:125.97px" class="cls_002">{!spaceandrate[12].field5}</div>
+            <div style="position:absolute;left:295.00px;top:125.97px" class="cls_002">{!spaceandrate[12].field6}</div>
+            <div style="position:absolute;left:340.79px;top:125.97px" class="cls_002">{!spaceandrate[12].field7}</div>
+            <div style="position:absolute;left:400.40px;top:125.97px" class="cls_002">{!spaceandrate[12].field10}</div>
+            <div style="position:absolute;left:441.32px;top:125.97px" class="cls_002">{!spaceandrate[12].field11}</div>
+            <div style="position:absolute;left:490.96px;top:125.97px" class="cls_002">{!spaceandrate[12].field16}</div>
+            <div style="position:absolute;left:538.00px;top:125.97px" class="cls_002">{!spaceandrate[12].field17}</div>
+            <div style="position:absolute;left:582.50px;top:125.97px" class="cls_002">{!spaceandrate[12].field9}</div>
+            <div style="position:absolute;left:627.50px;top:125.97px" class="cls_002">{!spaceandrate[12].field23}</div>
+            <div style="position:absolute;left:687.63px;top:125.97px" class="cls_002">{!spaceandrate[12].field24}</div>
+            <div style="position:absolute;left:727.41px;top:125.97px" class="cls_002">{!spaceandrate[12].field25}</div>
+            <div style="position:absolute;left:767.41px;top:125.97px" class="cls_002">{!spaceandrate[12].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:159.81px" class="cls_002">5</div>
+            <div style="position:absolute;left:55.44px;top:159.81px" class="cls_002">{!spaceandrate[13].field1}</div>
+            <div style="position:absolute;left:97.84px;top:159.81px" class="cls_002">{!spaceandrate[13].field2}</div>
+            <div style="position:absolute;left:153.80px;top:159.81px" class="cls_002">{!spaceandrate[13].field3}</div>
+            <div style="position:absolute;left:202.42px;top:159.81px" class="cls_002">{!spaceandrate[13].field4}</div>
+            <div style="position:absolute;left:247.07px;top:159.81px" class="cls_002">{!spaceandrate[13].field5}</div>
+            <div style="position:absolute;left:295.00px;top:159.81px" class="cls_002">{!spaceandrate[13].field6}</div>
+            <div style="position:absolute;left:340.79px;top:159.81px" class="cls_002">{!spaceandrate[13].field7}</div>
+            <div style="position:absolute;left:400.40px;top:159.81px" class="cls_002">{!spaceandrate[13].field10}</div>
+            <div style="position:absolute;left:441.32px;top:159.81px" class="cls_002">{!spaceandrate[13].field11}</div>
+            <div style="position:absolute;left:490.96px;top:159.81px" class="cls_002">{!spaceandrate[13].field16}</div>
+            <div style="position:absolute;left:538.00px;top:159.81px" class="cls_002">{!spaceandrate[13].field17}</div>
+            <div style="position:absolute;left:582.50px;top:159.81px" class="cls_002">{!spaceandrate[13].field9}</div>
+            <div style="position:absolute;left:627.50px;top:159.81px" class="cls_002">{!spaceandrate[13].field23}</div>
+            <div style="position:absolute;left:687.63px;top:159.81px" class="cls_002">{!spaceandrate[13].field24}</div>
+            <div style="position:absolute;left:727.41px;top:159.81px" class="cls_002">{!spaceandrate[13].field25}</div>
+            <div style="position:absolute;left:767.41px;top:159.81px" class="cls_002">{!spaceandrate[13].field26}</div>
+
+
+            <div style="position:absolute;left:30.33px;top:229.53px" class="cls_002">6</div>
+            <div style="position:absolute;left:55.44px;top:229.53px" class="cls_002">{!spaceandrate[15].field1}</div>
+            <div style="position:absolute;left:97.84px;top:229.53px" class="cls_002">{!spaceandrate[15].field2}</div>
+            <div style="position:absolute;left:153.80px;top:229.53px" class="cls_002">{!spaceandrate[15].field3}</div>
+            <div style="position:absolute;left:202.42px;top:229.53px" class="cls_002">{!spaceandrate[15].field4}</div>
+            <div style="position:absolute;left:247.07px;top:229.53px" class="cls_002">{!spaceandrate[15].field5}</div>
+            <div style="position:absolute;left:295.00px;top:229.53px" class="cls_002">{!spaceandrate[15].field6}</div>
+            <div style="position:absolute;left:340.79px;top:229.53px" class="cls_002">{!spaceandrate[15].field7}</div>
+            <div style="position:absolute;left:400.40px;top:229.53px" class="cls_002">{!spaceandrate[15].field10}</div>
+            <div style="position:absolute;left:441.32px;top:229.53px" class="cls_002">{!spaceandrate[15].field11}</div>
+            <div style="position:absolute;left:490.96px;top:229.53px" class="cls_002">{!spaceandrate[15].field16}</div>
+            <div style="position:absolute;left:538.00px;top:229.53px" class="cls_002">{!spaceandrate[15].field17}</div>
+            <div style="position:absolute;left:582.50px;top:229.53px" class="cls_002">{!spaceandrate[15].field9}</div>
+            <div style="position:absolute;left:627.50px;top:229.53px" class="cls_002">{!spaceandrate[15].field23}</div>
+            <div style="position:absolute;left:687.63px;top:229.53px" class="cls_002">{!spaceandrate[15].field24}</div>
+            <div style="position:absolute;left:727.41px;top:229.53px" class="cls_002">{!spaceandrate[15].field25}</div>
+            <div style="position:absolute;left:767.41px;top:229.53px" class="cls_002">{!spaceandrate[15].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:263.37px" class="cls_002">6</div>
+            <div style="position:absolute;left:55.44px;top:263.37px" class="cls_002">{!spaceandrate[16].field1}</div>
+            <div style="position:absolute;left:97.84px;top:263.37px" class="cls_002">{!spaceandrate[16].field2}</div>
+            <div style="position:absolute;left:153.80px;top:263.37px" class="cls_002">{!spaceandrate[16].field3}</div>
+            <div style="position:absolute;left:202.42px;top:263.37px" class="cls_002">{!spaceandrate[16].field4}</div>
+            <div style="position:absolute;left:247.07px;top:263.37px" class="cls_002">{!spaceandrate[16].field5}</div>
+            <div style="position:absolute;left:295.00px;top:263.37px" class="cls_002">{!spaceandrate[16].field6}</div>
+            <div style="position:absolute;left:340.79px;top:263.37px" class="cls_002">{!spaceandrate[16].field7}</div>
+            <div style="position:absolute;left:400.40px;top:263.37px" class="cls_002">{!spaceandrate[16].field10}</div>
+            <div style="position:absolute;left:441.32px;top:263.37px" class="cls_002">{!spaceandrate[16].field11}</div>
+            <div style="position:absolute;left:490.96px;top:263.37px" class="cls_002">{!spaceandrate[16].field16}</div>
+            <div style="position:absolute;left:538.00px;top:263.37px" class="cls_002">{!spaceandrate[16].field17}</div>
+            <div style="position:absolute;left:582.50px;top:263.37px" class="cls_002">{!spaceandrate[16].field9}</div>
+            <div style="position:absolute;left:627.50px;top:263.37px" class="cls_002">{!spaceandrate[16].field23}</div>
+            <div style="position:absolute;left:687.63px;top:263.37px" class="cls_002">{!spaceandrate[16].field24}</div>
+            <div style="position:absolute;left:727.41px;top:263.37px" class="cls_002">{!spaceandrate[16].field25}</div>
+            <div style="position:absolute;left:767.41px;top:263.37px" class="cls_002">{!spaceandrate[16].field26}</div>
+
+
+            <div style="position:absolute;left:30.33px;top:333.03px" class="cls_002">7</div>
+            <div style="position:absolute;left:55.44px;top:333.03px" class="cls_002">{!spaceandrate[18].field1}</div>
+            <div style="position:absolute;left:97.84px;top:333.03px" class="cls_002">{!spaceandrate[18].field2}</div>
+            <div style="position:absolute;left:153.80px;top:333.03px" class="cls_002">{!spaceandrate[18].field3}</div>
+            <div style="position:absolute;left:202.42px;top:333.03px" class="cls_002">{!spaceandrate[18].field4}</div>
+            <div style="position:absolute;left:247.07px;top:333.03px" class="cls_002">{!spaceandrate[18].field5}</div>
+            <div style="position:absolute;left:295.00px;top:333.03px" class="cls_002">{!spaceandrate[18].field6}</div>
+            <div style="position:absolute;left:340.79px;top:333.03px" class="cls_002">{!spaceandrate[18].field7}</div>
+            <div style="position:absolute;left:400.40px;top:333.03px" class="cls_002">{!spaceandrate[18].field10}</div>
+            <div style="position:absolute;left:441.32px;top:333.03px" class="cls_002">{!spaceandrate[18].field11}</div>
+            <div style="position:absolute;left:490.96px;top:333.03px" class="cls_002">{!spaceandrate[18].field16}</div>
+            <div style="position:absolute;left:538.00px;top:333.03px" class="cls_002">{!spaceandrate[18].field17}</div>
+            <div style="position:absolute;left:582.50px;top:333.03px" class="cls_002">{!spaceandrate[18].field9}</div>
+            <div style="position:absolute;left:627.50px;top:333.03px" class="cls_002">{!spaceandrate[18].field23}</div>
+            <div style="position:absolute;left:687.63px;top:333.03px" class="cls_002">{!spaceandrate[18].field24}</div>
+            <div style="position:absolute;left:727.41px;top:333.03px" class="cls_002">{!spaceandrate[18].field25}</div>
+            <div style="position:absolute;left:767.41px;top:333.03px" class="cls_002">{!spaceandrate[18].field26}</div>
+
+
+            <div style="position:absolute;left:30.33px;top:366.87px" class="cls_002">7</div>
+            <div style="position:absolute;left:55.44px;top:366.87px" class="cls_002">{!spaceandrate[19].field1}</div>
+            <div style="position:absolute;left:97.84px;top:366.87px" class="cls_002">{!spaceandrate[19].field2}</div>
+            <div style="position:absolute;left:153.80px;top:366.87px" class="cls_002">{!spaceandrate[19].field3}</div>
+            <div style="position:absolute;left:202.42px;top:366.87px" class="cls_002">{!spaceandrate[19].field4}</div>
+            <div style="position:absolute;left:247.07px;top:366.87px" class="cls_002">{!spaceandrate[19].field5}</div>
+            <div style="position:absolute;left:295.00px;top:366.87px" class="cls_002">{!spaceandrate[19].field6}</div>
+            <div style="position:absolute;left:340.79px;top:366.87px" class="cls_002">{!spaceandrate[19].field7}</div>
+            <div style="position:absolute;left:400.40px;top:366.87px" class="cls_002">{!spaceandrate[19].field10}</div>
+            <div style="position:absolute;left:441.32px;top:366.87px" class="cls_002">{!spaceandrate[19].field11}</div>
+            <div style="position:absolute;left:490.96px;top:366.87px" class="cls_002">{!spaceandrate[19].field16}</div>
+            <div style="position:absolute;left:538.00px;top:366.87px" class="cls_002">{!spaceandrate[19].field17}</div>
+            <div style="position:absolute;left:582.50px;top:366.87px" class="cls_002">{!spaceandrate[19].field9}</div>
+            <div style="position:absolute;left:627.50px;top:366.87px" class="cls_002">{!spaceandrate[19].field23}</div>
+            <div style="position:absolute;left:687.63px;top:366.87px" class="cls_002">{!spaceandrate[19].field24}</div>
+            <div style="position:absolute;left:727.41px;top:366.87px" class="cls_002">{!spaceandrate[19].field25}</div>
+            <div style="position:absolute;left:767.41px;top:366.87px" class="cls_002">{!spaceandrate[19].field26}</div>
+
+
+            <div style="position:absolute;left:30.33px;top:436.59px" class="cls_002">8</div>
+            <div style="position:absolute;left:55.44px;top:436.59px" class="cls_002">{!spaceandrate[21].field1}</div>
+            <div style="position:absolute;left:97.84px;top:436.59px" class="cls_002">{!spaceandrate[21].field2}</div>
+            <div style="position:absolute;left:153.80px;top:436.59px" class="cls_002">{!spaceandrate[21].field3}</div>
+            <div style="position:absolute;left:202.42px;top:436.59px" class="cls_002">{!spaceandrate[21].field4}</div>
+            <div style="position:absolute;left:247.07px;top:436.59px" class="cls_002">{!spaceandrate[21].field5}</div>
+            <div style="position:absolute;left:295.00px;top:436.59px" class="cls_002">{!spaceandrate[21].field6}</div>
+            <div style="position:absolute;left:340.79px;top:436.59px" class="cls_002">{!spaceandrate[21].field7}</div>
+            <div style="position:absolute;left:400.40px;top:436.59px" class="cls_002">{!spaceandrate[21].field10}</div>
+            <div style="position:absolute;left:441.32px;top:436.59px" class="cls_002">{!spaceandrate[21].field11}</div>
+            <div style="position:absolute;left:490.96px;top:436.59px" class="cls_002">{!spaceandrate[21].field16}</div>
+            <div style="position:absolute;left:538.00px;top:436.59px" class="cls_002">{!spaceandrate[21].field17}</div>
+            <div style="position:absolute;left:582.50px;top:436.59px" class="cls_002">{!spaceandrate[21].field9}</div>
+            <div style="position:absolute;left:627.50px;top:436.59px" class="cls_002">{!spaceandrate[21].field23}</div>
+            <div style="position:absolute;left:687.63px;top:436.59px" class="cls_002">{!spaceandrate[21].field24}</div>
+            <div style="position:absolute;left:727.41px;top:436.59px" class="cls_002">{!spaceandrate[21].field25}</div>
+            <div style="position:absolute;left:767.41px;top:436.59px" class="cls_002">{!spaceandrate[21].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:470.43px" class="cls_002">8</div>
+            <div style="position:absolute;left:55.44px;top:470.43px" class="cls_002">{!spaceandrate[22].field1}</div>
+            <div style="position:absolute;left:97.84px;top:470.43px" class="cls_002">{!spaceandrate[22].field2}</div>
+            <div style="position:absolute;left:153.80px;top:470.43px" class="cls_002">{!spaceandrate[22].field3}</div>
+            <div style="position:absolute;left:202.42px;top:470.43px" class="cls_002">{!spaceandrate[22].field4}</div>
+            <div style="position:absolute;left:247.07px;top:470.43px" class="cls_002">{!spaceandrate[22].field5}</div>
+            <div style="position:absolute;left:295.00px;top:470.43px" class="cls_002">{!spaceandrate[22].field6}</div>
+            <div style="position:absolute;left:340.79px;top:470.43px" class="cls_002">{!spaceandrate[22].field7}</div>
+            <div style="position:absolute;left:400.40px;top:470.43px" class="cls_002">{!spaceandrate[22].field10}</div>
+            <div style="position:absolute;left:441.32px;top:470.43px" class="cls_002">{!spaceandrate[22].field11}</div>
+            <div style="position:absolute;left:490.96px;top:470.43px" class="cls_002">{!spaceandrate[22].field16}</div>
+            <div style="position:absolute;left:538.00px;top:470.43px" class="cls_002">{!spaceandrate[22].field17}</div>
+            <div style="position:absolute;left:582.50px;top:470.43px" class="cls_002">{!spaceandrate[22].field9}</div>
+            <div style="position:absolute;left:627.50px;top:470.43px" class="cls_002">{!spaceandrate[22].field23}</div>
+            <div style="position:absolute;left:687.63px;top:470.43px" class="cls_002">{!spaceandrate[22].field24}</div>
+            <div style="position:absolute;left:727.41px;top:470.43px" class="cls_002">{!spaceandrate[22].field25}</div>
+            <div style="position:absolute;left:767.41px;top:470.43px" class="cls_002">{!spaceandrate[22].field26}</div>
+
+
+            <div style="position:absolute;left:30.33px;top:540.15px" class="cls_002">9</div>
+            <div style="position:absolute;left:55.44px;top:540.15px" class="cls_002">{!spaceandrate[24].field1}</div>
+            <div style="position:absolute;left:97.84px;top:540.15px" class="cls_002">25 Months,16</div>
+            <div style="position:absolute;left:153.80px;top:540.15px" class="cls_002">{!spaceandrate[24].field3}</div>
+            <div style="position:absolute;left:202.42px;top:540.15px" class="cls_002">{!spaceandrate[24].field4}</div>
+            <div style="position:absolute;left:247.07px;top:540.15px" class="cls_002">{!spaceandrate[24].field5}</div>
+            <div style="position:absolute;left:295.00px;top:540.15px" class="cls_002">{!spaceandrate[24].field6}</div>
+            <div style="position:absolute;left:340.79px;top:540.15px" class="cls_002">{!spaceandrate[24].field7}</div>
+            <div style="position:absolute;left:400.40px;top:540.15px" class="cls_002">{!spaceandrate[24].field10}</div>
+            <div style="position:absolute;left:441.32px;top:540.15px" class="cls_002">{!spaceandrate[24].field11}</div>
+            <div style="position:absolute;left:490.96px;top:540.15px" class="cls_002">{!spaceandrate[24].field16}</div>
+            <div style="position:absolute;left:538.00px;top:540.15px" class="cls_002">{!spaceandrate[24].field17}</div>
+            <div style="position:absolute;left:582.50px;top:540.15px" class="cls_002">{!spaceandrate[24].field9}</div>
+            <div style="position:absolute;left:627.50px;top:540.15px" class="cls_002">{!spaceandrate[24].field23}</div>
+            <div style="position:absolute;left:687.63px;top:540.15px" class="cls_002">{!spaceandrate[24].field24}</div>
+            <div style="position:absolute;left:727.41px;top:540.15px" class="cls_002">{!spaceandrate[24].field25}</div>
+            <div style="position:absolute;left:767.41px;top:540.15px" class="cls_002">{!spaceandrate[24].field26}</div>
+
+            <div style="position:absolute;left:23.73px;top:578.55px" class="cls_002">PAGE 2 OF 4</div>
+
+            <div style="position:absolute;left:86.22px;top:576.97px" class="cls_003">INITIALS:</div>
+
+            <div style="position:absolute;left:202.38px;top:576.97px" class="cls_003">&amp;</div>
+
+            <div style="position:absolute;left:580.52px;top:578.55px" class="cls_004">Attachment to GSA FORM 1364-A (REV
+                6/04)
+            </div>
+
+            <div style="position:absolute;left:126.22px;top:586.15px" class="cls_003">LESSOR</div>
+
+            <div style="position:absolute;left:212.59px;top:586.15px" class="cls_003">GOVERNMENT</div>
+
+        </div>
+
+        <div style="position:absolute;left:50%;margin-left:-396px;top:1444px;width:792px;height:612px;border-style:outset;overflow:hidden">
+
+            <div style="position:absolute;left:0px;top:0px">
+
+                <img src="{!URLFOR($Resource.form1364RateStructure, 'image003_092316.jpg')}" width="792" height="612"/>
+            </div>
+
+            <div style="position:absolute;left:30.33px;top:20.87px" class="cls_002">9</div>
+            <div style="position:absolute;left:55.44px;top:20.87px" class="cls_002">{!spaceandrate[25].field1}</div>
+            <div style="position:absolute;left:97.84px;top:20.87px" class="cls_002">19 Months,11</div>
+            <div style="position:absolute;left:153.80px;top:20.87px" class="cls_002">{!spaceandrate[25].field3}</div>
+            <div style="position:absolute;left:202.42px;top:20.87px" class="cls_002">{!spaceandrate[25].field4}</div>
+            <div style="position:absolute;left:247.07px;top:20.87px" class="cls_002">{!spaceandrate[25].field5}</div>
+            <div style="position:absolute;left:295.00px;top:20.87px" class="cls_002">{!spaceandrate[25].field6}</div>
+            <div style="position:absolute;left:340.79px;top:20.87px" class="cls_002">{!spaceandrate[25].field7}</div>
+            <div style="position:absolute;left:400.40px;top:20.87px" class="cls_002">{!spaceandrate[25].field10}</div>
+            <div style="position:absolute;left:441.32px;top:20.87px" class="cls_002">{!spaceandrate[25].field11}</div>
+            <div style="position:absolute;left:490.96px;top:20.87px" class="cls_002">{!spaceandrate[25].field16}</div>
+            <div style="position:absolute;left:538.00px;top:20.87px" class="cls_002">{!spaceandrate[25].field17}</div>
+            <div style="position:absolute;left:582.50px;top:20.87px" class="cls_002">{!spaceandrate[25].field9}</div>
+            <div style="position:absolute;left:627.50px;top:20.87px" class="cls_002">{!spaceandrate[25].field23}</div>
+            <div style="position:absolute;left:687.63px;top:20.87px" class="cls_002">{!spaceandrate[25].field24}</div>
+            <div style="position:absolute;left:727.41px;top:20.87px" class="cls_002">{!spaceandrate[25].field25}</div>
+            <div style="position:absolute;left:767.41px;top:20.87px" class="cls_002">{!spaceandrate[25].field26}</div>
+
+
+            <div style="position:absolute;left:30.33px;top:90.53px" class="cls_002">10</div>
+            <div style="position:absolute;left:55.44px;top:90.53px" class="cls_002">{!spaceandrate[27].field1}</div>
+            <div style="position:absolute;left:97.84px;top:90.53px" class="cls_002">25 Months,16</div>
+            <div style="position:absolute;left:153.80px;top:90.53px" class="cls_002">{!spaceandrate[27].field3}</div>
+            <div style="position:absolute;left:202.42px;top:90.53px" class="cls_002">{!spaceandrate[27].field4}</div>
+            <div style="position:absolute;left:247.07px;top:90.53px" class="cls_002">{!spaceandrate[27].field5}</div>
+            <div style="position:absolute;left:295.00px;top:90.53px" class="cls_002">{!spaceandrate[27].field6}</div>
+            <div style="position:absolute;left:340.79px;top:90.53px" class="cls_002">{!spaceandrate[27].field7}</div>
+            <div style="position:absolute;left:400.40px;top:90.53px" class="cls_002">{!spaceandrate[27].field10}</div>
+            <div style="position:absolute;left:441.32px;top:90.53px" class="cls_002">{!spaceandrate[27].field11}</div>
+            <div style="position:absolute;left:490.96px;top:90.53px" class="cls_002">{!spaceandrate[27].field16}</div>
+            <div style="position:absolute;left:538.00px;top:90.53px" class="cls_002">{!spaceandrate[27].field17}</div>
+            <div style="position:absolute;left:582.50px;top:90.53px" class="cls_002">{!spaceandrate[27].field9}</div>
+            <div style="position:absolute;left:627.50px;top:90.53px" class="cls_002">{!spaceandrate[27].field23}</div>
+            <div style="position:absolute;left:687.63px;top:90.53px" class="cls_002">{!spaceandrate[27].field24}</div>
+            <div style="position:absolute;left:727.41px;top:90.53px" class="cls_002">{!spaceandrate[27].field25}</div>
+            <div style="position:absolute;left:767.41px;top:90.53px" class="cls_002">{!spaceandrate[27].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:124.37px" class="cls_002">10</div>
+            <div style="position:absolute;left:55.44px;top:124.37px" class="cls_002">{!spaceandrate[28].field1}</div>
+            <div style="position:absolute;left:97.84px;top:124.37px" class="cls_002">19 Months,11</div>
+            <div style="position:absolute;left:153.80px;top:124.37px" class="cls_002">{!spaceandrate[28].field3}</div>
+            <div style="position:absolute;left:202.42px;top:124.37px" class="cls_002">{!spaceandrate[28].field4}</div>
+            <div style="position:absolute;left:247.07px;top:124.37px" class="cls_002">{!spaceandrate[28].field5}</div>
+            <div style="position:absolute;left:295.00px;top:124.37px" class="cls_002">{!spaceandrate[28].field6}</div>
+            <div style="position:absolute;left:340.79px;top:124.37px" class="cls_002">{!spaceandrate[28].field7}</div>
+            <div style="position:absolute;left:400.40px;top:124.37px" class="cls_002">{!spaceandrate[28].field10}</div>
+            <div style="position:absolute;left:441.32px;top:124.37px" class="cls_002">{!spaceandrate[28].field11}</div>
+            <div style="position:absolute;left:490.96px;top:124.37px" class="cls_002">{!spaceandrate[28].field16}</div>
+            <div style="position:absolute;left:538.00px;top:124.37px" class="cls_002">{!spaceandrate[28].field17}</div>
+            <div style="position:absolute;left:582.50px;top:124.37px" class="cls_002">{!spaceandrate[28].field9}</div>
+            <div style="position:absolute;left:627.50px;top:124.37px" class="cls_002">{!spaceandrate[28].field23}</div>
+            <div style="position:absolute;left:687.63px;top:124.37px" class="cls_002">{!spaceandrate[28].field24}</div>
+            <div style="position:absolute;left:727.41px;top:124.37px" class="cls_002">{!spaceandrate[28].field25}</div>
+            <div style="position:absolute;left:767.41px;top:124.37px" class="cls_002">{!spaceandrate[28].field26}</div>
+
+
+            <div style="position:absolute;left:30.33px;top:194.09px" class="cls_002">11</div>
+            <div style="position:absolute;left:55.44px;top:194.09px" class="cls_002">{!spaceandrate[30].field1}</div>
+            <div style="position:absolute;left:97.84px;top:194.09px" class="cls_002">25 Months,16</div>
+            <div style="position:absolute;left:153.80px;top:194.09px" class="cls_002">{!spaceandrate[30].field3}</div>
+            <div style="position:absolute;left:202.42px;top:194.09px" class="cls_002">{!spaceandrate[30].field4}</div>
+            <div style="position:absolute;left:247.07px;top:194.09px" class="cls_002">{!spaceandrate[30].field5}</div>
+            <div style="position:absolute;left:295.00px;top:194.09px" class="cls_002">{!spaceandrate[30].field6}</div>
+            <div style="position:absolute;left:340.79px;top:194.09px" class="cls_002">{!spaceandrate[30].field7}</div>
+            <div style="position:absolute;left:400.40px;top:194.09px" class="cls_002">{!spaceandrate[30].field10}</div>
+            <div style="position:absolute;left:441.32px;top:194.09px" class="cls_002">{!spaceandrate[30].field11}</div>
+            <div style="position:absolute;left:490.96px;top:194.09px" class="cls_002">{!spaceandrate[30].field16}</div>
+            <div style="position:absolute;left:538.00px;top:194.09px" class="cls_002">{!spaceandrate[30].field17}</div>
+            <div style="position:absolute;left:582.50px;top:194.09px" class="cls_002">{!spaceandrate[30].field9}</div>
+            <div style="position:absolute;left:627.50px;top:194.09px" class="cls_002">{!spaceandrate[30].field23}</div>
+            <div style="position:absolute;left:687.63px;top:194.09px" class="cls_002">{!spaceandrate[30].field24}</div>
+            <div style="position:absolute;left:727.41px;top:194.09px" class="cls_002">{!spaceandrate[30].field25}</div>
+            <div style="position:absolute;left:767.41px;top:194.09px" class="cls_002">{!spaceandrate[30].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:227.93px" class="cls_002">11</div>
+            <div style="position:absolute;left:55.44px;top:227.93px" class="cls_002">{!spaceandrate[31].field1}</div>
+            <div style="position:absolute;left:97.84px;top:227.93px" class="cls_002">19 Months,11</div>
+            <div style="position:absolute;left:153.80px;top:227.93px" class="cls_002">{!spaceandrate[31].field3}</div>
+            <div style="position:absolute;left:202.42px;top:227.93px" class="cls_002">{!spaceandrate[31].field4}</div>
+            <div style="position:absolute;left:247.07px;top:227.93px" class="cls_002">{!spaceandrate[31].field5}</div>
+            <div style="position:absolute;left:295.00px;top:227.93px" class="cls_002">{!spaceandrate[31].field6}</div>
+            <div style="position:absolute;left:340.79px;top:227.93px" class="cls_002">{!spaceandrate[31].field7}</div>
+            <div style="position:absolute;left:400.40px;top:227.93px" class="cls_002">{!spaceandrate[31].field10}</div>
+            <div style="position:absolute;left:441.32px;top:227.93px" class="cls_002">{!spaceandrate[31].field11}</div>
+            <div style="position:absolute;left:490.96px;top:227.93px" class="cls_002">{!spaceandrate[31].field16}</div>
+            <div style="position:absolute;left:538.00px;top:227.93px" class="cls_002">{!spaceandrate[31].field17}</div>
+            <div style="position:absolute;left:582.50px;top:227.93px" class="cls_002">{!spaceandrate[31].field9}</div>
+            <div style="position:absolute;left:627.50px;top:227.93px" class="cls_002">{!spaceandrate[31].field23}</div>
+            <div style="position:absolute;left:687.63px;top:227.93px" class="cls_002">{!spaceandrate[31].field24}</div>
+            <div style="position:absolute;left:727.41px;top:227.93px" class="cls_002">{!spaceandrate[31].field25}</div>
+            <div style="position:absolute;left:767.41px;top:227.93px" class="cls_002">{!spaceandrate[31].field26}</div>
+
+
+            <div style="position:absolute;left:30.33px;top:297.65px" class="cls_002">12</div>
+            <div style="position:absolute;left:55.44px;top:297.65px" class="cls_002">{!spaceandrate[33].field1}</div>
+            <div style="position:absolute;left:97.84px;top:297.65px" class="cls_002">25 Months,16</div>
+            <div style="position:absolute;left:153.80px;top:297.65px" class="cls_002">{!spaceandrate[33].field3}</div>
+            <div style="position:absolute;left:202.42px;top:297.65px" class="cls_002">{!spaceandrate[33].field4}</div>
+            <div style="position:absolute;left:247.07px;top:297.65px" class="cls_002">{!spaceandrate[33].field5}</div>
+            <div style="position:absolute;left:295.00px;top:297.65px" class="cls_002">{!spaceandrate[33].field6}</div>
+            <div style="position:absolute;left:340.79px;top:297.65px" class="cls_002">{!spaceandrate[33].field7}</div>
+            <div style="position:absolute;left:400.40px;top:297.65px" class="cls_002">{!spaceandrate[33].field10}</div>
+            <div style="position:absolute;left:441.32px;top:297.65px" class="cls_002">{!spaceandrate[33].field11}</div>
+            <div style="position:absolute;left:490.96px;top:297.65px" class="cls_002">{!spaceandrate[33].field16}</div>
+            <div style="position:absolute;left:538.00px;top:297.65px" class="cls_002">{!spaceandrate[33].field17}</div>
+            <div style="position:absolute;left:582.50px;top:297.65px" class="cls_002">{!spaceandrate[33].field9}</div>
+            <div style="position:absolute;left:627.50px;top:297.65px" class="cls_002">{!spaceandrate[33].field23}</div>
+            <div style="position:absolute;left:687.63px;top:297.65px" class="cls_002">{!spaceandrate[33].field24}</div>
+            <div style="position:absolute;left:727.41px;top:297.65px" class="cls_002">{!spaceandrate[33].field25}</div>
+            <div style="position:absolute;left:767.41px;top:297.65px" class="cls_002">{!spaceandrate[33].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:331.49px" class="cls_002">12</div>
+            <div style="position:absolute;left:55.44px;top:331.49px" class="cls_002">{!spaceandrate[34].field1}</div>
+            <div style="position:absolute;left:97.84px;top:331.49px" class="cls_002">19 Months,11</div>
+            <div style="position:absolute;left:153.80px;top:331.49px" class="cls_002">{!spaceandrate[34].field3}</div>
+            <div style="position:absolute;left:202.42px;top:331.49px" class="cls_002">{!spaceandrate[34].field4}</div>
+            <div style="position:absolute;left:247.07px;top:331.49px" class="cls_002">{!spaceandrate[34].field5}</div>
+            <div style="position:absolute;left:295.00px;top:331.49px" class="cls_002">{!spaceandrate[34].field6}</div>
+            <div style="position:absolute;left:340.79px;top:331.49px" class="cls_002">{!spaceandrate[34].field7}</div>
+            <div style="position:absolute;left:400.40px;top:331.49px" class="cls_002">{!spaceandrate[34].field10}</div>
+            <div style="position:absolute;left:441.32px;top:331.49px" class="cls_002">{!spaceandrate[34].field11}</div>
+            <div style="position:absolute;left:490.96px;top:331.49px" class="cls_002">{!spaceandrate[34].field16}</div>
+            <div style="position:absolute;left:538.00px;top:331.49px" class="cls_002">{!spaceandrate[34].field17}</div>
+            <div style="position:absolute;left:582.50px;top:331.49px" class="cls_002">{!spaceandrate[34].field9}</div>
+            <div style="position:absolute;left:627.50px;top:331.49px" class="cls_002">{!spaceandrate[34].field23}</div>
+            <div style="position:absolute;left:687.63px;top:331.49px" class="cls_002">{!spaceandrate[34].field24}</div>
+            <div style="position:absolute;left:727.41px;top:331.49px" class="cls_002">{!spaceandrate[34].field25}</div>
+            <div style="position:absolute;left:767.41px;top:331.49px" class="cls_002">{!spaceandrate[34].field26}</div>
+
+
+            <div style="position:absolute;left:30.33px;top:401.15px" class="cls_002">13</div>
+            <div style="position:absolute;left:55.44px;top:401.15px" class="cls_002">{!spaceandrate[36].field1}</div>
+            <div style="position:absolute;left:97.84px;top:401.15px" class="cls_002">25 Months,16</div>
+            <div style="position:absolute;left:153.80px;top:401.15px" class="cls_002">{!spaceandrate[36].field3}</div>
+            <div style="position:absolute;left:202.42px;top:401.15px" class="cls_002">{!spaceandrate[36].field4}</div>
+            <div style="position:absolute;left:247.07px;top:401.15px" class="cls_002">{!spaceandrate[36].field5}</div>
+            <div style="position:absolute;left:295.00px;top:401.15px" class="cls_002">{!spaceandrate[36].field6}</div>
+            <div style="position:absolute;left:340.79px;top:401.15px" class="cls_002">{!spaceandrate[36].field7}</div>
+            <div style="position:absolute;left:400.40px;top:401.15px" class="cls_002">{!spaceandrate[36].field10}</div>
+            <div style="position:absolute;left:441.32px;top:401.15px" class="cls_002">{!spaceandrate[36].field11}</div>
+            <div style="position:absolute;left:490.96px;top:401.15px" class="cls_002">{!spaceandrate[36].field16}</div>
+            <div style="position:absolute;left:538.00px;top:401.15px" class="cls_002">{!spaceandrate[36].field17}</div>
+            <div style="position:absolute;left:582.50px;top:401.15px" class="cls_002">{!spaceandrate[36].field9}</div>
+            <div style="position:absolute;left:627.50px;top:401.15px" class="cls_002">{!spaceandrate[36].field23}</div>
+            <div style="position:absolute;left:687.63px;top:401.15px" class="cls_002">{!spaceandrate[36].field24}</div>
+            <div style="position:absolute;left:727.41px;top:401.15px" class="cls_002">{!spaceandrate[36].field25}</div>
+            <div style="position:absolute;left:767.41px;top:401.15px" class="cls_002">{!spaceandrate[36].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:434.99px" class="cls_002">13</div>
+            <div style="position:absolute;left:55.44px;top:434.99px" class="cls_002">{!spaceandrate[37].field1}</div>
+            <div style="position:absolute;left:97.84px;top:434.99px" class="cls_002">19 Months,11</div>
+            <div style="position:absolute;left:153.80px;top:434.99px" class="cls_002">{!spaceandrate[37].field3}</div>
+            <div style="position:absolute;left:202.42px;top:434.99px" class="cls_002">{!spaceandrate[37].field4}</div>
+            <div style="position:absolute;left:247.07px;top:434.99px" class="cls_002">{!spaceandrate[37].field5}</div>
+            <div style="position:absolute;left:295.00px;top:434.99px" class="cls_002">{!spaceandrate[37].field6}</div>
+            <div style="position:absolute;left:340.79px;top:434.99px" class="cls_002">{!spaceandrate[37].field7}</div>
+            <div style="position:absolute;left:400.40px;top:434.99px" class="cls_002">{!spaceandrate[37].field10}</div>
+            <div style="position:absolute;left:441.32px;top:434.99px" class="cls_002">{!spaceandrate[37].field11}</div>
+            <div style="position:absolute;left:490.96px;top:434.99px" class="cls_002">{!spaceandrate[37].field16}</div>
+            <div style="position:absolute;left:538.00px;top:434.99px" class="cls_002">{!spaceandrate[37].field17}</div>
+            <div style="position:absolute;left:582.50px;top:434.99px" class="cls_002">{!spaceandrate[37].field9}</div>
+            <div style="position:absolute;left:627.50px;top:434.99px" class="cls_002">{!spaceandrate[37].field23}</div>
+            <div style="position:absolute;left:687.63px;top:434.99px" class="cls_002">{!spaceandrate[37].field24}</div>
+            <div style="position:absolute;left:727.41px;top:434.99px" class="cls_002">{!spaceandrate[37].field25}</div>
+            <div style="position:absolute;left:767.41px;top:434.99px" class="cls_002">{!spaceandrate[37].field26}</div>
+
+
+            <div style="position:absolute;left:30.33px;top:504.71px" class="cls_002">14</div>
+            <div style="position:absolute;left:55.44px;top:504.71px" class="cls_002">{!spaceandrate[39].field1}</div>
+            <div style="position:absolute;left:97.84px;top:504.71px" class="cls_002">25 Months,16</div>
+            <div style="position:absolute;left:153.80px;top:504.71px" class="cls_002">{!spaceandrate[39].field3}</div>
+            <div style="position:absolute;left:202.42px;top:504.71px" class="cls_002">{!spaceandrate[39].field4}</div>
+            <div style="position:absolute;left:247.07px;top:504.71px" class="cls_002">{!spaceandrate[39].field5}</div>
+            <div style="position:absolute;left:295.00px;top:504.71px" class="cls_002">{!spaceandrate[39].field6}</div>
+            <div style="position:absolute;left:340.79px;top:504.71px" class="cls_002">{!spaceandrate[39].field7}</div>
+            <div style="position:absolute;left:400.40px;top:504.71px" class="cls_002">{!spaceandrate[39].field10}</div>
+            <div style="position:absolute;left:441.32px;top:504.71px" class="cls_002">{!spaceandrate[39].field11}</div>
+            <div style="position:absolute;left:490.96px;top:504.71px" class="cls_002">{!spaceandrate[39].field16}</div>
+            <div style="position:absolute;left:538.00px;top:504.71px" class="cls_002">{!spaceandrate[39].field17}</div>
+            <div style="position:absolute;left:582.50px;top:504.71px" class="cls_002">{!spaceandrate[39].field9}</div>
+            <div style="position:absolute;left:627.50px;top:504.71px" class="cls_002">{!spaceandrate[39].field23}</div>
+            <div style="position:absolute;left:687.63px;top:504.71px" class="cls_002">{!spaceandrate[39].field24}</div>
+            <div style="position:absolute;left:727.41px;top:504.71px" class="cls_002">{!spaceandrate[39].field25}</div>
+            <div style="position:absolute;left:767.41px;top:504.71px" class="cls_002">{!spaceandrate[39].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:538.55px" class="cls_002">14</div>
+            <div style="position:absolute;left:55.44px;top:538.55px" class="cls_002">{!spaceandrate[40].field1}</div>
+            <div style="position:absolute;left:97.84px;top:538.55px" class="cls_002">19 Months,11</div>
+            <div style="position:absolute;left:153.80px;top:538.55px" class="cls_002">{!spaceandrate[40].field3}</div>
+            <div style="position:absolute;left:202.42px;top:538.55px" class="cls_002">{!spaceandrate[40].field4}</div>
+            <div style="position:absolute;left:247.07px;top:538.55px" class="cls_002">{!spaceandrate[40].field5}</div>
+            <div style="position:absolute;left:295.00px;top:538.55px" class="cls_002">{!spaceandrate[40].field6}</div>
+            <div style="position:absolute;left:340.79px;top:538.55px" class="cls_002">{!spaceandrate[40].field7}</div>
+            <div style="position:absolute;left:400.40px;top:538.55px" class="cls_002">{!spaceandrate[40].field10}</div>
+            <div style="position:absolute;left:441.32px;top:538.55px" class="cls_002">{!spaceandrate[40].field11}</div>
+            <div style="position:absolute;left:490.96px;top:538.55px" class="cls_002">{!spaceandrate[40].field16}</div>
+            <div style="position:absolute;left:538.00px;top:538.55px" class="cls_002">{!spaceandrate[40].field17}</div>
+            <div style="position:absolute;left:582.50px;top:538.55px" class="cls_002">{!spaceandrate[40].field9}</div>
+            <div style="position:absolute;left:627.50px;top:538.55px" class="cls_002">{!spaceandrate[40].field23}</div>
+            <div style="position:absolute;left:687.63px;top:538.55px" class="cls_002">{!spaceandrate[40].field24}</div>
+            <div style="position:absolute;left:727.41px;top:538.55px" class="cls_002">{!spaceandrate[40].field25}</div>
+            <div style="position:absolute;left:767.41px;top:538.55px" class="cls_002">{!spaceandrate[40].field26}</div>
+
+            <div style="position:absolute;left:23.29px;top:579.95px" class="cls_002">PAGE 3 OF 4</div>
+
+            <div style="position:absolute;left:85.78px;top:576.53px" class="cls_003">INITIALS:</div>
+
+            <div style="position:absolute;left:201.94px;top:576.53px" class="cls_003">&amp;</div>
+
+            <div style="position:absolute;left:580.09px;top:578.99px" class="cls_004">Attachment to GSA FORM 1364-A (REV
+                6/04)
+            </div>
+
+            <div style="position:absolute;left:125.45px;top:585.71px" class="cls_003">LESSOR</div>
+
+            <div style="position:absolute;left:211.82px;top:585.71px" class="cls_003">GOVERNMENT</div>
+
+        </div>
+
+        <div style="position:absolute;left:50%;margin-left:-396px;top:2166px;width:792px;height:612px;border-style:outset;overflow:hidden">
+
+            <div style="position:absolute;left:0px;top:0px">
+
+                <img src="{!URLFOR($Resource.form1364RateStructure, 'image004_092316.jpg')}" width="792" height="612"/>
+            </div>
+
+
+            <div style="position:absolute;left:30.33px;top:59.84px" class="cls_002">15</div>
+            <div style="position:absolute;left:55.44px;top:59.84px" class="cls_002">{!spaceandrate[42].field1}</div>
+            <div style="position:absolute;left:97.84px;top:59.84px" class="cls_002">25 Months,16</div>
+            <div style="position:absolute;left:153.80px;top:59.84px" class="cls_002">{!spaceandrate[42].field3}</div>
+            <div style="position:absolute;left:202.42px;top:59.84px" class="cls_002">{!spaceandrate[42].field4}</div>
+            <div style="position:absolute;left:247.07px;top:59.84px" class="cls_002">{!spaceandrate[42].field5}</div>
+            <div style="position:absolute;left:295.00px;top:59.84px" class="cls_002">{!spaceandrate[42].field6}</div>
+            <div style="position:absolute;left:340.79px;top:59.84px" class="cls_002">{!spaceandrate[42].field7}</div>
+            <div style="position:absolute;left:400.40px;top:59.84px" class="cls_002">{!spaceandrate[42].field10}</div>
+            <div style="position:absolute;left:441.32px;top:59.84px" class="cls_002">{!spaceandrate[42].field11}</div>
+            <div style="position:absolute;left:490.96px;top:59.84px" class="cls_002">{!spaceandrate[42].field16}</div>
+            <div style="position:absolute;left:538.00px;top:59.84px" class="cls_002">{!spaceandrate[42].field17}</div>
+            <div style="position:absolute;left:582.50px;top:59.84px" class="cls_002">{!spaceandrate[42].field9}</div>
+            <div style="position:absolute;left:627.50px;top:59.84px" class="cls_002">{!spaceandrate[42].field23}</div>
+            <div style="position:absolute;left:687.63px;top:59.84px" class="cls_002">{!spaceandrate[42].field24}</div>
+            <div style="position:absolute;left:727.41px;top:59.84px" class="cls_002">{!spaceandrate[42].field25}</div>
+            <div style="position:absolute;left:767.41px;top:59.84px" class="cls_002">{!spaceandrate[42].field26}</div>
+
+            <div style="position:absolute;left:30.33px;top:93.68px" class="cls_002">15</div>
+            <div style="position:absolute;left:55.44px;top:93.68px" class="cls_002">{!spaceandrate[43].field1}</div>
+            <div style="position:absolute;left:97.84px;top:93.68px" class="cls_002">19 Months,11</div>
+            <div style="position:absolute;left:153.80px;top:93.68px" class="cls_002">{!spaceandrate[43].field3}</div>
+            <div style="position:absolute;left:202.42px;top:93.68px" class="cls_002">{!spaceandrate[43].field4}</div>
+            <div style="position:absolute;left:247.07px;top:93.68px" class="cls_002">{!spaceandrate[43].field5}</div>
+            <div style="position:absolute;left:295.00px;top:93.68px" class="cls_002">{!spaceandrate[43].field6}</div>
+            <div style="position:absolute;left:340.79px;top:93.68px" class="cls_002">{!spaceandrate[43].field7}</div>
+            <div style="position:absolute;left:400.40px;top:93.68px" class="cls_002">{!spaceandrate[43].field10}</div>
+            <div style="position:absolute;left:441.32px;top:93.68px" class="cls_002">{!spaceandrate[43].field11}</div>
+            <div style="position:absolute;left:490.96px;top:93.68px" class="cls_002">{!spaceandrate[43].field16}</div>
+            <div style="position:absolute;left:538.00px;top:93.68px" class="cls_002">{!spaceandrate[43].field17}</div>
+            <div style="position:absolute;left:582.50px;top:93.68px" class="cls_002">{!spaceandrate[43].field9}</div>
+            <div style="position:absolute;left:627.50px;top:93.68px" class="cls_002">{!spaceandrate[43].field23}</div>
+            <div style="position:absolute;left:687.63px;top:93.68px" class="cls_002">{!spaceandrate[43].field24}</div>
+            <div style="position:absolute;left:727.41px;top:93.68px" class="cls_002">{!spaceandrate[43].field25}</div>
+            <div style="position:absolute;left:767.41px;top:93.68px" class="cls_002">{!spaceandrate[43].field26}</div>
+
+
+            <div style="position:absolute;left:91.98px;top:573.44px" class="cls_003">INITIALS:</div>
+
+            <div style="position:absolute;left:208.15px;top:573.44px" class="cls_003">&amp;</div>
+
+            <div style="position:absolute;left:20.20px;top:583.04px" class="cls_002">PAGE 4 OF 4</div>
+
+            <div style="position:absolute;left:131.32px;top:582.62px" class="cls_003">LESSOR</div>
+
+            <div style="position:absolute;left:217.69px;top:582.62px" class="cls_003">GOVERNMENT</div>
+
+            <div style="position:absolute;left:577.00px;top:582.08px" class="cls_004">Attachment to GSA FORM 1364-A (REV
+                6/04)
+            </div>
+
+        </div>
+    </apex:panelGrid>
+
+    </body>
+
+</apex:page>

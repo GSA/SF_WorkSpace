@@ -1,0 +1,2385 @@
+<!-- 7-JUL-2020 acheslyn updated head section to include google analytics snippet user story sfws 766-->
+<apex:page controller="PBS_AAAP_OfferForm1217" standardstylesheets="false" sidebar="false" renderAs="pdf" action="{!isValidUserAction}">
+
+
+    <head>
+        <style type="text/css">
+
+.homeTab .brdPalette { height:5700px; }
+
+span.cls_004{font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_004{font-family:Arial,serif;font-size:10.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_002{font-family:Arial,serif;font-size:13.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+span.cls_005{font-family:Arial,serif;font-size:12.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal;white-space:nowrap;}
+
+div.cls_005{font-family:Arial,serif;font-size:12.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_007{font-family:Arial,serif;font-size:11.0px;color:rgb(0,0,0);font-weight:normal;font-style:italic}
+
+div.cls_007{font-family:Arial,serif;font-size:11.0px;color:rgb(0,0,0);font-weight:normal;font-style:italic}
+
+span.cls_006{font-family:Arial,serif;font-size:11.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal}
+
+div.cls_006{font-family:Arial,serif;font-size:11.0px;color:rgb(255,0,0);font-weight:bold;font-style:normal}
+
+span.cls_008{font-family:Arial,serif;font-size:11.0px;color:rgb(255,0,0);font-weight:normal;font-style:italic;white-space:nowrap;}
+
+div.cls_008{font-family:Arial,serif;font-size:11.0px;color:rgb(255,0,0);font-weight:normal;font-style:italic}
+
+span.cls_009{font-family:Arial,serif;font-size:11.0px;color:rgb(255,0,0);font-weight:normal;font-style:normal}
+
+div.cls_009{font-family:Arial,serif;font-size:11.0px;color:rgb(255,0,0);font-weight:normal;font-style:normal}
+
+span.cls_003{font-family:Arial,serif;font-size:8.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_003{font-family:Arial,serif;font-size:8.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_010{font-family:Arial,serif;font-size:12.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_010{font-family:Arial,serif;font-size:12.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_011{font-family:Arial,serif;font-size:12.1px;color:rgb(255,0,0);font-weight:normal;font-style:normal}
+
+div.cls_011{font-family:Arial,serif;font-size:9.1px;color:rgb(255,0,0);font-weight:normal;font-style:normal}
+
+
+        </style>
+        <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+ 		<script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+        <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+
+    </head>
+
+
+    <body>
+    <apex:panelGrid rendered="{!!isValidUser}">
+        <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+        <apex:messages styleClass="errMessage" id="errmessage"/>
+    </apex:panelGrid>
+    <apex:panelGrid rendered="{!isValidUser}">
+        <apex:panelGrid rendered="{!isNew}">
+
+            <div style="position:absolute;left:50%;margin-left:-306px;top:0px;width:612px;height:860px;border-style:outset;overflow:hidden">
+
+                <div style="position:absolute;left:0px;top:0px">
+
+                    <img src="{!URLFOR($Resource.form3518, 'image001.jpg')}" width="612" height="792"/></div>
+
+                <div style="position:absolute;left:69.02px;top:56.00px" class="cls_004">ADDENDUM to the System for Award
+                    Management (SAM)
+                </div>
+                <!-- RLP FY15 Change 09/03/2014: Vaishali -->
+                <div style="position:absolute;left:348.71px;top:56.00px" class="cls_004">Request For Lease
+                    Proposals<br/>Number: {!RLPNumber}</div>
+
+                <div style="position:absolute;left:478.71px;top:56.00px" class="cls_004">Dated<br/>{!sysDate}</div>
+
+                <div style="position:absolute;left:69.02px;top:66.64px" class="cls_004">REPRESENTATIONS AND
+                    CERTIFICATIONS (Acquisitions
+                </div>
+                <div style="position:absolute;left:69.02px;top:76.64px;white-space:nowrap;" class="cls_004">of Leasehold
+                    Interests in Real Property)
+                </div>
+
+                <div style="position:absolute;left:72.02px;top:106.66px; white-space:nowrap;" class="cls_007">Complete
+                    appropriate boxes, sign the form, and attach the offer.
+                </div>
+
+                <div style="position:absolute;left:72.02px;top:120.94px;white-space:nowrap;" class="cls_007">The Offeror
+                    makes the following additional Representations. NOTE: The "Offeror," as used on this form,
+                </div>
+
+                <div style="position:absolute;left:72.02px;top:134.46px;white-space:nowrap;" class="cls_007"> is the
+                    owner of the property offered, not an individual or agent representing the owner.
+                </div>
+
+                <div style="position:absolute;left:81.74px;top:155.38px" class="cls_002">1.</div>
+                <!-- RLP FY15 Change 09/03/2014: Vaishali -->
+                <div style="position:absolute;left:100.82px;top:155.38px" class="cls_002">ANNUAL REPRESENTATIONS AND
+                    CERTIFICATIONS FOR LEASEHOLD
+                </div>
+                <div style="position:absolute;left:100.82px;top:170.38px" class="cls_002">ACQUISITIONS (APR 2015)</div>
+
+                <div style="position:absolute;left:100.82px;top:199.82px" class="cls_005">(a)</div>
+
+                <div style="position:absolute;left:129.62px;top:199.82px" class="cls_005">(1)</div>
+                <!-- RLP FY15 Change 09/03/2014: Vaishali -->
+                <div style="position:absolute;left:158.43px;top:199.82px" class="cls_005">The North American Industry
+                    Classification System (NAICS) code for this acquisition is
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:219.78px;white-space:nowrap;" class="cls_005">531120,
+                    unless the real property is self-storage (#531130), land (#531190), or residential
+                </div>
+                <div style="position:absolute;left:158.42px;top:239.78px" class="cls_005">(#531110).</div>
+
+                <div style="position:absolute;left:129.62px;top:259.82px" class="cls_005">(2)</div>
+
+                <div style="position:absolute;left:158.43px;top:259.82px;white-space:nowrap;" class="cls_005">The small
+                    business size standard is 38.5 Million in annual average gross revenue of the
+                </div>
+                <div style="position:absolute;left:158.42px;top:279.78px;white-space:nowrap;" class="cls_005"> concern
+                    for the last 3 fiscal years.
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:299.82px" class="cls_005">(3)</div>
+
+                <div style="position:absolute;left:158.43px;top:299.82px;white-space:nowrap;" class="cls_005">The small
+                    business size standard for a concern which submits an offer in its own name,
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:319.78px;white-space:nowrap;" class="cls_005">other than
+                    on a construction or service contract, but which proposes to furnish a product
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:339.77px;white-space:nowrap;" class="cls_005">which it
+                    did not itself manufacture, is 500 employees.
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:361.37px" class="cls_005">(b)</div>
+
+                <div style="position:absolute;left:129.62px;top:361.37px" class="cls_005">The System for Award
+                    Management (SAM) is a centrally located, searchable database which
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:381.37px" class="cls_005">assists in the development,
+                    maintenance, and provision of sources for future procurements. The
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:401.37px" class="cls_005">Offeror, by signing this
+                    addendum, hereby certifies he is registered in SAM.
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:421.37px" class="cls_005">[<span
+                            class="cls_006">{!SAMCertified}</span> <span class="cls_005"> ] Registration Active and Copy Attached</span>
+                </div>
+
+
+                <div style="position:absolute;left:81.74px;top:449.70px" class="cls_002">2.</div>
+
+                <div style="position:absolute;left:100.82px;top:449.70px" class="cls_002">552.203-72 REPRESENTATION BY
+                    CORPORATIONS REGARDING AN UNPAID
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:466.75px" class="cls_002">DELINQUENT FEDERAL TAX
+                    LIABILITY OR A FELONY CONVICTION UNDER
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:483.80px;white-space:nowrap;" class="cls_002">ANY
+                    FEDERAL LAW (DEVIATION) (OCT 2013)
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:505.70px" class="cls_005">(a)</div>
+
+                <div style="position:absolute;left:129.62px;top:505.70px" class="cls_005">In accordance with Sections
+                    630 and 631 of Division of the Consolidated Appropriations Act,
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:520.70px" class="cls_005">2012 (Pub. L. 112-74), and
+                    Section 101 of the Continuing Appropriations Act, 2014 (Pub. L.
+                </div>
+                <div style="position:absolute;left:129.62px;top:540.70px" class="cls_005">113-16) none of the funds made
+                    available by the Continuing Appropriations Act 2014 may be
+                </div>
+                <div style="position:absolute;left:129.62px;top:560.70px" class="cls_005">used to enter into a contract
+                    action with any corporation that---
+                </div>
+                <div style="position:absolute;left:129.62px;top:580.70px" class="cls_005">(1)</div>
+                <div style="position:absolute;left:150.82px;top:580.70px" class="cls_005">Has any unpaid Federal tax
+                    liability that has been assessed, for which all judicial and
+                </div>
+                <div style="position:absolute;left:150.82px;top:600.70px" class="cls_005">administrative remedies have
+                    been exhausted or have lapsed, and that is not being
+                </div>
+                <div style="position:absolute;left:150.82px;top:620.70px" class="cls_005">paid in a timely manner
+                    pursuant to an agreement with the authority responsible for &nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:150.82px;top:640.70px" class="cls_005">collecting the tax liability,
+                    where the awarding agency is aware of the unpaid tax&nbsp;
+                </div>
+                <div style="position:absolute;left:150.82px;top:660.70px" class="cls_005"> liability, unless the agency
+                    has considered suspension or debarment of the &nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:150.82px;top:680.70px" class="cls_005"> corporation and made a
+                    determination that this further action is not necessary to &nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:150.82px;top:700.70px" class="cls_005"> protect the interests of the
+                    Government, or
+                </div>
+                <div style="position:absolute;left:129.62px;top:720.70px" class="cls_005"> (2)</div>
+                <div style="position:absolute;left:150.82px;top:720.70px" class="cls_005"> Was convicted, or had an
+                    officer or agent of such corporation acting on behalf of the
+                </div>
+                <div style="position:absolute;left:150.82px;top:740.70px" class="cls_005"> corporation convicted of a
+                    felony criminal violation under any Federal law within the
+                </div>
+                <div style="position:absolute;left:150.82px;top:760.70px" class="cls_005"> preceding 24 months, where
+                    the awarding agency is aware of the conviction, unless the &nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:150.82px;top:780.70px" class="cls_005"> agency has considered
+                    suspension or debarment of the corporation or such officer
+                </div>
+                <!-- extra for 5-- -->
+
+
+                <div style="position:absolute;left:450.47px;top:840.14px" class="cls_003">GSA FORM 3518-SAM PAGE 1
+                    (04/15)
+                </div>
+            </div>
+
+            <div style="position:absolute;left:50%;margin-left:-306px;top:1000px;width:612px;height:792px;border-style:outset;overflow:hidden">
+
+                <div style="position:absolute;left:0px;top:0px">
+
+                    <img src="{!URLFOR($Resource.form3518, 'image007.jpg')}" width="612" height="792"/></div>
+                <div style="position:absolute;left:150.82px;top:52.08px" class="cls_005">or agent and made a
+                    determination that this action is not necessary to protect the
+                </div>
+                <div style="position:absolute;left:150.82px;top:67.08px" class="cls_005">interests of the Government.
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:97.08px" class="cls_005">(b)</div>
+                <div style="position:absolute;left:129.62px;top:97.08px" class="cls_005">The Contractor represents that—
+                    &nbsp;&nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:129.62px;top:120.08px" class="cls_005">(1)</div>
+                <div style="position:absolute;left:150.82px;top:120.08px" class="cls_005">It is <span
+                            class="cls_004">[</span><span class="cls_006">{!no11a}</span><span
+                            class="cls_004">]</span><span class="cls_005"> is not </span><span
+                            class="cls_004">[</span><span class="cls_006">{!yes11a}</span><span class="cls_004">]</span>
+                    a corporation that has any unpaid Federal tax liability that has been
+                </div>
+                <div style="position:absolute;left:150.82px;top:135.08px" class="cls_005">assessed, for which all
+                    judicial and administrative remedies have been exhausted or
+                </div>
+                <div style="position:absolute;left:150.82px;top:150.08px" class="cls_005">have lapsed, and that is not
+                    being paid in a timely manner pursuant to an agreement &nbsp;&nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:150.82px;top:165.08px" class="cls_005">with the authority responsible
+                    for collecting the tax liability.
+                </div>
+                <div style="position:absolute;left:129.62px;top:183.08px" class="cls_005">(2)</div>
+                <div style="position:absolute;left:150.82px;top:183.08px" class="cls_005">It is <span
+                            class="cls_004">[</span><span class="cls_006">{!no11b}</span><span
+                            class="cls_004">]</span><span class="cls_005"> is not </span><span
+                            class="cls_004">[</span><span class="cls_006">{!yes11b}</span><span class="cls_004">]</span>
+                    a corporation that was convicted, or had an officer or agent of the
+                </div>
+                <div style="position:absolute;left:150.82px;top:200.08px" class="cls_005">corporation acting on behalf
+                    of the corporation, convicted of a felony criminal violation
+                </div>
+                <div style="position:absolute;left:150.82px;top:215px" class="cls_005">under any Federal law within the
+                    preceding 24 months.
+                </div>
+                <div style="position:absolute;left:81.74px;top:235.08px" class="cls_002">3.</div>
+                <div style="position:absolute;left:100.82px;top:235.08px" class="cls_002"> Property Owner's DUNS NUMBER
+                    Enter number: <span class="cls_006"><u>{!dunsNumber}</u></span></div>
+                <div style="position:absolute;left:78.02px;top:266.21px" class="cls_010">OFFEROR OR</div>
+
+                <div style="position:absolute;left:200.05px;top:266.21px" class="cls_010">NAME, ADDRESS (INCLUDING ZIP
+                    CODE)
+                </div>
+
+                <div style="position:absolute;left:438.07px;top:266.21px" class="cls_010">TELEPHONE</div>
+
+                <div style="position:absolute;left:78.02px;top:280.21px" class="cls_010">LEGALLY</div>
+
+                <div style="position:absolute;left:438.07px;top:280.21px" class="cls_010">NUMBER</div>
+
+                <div style="position:absolute;left:204.05px;top:286.53px" class="cls_011">NAME:   {!ownerName}</div>
+
+                <div style="position:absolute;left:78.02px;top:294.85px" class="cls_010">AUTHORIZED</div>
+                <div style="position:absolute;left:78.02px;top:308.85px" class="cls_010">REPRESENTATIVE</div>
+
+                <div style="position:absolute;left:438.02px;top:294.85px" class="cls_011">{!ownerMainPhone}</div>
+
+                <div style="position:absolute;left:204.05px;top:298.85px" class="cls_011">STREET:    {!bldgStreet}</div>
+
+                <div style="position:absolute;left:204.05px;top:315.29px" class="cls_011">CITY, STATE, ZIP:  {!bldgCity}
+                    , {!bldgState} - {!bldgZip}</div>
+
+                <div style="position:absolute;left:204.05px;top:370.01px" class="cls_010">Signature</div>
+
+                <div style="position:absolute;left:438.07px;top:370.01px" class="cls_010">Date</div>
+
+
+                <div style="position:absolute;left:404.47px;top:746.14px" class="cls_003">GSA FORM 3518-SAM PAGE 2
+                    (04/15)
+                </div>
+
+            </div>
+        </apex:panelGrid>
+        <apex:panelGrid rendered="{!isOld}">
+
+            <div style="position:absolute;left:50%;margin-left:-306px;top:0px;width:612px;height:792px;border-style:outset;overflow:hidden">
+
+                <div style="position:absolute;left:0px;top:0px">
+
+                    <img src="{!URLFOR($Resource.form3518, 'image008.jpg')}" width="612" height="792"/>
+
+                </div>
+
+                <div style="position:absolute;left:78.02px;top:54.00px" class="cls_004">REPRESENTATIONS AND
+                    CERTIFICATIONS
+                </div>
+                <!-- RLP FY15 Change 09/03/2014: Vaishali -->
+                <div style="position:absolute;left:336.71px;top:54.00px" class="cls_005"><b>Request For Lease
+                        Proposals</b><br/>{!RLPNumber}</div>
+
+                <div style="position:absolute;left:493.71px;top:54.00px" class="cls_005"><b>Dated</b><br/>{!sysDate}
+                </div>
+
+                <div style="position:absolute;left:78.02px;top:62.64px" class="cls_005">(Acquisition of Leasehold
+                    Interests in Real Property)
+                </div>
+
+                <div style="position:absolute;left:72.02px;top:98.66px; white-space:nowrap;" class="cls_007">Complete
+                    appropriate boxes, sign the form, and attach the offer.
+                </div>
+
+                <div style="position:absolute;left:72.02px;top:115.94px" class="cls_007">The Offeror makes the following
+                    Representations and Certifications. NOTE: The "Offeror," as used on
+                </div>
+
+                <div style="position:absolute;left:72.02px;top:124.46px" class="cls_007">this form, is the owner of the
+                    property offered, not an individual or agent representing the owner.
+                </div>
+
+                <div style="position:absolute;left:81.74px;top:153.38px" class="cls_004">1.</div>
+                <!-- RLP FY15 Change 09/03/2014: Vaishali -->
+                <div style="position:absolute;left:100.82px;top:153.38px" class="cls_004">52.2191 - SMALL BUSINESS
+                    PROGRAM REPRESENTATIONS (APR 2012)
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:169.82px" class="cls_005">(a)</div>
+
+                <div style="position:absolute;left:129.62px;top:169.82px" class="cls_005">(1)</div>
+                <!-- RLP FY15 Change 09/03/2014: Vaishali -->
+                <div style="position:absolute;left:158.43px;top:169.82px" class="cls_005">The North American Industry
+                    Classification System (NAICS) code for this acquisition is
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:179.78px" class="cls_005">531120, unless the real
+                    property is self-storage (#531130), land (#531190), or residential (#531110).
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:219.82px" class="cls_005">(2)</div>
+
+                <div style="position:absolute;left:158.43px;top:219.82px" class="cls_005">Effective July 14, 2014 the
+                    small business size standard is $38.5 Million in annual average gross revenue of the concern for the
+                    last 3 fiscal years.
+                </div>
+                <div style="position:absolute;left:158.42px;top:229.78px" class="cls_005"></div>
+
+                <div style="position:absolute;left:129.62px;top:249.82px" class="cls_005">(3)</div>
+
+                <div style="position:absolute;left:158.43px;top:249.82px" class="cls_005">The small business size
+                    standard for a concern which submits an offer in its own name,
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:259.78px" class="cls_005">other than on a construction
+                    or service contract, but which proposes to furnish a product
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:269.77px" class="cls_005">which it did not itself
+                    manufacture, is 500 employees.
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:291.37px" class="cls_005">(b)</div>
+
+                <div style="position:absolute;left:129.62px;top:291.37px" class="cls_007">Representations<span
+                            class="cls_005">.</span></div>
+
+                <div style="position:absolute;left:129.62px;top:311.29px" class="cls_005">(1)</div>
+
+                <div style="position:absolute;left:158.43px;top:311.29px" class="cls_005">The Offeror represents as part
+                    of its offer that it <span class="cls_004">[</span><span
+                            class="cls_006">{!smallBusiness}</span><span class="cls_004">]</span><span class="cls_005"> is, </span><span
+                            class="cls_004">[</span><span class="cls_006">{!notsmallBusiness}</span><span
+                            class="cls_004">]</span><span class="cls_005"> is not a small business</span></div>
+
+                <div style="position:absolute;left:158.42px;top:321.37px" class="cls_005">concern.</div>
+
+                <div style="position:absolute;left:129.62px;top:341.29px" class="cls_005">(2)</div>
+
+                <div style="position:absolute;left:158.43px;top:341.29px" class="cls_005">[<span class="cls_008">Complete  only  if  the  Offeror  represented  itself  as  a  small  business  concern  in</span>
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:351.37px" class="cls_008">paragraph</div>
+
+                <div style="position:absolute;left:209.51px;top:351.37px" class="cls_008">(b)(1) of this provision<span
+                            class="cls_009">.</span><span class="cls_005">]  The  Offeror  represents,  for  general  statistical</span>
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:361.33px" class="cls_005">purposes, that it <span
+                            class="cls_004">[</span><span class="cls_006">{!yes1A}</span><span
+                            class="cls_004">]</span><span class="cls_005"> is, </span><span
+                            class="cls_004">[</span><span class="cls_006">{!no1A}</span><span
+                            class="cls_004">]</span><span class="cls_005"> is not, a small disadvantaged business concern as defined in</span>
+                </div>
+
+
+                <div style="position:absolute;left:158.42px;top:371.29px" class="cls_005">13 CFR 124.1002.</div>
+
+                <div style="position:absolute;left:129.62px;top:391.33px" class="cls_005">(3)</div>
+
+                <div style="position:absolute;left:158.43px;top:391.33px" class="cls_005">[<span class="cls_008">Complete  only  if  the  Offeror  represented  itself  as  a  small  business  concern  in</span>
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:401.29px" class="cls_008">paragraph (b)(1) of this
+                    provision<span class="cls_009">.</span><span class="cls_005">] The Offeror represents as part of its offer that it </span><span
+                            class="cls_004">[</span><span class="cls_006">{!yes1B}</span><span
+                            class="cls_004">]</span><span class="cls_005"> is,</span></div>
+
+                <div style="position:absolute;left:158.42px;top:411.37px" class="cls_009"><span class="cls_004">[</span><span
+                            class="cls_006">{!no1B}</span><span class="cls_004">]</span></div>
+
+                <div style="position:absolute;left:171.94px;top:411.37px" class="cls_004"><span class="cls_005"> is not a women-owned small business concern.</span>
+                </div>
+                <!-- Vaishali to enter new 4 and 5 -->
+                <div style="position:absolute;left:129.62px;top:431.29px" class="cls_005">(4)</div>
+                <div style="position:absolute;left:158.43px;top:431.29px" class="cls_005">Women-owned small business
+                    (WOSB) concern eligible under the WOSB Program.
+                </div>
+
+                <div style="position:absolute;left:158.43px;top:441.37px" class="cls_005">[<span class="cls_008">Complete only if the offeror represented itself as a women-owned small business</span>
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:451.35px" class="cls_008">concern in paragraph (b)(3) of
+                    this provision.<span class="cls_005">] The offeror represents as part of its offer </span></div>
+
+                <div style="position:absolute;left:158.42px;top:461.35px" class="cls_005">that-</div>
+
+                <div style="position:absolute;left:168.42px;top:481.39px" class="cls_005">(i)</div>
+
+                <div style="position:absolute;left:187.22px;top:481.31px" class="cls_005">It <span
+                            class="cls_004">[</span><span class="cls_006">{!yes1B1}</span><span class="cls_004">]</span><span
+                            class="cls_005"> is, </span><span class="cls_004">[</span><span
+                            class="cls_006">{!no1B1}</span><span class="cls_004">]</span><span class="cls_005"> is not a WOSB concern eligible under the WOSB Program, has</span>
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:491.35px" class="cls_005">provided all the required
+                    documents to the WOSB Repository, and no change
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:501.35px" class="cls_005">in circumstances or adverse
+                    decisions have been issued that affects its &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:511.35px" class="cls_005">eligibility&#59; and</div>
+
+                <div style="position:absolute;left:168.42px;top:531.35px" class="cls_005">(ii)</div>
+
+                <div style="position:absolute;left:187.22px;top:531.35px" class="cls_005">It <span
+                            class="cls_004">[</span><span class="cls_006">{!yes1B2}</span><span class="cls_004">]</span><span
+                            class="cls_005"> is, </span><span class="cls_004">[</span><span
+                            class="cls_006">{!no1B2}</span><span class="cls_004">]</span><span class="cls_005"> is not a joint venture that complies with the requirements of 13 CFR</span>
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:541.35px" class="cls_005">part 127, and the
+                    representation in paragraph (b)(4)(i) of this provision is
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:551.35px" class="cls_005">accurate in reference to the
+                    WOSB concern or concerns that are participating
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:561.35px" class="cls_005">in the joint venture. [<span
+                            class="cls_008">The offeror shall enter the name or names of the WOSB </span></div>
+
+                <div style="position:absolute;left:187.22px;top:571.35px" class="cls_008">concern or concerns that are
+                    participating in the joint venture: ___<U>{!WOSBNames}</U>___<span class="cls_005">.]</span></div>
+                <div style="position:absolute;left:187.22px;top:581.35px" class="cls_005"><i>Each WOSB concern
+                        participating in the joint venture shall submit</i></div>
+                <div style="position:absolute;left:187.22px;top:591.35px" class="cls_005"><i>a separate signed copy of
+                        the WOSB representation.</i></div>
+
+                <div style="position:absolute;left:129.62px;top:611.29px" class="cls_005">(5)</div>
+                <div style="position:absolute;left:158.43px;top:611.29px" class="cls_005">Economically disadvantaged
+                    women-owned small business (EDWOSB) concern.
+                </div>
+
+                <div style="position:absolute;left:158.43px;top:621.29px" class="cls_005">[<span class="cls_008">Complete only if the offeror represented itself as a women-owned small business</span>
+                </div>
+                <div style="position:absolute;left:158.43px;top:631.29px" class="cls_008">concern eligible under the
+                    WOSB Program in (b)(4) of this provision.<span class="cls_005">] The offeror</span></div>
+                <div style="position:absolute;left:158.43px;top:641.29px" class="cls_005">represents as part of its
+                    offer that— &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+
+                <div style="position:absolute;left:72.02px;top:737.02px;white-space:nowrap;" class="cls_003">INITIALS:
+                    ______________
+                </div>
+                <div style="position:absolute;left:188.18px;top:737.02px" class="cls_003">&amp; _________________</div>
+
+                <div style="position:absolute;left:111.62px;top:746.14px" class="cls_003">LESSOR</div>
+
+                <div style="position:absolute;left:198.03px;top:746.14px" class="cls_003">GOVERNMENT</div>
+
+                <div style="position:absolute;left:404.47px;top:746.14px" class="cls_003">GSA FORM 3518 PAGE 1 (REV
+                    10/2014)
+                </div>
+
+            </div>
+
+            <div style="position:absolute;left:50%;margin-left:-306px;top:1002px;width:612px;height:792px;border-style:outset;overflow:hidden">
+
+                <div style="position:absolute;left:0px;top:0px">
+
+                    <img src="{!URLFOR($Resource.form3518, 'image002.jpg')}" width="612" height="792"/></div>
+                <!-- Moved from the top -->
+                <div style="position:absolute;left:168.42px;top:52.08px" class="cls_005">(i)</div>
+
+                <div style="position:absolute;left:187.22px;top:52.08px" class="cls_005">It <span
+                            class="cls_004">[</span><span class="cls_006">{!yes1B3}</span><span class="cls_004">]</span><span
+                            class="cls_005"> is, </span><span class="cls_004">[</span><span
+                            class="cls_006">{!no1B3}</span><span class="cls_004">]</span><span class="cls_005"> is not an EDWOSB concern eligible under the WOSB Program, has</span>
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:62.08px" class="cls_005">provided all the required
+                    documents to the WOSB Repository, and no change
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:72.08px" class="cls_005">in circumstances or adverse
+                    decisions have been issued that affects its &nbsp;
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:82.08px" class="cls_005">eligibility&#59; and</div>
+
+                <div style="position:absolute;left:168.42px;top:102.08px" class="cls_005">(ii)</div>
+
+                <div style="position:absolute;left:187.22px;top:102.08px" class="cls_005">It <span
+                            class="cls_004">[</span><span class="cls_006">{!yes1B4}</span><span class="cls_004">]</span><span
+                            class="cls_005"> is, </span><span class="cls_004">[</span><span
+                            class="cls_006">{!no1B4}</span><span class="cls_004">]</span><span class="cls_005"> is not a joint venture that complies with the requirements of 13 CFR</span>
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:112.08px" class="cls_005">part 127, and the
+                    representation in paragraph (b)(5)(i) of this provision is
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:122.08px" class="cls_005">accurate in reference to the
+                    EDWOSB concern or concerns that are
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:132.08px" class="cls_005">participating in the joint
+                    venture. [<span class="cls_008">The offeror shall enter the name or names of the </span></div>
+
+                <div style="position:absolute;left:187.22px;top:142.08px" class="cls_008">EDWOSB concern or concerns
+                    that are participating in the joint venture:
+                </div>
+                <div style="position:absolute;left:187.22px;top:152.08px" class="cls_008">
+                    ___<U>{!EDWOSBNames}</U>___<span class="cls_005">.] <i>Each EDWOSB concern participating in the joint venture shall</i></span>
+                </div>
+                <div style="position:absolute;left:187.22px;top:162.08px;white-space:nowrap;" class="cls_005"><i>submit
+                        a separate signed copy of the EDWOSB representation.</i></div>
+
+                <div style="position:absolute;left:129.62px;top:182.08px" class="cls_005">(6)</div>
+
+                <div style="position:absolute;left:158.43px;top:182.08px" class="cls_005">[<span class="cls_008">Complete  only  if  the  Offeror  represented  itself  as  a  small  business  concern  in</span>
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:192.08px" class="cls_008">paragraph (b)(1) of this
+                    provision<span class="cls_009">.</span><span class="cls_005">] The Offeror represents as part of its offer that it </span><span
+                            class="cls_004">[</span><span class="cls_006">{!yes1C}</span><span
+                            class="cls_004">]</span><span class="cls_005"> is,</span></div>
+
+                <div style="position:absolute;left:158.42px;top:202.08px" class="cls_004"><span class="cls_004">[</span><span
+                            class="cls_006">{!no1C}</span><span class="cls_004">]</span><span class="cls_005"> is not a veteran-owned small business concern.</span>
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:222.08px" class="cls_005">(7)</div>
+
+                <div style="position:absolute;left:158.43px;top:222.08px" class="cls_005">[<span class="cls_008">Complete only if the Offeror represented itself as a veteran-owned small business</span>
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:232.08px" class="cls_008">concern in paragraph (b)(6) of
+                    this provision<span class="cls_009">.</span><span class="cls_005">] The Offeror represents as part of its offer</span>
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:242.08px" class="cls_005">that it <span class="cls_004">[</span><span
+                            class="cls_006">{!yes1D}</span><span class="cls_004">]</span><span
+                            class="cls_005"> is, </span><span class="cls_004">[</span><span
+                            class="cls_006">{!no1D}</span><span class="cls_004">]</span><span class="cls_005"> is not a service-disabled veteran-owned small business concern.</span>
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:272.08px" class="cls_005">(8)</div>
+
+                <div style="position:absolute;left:158.42px;top:272.08px" class="cls_007">[<span class="cls_008">Complete  only  if  the  Offeror  represented  itself  as  a  small  business  concern  in</span>
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:282.08px" class="cls_008">paragraph (b)(1) of this
+                    provision<span class="cls_009">.</span><span class="cls_005">] The Offeror represents, as part of its offer, that—</span>
+                </div>
+
+                <div style="position:absolute;left:164.30px;top:302.08px" class="cls_005">(i)</div>
+
+                <div style="position:absolute;left:187.22px;top:302.08px" class="cls_005">It <span
+                            class="cls_004">[</span><span class="cls_006">{!yes1E}</span><span class="cls_004">]</span>
+                    <span class="cls_005"> is, </span><span class="cls_004">[</span><span class="cls_006">{!no1E}</span><span
+                            class="cls_004">]</span>
+                    <span class="cls_005"> is not a HUBZone small business concern listed, on the date of this</span>
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:312.08px" class="cls_005">representation, on the List of
+                    Qualified HUBZone Small Business Concerns
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:322.08px" class="cls_005">maintained by the Small
+                    Business Administration, and no material change in
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:332.08px" class="cls_005">ownership and control,
+                    principal office, or HUBZone employee percentage has
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:342.08px" class="cls_005">occurred since it was
+                    certified in accordance with 13 CFR part 126; and
+                </div>
+
+                <!--  div style="position:absolute;left:187.22px;top:352.08px" class="cls_005"></div-->
+
+                <div style="position:absolute;left:162.14px;top:372.08px" class="cls_005">(ii)</div>
+
+                <div style="position:absolute;left:187.22px;top:372.08px" class="cls_005">It <span
+                            class="cls_004">[</span><span class="cls_006">{!yes1F}</span><span class="cls_004">]</span>
+
+                    <span class="cls_005"> is, </span><span class="cls_004">[</span><span class="cls_006">{!no1F}</span><span
+                            class="cls_004">]</span>
+
+                    <span class="cls_005"> is not a HUBZone joint venture that complies with the requirements </span>
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:381.35px" class="cls_005">of 13 CFR part 126, and the
+                    representation in paragraph (b)(8)(i) of this provision is
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:391.31px" class="cls_005">accurate for each HUBZone
+                    small business concern participating in the
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:401.42px" class="cls_005">HUBZone joint venture. [<span
+                            class="cls_008">The offeror shall enter the names of each of the</span></div>
+
+                <div style="position:absolute;left:187.22px;top:411.38px" class="cls_008">HUBZone small business
+                    concerns participating in the HUBZone joint venture:
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:421.34px" class="cls_008">___{!names1G}___<span
+                            class="cls_009">.</span><span class="cls_005">]  Each  HUBZone  small  business  concern participating in the</span>
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:431.42px" class="cls_005">HUBZone joint venture shall
+                    submit a separate signed copy of the HUBZone
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:441.38px" class="cls_005">representation.</div>
+                <!-- Top Move End -->
+                <div style="position:absolute;left:100.82px;top:461.38px" class="cls_005">(c)</div>
+
+                <div style="position:absolute;left:129.62px;top:461.38px" class="cls_007">Definitions<span
+                            class="cls_005">. As used in this provision—</span></div>
+
+                <div style="position:absolute;left:129.62px;top:481.38px" class="cls_005">"Economically disadvantaged
+                    women-owned small business (EDWOSB) concern" means a &nbsp;
+                </div>
+                <div style="position:absolute;left:129.62px;top:491.38px" class="cls_005">small business concern that is
+                    at least 51 percent directly and unconditionally owned by, and &nbsp;&nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:129.62px;top:501.38px" class="cls_005">the management and daily
+                    business operations of which are controlled by, one or more &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:129.62px;top:511.38px" class="cls_005">women who are citizens of the
+                    United States and who are economically disadvantaged in&nbsp;
+                </div>
+                <div style="position:absolute;left:129.62px;top:521.38px" class="cls_005">accordance with 13 CFR part
+                    127. It automatically qualifies as a women-owned small&nbsp;
+                </div>
+                <div style="position:absolute;left:129.62px;top:531.38px" class="cls_005">business concern eligible
+                    under the WOSB Program.
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:551.38px" class="cls_005">"Service-disabled
+                    veteran-owned small business concern"—
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:571.54px" class="cls_005">(1)</div>
+
+                <div style="position:absolute;left:158.43px;top:571.54px; white-space:nowrap;" class="cls_005">Means a
+                    small business concern—
+                </div>
+
+                <div style="position:absolute;left:164.30px;top:591.54px" class="cls_005">(i)</div>
+
+                <div style="position:absolute;left:187.23px;top:591.54px" class="cls_005">Not less than 51 percent of
+                    which is owned by one or more service-disabled
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:601.54px" class="cls_005">veterans or, in the case of
+                    any publicly owned business, not less than 51 percent
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:611.54px" class="cls_005">of the stock of which is owned
+                    by one or more service-disabled veterans; and
+                </div>
+
+                <div style="position:absolute;left:72.02px;top:737.02px" class="cls_003">INITIALS:</div>
+
+                <div style="position:absolute;left:188.18px;top:737.02px" class="cls_003">&amp;</div>
+
+                <div style="position:absolute;left:111.62px;top:746.14px" class="cls_003">LESSOR</div>
+
+                <div style="position:absolute;left:198.03px;top:746.14px" class="cls_003">GOVERNMENT</div>
+
+                <div style="position:absolute;left:404.47px;top:746.14px" class="cls_003">GSA FORM 3518 PAGE 2 (REV
+                    10/2014)
+                </div>
+
+            </div>
+
+            <div style="position:absolute;left:50%;margin-left:-306px;top:2004px;width:612px;height:792px;border-style:outset;overflow:hidden">
+
+                <div style="position:absolute;left:0px;top:0px">
+
+                    <img src="{!URLFOR($Resource.form3518, 'image002.jpg')}" width="612" height="792"/></div>
+                <!-- -Moved from above -->
+                <div style="position:absolute;left:162.14px;top:93.62px" class="cls_005">(ii)</div>
+
+                <div style="position:absolute;left:187.22px;top:93.62px" class="cls_005">The management and daily
+                    business operations of which are controlled by one or
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:103.58px" class="cls_005">more service-disabled veterans
+                    or, in the case of a service-disabled veteran with
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:113.54px" class="cls_005">permanent and severe
+                    disability, the spouse or permanent caregiver of such veteran.
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:143.58px" class="cls_005">(2)</div>
+
+                <div style="position:absolute;left:158.43px;top:143.58px" class="cls_005">"Service-disabled veteran"
+                    means a veteran, as defined in <u>38 U.S.C. 101(2)</u>, with a
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:153.54px" class="cls_005">disability that is
+                    service-connected, as defined in <u>38 U.S.C. 101(16)</u>.
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:185.14px" class="cls_005">"Small business concern" means
+                    a concern, including its affiliates, that is independently
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:195.10px" class="cls_005">owned and operated, not
+                    dominant in the field of operation in which it is bidding on
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:205.06px" class="cls_005">Government contracts, and
+                    qualified as a small business under the criteria in 13 CFR part
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:215.14px" class="cls_005">121 and the size standard in
+                    paragraph (a) of this provision.
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:245.06px;white-space:nowrap;" class="cls_005">
+                    "Veteran-owned small business concern" means a small business concern—
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:265.17px" class="cls_005">(1)</div>
+
+                <div style="position:absolute;left:158.43px;top:265.17px" class="cls_005">Not less than 51 percent of
+                    which is owned by one or more veterans (as defined at
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:275.13px" class="cls_005">38 U.S.C. 101(2)) or, in the
+                    case of any publicly owned business, not less than 51
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:285.09px" class="cls_005">percent of the stock of which
+                    is owned by one or more veterans; and
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:305.13px" class="cls_005">(2)</div>
+
+                <div style="position:absolute;left:158.43px;top:305.13px" class="cls_005">The management and daily
+                    business operations of which are controlled by one or more
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:315.09px" class="cls_005">veterans.</div>
+
+                <div style="position:absolute;left:129.62px;top:335.13px;white-space:nowrap;" class="cls_005">
+                    "Women-owned small business concern" means a small business concern—
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:355.09px" class="cls_005">(1)</div>
+
+                <div style="position:absolute;left:158.43px;top:355.09px" class="cls_005">That is at least 51 percent
+                    owned by one or more women; or, in the case of any publicly
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:365.17px" class="cls_005">owned business, at least 51
+                    percent of the stock of which is owned by one or more
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:375.13px" class="cls_005">women; and</div>
+
+                <div style="position:absolute;left:129.62px;top:385.57px" class="cls_005">(2)</div>
+
+                <div style="position:absolute;left:158.43px;top:395.57px" class="cls_005">Whose management and daily
+                    business operations are controlled by one or more
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:405.53px" class="cls_005">women.</div>
+
+                <div style="position:absolute;left:129.62px;top:425.17px;" class="cls_005">"Women-owned small business
+                    (WOSB) concern eligible under the WOSB Program" (in
+                </div>
+                <div style="position:absolute;left:129.62px;top:435.17px;" class="cls_005">accordance with 13 CFR part
+                    127), means a small business concern that is at least 51
+                </div>
+                <div style="position:absolute;left:129.62px;top:445.17px;" class="cls_005">percent directly and
+                    unconditionally owned by, and the management and daily business &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:129.62px;top:455.17px;" class="cls_005">operations of which are
+                    controlled by, one or more women who are citizens of the &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:129.62px;top:465.17px;" class="cls_005">United States.</div>
+
+                <div style="position:absolute;left:100.82px;top:485.17px" class="cls_005">(d)</div>
+
+                <div style="position:absolute;left:129.62px;top:485.17px" class="cls_007">Notice<span
+                            class="cls_005">.</span></div>
+
+                <div style="position:absolute;left:129.62px;top:505.11px" class="cls_005">(1)</div>
+
+                <div style="position:absolute;left:158.43px;top:505.11px" class="cls_005">If this solicitation is for
+                    supplies and has been set aside, in whole or in part, for small
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:515.19px" class="cls_005">business concerns, then the
+                    clause in this solicitation providing notice of the set-aside
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:525.15px" class="cls_005">contains restrictions on the
+                    source of the end items to be furnished.
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:545.19px" class="cls_005">(2)</div>
+
+                <div style="position:absolute;left:158.43px;top:545.19px" class="cls_005">Under 15 U.S.C. 645(d), any
+                    person who misrepresents a firm's status as a business
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:555.15px" class="cls_005">concern that is small, HUBZone
+                    small, small disadvantaged, service-disabled veteran-
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:565.15px" class="cls_005">owned small, economically
+                    disadvantaged women-owned small, or women-owned small
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:575.15px;white-space:nowrap;" class="cls_005">eligible
+                    under the WOSB Program in order to obtain a contract to be awarded
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:585.11px;white-space:nowrap;" class="cls_005">under the
+                    preference programs established pursuant to section 8, 9, 15, 31, and 36 of
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:595.19px" class="cls_005">the Small Business Act or any
+                    other provision of Federal law that specifically
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:605.15px" class="cls_005">references section 8(d) for a
+                    definition of program eligibility, shall-
+                </div>
+
+                <div style="position:absolute;left:164.30px;top:635.19px" class="cls_005">(i)</div>
+
+                <div style="position:absolute;left:187.23px;top:635.19px" class="cls_005">Be punished by imposition of
+                    fine, imprisonment, or both;
+                </div>
+
+                <div style="position:absolute;left:162.14px;top:655.15px" class="cls_005">(ii)</div>
+
+                <div style="position:absolute;left:187.22px;top:655.15px" class="cls_005">Be subject to administrative
+                    remedies, including suspension and debarment; and
+                </div>
+
+                <div style="position:absolute;left:160.10px;top:675.11px" class="cls_005">(iii)</div>
+
+                <div style="position:absolute;left:187.22px;top:675.11px" class="cls_005">Be ineligible for
+                    participation in programs conducted under the authority of the
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:685.11px" class="cls_005">Act.</div>
+
+
+                <div style="position:absolute;left:72.02px;top:737.02px" class="cls_003">INITIALS:</div>
+
+                <div style="position:absolute;left:188.18px;top:737.02px" class="cls_003">&amp;</div>
+
+                <div style="position:absolute;left:111.62px;top:746.14px" class="cls_003">LESSOR</div>
+
+                <div style="position:absolute;left:198.03px;top:746.14px" class="cls_003">GOVERNMENT</div>
+
+                <div style="position:absolute;left:404.47px;top:746.14px" class="cls_003">GSA FORM 3518 PAGE 3 (REV
+                    10/2014)
+                </div>
+
+            </div>
+
+            <div style="position:absolute;left:50%;margin-left:-306px;top:2906px;width:612px;height:792px;border-style:outset;overflow:hidden">
+
+                <div style="position:absolute;left:0px;top:0px">
+
+                    <img src="{!URLFOR($Resource.form3518, 'image004.jpg')}" width="612" height="792"/></div>
+
+                <div style="position:absolute;left:81.74px;top:52.08px" class="cls_004">2.</div>
+                <div style="position:absolute;left:100.82px;top:52.08px" class="cls_004">52.2045 - WOMEN-OWNED BUSINESS
+                    (OTHER THAN SMALL BUSINESS) (MAY 1999)
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:72.70px" class="cls_005">(a)</div>
+
+                <div style="position:absolute;left:129.62px;top:72.70px" class="cls_007">Definition<span
+                            class="cls_005">. "Women-owned business concern," as used in this provision, means a concern</span>
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:82.70px" class="cls_005">which is at least 51 percent
+                    owned by one or more women; or in the case of any publicly
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:92.70px" class="cls_005">owned business, at least 51
+                    percent of its stock is owned by one or more women; and
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:102.70px" class="cls_005">whose management and daily
+                    business operations are controlled by one or more women.
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:122.70px" class="cls_005">(b)</div>
+
+                <div style="position:absolute;left:129.62px;top:122.70px" class="cls_007">Representation<span
+                            class="cls_005">. [</span><span class="cls_009">Complete only if the Offeror is a women-owned business concern and has</span>
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:132.70px;white-space:nowrap;" class="cls_009">not
+                    represented itself as a small business concern in paragraph (b)(1) of FAR 52.219-1,
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:142.70px" class="cls_009">Small Business Program
+                    Representations, of this solicitation.<span class="cls_005">] The Offeror represents that it</span>
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:152.70px" class="cls_004"><span class="cls_004">[</span><span
+                            class="cls_006">{!yes1H}</span><span class="cls_004">]</span>
+
+                    <span class="cls_005"> is a women-owned business concern.</span></div>
+
+                <div style="position:absolute;left:81.74px;top:173.16px" class="cls_004">3.</div>
+
+                <div style="position:absolute;left:100.82px;top:173.16px" class="cls_004">52.222-22 - PREVIOUS CONTRACTS
+                    AND COMPLIANCE REPORTS (FEB 1999)
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:193.16px" class="cls_005">(Applicable when the estimated
+                    value of the acquisition exceeds $10,000)
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:208.16px;white-space:nowrap;" class="cls_005">The
+                    Offeror represents that—
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:224.58px" class="cls_005">(a)</div>
+
+                <div style="position:absolute;left:129.62px;top:224.58px" class="cls_005">It <span
+                            class="cls_004">[</span><span class="cls_006">{!yes2}</span><span class="cls_004">]</span>
+
+                    <span class="cls_005"> has, </span><span class="cls_004">[</span><span class="cls_006">{!no2}</span><span
+                            class="cls_004">]</span>
+
+                    <span class="cls_005"> has not participated in a previous contract or subcontract subject to the Equal</span>
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:234.54px" class="cls_005">Opportunity clause of this
+                    solicitation;
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:254.58px" class="cls_005">(b)</div>
+
+                <div style="position:absolute;left:129.62px;top:254.58px" class="cls_005">It <span
+                            class="cls_004">[</span><span class="cls_006">{!yes2A}</span><span class="cls_004">]</span>
+
+                    <span class="cls_005"> has, </span><span class="cls_004">[</span><span
+                            class="cls_006">{!no2A}</span><span class="cls_004">]</span>
+
+                    <span class="cls_005"> has not filed all required compliance reports; and</span></div>
+
+                <div style="position:absolute;left:100.82px;top:269.62px" class="cls_005">(c)</div>
+
+                <div style="position:absolute;left:129.62px;top:269.62px" class="cls_005">Representations indicating
+                    submission of required compliance reports, signed by proposed
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:279.58px" class="cls_005">subcontractors, will be
+                    obtained before subcontract awards. (Approved by OMB under
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:289.58px" class="cls_005">Control Number 1215-0072.)
+                </div>
+
+                <div style="position:absolute;left:81.74px;top:308.70px" class="cls_004">4.</div>
+
+                <div style="position:absolute;left:100.82px;top:308.70px" class="cls_004">52.222-25 - AFFIRMATIVE ACTION
+                    COMPLIANCE (APR 1984)
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:325.14px" class="cls_005">(Applicable when the estimated
+                    value of the acquisition exceeds $10,000)
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:355.17px;white-space:nowrap;" class="cls_005">The
+                    Offeror represents that—
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:375.09px" class="cls_005">(a)</div>
+
+                <div style="position:absolute;left:129.62px;top:375.09px" class="cls_005">It <span
+                            class="cls_004">[</span><span class="cls_006">{!yes3}</span><span class="cls_004">]</span>
+
+                    <span class="cls_005"> has developed and has on file, </span><span class="cls_004">[</span><span
+                            class="cls_006">{!no3}</span><span class="cls_004">]</span><span class="cls_005"> has not developed and does not have on file, at</span>
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:385.17px" class="cls_005">each establishment affirmative
+                    action programs required by the rules and regulations of the
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:395.13px" class="cls_005">Secretary of Labor (41 CFR
+                    60-1 and 60-2), or
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:415.17px" class="cls_005">(b)</div>
+
+                <div style="position:absolute;left:129.62px;top:415.17px" class="cls_005">It <span
+                            class="cls_004">[</span><span class="cls_006">{!yes3a}</span><span class="cls_004">]</span>
+
+                    <span class="cls_005"> has not previously had contracts subject to the written affirmative action programs</span>
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:425.13px" class="cls_005">requirement of the rules and
+                    regulations of the Secretary of Labor. (Approved by OMB
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:435.09px" class="cls_005">under Control Number
+                    1215-0072.)
+                </div>
+
+                <div style="position:absolute;left:81.74px;top:465.70px" class="cls_004">5.</div>
+
+                <div style="position:absolute;left:100.82px;top:465.70px" class="cls_004">552.203-72 REPRESENTATION BY
+                    CORPORATIONS REGARDING AN UNPAID
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:476.75px" class="cls_004">DELINQUENT FEDERAL TAX
+                    LIABILITY OR A FELONY CONVICTION UNDER
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:488.80px" class="cls_004">ANY FEDERAL LAW (DEVIATION)
+                    (APR 2012)
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:505.70px" class="cls_005">(a)</div>
+
+                <div style="position:absolute;left:129.62px;top:505.70px" class="cls_005">In accordance with Sections
+                    630 and 631 of Division of the Consolidated Appropriations Act,
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:515.70px" class="cls_005">2012 (Pub. L. 112-74), none of
+                    the funds made available by that Act may be used to enter
+                </div>
+                <div style="position:absolute;left:129.62px;top:525.70px" class="cls_005">into a contract action with
+                    any corporation that-
+                </div>
+                <div style="position:absolute;left:129.62px;top:545.70px" class="cls_005">(1)</div>
+                <div style="position:absolute;left:150.82px;top:545.70px" class="cls_005">Has any unpaid Federal tax
+                    liability that has been assessed, for which all judicial and
+                </div>
+                <div style="position:absolute;left:150.82px;top:555.70px" class="cls_005">administrative remedies have
+                    been exhausted or have lapsed, and that is not being
+                </div>
+                <div style="position:absolute;left:150.82px;top:565.70px" class="cls_005">paid in a timely manner
+                    pursuant to an agreement with the authority responsible for &nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:150.82px;top:575.70px" class="cls_005">collecting the tax liability,
+                    where the awarding agency is aware of the unpaid tax&nbsp;
+                </div>
+                <div style="position:absolute;left:150.82px;top:585.70px" class="cls_005"> liability, unless the agency
+                    has considered suspension or debarment of the &nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:150.82px;top:595.70px" class="cls_005"> corporation and made a
+                    determination that this further action is not necessary to &nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:150.82px;top:605.70px" class="cls_005"> protect the interests of the
+                    Government, or
+                </div>
+                <div style="position:absolute;left:129.62px;top:625.70px" class="cls_005"> (2)</div>
+                <div style="position:absolute;left:150.82px;top:625.70px" class="cls_005"> Was convicted, or had an
+                    officer or agent of such corporation acting on behalf of the
+                </div>
+                <div style="position:absolute;left:150.82px;top:635.70px" class="cls_005"> corporation convicted of a
+                    felony criminal violation under any Federal law within the
+                </div>
+                <div style="position:absolute;left:150.82px;top:645.70px" class="cls_005"> preceding 24 months, where
+                    the awarding agency is aware of the conviction, unless the &nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:150.82px;top:655.70px" class="cls_005"> agency has considered
+                    suspension or debarment of the corporation or such officer
+                </div>
+                <!-- extra for 5-- -->
+
+                <div style="position:absolute;left:72.02px;top:737.02px" class="cls_003">INITIALS:</div>
+
+                <div style="position:absolute;left:188.18px;top:737.02px" class="cls_003">&amp;</div>
+
+                <div style="position:absolute;left:111.62px;top:746.14px" class="cls_003">LESSOR</div>
+
+                <div style="position:absolute;left:198.03px;top:746.14px" class="cls_003">GOVERNMENT</div>
+
+                <div style="position:absolute;left:404.47px;top:746.14px" class="cls_003">GSA FORM 3518 PAGE 4 (REV
+                    10/2014)
+                </div>
+
+            </div>
+
+            <div style="position:absolute;left:50%;margin-left:-306px;top:3908px;width:612px;height:792px;border-style:outset;overflow:hidden">
+
+                <div style="position:absolute;left:0px;top:0px">
+
+                    <img src="{!URLFOR($Resource.form3518, 'image002.jpg')}" width="612" height="792"/></div>
+                <div style="position:absolute;left:150.82px;top:52.08px" class="cls_005">or agent and made a
+                    determination that this action is not necessary to protect the
+                </div>
+                <div style="position:absolute;left:150.82px;top:62.08px" class="cls_005">interests of the Government.
+                </div>
+                <div style="position:absolute;left:100.82px;top:82.08px" class="cls_005">(b)</div>
+                <div style="position:absolute;left:129.62px;top:82.08px" class="cls_005">The Contractor represents that—
+                    &nbsp;&nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:129.62px;top:102.08px" class="cls_005">(1)</div>
+                <div style="position:absolute;left:150.82px;top:102.08px" class="cls_005">It is <span
+                            class="cls_004">[</span><span class="cls_006">{!yes11a}</span><span class="cls_004">]</span><span
+                            class="cls_005"> is not </span><span class="cls_004">[</span><span
+                            class="cls_006">{!no11a}</span><span class="cls_004">]</span> a corporation that has any
+                    unpaid Federal tax liability that has been
+                </div>
+                <div style="position:absolute;left:150.82px;top:112.08px" class="cls_005">assessed, for which all
+                    judicial and administrative remedies have been exhausted or
+                </div>
+                <div style="position:absolute;left:150.82px;top:122.08px" class="cls_005">have lapsed, and that is not
+                    being paid in a timely manner pursuant to an agreement &nbsp;&nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:150.82px;top:132.08px" class="cls_005">with the authority responsible
+                    for collecting the tax liability.
+                </div>
+                <div style="position:absolute;left:129.62px;top:152.08px" class="cls_005">(2)</div>
+                <div style="position:absolute;left:150.82px;top:152.08px" class="cls_005">It is <span
+                            class="cls_004">[</span><span class="cls_006">{!yes11b}</span><span class="cls_004">]</span><span
+                            class="cls_005"> is not </span><span class="cls_004">[</span><span
+                            class="cls_006">{!no11b}</span><span class="cls_004">]</span> a corporation that was
+                    convicted, or had an officer or agent of the
+                </div>
+                <div style="position:absolute;left:150.82px;top:162.08px" class="cls_005">corporation acting on behalf
+                    of the corporation, convicted of a felony criminal violation
+                </div>
+                <div style="position:absolute;left:150.82px;top:172.08px" class="cls_005">under any Federal law within
+                    the preceding 24 months.
+                </div>
+
+                <div style="position:absolute;left:81.74px;top:197.08px" class="cls_004">6.</div>
+
+                <div style="position:absolute;left:100.82px;top:197.08px" class="cls_004">52.203-02 - CERTIFICATE OF
+                    INDEPENDENT PRICE DETERMINATION (APR 1985)
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:215.08px" class="cls_005">(Applicable when the estimated
+                    value of the acquisition exceeds the simplified lease acquisition
+                </div>
+                <div style="position:absolute;left:100.82px;top:225.08px" class="cls_005">threshold)</div>
+
+                <div style="position:absolute;left:100.82px;top:245.08px" class="cls_005">(a)</div>
+
+                <div style="position:absolute;left:129.62px;top:245.08px;white-space:nowrap;" class="cls_005">The
+                    Offeror certifies that—
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:262.08px" class="cls_005">(1)</div>
+
+                <div style="position:absolute;left:158.43px;top:262.08px" class="cls_005">The prices in this offer have
+                    been arrived at independently, without, for the purpose of
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:272.08px;white-space:nowrap;" class="cls_005">
+                    restricting competition, any consultation, communication, or agreement with any other
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:282.08px" class="cls_005">Offeror or competitor relating
+                    to (i) those prices, (ii) the intention to submit an offer, or
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:292.08px" class="cls_005">(iii) the methods or factors
+                    used to calculate the prices offered;
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:310.59px" class="cls_005">(2)</div>
+
+                <div style="position:absolute;left:158.43px;top:310.59px" class="cls_005">The prices in this offer have
+                    not been and will not be knowingly disclosed by the Offeror,
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:320.59px" class="cls_005">directly or indirectly, to any
+                    other Offeror or competitor before bid opening (in the case of
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:330.59px" class="cls_005">a sealed bid solicitation) or
+                    contract award (in the case of a negotiated solicitation)
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:340.59px" class="cls_005">unless otherwise required by
+                    law; and
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:360.59px" class="cls_005">(3)</div>
+
+                <div style="position:absolute;left:158.43px;top:360.59px" class="cls_005">No attempt has been made or
+                    will be made by the Offeror to induce any other concern
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:370.59px" class="cls_005">to submit or not to submit an
+                    offer for the purpose of restricting competition.
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:390.59px" class="cls_005">(b)</div>
+
+                <div style="position:absolute;left:129.62px;top:390.59px" class="cls_005">Each signature on the offer is
+                    considered to be a certification by the signatory that the
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:400.59px" class="cls_005">signatory—</div>
+
+                <div style="position:absolute;left:129.62px;top:420.59px" class="cls_005">(1)</div>
+
+                <div style="position:absolute;left:158.43px;top:420.59px" class="cls_005">Is the person in the Offeror's
+                    organization responsible for determining the prices being
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:430.59px" class="cls_005">offered in this bid or
+                    proposal, and that the signatory has not participated and will not
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:440.59px" class="cls_005">participate in any action
+                    contrary to subparagraphs (a)(1) through (a)(3) above; or
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:460.59px" class="cls_005">(2)</div>
+
+                <div style="position:absolute;left:164.18px;top:460.59px" class="cls_005">(i)</div>
+
+                <div style="position:absolute;left:187.22px;top:460.59px" class="cls_005">Has been authorized, in
+                    writing, to act as agent for the following principals in
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:470.59px" class="cls_005">certifying that those
+                    principals have not participated, and will not participate in any
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:480.59px" class="cls_005">action contrary to
+                    subparagraphs (a)(1) through (a)(3) above
+                </div>
+
+                <div style="position:absolute;left:189.86px;top:490.59px" class="cls_009">_________<span
+                            class="cls_006">{!name4b}</span>_____________
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:500.62px" class="cls_005">[<span class="cls_009">Insert  full name of person(s) in the Offeror's organization responsible for determining the</span>
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:510.62px" class="cls_009">prices offered in this bid or
+                    proposal, and the title of his or her position in the
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:520.62px" class="cls_009">Offeror's organization<span
+                            class="cls_005">];</span></div>
+                <div style="position:absolute;left:162.14px;top:540.62px" class="cls_005">(ii)</div>
+
+                <div style="position:absolute;left:187.22px;top:540.62px" class="cls_005">As an authorized agent, does
+                    certify that the principals named in subdivision
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:550.62px" class="cls_005">(b)(2)(i) above have not
+                    participated, and will not participate, in any action
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:560.62px" class="cls_005">contrary to subparagraphs
+                    (a)(1) through (a)(3) above; and
+                </div>
+
+                <div style="position:absolute;left:159.98px;top:580.62px" class="cls_005">(iii)</div>
+
+                <div style="position:absolute;left:187.22px;top:580.62px" class="cls_005">As an agent, has not
+                    personally participated, and will not participate, in action
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:590.62px" class="cls_005">contrary to subparagraphs
+                    (a)(1) through (a)(3) above.
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:610.62px" class="cls_005">(c)</div>
+
+                <div style="position:absolute;left:129.62px;top:610.62px;white-space:nowrap;" class="cls_005">If the
+                    Offeror deletes or modifies subparagraph (a)(2) above, the Offeror must furnish with its
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:620.62px" class="cls_005">offer a signed statement
+                    setting forth in detail the circumstances of the disclosure.
+                </div>
+
+                <div style="position:absolute;left:81.74px;top:640.62px" class="cls_004">7.</div>
+
+                <div style="position:absolute;left:100.82px;top:640.62px" class="cls_004">52.203-11 - CERTIFICATION AND
+                    DISCLOSURE REGARDING PAYMENTS TO INFLUENCE
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:654.62px;white-space:nowrap;" class="cls_004">CERTAIN
+                    FEDERAL TRANSACTIONS (SEP 2007)
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:675.62px" class="cls_005">(Applicable when the estimated
+                    value of the acquisition exceeds $100,000.)
+                </div>
+
+
+                <div style="position:absolute;left:72.02px;top:737.02px" class="cls_003">INITIALS:</div>
+
+                <div style="position:absolute;left:188.18px;top:737.02px" class="cls_003">&amp;</div>
+
+                <div style="position:absolute;left:111.62px;top:746.14px" class="cls_003">LESSOR</div>
+
+                <div style="position:absolute;left:198.03px;top:746.14px" class="cls_003">GOVERNMENT</div>
+
+                <div style="position:absolute;left:404.47px;top:746.14px" class="cls_003">GSA FORM 3518 PAGE 5 (REV
+                    10/2014)
+                </div>
+
+            </div>
+
+            <div style="position:absolute;left:50%;margin-left:-306px;top:4910px;width:612px;height:792px;border-style:outset;overflow:hidden">
+
+                <div style="position:absolute;left:0px;top:0px">
+
+                    <img src="{!URLFOR($Resource.form3518, 'image005.jpg')}" width="612" height="792"/></div>
+
+                <div style="position:absolute;left:100.82px;top:66.15px" class="cls_005">(a)</div>
+                <div style="position:absolute;left:129.62px;top:66.15px" class="cls_005"><i>Definitions.</i> As used in
+                    this provision—“Lobbying contact” has the meaning provided at
+                </div>
+                <div style="position:absolute;left:129.62px;top:76.15px" class="cls_005">2 U.S.C. 1602(8). The terms
+                    “agency,” “influencing or attempting to influence,” “officer or
+                </div>
+                <div style="position:absolute;left:129.62px;top:86.15px" class="cls_005">employee of an agency,”
+                    “person,” “reasonable compensation,” and “regularly employed” are
+                </div>
+                <div style="position:absolute;left:129.62px;top:96.15px" class="cls_005">defined in the FAR clause of
+                    this solicitation entitled “Limitation on Payments to Influence &nbsp;&nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:129.62px;top:106.15px" class="cls_005">Certain Federal Transactions”
+                    (52.203-12).
+                </div>
+                <div style="position:absolute;left:100.82px;top:126.15px" class="cls_005">(b)</div>
+                <div style="position:absolute;left:129.62px;top:126.15px" class="cls_005"><i>Prohibition.</i> The
+                    prohibition and exceptions contained in the FAR clause of this solicitation &nbsp;&nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:129.62px;top:136.15px" class="cls_005">entitled “Limitation on
+                    Payments to Influence Certain Federal Transactions” (52.203-12) are
+                </div>
+                <div style="position:absolute;left:129.62px;top:146.15px" class="cls_005">hereby incorporated by
+                    reference in this provision.
+                </div>
+                <div style="position:absolute;left:100.82px;top:166.15px" class="cls_005">(c)</div>
+                <div style="position:absolute;left:129.62px;top:166.15px" class="cls_005"><i>Certification.</i> The
+                    offeror, by signing its offer, hereby certifies to the best of its knowledge
+                </div>
+                <div style="position:absolute;left:129.62px;top:176.15px" class="cls_005">and belief that no Federal
+                    appropriated funds have been paid or will be paid to any person for
+                </div>
+                <div style="position:absolute;left:129.62px;top:186.15px;white-space:nowrap;" class="cls_005">
+                    influencing or attempting to influence an officer or employee of any agency, a Member of Congress,
+                </div>
+                <div style="position:absolute;left:129.62px;top:196.15px;white-space:nowrap;" class="cls_005">an officer
+                    or employee of Congress, or an employee of a Member of Congress on its behalf in
+                </div>
+                <div style="position:absolute;left:129.62px;top:206.15px" class="cls_005">connection with the awarding
+                    of this contract.
+                </div>
+                <div style="position:absolute;left:100.82px;top:226.15px" class="cls_005">(d)</div>
+                <div style="position:absolute;left:129.62px;top:226.15px" class="cls_005"><i>Disclosure.</i> If any
+                    registrants under the Lobbying Disclosure Act of 1995 have made a lobbying
+                </div>
+                <div style="position:absolute;left:129.62px;top:236.15px" class="cls_005"> contact on behalf of the
+                    offeror with respect to this contract, the offeror shall complete and submit,
+                </div>
+                <div style="position:absolute;left:129.62px;top:246.15px" class="cls_005"> with its offer, OMB Standard
+                    Form LLL, Disclosure of Lobbying Activities, to provide the name
+                </div>
+                <div style="position:absolute;left:129.62px;top:256.15px" class="cls_005"> of the registrants. The
+                    offeror need not report regularly employed officers or employees of the
+                </div>
+                <div style="position:absolute;left:129.62px;top:266.15px;white-space:nowrap;" class="cls_005"> offeror
+                    to whom payments of reasonable compensation were made.
+                </div>
+                <div style="position:absolute;left:100.82px;top:286.15px" class="cls_005">(e)</div>
+                <div style="position:absolute;left:129.62px;top:286.15px" class="cls_005"><i>Penalty.</i> Submission of
+                    this certification and disclosure is a prerequisite for making or entering into
+                </div>
+                <div style="position:absolute;left:129.62px;top:296.15px" class="cls_005"> this contract imposed by 31
+                    U.S.C. 1352.Any person who makes an expenditure prohibited under
+                </div>
+                <div style="position:absolute;left:129.62px;top:306.15px" class="cls_005"> this provision or who fails
+                    to file or amend the disclosure required to be filed or amended by
+                </div>
+                <div style="position:absolute;left:129.62px;top:316.15px" class="cls_005"> this provision, shall be
+                    subject to a civil penalty of not less than $10,000, and not more than $100,000, for each such
+                    failure.
+                </div>
+
+                <div style="position:absolute;left:81.74px;top:346.27px" class="cls_004">8.</div>
+
+                <div style="position:absolute;left:100.82px;top:346.27px" class="cls_004">52.209-5</div>
+
+                <div style="position:absolute;left:148.46px;top:346.27px" class="cls_004">- CERTIFICATION REGARDING
+                    RESPONSIBILITY MATTERS (APR 2010)
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:366.30px" class="cls_005">(Applicable when the estimated
+                    value of the acquisition exceeds the simplified lease acquisition
+                </div>
+                <div style="position:absolute;left:100.82px;top:376.30px" class="cls_005">threshold)</div>
+
+                <div style="position:absolute;left:100.82px;top:396.15px" class="cls_005">(a)</div>
+
+                <div style="position:absolute;left:129.62px;top:396.15px" class="cls_005">(1)</div>
+
+                <div style="position:absolute;left:158.43px;top:396.15px;white-space:nowrap;" class="cls_005">The
+                    Offeror certifies, to the best of its knowledge and belief, that—
+                </div>
+
+                <div style="position:absolute;left:164.30px;top:416.19px" class="cls_005">(i)</div>
+
+                <div style="position:absolute;left:187.23px;top:416.19px;white-space:nowrap;" class="cls_005">The
+                    Offeror and/or any of its Principals—
+                </div>
+
+                <div style="position:absolute;left:187.23px;top:436.19px" class="cls_005">(A)</div>
+
+                <div style="position:absolute;left:216.06px;top:436.19px" class="cls_005">Are <span
+                            class="cls_004">[</span><span class="cls_006">{!no5}</span><span
+                            class="cls_004">]</span><span class="cls_005"> are not </span><span class="cls_004">[</span><span
+                            class="cls_006">{!yes5}</span><span class="cls_004">]</span><span class="cls_005"> presently  debarred,  suspended,  proposed  for</span>
+                </div>
+
+
+                <div style="position:absolute;left:216.05px;top:446.19px" class="cls_005">debarment, or declared
+                    ineligible for the award of contracts by any
+                </div>
+
+                <div style="position:absolute;left:216.05px;top:456.19px" class="cls_005">Federal agency;</div>
+
+                <div style="position:absolute;left:187.23px;top:476.19px" class="cls_005">(B)</div>
+
+                <div style="position:absolute;left:216.06px;top:476.19px" class="cls_005">Have <span
+                            class="cls_004">[</span><span class="cls_006">{!no6}</span><span
+                            class="cls_004">]</span><span class="cls_005"> have not </span><span
+                            class="cls_004">[</span><span class="cls_006">{!yes6}</span><span
+                            class="cls_004">]</span><span class="cls_005">, within a three-year period preceding this offer,</span>
+                </div>
+
+                <div style="position:absolute;left:216.05px;top:486.19px" class="cls_005">been convicted of or had a
+                    civil judgment rendered against them for:
+                </div>
+
+                <div style="position:absolute;left:216.05px;top:496.19px" class="cls_005">commission of fraud or a
+                    criminal offense in connection with obtaining,
+                </div>
+
+                <div style="position:absolute;left:216.05px;top:506.19px;white-space:nowrap;" class="cls_005">attempting
+                    to obtain, or performing a public (Federal, state, or local)
+                </div>
+
+                <div style="position:absolute;left:216.05px;top:516.19px" class="cls_005">contract or subcontract;
+                    violation of Federal or state antitrust statutes
+                </div>
+
+                <div style="position:absolute;left:216.05px;top:526.19px" class="cls_005">relating to the submission of
+                    offers; or commission of embezzlement,
+                </div>
+
+                <div style="position:absolute;left:216.05px;top:536.19px" class="cls_005">theft, forgery, bribery,
+                    falsification or destruction of records, making false
+                </div>
+
+                <div style="position:absolute;left:216.05px;top:546.19px" class="cls_005">statements, tax evasion,
+                    violating Federal criminal tax laws, or receiving
+                </div>
+
+                <div style="position:absolute;left:216.05px;top:556.19px" class="cls_005">stolen property (if offeror
+                    checks “have”, the offeror shall also see
+                </div>
+                <div style="position:absolute;left:216.05px;top:566.19px" class="cls_005"><a
+                            href="https://www.acquisition.gov/far/current/html/52_207_211.html#wp1144964">52.209-7</a>,
+                    if included in this solicitation);
+                </div>
+
+
+                <div style="position:absolute;left:187.23px;top:586.19px" class="cls_005">(C)</div>
+                <div style="position:absolute;left:216.05px;top:586.19px" class="cls_005">Are <span
+                            class="cls_004">[</span><span class="cls_006">{!no7}</span><span
+                            class="cls_004">]</span><span class="cls_005"> are not </span><span class="cls_004">[</span><span
+                            class="cls_006">{!yes7}</span><span class="cls_004">]</span><span class="cls_005"> presently indicted for, or otherwise criminally or civilly</span>
+                </div>
+
+                <div style="position:absolute;left:216.05px;top:596.19px" class="cls_005">charged by a governmental
+                    entity with, commission of any of the
+                </div>
+
+                <div style="position:absolute;left:216.05px;top:606.19px" class="cls_005">offenses enumerated in
+                    paragraph (a)(1)(i)(B) of this provision.
+                </div>
+
+                <div style="position:absolute;left:187.23px;top:626.19px" class="cls_005">(D)</div>
+                <div style="position:absolute;left:216.05px;top:626.19px" class="cls_005"> Have <span
+                            class="cls_004">[</span><span class="cls_006">{!no10}</span><span
+                            class="cls_004">]</span><span class="cls_005"> have not </span><span
+                            class="cls_004">[</span><span class="cls_006">{!yes10}</span><span
+                            class="cls_004">]</span><span class="cls_005">, within a three-year period preceding this offer,</span>
+                </div>
+                <div style="position:absolute;left:216.05px;top:636.19px" class="cls_005"> been notified of any
+                    delinquent Federal taxes in an amount that exceeds
+                </div>
+                <div style="position:absolute;left:216.05px;top:646.19px" class="cls_005"> $3,000 for which the
+                    liability remains unsatisfied.
+                </div>
+
+                <div style="position:absolute;left:72.02px;top:737.02px" class="cls_003">INITIALS:</div>
+
+                <div style="position:absolute;left:188.18px;top:737.02px" class="cls_003">&amp;</div>
+
+                <div style="position:absolute;left:111.62px;top:746.14px" class="cls_003">LESSOR</div>
+
+                <div style="position:absolute;left:198.03px;top:746.14px" class="cls_003">GOVERNMENT</div>
+
+                <div style="position:absolute;left:404.47px;top:746.14px" class="cls_003">GSA FORM 3518 PAGE 6 (REV
+                    10/2014)
+                </div>
+
+            </div>
+
+            <div style="position:absolute;left:50%;margin-left:-306px;top:5812px;width:612px;height:792px;border-style:outset;overflow:hidden">
+
+                <div style="position:absolute;left:0px;top:0px"><img src="{!URLFOR($Resource.form3518, 'image002.jpg')}"
+                                                                     width="612" height="792"/></div>
+
+                <div style="position:absolute;left:216.05px;top:56.19px" class="cls_005">(1)</div>
+                <div style="position:absolute;left:245.15px;top:56.19px" class="cls_005">Federal taxes are considered
+                    delinquent if both of the following
+                </div>
+                <div style="position:absolute;left:245.15px;top:66.19px" class="cls_005">criteria apply: &nbsp;&nbsp;&nbsp;</div>
+                <div style="position:absolute;left:245.15px;top:86.19px" class="cls_005">(i)</div>
+                <div style="position:absolute;left:265.15px;top:86.19px" class="cls_005"><i>The tax liability is finally
+                        determined</i>. The liability is
+                </div>
+                <div style="position:absolute;left:265.15px;top:96.19px" class="cls_005">finally determined if it has
+                    been assessed. A liability is
+                </div>
+                <div style="position:absolute;left:265.15px;top:106.19px" class="cls_005">not finally determined if
+                    there is a pending administrative
+                </div>
+                <div style="position:absolute;left:265.15px;top:116.19px" class="cls_005">or judicial challenge. In the
+                    case of a judicial challenge
+                </div>
+                <div style="position:absolute;left:265.15px;top:126.19px" class="cls_005">to the liability, the
+                    liability is not finally determined until
+                </div>
+                <div style="position:absolute;left:265.15px;top:136.19px" class="cls_005">all judicial appeal rights
+                    have been exhausted.
+                </div>
+                <div style="position:absolute;left:245.15px;top:156.19px" class="cls_005">(ii)</div>
+                <div style="position:absolute;left:265.15px;top:156.19px" class="cls_005"><i>The taxpayer is delinquent
+                        in making payment.</i> A
+                </div>
+                <div style="position:absolute;left:265.15px;top:166.19px" class="cls_005">taxpayer is delinquent if the
+                    taxpayer has failed to pay
+                </div>
+                <div style="position:absolute;left:265.15px;top:176.19px" class="cls_005">the tax liability when full
+                    payment was due and required.
+                </div>
+                <div style="position:absolute;left:265.15px;top:186.19px" class="cls_005">A taxpayer is not delinquent
+                    in cases where enforced
+                </div>
+                <div style="position:absolute;left:265.15px;top:196.19px" class="cls_005">collection action is
+                    precluded.
+                </div>
+                <div style="position:absolute;left:216.05px;top:216.19px" class="cls_005">(2)</div>
+                <div style="position:absolute;left:245.15px;top:216.19px" class="cls_005">Examples.</div>
+                <div style="position:absolute;left:245.15px;top:236.19px" class="cls_005">(i)</div>
+                <div style="position:absolute;left:265.15px;top:236.19px" class="cls_005">The taxpayer has received a
+                    statutory notice of
+                </div>
+                <div style="position:absolute;left:265.15px;top:246.19px;white-space:nowrap;" class="cls_005">
+                    deficiency, under I.R.C. § 6212, which entitles the &nbsp;&nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:265.15px;top:256.19px" class="cls_005">taxpayer to seek Tax Court
+                    review of a proposed tax
+                </div>
+                <div style="position:absolute;left:265.15px;top:266.19px" class="cls_005">deficiency. This is not a
+                    delinquent tax because it is not
+                </div>
+                <div style="position:absolute;left:265.15px;top:276.19px" class="cls_005">a final tax liability. Should
+                    the taxpayer seek Tax Court
+                </div>
+                <div style="position:absolute;left:265.15px;top:286.19px" class="cls_005">review, this will not be a
+                    final tax liability until the
+                </div>
+                <div style="position:absolute;left:265.15px;top:296.19px" class="cls_005">taxpayer has exercised all
+                    judicial appeal rights.
+                </div>
+                <div style="position:absolute;left:245.15px;top:316.19px" class="cls_005">(ii)</div>
+                <div style="position:absolute;left:265.15px;top:316.19px" class="cls_005">The IRS has filed a notice of
+                    Federal tax lien with
+                </div>
+                <div style="position:absolute;left:265.15px;top:326.19px" class="cls_005">respect to an assessed tax
+                    liability, and the taxpayer
+                </div>
+                <div style="position:absolute;left:265.15px;top:336.19px;white-space:nowrap;" class="cls_005">has been
+                    issued a notice under I.R.C. § 6320 entitling &nbsp;&nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:265.15px;top:346.19px;white-space:nowrap;" class="cls_005">the
+                    taxpayer to request a hearing with the IRS Office of
+                </div>
+                <div style="position:absolute;left:265.15px;top:356.19px;white-space:nowrap;" class="cls_005">Appeals
+                    contesting the lien filing, and to further appeal
+                </div>
+                <div style="position:absolute;left:265.15px;top:366.19px;white-space:nowrap;" class="cls_005">to the Tax
+                    Court if the IRS determines to sustain the lien
+                </div>
+                <div style="position:absolute;left:265.15px;top:376.19px;white-space:nowrap;" class="cls_005">filing. In
+                    the course of the hearing, the taxpayer is
+                </div>
+                <div style="position:absolute;left:265.15px;top:386.19px" class="cls_005">entitled to contest the
+                    underlying tax liability because the
+                </div>
+                <div style="position:absolute;left:265.15px;top:396.19px" class="cls_005">taxpayer has had no prior
+                    opportunity to contest the
+                </div>
+                <div style="position:absolute;left:265.15px;top:406.19px" class="cls_005">liability. This is not a
+                    delinquent tax because it is not a
+                </div>
+                <div style="position:absolute;left:265.15px;top:416.19px" class="cls_005">final tax liability. Should
+                    the taxpayer seek tax court
+                </div>
+                <div style="position:absolute;left:265.15px;top:426.19px" class="cls_005">review, this will not be a
+                    final tax liability until the
+                </div>
+                <div style="position:absolute;left:265.15px;top:436.19px" class="cls_005">taxpayer has exercised all
+                    judicial appeal rights.
+                </div>
+                <div style="position:absolute;left:245.15px;top:456.19px" class="cls_005">(iii)</div>
+                <div style="position:absolute;left:265.15px;top:456.19px;white-space:nowrap;" class="cls_005">The
+                    taxpayer has entered into an installment agreement &nbsp;&nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:265.15px;top:466.19px;white-space:nowrap;" class="cls_005">pursuant
+                    to I.R.C. § 6159. The taxpayer is making timely &nbsp;&nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:265.15px;top:476.19px;white-space:nowrap;" class="cls_005">payments
+                    and is in full compliance with the agreement terms. &nbsp;&nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:265.15px;top:486.19px;white-space:nowrap;" class="cls_005">The
+                    taxpayer is not delinquent because the taxpayer is not &nbsp;&nbsp;&nbsp;
+                </div>
+                <div style="position:absolute;left:265.15px;top:496.19px" class="cls_005">currently required to make
+                    full payment.
+                </div>
+                <div style="position:absolute;left:245.15px;top:516.19px" class="cls_005">(iv)</div>
+                <div style="position:absolute;left:265.15px;top:516.19px" class="cls_005">The taxpayer has filed for
+                    bankruptcy protection. The
+                </div>
+                <div style="position:absolute;left:265.15px;top:526.19px" class="cls_005">taxpayer is not delinquent
+                    because enforced collection
+                </div>
+                <div style="position:absolute;left:265.15px;top:536.19px" class="cls_005">action is stayed under 11
+                    U.S.C. 362 (the Bankruptcy Code).
+                </div>
+
+                <div style="position:absolute;left:162.14px;top:557.10px" class="cls_005">(ii)</div>
+
+                <div style="position:absolute;left:187.22px;top:557.10px" class="cls_005">The Offeror has <span
+                            class="cls_004">[</span><span class="cls_006">{!no8}</span><span
+                            class="cls_004">]</span><span class="cls_005"> has not </span><span class="cls_004">[</span><span
+                            class="cls_006">{!yes8}</span><span class="cls_004">]</span><span class="cls_005">, within a three-year period preceding this offer,</span>
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:567.10px" class="cls_005">had one or more contracts
+                    terminated for default by any Federal agency.
+                </div>
+
+
+                <div style="position:absolute;left:72.02px;top:737.02px" class="cls_003">INITIALS:</div>
+
+                <div style="position:absolute;left:188.18px;top:737.02px" class="cls_003">&amp;</div>
+
+                <div style="position:absolute;left:111.62px;top:746.14px" class="cls_003">LESSOR</div>
+
+                <div style="position:absolute;left:198.03px;top:746.14px" class="cls_003">GOVERNMENT</div>
+
+                <div style="position:absolute;left:404.47px;top:746.14px" class="cls_003">GSA FORM 3518 PAGE 7 (REV
+                    10/2014)
+                </div>
+
+            </div>
+
+            <div style="position:absolute;left:50%;margin-left:-306px;top:6784px;width:612px;height:792px;border-style:outset;overflow:hidden">
+
+                <div style="position:absolute;left:0px;top:0px">
+
+                    <img src="{!URLFOR($Resource.form3518, 'image002.jpg')}" width="612" height="792"/></div>
+
+
+                <div style="position:absolute;left:129.62px;top:52.10px" class="cls_005">(2)</div>
+
+                <div style="position:absolute;left:158.43px;top:52.10px" class="cls_005">"Principal," for the purposes
+                    of this certification, means an officer, director, owner,
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:62.06px" class="cls_005">partner, or a person having
+                    primary management or supervisory responsibilities within a
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:72.14px" class="cls_005">business entity (e.g., general
+                    manager; plant manager; head of a division or business
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:82.10px" class="cls_005">segment; and similar
+                    positions).
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:102.14px" class="cls_005">This Certification Concerns a
+                    Matter Within the Jurisdiction of an Agency of the United
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:112.10px" class="cls_005">States and the Making of a
+                    False, Fictitious, or Fraudulent Certification May Render the
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:122.06px;white-space:nowrap;" class="cls_005">Maker
+                    Subject to Prosecution Under Section 1001, Title 18, United States Code.
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:142.66px" class="cls_005">(b)</div>
+
+                <div style="position:absolute;left:129.62px;top:142.66px" class="cls_005">The Offeror shall provide
+                    immediate written notice to the Contracting Officer if, at any time
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:152.66px" class="cls_005">prior to contract award, the
+                    Offeror learns that its certification was erroneous when submitted
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:162.66px" class="cls_005">or has become erroneous by
+                    reason of changed circumstances.
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:182.66px" class="cls_005">(c)</div>
+
+                <div style="position:absolute;left:129.62px;top:182.66px" class="cls_005">A certification that any of
+                    the items in paragraph (a) of this provision exists will not
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:192.73px" class="cls_005">necessarily result in
+                    withholding of an award under this solicitation. However, the certification
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:202.73px" class="cls_005">will be considered in
+                    connection with a determination of the Offeror's responsibility. Failure of
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:212.73px" class="cls_005">the Offeror to furnish a
+                    certification or provide such additional information as requested by
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:222.73px" class="cls_005">the Contracting Officer may
+                    render the Offeror nonresponsible.
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:242.73px" class="cls_005">(d)</div>
+
+                <div style="position:absolute;left:129.62px;top:242.73px" class="cls_005">Nothing contained in the
+                    foregoing shall be construed to require establishment of a system
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:252.73px" class="cls_005">of records in order to render,
+                    in good faith, the certification required by paragraph (a) of this
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:262.73px" class="cls_005">provision. The knowledge and
+                    information of an Offeror is not required to exceed that which
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:272.73px" class="cls_005">is normally possessed by a
+                    prudent person in the ordinary course of business dealings.
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:292.73px" class="cls_005">(e)</div>
+
+                <div style="position:absolute;left:129.62px;top:292.73px" class="cls_005">The certification in paragraph
+                    (a) of this provision is a material representation of fact upon
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:302.73px" class="cls_005">which reliance was placed when
+                    making award. If it is later determined that the Offeror
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:312.73px" class="cls_005">knowingly rendered an
+                    erroneous certification, in addition to other remedies available to the
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:322.73px" class="cls_005">Government, the Contracting
+                    Officer may terminate the contract resulting from this
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:332.73px" class="cls_005">solicitation for default.
+                </div>
+
+                <div style="position:absolute;left:81.74px;top:352.73px" class="cls_004">9.</div>
+
+                <div style="position:absolute;left:100.82px;top:352.73px;white-space:nowrap;" class="cls_004">52.204-3 -
+                    TAXPAYER IDENTIFICATION (OCT 1998)
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:382.73px" class="cls_005">(a)</div>
+
+                <div style="position:absolute;left:129.62px;top:382.73px" class="cls_007">Definitions<span
+                            class="cls_005">.</span></div>
+
+                <div style="position:absolute;left:129.62px;top:402.73px" class="cls_005">"Common parent," as used in
+                    this provision, means that corporate entity that owns or
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:412.73px" class="cls_005">controls an affiliated group
+                    of corporations that files its Federal income tax returns on a
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:422.73px" class="cls_005">consolidated basis, and of
+                    which the Offeror is a member.
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:442.73px" class="cls_005">“Taxpayer Identification
+                    Number (TIN),” as used in this provision, means the number
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:452.73px" class="cls_005">required by the Internal
+                    Revenue Service (IRS) to be used by the Offeror in reporting income
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:462.73px;white-space:nowrap;" class="cls_005">tax and
+                    other returns. The TIN may be either a Social Security Number or an Employer
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:472.73px" class="cls_005">Identification Number.</div>
+
+                <div style="position:absolute;left:100.82px;top:492.73px" class="cls_005">(b)</div>
+
+                <div style="position:absolute;left:129.62px;top:492.73px;white-space:nowrap;" class="cls_005">All
+                    Offerors must submit the information required in paragraphs
+                </div>
+
+                <div style="position:absolute;left:437.74px;top:492.73px" class="cls_005">(d) through</div>
+
+                <div style="position:absolute;left:495.28px;top:492.73px" class="cls_005">(f) of this</div>
+
+                <div style="position:absolute;left:129.62px;top:502.73px" class="cls_005">provision to comply with debt
+                    collection requirements of 31 U.S.C. 7701(c) and 3325(d),
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:512.73px" class="cls_005">reporting requirements of 26
+                    U.S.C. 6041, 6041A, and 6050M, and implementing regulations
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:522.73px" class="cls_005">issued by the IRS. If the
+                    resulting contract is subject to the payment reporting requirements
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:532.73px;white-space:nowrap;" class="cls_005">described
+                    in Federal Acquisition Regulation (FAR) 4.904, the failure or refusal by the Offeror
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:542.73px" class="cls_005">to furnish the information may
+                    result in a 31 percent reduction of payments otherwise due
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:552.73px" class="cls_005">under the contract.</div>
+
+                <div style="position:absolute;left:100.82px;top:572.73px" class="cls_005">(c)</div>
+
+                <div style="position:absolute;left:129.62px;top:572.73px" class="cls_005">The TIN may be used by the
+                    Government to collect and report on any delinquent amounts
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:582.73px" class="cls_005">arising out of the Offeror’s
+                    relationship with the Government (31 U.S.C. 7701(c)(3)). If the
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:592.73px;white-space:nowrap;" class="cls_005">resulting
+                    contract is subject to the payment reporting requirements described in FAR 4.904,
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:602.73px" class="cls_005">the TIN provided hereunder may
+                    be matched with IRS records to verify the accuracy of the
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:612.73px" class="cls_005">Offeror’s TIN.</div>
+
+
+                <div style="position:absolute;left:72.02px;top:737.02px" class="cls_003">INITIALS:</div>
+
+                <div style="position:absolute;left:188.18px;top:737.02px" class="cls_003">&amp;</div>
+
+                <div style="position:absolute;left:111.62px;top:746.14px" class="cls_003">LESSOR</div>
+
+                <div style="position:absolute;left:198.03px;top:746.14px" class="cls_003">GOVERNMENT</div>
+
+                <div style="position:absolute;left:404.47px;top:746.14px" class="cls_003">GSA FORM 3518 PAGE 8 (REV
+                    10/2014)
+                </div>
+
+            </div>
+
+            <div style="position:absolute;left:50%;margin-left:-306px;top:7716px;width:612px;height:792px;border-style:outset;overflow:hidden">
+
+                <div style="position:absolute;left:0px;top:0px">
+
+                    <img src="{!URLFOR($Resource.form3518, 'image006.jpg')}" width="612" height="792"/></div>
+
+                <div style="position:absolute;left:100.82px;top:52.08px" class="cls_005">(d)</div>
+
+                <div style="position:absolute;left:129.62px;top:52.08px" class="cls_007">Taxpayer Identification Number
+                    (TIN)<span class="cls_005">.</span></div>
+
+                <div style="position:absolute;left:129.62px;top:72.12px" class="cls_004"><span
+                            class="cls_004">[</span><span class="cls_006">{!yesTINKnown}</span><span
+                            class="cls_004">]</span></div>
+
+
+                <div style="position:absolute;left:158.42px;top:72.12px" class="cls_005">TIN:</div>
+                <div style="position:absolute;left:210.62px;top:72.12px" class="cls_004">{!TINNumber}</div>
+
+                <div style="position:absolute;left:129.62px;top:82.10px" class="cls_004"><span
+                            class="cls_004">[</span><span class="cls_006">{!yesTINAppliedFor}</span><span
+                            class="cls_004">]</span></div>
+
+
+                <div style="position:absolute;left:158.42px;top:82.10px" class="cls_005">TIN has been applied for.</div>
+
+                <div style="position:absolute;left:129.62px;top:92.06px" class="cls_004"><span
+                            class="cls_004">[</span><span class="cls_006">{!yesTINNotRequired}</span><span
+                            class="cls_004">]</span></div>
+
+
+                <div style="position:absolute;left:158.42px;top:92.06px" class="cls_005">TIN is not required because:
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:102.14px" class="cls_004"><span class="cls_004">[</span><span
+                            class="cls_006">{!TINReasonA}</span><span class="cls_004">]</span></div>
+
+
+                <div style="position:absolute;left:158.42px;top:102.14px" class="cls_005">Offeror is a nonresident
+                    alien, foreign corporation, or foreign partnership that does not
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:112.10px" class="cls_005">have income effectively
+                    connected with the conduct of a trade or business in the
+                </div>
+                <div style="position:absolute;left:158.42px;top:122.06px" class="cls_005">United States and does not
+                    have an office or place of business or a fiscal paying
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:132.14px" class="cls_005">agent in the United States;
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:142.10px" class="cls_004"><span class="cls_004">[</span><span
+                            class="cls_006">{!TINReasonB}</span><span class="cls_004">]</span></div>
+
+
+                <div style="position:absolute;left:158.42px;top:142.10px" class="cls_005">Offeror is an agency or
+                    instrumentality of a foreign government;
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:152.06px" class="cls_004"><span class="cls_004">[</span><span
+                            class="cls_006">{!TINReasonC}</span><span class="cls_004">]</span></div>
+
+
+                <div style="position:absolute;left:158.42px;top:152.06px" class="cls_005">Offeror is an agency or
+                    instrumentality of the Federal government;
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:172.10px" class="cls_005">(e)</div>
+
+                <div style="position:absolute;left:129.62px;top:172.10px" class="cls_007">Type of organization<span
+                            class="cls_005">.</span></div>
+
+                <div style="position:absolute;left:129.62px;top:192.14px" class="cls_004"><span class="cls_004">[</span><span
+                            class="cls_006">{!soleproprietorship}</span><span class="cls_004">]</span></div>
+
+                <div style="position:absolute;left:145.50px;top:192.14px" class="cls_004"><span class="cls_005"> Sole proprietorship;</span>
+                </div>
+
+                <div style="position:absolute;left:310.61px;top:192.14px" class="cls_004"><span class="cls_004">[</span><span
+                            class="cls_006">{!govtentity}</span><span class="cls_004">]</span></div>
+
+                <div style="position:absolute;left:326.49px;top:192.14px" class="cls_004"><span class="cls_005"> Government entity (Federal, State, or local);</span>
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:202.10px" class="cls_004"><span class="cls_004">[</span><span
+                            class="cls_006">{!partnership}</span><span class="cls_004">]</span></div>
+
+                <div style="position:absolute;left:145.50px;top:202.10px" class="cls_004"><span class="cls_005"> Partnership;</span>
+                </div>
+
+                <div style="position:absolute;left:310.61px;top:202.10px" class="cls_004"><span class="cls_004">[</span><span
+                            class="cls_006">{!foreigngovt}</span><span class="cls_004">]</span></div>
+
+                <div style="position:absolute;left:326.49px;top:202.10px" class="cls_004"><span class="cls_005"> Foreign government;</span>
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:212.06px" class="cls_004"><span class="cls_004">[</span><span
+                            class="cls_006">{!corporateentitynottax}</span><span class="cls_004">]</span></div>
+
+                <div style="position:absolute;left:145.50px;top:212.06px" class="cls_004"><span class="cls_005"> Corporate entity (not tax-exempt);</span>
+                </div>
+
+                <div style="position:absolute;left:310.61px;top:212.06px" class="cls_004"><span class="cls_004">[</span><span
+                            class="cls_006">{!internationalorg}</span><span class="cls_004">]</span></div>
+
+                <div style="position:absolute;left:326.49px;top:212.06px" class="cls_004"><span class="cls_005"> International organization per 26 CFR 1.6049-4;</span>
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:232.10px" class="cls_004"><span class="cls_004">[</span><span
+                            class="cls_006">{!corporateentitytax}</span><span class="cls_004">]</span></div>
+
+                <div style="position:absolute;left:145.50px;top:232.10px" class="cls_004"><span class="cls_005"> Corporate entity (tax-exempt);</span>
+                </div>
+
+                <div style="position:absolute;left:310.61px;top:232.10px" class="cls_004"><span class="cls_004">[</span><span
+                            class="cls_006">{!other}</span><span class="cls_004">]</span></div>
+
+                <div style="position:absolute;left:326.49px;top:232.10px" class="cls_004"><span
+                            class="cls_005"> Other</span> {!otherName}</div>
+
+                <div style="position:absolute;left:100.82px;top:252.17px" class="cls_005">(f)</div>
+
+                <div style="position:absolute;left:129.62px;top:252.17px" class="cls_007">Common Parent<span
+                            class="cls_005">.</span></div>
+
+                <div style="position:absolute;left:129.62px;top:272.09px" class="cls_004"><span class="cls_004">[</span><span
+                            class="cls_006">{!commonParentNo}</span><span class="cls_004">]</span></div>
+
+
+                <div style="position:absolute;left:158.42px;top:272.09px" class="cls_005">Offeror is not owned or
+                    controlled by a common parent as defined in paragraph (a) of
+                </div>
+
+                <div style="position:absolute;left:158.42px;top:282.17px" class="cls_005">this provision.</div>
+
+                <div style="position:absolute;left:129.62px;top:292.13px" class="cls_004"><span class="cls_004">[</span><span
+                            class="cls_006">{!commonParentYes}</span><span class="cls_004">]</span></div>
+
+
+                <div style="position:absolute;left:158.42px;top:292.13px" class="cls_005">Name and TIN of common
+                    parent:
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:312.17px" class="cls_005">Name:</div>
+                <div style="position:absolute;left:180.62px;top:312.17px" class="cls_004">{!commonParentName}</div>
+
+                <div style="position:absolute;left:129.62px;top:332.09px" class="cls_005">TIN :</div>
+                <div style="position:absolute;left:180.62px;top:332.09px" class="cls_004">{!TINNumber}</div>
+
+                <div style="position:absolute;left:81.74px;top:361.25px" class="cls_004">10.</div>
+
+                <div style="position:absolute;left:100.82px;top:361.25px;white-space:nowrap;" class="cls_004">52.2046 -
+                    Data Universal Numbering System (DUNS) Number (APR 2008)
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:377.57px" class="cls_005">(a)</div>
+
+                <div style="position:absolute;left:129.62px;top:377.57px" class="cls_005">The Offeror shall enter, in
+                    the block with its name and address on the cover page of its offer,
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:387.65px" class="cls_005">the annotation "DUNS" or
+                    "DUNS+4" followed by the DUNS number or "DUNS+4" that
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:397.61px" class="cls_005">identifies the Offeror's name
+                    and address exactly as stated in the offer. The DUNS number
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:407.57px" class="cls_005">is a nine-digit number
+                    assigned by Dun and Bradstreet, Inc. The DUNS+4 is the DUNS
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:417.65px" class="cls_005">number plus a 4-character
+                    suffix that may be assigned at the discretion of the Offeror to
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:427.63px" class="cls_005">establish additional CCR
+                    records for identifying alternative Electronic Funds Transfer (EFT)
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:437.59px" class="cls_005">accounts <u>(see Subpart
+                        32.11)</u> for the same parent concern.
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:457.63px" class="cls_005">(b)</div>
+
+                <div style="position:absolute;left:129.62px;top:457.63px" class="cls_005">If the Offeror does not have a
+                    DUNS number, it should contact Dun and Bradstreet directly
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:467.59px" class="cls_005">to obtain one. &nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                <div style="position:absolute;left:129.62px;top:487.63px" class="cls_005">(1)</div>
+
+                <div style="position:absolute;left:158.43px;top:487.63px;white-space:nowrap;" class="cls_005">An Offeror
+                    may obtain a DUNS number—
+                </div>
+
+                <div style="position:absolute;left:164.18px;top:507.67px" class="cls_005">(i)</div>
+
+                <div style="position:absolute;left:187.22px;top:507.67px" class="cls_005">Via the Internet at <A
+                            HREF="http://fedgov.dnb.com/webform">http://fedgov.dnb.com/webform</A> or if the offeror
+                    does not
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:517.67px" class="cls_005">have internet access, it may
+                    call Dun and Bradstreet at 1-866-705-5711 if
+                </div>
+                <div style="position:absolute;left:187.22px;top:527.67px" class="cls_005">located within the United
+                    States; or
+                </div>
+
+                <div style="position:absolute;left:162.14px;top:547.63px" class="cls_005">(ii)</div>
+
+                <div style="position:absolute;left:187.22px;top:547.63px" class="cls_005">If located outside the United
+                    States, by contacting the local Dun and Bradstreet
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:557.59px" class="cls_005">office. The offeror should
+                    indicate that it is an offeror for a U.S. Government
+                </div>
+                <div style="position:absolute;left:187.22px;top:567.59px" class="cls_005">contract when contacting the
+                    local Dun and Bradstreet office.
+                </div>
+
+                <div style="position:absolute;left:129.62px;top:582.63px" class="cls_005">(2)</div>
+
+                <div style="position:absolute;left:158.43px;top:582.63px;white-space:nowrap;" class="cls_005">The
+                    Offeror should be prepared to provide the following information:
+                </div>
+
+                <div style="position:absolute;left:164.18px;top:597.59px" class="cls_005">(i)</div>
+
+                <div style="position:absolute;left:187.22px;top:597.59px" class="cls_005">Company legal business name.
+                </div>
+
+                <div style="position:absolute;left:162.14px;top:607.67px" class="cls_005">(ii)</div>
+
+                <div style="position:absolute;left:187.22px;top:607.67px" class="cls_005">Tradestyle, doing business, or
+                    other name by which your entity is commonly
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:617.67px" class="cls_005">recognized.</div>
+
+                <div style="position:absolute;left:159.98px;top:627.67px" class="cls_005">(iii)</div>
+
+                <div style="position:absolute;left:187.22px;top:627.67px" class="cls_005">Company physical street
+                    address, city, state and ZIP Code.
+                </div>
+
+                <div style="position:absolute;left:159.38px;top:637.67px" class="cls_005">(iv)</div>
+
+                <div style="position:absolute;left:187.22px;top:637.67px" class="cls_005">Company mailing address, city,
+                    state and ZIP Code (if separate from physical).
+                </div>
+
+                <div style="position:absolute;left:161.42px;top:647.67px" class="cls_005">(v)</div>
+
+                <div style="position:absolute;left:187.23px;top:647.67px" class="cls_005">Company telephone number.
+                </div>
+
+                <div style="position:absolute;left:159.38px;top:657.67px" class="cls_005">(vi)</div>
+
+                <div style="position:absolute;left:187.22px;top:657.67px" class="cls_005">Date the company was
+                    started.
+                </div>
+
+                <div style="position:absolute;left:157.22px;top:667.67px" class="cls_005">(vii)</div>
+
+                <div style="position:absolute;left:187.22px;top:667.67px" class="cls_005">Number of employees at your
+                    location.
+                </div>
+
+                <div style="position:absolute;left:155.06px;top:677.66px" class="cls_005">(viii)</div>
+
+                <div style="position:absolute;left:187.22px;top:677.66px" class="cls_005">Chief executive officer/key
+                    manager.
+                </div>
+
+                <div style="position:absolute;left:159.38px;top:687.62px" class="cls_005">(ix)</div>
+
+                <div style="position:absolute;left:187.22px;top:687.62px" class="cls_005">Line of business (industry).
+                </div>
+
+                <div style="position:absolute;left:161.42px;top:697.70px" class="cls_005">(x)</div>
+
+                <div style="position:absolute;left:187.23px;top:697.70px" class="cls_005">Company Headquarters name and
+                    address (reporting relationship within your
+                </div>
+
+                <div style="position:absolute;left:187.22px;top:707.66px" class="cls_005">entity).</div>
+
+                <div style="position:absolute;left:72.02px;top:737.02px" class="cls_003">INITIALS:</div>
+
+                <div style="position:absolute;left:188.18px;top:737.02px" class="cls_003">&amp;</div>
+
+                <div style="position:absolute;left:111.62px;top:746.14px" class="cls_003">LESSOR</div>
+
+                <div style="position:absolute;left:198.03px;top:746.14px" class="cls_003">GOVERNMENT</div>
+
+                <div style="position:absolute;left:404.47px;top:746.14px" class="cls_003">GSA FORM 3518 PAGE 9 (REV
+                    10/2014)
+                </div>
+
+            </div>
+
+            <div style="position:absolute;left:50%;margin-left:-306px;top:8718px;width:612px;height:792px;border-style:outset;overflow:hidden">
+
+                <div style="position:absolute;left:0px;top:0px">
+
+                    <img src="{!URLFOR($Resource.form3518, 'image007.jpg')}" width="612" height="792"/></div>
+
+                <div style="position:absolute;left:76.22px;top:53.16px" class="cls_004">11. DUNS NUMBER (JUN 2004)</div>
+
+                <div style="position:absolute;left:100.82px;top:69.60px" class="cls_005">Notwithstanding the above
+                    instructions, in addition to inserting the DUNS Number on the offer
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:79.58px" class="cls_005">cover page, the Offeror shall
+                    also provide its DUNS Number as part of this submission:
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:99.62px;white-space:nowrap;" class="cls_005">DUNS #
+                </div>
+                <div style="position:absolute;left:200.62px;top:99.62px"
+                     class="cls_011">{!offer.PBS_AAAP_DUNS_Number__c}</div>
+
+                <div style="position:absolute;left:76.22px;top:128.66px" class="cls_004">12. CENTRAL CONTRACTOR
+                    REGISTRATION (MAY 2012)
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:145.10px" class="cls_005">The Central Contractor
+                    Registration (CCR) System is a centrally located, searchable database
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:155.06px" class="cls_005">which assists in the
+                    development, maintenance, and provision of sources for future procurements.
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:165.14px;white-space:nowrap;" class="cls_005">The
+                    Offeror must be registered in the CCR prior to lease award. The Offeror shall register via the
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:175.10px" class="cls_005">Internet at <A
+                            HREF="​https://www.acquisition.gov">​https://www.acquisition.gov.</A> To remain active, the
+                    Offeror/Lessor is required to update or
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:185.06px" class="cls_005">renew its registration
+                    annually.
+                </div>
+
+                <div style="position:absolute;left:100.82px;top:205.10px" class="cls_004"><span class="cls_004">[</span><span
+                            class="cls_006">{!activeYes}</span><span class="cls_004">]</span>
+                    <span class="cls_005">Registration Active and Copy Attached </span></div>
+
+                <div style="position:absolute;left:100.82px;top:225.14px" class="cls_004"><span class="cls_004">[</span><span
+                            class="cls_006">{!activeNo}</span><span class="cls_004">]</span>
+                    <span class="cls_005"> Will Activate Registration and Submit Copy to the Government Prior to Award </span>
+                </div>
+
+                <div style="position:absolute;left:78.02px;top:266.21px" class="cls_010">OFFEROR OR</div>
+
+                <div style="position:absolute;left:200.05px;top:266.21px" class="cls_010">NAME, ADDRESS (INCLUDING ZIP
+                    CODE)
+                </div>
+
+                <div style="position:absolute;left:438.07px;top:266.21px" class="cls_010">TELEPHONE</div>
+
+                <div style="position:absolute;left:78.02px;top:276.53px" class="cls_010">AUTHORIZED</div>
+
+                <div style="position:absolute;left:438.07px;top:276.53px" class="cls_010">NUMBER</div>
+
+                <div style="position:absolute;left:202.05px;top:282.53px" class="cls_011">
+                    NAME:   {!offer.PBS_AAAP_Owner_Name__c}</div>
+
+                <div style="position:absolute;left:78.02px;top:286.85px" class="cls_010">REPRESENTATIVE</div>
+
+                <div style="position:absolute;left:438.02px;top:286.85px"
+                     class="cls_011">{!offer.PBS_AAAP_Owner_Main_Phone__c}</div>
+
+                <div style="position:absolute;left:204.05px;top:298.85px" class="cls_011">
+                    STREET:    {!offer.PBS_AAAP_Street_Address__c}</div>
+
+                <div style="position:absolute;left:204.05px;top:315.29px" class="cls_011">CITY, STATE,
+                    ZIP:  {!offer.PBS_AAAP_City__c}, {!offer.PBS_AAAP_State__c} - {!offer.PBS_AAAP_ZipCode__c}</div>
+
+                <div style="position:absolute;left:204.05px;top:370.01px" class="cls_010">Signature</div>
+
+                <div style="position:absolute;left:438.07px;top:380.33px" class="cls_010">Date</div>
+
+                <div style="position:absolute;left:72.02px;top:737.02px" class="cls_003">INITIALS: ______________</div>
+
+                <div style="position:absolute;left:188.18px;top:737.02px" class="cls_003">&amp; _________________</div>
+
+                <div style="position:absolute;left:111.62px;top:746.14px" class="cls_003">LESSOR</div>
+
+                <div style="position:absolute;left:198.03px;top:746.14px" class="cls_003">GOVERNMENT</div>
+
+                <div style="position:absolute;left:404.47px;top:746.14px" class="cls_003">GSA FORM 3518 PAGE 10 (REV
+                    10/2014)
+                </div>
+
+            </div>
+
+        </apex:panelGrid>
+    </apex:panelGrid>
+
+    </body>
+
+
+</apex:page>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>NCMT_Contractor__c$Contractor_Description__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_Contractor__c.NCMT_DES_Items__r$SubContractor_Overhead__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_Contractor__c.NCMT_DES_Items__r$SubContractor_Profit__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>NCMT_Contractor__c.NCMT_DES_Items__r$Total_Equipment_Cost1__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>NCMT_Contractor__c.NCMT_DES_Items__r$Total_Material_Cost1__c</field>
+    </columns>
+    <description>NCMT DES Reports</description>
+    <filter>
+        <criteriaItems>
+            <column>NCMT_Contractor__c.NCMT_DES_Items__r$NCMT_Project_Name__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>TestDESOff1231-v2</value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>NCMT_Contractor__c$Name</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>NCMT Project Subcontractor Summary</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>NCMT_Project_Subcontractor_Details__c</reportType>
+    <scope>organization</scope>
+    <showDetails>false</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>NCMT_Contractor__c$CreatedDate</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

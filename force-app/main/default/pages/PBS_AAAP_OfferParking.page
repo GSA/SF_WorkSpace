@@ -1,0 +1,321 @@
+<apex:page Controller="PBS_AAAP_OfferParkingController" sidebar="false" showHeader="false"  standardStylesheets="false">
+    <c:PBS_AAAP_PortalPage_Begin ></c:PBS_AAAP_PortalPage_Begin>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/demo_page.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+    <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+
+    <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+    <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+    <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+
+    <style type="text/css">
+.ui-dialog {
+    background:#fff;
+    padding:10px;
+    border:1px solid #999;
+}
+ 
+.ui-dialog a {
+    float:right;
+    font-weight:bold;
+    padding:3px;
+    color:#999;
+    text-transform:uppercase;
+    font-size:10px;
+} 
+
+#lean_overlay {
+    position: fixed;
+    z-index:100;
+    top: 0px;
+    left: 0px;
+    height:100%;
+    width:100%;
+    background:#000;
+    display: none;
+}
+.mainForm
+{
+    margin-right: 50px;
+}
+
+.showPopup {
+    width: 500px;
+} 
+
+.errMessage {color:red; }
+
+    </style>
+    <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+    <script type="text/javascript"
+            src="{!$Label.AAAP_JQUERYUI_URL}"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <script type="text/javascript">
+        console.log('{!pageURLForRedirection}');
+        if('{!JSENCODE(pageURLForRedirection)}' != ''){
+            window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
+            window.parent.document.body = document.createElement('body');
+        }
+    	else{
+        	window.parent.document.body.scrollTop = 0;
+  			window.parent.document.documentElement.scrollTop = 0;
+        }
+    //alert('test');
+    JQ  =  jQuery.noConflict();
+          JQ(document).ready(function(){ 
+              //added by syam display msg when submitted offer is saved.
+                 draftMsgFlag = JQ('input[id=' + "'{!$Component.newOffer.draftMsgFlag}'" + ']').val();
+              if(draftMsgFlag == 'true') {
+              var confirm1  =  JQ('<div></div>').html("Your offer is no longer submitted. Offer status is updated to 'Draft' status and needs to be submitted again.").dialog({
+                    autoOpen: false,
+                    title: '',
+                    modal: true,
+                    position: ['center', 'center'],
+                    buttons: { 'OK' : function(){ JQ(this).dialog('close');}
+                         }
+                    });
+                      
+                  confirm1.dialog('open');            
+                }
+          }); 
+
+    </script>
+
+    <!--<div id="login">
+        <ul>
+            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
+                <apex:outputLink value="/AAAP/home/home.jsp">
+                    <li>{!$Label.site.login_button}</li>
+                </apex:outputLink>
+                <li> |</li>
+                <apex:outputLink value="/AAAP/ForgotPassword">
+                    <li>{!$Label.site.forgot_your_password_q}</li>
+                </apex:outputLink>
+                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
+                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
+                    <li>{!$Label.site.new_user_q}</li>
+                </apex:outputLink>
+            </apex:panelGroup>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>{!$Label.site.logout}</li>
+            </apex:outputLink>
+            <li>|</li>
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>
+        </ul>
+
+    </div>--><!--/login-->
+    <div id="wrapper">
+        <c:inside_header offerId="{!offerParking.Id}" />
+        <div id="content" class="parking"><!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
+            <!-- apex:form id="errorMessage" rendered="{!!isValidUser}" styleClass="formwrap" -->
+            <!-- apex:pageMessages / -->
+            <!-- /apex:form-->
+            <apex:panelGrid rendered="{!!isValidUser}">
+                <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+                <apex:messages styleClass="errMessage" id="errmessage"/>
+            </apex:panelGrid>
+            <apex:panelGroup rendered="{!isValidUser}">
+                <c:PBS_AAAP_ProgressBar myValue="{!offerParking.Id}" step="2" />
+            </apex:panelGroup>
+            <apex:form id="newOffer" rendered="{!isValidUser}" styleClass="mainForm">
+                <apex:outputPanel id="thePanelform1" layout="block" styleClass="formwrap">
+                    <h3 class="blue">Offer Parking</h3>
+                    <apex:messages styleClass="errMessage"/>
+
+                    <apex:inputHidden id="draftMsgFlag" value="{!draftMsgFlag}"/>
+                    <apex:inputHidden value="{!pageUrl}" id="pgUrl" />                     
+
+                    <Table id="form1">
+
+                        <tr>
+
+                            <td>
+                                <apex:outputtext value="{!$Label.PBS_AAAP_Total_Parking_Spaes}"/>
+                                <a class="popup" href="#Entire_building_parking"><img src="{!$Resource.Info_Icon}"
+                                                                                      alt="Information Button"/></a>
+                                <div id="Entire_building_parking" class="showPopup"
+                                     style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                    <p>Please enter the total number of parking spaces under the control of the offeror. If the project specific advertisement permits parking requirements to be met by offsite accommodations, the offeror shall, at a minimum, represent the ability to meet the requirements in section 1 of the RLP in this field.<br/><br/>
+
+                                        Refer to section 1 AMOUNT AND TYPE OF SPACE, LEASE TERM (AAAP VARIATION) and NEIGHBORHOOD, PARKING, LOCATION AMENITIES, AND PUBLIC TRANSPORTATION (AAAP VARIATION) of the RLP
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <!--JK switched surface and structured 7/2021-->
+                                <apex:outputtext value="Total Surface"/>
+                                <span class="required">*</span>
+                                <apex:inputField style="width:75px"
+                                                 value="{!offerParking.PBS_AAAP_Total_Surface_Parking_Spaces__c}"
+                                                 id="surfacespace1"/>
+                                
+                                <apex:outputtext value="Total Structured"/>
+                                <span class="required">*</span>
+
+                                <apex:inputField style="width:75px"
+                                                 value="{!offerParking.PBS_AAAP_Total_Structured_Parking_Spaces__c}"
+                                                 id="structspace1"/>
+                            </td>
+
+                        </tr>
+                        
+                        
+                        <tr>
+                            <td>
+                                <apex:outputtext value="{!$Label.PBS_AAAP_Is_All_Parking_Onsite}"/>
+                                 <span class="required">*</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <apex:selectRadio styleClass="radioCell"
+                                                  value="{!offerParking.PBS_AAAP_Parking_Onsite__c}"
+                                                  id="onsiteparking">
+                                    <apex:selectOptions value="{!onsiteParkingItems}"/>
+                                </apex:selectRadio>
+                            </td>
+                        </tr>
+                        
+                       
+                        
+                        <tr>
+                            <td>
+                                <apex:outputtext value="{!$Label.PBS_AAAP_Total_Parking_Spaces_Offered}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <apex:outputtext value=""/>
+                                <!--JK 7/2021. For the inputField below, the value has been set to the new field PBS_AAAP_Total_Park_Spaces_Offered__c, and the id set accordingly.-->
+                                <apex:inputField style="width:75px"
+                                                 value="{!offerParking.PBS_AAAP_Total_Park_Spaces_Offered__c}"
+                                                 id="structspace2"/>
+                            </td>
+                            <!--JK removed below and added above 7/2021-->
+                            <!--td>
+                                <apex:outputtext value="Structured"/>
+                                <span class="required">*</span>
+                                <apex:inputField style="width:75px"
+                                                 value="{!offerParking.PBS_AAAP_Total_Struct_Park_Space_Offered__c}"
+                                                 id="structspace2"/>
+                                <apex:outputtext value="Surface"/>
+                                <span class="required">*</span>
+                                <apex:inputField style="width:75px"
+                                                 value="{!offerParking.PBS_AAAP_Total_Surf_Park_Space_Offered__c}"
+                                                 id="surfacespace2"/>
+                            </td-->
+                        </tr>
+                        <tr/>
+                        <tr>
+                            <td>
+                                <apex:outputtext value="{!$Label.PBS_AAAP_Monthly_Amt_Reserved_Parking} "/>
+                                <br/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Table>
+                                    <tr>
+                                        <th style="text-align:center">&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                        <th style="text-align:center">Reserved<span class="required">*</span></th>
+                                        <th style="text-align:center">Non-Reserved (General)<span class="required">*</span></th>
+                                    </tr>
+                                    <!--JK switched the order of surface and structured July 2021-->
+                                    <tr>
+                                        <td style="font-weight:bold">
+                                            <apex:outputText value="Surface "/>
+                                        </td>
+                                        <td>
+                                            <apex:outputPanel >$&nbsp;<apex:inputField value="{!offerParking.PBS_AAAP_Monthly_cost_res_sur_park__c}"/>
+                                            </apex:outputPanel>
+                                        </td>
+                                        <td>
+                                            <apex:outputPanel >$&nbsp;<apex:inputField value="{!offerParking.PBS_AAAP_Monthly_cost_nonres_sur_park__c}"/>
+                                            </apex:outputPanel>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td style="font-weight:bold">
+                                            <apex:outputText value="Structured "/>
+                                        </td>
+                                        <td>
+                                            <apex:outputPanel >$&nbsp;<apex:inputField value="{!offerParking.PBS_AAAP_Monthly_cost_res_gar_park__c}"/>
+                                            </apex:outputpanel>
+                                        </td>
+                                        <td>
+                                            <apex:outputPanel >$&nbsp;<apex:inputField value="{!offerParking.PBS_AAAP_Monthly_cost_nonres_gar_park__c}"/>
+                                            </apex:outputPanel>
+                                        </td>
+                                    </tr>
+                                </Table>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><!-- weston steve cut this <apex:outputtext value="{!$Label.PBS_AAAP_Option_Parking}"/><span class="required">*</span><br/>
+                    <apex:selectRadio styleClass="radioCell" value="{!offerParking.PBS_AAAP_Option_Parking__c}" id="parkingspace5">
+                    <apex:actionSupport event="onchange" action="{!showParkingOptions}" rerender="options" />
+                        <apex:selectOptions value="{!partialItems}"/>
+                    </apex:selectRadio> 
+                </td>               
+            </tr>           
+            <tr>
+                <td>
+                <apex:outputPanel id="options">
+                    <apex:outputPanel rendered="{!options5a}">
+                        <apex:outputtext value="{!$Label.PBS_AAAP_Annual_cost_entire_garage_parking}"/><span class="required">*</span><br/>
+                        $&nbsp;<apex:inputField value="{!offerParking.PBS_AAAP_Annual_cost_entire_garage_park__c}" id="parkingspace5i"/>
+                        </apex:outputPanel>
+                    <apex:outputPanel rendered="{!options5b}">
+                        <br/>
+                        <apex:outputtext value="{!$Label.PBS_AAAP_Number_of_garage_parking_spaces}"/><span class="required">*</span><br/>
+                        &nbsp;&nbsp;&nbsp;<apex:inputField value="{!offerParking.PBS_AAAP_Number_of_gar_parking_spaces__c}" id="parkingspace5ii"/>
+                        </apex:outputPanel>                 
+                    <apex:outputPanel rendered="{!options5c}">
+                        <br/>
+                        <apex:outputtext value="{!$Label.PBS_AAAP_Partial_secured_garage_parking_space}"/><span class="required">*</span><br/>
+                        &nbsp;&nbsp;&nbsp;<apex:inputField value="{!offerParking.PBS_AAAP_Partial_Secured_GAR_PARK_SPACE__c}" id="parkingspace5iii"/>                        
+                    </apex:outputPanel>
+                </apex:outputPanel>
+                   
+                              
+                </td>
+            </tr>
+            <tr>
+                <td>  -->
+                                <!--<apex:commandButton value="Save & Continue"   action="{!saveParkingAndContinue}"/>
+                    <apex:commandButton value="Back" action="{!backToOfrBlding}"/>
+                    <apex:commandButton value="Save Form" styleClass="btnSave" action="{!saveParkingInfo}"/> 
+                    <apex:commandButton value="Cancel" action="{!actionCancel}" onclick="if(confirm('Are you sure you want to cancel editing this record without saving changes?')){return true;} else return false;"/>
+                    <apex:commandButton value="View Offer" onclick="window.open('/AAAP/PBS_AAAP_PreviewOfferPage?offerId={!offerParking.id}','View Offer Screen','width=900, height=700,scrollbars=yes,resizable=yes,location=no');return false;"/>
+                    <apex:commandButton value="Delete Offer" action="{!actionDeleteOffer}" onclick="if(confirm('Are you sure you want to delete this record?')){return true;} else return false;"/>
+                    -->
+
+                                <apex:commandButton value="Back" action="{!backToOfrBlding}" styleClass="buttonred"/>
+                                <!-- <apex:commandButton value="Save Page" styleClass="btnSave" action="{!saveParkingInfo}"/> -->
+                                <apex:commandButton value="Save Page" styleClass="btnJQSubmit" action="{!saveParkingInfo}"/>
+                                <apex:commandButton value="Next" action="{!saveParkingAndContinue}"/>
+                                <apex:commandButton value="Exit Offer"
+                                                onclick="if(confirm('Are you sure you want to cancel editing this record without saving changes?')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}AAAP-PortalHome';return false;} else {return false;}" 
+                                             />
+                               <!-- <apex:commandButton value="Exit Offer" action="{!actionCancel}"
+                                                    onclick="if(confirm('Are you sure you want to cancel editing this record without saving changes?')){return true;} else return false;"/>-->
+                            </td>
+                        </tr>
+
+                    </Table>
+                </apex:outputPanel>
+
+            </apex:form>
+        </div><!--/content-->
+    </div><!-- /Wrapper -->
+    <c:SiteFooterUX />
+</apex:page>

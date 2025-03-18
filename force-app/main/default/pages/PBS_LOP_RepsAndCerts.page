@@ -1,0 +1,160 @@
+<apex:page Controller="PBS_LOPController" sidebar="false" showHeader="false" standardStylesheets="false" cache="true">
+
+<apex:includescript value="{!$Resource.showpopup}"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="{!URLFOR($Resource.modaljquery)}"></script>
+<apex:stylesheet value="{!$Resource.showpopupcss}"/>
+
+<style>
+.ui-dialog {
+    background:#fff;
+    padding:10px;
+    border:1px solid #999;
+}
+ 
+.ui-dialog a {
+    float:right;
+    font-weight:bold;
+    padding:3px;
+    color:#999;
+    text-transform:uppercase;
+    font-size:10px;
+} 
+    
+.errMessage {color:red; } 
+
+#lean_overlay {
+    position: fixed;
+    z-index:100;
+    top: 0px;
+    left: 0px;
+    height:100%;
+    width:100%;
+    background:none;
+    display: none;
+}
+
+</style>
+
+<apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script> 
+ <script src="{!URLFOR($Resource.modaljquery)}"></script>
+<script type="text/javascript">
+    //alert('test');
+    JQ  =  jQuery.noConflict();
+          JQ(document).ready(function(){ 
+              //added by syam display msg when submitted offer is saved.
+                 draftMsgFlag = JQ('input[id=' + "'{!$Component.newOffer.draftMsgFlag}'" + ']').val();
+              if(draftMsgFlag == 'true') {
+              var confirm1  =  JQ('<div></div>').html("Your offer is no longer submitted. Offer status is updated to 'Draft' status and needs to be submitted again.").dialog({
+                    autoOpen: false,
+                    title: '',
+                    modal: true,
+                    position: ['center', 'center'],
+                    buttons: { 'OK' : function(){ JQ(this).dialog('close');}
+                         }
+                    });
+                      
+                  confirm1.dialog('open');            
+                }
+              
+          }); 
+</script>
+<div id="login">
+ <ul>
+      <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
+        <apex:outputLink value="/AAAP/home/home.jsp"><li>{!$Label.site.login_button}</li></apex:outputLink>
+        <li> | </li>
+        <apex:outputLink value="/AAAP/ForgotPassword"><li>{!$Label.site.forgot_your_password_q}</li></apex:outputLink>
+        <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
+        <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}"><li>{!$Label.site.new_user_q}</li></apex:outputLink>
+      </apex:panelGroup>
+      <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp" rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}"><li>{!$Label.site.logout}</li></apex:outputLink>
+      <li>|</li>
+      <li><a href="http://www.gsa.gov/">About GSA</a></li>
+</ul>
+  </div><!--/login-->
+
+<div id="wrapper">
+<c:lop_inside_header />
+<div id="content" class="reps-certs">
+       <apex:panelGrid rendered="{!!isValidUser}">
+        <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+        <apex:messages styleClass="errMessage" id="message"  /> 
+    </apex:panelGrid>
+    <apex:panelGroup rendered="{!isValidUser}">
+         <apex:panelGrid columns="2" style="float:right"> <a href="#" onclick="window.print();">Click Here To Print This Page</a><apex:outputLabel style="padding-right:47px"></apex:outputLabel></apex:panelGrid>
+        <br/>
+        <c:lopHeader myOffer="{!lopOffer}" myProject="{!project}" offerDueDate="{!offerDueDate}"/>
+	   <c:lopProgressBar myValue="{!lopOffer.Id}" myEdit="{!isEditable}"/>
+    </apex:panelGroup>
+    <apex:form id="newOffer" styleClass="formwrap" rendered="{!isValidUser}">
+        <h3 class="blue">Addendum to SAM Representations and Certifications</h3>
+        <apex:messages styleClass="errMessage"/>    
+        <apex:inputHidden id="draftMsgFlag" value="{!draftMsgFlag}"/>
+             <apex:panelGrid columns="1" id="theGridsection2" style="width:935px; overflow:hidden; "> 
+             
+                <apex:outputPanel >
+                    <apex:outputPanel ><apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_1}"/><span class="required">*</span> <a class="popup" href="#Modal_SpaceSummary_Ques1"><img src="{!$Resource.Info_Icon}"/></a>
+                           <div id="Modal_SpaceSummary_Ques1" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                               <p>For leases, GSAM 570.102 defines a small business as one (including its affiliates) organized for profit,<br/> 
+                              independently owned and operated, not dominant in the commercial lease market, and that has average annual gross<br/> 
+                              receipts below current thresholds ($20.5 million) for the 3 preceding fiscal years.
+                          </p>
+                        </div>
+ </apex:outputPanel>                 
+                    <apex:selectRadio value="{!lopOffer.LOP_Representation_Business__c}" id="reps1" styleClass="radioCell">
+                    <apex:actionSupport event="onchange" action="{!showPropertyOwnerSmallBusiness}" rerender="smallBusiYes" />
+                        <apex:selectOptions value="{!smallBusiness}"/>
+                    </apex:selectRadio>
+                </apex:outputPanel>  
+                 
+                 <apex:outputPanel id="smallBusiYes"> 
+                 <apex:outputPanel rendered="{!smallBusinessYES}">
+                    <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_1I}" /><br/>
+                    <apex:inputField value="{!lopOffer.LOP_HUBZone_SBC_Waive_Pref__c}"  id="reps1I"/> 
+                    <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_1Ia}" />
+                </apex:outputPanel>
+                 </apex:outputPanel>    
+                
+                <apex:outputPanel > 
+                    <apex:outputPanel ><apex:outputtext value="{!$Label.PBS_AAAP_REPS_and_Certs_11}"/></apex:outputPanel>
+                    <br/>
+                    <apex:outputPanel style="margin-left: 0.8cm"><apex:outputtext value=" {!$Label.PBS_AAAP_REPS_and_Certs_11a}"/><span class="required">*</span> </apex:outputPanel>
+                    <apex:selectRadio style="margin-left: 0.8cm" value="{!lopOffer.LOP_Corporation_not_tax_felon__c}" id="reps11a" styleClass="radioCell">
+                        <apex:selectOptions value="{!items}"/>
+                    </apex:selectRadio>
+                </apex:outputPanel>
+                <apex:outputPanel > 
+                    <apex:outputPanel style="margin-left: 0.8cm"><apex:outputtext value="{!$Label.PBS_AAAP_REPS_and_Certs_11b}"/><span class="required">*</span> </apex:outputPanel>
+                    <apex:selectRadio style="margin-left: 0.8cm" value="{!lopOffer.LOP_Corp_Not_Convicted_Felon__c}" id="reps11b" styleClass="radioCell">
+                        <apex:selectOptions value="{!items}"/>
+                    </apex:selectRadio>
+                </apex:outputPanel>
+                   <apex:outputPanel > 
+                    <apex:outputPanel ><apex:outputtext value="{!$Label.PBS_AAAP_REPS_and_Certs_12}"/></apex:outputPanel>
+                      <apex:selectRadio value="{!lopOffer.LOP_Sam_Registered__c}" id="reps12" styleClass="radioCell">
+                        <apex:selectOptions value="{!sAMRegistrationItems}"/>
+                    </apex:selectRadio>
+                </apex:outputPanel>
+
+                
+            </apex:PanelGrid>
+
+            <apex:outputPanel rendered="{!!viewOnly}"><br/>
+            
+                 
+                <apex:commandButton value="Back" action="{!backToOfrPropertyOwnerTab}"/>
+                <apex:commandButton value="Save Page" styleClass="btnSave" action="{!saveRepsAndCertsInfo}"/> 
+                <apex:commandButton value="Next"  action="{!saveRepsAndCertsandContinue}" /> 
+                <apex:commandButton value="Exit Offer" action="{!actionCancel}" onclick="if(confirm('Please make sure to hit save page before exiting your offer.  Changes will not be saved unless you hit Save Page.')){return true;} else return false;"/>
+        </apex:outputPanel>
+  
+   
+    </apex:form> 
+</div><!-- /content--> 
+</div><!-- /Wrapper -->
+<c:SiteFooterUX />       
+</apex:page>

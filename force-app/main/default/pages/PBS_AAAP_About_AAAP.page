@@ -1,0 +1,320 @@
+<!-- 7-JUL-2020 acheslyn updated page with script for analytics section user story sfws 766 -->
+<apex:page sidebar="false" standardStylesheets="false" showHeader="false">
+
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/demo_page.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+
+     <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+    <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+    <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+
+    <!-- <c:EnrollCSS /> -->
+    <!--<c:jQueryInit bDataTables="true" /> -->
+    <style>
+span.dropt {border-bottom: thin dotted; background: #ffeedd;}
+span.dropt:hover {text-decoration: none; background: #fefefe; z-index: 6; }
+span.dropt span {position: absolute; left: -9999px;
+  margin: 20px 0 0 0px; padding: 3px 3px 3px 3px;
+  border-style:solid; border-color:black; border-width:1px; z-index: 6;}
+span.dropt:hover span {left: 2%; background:rgb(236, 236, 236);} 
+span.dropt span {position: absolute; left: -9999px;
+  margin: 4px; padding: 3px 3px 3px 3px; text-indent:0in;
+  border-style:solid; border-color:#666; border-width:1px;}
+span.dropt:hover span {margin: 20px 0 0 170px; background:rgb(236, 236, 236); z-index:6;} 
+
+.sb-int {margin:10px;padding:10px;}
+#rightCol {width:620px; padding-right:20px;}
+.sb-int .bucket {margin-top:10px !important;}
+h3.blue {padding-top:15px;}
+.portalhome .apexp .selector {top:70px; left:0px;}
+menu.table-options {top:40px;left:-350px;}
+.tabbed-table table tr {height:35px;}
+menu.table-options a {border:1px solid#666666; border-radius:3px;padding:6px;background-position:-5px 145px;color:#333333;font-size:12px;text-decoration:none;}
+
+#lean_overlay {
+    position: fixed;
+    z-index:100;
+    top: 0px;
+    left: 0px;
+    height:100%;
+    width:100%;
+    background:none;
+    display: none;
+}
+
+#nav ul {
+    float: right;
+    list-style: none;
+    margin: 30px 0px 25px 20px;
+}
+
+h1.logo{clip: rect(0px,200px,70px,0px) !important;}
+
+
+
+    </style>
+
+
+    <!--div id="login">
+    <ul>
+        <li><a href="/AAAP/PBS_AAAP_PortalHome">Home</a></li>
+        <li>|</li>
+        <li><a href="{!$Site.Prefix}/secur/logout.jsp">LOGOUT</a></li>
+        <!-- 
+        <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp" rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}"><li>| {!$Label.site.logout}</li></apex:outputLink>
+         --!>
+    </ul>  
+</div><!--/login-->
+    
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+        <ul>
+            <apex:outputPanel rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li><a href="/AAAP/PortalHome">AAAP Home</a></li>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!(ISPICKVAL($User.UserType,'Guest'))}">
+                <li><a href="/AAAP/LoginPage">AAAP Home</a></li>
+            </apex:outputPanel>
+            <!--<li><a href="/AAAP/PBS_AAAP_HomePage">AAAP Home</a></li>->
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>| {!$Label.site.logout}</li>
+            </apex:outputLink>
+            <li>|</li>
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>
+        </ul>
+    </div><!--/login-->
+
+
+    <div id="wrapper" class="portalhome">
+        <!-- Header logo part starts Here -->
+        <h1 class="logo">GSA</h1>
+        <div id="nav">
+            <ul>
+                <apex:outputPanel rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                    <li><a style="" href="/AAAP/PortalHome">AAAP Home</a></li>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!(ISPICKVAL($User.UserType,'Guest'))}">
+                    <li><a style="" href="/AAAP/LoginPage">AAAP Home</a></li>
+                </apex:outputPanel>
+                <!--<li><a href="/AAAP/PBS_AAAP_News_Updates">News &amp; Updates</a></li>
+                <li><a class="selected" href="/AAAP/PBS_AAAP_About_AAAP">FAQs</a></li>
+                <li><a href="/AAAP/PBS_AAAP_Sitehelp">Help</a></li>
+                <li><a href="/AAAP/PBS_AAAP_UserRegistration">Registration</a></li>-->
+            </ul>
+        </div><!--/nav-->
+
+        <div id="hero-int2">
+            <h2>AAAP</h2>
+        </div><!--/hero-->
+        <!-- Header logo part ends Here -->
+        <div id="content">
+
+            <apex:form styleClass="formwrap">
+                <h3 id="page-title" class="blue">Frequently Asked Questions</h3>
+
+                <p class="MsoNormal"><span style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal"><span style='font-family:"Arial","sans-serif"'></span></p>
+                <br/>
+                <div class="clearfix">&nbsp;</div>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>1.
+                    <span style='mso-tab-count:1'>         </span>Question:
+                    <span style='mso-spacerun:yes'>  </span>What is the Automated Advanced Acquisition Program (AAAP)?
+                </p>
+
+                <p class="MsoNormal"><span style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>Answer:
+                    <span style='mso-spacerun:yes'>  </span>The AAAP is a multiple award platform that handles space
+                    requirements starting at 500
+                    square feet. The platform uses a pre-competed inventory of properties to meet the space requirements
+                    for various government agencies.
+                    The program offers the general public and businesses the opportunity to electronically offer
+                    building space for lease to the
+                    Federal Government. Using the AAAP procurement approach, the offer submission process is completely
+                    web-enabled,
+                    allowing all registered participants to submit and update offers to lease space to the Federal
+                    Government every month,
+                    in response to a Request for Lease Proposals (RLP).</p>
+
+                <p class="MsoNormal" style='margin-left:.5in'><span style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>2.
+                    <span style='mso-tab-count:1'>         </span>Question:
+                    <span style='mso-spacerun:yes'>  </span>Am I obligated to hold space offered to the Government off
+                    the market and, if so, for how long?</p>
+
+                <p class="MsoNormal" style='margin-left:.5in'><span style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in'><span style='font-family:"Arial","sans-serif"'></span>Answer:
+                    <span style='mso-spacerun:yes'>  </span>
+                    No. You may continue to market the space and can withdraw your offer at any time prior to lease
+                    award.</p>
+
+                <p class="MsoNormal" style='margin-left:.5in'><span style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>3.
+                    <span style='mso-tab-count:1'>         </span>Question:
+                    <span style='mso-spacerun:yes'>  </span>
+                    <span>Can I revise my original offer once I have already submitted an offer?</span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'><span
+                            style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>Answer:
+                    <span style='mso-spacerun:yes'>  </span>Yes.<span style='mso-spacerun:yes'>  </span>You may revise
+                    an offer for space in a building you've already
+                    submitted at any time during the open period. Typically, the open period is from the 1st through the
+                    7th of each month.</p>
+
+                <p class="MsoNormal" style='margin-left:.5in'><span style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>4.
+                    <span style='mso-tab-count:1'>         </span>Question:
+                    <span style='mso-spacerun:yes'>  </span>
+                    <span>Do I have to resubmit my offer every month? </span></p>
+
+                <p class="MsoNormal" style='margin-left:.25in'>
+                    <span style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>Answer:
+                    <span style='mso-spacerun:yes'></span>No.
+                    <span style='mso-spacerun:yes'> </span> Your offer remains active until you withdraw your offer or
+                    the AAAP staff replaces the current Request
+                    for Lease Proposal (RLP).
+                </p>
+
+                <p class="MsoNormal" style='margin-left:.5in'><span style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>5.
+                    <span style='mso-tab-count:1'>         </span>Question:
+                    <span style='mso-spacerun:yes'>  </span>If I already have a lease with GSA, and my building is fully
+                    leased, do I still need to submit an offer?</p>
+
+                <p class="MsoNormal"><span style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>
+                    <span style='mso-tab-count:1'>            </span>Answer:
+                    <span style='mso-spacerun:yes'>  </span>Yes.
+                    <span style='mso-spacerun:yes'> </span> In the event that your lease with GSA expires within the
+                    timeframe indicated in the advertisement,
+                    you will be notified that this is your competitive forum for any expiring lease.
+                    <span style='mso-spacerun:yes'> </span>
+                </p>
+
+                <p class="MsoNormal"><span style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>6.
+                    <span style='mso-tab-count:1'>         </span>Question:
+                    <span style='mso-spacerun:yes'>  What is the definition of ANSI/BOMA Office Area (ABOA) square feet? </span>
+                </p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'><span
+                            style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>Answer:
+                    <span style='mso-spacerun:yes'>  </span>For the purposes of this RLP, space shall be measured in
+                    accordance with the standard provided by American National Standards
+                    Institute/Building Owners and Managers Association (ANSI/BOMA) for office area. ANSI/BOMA Z65.1-1996
+                    shall be used.
+                    References to ABOA SF mean ANSI/BOMA office area.
+                    <span style='mso-spacerun:yes'>  </span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in'><span style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>7.
+                    <span style='mso-tab-count:1'>         </span>Will the Government accept escalations on the Base
+                    Rent?</p>
+
+                <p class="MsoNormal"><span style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>Answer:
+                    <span style='mso-spacerun:yes'>  </span>No. The Base Rent is flat over the term of the lease.<span
+                            style='mso-spacerun:yes'> 
+</span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in'><span style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>8.
+                    <span style='mso-tab-count:1'>         </span>Question:
+                    <span style='mso-spacerun:yes'></span>Am I guaranteed a lease award if I submit? </p>
+
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'><span
+                            style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>Answer:
+                    <span style='mso-spacerun:yes'>  </span>No. You are not guaranteed a lease award just by submitting
+                    an offer. To be awarded a lease, your offer must
+                    be the lowest priced proposal that meets an agency’s specific space requirements.<span
+                            style='mso-spacerun:yes'> 
+</span>
+                    References to ABOA SF mean ANSI/BOMA office area.
+                    <span style='mso-spacerun:yes'>  </span></p>
+
+                <p class="MsoNormal"><span style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>9.
+                    <span style='mso-tab-count:1'>         </span>Question:
+                    <span style='mso-spacerun:yes'></span>Will the Government consider modifications to the RLP and/or
+                    general clauses/attachments?</p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>Answer:
+                    <span style='mso-spacerun:yes'>  </span>No.</p>
+
+                <p class="MsoNormal" style='margin-left:.5in'><span style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span>10.
+                    <span style='mso-tab-count:1'>      </span>Question:
+                    <span style='mso-spacerun:yes'>  </span>Does offering under the AAAP limit my ability to offer space
+                    under another GSA RLP?</p>
+
+                <p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+                    <span style='font-family:"Arial","sans-serif"'></span></p>
+
+                <p class="MsoNormal" style='margin-left:.5in'><span
+                            style='font-family:"Arial","sans-serif"'>Answer:</span>
+                    <span style='mso-spacerun:yes'>   </span>No.<span style='mso-spacerun:yes'>  </span></p>
+
+
+            </apex:form>
+        </div><!--/content-->
+
+    </div><!-- /Wrapper -->
+    <script>
+   $(".popup").leanModal();
+
+
+
+    </script>
+    <c:SiteFooterUX ></c:SiteFooterUX>
+</apex:page>

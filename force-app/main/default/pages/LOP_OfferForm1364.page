@@ -1,0 +1,2011 @@
+<!--
+ - Created by nkopparthi on 10/8/19.
+ - 9-JUL-2020 acheslyn updated analytics script to page for user story sfws 766
+ -->
+
+<apex:page id="LOP_OfferForm1364New" controller="PBS_LOP_OfferForm1364Controller" showHeader="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" renderAs="pdf" action="{!isValidUserAction}">
+
+    <head>
+         <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+ 		<script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+        <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+
+        <style>
+            table.outerTable{
+                width: 95%;
+                margin-left:2.5%;
+                border-spacing: 0px;
+                border: black;
+                border-style: solid;
+                padding-left: 5px;
+                padding-right: 5px;
+                padding-top: 5px;
+            }
+
+            table.mainTable{
+                border-spacing: 0px;
+                width: 100%;
+            }
+
+            table.mainTable td{
+                border:black;
+                border-style: solid;
+                border-width: 0.5px;
+                border-spacing: 0px;
+                /*border-left: none;
+                border-top: none;*/
+            }
+
+            td.td1{
+                font-weight: bold;
+                vertical-align: middle;
+                font-size: x-small;
+                font-family: Arial;
+                text-align: center;
+                padding-top: 3px;
+                padding-bottom: 3px;
+                padding-bottom: 5px;
+            }
+
+            td.td2{
+                font-weight: normal;
+                vertical-align: middle;
+                font-family: Arial;
+                font-size: xx-small;
+                padding-left: 3px;
+                padding-right: 3px;
+                vertical-align: top;
+                padding-bottom: 5px;
+            }
+
+            td.td3{
+                font-weight: normal;
+                vertical-align: middle;
+                font-family: Arial;
+                font-size: xx-small;
+                padding-left: 3px;
+                padding-right: 3px;
+                background-color: darkgray;
+                padding-bottom: 5px;
+            }
+
+            span.resp{
+                color: red;
+                font-weight: bold;
+            }
+
+
+        </style>
+    </head>
+    <table class="outerTable">
+        <tr>
+            <td colspan="2">
+
+                <table class="mainTable">
+                    <tr>
+                        <td class="td1" style="width:25%;border-top:solid;">
+                            PROPOSAL TO LEASE SPACE                            
+                        </td>
+                        <td class="td2" style="width:25%;border-top:solid;">
+                            In Response to Request for Lease Proposals (RLP) Number->
+                        </td>
+                        <td class="td2" style="width:25%;text-align:center;vertical-align:middle;border-top:solid;">
+                            <span class="resp">{!RLPNumber}</span>
+                        </td>
+                        <td class="td2" style="width:25%;border-top:solid;">
+                            <table>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        Dated
+                                    </td>
+                                    <td style="border-style:none;">
+                                        <span class="resp">{!sysDate}</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td1" colspan="4">
+                            SECTION I  -  DESCRIPTION OF PREMISES
+                        </td>
+                    </tr>
+                </table>
+                <table class="mainTable">
+                    <tr>
+                        <td class="td2" width="12%">
+                            <table>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        1. BUILDING DESCRIPTION
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        <!--TO DO-->
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                        <td class="td2" width="38%">
+                            <table>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        a. Building Name
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        <span class="resp">{!buildingName}</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                        <td class="td2" width="50%">
+                            <table>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        b.  Building Street Address
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        <span class="resp">{!address}</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+                </table>
+                <table class="mainTable">
+                    <tr>
+                        <td class="td2" width="40%">
+                            <table>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        c. City
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        <span class="resp">{!city}</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="td2" width="10%">
+                            <table>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        d. State
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        <span class="resp">{!state}</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                        <td class="td2" width="25%">
+                            <table>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        e. 9-Digit ZIP Code
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        <span class="resp">{!zip}</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                        <td class="td2" width="25%">
+                            <table>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        f. Congressional District
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        <span class="resp">{!offer.PBS_AAAP_Congressional_District__c}</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+                </table>
+                <table class="mainTable">
+                    <tr>
+                        <td class="td2" width="20%" rowspan="2">
+                            2a. FLOORS OFFERED <br/><br/><br/><br/>
+                            <span class="resp">{!floorsDesc}</span>
+                        </td>
+                        <td class="td2" width="20%" rowspan="2">
+                            2b. TOTAL NUMBER OF FLOORS IN BUILDING <br/><br/><br/>
+                            <span class="resp">{!noOfFloors}</span>
+                        </td>
+                        <td class="td2" width="60%" colspan="3">
+                            3. TOTAL RENTABLE SPACE IN OFFERED BUILDING &nbsp;&nbsp;&nbsp;
+                            <span class="resp">
+                                <apex:outputText value="{0, number, ###,###.##}">
+                                    <apex:param value="{!totalSpace}"/>
+                                </apex:outputText>
+                            </span> SF
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" width="20%">
+                            a. GENERAL PURPOSE (Office) <br/>
+                            <span class="resp">
+                                <apex:outputText value="{0, number, ###,###.##}">
+                                    <apex:param value="{!officeSpace}"/>
+                                </apex:outputText>
+                            </span> SF
+                        </td>
+                        <td class="td2" width="20%">
+                            b.  WAREHOUSE <br/><br/>
+                            <span class="resp">
+                                <apex:outputText value="{0, number, ###,###.##}">
+                                    <apex:param value="{!warehouseSpace}"/>
+                                </apex:outputText>
+                            </span> SF
+                        </td>
+                        <td class="td2" width="20%">
+                            c.  OTHER <br/><br/>
+                            <span class="resp">
+                                <apex:outputText value="{0, number, ###,###.##}">
+                                    <apex:param value="{!otherSpace}"/>
+                                </apex:outputText>
+                            </span> SF
+                        </td>
+                    </tr>
+                </table>
+                <table class="mainTable">
+                    <tr>
+                        <td class="td2" width="20%">
+                            <table>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        4.  LIVE FLOOR LOAD<br/><br/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        <span class="resp">
+                                            <apex:outputPanel rendered="{!IF(liveFloorLoad != NULL, true, false)}">
+                                                <apex:outputText value="{0, number, ###,###.##}">
+                                                    <apex:param value="{!liveFloorLoad}"/>
+                                                </apex:outputText>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!IF(liveFloorLoadStr != NULL, true, false)}">
+                                                <apex:outputText value="{!liveFloorLoadStr}"/>
+                                            </apex:outputPanel>
+                                        </span> Pounds per SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="td2" width="20%">
+                            <table>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        5. MEASUREMENT METHOD
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        <table width="100%">
+                                            <tr>
+                                                <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                                                    <span class="resp">{!ANSIBOMA}</span>
+                                                </td>
+                                                <td style="border-style:none;">
+                                                    ANSI/BOMA
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                                                    &nbsp;
+                                                </td>
+                                                <td style="border-style:none;">
+                                                    Other
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="td2" width="20%">
+                            <table>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        6.  YEAR OF LAST MAJOR RENOVATION (if applicable)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        <span class="resp">{!renovationYr}</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="td2" width="20%">
+                            <table>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        7. BUILDING AGE<br/><br/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        <span class="resp">{!buildingAge}</span> years
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="td2" width="20%">
+                            <table>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        8. SITE SIZE<br/><br/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-style:none;">
+                                        <span class="resp">
+                                            <apex:outputText value="{0, number, ###,###.##}" rendered="{!IF(siteSize != null, true, false)}">
+                                                <apex:param value="{!siteSize}"/>
+                                            </apex:outputText>
+                                            <apex:outputText rendered="{!IF(siteSize == null, true, false)}">N/A</apex:outputText>
+                                        </span> SF <br/>
+                                        <span class="resp">
+                                            <apex:outputText value="{0, number, ###,###.##}" rendered="{!IF(siteSizeAcres != null, true, false)}">
+                                                <apex:param value="{!siteSizeAcres}"/>
+                                            </apex:outputText>
+                                            <apex:outputText rendered="{!IF(siteSizeAcres == null, true, false)}">N/A</apex:outputText>
+                                        </span> Acres <br/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <table class="mainTable">
+                    <tr>
+                        <td class="td1" colspan="4">
+                            SECTION II  -  SPACE OFFERED AND RATES
+                        </td>
+                    </tr>
+                </table>
+                <table class="mainTable">
+                    <tr>
+                        <td class="td2" width="20%" style="border-right:none;padding-top:8px;padding-bottom:8px;">
+                            9.  ANSI/BOMA OFFICE AREA SQUARE FEET (ABOA)
+                        </td>
+                        <td class="td2" width="10%" style="padding-top:8px;padding-bottom:8px;border-left:none;">
+                            <span class="resp">
+                                <apex:outputText value="{0, number, ###,###.##}">
+                                    <apex:param value="{!ansiBomaOffered}"/>
+                                </apex:outputText>
+                            </span>
+                        </td>
+                        <td class="td2" width="20%" style="border-right:none;padding-top:8px;padding-bottom:8px;">
+                            10. RENTABLE SQUARE FEET (RSF)
+                        </td>
+                        <td class="td2" width="10%" style="padding-top:8px;padding-bottom:8px;border-left:none;">
+                            <span class="resp">
+                                <apex:outputText value="{0, number, ###,###.##}">
+                                    <apex:param value="{!ansiBomaRentable}"/>
+                                </apex:outputText>
+                            </span>
+                        </td>
+                        <td class="td2" width="30%" style="border-right:none;padding-top:8px;padding-bottom:8px;">
+                            11. COMMON AREA FACTOR (CAF)
+                        </td>
+                        <td class="td2" width="20%" style="padding-top:8px;padding-bottom:8px;border-left:none;">
+                            <span class="resp">{!CAF} %</span>
+                        </td>
+                    </tr>
+                </table>
+                <table class="mainTable">
+                    <tr>
+                        <td class="td2" width="100%" style="padding-top:8px;padding-bottom:8px;">
+                            "Tenant Improvements" are all alterations for the Government demised area above the building shell buildout,
+                            excluding costs identified as tenant improvements in the Security Unit Price List.  Building Specific Amortized
+                            Capital (BSAC) is the sum of costs identified as such in the Security Unit Price List.  Neither the Tenant
+                            Improvements as stated in Block 12, nor the BSAC as stated in Block 13, are to be included in the shell rent.
+                            It is expected that the tenant buildout will be fully amortized at the end of the firm term, and the rent will
+                            be reduced accordingly. Any desired rent increases or decreases beyond the firm term of the lease should be
+                            reflected in the shell rate and fully explained as part of this written proposal. If Tenant Improvements or BSAC
+                            improvements are to be amortized beyond the firm term, those calculations must be itemized as part of this written
+                            proposal. The Offeror may attach additional pages as necessary.
+                        </td>
+                    </tr>
+                </table>
+                <table class="mainTable">
+                    <tr>
+                        <td class="td3" width="22%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td2" width="13%" colspan="2">
+                            Number of years each cost per square foot is in effect. State any changes for any rent component.
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="td3" width="22%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td2" width="13%" style="text-align:center">
+                            a.<br/>
+                            BUILD OUT COSTS PER CATEGORY
+                        </td>
+                        <td class="td2" width="13%" style="text-align:center">
+                            b.<br/>
+                            AMORTIZATION
+                            TERM
+                        </td>
+                        <td class="td2" width="13%" style="text-align:center">
+                            c.<br/>
+                            AMORTIZATION
+                            INTEREST RATE (%)
+                        </td>
+                        <td class="td2" width="13%" style="text-align:center">
+                            d.<br/>
+                            ANNUAL RENT
+                            $ PER RSF
+                        </td>
+                        <td class="td2" width="13%" style="text-align:center">
+                            e.<br/>
+                            ANNUAL RENT
+                            $ PER ABOA SF
+                        </td>
+                        <td class="td2" width="13%" style="text-align:center">
+                            f.<br/>
+                            NUMBER YEARS RATE IS EFFECTIVE
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" width="22%">
+                            12. TENANT IMPROVEMENTS
+                            (per RLP requirements)
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;">
+                            $ <span class="resp">
+                                <apex:outputText value="{0, number, ###,###.00}" style="float:right;">
+                                    <apex:param value="{!field12a}"/>
+                                </apex:outputText>
+                            </span>
+                        </td>
+                        <td class="td2" width="13%" style="text-align:right;vertical-align:middle;padding-left:8px;padding-right:8px;">
+                            <span class="resp">{!field12b} months</span>
+                        </td>
+                        <td class="td2" width="13%" style="text-align:right;vertical-align:middle;padding-left:8px;padding-right:8px;">
+                            <span class="resp">{!field12c}</span>
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;">
+                            $ <span class="resp" style="float:right;">{!field12d}</span>
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;">
+                            $ <span class="resp" style="float:right;">{!field12e}</span>
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;">
+                            <span class="resp">{!field12f}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" width="22%">
+                            13. BSAC
+                            (per RLP requirements)
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;">
+                            $ <span class="resp">
+                                <apex:outputText value="{0, number, ###,###.00}" style="float:right;">
+                                    <apex:param value="{!field13a}"/>
+                                </apex:outputText>
+                            </span>
+                        </td>
+                        <td class="td2" width="13%" style="text-align:right;vertical-align:middle;padding-left:8px;padding-right:8px;">
+                            <span class="resp">{!field13b} months</span>
+                        </td>
+                        <td class="td2" width="13%" style="text-align:right;vertical-align:middle;padding-left:8px;padding-right:8px;">
+                            <span class="resp">{!field13c}</span>
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;">
+                            $ <span class="resp" style="float:right;">{!field13d}</span>
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;">
+                            $ <span class="resp" style="float:right;">{!field13e}</span>
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;">
+                            <span class="resp">{!field13f}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" width="22%">
+                            14. SHELL BUILD-OUT
+                            (per RLP requirements)
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;">
+                            $ <span class="resp">
+                                <apex:outputText value="{0, number, ###,###.00}" style="float:right;">
+                                    <apex:param value="{!field14a}"/>
+                                </apex:outputText>
+                            </span>
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" width="22%">
+                            15. TOTAL BUILD OUT COSTS
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;">
+                            $ <span class="resp">
+                                <apex:outputText value="{0, number, ###,###.00}" style="float:right;">
+                                    <apex:param value="{!field15a}"/>
+                                </apex:outputText>
+                            </span>
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" width="22%">
+                            16. SHELL RENT (Including real estate taxes.  Refer to Line 28 on GSA Form 1217)
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;"> $
+                            <span class="resp">
+                                <apex:outputText value="{0, number, ###,###.00}" style="float:right;">
+                                    <apex:param value="{!field16d}"/>
+                                </apex:outputText>
+                            </span>
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;"> $
+                            <span class="resp">
+                                <apex:outputText value="{0, number, ###,###.00}" style="float:right;">
+                                    <apex:param value="{!field16e}"/>
+                                </apex:outputText>
+                            </span>
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;">
+                            <span class="resp">{!field16f}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" width="22%">
+                            17. OPERATING COSTS (Refer to Line 27 on GSA Form 1217)
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;"> $
+                            <span class="resp">
+                                <apex:outputText value="{0, number, ###,###.00}" style="float:right;">
+                                    <apex:param value="{!field17d}"/>
+                                </apex:outputText>
+                            </span>
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;"> $
+                            <span class="resp">
+                                <apex:outputText value="{0, number, ###,###.00}" style="float:right;">
+                                    <apex:param value="{!field17e}"/>
+                                </apex:outputText>
+                            </span>
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" width="22%">
+                            18. TOTAL RATE/SF
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;"> $
+                            <span class="resp">
+                                <apex:outputText value="{0, number, ###,###.00}" style="float:right;">
+                                    <apex:param value="{!field18d}"/>
+                                </apex:outputText>
+                            </span>
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;"> $
+                            <span class="resp">
+                                <apex:outputText value="{0, number, ###,###.00}" style="float:right;">
+                                    <apex:param value="{!field18e}"/>
+                                </apex:outputText>
+                            </span>
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;">
+                            <span class="resp">{!field18f}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td3" width="22%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" width="22%">
+                            19.  TOTAL ANNUAL RENT
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;"> $
+                            <span class="resp">
+                                <apex:outputText value="{0, number, ###,###.00}" style="float:right;">
+                                    <apex:param value="{!field19d}"/>
+                                </apex:outputText>
+                            </span>
+                        </td>
+                        <td class="td3" width="13%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;vertical-align:middle;padding-left:8px;padding-right:8px;">
+                            <span class="resp">{!field19f}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td3" width="22%" bgcolor="#a9a9a9">
+
+                        </td>
+                        <td class="td2" width="13%" style="text-align:center">
+                            PER SF RATE
+                        </td>
+                        <td class="td2" width="13%" style="text-align:center">
+                            FOR YEARS
+                        </td>
+                        <td class="td2" width="13%" style="text-align:center">
+                            PER SF RATE RENT
+                        </td>
+                        <td class="td2" width="13%" style="text-align:center">
+                            FOR YEARS
+                        </td>
+                        <td class="td2" width="13%" style="text-align:center">
+                            PER SF RATE
+                        </td>
+                        <td class="td2" width="13%" style="text-align:center">
+                            FOR YEARS
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" width="22%">
+                            20.  STEP RENT (SHELL RATES)
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;padding-left:5px;">
+                            $ <span class="resp">
+                                <!--<apex:outputText value="{!field20a1}" rendered="{!IF(field20a1 != 0.00, true, false)}"/>-->
+                                <apex:outputText value="{0, number, ###,###.00}" rendered="{!IF(field20a1 != 0.00, true, false)}">
+                                    <apex:param value="{!field20a1}"/>
+                                </apex:outputText>
+                                <apex:outputText rendered="{!IF(field20a1 != 0.00, false, true)}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</apex:outputText>
+                            </span> /RSF <br/>
+                            $ <span class="resp">
+                                <!--<apex:outputText value="{!field20a2}" rendered="{!IF(field20a2 != 0.00, true, false)}"/>-->
+                                <apex:outputText value="{0, number, ###,###.00}" rendered="{!IF(field20a2 != 0.00, true, false)}">
+                                    <apex:param value="{!field20a2}"/>
+                                </apex:outputText>
+                                <apex:outputText rendered="{!IF(field20a2 != 0.00, false, true)}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</apex:outputText>
+                            </span> /ABOA
+                        </td>
+                        <td class="td2" width="13%" style="text-align:center;padding-left:5px;">
+                            <span class="resp">
+                                <apex:outputText value="{!field20b1}" rendered="{!IF(field20b1 != '0', true, false)}"/>
+                            </span>
+                            Thru
+                            <span class="resp">
+                                <apex:outputText value="{!field20b2}" rendered="{!IF(field20b2 != '0', true, false)}"/>
+                            </span>
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;padding-left:5px;">
+                            $ <span class="resp">
+                                <!--<apex:outputText value="{!field20c1}" rendered="{!IF(field20c1 != 0.00, true, false)}"/>-->
+                                <apex:outputText value="{0, number, ###,###.00}" rendered="{!IF(field20c1 != 0.00, true, false)}">
+                                    <apex:param value="{!field20c1}"/>
+                                </apex:outputText>
+                                <apex:outputText rendered="{!IF(field20c1 != 0.00, false, true)}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</apex:outputText>
+                            </span> /RSF <br/>
+                            $ <span class="resp">
+                                <!--<apex:outputText value="{!field20c2}" rendered="{!IF(field20c2 != 0.00, true, false)}"/>-->
+                                <apex:outputText value="{0, number, ###,###.00}" rendered="{!IF(field20c2 != 0.00, true, false)}">
+                                    <apex:param value="{!field20c2}"/>
+                                </apex:outputText>
+                                <apex:outputText rendered="{!IF(field20c2 != 0.00, false, true)}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</apex:outputText>
+                            </span> /ABOA
+                        </td>
+                        <td class="td2" width="13%" style="text-align:center;padding-left:5px;">
+                            <span class="resp">
+                                <apex:outputText value="{!field20d1}" rendered="{!IF(field20d1 != '0', true, false)}"/>
+                            </span>
+                            Thru
+                            <span class="resp">
+                                <apex:outputText value="{!field20d2}" rendered="{!IF(field20d2 != '0', true, false)}"/>
+                            </span>
+                        </td>
+                        <td class="td2" width="13%" style="text-align:left;padding-left:5px;">
+                            $ <span class="resp">
+                                <!--<apex:outputText value="{!field20e1}" rendered="{!IF(field20e1 != 0.00, true, false)}"/>-->
+                                <apex:outputText value="{0, number, ###,###.00}" rendered="{!IF(field20e1 != 0.00, true, false)}">
+                                    <apex:param value="{!field20e1}"/>
+                                </apex:outputText>
+                                <apex:outputText rendered="{!IF(field20e1 != 0.00, false, true)}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</apex:outputText>
+                            </span> /RSF <br/>
+                            $ <span class="resp">
+                                <!--<apex:outputText value="{!field20e2}" rendered="{!IF(field20e2 != 0.00, true, false)}"/>-->
+                                <apex:outputText value="{0, number, ###,###.00}" rendered="{!IF(field20e2 != 0.00, true, false)}">
+                                    <apex:param value="{!field20e2}"/>
+                                </apex:outputText>
+                                <apex:outputText rendered="{!IF(field20e2 != 0.00, false, true)}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</apex:outputText>
+                            </span> /ABOA
+                        </td>
+                        <td class="td2" width="13%" style="text-align:center;padding-left:5px;">
+                            <span class="resp">
+                                <apex:outputText value="{!field20f1}" rendered="{!IF(field20f1 != '0', true, false)}"/>
+                            </span>
+                            Thru
+                            <span class="resp">
+                                <apex:outputText value="{!field20f2}" rendered="{!IF(field20f2 != '0', true, false)}"/>
+                            </span>
+                        </td>
+                    </tr>
+
+                </table>
+                <table class="mainTable">
+                    <tr>
+                        <td class="td2" width="10%" rowspan="6" style="border-bottom:black;border-bottom-style:solid;border-bottom-width:thin;">
+                            21. PARKING
+                        </td>
+                        <td class="td2" width="60%" style="border:none">
+                            a.  Number of parking spaces for the entire building/ facility which are under the control of the Offeror:
+                        </td>
+                        <td class="td2" width="30%" style="border-bottom:none;border-left:none;border-top:none;">
+                            <div style="position:relative;">
+                                <div style="width:100%;position:absolute;">
+                                    ________ Surface    ________ Structured
+                                </div>
+                                <div style="position:absolute;left:1%;"><span class="resp">{!surfParking}</span></div>
+                                <div style="position:absolute;left:36%;"><span class="resp">{!structParking}</span></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" width="60%" style="border:none">
+                            b.  Number of parking spaces required by local code:
+                        </td>
+                        <td class="td2" width="30%" style="border-bottom:none;border-left:none;border-top:none;">
+                            <div style="position:relative;">
+                                <div style="width:100%;position:absolute;">
+                                    ________ Surface    ________ Structured
+                                </div>
+                                <div style="position:absolute;left:1%;"><span class="resp">{!reqSurface}</span></div>
+                                <div style="position:absolute;left:36%;"><span class="resp">{!reqStructured}</span></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" width="60%" style="border:none">
+                            c.  Number of parking spaces for Employee/Visitor Use (per RLP):
+                        </td>
+                        <td class="td2" width="30%" style="border-bottom:none;border-left:none;border-top:none;">
+                            <div style="position:relative;">
+                                <div style="width:100%;position:absolute;">
+                                    ________ Surface    ________ Structured
+                                </div>
+                                <div style="position:absolute;left:1%;"><span class="resp">{!visitorSurface}</span></div>
+                                <div style="position:absolute;left:36%;"><span class="resp">{!visitorGarage}</span></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" width="60%" style="border:none">
+                            d.  Number of parking spaces for Official Government Vehicles (per RLP):
+                        </td>
+                        <td class="td2" width="30%" style="border-bottom:none;border-left:none;border-top:none;">
+                            <div style="position:relative;">
+                                <div style="width:100%;position:absolute;">
+                                    ________ Surface    ________ Structured
+                                </div>
+                                <div style="position:absolute;left:1%;"><span class="resp">{!govSurface}</span></div>
+                                <div style="position:absolute;left:36%;"><span class="resp">{!govGarage}</span></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" width="60%" style="border:none">
+                            e.  Does the rental rate offered above include RLP required parking costs?
+                        </td>
+                        <td class="td2" width="30%" style="border-bottom:none;border-left:none;border-top:none;">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" width="60%" style="border-bottom:black;border-bottom-style:solid;border-right:none;border-bottom-width:thin;border-top:none;border-left:none;">
+                            <!--&nbsp;&nbsp;&nbsp;&nbsp;YES [<span class="resp"><apex:outputText value="{!IF(field21eYes == NULL, '  ', field21eYes)}"/></span>] NO [<span class="resp"><apex:outputText value="{!IF(field21eNo == NULL, '  ', field21eNo)}"/></span>]         If NO,  complete the following:-->
+                            <table style="margin-left:16px;">
+                                <tr>
+                                    <td width="20px" style="border:none">YES</td>
+                                    <td width="10px" style="border:black;border-style:solid;border-width:thin;text-align:center;">
+                                        <span class="resp"><apex:outputText value="{!IF(field21eYes == NULL, '  ', field21eYes)}"/></span>
+                                    </td>
+                                    <td width="20px;" style="border:none">
+
+                                    </td>
+                                    <td width="15px" style="border:none">NO</td>
+                                    <td width="10px" style="border:black;border-style:solid;border-width:thin;text-align:center;">
+                                        <span class="resp"><apex:outputText value="{!IF(field21eNo == NULL, '  ', field21eNo)}"/></span>
+                                    </td>
+                                    <td width="10px" style="border:none">
+
+                                    </td>
+                                    <td style="border:none">
+                                        If NO,  complete the following:
+                                    </td>
+                                    <td width="35px" style="border:none">
+
+                                    </td>
+                                    <td style="border:none">
+                                        Annual cost per space:
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                        <td class="td2" width="30%" style="border-bottom:black;border-bottom-style:solid;padding-top:5px;border-bottom-width:thin;border-top:none;border-left:none;">
+                            <div style="position:relative;">
+                                <div style="width:100%;position:absolute;">
+                                    $_______ Surface    $_______ Structured
+                                </div>
+                                <div style="position:absolute;left:2.5%;"><span class="resp">{!surfParkingCost}</span></div>
+                                <div style="position:absolute;left:38%;"><span class="resp">{!structParkingCost}</span></div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-top:10px;padding-left:8px;padding-bottom:10px;" colspan="1" width="50%">
+                <span style="font-weight:lighter;font-size:xx-small;font-family:Arial;">Page 1 of 3</span>
+            </td>
+            <td style="padding-top:10px;padding-right:8px;padding-bottom:10px;text-align:right;" colspan="1" >
+                <span style="font-weight:lighter;font-size:xx-small;font-family:Arial;">GSA FORM 1364 (REV 10/18)</span>
+            </td>
+        </tr>
+    </table>
+
+    <table class="outerTable" style="page-break-before: always">
+        <tr>
+            <td colspan="2">
+                <table class="mainTable">
+                    <tr>
+                        <td class="td1" colspan="4" style="border-top:black;border-top-style:solid;">
+                            SECTION III  -  LEASE TERMS AND CONDITIONS
+                        </td>
+                    </tr>
+                </table>
+                <table class="mainTable">
+                    <tr>
+                        <td class="td2" colspan="3" width="50%">
+                            22.   INITIAL LEASE TERM <br/>
+                            (Full Term)
+                        </td>
+                        <td class="td2" colspan="4" width="50%">
+                            23.   RENEWAL OPTIONS
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" width="16%" colspan="1" style="padding-bottom:0px;">
+                            a.  Number of Years<br/><br/><br/>
+                            <div style="text-align:center;">
+                                <span class="resp">{!field22a}</span>
+                            </div>
+                        </td>
+                        <td class="td2" width="17%" colspan="1" style="padding-bottom:0px;">
+                            b.  Years Firm<br/><br/><br/>
+                            <div style="text-align:center">
+                                <span class="resp">{!field22b}</span>
+                            </div>
+                        </td>
+                        <td class="td2" width="17%" colspan="1" style="padding-bottom:0px;">
+                            c.  Number of Days
+                            Notice for Government to Terminate Lease<br/>
+                            <div style="text-align:center">
+                                <span class="resp">{!field22c}</span>
+                            </div>
+                        </td>
+                        <td colspan="4" class="td2" style="padding-bottom:0px;">
+                            <table width="101%" style="border-spacing:0px;">
+                                <tr>
+                                    <td style="border-bottom:none;vertical-align:top;padding-bottom:0px;border-top:none;border-left:none;">
+                                        a.  Shell Rate /
+                                        RSF / Yr<br/><br/>
+                                        <div style="text-align: center">
+                                            $ <span class="resp">{!field23a}</span>
+                                        </div>
+                                    </td>
+                                    <td style="border-bottom:none;vertical-align:top;padding-bottom:0px;border-top:none;">
+                                        b.  Years Each<br/><br/>
+                                        <div style="text-align: center">
+                                            <span class="resp">{!field23b}</span>
+                                        </div>
+                                    </td>
+                                    <td style="border-bottom:none;vertical-align:top;padding-bottom:0px;border-top:none;">
+                                        c.  Number of Options<br/><br/>
+                                        <div style="text-align: center">
+                                            <span class="resp">{!field23c}</span>
+                                        </div>
+                                    </td>
+                                    <td style="border-bottom:none;vertical-align:top;padding-bottom:0px;border-top:none;">
+                                        d.  Number of Days Notice to Exercise Option:<br/><br/>
+                                        <div style="text-align: center">
+                                            <span class="resp">{!field23d}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" colspan="3" width="50%">
+                            24. OFFER GOOD UNTIL AWARD
+                        </td>
+                        <td class="td2" colspan="4" width="50%">
+                            25. Space will be altered and delivered in accordance with the Government's
+                            specifications and requirements in accordance with the Request for Lease Proposals
+                            (RLP) and the lease.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" width="100%" colspan="7">
+                            26.   COMMISSIONS (If applicable), ATTACH COMMISSION AGREEMENT
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" width="33%" colspan="2">
+                            a.  Tenant Representative Commission:<br/>
+                            <div style="text-align: left">
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="resp">{!field26a}</span> %
+                            </div>
+                        </td>
+                        <td class="td2" width="33%" colspan="2">
+                            b.  Owner’s Representative Commission:<br/>
+                            <div style="text-align: left">
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="resp">{!field26b}</span> %
+                            </div>
+                        </td>
+                        <td class="td2" width="34%" colspan="3">
+                            c.  Schedule of Commission Payments:<br/>
+                            <div style="text-align: left">
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="resp">{!field26c1}</span> % at lease award and <span class="resp">{!field26c2}</span> % at lease occupancy
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" colspan="3" width="50%">
+                            27. OFFEROR’S TENANT IMPROVEMENT FEE SCHEDULE<span class="resp">*</span>
+                            <br/><br/>
+                            &nbsp;&nbsp;<span style="font-size:xx-small;margin-left:5px;color:red;">*Block 27 fees only applicable for TI subject to post-award pricing.; N/A for turnkey</span>
+                            &nbsp;&nbsp;<span style="font-size:xx-small;margin-left:5px;color:red;">pricing</span>
+                            <br/><br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;a.  Architectural/Engineering fees will be (choose one):
+                            <br/>
+                            <table width="100%" style="margin-left:18px;">
+                                <tr>
+                                    <td width="4%" style="border:black;border-style:solid;border-width:thin;text-align:center;">
+                                        <span class="resp">{!field27a1}</span><apex:outputText rendered="{!IF(field27a1 != 'X', true, false)}">&nbsp;</apex:outputText>
+                                    </td>
+                                    <td style="border-style:none;">
+                                        <div style="position:relative;">
+                                            <div style="position:absolute;left:27px;top:-5px;">
+                                                <span class="resp">
+                                                    <apex:outputText value="{0, number, ###,###.00}">
+                                                        <apex:param value="{!field27a1v}"/>
+                                                    </apex:outputText>
+                                                </span>
+                                            </div>
+                                            <div style="position:absolute;top:-5px;width:100%;">
+                                                &nbsp;&nbsp;1.&nbsp;&nbsp;  $ ____________ per ABOA SF
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="4%" style="border:black;border-style:solid;border-width:thin;text-align:center;">
+                                        <span class="resp">{!field27a2}</span><apex:outputText rendered="{!IF(field27a2 != 'X', true, false)}">&nbsp;</apex:outputText>
+                                    </td>
+                                    <td style="border-style:none;">
+                                        <div style="position:relative;">
+                                            <div style="position:absolute;left:19px;top:-5px;">
+                                                <span class="resp">{!field27a2v}</span>
+                                            </div>
+                                            <div style="position:absolute;top:-5px;width:100%;">
+                                                &nbsp;&nbsp;2.&nbsp;&nbsp;  ______% of Total TI construction costs
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="4%" style="border:black;border-style:solid;border-width:thin;text-align:center;">
+                                        <span class="resp">{!field27a3}</span><apex:outputText rendered="{!IF(field27a3 != 'X', true, false)}">&nbsp;</apex:outputText>
+                                    </td>
+                                    <td style="border-style:none;">
+                                        <div style="position:relative;">
+                                            <div style="position:absolute;left:27px;top:-5px;">
+                                                <span class="resp">
+                                                    <apex:outputText value="{0, number, ###,###.00}">
+                                                        <apex:param value="{!field27a3v}"/>
+                                                    </apex:outputText>
+                                                </span>
+                                            </div>
+                                            <div style="position:absolute;top:-5px;width:100%;">
+                                                &nbsp;&nbsp;3.&nbsp;&nbsp;  $ ____________ flat fee
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div style="position:relative;">
+                                <div style="position:absolute;left:174px;top:5px;">
+                                    <span class="resp">{!field27b}</span>
+                                </div>
+                                <div style="position:absolute;top:5px;width:100%;">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;b.  Lessor’s Project Management Fee will be ______ percent of Total TI construction &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;costs
+                                </div>
+                            </div>
+
+                            <br/><br/><br/>
+
+                            <div>
+                                &nbsp;&nbsp;&nbsp;&nbsp;c.  If other fees are applicable, state as per ABOA square foot, or if using a <br/>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;percentage, the basis for determining the fee.<br/>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="resp">{!field27c}</span>
+                            </div>
+
+
+                            <br/><br/><br/><br/><br/><br/><br/>
+                            <div style="margin-left:8px;">
+                                <br/><br/><br/>
+                                <b>
+                                    The Government will add the cost of the proposed TI fees to the net present value of the offered rental
+                                    rate as described in the RLP’s Present Value Price Evaluation paragraph.  This schedule will be applicable
+                                    for Tenant Improvements.
+                                </b>
+                            </div>
+                        </td>
+                        <td class="td2" colspan="4" width="50%">
+                            28.  ADDITIONAL  FINANCIAL ASPECTS OF THE LEASE
+                            <br/>
+                            <table style="margin-left:8px;border:none" width="100%">
+                                <tr>
+                                    <td style="border:none;" width="40%">
+                                        Adjustment for Vacant Premises:
+                                    </td>
+                                    <td style="border:none;" width="60%">
+                                        <!--$ <span class="resp">{!vacantPremiseAdjustment}</span> per ABOA SF-->
+                                        $ <span class="resp">
+                                            <apex:outputText value="{0, number, ###,###.00}">
+                                                <apex:param value="{!vacantPremiseAdjustment}"/>
+                                            </apex:outputText>
+                                        </span> per ABOA SF
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:none;" width="40%">
+                                        Adjustment for Reduced Services:
+                                    </td>
+                                    <td style="border:none;" width="60%">
+                                        <!--$ <span class="resp">{!reducedAdjustment}</span> per ABOA SF*-->
+                                        $ <span class="resp">
+                                            <apex:outputText value="{0, number, ###,###.00}">
+                                                <apex:param value="{!reducedAdjustment}"/>
+                                            </apex:outputText>
+                                        </span> per ABOA SF*
+                                    </td>
+                                </tr>
+                            </table>
+                            <div style="margin-left:8px;">
+                                *Only applies when Government requires extended services, such as 24/7 HVAC, beyond normal
+                                operating hours (check RLP/Lease for confirmation).  Reflects reduction if Government no longer
+                                requires these extended services.
+                            </div>
+                            <table style="margin-left:8px;border:none" width="100%">
+                                <tr>
+                                    <td style="border:none;vertical-align:middle;" width="40%">
+                                        HVAC Overtime Rate:
+                                    </td>
+                                    <td style="border:none;" width="60%">
+                                        <table width="100%">
+                                            <tr>
+                                                <td style="border-style:none;" width="45%">
+                                                    <!--$ <span class="resp">{!field28HVACRt}</span> per  hour per-->
+                                                    $ <span class="resp">
+                                                        <apex:outputText value="{0, number, ###,###.00}">
+                                                            <apex:param value="{!field28HVACRt}"/>
+                                                        </apex:outputText>
+                                                    </span> per hour per
+                                                </td>
+                                                <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                                                    <span class="resp">{!field28HVACzone}</span><apex:outputText rendered="{!IF(field28HVACzone != 'X', true, false)}">&nbsp;&nbsp;</apex:outputText>
+                                                </td>
+                                                <td style="border-style:none;" width="5%">
+                                                    zone
+                                                </td>
+                                                <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                                                    <span class="resp">{!field28HVACfloor}</span><apex:outputText rendered="{!IF(field28HVACfloor != 'X', true, false)}">&nbsp;&nbsp;</apex:outputText>
+                                                </td>
+                                                <td style="border-style:none;" width="5%">
+                                                    floor
+                                                </td>
+                                                <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                                                    <span class="resp">{!field28HVACspace}</span><apex:outputText rendered="{!IF(field28HVACspace != 'X', true, false)}">&nbsp;&nbsp;</apex:outputText>
+                                                </td>
+                                                <td style="border-style:none;">
+                                                    space
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="7" style="border-style:none;">
+                                                    (choose one)
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div style="margin-left:8px;">
+                                <div style="position:relative;">
+                                    <div style="position:absolute;left:139px;top:10px;">
+                                        <span class="resp">{!field28HVACZones}</span>
+                                    </div>
+                                    <div style="position:absolute;top:0px;width:100%;">
+                                        For rates based on a “per zone” basis, provide the following:<br/>
+                                        Number of zones in offered Space: ______<br/>
+                                    </div>
+                                </div>
+
+                                <br/><br/><br/>
+
+                                Building’s Normal Hours of HVAC Operation:<br/>
+                            </div>
+                            <table style="margin-left:18px;border:none" width="60%">
+                                <tr>
+                                    <td style="border:none;" width="40%">
+                                        Monday - Friday
+                                    </td>
+                                    <td style="border:none;" width="60%">
+                                        <span class="resp">{!HVACwkStart}</span> to <span class="resp">{!HVACwkEnd}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:none;" width="40%">
+                                        Saturday
+                                    </td>
+                                    <td style="border:none;" width="60%">
+                                        <span class="resp">{!HVACsatStart}</span> to <span class="resp">{!HVACsatEnd}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:none;" width="40%">
+                                        Sunday
+                                    </td>
+                                    <td style="border:none;" width="60%">
+                                        <span class="resp">{!HVACsunStart}</span> to <span class="resp">{!HVACsunEnd}</span>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table style="margin-left:6px;border:none" width="70%">
+                                <tr>
+                                    <td style="border:none;" width="60%">
+                                        Percent of Government Occupancy
+                                    </td>
+                                    <td style="border:none;vertical-align:baseline;" width="40%">
+                                        <div style="position:relative;">
+                                            <div style="position:absolute;left:10px;top:0px;">
+                                                <span class="resp">{!prcntGovOccupancy}</span>
+                                            </div>
+                                            <div style="position:absolute;top:0px;width:100%;">
+                                                _________%
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:none;" width="60%">
+                                        Current Year Taxes:
+                                    </td>
+                                    <td style="border:none;vertical-align:baseline;" width="40%">
+                                        <div style="position:relative;">
+                                            <div style="position:absolute;left:8px;top:0px;">
+                                                <span class="resp">
+                                                    <apex:outputText value="{0, number, ###,###.00}">
+                                                        <apex:param value="{!currentYrTaxes}"/>
+                                                    </apex:outputText>
+                                                </span>
+                                            </div>
+                                            <div style="position:absolute;top:0px;width:100%;">
+                                                $_________
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </table>
+                            <div style="margin-left:18px;">
+                                <table style="border-spacing:0px;margin-left:-1px;">
+                                    <tr>
+                                        <td style="border:none;" width="50%">
+                                            Based on fully assessed value?
+                                        </td>
+                                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="5%">
+                                            <span class="resp">{!fullyAssessedYes}</span><apex:outputText rendered="{!IF(fullyAssessedYes != 'X', true, false)}">&nbsp;</apex:outputText>
+                                        </td>
+                                        <td style="border:none;padding-left:2px;" width="12%">
+                                            Yes
+                                        </td>
+                                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="5%">
+                                            <span class="resp">{!fullyAssessedNo}</span><apex:outputText rendered="{!IF(fullyAssessedNo != 'X', true, false)}">&nbsp;</apex:outputText>
+                                        </td>
+                                        <td style="border:none;padding-left:2px;">
+                                            No
+                                        </td>
+                                    </tr>
+                                </table>
+                                Is the offered space part of multiple tax bills or multiple buildings on an single tax parcel?<br/>
+                                <table style="border-spacing:0px;margin-left:10px;">
+                                    <tr>
+                                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="5%">
+                                            <span class="resp">{!multyTaxBillYes}</span><apex:outputText rendered="{!IF(multyTaxBillYes != 'X', true, false)}">&nbsp;</apex:outputText>
+                                        </td>
+                                        <td style="border:none;padding-left:2px;" width="12%">
+                                            Yes
+                                        </td>
+                                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="5%">
+                                            <span class="resp">{!multyTaxBillNo}</span><apex:outputText rendered="{!IF(multyTaxBillNo != 'X', true, false)}">&nbsp;</apex:outputText>
+                                        </td>
+                                        <td style="border:none;padding-left:2px;">
+                                            No
+                                        </td>
+                                    </tr>
+                                </table>
+                                If so, provide tax ID numbers and SF for each.  Attach the legal description of the offered property.<br/>
+                            </div>
+                            <div style="margin-left: 8px;">
+                                <div style="position:relative;">
+                                    <div style="position:absolute;left:170px;top:0px;">
+                                        <!--<span class="resp">{!totalLandCost}</span>-->
+                                        <span class="resp">
+                                            <apex:outputText value="{0, number, ###,##0.00}">
+                                                <apex:param value="{!totalLandCost}"/>
+                                            </apex:outputText>
+                                        </span>
+                                    </div>
+                                    <div style="position:absolute;top:0px;width:100%;">
+                                        If a site is offered, state the total land costs:  $________
+                                    </div>
+                                </div>
+                                <br/>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" colspan="3" width="50%">
+                            29. FREE RENT INCLUDED IN OFFER
+                            <div style="margin-left: 18px;">
+                                <table width="100%" style="margin-left:-1px;">
+                                    <tr>
+                                        <td width="4%" style="border:black;border-style:solid;border-width:thin;text-align:center;">
+                                            <span class="resp">{!freeRent1}</span><apex:outputText rendered="{!IF(freeRent1 != 'X', true, false)}">&nbsp;</apex:outputText>
+                                        </td>
+                                    	<!--Rental Concessions changes from here Julia Kantarovsky 8.27.2020-->
+                                        <td style="border-style:none;">
+                                            <div style="position:relative;">
+                                                <div style="position:absolute;left:25px;top:-5px;">
+                                                    <span class="resp">{!formField1}</span><!--Julia was noOfMonthsFreeRentLOP, now assigning new variable-->
+                                                </div>
+                                                <div style="position:absolute;left:25px;top:-5px;">
+                                                    <span class="resp">{!noOfMonthsFreeRentAAAP}</span>
+                                                </div>
+                                                <div style="position:absolute;top:-5px;width:100%;">
+                                                    &nbsp;&nbsp;1.&nbsp;&nbsp;  ______ months free rent (includes shell, operating, TI and BSAC rent)
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="4%" style="border:black;border-style:solid;border-width:thin;text-align:center;">
+                                            <span class="resp">{!freeRent2}</span><apex:outputText rendered="{!IF(freeRent2 != 'X', true, false)}">&nbsp;</apex:outputText>
+                                        </td>
+                                        <td style="border-style:none;">
+                                            <div style="position:relative;">
+                                                <div style="position:absolute;left:188px;top:-5px;font-size:8px;">
+                                                    <span class="resp">{!formField2}</span>
+                                                </div>
+                                                <div style="position:absolute;top:-5px;width:100%;">
+                                                    &nbsp;&nbsp;2.&nbsp;&nbsp;  Other rental concessions structured as follows ______
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="4%" style="border:black;border-style:solid;border-width:thin;text-align:center;">
+                                            <span class="resp">{!freeRent3}</span><apex:outputText rendered="{!IF(freeRent3 != 'X', true, false)}">&nbsp;</apex:outputText>
+                                        </td>
+                                        <!--Rental Concessions changes to here-->
+                                        <td style="border-style:none;">
+                                            <div style="position:relative;">
+                                                <div style="position:absolute;top:-5px;width:100%;">
+                                                    &nbsp;&nbsp;3.&nbsp;&nbsp;  None
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </td>
+                        <td class="td2" colspan="4" width="50%">
+                            30.     LIST OF ATTACHMENTS SUBMITTED WITH THIS OFFER (See RLP requirements)<br/><br/>
+
+
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="7" width="100%" class="td2">
+                            31. ADDITIONAL REMARKS OR CONDITIONS WITH RESPECT TO THIS OFFER<br/>
+                            <span class="resp">{!additionalRemarks}</span>                            
+                        </td>
+                    </tr>
+                </table>
+                <table class="mainTable">
+                    <tr>
+                        <td class="td1" colspan="6" width="100%">
+                            SECTION IV  -  OWNER IDENTIFICATION AND CERTIFICATION
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" colspan="6" width="100%">
+                            32. RECORDED OWNER<br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" colspan="1" width="17%">
+                            a.  Name<br/><br/>
+                            <span class="resp">{!ownerName}</span>
+                        </td>
+                        <td class="td2" colspan="1" width="17%">
+                            b.  Address<br/><br/>
+                            <span class="resp">{!ownerAddress}</span>
+                        </td>
+                        <td class="td2" colspan="1" width="17%">
+                            c.  City<br/><br/>
+                            <span class="resp">{!ownerCity}</span>
+                        </td>
+                        <td class="td2" colspan="1" width="16%">
+                            d.  State<br/><br/>
+                            <span class="resp"> {!ownerState}</span>
+                        </td>
+                        <td class="td2" colspan="1" width="16%">
+                            e.  ZIP +4<br/><br/>
+                            <span class="resp"> {!ownerZip}</span>
+                        </td>
+                        <td class="td2" colspan="1" width="17%">
+                            f. DUNS Number<br/><br/>
+                            <span class="resp"> {!dunsNumber}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="100%" colspan="6" class="td2">
+                            33. BY SUBMITTING THIS OFFER, THE OFFEROR AGREES UPON ACCEPTANCE OF THIS PROPOSAL BY
+                            HEREIN SPECIFIED DATE, TO LEASE TO THE UNITED STATES OF AMERICA, THE PREMISES DESCRIBED,
+                            UPON THE TERMS AND CONDITIONS AS SPECIFIED HEREIN, IN FULL COMPLIANCE WITH AND ACCEPTANCE
+                            OF THE AFOREMENTIONED RLP, WITH ATTACHMENTS.
+                            <div style="margin-left:18px;">
+                                <table>
+                                    <tr>
+                                        <td width="4%" style="border:black;border-style:solid;border-width:thin;text-align:center;">
+                                            <span class="resp">{!acceptedTerms}</span><apex:outputText rendered="{!IF(acceptedTerms != 'X', true, false)}">&nbsp;</apex:outputText>
+                                        </td>
+                                        <td style="border-style:none;">
+                                            I have read the RLP with attachments in its entirety and am requesting no deviations.
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="100%" colspan="6" class="td2">
+                            34. Offeror’s Interest in Property
+                            <div style="margin-left:18px;">
+                                <table>
+                                    <tr>
+                                        <td width="2%" style="border:black;border-style:solid;border-width:thin;text-align:center;">
+                                            <span class="resp">{!interestFlag1}</span><apex:outputText rendered="{!IF(interestFlag1 != 'X', true, false)}">&nbsp;</apex:outputText>
+                                        </td>
+                                        <td style="border-style:none;" width="10%">
+                                            Owner
+                                        </td>
+                                        <td width="2%" style="border:black;border-style:solid;border-width:thin;text-align:center;">
+                                            <span class="resp">{!interestFlag2}</span><apex:outputText rendered="{!IF(interestFlag2 != 'X', true, false)}">&nbsp;</apex:outputText>
+                                        </td>
+                                        <td style="border-style:none;" width="10%">
+                                            Agent
+                                        </td>
+                                        <td width="2%" style="border:black;border-style:solid;border-width:thin;text-align:center;">
+                                            <span class="resp">{!interestFlag3}</span><apex:outputText rendered="{!IF(interestFlag3 != 'X', true, false)}">&nbsp;</apex:outputText>
+                                        </td>
+                                        <td style="border-style:none;" width="10%">
+                                            Other
+                                        </td>
+                                        <td style="border-style:none;">
+                                            <div style="position:relative;">
+                                                <div style="position:absolute;left:10px;top:-5px;">
+                                                    <span class="resp">{!lopOffer.PBS_AAAP_OFFEROR_INTEREST_OTHER__c}</span>
+                                                </div>
+                                                <div style="position:absolute;top:-5px;width:100%;">
+                                                    _____________________________________
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="100%" colspan="6" class="td2">
+                            <table style="margin-left:-2px;">
+                                <tr>
+                                    <td style="border-style:none;" width="20%">
+                                        35. OFFEROR
+                                    </td>
+                                    <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="3%">
+                                        <span class="resp">{!interestFlag4}</span><apex:outputText rendered="{!IF(interestFlag4 != 'X', true, false)}">&nbsp;&nbsp;&nbsp;</apex:outputText>
+                                    </td>
+                                    <td style="border-style:none;padding-left:5px;">
+                                        Check if same as Recorded Owner
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" colspan="1" >
+                            a.  Name<br/>
+                            <span class="resp">{!userdetail.Name}</span>
+                        </td>
+                        <td class="td2" colspan="2" >
+                            b.  Address<br/>
+                            <span class="resp">{!userdetail.Street}</span>
+                        </td>
+                        <td class="td2" colspan="1" >
+                            c.  City<br/>
+                            <span class="resp">{!userdetail.City}</span>
+                        </td>
+                        <td class="td2" colspan="1" >
+                            d.  State<br/>
+                            <span class="resp">{!userdetail.State}</span>
+                        </td>
+                        <td class="td2" colspan="1" >
+                            e.  ZIP + 4<br/>
+                            <span class="resp">{!userdetail.PostalCode}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" colspan="1" >
+                            f.  Title<br/>
+                            <span class="resp">{!if(userdetail.Title != '', userdetail.Title,'N/A')}</span>
+                        </td>
+                        <td class="td2" colspan="3" >
+                            g.  E-Mail Address<br/>
+                            <span class="resp">{!userdetail.Email}</span>
+                        </td>
+                        <td class="td2" colspan="2" >
+                            h.  Telephone Number<br/>
+                            <span class="resp">{!userdetail.Contact.Phone}</span> &nbsp;&nbsp;extension <span class="resp">{!userdetail.Contact.PBS_AAAP_Alternate_Phone__c}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td2" colspan="4" >
+                            i.  Offeror’s Signature<br/>
+                            <span class="resp" style="font-size:large;"><i>{!if(sysDate!='',userdetail.Name,'')}</i></span>
+                            <apex:outputPanel rendered="{!if(sysDate!='',false,true)}">
+                                <br/><br/>
+                            </apex:outputPanel>
+                        </td>
+                        <td class="td2" colspan="2" >
+                            j.  Date Signed<br/>
+                            <span class="resp">{!if(sysDate!='','Signed and submitted on','')} {!sysDate}</span>
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+
+        </tr>
+        <tr>
+            <td style="padding-top:10px;padding-left:8px;padding-bottom:10px;" colspan="1" width="50%">
+                <span style="font-weight:lighter;font-size:xx-small;font-family:Arial;">Page 2 of 3</span>
+            </td>
+            <td style="padding-top:10px;padding-right:8px;padding-bottom:10px;text-align:right;" colspan="1" >
+                <span style="font-weight:lighter;font-size:xx-small;font-family:Arial;">GSA FORM 1364 (REV 10/18)</span>
+            </td>
+        </tr>
+
+    </table>
+
+    <table class="outerTable" style="page-break-before: always">
+        <tr>
+            <td class="td3" colspan="2" width="35%" bgcolor="#a9a9a9" style="border-right:solid;border-right-width:thin;border-bottom:solid;border-bottom-width:thin;">
+                <span style="color:white;font-weight:bold">LEASE PROPOSAL DATA</span>
+            </td>
+            <td class="td3" colspan="1" width="40%" bgcolor="#a9a9a9" style="border-right:solid;border-right-width:thin;border-bottom:solid;border-bottom-width:thin;">
+                <span style="color:white;font-weight:bold">In Response to Request for Lease Proposals (RLP) Number</span><br/>
+                <div style="text-align:center;">
+                    <span style="color:white;font-weight:bold;">{!RLPNumber}</span>
+                </div>
+            </td>
+            <td class="td3" colspan="1" width="25%" bgcolor="#a9a9a9" style="border-bottom:solid;border-bottom-width:thin;border-right:solid;border-right-width:thin;">
+                <span style="color:white;font-weight:bold">DATE:</span><br/>
+                <div style="text-align:center;">
+                    <span style="color:white;font-weight:bold;">{!sysDate}</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="td3" colspan="1" width="5%" bgcolor="#a9a9a9" style="border-right:solid;border-right-width:thin;text-align:center;border-bottom:solid;border-bottom-width:thin;">
+                <span style="color:white;font-weight:bold">1</span>
+            </td>
+            <td class="td2" colspan="3" width="95%" style="border-bottom:solid;border-bottom-width:thin;font-weight:bold;border-right:solid;border-right-width:thin;">
+                Offeror's Interest in the Property:<br/>
+                <table>
+                    <tr>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!propOwner}</span>
+                        </td>
+                        <td style="border-style:none;" width="10%">
+                            Fee owner
+                        </td>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!propAgent}</span>
+                        </td>
+                        <td style="border-style:none;" width="9%">
+                            Agent
+                        </td>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!interestFlag3}</span>
+                        </td>
+                        <td style="border-style:none;">
+                            Other: <span class="resp">{!propOther}</span>
+                        </td>
+                    </tr>
+                </table>
+                <br/><br/>
+
+                Attach evidence of Offeror's interest in property (e.g., deed) and representative's authority to bind Offeror.
+            </td>
+        </tr>
+        <tr>
+            <td class="td3" colspan="1" width="5%" bgcolor="#a9a9a9" style="border-right:solid;border-right-width:thin;text-align:center;border-bottom:solid;border-bottom-width:thin;">
+                <span style="color:white;font-weight:bold">2</span>
+            </td>
+            <td class="td2" colspan="3" width="95%" style="border-bottom:solid;border-bottom-width:thin;font-weight:bold;border-right:solid;border-right-width:thin;">
+                Flood Plains:<br/>
+                <table>
+                    <tr>
+                        <td style="border-style:none;" width="12%">
+                            The Property is
+                        </td>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!floodPlain100Yrs}</span>
+                        </td>
+                        <td style="border-style:none;" width="24%">
+                            in a base (100-year) flood plain
+                        </td>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!floodPlain500Yrs}</span>
+                        </td>
+                        <td style="border-style:none;" width="20%">
+                            in a 500-year flood plain
+                        </td>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!floodPlainNot}</span>
+                        </td>
+                        <td style="border-style:none;">
+                            not in a flood plain.
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+                (See RLP Section 2, Flood Plains.)
+            </td>
+        </tr>
+        <tr>
+            <td class="td3" colspan="1" width="5%" bgcolor="#a9a9a9" style="border-right:solid;border-right-width:thin;text-align:center;border-bottom:solid;border-bottom-width:thin;">
+                <span style="color:white;font-weight:bold">3</span>
+            </td>
+            <td class="td2" colspan="3" width="95%" style="border-bottom:solid;border-bottom-width:thin;font-weight:bold;border-right:solid;border-right-width:thin;">
+                Seismic Safety:  The Building<br/>
+                <table>
+                    <tr>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!rlpNotSeismic}</span>
+                        </td>
+                        <td style="border-style:none;">
+                            RLP does not contain seismic requirements.  No documentation required.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!rlpSeismic}</span>
+                        </td>
+                        <td style="border-style:none;">
+                            RLP contains seismic requirements.  The Building
+                        </td>
+                    </tr>
+                </table>
+                <div style="margin-left:24px;">
+                    <table>
+                        <tr>
+                            <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="3%">
+                                <span class="resp">{!seismicFull}</span><apex:outputText rendered="{!IF(seismicFull != 'X', true, false)}">&nbsp;</apex:outputText>
+                            </td>
+                            <td style="border-style:none;">
+                                Fully meets seismic requirements or meets an exemption under the RLP
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="3%">
+                                <span class="resp">{!seismicNot}</span><apex:outputText rendered="{!IF(seismicNot != 'X', true, false)}">&nbsp;</apex:outputText>
+                            </td>
+                            <td style="border-style:none;">
+                                Does not meet seismic requirements, but will be retrofitted to meet seismic requirements
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="3%">
+                                <span class="resp">{!seismicWill}</span><apex:outputText rendered="{!IF(seismicWill != 'X', true, false)}">&nbsp;</apex:outputText>
+                            </td>
+                            <td style="border-style:none;">
+                                Will be constructed to meet seismic requirements
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="3%">
+                                <span class="resp">{!seismicWillNot}</span><apex:outputText rendered="{!IF(seismicWillNot != 'X', true, false)}">&nbsp;</apex:outputText>
+                            </td>
+                            <td style="border-style:none;">
+                                Will not meet seismic requirements
+                            </td>
+                        </tr>
+                    </table>
+                </div><br/>
+                (See RLP Section 2, Seismic Safety.)  Attach appropriate documentation.
+            </td>
+        </tr>
+        <tr>
+            <td class="td3" colspan="1" width="5%" bgcolor="#a9a9a9" style="border-right:solid;border-right-width:thin;text-align:center;border-bottom:solid;border-bottom-width:thin;">
+                <span style="color:white;font-weight:bold">4</span>
+            </td>
+            <td class="td2" colspan="3" width="95%" style="border-bottom:solid;border-bottom-width:thin;font-weight:bold;border-right:solid;border-right-width:thin;">
+                Historic Preference:  The Building is a<br/>
+                <table>
+                    <tr>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!histPropHistDist}</span>
+                        </td>
+                        <td style="border-style:none;">
+                            Historic property within a historic district.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!NhistPropHistDist}</span>
+                        </td>
+                        <td style="border-style:none;">
+                            Non-historic developed site or non-historic undeveloped site within a historic district.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!histPropNHistDist}</span>
+                        </td>
+                        <td style="border-style:none;">
+                            Historic property outside of a historic district.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!NhistPropNHistDist}</span>
+                        </td>
+                        <td style="border-style:none;">
+                            None of the above
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+
+                (See RLP Section 2, Historic Preference.)  Attach appropriate documentation.
+            </td>
+        </tr>
+        <tr>
+            <td class="td3" colspan="1" width="5%" bgcolor="#a9a9a9" style="border-right:solid;border-right-width:thin;text-align:center;border-bottom:solid;border-bottom-width:thin;">
+                <span style="color:white;font-weight:bold">5</span>
+            </td>
+            <td class="td2" colspan="3" width="95%" style="border-bottom:solid;border-bottom-width:thin;font-weight:bold;border-right:solid;border-right-width:thin;">
+                Asbestos-Containing Material (ACM):  The Property<br/>
+                <table>
+                    <tr>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!asbestosNot}</span>
+                        </td>
+                        <td style="border-style:none;">
+                            Contains no ACM, or contains ACM in a stable, solid matrix that is not damaged or subject to damage.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!asbestosNotStable}</span>
+                        </td>
+                        <td style="border-style:none;">
+                            Contains ACM not in a stable, solid matrix.
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+
+                (See RLP Section 2, Asbestos.)
+            </td>
+        </tr>
+        <tr>
+            <td class="td3" colspan="1" width="5%" bgcolor="#a9a9a9" style="border-right:solid;border-right-width:thin;text-align:center;border-bottom:solid;border-bottom-width:thin;">
+                <span style="color:white;font-weight:bold">6</span>
+            </td>
+            <td class="td2" colspan="3" width="95%" style="border-bottom:solid;border-bottom-width:thin;font-weight:bold;border-right:solid;border-right-width:thin;">
+                Fire/Life Safety:<br/>
+                <table>
+                    <tr>
+                        <td style="border-style:none;" width="10%">
+                            The Property
+                        </td>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!flsMet}</span>
+                        </td>
+                        <td style="border-style:none;" width="5%">
+                            Meets
+                        </td>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!flsNot}</span>
+                        </td>
+                        <td style="border-style:none;">
+                            Does not meet Lease fire/life safety standards.
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+
+                (See RLP Section 2, Fire Protection and Life Safety.)
+            </td>
+        </tr>
+        <tr>
+            <td class="td3" colspan="1" width="5%" bgcolor="#a9a9a9" style="border-right:solid;border-right-width:thin;text-align:center;border-bottom:solid;border-bottom-width:thin;">
+                <span style="color:white;font-weight:bold">7</span>
+            </td>
+            <td class="td2" colspan="3" width="95%" style="border-bottom:solid;border-bottom-width:thin;font-weight:bold;border-right:solid;border-right-width:thin;">
+                Accessibility:<br/>
+                <table>
+                    <tr>
+                        <td style="border-style:none;" width="10%">
+                            The Property
+                        </td>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!accessibilityMet}</span>
+                        </td>
+                        <td style="border-style:none;" width="5%">
+                            Meets
+                        </td>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!accessibilityNot}</span>
+                        </td>
+                        <td style="border-style:none;">
+                            Does not meet accessibility standards.
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+
+                (See RLP Section 2, Accessibility.)
+            </td>
+        </tr>
+        <tr>
+            <td class="td3" colspan="1" width="5%" bgcolor="#a9a9a9" style="border-right:solid;border-right-width:thin;text-align:center;border-bottom:solid;border-bottom-width:thin;">
+                <span style="color:white;font-weight:bold">8</span>
+            </td>
+            <td class="td2" colspan="3" width="95%" style="border-bottom:solid;border-bottom-width:thin;font-weight:bold;border-right:solid;border-right-width:thin;">
+                ENERGY STAR®:  The Building<br/>
+                <table>
+                    <tr>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!energyStarCerified}</span><apex:outputText rendered="{!IF(energyStarCerified != 'X', true, false)}">&nbsp;</apex:outputText>
+                        </td>
+                        <td style="border-style:none;" colspan="2">
+                            <div style="position:relative;">
+                                <div style="position:absolute;left:377px;top:-5px;">
+                                    <span class="resp">{!energyStarCertDt}</span>
+                                </div>
+                                <div style="position:absolute;top:-5px;width:100%;">
+                                    Has received the ENERGY STAR® Label within the past twelve months.  Date (MM-DD-YYYY): __________
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!energyStarNotCerified}</span><apex:outputText rendered="{!IF(energyStarNotCerified != 'X', true, false)}">&nbsp;</apex:outputText>
+                        </td>
+                        <td style="border-style:none;" colspan="2">
+                            Has not received the ENERGY STAR® Label within the past twelve months; the Offeror has evaluated energy savings measures and
+                        </td>
+                    </tr>
+                </table>
+
+                <table style="margin-left:24px;">
+                    <tr>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!energyNo1}</span><apex:outputText rendered="{!IF(energyNo1 != 'X', true, false)}">&nbsp;</apex:outputText>
+                        </td>
+                        <td style="border-style:none;">
+                            Determined that none are cost effective.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!energyNo2}</span><apex:outputText rendered="{!IF(energyNo2 != 'X', true, false)}">&nbsp;</apex:outputText>
+                        </td>
+                        <td style="border-style:none;">
+                            Determined that the following are cost effective (Attach additional pages):
+                        </td>
+                    </tr>
+                </table>
+
+                <br/><br/>
+                <br/><br/><br/><br/><br/><br/><br/>
+
+                (See RLP Section 2, Energy Independence and Security Act.)
+            </td>
+        </tr>
+        <tr>
+            <td class="td3" colspan="1" width="5%" bgcolor="#a9a9a9" style="border-right:solid;border-right-width:thin;text-align:center;border-bottom:solid;border-bottom-width:thin;">
+                <span style="color:white;font-weight:bold">9</span>
+            </td>
+            <td class="td2" colspan="3" width="95%" style="border-bottom:solid;border-bottom-width:thin;font-weight:bold;border-right:solid;border-right-width:thin;">
+                Waiver of Price Evaluation Preference.  A HUBZone small business concern (SBC) Offeror may elect to waive the price evaluation
+                preference provided in Section 4 of the RLP.  In such a case, no price evaluation preference shall apply to the evaluation of the
+                HUBZone SBC, and the performance of work requirements set forth in Section 1 of the Lease shall not be applicable to a lease awarded
+                to the HUBZone SBC Offeror under this solicitation.  A HUBZone SBC desiring to waive the price evaluation preference should so
+                indicate below.<br/>
+                <table width="100%">
+                    <tr>
+                        <td style="border:black;border-style:solid;border-width:thin;text-align:center;" width="2%">
+                            <span class="resp">{!hubZoneOfferer}</span>
+                        </td>
+                        <td style="border-style:none;">
+                            I am a HUBZone SBC Offeror and I elect to waive the price evaluation preference.
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+
+                (See RLP and Lease documents for more information)
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-top:10px;padding-left:8px;padding-bottom:10px;" colspan="2" width="50%">
+                <span style="font-weight:lighter;font-size:xx-small;font-family:Arial;">Page 3 of 3</span>
+            </td>
+            <td style="padding-top:10px;padding-right:8px;padding-bottom:10px;text-align:right;" colspan="2" >
+                <span style="font-weight:lighter;font-size:xx-small;font-family:Arial;">GSA FORM 1364 (REV 10/18)</span>
+            </td>
+        </tr>
+
+    </table>
+</apex:page>

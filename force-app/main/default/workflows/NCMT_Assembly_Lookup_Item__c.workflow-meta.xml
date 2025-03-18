@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <rules>
+        <fullName>NCMT Assembly Lookup Updates</fullName>
+        <actions>
+            <name>Labor_Hours_Update</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Total_Cost_O_P</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Update_Equipment_Cost</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Update_Installation_Cost</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Update_Labor_Unit_Cost</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Update_Material_Unit_cost</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>NCMT_Assembly_Lookup_Item__c.CreatedDate</field>
+            <operation>greaterThan</operation>
+            <value>1/1/1900</value>
+        </criteriaItems>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+</Workflow>

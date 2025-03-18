@@ -1,0 +1,350 @@
+<apex:page Controller="PBS_AAAP_OfferRepsAndCerts" sidebar="false" showHeader="false">
+
+    <style>
+.errMessage {color:red; }
+
+    </style>
+
+    <!-- <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/> -->
+    <script type="text/javascript">
+function validate(){    
+    var flag = true;
+    var reps1 = document.getElementsByName('{!$Component.newOffer.reps1}');
+    var bsw = false;
+    for(var i=0; i<reps1.length; i++){
+        if(reps1[i].checked == true){
+            bsw=true; break;
+        }       
+    }
+    if(bsw == false){
+        document.getElementById('reps1error').style.display ='inline';
+        flag = false;
+    }
+    else{
+        document.getElementById('reps1error').style.display ='none';
+    }
+    
+    var reps2 = document.getElementsByName('{!$Component.newOffer.reps2}');
+    var bsw = false;
+    for(var i=0; i<reps2.length; i++){
+        if(reps2[i].checked == true){
+            bsw=true; break;
+        }       
+    }
+    if(bsw == false){
+        document.getElementById('reps2error').style.display ='inline';
+        flag = false;
+    }
+    else{
+        document.getElementById('reps2error').style.display ='none';
+    }
+    
+    var reps3 = document.getElementsByName('{!$Component.newOffer.reps3}');
+    var bsw = false;
+    for(var i=0; i<reps3.length; i++){
+        if(reps3[i].checked == true){
+            bsw=true; break;
+        }       
+    }
+    if(bsw == false){
+        document.getElementById('reps3error').style.display ='inline';
+        flag = false;
+    }
+    else{
+        document.getElementById('reps3error').style.display ='none';
+    }
+    
+    var reps4 = document.getElementsByName('{!$Component.newOffer.reps4}');
+    var bsw = false;
+    for(var i=0; i<reps4.length; i++){
+        if(reps4[i].checked == true){
+            bsw=true; break;
+        }       
+    }
+    if(bsw == false){
+        document.getElementById('reps4error').style.display ='inline';
+        flag = false;
+    }
+    else{
+        document.getElementById('reps4error').style.display ='none';
+    }
+    
+    var reps5 = document.getElementsByName('{!$Component.newOffer.reps5}');
+    var bsw = false;
+    for(var i=0; i<reps5.length; i++){
+        if(reps5[i].checked == true){
+            bsw=true; break;
+        }       
+    }
+    if(bsw == false){
+        document.getElementById('reps5error').style.display ='inline';
+        flag = false;
+    }
+    else{
+        document.getElementById('reps5error').style.display ='none';
+    }
+    
+    
+    
+    
+    return flag;
+}
+
+    </script>
+    
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+        <ul>
+            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
+                <apex:outputLink value="/AAAP/home/home.jsp">
+                    <li>{!$Label.site.login_button}</li>
+                </apex:outputLink>
+                <li> |</li>
+                <apex:outputLink value="/AAAP/ForgotPassword">
+                    <li>{!$Label.site.forgot_your_password_q}</li>
+                </apex:outputLink>
+                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
+                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
+                    <li>{!$Label.site.new_user_q}</li>
+                </apex:outputLink>
+            </apex:panelGroup>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>{!$Label.site.logout}</li>
+            </apex:outputLink>
+            <li>|</li>
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>
+        </ul>
+
+    </div><!--/login-->
+    <div id="wrapper">
+        <c:inside_header />
+        <div id="content" class="reps-certs"><!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
+
+            <c:PBS_AAAP_ProgressBar myValue="{!offerRepsAndCerts.Id}"/>
+            <apex:form id="newOffer" styleClass="formwrap">
+                <h3 class="blue">Representation and Certification</h3>
+                <apex:messages styleClass="errMessage"/>
+                <apex:panelGrid columns="1" id="theGridsection2" style="width:935px; overflow:hidden; ">
+
+                    <apex:outputPanel >
+                        <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_1}"/>
+                        <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_Representation__c}" id="reps1">
+                            <apex:actionSupport event="onchange" action="{!showPropertyOwnerSmallBusiness}"
+                                                rerender="smallBusinessPanel"/>
+                            <apex:selectOptions value="{!smallBusiness}"/>
+                        </apex:selectRadio>
+
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="smallBusinessPanel">&nbsp;&nbsp;
+                        <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_1A}" rendered="{!smallBusinessYES}"/>
+                        <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_SMALL_DISADVANTAGED_IDENTIFIER__c}"
+                                          rendered="{!smallBusinessYES}" id="reps1A">
+                            <apex:selectOptions value="{!items}"/>
+                        </apex:selectRadio>
+
+                        &nbsp;&nbsp;<apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_1B}"
+                                                     rendered="{!smallBusinessYES}"/>
+                        <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_Women_Owned_Identifier__c}"
+                                          rendered="{!smallBusinessYES}" id="reps1B" styleClass="radioCell">
+                            <apex:selectOptions value="{!items}"/>
+                        </apex:selectRadio>
+
+                        &nbsp;&nbsp;<apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_1C}"
+                                                     rendered="{!smallBusinessYES}"/>
+                        <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_Veteran_Owned_Identifier__c}"
+                                          rendered="{!smallBusinessYES}" id="reps1C" styleClass="radioCell">
+                            <apex:actionSupport event="onchange" action="{!showPropertyOwnerVeteranOwned}"
+                                                rerender="smallBusiness1DPanel"/>
+                            <apex:selectOptions value="{!items}"/>
+                        </apex:selectRadio>
+
+                        &nbsp;&nbsp;<apex:outputPanel id="smallBusiness1DPanel">
+                            <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_1D}"
+                                             rendered="{!smallBusiness1D}"/>
+                            <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_SERVICE_DISABLED_IDENTIFIER__c}"
+                                              rendered="{!smallBusiness1D}" id="reps1D" styleClass="radioCell">
+                                <apex:selectOptions value="{!items}"/>
+                            </apex:selectRadio>
+                        </apex:outputPanel>
+
+                        <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_1E}" rendered="{!smallBusinessYES}"/>
+                        <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_HUBZONE_IDENTIFIER__c}"
+                                          rendered="{!smallBusinessYES}" id="reps1E" styleClass="radioCell">
+                            <apex:actionSupport event="onchange" action="{!showPropertyOwnerHUBZONE}"
+                                                rerender="smallBusiness1FPanel,smallBusiness1GPanel"/>
+                            <apex:selectOptions value="{!items}"/>
+                        </apex:selectRadio>
+
+
+                        <apex:outputPanel id="smallBusiness1FPanel">
+                            <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_1I}"
+                                             rendered="{!smallBusinessHUBZONE}"/>
+                            <br/>
+                            <apex:inputField value="{!offerRepsAndCerts.PBS_AAAP_HUBZone_SBC_Offeror__c}"
+                                             rendered="{!smallBusinessHUBZONE}" id="reps1I"/> &nbsp;
+                            <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_1Ia}"
+                                             rendered="{!smallBusinessHUBZONE}"/>
+                            <br/><br/>
+
+                            <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_1F}"
+                                             rendered="{!smallBusinessHUBZONE}"/>
+                            <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_HUBZONE_JOINT_VENTURE__c}"
+                                              rendered="{!smallBusinessHUBZONE}" id="reps1F" styleClass="radioCell">
+                                <apex:actionSupport event="onchange"
+                                                    action="{!showPropertyOwnerHUBZONEJointVentureNames}"
+                                                    rerender="smallBusiness1GPanel"/>
+                                <apex:selectOptions value="{!items}"/>
+                            </apex:selectRadio>
+
+                            <apex:outputPanel id="smallBusiness1GPanel">
+                                <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_1G}"
+                                                 rendered="{!smallBusinessHUBZONENames}"/>
+                                <apex:inputField value="{!offerRepsAndCerts.PBS_AAAP_HUBZONE_JOINT_VENTURE_NAMES__c}"
+                                                 rendered="{!smallBusinessHUBZONENames}" id="reps1G"/>
+                            </apex:outputPanel>
+
+                            <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_1H}"
+                                             rendered="{!smallBusinessNO}"/>
+                            <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_Women_Owned_Identifier__c}"
+                                              rendered="{!smallBusinessNO}" id="reps1H" styleClass="radioCell">
+                                <apex:selectOptions value="{!items}"/>
+                            </apex:selectRadio>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel >
+                        <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_2}"/>
+                        <br/>
+                        <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_EEO_CLAUSE__c}" id="reps2"
+                                          styleClass="radioCell">
+                            <apex:actionSupport event="onchange" action="{!showPropertyOwnerComplianceReport}"
+                                                rerender="smallBusinessQ2aPanel"/>
+                            <apex:selectOptions value="{!items}"/>
+                        </apex:selectRadio>
+
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="smallBusinessQ2aPanel">
+                        <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_2a}" rendered="{!complianceReport}"/>
+                        <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_COMPLIANCE_REPORT__c}"
+                                          rendered="{!complianceReport}" id="reps2a" styleClass="radioCell">
+                            <apex:selectOptions value="{!items}"/>
+                        </apex:selectRadio>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel >
+                        <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_3}"/>
+                        <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_AFFIRMATIVE_ACTION_PROGRAMS__c}"
+                                          id="reps3" styleClass="radioCell">
+                            <apex:actionSupport event="onchange" action="{!showPropertyOwnerSecretaryLabor3a}"
+                                                rerender="smallBusinessQ3aPanel"/>
+                            <apex:selectOptions value="{!items}"/>
+                        </apex:selectRadio>
+
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="smallBusinessQ3aPanel">
+                        <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_3a}" rendered="{!secretaryLabor}"/>
+                        <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_AFFIRMATIVE_ACTION_CONTRACTS__c}"
+                                          rendered="{!secretaryLabor}" id="reps3a" styleClass="radioCell">
+                            <apex:selectOptions value="{!items}"/>
+                        </apex:selectRadio>
+
+                    </apex:outputPanel>
+
+                    <apex:outputPanel >
+                        <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_4}"/>
+                        <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_CERTIFICATE_OF_SIGNATORY__c}" id="reps4"
+                                          styleClass="radioCell">
+                            <apex:actionSupport event="onchange" action="{!showPropertyOwnerSecretaryAcknowledge4a}"
+                                                rerender="smallBusinessQ4aPanel,smallBusinessQ4bPanel"/>
+                            <apex:selectOptions value="{!items}"/>
+                        </apex:selectRadio>
+
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="smallBusinessQ4aPanel">
+                        <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_4a}"
+                                         rendered="{!authorizedSignature}"/>
+                        <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_AUTHORIZED_SIGNATORY__c}"
+                                          rendered="{!authorizedSignature}" id="reps4a" styleClass="radioCell">
+                            <apex:actionSupport event="onchange" action="{!showPropertyOwnerPersonFullName4b}"
+                                                rerender="smallBusinessQ4bPanel"/>
+                            <apex:selectOptions value="{!items}"/>
+                        </apex:selectRadio>
+
+                        <apex:outputPanel id="smallBusinessQ4bPanel">
+                            <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_4b}"
+                                             rendered="{!authorizedNames}"/>
+                            <apex:inputField value="{!offerRepsAndCerts.PBS_AAAP_NAMES_RESP_FOR_DET_PRICES__c}"
+                                             rendered="{!authorizedNames}" id="reps4b"/>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel >
+                        <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_5}"/>
+                        <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_Confirm_Owner_Status__c}" id="reps5"
+                                          styleClass="radioCell">
+                            <apex:selectOptions value="{!items}"/>
+                        </apex:selectRadio>
+
+                    </apex:outputPanel>
+
+                    <apex:outputPanel >
+                        <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_6}"/>
+                        <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_OWNER_CONVICTION__c}" id="reps6"
+                                          styleClass="radioCell">
+                            <apex:selectOptions value="{!items}"/>
+                        </apex:selectRadio>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel >
+                        <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_7}"/>
+                        <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_OWNER_INDICTMENT__c}" id="reps7"
+                                          styleClass="radioCell">
+                            <apex:selectOptions value="{!items}"/>
+                        </apex:selectRadio>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel >
+                        <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_8}"/>
+                        <br/>
+                        <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_OWNER_CONTRACT_DEFAULT__c}" id="reps8"
+                                          styleClass="radioCell">
+                            <apex:selectOptions value="{!items}"/>
+                        </apex:selectRadio>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel >
+                        <apex:outputtext value="{!$Label.AAAP_PBS_Reps_And_Certs_9}"/>
+                        <br/>
+                        <apex:selectRadio value="{!offerRepsAndCerts.PBS_AAAP_CCR_REGISTRATION_ACTIVE_STATUS__c}"
+                                          id="reps9" styleClass="radioCell">
+                            <apex:selectOptions value="{!itemsQ9}"/>
+                        </apex:selectRadio>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel >
+                        <apex:commandButton value="Continue" action="{!gotoAttachmentsTab}"/>
+                        <!-- onclick="return validate();" -->
+                        <apex:commandButton value="Back" action="{!backToOfrPropertyOwnerTab}"/>
+                        <apex:commandButton value="Save Form" action="{!saveRepsAndCertsInfo}"/>
+                        <apex:commandButton value="Cancel"/>
+                        <apex:commandButton value="View Offer"
+                                            onclick="window.open('/AAAP/PBS_AAAP_PreviewOfferPage?offerId={!JSENCODE(offerRepsAndCerts.id)}','_blank');"/>
+                        <apex:commandButton value="Delete Offer" action="{!actionDeleteOffer}"
+                                            onclick="if(confirm('Are you sure you want to delete this record?')){return true;} else return false;"/>
+
+                    </apex:outputPanel>
+
+                </apex:panelGrid>
+
+            </apex:form>
+        </div><!-- /content-->
+
+    </div><!-- /Wrapper -->
+    <c:SiteFooterUX />
+</apex:page>

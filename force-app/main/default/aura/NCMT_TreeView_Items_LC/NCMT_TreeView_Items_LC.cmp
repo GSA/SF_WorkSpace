@@ -1,0 +1,475 @@
+<aura:component controller='NCMT_TreeView_Items_Ctrl_LC' >
+    <aura:attribute name='recordId' type='string' />
+    <aura:attribute name="costCat" type="String" />
+    <aura:attribute name="pcsId" type="String" />
+    <aura:attribute name="costCatId" type="String" />
+    
+    <!--Project attributes -->
+    <aura:attribute name="projectYear" type="String" />
+    <aura:attribute name="projectState" type="String" />
+
+    <aura:attribute name="isOandP" type="boolean" />
+
+    <aura:attribute name="locationMultiplier" type="Integer" />
+    <aura:attribute name="salesTax" type="Integer" />
+    <aura:attribute name="laborBurden" type="Integer" />
+
+    <aura:attribute name='laborMarkups' type='object' />
+    
+    <aura:attribute name="level2desc" type="String" />
+    <aura:attribute name="level3desc" type="String" />
+    <aura:attribute name="level4desc" type="String" />
+    <aura:attribute name="level5desc" type="String" />
+    <aura:attribute name="isLevelFive" type="boolean" />
+    <aura:attribute name="isLevelTwo" type="boolean" />
+    <aura:attribute name="isLoaded" type="boolean" default="false"/>
+
+    <aura:attribute name="ESTFormat" type="String" />
+    <aura:attribute name="treeMarkupMethod" type="String" />
+
+    
+    <!-- <aura:attribute name="isError" type="boolean" /> -->
+    
+    <!-- <aura:attribute name="lookupLimit" type="Integer" default="10"/>
+    <aura:attribute name="currentLookups" type="Integer" default="10"/>
+    <aura:attribute name="lookupOffset" type="Integer" default="0"/> -->
+    
+    <aura:attribute name="lookupTotal" type="Integer" default="0"/>
+    
+    <aura:attribute name="recordTypeId" type="string" />
+    
+    <aura:handler name='init' value='{!this}' action='{!c.doInit}'/>
+    
+    <aura:attribute name="oRecord" type="sObject" />
+    <aura:registerEvent name="oSelectedRecordEvent" type="c:NCMT_selectListEvent"/>
+    
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}" description="Use,for store SELECTED sObject Record"/>
+    
+    <aura:attribute name='selectedCrewMasters' type='List' default ='[]'/>
+    <aura:attribute name='selectedUniformats' type='List' default ='[]'/>
+    <aura:attribute name='selectedContractors' type='List' default ='[]'/>
+    
+    <aura:attribute name='selectedName' type='string'/>
+    <aura:attribute name='selectedId' type='string'/>
+    
+    
+    <aura:attribute name='data' type='object' />
+    <!-- <aura:attribute name='initData' type='object' /> -->
+
+    <aura:attribute name='selectedItems' type='object' />
+    <aura:attribute name='selItems' type='List'  default = '[]'/>
+    
+    
+    <aura:attribute name='phases' type='object[]' />
+    <aura:attribute name='costTypes' type='List[]' />
+    
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <aura:attribute name='createdItems' type='object' />
+    <aura:attribute name="itemsCreated" type="boolean" default="false"/>
+    <aura:attribute name="messageText" type="string" />
+    
+    
+    <aura:attribute name="activeSections" type="List" default="" />
+    <aura:attribute name="activeSectionsMessage" type="String" default="" />
+    
+    
+    
+    <!-- <p>Click > Item to view more details::{! v.activeSectionsMessage }</p>
+  <div class="" style="height:6rem" aura:id='loadingData'> 
+    <div role="status" class="slds-spinner slds-spinner_medium">
+      <span class="slds-assistive-text">Loading</span>
+      <div class="slds-spinner__dot-a"></div>
+      <div class="slds-spinner__dot-b"></div>
+    </div>
+  </div> -->
+  <aura:if isTrue="{! !v.isLoaded }">
+        <lightning:spinner alternativeText="Loading" />
+    </aura:if>
+
+    <aura:if isTrue="{!v.isLoaded }">
+        <div class="totalClass">
+            <b> {!v.lookupTotal} &nbsp; {!v.level5desc} Items</b>
+            
+        </div>
+        <lightning:accordion
+                           allowMultipleSectionsOpen="true"
+						   onsectiontoggle="{! c.handleSectionToggle }"
+                           activeSectionName="{! v.activeSections }"
+						   >
+            
+            <div class="slds-grid slds-wrap">
+                <div class="slds-form slds-p-around--large slds-width-fill">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered" aria-multiselectable="true">
+                        
+                        <tbody>
+                            <aura:iteration items='{!v.data}' var='wi'>
+                                <lightning:accordionSection name="{!wi.Id}" label="{!wi.ItemDesc__c}">
+                                    <aura:if isTrue='{!wi.Level_2_Description__c  != null}'>
+                                        <tr class="slds-hint-parent ">
+                                            <th data-label="Select" scope="row">
+                                                <div class="slds-form-element slds-form-element_stacked">
+                                                    <div class="slds-form-element__control">
+                                                        <label class="slds-form-element__label slds-checkbox" for="Select">Select</label>
+                                                        <div style="margin-left:10px;">
+                                                            <ui:inputCheckbox class="slds-checkbox" value="{!wi.selected}" text='{!wi}' change='{!c.handleSelect}'/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- <td><ui:outputText aura:id="itemId" value="{!wi.Id}"/></td> -->
+                                            </th>
+                                            
+                                            <!-- COL 2 -->
+                                            
+                                            
+                                            
+                                            <td style="width:175px;">
+                                                <div class="slds-form-element slds-form-element_stacked">
+                                                    <label class="slds-form-element__label" for="itemNumber">Line Item Number</label>
+                                                    <div class="slds-form-element__control">
+                                                        <aura:if isTrue='{!v.isLevelFive}'>                                         
+                                                            <ui:inputText class="slds-input" aura:id="itemNumber" value="{!wi.Line_Item_Number__c}" placeholder="Line Item Number"/>
+                                                            <aura:set attribute="else">    
+                                                                <!--<ui:outputText class="" aura:id="itemNumber" value="{!wi.Line_Item_Number__c}"/>-->
+                                                                <lightning:formattedText class="" aura:id="itemNumber" value="{!wi.Line_Item_Number__c}"/>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-form-element slds-form-element_stacked">
+                                                    <label class="slds-form-element__label" for="itemDescription">Description</label>
+                                                    <div class="slds-form-element__control">
+                                                        <aura:renderIf isTrue="{!wi.Description__c !=''}">
+                                                            <aura:if isTrue='{!v.isLevelTwo}'>                                         
+                                                                <ui:inputTextArea class="slds-input slds-desc slds-cell-wrap" maxlength="150" aura:id="itemDescription" value="{!wi.Description__c}"/>
+                                                                <!-- <ui:inputText class="slds-input_bare slds-desc slds-grow slds-cell-wrap" aura:id="itemDescription" value="{!wi.Description__c}" /> -->
+                                                                <aura:set attribute="else">
+                                                                    <ui:inputText class="slds-input slds-grow slds-cell-wrap" aura:id="itemDescription" value="{!wi.Description__c}" placeholder="Add Description"/>
+                                                                </aura:set>
+                                                                <aura:set attribute="else">
+                                                                    <!--<ui:outputTextArea class="slds-desc slds-cell-wrap" aura:id="itemDescription" value="{!wi.Description__c}"/>-->
+                                                                    <lightning:formattedText class="slds-desc slds-cell-wrap" aura:id="itemDescription" value="{!wi.Description__c}"/>
+                                                                </aura:set>
+                                                            </aura:if>
+                                                        </aura:renderIf>                                        
+                                                        <!-- <input type="text" aura:id="itemDescription" value="{!wi.Description__c}" placeholder="Add Description" class="slds-input" />  -->
+                                                        <!-- <ui:inputText class="slds-input slds-grow slds-cell-wrap" aura:id="itemDescription" value="{!wi.Description__c}" placeholder="Add Description"/>  -->
+                                                    </div>
+                                                </div>
+                                                <aura:if isTrue="{!and(v.recordId != null, v.recordId !='')}"> 
+                                                <div class="slds-form-element slds-form-element_stacked">
+                                                    <label class="slds-form-element__label" for="itemTag">Tag</label>
+                                                    <div class="slds-form-element__control">
+                                                        <ui:inputText class="slds-input" aura:id="itemTag" value="{!wi.Tag__c}" placeholder="Tag Details"/>
+                                                        <!-- <input type="text" aura:id="itemTag" value="{!wi.Tag__c}" placeholder="Tag Details" class="slds-input" /> -->
+                                                        
+                                                    </div>
+                                                </div>
+                                                </aura:if>
+                                                <!-- <div class="slds-form-element slds-form-element_stacked">
+                                        <c:NCMT_TreeView_Item_Lookup label="Uniformat Lookup"  hoverMessage="Search Uniformat Lookup" currentWiId='{!wi.Id}' currentValue='{!wi.DES_Uniformat_Lookup__r.Name}' 
+                                                                    objectAPIName='NCMT_Assembly_Lookup_Detail__c' cmList = '{!v.selectedUniformats}' IconName="standard:contract_line_item" fiscalYear='{!v.projectYear}' selectedRecord="{!v.selectedLookUpRecord}"/>
+                                    </div> -->
+                                            </td>
+                                            
+                                            <!-- COL 3 -->
+                                            <td style="width:175px;">
+                                                <div class="slds-form-element slds-form-element_stacked">
+                                                    <label class="slds-form-element__label" for="itemTag">Labor Resource</label>
+                                                    <div class="slds-form-element__control">
+                                                    <!--<ui:outputTextArea class="slds-desc slds-cell-wrap" aura:id="itemDescription" value="{!wi.NCMT_Labor__r.Name}"/>-->
+                                                    <lightning:formattedText class="slds-desc slds-cell-wrap" aura:id="itemDescription" value="{!wi.NCMT_Labor__r.Name}"/>
+                                                </div>
+
+                                                </div>
+                                                <div style="{!if(v.isLevelFive == false, 'pointer-events:none;')}" class="slds-form-element slds-form-element_stacked">
+                                                    <label class="slds-form-element__label " style="float: right; padding: 0.1rem;">
+                                                        <lightning:helptext title="Index applied to each crew as part of an overall crew library" iconName="utility:info_alt"/>
+                                                    </label>
+                                                    <c:NCMT_TreeView_Item_Lookup label="Crew Master Name" currentWiId='{!wi.Id}' currentValue='{!wi.NCMT_Crew_Master__r.Name}'
+                                                                                objectAPIName='NCMT_Crew_Master__c' cmList = '{!v.selectedCrewMasters}' IconName="standard:service_crew" selectedRecord="{!v.selectedLookUpRecord}"/>
+                                                </div>
+                                                <aura:if isTrue="{!and(v.recordId != null, v.recordId !='')}"> 
+                                                <div class="slds-form-element slds-form-element_stacked">
+                                                    <c:NCMT_TreeView_Item_Lookup label="Sub Contractor" hoverMessage="Search Sub Contractor Lookup" currentWiId='{!wi.Id}' currentValue='{!wi.NCMT_Contractor_ID__r.Name}' 
+                                                                                objectAPIName='NCMT_Contractor__c' cmList = '{!v.selectedContractors}' IconName="standard:skill_requirement" fiscalYear='{!v.projectYear}' selectedRecord="{!v.selectedLookUpRecord}"/>
+                                                </div>
+                                                </aura:if>
+    <!--                                             
+                                                <div class="slds-form-element slds-form-element_stacked">
+                                                    <label class="slds-form-element__label" for="phases">Phase<abbr class="slds-required" title="required">*</abbr></label>
+                                                    <div class="slds-form-element__control">
+                                                        <ui:inputSelect aura:id="phases" class="slds-input" value="{!wi.Project_Phasing__c}" required="true" >
+                                                            <aura:iteration items="{!v.phases}" var="ph">
+                                                                <ui:inputSelectOption text="{!ph.Id}" label="{!ph.Name}" value='true'/>
+                                                            </aura:iteration>
+                                                        </ui:inputSelect>
+                                                    </div>
+                                                </div>  -->
+                                               <div class="slds-form-element slds-form-element_stacked">
+                                                    <div class="slds-form-element__control">
+                                                        <lightning:input type="checkbox" label="Apply Location Factor" checked="true" aura:id="includeLoc" value="{!wi}" onchange="{!c.handleInclude}" />                                              
+                                                      </div>
+                                                </div>
+                                                
+                                            </td>
+                                            
+                                            <!-- COL 4 -->
+                                            <td>
+                                                <!--SFWS-1769
+                                                <div class="slds-form-element slds-form-element_stacked">
+                                                    <label class="slds-form-element__label" for="costType">
+                                                        Cost Type<abbr class="slds-required" title="required">*</abbr>
+                                                    </label>
+                                                    <label class="slds-form-element__label " style="float: right; padding: 0.1rem;">
+                                                        <lightning:helptext title="User to select either Shell, TI, or Security for the line item to apply" iconName="utility:info_alt"/>
+                                                    </label>
+                                                    <div class="slds-form-element__control">
+                                                        <ui:inputSelect aura:id="costType" class="slds-input" value="{!wi.Cost_Type__c}" required="true">
+                                                            <aura:iteration items="{!v.costTypes}" var="ct">
+                                                                <ui:inputSelectOption text="{!ct}" label="{!ct}" />
+                                                            </aura:iteration>
+                                                        </ui:inputSelect>
+                                                    </div>
+                                                </div>
+                                                -->
+                                                
+                                                <div class="slds-form-element slds-form-element_stacked">
+                                                    <label class="slds-form-element__label" for="itemUnit">Unit</label>
+                                                    <div class="slds-form-element__control">
+                                                        <aura:if isTrue='{!wi.isNewRow || v.isLevelFive}'>
+                                                            <ui:inputText class="slds-input" aura:id="itemUnit" value="{!wi.Unit__c}" placeholder="UOM"/>
+                                                            <aura:set attribute="else">    
+                                                                <!--<ui:outputText class="" aura:id="itemUnit" value="{!wi.Unit__c}"/>-->
+                                                                <lightning:formattedText class="" aura:id="itemUnit" value="{!wi.Unit__c}"/>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="slds-form-element slds-form-element_stacked">
+                                                    <label class="slds-form-element__label" for="itemQuantity">Quantity</label>
+                                                    <div class="slds-form-element__control">  
+                                                        <ui:inputNumber class="slds-input" aura:id="itemQuantity" value="{!wi.Quantity__c}" placeholder="Enter Qty."/>
+                                                    </div>
+                                                </div>
+                                                
+                                            </td>
+                                            
+                                            <!-- COL 5 -->
+                                            <td>
+                                                <div class="slds-form-element slds-form-element_stacked">
+                                                    <label class="slds-form-element__label" for="itemLaborHrs">
+                                                        Labor Hours</label>
+                                                    <label class="slds-form-element__label " style="float: right; padding: 0.1rem;">
+                                                        <lightning:helptext title="Represents the estimated time necessary to perform the work defined in a line item." iconName="utility:info_alt"/>
+                                                    </label>
+                                                    <div class="slds-form-element__control">  
+                                                        <aura:if isTrue='{!v.isLevelFive}'>                                         
+                                                            <ui:inputNumber class="slds-input" aura:id="itemLaborHrs" value="{!wi.Labor_Hours_txt__c}" placeholder="Enter Hrs"/>
+                                                            <aura:set attribute="else">    
+                                                                <!--<ui:outputNumber class="" aura:id="itemEquipRental" value="{!wi.Labor_Hours_txt__c}"/>-->
+                                                                <lightning:formattedNumber class="" aura:id="itemEquipRental" value="{!wi.Labor_Hours_txt__c}"/>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div  class="slds-form-element slds-form-element_stacked">
+                                                    <label class="slds-form-element__label" for="itemRate">Labor Unit Cost</label>
+                                                    <div class="slds-form-element__control">  
+                                                        <aura:if isTrue='{!v.isLevelTwo}'>                                         
+                                                            <ui:inputNumber class="slds-input" aura:id="itemRate" value="{!wi.Hourly_Rate_txt__c}" placeholder="Enter Rate"/> 
+                                                        <aura:set attribute="else">    
+                                                      <!--      <ui:outputNumber class="" aura:id="itemRate" value="{!wi.Hourly_Rate_txt__c}"/>-->
+                                                            <lightning:formattedNumber  class="" aura:id="itemRate" value="{!wi.Hourly_Rate_txt__c}"/>
+                                                        </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="slds-form-element slds-form-element_stacked">
+                                                    <label class="slds-form-element__label" for="itemDifficulty">
+                                                        Difficulty Factor %</label>
+                                                    <label class="slds-form-element__label " style="float: right; padding: 0.1rem;">
+                                                        <lightning:helptext iconName="utility:info_alt" title="A percent increase in the time it will take to perform the work due to specific job circumstances. This is a labor-only markup required for extenuating circumstances."/>
+                                                    </label>
+                                                    <div class="slds-form-element__control"> 
+                                                        <aura:if isTrue='{!v.isOandP}'>
+                                                            <!--<ui:outputNumber class="" aura:id="itemDifficulty" value="{!wi.Difficulty_Factor_Percent__c}"/>-->
+                                                            <lightning:formattedNumber class="" aura:id="itemDifficulty" value="{!wi.Difficulty_Factor_Percent__c}"/>
+                                                        <aura:set attribute="else">
+                                                            <ui:inputNumber class="slds-input" aura:id="itemDifficulty" value="{!wi.Difficulty_Factor_Percent__c}" placeholder="Difficulty Factor %" /> 
+                                                        </aura:set>
+                                                        </aura:if> 
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            
+                                            <!-- COL 6 -->                            
+                                            <td>
+                                                <div class="slds-form-element slds-form-element_stacked">
+                                                    <label class="slds-form-element__label" for="itemUnitCost">Material Unit Cost</label>
+                                                    <div class="slds-form-element__control">  
+                                                        <aura:if isTrue='{!v.isLevelTwo}'>                                         
+                                                            <ui:inputNumber class="slds-input" aura:id="itemUnitCost" value="{!wi.Material_Unit_Cost__c}" placeholder="Enter Unit Cost"/> 
+                                                            <aura:set attribute="else">    
+                                                              <!--  <ui:outputNumber class="" aura:id="itemUnitCost" value="{!wi.Material_Unit_Cost__c}"/>-->
+                                                                <lightning:formattedNumber class="" aura:id="itemUnitCost" value="{!wi.Material_Unit_Cost__c}"/>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                
+                                                
+                                                <div class="slds-form-element slds-form-element_stacked">
+                                                    <label class="slds-form-element__label" for="itemWasteFactor">
+                                                        Waste Factor %</label>
+                                                    <label class="slds-form-element__label " style="float: right; padding: 0.1rem;">
+                                                        <lightning:helptext  iconName="utility:info_alt" title="A percent increase in the quantity of material required for a project due to layout, breakage, variance between manufactured sizes and installation requirements."/>
+                                                    </label>                                        
+                                                    <div class="slds-form-element__control">  
+                                                        <aura:if isTrue='{!v.isOandP}'>
+                                                            
+                                                            <!--<ui:outputNumber class="" aura:id="itemWasteFactor" value="{!wi.Waste_Factor__c}"/>-->
+                                                            <lightning:formattedNumber class="" aura:id="itemWasteFactor" value="{!wi.Waste_Factor__c}"/>
+                                                        <aura:set attribute="else">
+                                                            <ui:inputNumber class="slds-input" aura:id="itemWasteFactor" value="{!wi.Waste_Factor__c}" placeholder="Waste Factor" /> 
+                                                        </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                
+                                                
+                                                <div class="slds-form-element slds-form-element_stacked">
+                                                    <label class="slds-form-element__label" for="itemEquipRental">Equipment Unit Cost</label>
+                                                    <div class="slds-form-element__control">  
+                                                        <aura:if isTrue='{!v.isLevelTwo}'>                                         
+                                                            <ui:inputNumber class="slds-input" aura:id="itemEquipRental" value="{!wi.Equipment_Unit_Cost__c}" placeholder="Rent/Day"/> 
+                                                            <aura:set attribute="else">    
+                                                                <!--<ui:outputNumber class="" aura:id="itemEquipRental" value="{!wi.Equipment_Unit_Cost__c}"/>-->
+                                                                <lightning:formattedNumber class="" aura:id="itemEquipRental" value="{!wi.Equipment_Unit_Cost__c}"/>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <!-- COL 7 -->
+                                            <td>
+                                                <div class="slds-form-element slds-form-element_stacked">
+                                                    <label class="slds-form-element__label" for="totalCost">Total Cost</label>
+                                                    <div class="slds-form-element__control"> 
+                                                        <aura:if isTrue="{!v.isOandP}">
+                                                       <!--     <ui:outputNumber class="slds-input" aura:id="totalC0st" value="{!wi.O_P_Unit_Total__c}"/>-->
+                                                            <lightning:formattedNumber class="slds-input" aura:id="totalC0st" value="{!wi.O_P_Unit_Total__c}"/>
+                                                            <aura:set attribute="else"> 
+                                                           <!--     <ui:outputCurrency class="slds-input" aura:id="totalC0st" value="{!wi.In_house_Unit_Total__c}"/>-->
+                                                                  <lightning:formattedNumber class="slds-input" aura:id="totalC0st" value="{!wi.In_house_Unit_Total__c}"/>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                
+                                                
+                                                <div class="slds-form-element" aura:id='error-container'>
+                                                    
+                                                    <label class="slds-form-element__label" for="itemComments">Comments</label>
+                                                    <div class="slds-form-element__control">
+                                                        <ui:inputTextArea class="slds-input slds-comment" aura:id="itemComments" value="{!wi.Comments__c}" placeholder="Enter Comments"/> 
+                                                    </div>
+                                                    <!-- <input type="text" name="defaultdifffac" value="{!wi.Difficulty_Factor_Percent__c}" /> -->
+                                                    <!-- <span class="slds-text-color_error" style="{!if(wi.Default_Difficulty_Factor__c != wi.Difficulty_Factor_Percent__c &amp;&amp;( wi.Comments__c=='' ||wi.Comments__c== undefined),'color:rgb(194, 57, 52)','display:none' )}"> -->
+                                                    <span class="slds-text-color_error" style="{!if(wi.defaultLaborHour != wi.Labor_Hours_txt__c &amp;&amp;( wi.Comments__c=='' ||wi.Comments__c== undefined) &amp;&amp; !wi.isNewRow, 'color:rgb(194, 57, 52)','display:none' )}">
+                                                        Comment required: Change Labor Hours<br/>
+                                                    </span>
+                                                    <span class="slds-text-color_error" style="{!if(wi.defaultHourlyRate != wi.Hourly_Rate_txt__c &amp;&amp;( wi.Comments__c=='' ||wi.Comments__c== undefined) &amp;&amp; !wi.isNewRow,'color:rgb(194, 57, 52)','display:none' )}">
+                                                        Comment required: Change Labor Unit Cost<br/>
+                                                    </span>
+                                                    <span class="slds-text-color_error" style="{!if(wi.defaultDifficulty != wi.Difficulty_Factor_Percent__c &amp;&amp;( wi.Comments__c=='' ||wi.Comments__c== undefined) &amp;&amp; !wi.isNewRow,'color:rgb(194, 57, 52)','display:none' )}">
+                                                        Comment required: Change Difficulty Factor %<br/>
+                                                    </span>
+                                                    <span class="slds-text-color_error" style="{!if(wi.defaultMaterialUnitCost != wi.Material_Unit_Cost__c &amp;&amp;( wi.Comments__c=='' ||wi.Comments__c== undefined) &amp;&amp; !wi.isNewRow,'color:rgb(194, 57, 52)','display:none' )}">
+                                                        Comment required: Change Material Unit Cost<br/>
+                                                    </span>
+                                                    <span class="slds-text-color_error" style="{!if(wi.Waste_Factor__c >= 20 &amp;&amp; ( wi.Comments__c=='' ||wi.Comments__c== undefined) &amp;&amp; !wi.isNewRow,'color:rgb(194, 57, 52)','display:none' )}" >
+                                                        Comment required: Waste Factor above 20%<br/>
+                                                    </span>                                                
+                                                    <span class="slds-text-color_error" style="{!if(wi.defaulEquipmentUnitCost != wi.Equipment_Unit_Cost__c &amp;&amp;( wi.Comments__c=='' ||wi.Comments__c== undefined) &amp;&amp; !wi.isNewRow ,'color:rgb(194, 57, 52)','display:none' )}">
+                                                        Comment required: Change Equipment Unit Cost<br/>
+                                                    </span>
+    
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </aura:if>
+                                </lightning:accordionSection>   
+                            </aura:iteration>     
+                        </tbody>
+                    </table>
+                    <aura:if isTrue="{!v.isOpen}">
+                        <!--###### MODAL BOX Start######--> 
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-modal_small slds-fade-in-open">
+                            <div class="slds-modal__container">
+                                <!-- ###### MODAL BOX HEADER Start ######-->
+                                <header class="slds-modal__header">
+                                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!v.messageText}</h2>
+                                </header>
+                                <!--###### MODAL BOX BODY Part Start######-->
+                                <aura:if isTrue="{!v.itemsCreated}">
+                                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                        <aura:iteration items='{!v.createdItems}' var='ci'>
+                                            <div>
+                                               <!-- Des Item: <a id="{!ci.Id}" onclick='{!c.redirectToItem}'><ui:outputText class="field" value="{!ci.Description__c}"/></a>-->
+                                             Des Item: <a id="{!ci.Id}" onclick='{!c.redirectToItem}'><lightning:formattedText value="{!ci.Description__c}"/></a> 
+                                            </div>
+                                            <br/>
+                                        </aura:iteration>
+                                    </div>
+                                    <!--###### MODAL BOX FOOTER Part Start ######-->
+                                    <footer class="slds-modal__footer">
+                                        <lightning:button label="Add More Items"
+                                        title="addMore"
+                                        onclick="{!c.addMoreItems}"/>
+                                        <lightning:button variant="brand" 
+                                                        label="Back to Tree Structure"
+                                                        title="Back to Tree Structure"
+                                                        onclick="{!c.redirectToStructure}"/>
+                                    </footer>
+                                    <aura:set attribute="else">
+                                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                                            <!-- ###### Errors in selection ######-->
+                                            <p>{!v.createdItems}</p>
+                                            <br/>
+                                        </div>  
+                                        <footer class="slds-modal__footer"> 
+                                            
+                                            <lightning:button label="Back"
+                                                            title="Back"
+                                                            onclick="{!c.closeModal}"/>
+                                        </footer> 
+                                    </aura:set>
+                                </aura:if>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </aura:if>
+                    
+                    <aura:if isTrue="{!and(v.recordId != null, v.recordId !='')}">  
+                    <div class="slds-grid slds-p-around_large slds-grid_align-spread slds-docked-form-footer">
+                        <div class="slds-col"/>
+                        <div class="slds-col">
+                            <!-- <lightning:button class="slds-button slds-button_text-destructive" label="Remove Line Item" iconName="utility:close" iconPosition="left"/> -->
+                            <lightning:button label="Back" variant="neutral" iconName="utility:back" iconPosition="left" title="Back" onclick="{!c.redirectToStructure}"/>
+                            <aura:if isTrue='{!v.isLevelTwo}'>
+                                <lightning:button label="Add Line Item" iconName="utility:add" iconPosition="left" title="addRow" onclick="{! c.addRow }"/>
+                            </aura:if>            
+                    
+                            <lightning:button label="Save" variant="brand" iconName="utility:save" iconPosition="left" title="Success" onclick="{! c.handleClick }"/>
+                            
+                        </div>
+                    </div>
+                    </aura:if>
+                </div>
+            </div>
+        </lightning:accordion>    
+    </aura:if>
+</aura:component>

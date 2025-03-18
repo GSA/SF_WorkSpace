@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Building_Energy_Cost_SF__c</fullName>
+    <externalId>false</externalId>
     <formula>IF(Project_Name__r.Total_GSF__c ==0,0,
 ((Ann_Grid_Cost__c + Renewable_Electricity_Cost__c + Ann_Gas_Cost__c + Ann_Oth_Heating_Cost__c + Other_Cooling_Cost__c)/ Project_Name__r.Total_GSF__c))</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>

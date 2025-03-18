@@ -1,0 +1,1584 @@
+<apex:page controller="PBS_LOP_SpacesAndRatesController" id="SpacesAndRates" showHeader="false" sidebar="false" standardStylesheets="true">
+
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+
+
+    <head>
+
+        <style type="text/css">
+            .hideStepRentSection {
+                visibility: hidden;
+                display: none;
+            }
+
+            .hideSection {
+                visibility: hidden;
+                display: none;
+            }
+
+            .showSection {
+                visibility: visible;
+            }
+
+            .showStepRentSection {
+                visibility: visible;
+            }
+
+            .hideRenewalSection {
+                visibility: hidden;
+                display: none;
+
+            }
+
+            .showRenewalSection {
+                visibility: visible;
+            }
+
+            .ui-dialog {
+                background: #fff;
+                padding: 10px;
+                border: 1px solid #999;
+            }
+
+            .ui-dialog a {
+                float: right;
+                font-weight: bold;
+                padding: 3px;
+                color: #999;
+                text-transform: uppercase;
+                font-size: 10px;
+            }
+
+            .errMessage {
+                color: red;
+            }
+
+            #lean_overlay {
+                position: fixed;
+                z-index: 100;
+                top: 0px;
+                left: 0px;
+                height: 100%;
+                width: 100%;
+                background: none;
+                display: none;
+            }
+
+            body .bPageBlock, body #bodyCell .bResource .secondaryPalette, body .secondaryPalette.bPageBlock, body .individualPalette .secondaryPalette.bPageBlock, body .bodyDiv .genericTable, body .genericPageBlockTable, body .bodyDiv .bSubBlock, body .bComponentBlock .bPageBlock, body .bMyDashboard .bPageBlock, body.rlHoverFrame .bPageBlock, body.subjectSelectionPopup div.choicesBox, body.lookupTab .secondaryPalette.bPageBlock, body.popupTab .secondaryPalette.bPageBlock, body.UserTagStatsPage .secondaryPalette.bPageBlock {
+                border-bottom: #fff;
+            }
+
+            body .pbBody table.list tr.headerRow td, body .pbBody table.list tr.headerRow th {
+                background: #999;
+            }
+
+            body .pbBody table.list tr th, body .pbBody table.list tr td {
+                border: 1px solid rgb(200, 200, 200);
+            }
+
+            body .pbBody table.list tr.headerRow th:first-child, body .pbBody table.list tr.dataRow td:first-child {
+                border-left-width: 1px;
+            }
+
+            body .pbBody table.list tr.headerRow td, body .pbBody table.list tr.headerRow th {
+                border: 0px;
+            }
+
+            ul li, ol li {
+                margin-left: 0em;
+            }
+
+            .message {
+                background-color: #fff;
+                border-style: solid;
+                border-width: 0px;
+                color: #000;
+                padding: 6px 8px 6px 6px;
+                margin: 4px;
+            }
+
+            .col1 {
+                text-align: left;
+                width: 400px;
+            }
+
+            .col2 {
+                text-align: center;
+                width: 230px;
+            }
+
+            .col3 {
+                text-align: center;
+                width: 230px;
+            }
+
+            .col4 {
+                text-align: center;
+                width: 230px;
+            }
+
+            .tabbed-table table td {
+                background: #fff;
+            }
+
+            h2 {
+                color: #fff;
+                font-size: 80%;
+                font-weight: bold;
+                padding-left: 40px;
+                width: 80%;
+            }
+
+            .tabbed-table table th {
+                padding-left: 3px;
+                padding-right: 3px;
+                font-size: 12px important !;
+            }
+
+            .hr {
+                font-weight: bold;
+                font-size: 28px;
+                border-bottom: 1px solid #cccccc;
+                padding: 0 0 8px;
+                color: #002BAD;
+                padding-top: 15px;
+            }
+
+            .bb {
+                border-bottom: 1px solid #cccccc;
+                border-top: 1px solid #cccccc;
+                border-left: 1px solid #cccccc;
+                border-right: 1px solid #cccccc;
+                margin-right: 47px;
+                padding: 10px;
+            }
+
+            .tooltip .tooltiptext {
+                visibility: hidden;
+                width: 120px;
+                background-color: black;
+                color: #fff;
+                text-align: center;
+                padding: 5px 0;
+                border-radius: 6px;
+
+                /* Position the tooltip text - see examples below! */
+                position: absolute;
+                z-index: 1;
+            }
+            #bsacSection td, .TI_header td{
+                padding-top: 10px;
+            }
+            .TI_header{
+                    margin-top: -20px;
+            }
+            div.selector span{
+                width: 130px;
+            }
+            div.selector {
+                background-position: -28px 0;
+            }
+            .AmountWillBe input.text{
+                width:90px;
+            }
+            div.selector select{
+                min-width: 170px;
+            }
+            div.selector {
+                width: 180px;
+            top:3px;
+            }
+            #stepRentSpan td, #renewalDiv td{
+                padding-top:0px;
+            }
+            
+            .long div.selector span{
+                width: 160px;
+            }
+            .long div.selector {
+                background-position: 0px 0;
+            }
+            .long div.selector {
+                width: 205px;
+                top: 3px;
+            }
+            .long {
+                padding-right: 5px;
+            }
+            .long div.selector select {
+                min-width: 200px;
+            }
+             .infopopup1 {
+              position:fixed !important;
+              display:inline-block;
+              top:38% !important;
+              left:50% !important;
+              //width:700px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+            //transform: translate(-50%, -50%); !important;
+            }
+             .infopopup2 {
+              position:fixed !important;
+              display:inline-block;
+              top:45% !important;
+              left:60% !important;
+              //width:700px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+           
+            }
+            .infopopup3 {
+              position:fixed !important;
+              display:inline-block;
+              top:55% !important;
+              left:65%!important;
+              //width:700px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+            //transform: translate(-50%, -50%); !important;
+            }
+            
+            .infopopup4 {
+              position:fixed !important;
+              display:inline-block;
+              top:60% !important;
+              left:50% !important;
+              //width:700px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+           
+            }
+            
+            .infopopup5 {
+              position:fixed !important;
+              display:inline-block;
+              top:45% !important;
+              left:50% !important;
+              //width:700px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+           
+            }
+        </style>
+    </head>
+    <script type="text/javascript">
+            console.log('pageURLForRedirection from portalHomePage ===> {!pageURLForRedirection}' );
+            if('{!JSENCODE(pageURLForRedirection)}' != ''){
+                window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
+                window.parent.document.body = document.createElement('body');
+            }
+    		else{
+        	window.parent.document.body.scrollTop = 0;
+  			window.parent.document.documentElement.scrollTop = 0;
+       		}            
+        </script>
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript"
+            src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+
+    <body onload="initializeSectionLoading();">
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <script type='text/javascript'>
+        JY = jQuery.noConflict();
+        var Tf1;
+        var Tf2;
+        var Tf3;
+        var Bf1;
+        var Bf2;
+        var Bf3;
+        JY(document).ready(function () {
+            //added by syam display msg when submitted offer is saved.
+            draftMsgFlag = JY('input[id=' + "'{!$Component.spaceAndRatesForm.draftMsgFlag}'" + ']').val();
+            if (draftMsgFlag == 'true') {
+                var confirm1 = JQ('<div></div>').html("Your offer is no longer submitted. Offer status is updated to 'Draft' status and needs to be submitted again.").dialog({
+                    autoOpen: false,
+                    title: '',
+                    modal: true,
+                    position: ['center', 'center'],
+                    buttons: {
+                        'OK': function () {
+                            JY(this).dialog('close');
+                        }
+                    }
+                });
+
+                confirm1.dialog('open');
+            }
+
+        });
+        
+        /*function replaceParameterLable() {
+            let text1 = 'Rates';
+            let text2 = 'LeaseTerms';
+            let url = window.parent.document.location.href;
+            window.parent.document.location.href = url.replace(text1, text2);
+       	}*/
+
+        function showTiSection() {
+            JY("#tiSection").removeClass("hideSection");
+            JY("#tiSection").addClass("showSection");
+            Tf1 = JY('[id*=tenantF1]').val();
+            Tf2 = JY('[id*=tenantF2]').val();
+            Tf3 = JY('[id*=tenantF3]').val();
+            JY(".steps.steps-7 span").hover(function() {
+                JY(this).css('cursor','not-allowed').attr('title', 'You must Save TI information or Cancel');
+            }, function() {
+                JY(this).css('cursor','auto');
+            });
+            JY("center").hover(function() {
+                JY(this).css('cursor','not-allowed').attr('title', 'You must Save TI information or Cancel');
+            }, function() {
+                JY(this).css('cursor','auto');
+            });
+            JY(".steps.steps-7").css('opacity', '0.1');
+
+            JY('.button span input').slice(-4).prop('disabled', true);
+            JY('.button').slice(-4).hover(function() {
+                JY(this).css('cursor','not-allowed').attr('title', 'You must Save TI information or Cancel');
+            }, function() {
+                JY(this).css('cursor','auto');
+            });
+            JY('.button').slice(-4).css('opacity', '0.1');
+
+        }
+
+        function tenantCancel() {
+            JY('[id*=tenantF1]').val(Tf1);
+            JY('[id*=tenantF2]').val(Tf2);
+            JY('[id*=tenantF3]').val(Tf3);
+            hideTiSection();
+        }
+
+        function bsacCancel() {
+            JY('[id*=bsacF1]').val(Bf1);
+            JY('[id*=bsacF2]').val(Bf2);
+            JY('[id*=bsacF3]').val(Bf3);
+            hideBSACSection();
+        }
+
+        function hideTiSection() {
+            JY("#tiSection").removeClass("showSection");
+            JY("#tiSection").addClass("hideSection");
+            JY(".steps.steps-7 span").hover(function() {
+                JY(this).css('cursor','pointer').attr('title', '');
+            }, function() {
+                JY(this).css('cursor','auto');
+            });
+            JY("center").hover(function() {
+                JY(this).css('cursor','auto').attr('title', '');
+            }, function() {
+                JY(this).css('cursor','auto');
+            });
+            JY(".steps.steps-7").css('opacity', '1');
+
+            JY('.button span input').slice(-4).prop('disabled', false);
+            JY('.button').slice(-4).hover(function() {
+                JY(this).css('cursor','pointer').attr('title', '');
+            }, function() {
+                JY(this).css('cursor','auto');
+            });
+            JY('.button').slice(-4).css('opacity', '1');
+        }
+
+        function hideBSACSection() {
+            JY("#bsacSection").removeClass("showSection");
+            JY("#bsacSection").addClass("hideSection");
+            JY(".steps.steps-7 span").hover(function() {
+                JY(this).css('cursor','pointer').attr('title', '');
+            }, function() {
+                JY(this).css('cursor','auto');
+            });
+            JY("center").hover(function() {
+                JY(this).css('cursor','auto').attr('title', '');
+            }, function() {
+                JY(this).css('cursor','auto');
+            });
+            JY(".steps.steps-7").css('opacity', '1');
+
+            JY('.button span input').slice(-4).prop('disabled', false);
+            JY('.button').slice(-4).hover(function() {
+                JY(this).css('cursor','pointer').attr('title', '');
+            }, function() {
+                JY(this).css('cursor','auto');
+            });
+            JY('.button').slice(-4).css('opacity', '1');
+        }
+
+        function showBSACSection() {
+            JY("#bsacSection").removeClass("hideSection");
+            JY("#bsacSection").addClass("showSection");
+            Bf1 = JY('[id*=bsacF1]').val();
+            Bf2 = JY('[id*=bsacF2]').val();
+            Bf3 = JY('[id*=bsacF3]').val();
+            console.log('***>>' + Bf1 + '--' + Bf2 + '--' + Bf3);
+            JY(".steps.steps-7 span").hover(function() {
+                JY(this).css('cursor','not-allowed').attr('title', 'You must Save BSAC information or Cancel');
+            }, function() {
+                JY(this).css('cursor','auto');
+            });
+            JY("center").hover(function() {
+                JY(this).css('cursor','not-allowed').attr('title', 'You must Save BSAC information or Cancel');
+            }, function() {
+                JY(this).css('cursor','auto');
+            });
+            JY(".steps.steps-7").css('opacity', '0.1');
+
+            JY('.button span input').slice(-4).prop('disabled', true);
+            JY('.button').slice(-4).hover(function() {
+                JY(this).css('cursor','not-allowed').attr('title', 'You must Save BSAC information or Cancel');
+            }, function() {
+                JY(this).css('cursor','auto');
+            });
+            JY('.button').slice(-4).css('opacity', '0.1');
+        }
+
+        function reRenderStepRent(el) {
+
+            var selectedVal = $('input[name="' + el + '"]:checked').val();
+            if (selectedVal == 'Yes') {
+                JY(".hideStepRentSection").addClass("showStepRentSection");
+                JY(".hideStepRentSection").removeClass("hideStepRentSection");
+            }
+            else {
+                JY(".showStepRentSection").addClass("hideStepRentSection");
+                JY(".showStepRentSection").removeClass("showStepRentSection");
+            }
+            pullSteps();
+        }
+
+        function reRenderRenewal(el) {
+            var selectedVal = $('input[name="' + el + '"]:checked').val();
+            if (selectedVal == 'Yes') {
+                JY(".hideRenewalSection").addClass("showRenewalSection");
+                JY(".hideRenewalSection").removeClass("hideRenewalSection");
+            }
+            else {
+                JY(".showRenewalSection").addClass("hideRenewalSection");
+                JY(".showRenewalSection").removeClass("showRenewalSection");
+            }
+        }
+
+        function initializeSectionLoading() {
+            var stepRent = JY('input[name=' + "'{!$Component.spaceAndRatesForm.shellRentStepped}'" + ']:checked').val();
+            var renewal = JY('input[name=' + "'{!$Component.spaceAndRatesForm.renewalOption}'" + ']:checked').val();
+            if (renewal == 'Yes') {
+                JY(".hideRenewalSection").addClass("showRenewalSection");
+                JY(".hideRenewalSection").removeClass("hideRenewalSection");
+            }
+
+            if (stepRent == 'Yes') {
+                JY(".hideStepRentSection").addClass("showStepRentSection");
+                JY(".hideStepRentSection").removeClass("hideStepRentSection");
+            }
+            else {
+                JY(".hideStepRentSection").addClass("hideStepRentSection");
+                JY(".hideStepRentSection").removeClass("showStepRentSection");
+            }
+
+        }
+
+        /*function shellRentYrsChange(obj) {
+            var years = parseInt(obj.value) || 0;
+            JY('input[id=' + "'{!$Component.spaceAndRatesForm.step1End}'" + ']').val(years);
+            JY('input[id=' + "'{!$Component.spaceAndRatesForm.step1Start}'" + ']').val('1');
+        }*/
+
+        function inputLimiter(e,allow) {
+            var AllowableCharacters = '';
+
+            if (allow == 'Letters'){AllowableCharacters=' ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';}
+            if (allow == 'Numbers'){AllowableCharacters='1234567890';}
+            if (allow == 'NameCharacters'){AllowableCharacters=' ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-.\'';}
+            if (allow == 'NameCharactersAndNumbers'){AllowableCharacters='1234567890 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-\'';}
+            if (allow == 'Currency'){AllowableCharacters='1234567890.';}
+
+            var k = document.all?parseInt(e.keyCode): parseInt(e.which);
+            if (k!=13 && k!=8 && k!=0){
+                if ((e.ctrlKey==false) && (e.altKey==false)) {
+                    return (AllowableCharacters.indexOf(String.fromCharCode(k))!=-1);
+                } else {
+                    return true;
+                }
+            } else {
+                return true;
+            }
+        }
+        function showTIAOrTurnkey(event){
+            console.log('showTIAOrTurnkey ',event.value);
+            if(event.value == 'TIA'){
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:tia1').style.display = 'block';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:tia2').style.display = 'block';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:turnkey').style.display = 'none';
+                
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:tenantF0').value = '0.00';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:tenantF3').value = '0.00';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_TI_Amorization_in_Years__c').value = '0';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_TI_Years_Rate_Effective__c').innerHTML = '0';
+                
+                
+            }else{
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:tia1').style.display = 'none';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:tia2').style.display = 'none';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:tia1').parentNode.parentNode.display = 'none';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:turnkey').style.display = 'block';
+                
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_TI_Buildout_as_in_RLP__c').value = '0.000000';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_TI_Total_Build_out_Costs__c').innerHTML = '0.00';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:tenantF3').value = '0.00';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_TI_Amorization_in_Years__c').value = '0';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_TI_Years_Rate_Effective__c').innerHTML = '0';
+            }
+        }
+        function showbsacOrabao(event){
+            console.log('showbsacOrabao ',event.value);
+            if(event.value == 'Rate per ABOA SF specified in RLP'){
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:abao1').style.display = 'block';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:abao2').style.display = 'block';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:bsac1').style.display = 'none';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:bsac2').style.display = 'none';
+                
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:bsac2input').value = '0.00';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:bsacF3').value = '0.00';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_BSAC_Amorization_in_Years__c').value = '0';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_BSAC_Years_Rate_Effective__c').innerHTML = '0';
+            }else{
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:abao1').style.display = 'none';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:abao2').style.display = 'none';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:bsac1').style.display = 'block';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:bsac2').style.display = 'block';
+                
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_RSAP_BSAC_Rate_from_RLP__c').value = '0.00';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_BSAC_Total_Build_out_Costs__c').innerHTML = '0.00';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_BSAC_Total_Build_out_Costs__chidden').value = '0.00';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:bsacF3').value = '0.00';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_BSAC_Amorization_in_Years__c').value = '0';
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_BSAC_Years_Rate_Effective__c').innerHTML = '0';
+            }
+        }
+        var formatter = new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD',
+            minimumFractionDigits: 2, 
+            maximumFractionDigits: 2,
+        });
+        function calculateTI(){
+            var totalABOAOffered = {!JSENCODE(Text(lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c))};
+            if(totalABOAOffered != null){
+                var TIBuildoutAsInRLP = document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_TI_Buildout_as_in_RLP__c').value;
+                if(TIBuildoutAsInRLP != undefined && TIBuildoutAsInRLP.trim() != ''){
+                    TIBuildoutAsInRLP = TIBuildoutAsInRLP.replace(',','');
+                }
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_TI_Total_Build_out_Costs__c').innerHTML = 
+                formatter.format(parseFloat(TIBuildoutAsInRLP) * totalABOAOffered);
+                var years = (document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_TI_Amorization_in_Years__c').value / 12);
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_TI_Years_Rate_Effective__c').innerHTML = Number.isInteger(years) ? years : years.toFixed(3);
+            }
+        }
+        function calculateBSAC(){
+            var totalABOAOffered = {!JSENCODE(Text(lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c))};
+            if(totalABOAOffered != null){
+                var BSACRateFromRLP = document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_RSAP_BSAC_Rate_from_RLP__c').value;
+                if(BSACRateFromRLP != undefined && BSACRateFromRLP.trim() != ''){
+                    BSACRateFromRLP = BSACRateFromRLP.replace(',','');
+                }
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_BSAC_Total_Build_out_Costs__c').innerHTML = 
+                formatter.format(parseFloat(BSACRateFromRLP) * totalABOAOffered);
+                var years = (document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_BSAC_Amorization_in_Years__c').value / 12);
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:PBS_AAAP_BSAC_Years_Rate_Effective__c').innerHTML = Number.isInteger(years) ? years : years.toFixed(3);
+            }
+        
+        }
+        function blockSpecialChar(e){
+            return (e.charCode >= 48 && e.charCode <=57);
+        }
+        function changeThePicklistValue(valueOfInput, inputId){
+            console.log(inputId);
+            document.getElementById(inputId).innerHTML = valueOfInput;
+        }
+        function changeThePerValue(valueOfInput, inputId){
+            var valueToSet = '';
+            if(valueOfInput == ''){
+                valueToSet = '';
+            }else if(valueOfInput == 'Shell'){
+                valueToSet = ' Year ';
+            }else{
+                valueToSet = ' Space per Month ';
+            }
+            if(document.getElementById(inputId) != null){
+            	document.getElementById(inputId).innerHTML = valueToSet;
+            }
+        }
+        function hideAddRowButton(){
+            if(document.getElementsByClassName('addTableRows').length == {!freeRentLimits}){
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:addRowButtonContainer').style.display = 'none';
+            }else{
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:addRowButtonContainer').style.display = 'block';
+            }
+        }
+        function hideAddRowButtonRenewal(){
+            if(document.getElementsByClassName('addTableRowsRenewal').length == {!renewalOptionsLimits}){
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:addRowButtonContainerRenewal').style.display = 'none';
+            }else{
+                document.getElementById('SpacesAndRates:spaceAndRatesForm:addRowButtonContainerRenewal').style.display = 'block';
+            }
+        }
+        function showHideRelatedTable(){
+            var spacepartofmulttaxbills = JY('[name*=Are_you_offering_renewal_option]:checked').val();
+            if(spacepartofmulttaxbills == 'Yes'){
+                JY('[id*=RenewalOptions]').show();
+                JY('[id*=addRowButtonContainerRenewal]').show();
+            }else{
+                JY('[id*=RenewalOptions]').hide();
+                JY('[id*=addRowButtonContainerRenewal]').hide();
+            }
+        }
+        var validate = function(e) {
+              var t = e.value;
+              e.value = (t.indexOf(".") >= 0) ? (t.substr(0, t.indexOf(".")) + t.substr(t.indexOf("."), 3)) : t;
+          }
+        var validate6 = function(e) {
+              var t = e.value;
+              e.value = (t.indexOf(".") >= 0) ? (t.substr(0, t.indexOf(".")) + t.substr(t.indexOf("."), 7)) : t;
+          }
+    </script>
+    
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+        <ul>
+            <li><a href="/RSAP/portalHome">RSAP Home</a></li>
+            <li>|</li>
+            <li><a href="/AAAP/portalHome">AAAP</a></li>
+            <li>|</li>
+            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
+                <apex:outputLink value="/AAAP/home/home.jsp">
+                    <li>{!$Label.site.login_button}</li>
+                </apex:outputLink>
+                <li> |</li>
+                <apex:outputLink value="/AAAP/ForgotPassword">
+                    <li>{!$Label.site.forgot_your_password_q}</li>
+                </apex:outputLink>
+                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
+                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
+                    <li>{!$Label.site.new_user_q}</li>
+                </apex:outputLink>
+            </apex:panelGroup>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>{!$Label.site.logout}</li>
+            </apex:outputLink>
+        </ul>
+    </div -->
+    <div id="wrapper">
+        <c:lop_inside_header />
+        <div id="content" class="space-rates"><!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
+            <apex:panelGrid rendered="{!!isValidUser}">
+                <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+                <apex:messages styleClass="errMessage" id="message"/>
+            </apex:panelGrid>
+            <apex:panelGroup rendered="{!isValidUser}">
+                <apex:panelGrid columns="2" style="float:right"><a href="#" onclick="window.print();"></a>
+                    <apex:outputLabel style="padding-right:47px"></apex:outputLabel>
+                </apex:panelGrid>
+                <br/>
+                <c:lopHeader myOffer="{!lopOffer}" myProject="{!rlp}" offerDueDate=""/>
+                <c:PBS_LOP_ProgressBar myValue="{!lopOffer.Id}" step="4" linksToViewModePage="{!isEditable}"/>
+            </apex:panelGroup>
+            <apex:form id="spaceAndRatesForm" styleClass="formwrap" rendered="{!isValidUser}">
+                <apex:actionFunction action="{!saveSpaceRates}" name="saveTheForm" reRender="total_initial_rent,LeaseAnnualRentPerRSF,Lease_Annual_Rent_Per_ABOA,Shell_Rent_Per_RSF_Initial,Shell_Rent_Per_ABOA_Initial"  />
+                <apex:inputHidden id="draftMsgFlag" value="{!draftMsgFlag}"/>
+                <apex:inputHidden id="pgUrl" value="{!pageUrl}"/>
+                <div class="hr">Rates</div>
+                <apex:messages styleClass="errMessage"/>
+                <apex:outputPanel rendered="{!viewOnly}">
+                    <apex:outputLabel id="msgview" styleClass="errMessage" value="{!viewMsg}"/>
+                </apex:outputPanel>
+                <apex:outputPanel id="panel_outerspace">
+                    <!--
+                    <br/>
+                    <div border="2" class="bb"><h4 class="grey">SPACE OFFERED</h4>
+                        <br/>
+                        <apex:panelGrid id="pangrid_header" columns="2">
+                            <apex:outputPanel >
+                                <apex:outputText value="1. What is the amount of ANSI/BOMA Office"></apex:outputText>
+                                <br/>
+                                <apex:outputText value="   Area Square Feet (ABOA SF) offered?"></apex:outputText>
+                                <span class="required">*</span>
+                            </apex:outputPanel>
+                            <apex:outputPanel >
+                                <apex:inputText value="{!lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c}"></apex:inputText>
+                                <apex:outputText value=""></apex:outputText>
+                            </apex:outputPanel>
+                            <apex:outputPanel >
+                                <apex:outputText id="q2" value="{!QLabels.lopSpaceQ2}"></apex:outputText>
+                                <span class="required">*</span></apex:outputPanel>
+                            <apex:outputPanel >
+                                <apex:inputText id="q2_cont_aboa"
+                                                value="{!lopOffer.PBS_AAAP_Office_RSF_OFFERED__c}"></apex:inputText>
+                                <apex:outputText value=""></apex:outputText>
+                            </apex:outputPanel>
+
+                            <apex:outputPanel >
+                                <apex:outputText id="q3_1" value="3. Please list the floor/s and or suite/s of the offered space:"></apex:outputText>
+                                <span class="required">*</span></apex:outputPanel>
+                            <apex:outputPanel >
+                                <apex:inputText id="q3_cont_aboa"
+                                                value="{!lopOffer.PBS_AAAP_floors_and_suites_offered__c}"></apex:inputText>
+                                <apex:outputText value=""></apex:outputText>
+                            </apex:outputPanel>
+
+
+                        </apex:panelGrid>
+                        <br/><h5>Hit "Save Page" button at the bottom of the screen to calculate the 4. Common Area
+                            Factor value below.</h5>
+                        <apex:panelGrid id="pangrid_space" columns="2">
+                            <apex:outputPanel >
+                                <apex:outputText id="q3" value="{!QLabels.lopSpaceQ3}"></apex:outputText>
+                                <a class="popup" href="#CAF"><img src="{!$Resource.Info_Icon}"/></a>
+                                <div id="CAF"
+                                     style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width: 700px;">
+                                    <p>The “Common Area Factor” (CAF) is a conversion factor determined by the Building
+                                        owner and applied by the
+                                        owner to the ABOA SF to determine the RSF for the leased Space. The CAF is
+                                        expressed as a percentage of the difference between the amount of rentable SF
+                                        and ABOA SF, divided by the ABOA SF. For example 11,500 RSF and 10,000 ABOA SF
+                                        will have a CAF of 15% [(11,500 RSF-10,000 ABOA SF)/10,000 ABOA SF]. </p></div>
+                            </apex:outputPanel>
+                            <apex:outputText id="offeredFloor" value="{!lopOffer.PBS_AAAP_Common_Area_Factor__c}%"/>
+                            <apex:outputText id="q4" value="{!QLabels.lopSpaceQ4}"></apex:outputText>
+                            <apex:outputPanel >
+                                <apex:inputText id="govtOccupancy"
+                                                 value="{!lopOffer.PBS_AAAP_Government_Occupancy_Percentage__c}"></apex:inputText>
+                                <apex:outputText value="%"></apex:outputText>
+                            </apex:outputPanel>
+                        </apex:panelGrid>
+                    </div>
+                    -->
+                    <!--<apex:outputPanel id="panel_rlpStandardCost">
+                        <br/>
+                        <div border="2" class="bb"><h4 class="grey">Shell Build-Out Costs (per the RLP
+                            requirements):</h4>
+                            <br/>
+                            <apex:panelGrid id="pangrid_rlpStandardCost" columns="1">
+                                <apex:outputPanel id="buildoutCost">
+                                    <apex:outputText value="1. Enter the total Shell Buildout Costs/investment required to bring your building up to the shell standards of the RLP:"></apex:outputText>
+                                </apex:outputPanel>
+                                <apex:outputPanel >$
+                                    <apex:inputField value="{!lopOffer.PBS_AAAP_SHELL_Build_out_Costs__c}"></apex:inputField>
+                                </apex:outputPanel>
+
+                            </apex:panelGrid>
+                        </div>
+                    </apex:outputPanel>-->
+
+                    <br/>
+                    <div border="2" class="bb">
+                        <h4 class="grey">RENT TABLE</h4>
+                        <br/><h5 style="color:blue">Enter initial rental figures only. Scheduled step rents for Shell and Parking can be entered lower on this page. 
+                        Certain fields will be auto-calculated based on inputs once the user hits the Save Page button located at the bottom of the screen.</h5>
+                        <br/><br/>
+                        <apex:outputPanel id="ratesOffered">
+                            <Table cellspacing="150px;" border="2" style="margin-top: -10px !important; width: 100%;">
+                                <tr>
+                                    <th style="text-align:center;width: 260px;">&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                    <th style="padding-left:10px; font-weight:bold;">Annual Rent</th>
+                                    <th style="text-align:center; font-weight:bold;">Annual Rent per RSF</th>
+                                    <th style="text-align:right; font-weight:bold;">Annual Rent per ABOA SF</th>
+                                    <!--<th style="text-align:center">#Yrs Effective</th>-->
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold; padding-top: 3px;">
+                                        <apex:outputText value="Shell Rent: "/>
+                                        <span class="required">*</span><a class="popup" href="#shellRate"><img
+                                            src="{!$Resource.Info_Icon}"/></a>
+                                        <div id="shellRate" class="infopopup1"
+                                             style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;font-weight:normal;">
+                                            <p>The shell rental rate shall include, but is not limited to, property
+                                                financing (exclusive of TIs and BSAC), insurance, taxes,
+                                                management, and profit, for the Building. The shell rental rate shall
+                                                also include all basic Building systems and common area
+                                                buildout, including, but not limited to, base Building lobbies, common
+                                                areas, and core areas, exclusive of the ABOA Space
+                                                offered as required in this RLP. All improvements in the base Building,
+                                                lobbies, common areas, core areas and Space, made
+                                                to come into compliance with the Lease, shall be provided by the Lessor,
+                                                at the Lessor’s expense.</p>
+                                        </div>
+                                    </td>
+                                    <td style="padding-top: 3px;">
+                                        <apex:outputPanel ><table>
+                                            <tr>
+                                                <td>$</td>
+                                                <td><apex:inputField required="true" id="Shell_Initial_Annual" onchange="saveTheForm();" value="{!lopOffer.PBS_RSAP_Shell_Initial_Annual__c}" onkeyup="validate(this)" /></td>
+                                            </tr>
+                                            </table>
+                                            
+                                        </apex:outputPanel>                                        
+                                    </td>
+                                    <td style="padding-top: 3px;">
+                                        <apex:outputPanel id="Shell_Rent_Per_RSF_Initial">&nbsp;$<apex:outputText value="{0,number, ###,##0.00}" html-readonly="true">
+                                                <apex:param value="{!lopOffer.PBS_RSAP_Shell_Rent_Per_RSF_Initial__c}"/>
+                                            </apex:outputText>
+                                        </apex:outputPanel>
+                                    </td>
+                                    <td style="padding-top: 3px;">
+                                        <apex:outputPanel id="Shell_Rent_Per_ABOA_Initial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$<apex:outputText value="{0,number, ###,##0.00}" html-readonly="true">
+                                                <apex:param value="{!lopOffer.PBS_RSAP_Shell_Rent_Per_ABOA_Initial__c}"/>
+                                            </apex:outputText>
+                                        </apex:outputPanel>
+                                    </td>
+                                    <!--<td>
+                                        <apex:outputPanel>
+                                            <apex:inputField value="{!lopOffer.PBS_AAAP_Shell_Rate_Years_Effective__c}"
+                                                             onblur="shellRentYrsChange(this);"/>
+                                        </apex:outputPanel>
+                                    </td>-->
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold;padding-top: 20px;">
+                                        <apex:outputText value="Operating Rent: "/>
+                                      <a class="popup" href="#OR"><img src="{!$Resource.Info_Icon}"/></a>
+                                        <div id="OR" class="infopopup2"
+                                             style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;font-weight:normal;">
+                                            <p>Navigate to the Operating &amp; Ownership Costs page to revise the operating rent. </p></div>
+                                    </td>
+                                    <td style="padding-top: 20px;">
+                                        <apex:outputPanel >&nbsp;$<apex:outputText value="{0,number, ###,##0.00}" html-readonly="true">
+                                                <apex:param value="{!lopOffer.PBS_AAAP_SRVC_UTIL_TOTAL_GOV__c}"/>
+                                            </apex:outputText>
+                                        </apex:outputPanel>
+                                    </td>
+                                    <td style="padding-top: 20px;">
+                                        <apex:outputPanel >&nbsp;$<apex:outputText value="{0,number, ###,##0.00}" html-readonly="true">
+                                                <apex:param value="{!lopOffer.PBS_AAAP_OP_COST_COST_PER_RSF__c}"/>
+                                            </apex:outputText>
+                                        </apex:outputPanel>
+                                    </td>
+                                    <td style="padding-top: 20px;">
+                                        <apex:outputPanel >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$<apex:outputText value="{0,number, ###,##0.00}" html-readonly="true">
+                                                <apex:param value="{!lopOffer.PBS_AAAP_OP_COST_COST_PER_ABOA__c}"/>
+                                            </apex:outputText>
+                                        </apex:outputPanel>
+                                    </td>
+                                    <!--<td>
+                                        <apex:outputPanel>
+                                            <apex:outputText value="{!lopOffer.PBS_AAAP_Op_Cost_Years_Effective__c}"
+                                                             html-readonly="true"/>
+                                        </apex:outputPanel>
+                                    </td>-->
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold">
+                                        <apex:outputText value="Tenant Improvement (TI) Rent: "/>
+                                        <a class="popup" href="#TI"><img src="{!$Resource.Info_Icon}"/></a>
+                                        <div id="TI" class="infopopup2"
+                                             style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;font-weight:normal;">
+                                            <p>Click Enter/Edit TI to add Tenant Improvements </p></div>
+                                    </td>                                    
+                                    <td>
+                                        <apex:outputPanel >&nbsp;$<apex:outputText value="{0,number, ###,##0.00}" html-readonly="true">
+                                                <apex:param value="{!lopOffer.PBS_AAAP_Annual_TI_Rent__c}"/>
+                                            </apex:outputText>
+                                        </apex:outputPanel>
+                                    </td>                                    
+                                    <td>
+                                        <apex:outputPanel >&nbsp;$<apex:outputText value="{0,number, ###,##0.00}" html-readonly="true">
+                                                <apex:param value="{!lopOffer.PBS_AAAP_TI_Annual_Rent_Per_RSF__c}"/>
+                                            </apex:outputText>
+                                        </apex:outputPanel>
+                                    </td>
+                                    <td>
+                                        <apex:outputPanel >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$<apex:outputText value="{0,number, ###,##0.00}" html-readonly="true">
+                                                <apex:param value="{!lopOffer.PBS_AAAP_TI_Annual_Rent_Per_ABOA__c}"/>
+                                            </apex:outputText>
+                                        </apex:outputPanel>                                        
+                                    </td>
+                                    <!--<td>
+                                        <apex:outputPanel>
+                                            <apex:outputText value="{!lopOffer.PBS_AAAP_TI_Years_Rate_Effective__c}"
+                                                             html-readonly="true"/>
+                                        </apex:outputPanel>
+                                    </td>-->
+                                </tr>
+                                <tr>
+                                    <!-- J. Rogers - Added code to onclick to remove scroll bar -->
+                                    <td style="font-weight:bold"><input type="button" value="Enter/Edit TI: "
+                                                                        rerender="options"
+                                                                        onclick="showTiSection(); 
+                                                                        top.postMessage('Page Updated', document.location.origin);
+                                                                        return false;"/></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <span id="tiSpan">
+                    <tr id="tiSection" class="hideSection">
+                      <td colspan="4" style="width:100px;">
+
+                          <div class="bb">
+
+
+                          <apex:panelGrid columns="1">
+
+
+                              <div style="margin-top: -10px;">
+                                  <h4 class="grey">TENANT IMPROVEMENTS</h4>
+                                  
+                              </div>
+              <!--<apex:outputText style="color:#102372;font-weight:bold;"
+                               value="If the Government requires a tenant improvement allowance (TIA) as part of the Request for Lease Proposals, the Offeror must provide the total tenant improvement allowance as part of the rental consideration.  The TIA shall be used for building out the government-demised area in accordance with the government-approved design intent drawings.  The TIA dollars are defined and specified in the RLP or the government’s lease requirements.  The TIA is based upon and calculated by using the ANSI/BOMA office area SF.  "></apex:outputText>-->
+                           <apex:panelGrid id="TI_header" styleClass="TI_header" columns="2">
+                               <apex:panelGrid columns="1">
+                                   <apex:outputText value="1. What method of tenant improvement pricing is required by the RLP?"></apex:outputText>
+                                   
+                                   <apex:selectRadio styleClass="radioCell" value="{!lopOffer.PBS_RSAP_TIA_Or_Turnkey__c}" onchange="showTIAOrTurnkey(this);">
+                                        <apex:selectOption itemLabel="Tenant Improvement Allowance (TIA)" itemValue="TIA"/>
+                                   <apex:selectOption itemLabel="Turnkey" itemValue="Turnkey"/>
+                                    </apex:selectRadio>
+                               </apex:panelGrid>
+                               <apex:panelGrid ></apex:panelGrid>
+                               <apex:panelGrid columns="2" id="tia1" style="{!IF(lopOffer.PBS_RSAP_TIA_Or_Turnkey__c == 'TIA', 'display:block;' , 'display:none;')}">
+                                   <apex:outputText >&#160;&#160;&#160;&#160;What is the TIA per ABOA SF stated in the RLP?&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;$</apex:outputText>
+                                   <apex:inputField id="PBS_AAAP_TI_Buildout_as_in_RLP__c" value="{!lopOffer.PBS_AAAP_TI_Buildout_as_in_RLP__c}" onkeyup="validate6(this)"></apex:inputField>
+                               </apex:panelGrid>
+                               <apex:panelGrid columns="2" id="tia2" style="{!IF(lopOffer.PBS_RSAP_TIA_Or_Turnkey__c == 'TIA', 'display:block;' , 'display:none;')}">
+                                   <div style="margin-left: -20px;width: 120px;">Calculated Total TI:</div>
+                                   <apex:outputPanel >
+                                       <div style="word-break: break-all;max-width: 110px;">
+                                           <apex:outputText id="PBS_AAAP_TI_Total_Build_out_Costs__c" value="{0,number, $ ###,##0.00}">
+                                               <apex:param value="{!lopOffer.PBS_AAAP_TI_Total_Build_out_Costs__c}"/>
+                                           </apex:outputText>
+                                       </div>
+                                   </apex:outputPanel>
+                               </apex:panelGrid>
+                               <apex:panelGrid columns="2" id="turnkey" style="{!IF(lopOffer.PBS_RSAP_TIA_Or_Turnkey__c == 'Turnkey', 'display:block;' , 'display:none;')}">
+                                   <apex:panelGrid columns="2">
+                                   <apex:outputText >&#160;&#160;What is the turnkey total Tenant Improvement amount?</apex:outputText>
+                               <apex:inputText id="tenantF0" value="{!lopOffer.PBS_RSAP_Total_TI_Turnkey__c}" onkeyup="validate(this)">$</apex:inputText>
+                                   </apex:panelGrid>
+                                   </apex:panelGrid>
+                               <apex:panelGrid >
+                               </apex:panelGrid>
+                               <apex:panelGrid columns="3">
+                        <apex:outputText >2. What is the amortization interest rate?&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</apex:outputText>
+                        <apex:inputText id="tenantF3" value="{!lopOffer.PBS_AAAP_TI_Amorti_Interest_Rate__c}" onkeyup="validate(this)"></apex:inputText>%
+                               </apex:panelGrid>
+                               <apex:panelGrid columns="2">
+                               </apex:panelGrid>
+                               <apex:panelGrid columns="2">
+                        <apex:outputText value="">3. What is the amortization period, in months?
+                               <a class="popup" href="#Modal_Bldg_Ques14"><img src="{!$Resource.Info_Icon}"/></a>
+                                <div id="Modal_Bldg_Ques14" class = "infopopup5"
+                                     style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                    <p>The tenant improvement rent is typically fully amortized at the end of the firm term, and the rent 
+                                       will be reduced accordingly (review the RLP to confirm this parameter). Any desired rent increases or  
+                                       decreases beyond the firm term of the lease should be reflected in the Step Rent section on this page.
+                                    </p>
+                                </div>&#160;&#160;&#160;&#160;&#160;&#160;
+                        </apex:outputText>
+                        <apex:inputText id="PBS_AAAP_TI_Amorization_in_Years__c"
+                                        value="{!lopOffer.PBS_AAAP_TI_Amorization_in_Years__c}" onkeypress="return inputLimiter(event,'Numbers');"></apex:inputText>
+                               </apex:panelGrid>
+                               <apex:panelGrid columns="3">
+                                   <div style="margin-left: -20px;">months (</div>
+                               
+                        <apex:outputText id="PBS_AAAP_TI_Years_Rate_Effective__c" value="{0,number, ######.###}">
+                                   <apex:param value="{!lopOffer.PBS_AAAP_TI_Years_Rate_Effective__c}"/>
+                        </apex:outputText>
+                                   <apex:outputText value="Years )"></apex:outputText>
+                               </apex:panelGrid>
+                        <!--<apex:outputText value="4. Annual Tenant Improvement Rent"></apex:outputText>
+
+                        <apex:outputText value="{0,number, $###,###.##}">
+                            <apex:param value="{!lopOffer.PBS_AAAP_Annual_TI_Rent__c}"/>
+                        </apex:outputText>
+
+                        <apex:outputText value="5. Annual Rent per RSF"></apex:outputText>
+
+                        <apex:outputText value="{!lopOffer.PBS_AAAP_TI_Annual_Rent_Per_RSF__c}"
+                                         html-readonly="true">$</apex:outputText>
+
+
+                        <apex:outputText value="6. Annual Rent per ABOA SF"></apex:outputText>
+
+                        <apex:outputText value="{!lopOffer.PBS_AAAP_TI_Annual_Rent_Per_ABOA__c}"
+                                         html-readonly="true">$</apex:outputText>-->
+                               <apex:outputPanel >
+                               </apex:outputPanel>
+                               <apex:outputPanel >
+                               </apex:outputPanel>
+                               <apex:outputPanel >
+                               </apex:outputPanel>
+                               <apex:outputPanel >
+                               </apex:outputPanel>
+                        <apex:outputPanel >
+                            <apex:commandButton value="Calculate" onclick="calculateTI(); return false;" />
+                            <apex:commandButton value="Save & Close" action="{!actionSaveSpaceRates}"/>
+                            <input type="button" value="Cancel"
+                                   rerender="options"
+                                   onclick="tenantCancel(); return false;"/>
+                         </apex:outputPanel>
+
+            </apex:panelGrid>
+              </apex:panelGrid> </div>
+              <br/></td>
+                      </tr>
+
+                      </span> <!-- end of TI div -->
+
+                                <tr>
+                                    <td style="font-weight:bold">
+                                        <apex:outputText value="Building Specific Amortized Capital (BSAC) Rent: "/>
+                                        <a class="popup" href="#BSAC"><img src="{!$Resource.Info_Icon}"/></a>
+                                        <div id="BSAC" class="infopopup3"
+                                             style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;font-weight:normal;">
+                                            <p>Click Enter/Edit BSAC to add Building Specific Amortized Capital </p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <apex:outputPanel >&nbsp;$<apex:outputText value="{0,number, ###,##0.00}" html-readonly="true">
+                                                <apex:param value="{!lopOffer.PBS_AAAP_Anual_BSAC_Rent__c}"/>
+                                            </apex:outputText>
+                                        </apex:outputPanel>                                     
+                                    </td>
+                                    <td>
+                                        <apex:outputPanel >&nbsp;$<apex:outputText value="{0,number, ###,##0.00}" html-readonly="true">
+                                                <apex:param value="{!lopOffer.PBS_AAAP_BSAC_Annual_Rent_Per_RSF__c}"/>
+                                            </apex:outputText>
+                                        </apex:outputPanel>
+                                    </td>
+                                    <td>
+                                        <apex:outputPanel >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$<apex:outputText value="{0,number, ###,##0.00}" html-readonly="true">
+                                                <apex:param value="{!lopOffer.PBS_AAAP_BSAC_Annual_Rent_Per_ABOA__c}"/>
+                                            </apex:outputText>
+                                        </apex:outputPanel>                                        
+                                    </td>
+                                    <!--<td>
+                                        <apex:outputPanel >
+                                            <apex:outputText value="{!lopOffer.PBS_AAAP_BSAC_Years_Rate_Effective__c}"
+                                                             html-readonly="true"/>
+                                        </apex:outputPanel>
+                                    </td>-->
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold">
+                                         <!-- J. Rogers - Added code to onclick to remove scroll bar -->
+                                        <apex:commandButton value="Enter/Edit BSAC: "
+                                                            onclick="showBSACSection(); 
+                                                            top.postMessage('Page Updated', document.location.origin);
+                                                            return false;"/>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <!-- BSAC section -->
+                                <span id="bsacSpan">
+                    <tr id="bsacSection" class="hideSection">
+                      <td colspan="4"> <div class="bb">
+                          <apex:panelGrid columns="1" id="bsacSectionToRender">
+
+            <h4 class="grey">BUILDING SPECIFIC AMORTIZED CAPITAL (BSAC)</h4><br/>
+              <!--<apex:outputText style="color:#102372;font-weight:bold;"
+                               value="Enter the total build-out costs, if any, necessary to bring the building up to the security standards outlined in the Request for Lease Proposals (RLP) package. For RLP packages requiring Facility Security Level II, build-out costs should be itemized on the Security Unit Price list, and uploaded on the ‘Attachments’ section of this process. Building specific security items must be priced separately from tenant improvements. You must complete all fields. "></apex:outputText>-->
+                              <apex:panelGrid id="BSAC_header1" columns="1">
+                                  <apex:outputText value="1. What method of building specific amortized capital pricing is required by the RLP?"></apex:outputText>
+                                  <apex:selectRadio styleClass="radioCell" value="{!lopOffer.PBS_RSAP_BSAC_Rate_ABOA_or_Total__c}" onchange="showbsacOrabao(this);">
+                                      <apex:selectOption itemLabel="Rate per ABOA SF specified in RLP" itemValue="Rate per ABOA SF specified in RLP"/>
+                                      <apex:selectOption itemLabel="Total BSAC buildout cost itemized on the Security Unit Price List" itemValue="Total BSAC buildout cost itemized on the Security Unit Price List"/>
+                                  </apex:selectRadio>
+                              </apex:panelGrid>
+                              <apex:panelGrid id="BSAC_header" columns="2">
+                                  <apex:panelGrid columns="1" id="abao1" style="{!IF(lopOffer.PBS_RSAP_BSAC_Rate_ABOA_or_Total__c == 'Rate per ABOA SF specified in RLP', 'display:block;' , 'display:none;')}">
+                                   <apex:outputText >&#160;&#160;What is the BSAC rate per ABOA SF stated in the RLP?&#160;&#160;&#160;$</apex:outputText>
+                               </apex:panelGrid>
+                               <apex:panelGrid columns="3" id="abao2" style="{!IF(lopOffer.PBS_RSAP_BSAC_Rate_ABOA_or_Total__c == 'Rate per ABOA SF specified in RLP', 'display:block;' , 'display:none;')}">
+                                   <apex:inputField id="PBS_RSAP_BSAC_Rate_from_RLP__c" value="{!lopOffer.PBS_RSAP_BSAC_Rate_from_RLP__c}" onkeyup="validate(this)"></apex:inputField>
+                                   <div style="width: 120px;">Calculated Total TI:</div>
+                                   <apex:outputPanel >
+                                       <div style="word-break: break-all;max-width: 110px;">
+                                           <apex:inputHidden id="PBS_AAAP_BSAC_Total_Build_out_Costs__chidden" value="{!lopOffer.PBS_AAAP_BSAC_Total_Build_out_Costs__c}" />
+                                           <apex:outputText id="PBS_AAAP_BSAC_Total_Build_out_Costs__c" value="{0,number, $ ###,##0.00}">
+                                               <apex:param value="{!lopOffer.PBS_AAAP_BSAC_Total_Build_out_Costs__c}"/>
+                                           </apex:outputText>
+                                       </div>
+                                   </apex:outputPanel>
+                               </apex:panelGrid>
+                               <apex:panelGrid columns="1" id="bsac1" style="{!IF(lopOffer.PBS_RSAP_BSAC_Rate_ABOA_or_Total__c == 'Total BSAC buildout cost itemized on the Security Unit Price List', 'display:block;' , 'display:none;')}">
+                                   <apex:outputText >&#160;&#160;What is the total BSAC buildout cost?</apex:outputText>
+                                </apex:panelGrid>
+                                  <apex:panelGrid columns="1" id="bsac2" style="{!IF(lopOffer.PBS_RSAP_BSAC_Rate_ABOA_or_Total__c == 'Total BSAC buildout cost itemized on the Security Unit Price List', 'display:block;' , 'display:none;')}">
+                                  <apex:inputText id="bsac2input" value="{!lopOffer.PBS_RSAP_BSAC_Calc_from_Rate__c}" onkeyup="validate(this)">$</apex:inputText>
+                               </apex:panelGrid>
+                        <!--<apex:outputPanel>$
+                            <apex:inputField id="bsacF1"
+                                             value="{!lopOffer.PBS_AAAP_BSAC_Total_Build_out_Costs__c}"></apex:inputField>
+                        </apex:outputPanel>-->
+                       
+                        <apex:outputText value="2. What is the amortization interest rate?"></apex:outputText>
+                        <apex:outputPanel >
+                        <apex:inputText id="bsacF3" value="{!lopOffer.PBS_AAAP_BSAC_Amorti_Interest_Rate__c}" onkeyup="validate(this)"></apex:inputText>%
+                         </apex:outputPanel>
+                        <apex:outputText value="">3. What is the amortization period, in months?
+                            <a class="popup" href="#Modal_Bldg_Ques14_1"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+                                        <div id="Modal_Bldg_Ques14_1" class = "infopopup4"
+                                             style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                            <p>The BSAC rent is typically fully amortized at the end of the firm term, and the rent  will be
+                                                reduced accordingly (review the RLP to confirm this parameter). Any desired rent increases or decreases 
+                                                 beyond the firm term of the lease should be reflected in the Step Rent section on this page.                                               
+                                            </p>
+                                        </div>
+                        </apex:outputText>
+                        <apex:outputPanel >
+                         <apex:outputPanel >
+                        <apex:inputText id="PBS_AAAP_BSAC_Amorization_in_Years__c"
+                                        value="{!lopOffer.PBS_AAAP_BSAC_Amorization_in_Years__c}" onkeypress="return inputLimiter(event,'Numbers');"></apex:inputText>
+                        months (&#160;
+                            </apex:outputPanel>
+                             <apex:outputText id="PBS_AAAP_BSAC_Years_Rate_Effective__c" value="{0,number, ######.###}">
+                            <apex:param value="{!lopOffer.PBS_AAAP_BSAC_Years_Rate_Effective__c}"/>
+                            </apex:outputText>
+                            <apex:outputText value=" Years )"></apex:outputText>
+                            </apex:outputPanel>
+                        <!--<apex:outputText value="4. Annual BSAC Rent"></apex:outputText>
+
+                        <apex:outputText value="{0,number, $###,###.##}">
+                            <apex:param value="{!lopOffer.PBS_AAAP_Anual_BSAC_Rent__c}"/>
+                        </apex:outputText>
+
+
+                        <apex:outputText value="5. Annual Rent per RSF"></apex:outputText>
+                        <apex:outputText value="{!lopOffer.PBS_AAAP_BSAC_Annual_Rent_Per_RSF__c}"
+                                         html-readonly="true">$</apex:outputText>
+
+                        <apex:outputText value="6. Annual Rent per ABOA SF"></apex:outputText>
+
+                        <apex:outputText value="{!lopOffer.PBS_AAAP_BSAC_Annual_Rent_Per_ABOA__c}"
+                                         html-readonly="true">$</apex:outputText>-->
+                         <apex:outputPanel ></apex:outputPanel>
+                         <apex:outputPanel ></apex:outputPanel>
+                         <apex:outputPanel ></apex:outputPanel>
+                         <apex:outputPanel ></apex:outputPanel>
+                         <apex:outputPanel ></apex:outputPanel>
+                       <!-- oncomplete="hideBSACSection();"/-->
+
+            </apex:panelGrid>
+             
+                          </apex:panelGrid>
+                          <apex:commandButton value="Calculate" onclick="calculateBSAC(); return false;" />
+                            <apex:commandButton value="Save & Close" action="{!actionSaveSpaceRates}"/>
+                            <input type="button" value="Cancel"
+                                   rerender="options"
+                                   onclick="bsacCancel(); return false;"/>
+                          </div>
+                        </td>
+                   </tr>
+                                    <tr>
+                                    <td style="font-weight:bold;">
+                                        <apex:outputText value="Parking: "/>
+                                    </td>
+                                    <td>
+                                        <apex:outputPanel >&nbsp;$<apex:outputText value="{0,number, ###,##0.00}" html-readonly="true">
+                                            <apex:param value="{!lopOffer.PBS_RSAP_Total_Parking_Annual_Amount__c}"/>
+                                            </apex:outputText>
+                                        </apex:outputPanel>
+                                    </td>         
+                                </tr>
+                                <!--<tr>
+                                    <td>
+                                        <apex:outputText style="font-weight:bold;width: 256px;" value="Total Initial Rent: "/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputPanel >$
+                                        <apex:outputText value="{0, number, ###,###.00}" id="myNumberDisplay">
+                                            <apex:param value="{!totalAnnualRentAmt}"/>
+                                        </apex:outputText>
+                                    </apex:outputPanel>
+                                    </td>
+                                </tr>-->
+                                <tr>
+                                    <td style="font-weight:bold;">
+                                        <apex:outputText value="Total Initial Rent: "/>
+                                    </td>
+                                    <td>
+                                        <apex:outputPanel id="total_initial_rent">&nbsp;$<apex:outputText value="{0,number, ###,##0.00}" html-readonly="true">
+                                            <apex:param value="{!lopOffer.PBS_RSAP_Lease_Annual_Rent__c}"/>
+                                            </apex:outputText>
+                                        </apex:outputPanel>
+                                    </td>
+                                    <td>
+                                        <apex:outputPanel id="LeaseAnnualRentPerRSF">&nbsp;$<apex:outputText value="{0,number, ###,##0.00}" html-readonly="true">
+                                            <apex:param value="{!lopOffer.PBS_AAAP_Lease_Annual_Rent_Per_RSF__c}"/>
+                                            </apex:outputText>
+                                        </apex:outputPanel>
+                                    </td>
+                                    <td>
+                                        <apex:outputPanel id="Lease_Annual_Rent_Per_ABOA" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$<apex:outputText value="{0,number, ###,##0.00}" html-readonly="true">
+                                            <apex:param value="{!lopOffer.PBS_AAAP_Lease_Annual_Rent_Per_ABOA__c}"/>
+                                            </apex:outputText>
+                                        </apex:outputPanel>
+                                    </td>
+                                </tr>
+                      </span>
+                            </Table>
+                        </apex:outputPanel>
+                    </div>
+
+                    <apex:panelGrid id="pangrid_totalRent" columns="1" style="margin-left:-5px;">
+                        <apex:outputPanel >
+                        <div id="stepRentTotal" class="bb" style="padding-right:1px;">
+                            <apex:panelGrid columns="2">
+
+                                <h4 class="grey">Step Rent</h4>
+                                <br/><h5 style="color:blue">Shell rent and parking steps should be detailed if the initial amount stated in the rental rates table above does not remain <br />the same for the full term of the lease.  
+                                Shell rent step amounts should be stated in annual rent for the entire leased space, not as a rate per square foot. Parking step rents should be stated as a dollar amount per space per month.<br /></h5>
+                                <br/>
+                                <apex:outputPanel ></apex:outputPanel>
+                                <!--<apex:outputText value="{!QLabels.lopSpaceQ12}"></apex:outputText>
+                                <apex:selectRadio id="shellRentStepped"
+                                                  value="{!lopOffer.PBS_AAAP_Is_Shell_Rent_Stepped__c}"
+                                                  onchange="reRenderStepRent(this.name);">
+                                    <apex:selectOptions value="{!items}"/>
+                                </apex:selectRadio>-->
+                            </apex:panelGrid>
+                            <span id="stepRentSpan">
+                                <apex:outputPanel id="StepRentInformation">
+                                                <table class="StepRentTable">
+                                                    <tr>
+                                                        <td style="min-width: 20px;"></td>
+                                                        <td style="min-width: 200px;"><u>Rent Type</u></td>
+                                                        <td style="min-width: 170px;"><u>Beginning Year</u></td>
+                                                        <td style="min-width: 170px;"><u>Through Year</u></td>
+                                                        <td style="min-width: 90;"><u>Amount Will Be:</u></td>
+                                                        <td style="min-width: 108px;"><u>Per:</u></td>
+                                                        <td style="padding-bottom:10px"><u>Delete</u></td>
+                                                    </tr>
+                                                    <apex:repeat value="{!stepFreeRentRecords}" var="record">
+                                                        <tr class="addTableRows">
+                                                            <td>{!record.PBS_RSAP_Rent_Number__c}.</td>
+                                                            <td style="max-width: 200px;" class="long">
+                                                                <apex:outputPanel rendered="{!!isRendered}">
+                                                                    <apex:inputField value="{!record.PBS_RSAP_Step_Rent_Type__c}" onchange="changeThePerValue(this.value,'PBS_RSAP_Step_Payment_Basis__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Rent_Number__c))}');" />
+                                                                </apex:outputPanel>
+                                                                <apex:outputPanel rendered="{!isRendered}">
+                                                                <div class="selector">
+                                                                    <span id="PBS_RSAP_Step_Rent_Type__c{!record.PBS_RSAP_Rent_Number__c}">{!IF(record.PBS_RSAP_Step_Rent_Type__c != Null , record.PBS_RSAP_Step_Rent_Type__c , '--None--')}</span>
+                                                                    <apex:inputField value="{!record.PBS_RSAP_Step_Rent_Type__c}" onchange="changeThePerValue(this.value,'PBS_RSAP_Step_Payment_Basis__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Rent_Number__c))}');changeThePicklistValue(this.value,'PBS_RSAP_Step_Rent_Type__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Rent_Number__c))}');" />
+                                                                </div>
+                                                                </apex:outputPanel>
+                                                            </td>
+                                                            <td style="max-width: 170px;    padding-right: 7px;">
+                                                                <apex:outputPanel rendered="{!!isRendered}">
+                                                                    <apex:inputField value="{!record.PBS_RSAP_Step_Start__c}" />
+                                                                </apex:outputPanel>
+                                                                <apex:outputPanel rendered="{!isRendered}">
+                                                                <div class="selector">
+                                                                    <span id="PBS_RSAP_Step_Start__c{!record.PBS_RSAP_Rent_Number__c}">{!IF(record.PBS_RSAP_Step_Start__c != Null , record.PBS_RSAP_Step_Start__c , '--None--')}</span>
+                                                                    <apex:inputField value="{!record.PBS_RSAP_Step_Start__c}" onchange="changeThePicklistValue(this.value,'PBS_RSAP_Step_Start__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Rent_Number__c))}');" />
+                                                                </div>
+                                                                </apex:outputPanel>
+                                                            </td>
+                                                            <td style="max-width: 170px;    padding-right: 7px;">
+                                                                <div>
+                                                                    <apex:outputPanel rendered="{!!isRendered}">
+                                                                        <apex:inputField value="{!record.PBS_RSAP_Step_End__c}"/>
+                                                                    </apex:outputPanel>
+                                                                    <apex:outputPanel rendered="{!isRendered}">
+                                                                        <div class="selector">
+                                                                            <span id="PBS_RSAP_Step_End__c{!record.PBS_RSAP_Rent_Number__c}">{!IF(record.PBS_RSAP_Step_End__c != Null , record.PBS_RSAP_Step_End__c , '--None--')}</span>
+                                                                            <apex:inputField value="{!record.PBS_RSAP_Step_End__c}" onchange="changeThePicklistValue(this.value,'PBS_RSAP_Step_End__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Rent_Number__c))}');" />
+                                                                        </div>
+                                                                    </apex:outputPanel>
+                                                                </div>
+                                                                
+                                                            </td>
+                                                            <td class="AmountWillBe">
+                                                                <div>
+                                                                    <apex:inputField value="{!record.PBS_RSAP_Step_Annual_Rent__c}" onkeyup="validate(this)" styleClass="text" />
+                                                                </div>
+                                                            </td>
+                                                            <td style="white-space: nowrap;"><div id="PBS_RSAP_Step_Payment_Basis__c{!record.PBS_RSAP_Rent_Number__c    }">
+                                                                {!record.PBS_RSAP_Step_Payment_Basis__c}
+                                                                </div></td>
+                                                            <td style="text-align: center;">
+                                                                <apex:commandLink action="{!deleteTheRow}" onclick="var con = confirm('Are you sure?');if(con==false)return false;" rendered="{!!viewOnly}" reRender="StepRentInformation"  oncomplete="hideAddRowButton();">
+                                                                    <apex:image url="{!URLFOR($Resource.gsa_common, '/images/delete-icon.png')}"
+                                                                                style="align: right;" alt="delete" title="Delete"/>
+                                                                    <apex:Param assignTo="{!freeRentIndexNumber}" name="attId" value="{!record.PBS_RSAP_Rent_Number__c  }"/>
+                                                                </apex:commandLink>
+                                                            </td>
+                                                        </tr>
+                                                    </apex:repeat>
+                                                </table>
+                                            </apex:outputPanel>
+                                <apex:outputPanel id="addRowButtonContainer" style="{!IF(freeRentLimits == 0 ||  stepFreeRentRecords.size < freeRentLimits,'display:block','display:none')}">
+                                                    <apex:outputPanel >
+                                                    <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        <div class="button">
+                                                            <!-- J. Rogers - added code to oncomplete to remove scroll bar -->
+                                                            <apex:commandButton value="+ Add Additional Row" styleClass="btnSave Add_Additional_Row" action="{!addRow}" reRender="StepRentInformation" onclick="document.getElementById('SpacesAndRates:spaceAndRatesForm:addRowButtonContainer').style.display = 'none';" 
+                                                                oncomplete="hideAddRowButton();top.postMessage('Page Updated', document.location.origin);" /> <!--  -->
+                                                        </div>
+                                                    </apex:outputPanel>
+                                            </apex:outputPanel>
+                <!--<apex:outputPanel id="stepRentSection" styleClass="hideStepRentSection">
+                 <Table cellspacing="150px;" border="2">
+
+                    <tr>
+                        <td style="font-weight:bold" align="center">
+                            <apex:outputPanel ><apex:outputText value="Step Rent (Shell Rates) "/>
+                        <a class="popup" href="#stepRent"><img src="{!$Resource.Info_Icon}"/></a>
+                    <div id="stepRent"
+                         style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                        <p> Input shell rates past the initial term, starting with the first year of stepped rent (the year following the end of the initial shell rate).<br/> A maximum of two (2) stepped rental increases may be offered after the initial term. Stepped rents for other rental components are not allowed.</p></div>
+                       </apex:outputPanel> </td>
+                        <td colspan="4" align="center" style="font-weight:bold"></td>
+
+                    </tr>
+                    <tr>
+
+                        <td style="font-weight:bold">Years<apex:outputText value=""/></td>
+                         <td><apex:outputPanel >#&nbsp;<apex:inputText value="{!lopOffer.PBS_AAAP_Step_1_Start__c}"
+                                                                      style="width:50px" id="step1Start"
+                                                                      html-readonly="true"/><apex:outputText value="To"/><apex:inputText value="{!lopOffer.PBS_AAAP_Step_1_End__c}"
+                                                             style="width:50px"
+                                                             id="step1End"
+                                                             html-readonly="true"/></apex:outputPanel></td>
+                        <td><apex:outputPanel >#&nbsp;<apex:inputText value="{!lopOffer.PBS_AAAP_Step_2_Start__c}"
+                                                                     style="width:50px"/><apex:outputText value="To"/><apex:inputText value="{!lopOffer.PBS_AAAP_Step_2_End__c}" style="width:50px"/></apex:outputPanel></td>
+                        <td><apex:outputPanel >#&nbsp;<apex:inputText value="{!lopOffer.PBS_AAAP_Step_3_Start__c}"
+                                                                     style="width:50px"/><apex:outputText value="To"/><apex:inputText value="{!lopOffer.PBS_AAAP_Step_3_End__c}" style="width:50px"/></apex:outputPanel></td>
+
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold"><apex:outputText value="Per RSF "/></td>
+                        <td><apex:outputPanel >$&nbsp;<apex:inputText value="{!lopOffer.PBS_AAAP_Step_1_Rent_Per_RSF__c}"
+                                                                     html-readonly="true"/></apex:outputPanel></td>
+                        <td><apex:outputPanel >$&nbsp;<apex:inputField value="{!lopOffer.PBS_AAAP_Step_2_Rent_Per_RSF__c}"/></apex:outputPanel></td>
+                        <td><apex:outputPanel >$&nbsp;<apex:inputField value="{!lopOffer.PBS_AAAP_Step_3_Rent_Per_RSF__c}"/></apex:outputPanel></td>
+                    </tr>
+                     <tr>
+                        <td style="font-weight:bold"><apex:outputText value="Per ABOA SF "/></td>
+                        <td><apex:outputPanel >$&nbsp;<apex:outputText value="{!lopOffer.PBS_AAAP_Step_1_Rent_Per_ABOA__c}"
+                                html-readonly="true"/></apex:outputPanel></td>
+                        <td><apex:outputPanel >$&nbsp;<apex:outputText value="{!lopOffer.PBS_AAAP_Step_2_Rent_Per_ABOA__c}"
+                                html-readonly="true"/></apex:outputPanel></td>
+                        <td><apex:outputPanel >$&nbsp;<apex:outputText value="{!lopOffer.PBS_AAAP_Step_3_Rent_Per_ABOA__c}"
+                                html-readonly="true"/></apex:outputPanel></td>
+                    </tr> 
+                </Table>
+                </apex:outputPanel>-->  
+                 </span>
+                        </div>
+                    </apex:outputPanel>
+                        <apex:outputPanel id="totalRent">
+                            <div id="totalRentDiv" class="bb">
+                                <!--<apex:panelGrid columns="2">
+                                    <apex:outputPanel >
+                                        <apex:outputText value="{!QLabels.lopSpaceQ5}"></apex:outputText>
+                                        <span class="required">*</span></apex:outputPanel>
+                                    <apex:selectRadio styleClass="radioCell" 
+                                                      value="{!lopOffer.PBS_AAAP_RLP_Parking_Cost_Incl__c}">
+                                        <apex:selectOptions value="{!items}"/>
+                                    </apex:selectRadio>
+                                </apex:panelGrid>-->
+                                <apex:panelGrid columns="2">
+                                    <!--<apex:outputText id="txt_amrt1" style="color:#102372;font-weight:bold;"
+                                                     value="(Note: Enter parking rates, if applicable, on the Parking Tab)"></apex:outputText>
+                                    <apex:outputPanel ></apex:outputPanel>-->
+                                    <apex:outputPanel ><h4 class="grey">Free Rent</h4><br/><br/> 
+                                        <span>1. If you are offering free rent, enter the number of months free you are offering. If you are not offering free rent, leave the field blank or &nbsp;&nbsp;&nbsp;&nbsp;enter ‘0’.</span>
+                                    </apex:outputPanel>
+                                    <br />
+                                    <apex:inputField style="margin-left:15px;" onkeypress="return blockSpecialChar(event);" value="{!lopOffer.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c}">months</apex:inputField>                                    
+                                    
+                                </apex:panelGrid>
+                                <apex:panelGrid >
+                                    <apex:outputText value="2. If you are offering free rent, what rent components are included in the free rent offered? (Select all that apply.)"></apex:outputText>
+                                </apex:panelGrid>
+                                <apex:panelGrid columns="11">&nbsp;&nbsp;&nbsp;
+                                    <apex:inputCheckbox value="{!ShellCheck}"></apex:inputCheckbox>Shell &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <apex:inputCheckbox value="{!OperatingCheck}"></apex:inputCheckbox>Operating &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <apex:inputCheckbox value="{!TICheck}"></apex:inputCheckbox>TI &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <apex:inputCheckbox value="{!BSACCheck}"></apex:inputCheckbox>BSAC &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <apex:inputCheckbox value="{!ParkingCheck}"></apex:inputCheckbox>Parking &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                               </apex:panelGrid>
+                                <!--Rental Concessions changes from here-->
+                                <!--<apex:panelGrid >
+                                    <apex:outputText value="2. Would you like to offer free rent structured different from #1 above, or offer the Government some other form of rental concession?"></apex:outputText>
+                                </apex:panelGrid>  
+                                <br/>
+                                    <div style="padding-left:10px">
+                                            <apex:selectRadio styleClass="radioCell" value="{!rentalConcessions}">  
+                                                <apex:selectOptions value="{!rentalItems}"/>
+                                                <apex:actionSupport event="onchange"  rerender="rentalContainer" action="{!rentalConcessionsRerender}" /> 
+                                            </apex:selectRadio>
+                                    </div>
+                                        
+                                <br/>
+                                
+                                    <div style="padding-left:20px;color:#002BAD;font-size:13px;">
+                                        <apex:outputPanel id="rentalContainer">
+                                            <apex:outputText rendered="{!rentalConcessions == 'Yes'}">
+                                                Please describe the free rent structure or other rental concession(s) you would like to offer in a document upload on the Attachments section, or in the ADDITIONAL REMARKS OR COMMENTS WITH RESPECT TO THIS OFFER box at the bottom of the Lease Terms &amp; Conditions section.
+                                            </apex:outputText> 
+                                             </apex:outputPanel>
+                                    </div>
+                                <!--Rental Concessions changes to here-->
+                                </div>
+                        </apex:outputPanel>
+                        <apex:outputPanel >
+                            <div id="renewalDiv" class="bb">
+                                <apex:panelGrid columns="2">
+                                    <h4 class="grey">
+                                        Renewal Options</h4>
+                                    <br/><h5 style="color:blue">Renewal Options are optional unless required by the RLP.  Only renewal options that are 
+                                    required by the RLP will factor into the Government’s financial analysis of the Offer.</h5>
+                                    <br/><br />
+                                    <apex:outputPanel >
+                                    </apex:outputPanel>
+                                    <apex:outputPanel >
+                                        <div style="padding-left:20px;">
+                                        <span>1. Are you offering renewal options?</span>
+                                        <br /><br />
+                                        <!-- J. Rogers - added code to onchange to remove scroll bar  -->
+                                        <apex:selectRadio styleClass="radioCell" value="{!lopOffer.PBS_RSAP_Are_you_offering_renewal_option__c}"
+                                                                  id="Are_you_offering_renewal_option" 
+                                                                  onchange="showHideRelatedTable(); 
+                                                                  top.postMessage('Page Updated', document.location.origin);
+                                                                  return false;">
+                                            <apex:selectOption itemLabel="Yes" itemValue="Yes"/>
+                                            <apex:selectOption itemLabel="No" itemValue="No"/><br />
+                                        </apex:selectRadio>                                      
+                                    
+                                   
+                                        <apex:outputPanel style="{!IF(lopOffer.PBS_RSAP_Are_you_offering_renewal_option__c == 'Yes', 'display:block;' , 'display:none;')}" id="RenewalOptions"><br />
+                                                <table class="StepRentTable">
+                                                    <tr>
+                                                        <td style="min-width: 20px;"><u>Option Number</u></td>
+                                                        <td style="min-width: 180px;padding-left: 15px;"><u>Duration in Years</u></td>
+                                                        <td style="min-width: 180px;padding-left: 15px;"><u>Annual Shell Rate per RSF</u></td>
+                                                        <td style="min-width: 180px;padding-left: 15px;"><u>Number of Days Notice to Exercise Option</u></td>
+                                                        <td style="padding-bottom:10px;padding-left: 15px;"><u>Delete</u></td>
+                                                    </tr>
+                                                    <apex:repeat value="{!renewalOptionsRecords}" var="record">
+                                                        <tr class="addTableRowsRenewal">
+                                                            <td style="text-align: center;">{!record.PBS_RSAP_Option_Number__c}.</td>
+                                                            <td style="max-width: 180px;padding-left: 15px;">
+                                                                <apex:outputPanel rendered="{!!isRendered}">
+                                                                    <apex:inputField value="{!record.PBS_RSAP_Option_Duration__c}" onchange="changeThePerValue(this.value,'PBS_RSAP_Step_Payment_Basis__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Option_Number__c))}');" />
+                                                                </apex:outputPanel>
+                                                                <apex:outputPanel rendered="{!isRendered}">
+                                                                <div class="selector">
+                                                                    <span id="PBS_RSAP_Option_Duration__c{!record.PBS_RSAP_Option_Number__c}">{!IF(record.PBS_RSAP_Option_Duration__c != Null , record.PBS_RSAP_Option_Duration__c , '--None--')}</span>
+                                                                    <apex:inputField value="{!record.PBS_RSAP_Option_Duration__c}" onchange="changeThePerValue(this.value,'PBS_RSAP_Step_Payment_Basis__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Option_Number__c))}');changeThePicklistValue(this.value,'PBS_RSAP_Option_Duration__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Option_Number__c))}');" />
+                                                                </div>
+                                                                </apex:outputPanel>
+                                                            </td>
+                                                            <td style="max-width: 180px;padding-left: 15px;">
+                                                                <apex:inputField value="{!record.PBS_RSAP_Option_RSF_Rate__c}" onkeyup="validate(this)" styleClass="text" />
+                                                            </td>
+                                                            <td style="max-width: 180px;padding-left: 15px;">
+                                                                <apex:inputField value="{!record.PBS_RSAP_Option_Days_Notice_to_Exercise__c}" styleClass="text" onkeypress="return blockSpecialChar(event);" />
+                                                                
+                                                            </td>
+                                                            <td style="text-align: center;padding-left: 15px;">
+                                                                <apex:commandLink action="{!deleteTheRenewalRow}" onclick="var con = confirm('Are you sure?');if(con==false)return false;" rendered="{!!viewOnly}" reRender="RenewalOptions"  oncomplete="hideAddRowButtonRenewal();">
+                                                                    <apex:image url="{!URLFOR($Resource.gsa_common, '/images/delete-icon.png')}"
+                                                                                style="align: right;" alt="delete" title="Delete"/>
+                                                                    <apex:Param assignTo="{!freeRentIndexNumber}" name="attId" value="{!record.PBS_RSAP_Option_Number__c    }"/>
+                                                                </apex:commandLink>
+                                                            </td>
+                                                        </tr>
+                                                    </apex:repeat>
+                                                </table>
+                                            </apex:outputPanel>
+                                                 </div>
+                                            <apex:outputPanel id="addRowButtonContainerRenewal" style="{!IF((renewalOptionsLimits == 0 ||  renewalOptionsRecords.size < renewalOptionsLimits) && lopOffer.PBS_RSAP_Are_you_offering_renewal_option__c == 'Yes','display:block','display:none')}">
+                                                    <apex:outputPanel >
+                                                    <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        <div class="button">
+                                                            <!-- J. Rogers - added to oncomplete to fix scroll bar -->
+                                                            <apex:commandButton value="+ Add Additional Row" styleClass="btnSave Add_Additional_Row" action="{!addRenewalRow}" reRender="RenewalOptions"  onclick="document.getElementById('SpacesAndRates:spaceAndRatesForm:addRowButtonContainerRenewal').style.display = 'none';" 
+                                                                oncomplete="hideAddRowButtonRenewal();top.postMessage('Page Updated', document.location.origin);" /> <!--  -->
+                                                        </div>
+                                                    </apex:outputPanel>
+                                            </apex:outputPanel>
+                                    </apex:outputPanel>
+                    
+                                    <!--<apex:outputText value="{!QLabels.lopSpaceQ7}"></apex:outputText>-->
+
+                                </apex:panelGrid>
+
+                                
+                                <apex:outputPanel id="renewalSection" styleClass="showRenewalSection">
+                                    <!--<apex:panelGrid columns="2">
+                                        <apex:outputText value="{!QLabels.lopSpaceQ8}"></apex:outputText>
+                                        <apex:outputPanel >
+                                            <apex:outputText value="(Per RSF) $"></apex:outputText>
+                                            <apex:inputField value="{!lopOffer.PBS_AAAP_Renewal_Shell_Rate__c}"></apex:inputField>
+                                        </apex:outputPanel>
+                                    </apex:panelGrid>
+                                    <apex:panelGrid columns="2">
+                                        <apex:outputText value="{!QLabels.lopSpaceQ9}:"></apex:outputText>
+                                        <apex:outputPanel >&nbsp;&nbsp;&nbsp;
+                                            <apex:inputText value="{!lopOffer.PBS_AAAP_Renewal_YEARS_EACH__c}"></apex:inputText>
+                                            <apex:outputText value="years"></apex:outputText>
+                                        </apex:outputPanel>
+                                    </apex:panelGrid>-->
+
+                                    <!--<apex:outputText style="color:#102372;"
+                                                     value="The Offeror is requested to confirm that the renewal term of the proposal is consistent with the RLP and it’s attachments. If the RLP requested more than one renewal term, the Offeror is requested to confirm that the renewal terms of the proposal are consistent with the Government’s requirement."></apex:outputText>
+                                    -->
+                                    <!--<apex:panelGrid columns="2">
+                                        <apex:outputText value="{!QLabels.lopSpaceQ10}"></apex:outputText>
+                                        <apex:outputPanel >
+                                            <apex:inputText value="{!lopOffer.PBS_AAAP_Renewal_NO_OF_OPTIONS__c}"></apex:inputText>
+                                            <apex:outputText value=""></apex:outputText>
+                                        </apex:outputPanel>
+                                        <apex:outputText value="{!QLabels.lopSpaceQ11}"></apex:outputText>
+                                        <apex:outputPanel >
+                                            <apex:inputText value="{!lopOffer.PBS_AAAP_Renewal_Days_Exercise_Option__c}"></apex:inputText>
+                                            <apex:outputText value="days"></apex:outputText>
+                                        </apex:outputPanel>
+                                    </apex:panelGrid>-->
+                                </apex:outputPanel>
+                                
+                            </div>
+                        </apex:outputPanel>
+                    </apex:panelGrid>
+                    <br/>                    
+                </apex:outputPanel>
+                <br/>
+
+                <apex:actionFunction name="pullSteps" action="{!updateStepRents}"/>
+
+
+                <apex:outputPanel rendered="{!!viewOnly}"><!--{!!viewOnly}-->
+                    <!--<apex:commandButton value="Back"  onclick="replaceParameterLable()" />-->
+                     <apex:commandButton value="Back" 
+                                        onclick="window.parent.document.location.href =encodeURI(window.parent.document.location.href.replace('Rates','LeaseTerms'));" />
+                    <apex:commandButton value="Save Page" styleClass="btnSave" action="{!actionSaveSpaceRates}"/>
+                    <apex:commandButton value="Next" action="{!actionSaveSpaceRatesAndContinue}"
+                                        styleClass="btnJQSubmit"/>
+                   <!-- <apex:commandButton value="Exit Offer" action="{!actionCancel}"
+                                        onclick="if(confirm('Please make sure to hit save page before exiting your offer. Changes will not be saved unless you hit Save Page.')){return true;} else return false;"/>  -->
+                    <apex:commandButton value="Exit Offer"
+                                            onclick="if(confirm('Are you sure you want to cancel editing this record without saving changes?')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}RSAP-PortalHome';return false;} else {return false;}"/>
+            
+                </apex:outputPanel>
+
+            </apex:form>
+        </div>
+    </div>
+    </body>
+    <c:SiteFooterUX />
+</apex:page>

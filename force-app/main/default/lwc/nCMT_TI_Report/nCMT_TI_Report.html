@@ -1,0 +1,341 @@
+<template>
+    <article class="slds-card">
+        <div class="slds-card__header slds-grid projectBody">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title" style="text-align:center">
+                        <span style="font-size: 23px;
+                font-weight: 600;
+                text-transform: uppercase;width:100%">TI DETAIL REPORT</span>
+                    </h2>
+                </div>
+                <div class="slds-no-flex">
+                    <button class="slds-button slds-button_neutral hideButton" onclick={printPage} id="prnBtn">Print Page</button>
+                </div>
+            </header>
+        </div>
+    </article>    
+    <template if:true={loaded}>
+        <div class="slds-card__body projectBody">
+            <div class="slds-form slds-grid">
+                <div class="slds-col width50">
+                    <table class="projectTable" style="width:100%">
+                        <tr style="font-size: 15px;
+                        font-weight: 700;
+                        text-transform: uppercase;">
+                            <th colspan="3" style="border:none">Project Properties</th>
+                        </tr>
+                        <tr>
+                            <th style="width: 35%;">Project Title</th>
+                            <td colspan="2"><a onclick={redirectToProject}> <h1>{projectDetails.hpData.Project__r.Name}</h1></a> </td>
+                        </tr>
+                        <tr>
+                            <th>Project Location:</th>
+                            <td colspan="2">{projectDetails.hpData.Project__r.City__c},{projectDetails.hpData.Project__r.State__c}</td>
+                        </tr>
+                        <tr>
+                            <th>Agency Bureau Code:</th>
+                            <td colspan="2">{projectDetails.hpData.PBS_Agency_AB_Code__c}</td>
+                        </tr> 
+                        <tr>
+                            <th>Agency Bureau Name:</th>
+                            <td colspan="2">{projectDetails.hpData.PBS_Agency_Bureau_Name__c}</td>
+                        </tr>                  
+                    </table>                    
+                </div>
+                <div class="slds-col width50" style="padding-left:10px">
+                    <div style="height: 22px;">
+                         
+                    </div>
+                    <table class="projectTable" style="width:100%">
+                        <tr>
+                            <th style="width: 35%;">Housing Plan:</th>
+                            <td><a onclick={redirectToHousingPlan}> <h1></h1>{projectDetails.hpData.Name}</h1></a> </td>
+                        </tr>
+                        <tr>
+                            <th style="width: 35%;">Housing Plan Name:</th>
+                            <td>{projectDetails.hpData.Housing_Plan_Name__c}</td>
+                        </tr>
+                        <tr>
+                            <th>Housing Plan Type:</th>
+                            <td>{projectDetails.hpData.Housing_Plan_Type__c}</td>
+                        </tr>
+                        <tr>
+                            <th>Useable Area - Total:</th>
+                            <td><lightning-formatted-number value={projectDetails.hpData.Total_USF__c}></lightning-formatted-number>  USF</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="slds-card__body projectBody">
+            <div class="slds-form slds-grid">
+                <div class="slds-col width50">
+                    <table class="projectParamterTable" style="width:100%">
+
+                        <tr style="height: 15px;">
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                        </tr>
+                        <tr>
+                            <th class="slds-text-align_center" style="background-color:lightgrey;width: 5%;"><b>WBS Code</b></th>
+                            <td class="slds-text-align_center" style="background-color:lightgrey;width: 20%;"><b>UNIFORMAT System Elements</b></td>
+                            <td class="slds-text-align_center" style="background-color:lightgrey;width: 10%;"><b>TI SubTotal Cost</b></td>
+                            <td class="slds-text-align_center" style="background-color:lightgrey;width: 10%;"><b>TRCS SubTotal Cost</b></td>
+                            <td class="slds-text-align_center" style="background-color:lightgrey;width: 10%;"><b>Total</b></td>
+                            <td class="slds-text-align_center" style="background-color:lightgrey;width: 10%;"><b>ECCA</b></td>
+                            <td class="slds-text-align_center" style="background-color:lightgrey;width: 10%;"><b>ECC</b></td>
+                            <td class="slds-text-align_center" style="background-color:lightgrey;width: 10%;"><b>ETPC</b></td>
+                            <td class="slds-text-align_center" style="background-color:lightgrey;width: 10%;"><b>ECCA/USF</b></td>
+                            <td class="slds-text-align_center" style="background-color:lightgrey;width: 10%;"><b>ECC/USF</b></td>
+                            <td class="slds-text-align_center" style="background-color:lightgrey;width: 10%;"><b>ETPC/USF</b></td>
+                        </tr>
+                        <template for:each={projectDetails.costDetailsValues} for:item="costdetails">
+                            <tr key={costdetails.Id}>
+                                <td>{costdetails.categoryCode}</td>
+                                <td>{costdetails.description}</td>
+                                <td class="slds-text-align_right"><lightning-formatted-number value={costdetails.totalTICost} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                                <td class="slds-text-align_right"><lightning-formatted-number value={costdetails.totalTRCSCost} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                                <td class="slds-text-align_right"><lightning-formatted-number value={costdetails.total} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                                <td class="slds-text-align_right"><lightning-formatted-number value={costdetails.ECCA} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                                <td class="slds-text-align_right"><lightning-formatted-number value={costdetails.ECC} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                                <td class="slds-text-align_right"><lightning-formatted-number value={costdetails.ETPC} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                                <td class="slds-text-align_right"><lightning-formatted-number value={costdetails.ECCAUSF} minimum-fraction-digits="2" maximum-fraction-digits="2" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                                <td class="slds-text-align_right"><lightning-formatted-number value={costdetails.ECCUSF} minimum-fraction-digits="2" maximum-fraction-digits="2" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                                <td class="slds-text-align_right"><lightning-formatted-number value={costdetails.ETPCUSF} minimum-fraction-digits="2" maximum-fraction-digits="2" format-style="currency" currency-code="USD"></lightning-formatted-number></td>                           
+                            
+                            </tr> 
+                        </template>
+                        <tr>
+                            <td class="slds-text-align_center" colspan="2"><b>Sub Total</b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.TotalTICost} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.TotalTRCSCost} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.TotalTITRCSCost} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>                     
+                        </tr>
+                   <!-- </table>
+                    <table class="projectParamterTable" style="width:60%">
+                        <tr>
+                            <th style="width: 20%;border:none"></th>
+                            <td style="width: 5%;border:none"></td>
+                            <td style="width: 10%;border:none"></td>
+                            <td style="width: 10%;border:none"></td>
+                            <td style="width: 10%;border:none"></td>
+                        </tr>-->
+                        <tr>
+                            <td style="width: 20%;" class="slds-text-align_left" colspan="1">Design Contingency</td>
+                            <td style="width: 5%;" class="slds-text-align_right"><lightning-formatted-number value={projectDetails.Design} minimum-fraction-digits="2" maximum-fraction-digits="2" format-style="percent"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTIDesign} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTRCSDesign} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTITRCSDesign} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="slds-text-align_center" colspan="2"><b>Sub Total</b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.SubtotTIDesign}  minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.SubtotTRCSDesign} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.SubtotTITRCSDesign} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="slds-text-align_left" colspan="1">General Conditions and Profit</td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.General} minimum-fraction-digits="2" maximum-fraction-digits="2" format-style="percent"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTIGeneral} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTRCSGeneral} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTITRCSGeneral} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="slds-text-align_center" colspan="2"><b>SubTotal CECA</b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.SubtotTIGeneral} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.SubtotTRCSGeneral} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.SubtotTITRCSGeneral} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="slds-text-align_left" colspan="1">Market Escalation</td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.Escmarket} minimum-fraction-digits="2" maximum-fraction-digits="2" format-style="percent"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTIEscmarket} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTRCSEscmarket} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTITRCSEscmarket} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="slds-text-align_left" colspan="1">Code and Practice Escalation</td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.EscCPE} minimum-fraction-digits="2" maximum-fraction-digits="2" format-style="percent"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTIEscCPE} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTRCSEscCPE} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTITRCSEscCPE} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="slds-text-align_center" colspan="2"><b>SubTotal ECCA</b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.SubtotTIECCA} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.SubtotTRCSECCA} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.SubtotTITRCSECCA} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.SubtotTITRCSECCA} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="slds-text-align_left" colspan="1">Construction Contingency</td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.Construct} minimum-fraction-digits="2" maximum-fraction-digits="2" format-style="percent"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTIConstruct} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTRCSConstruct} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTITRCSConstruct} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="slds-text-align_center" colspan="2"><b>SubTotal ECC*</b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.SubtotTIECC} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.SubtotTRCSECC} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.SubtotTITRCSECC} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="slds-text-align_left" colspan="1">Art-In-Architecture</td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.Art} minimum-fraction-digits="2" maximum-fraction-digits="2" format-style="percent"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTIArt} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTRCSArt} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTITRCSArt} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="slds-text-align_center" colspan="2"><b>Total ECC</b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.totTIECC} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.totTRCSECC} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.totTITRCSECC} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.totTITRCSECC} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="slds-text-align_left" colspan="1">EDRC</td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.EDRC} minimum-fraction-digits="2" maximum-fraction-digits="2" format-style="percent"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTIEDRC} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTRCSEDRC} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTITRCSEDRC} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="slds-text-align_left" colspan="1">EMIC</td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.EMIC} minimum-fraction-digits="2" maximum-fraction-digits="2" format-style="percent"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTIEMIC} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTRCSEMIC} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td class="slds-text-align_right"><lightning-formatted-number value={projectDetails.SubTITRCSEMIC} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="slds-text-align_center" colspan="2"><b>Total ETPC</b></td>
+                            <td class="slds-text-align_right"></td>
+                            <td class="slds-text-align_right"></td>
+                            <td class="slds-text-align_right"><b><lightning-formatted-number value={projectDetails.totTITRCSETPC} minimum-fraction-digits="0" maximum-fraction-digits="0" format-style="currency" currency-code="USD"></lightning-formatted-number></b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <table>
+                        <tr>
+                            <td style="font-size: xx-small;">Note:</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                         <td style="font-size: xx-small;">1. CECC = Current Estimated Construction Cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                         <td style="font-size: xx-small;">3. EDRC = Estimated Design and Review Cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                         <td style="font-size: xx-small;">5. ESOC = Estimated Site and Other Cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                         </tr>
+                         <tr>
+                         <td style="font-size: xx-small;">2. ECC = Estimated Construction Cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                         <td style="font-size: xx-small;">4. EMIC = Estimated Management and Inspection Cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                         <td style="font-size: xx-small;">6. ETPC = Estimated Total Project Cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                         </tr>
+                    </table>
+                </div>
+            </div>
+        </div> 
+    </template>
+    <template if:true={showError}>
+        <p>NO RECORD TO DISPLAY</p>
+    </template> 
+    
+</template>

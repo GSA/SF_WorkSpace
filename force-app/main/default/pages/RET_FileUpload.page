@@ -1,0 +1,646 @@
+<apex:page standardStylesheets="true" sidebar="false" showHeader="false" controller="RET_FileUploadController" docType="html-5.0">
+    <apex:slds />
+    <apex:PageMessages />
+    <apex:form id="upload-form" enctype="multipart/form-data">
+    <style>
+        .required:after { 
+            content: " *"; 
+            color: #e32;
+            display: inline;
+        }
+        
+        .hidden, .dateFormat { display: none; }
+        #iframe-spacer { height: 150px; }
+        body, html { overflow-y: hidden; }
+        #upload-form {
+            overflow-y: visible;
+            height: 380px;
+        }
+        .file-data {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            display: inline-block;
+            margin-top: 1em;
+            padding: 8px;
+        }
+        .file-data div {
+            float: left;
+            font-size: 0.9em;
+          }
+        .file-data .file-data-label {
+          clear: both;
+          padding-right: 10px;
+          text-align: right;
+          width: 90px;
+        }       
+        .file-data-value {
+            color: #555;
+            font-weight: bold;
+            padding-right: 10px;
+        }
+        .file-upload-label {
+            color: #555;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .ret-file-input {
+            margin-top: 3px;
+        }
+        .ret-file-input .slds-file-selector__dropzone {
+            padding: 5px 9px !important;
+        }
+        .form-container {
+            margin-left: 6px;
+        }
+        #fileToUpload { color: #888; }
+        .file-messages {
+            background-color: #FDEDEA;
+            border: 1px solid #F2A199;
+            border-radius: 8px;
+            margin-bottom: 1em;
+            padding: 0.7em;
+        }
+        .file-messages #message-heading {
+            color: #46465F;
+            display: block;
+            font-weight: bold;
+            padding-bottom: 1px;
+        }
+        .message-success {
+            background-color: #EDFDEA;
+            border: 1px solid #A1F299;
+        }
+        .edit-column {
+            display: inline-block;
+            padding: 1em 0.5em;
+            width: 48%;
+            vertical-align: top;
+        }
+        div.hideCurrDate span.dateInput span.dateFormat{
+           display:none;
+        }
+        .value-missing {
+            -webkit-box-shadow: 0px 0px 3px 1px rgba(240,0,0,1);
+            -moz-box-shadow: 0px 0px 3px 1px rgba(240,0,0,1);
+            box-shadow: 0px 0px 3px 1px rgba(240,0,0,1);
+        }
+    </style>
+    <script type="text/javascript">__sfdcSessionId = '{!$Api.Session_Id}';</script>
+    <script type="text/javascript">__sfdcSiteUrlPrefix = '{!$Site.Prefix}';</script>
+          
+    <script src="/soap/ajax/40.0/connection.js" type="text/javascript"></script>
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"/>
+    <script type="text/javascript">
+        $j = jQuery.noConflict();
+        //Ywrap everything in document.ready because the select tag we are taregting needs to
+        //be loaded in the DOM before we can access it.
+        $j(document).ready(function() {
+            
+            var cYear = new Date().getFullYear() ;        
+            var startYear=(cYear - 6);          
+            var endYear=(cYear + 1); 
+            var optionsString ='';    
+            if(startYear<endYear){
+                //Loops through each date and renders the string for an option tag and addes it to the Optrionsstring variable
+                for(i=startYear;i<endYear+1;i++){
+                    optionsString += "<option value=\""+i+"\">"+i+"</option>";
+                }
+                //Replace the innerHTML of the calendar picker year select tag with the Optionsstring we constructed.
+                $j('#calYearPicker').html(optionsString);
+            }
+        });
+    </script>
+    <script language="JavaScript">
+        var domainurl;
+            //if('{!$Site.Domain}'=='gsa-ws.force.com'){
+            if('{!$Site.Domain}'=='workspace.my.site.com'){
+                console.log('retprod');
+                domainurl = 'https://ret.gsa.gov';
+            }else{
+                console.log('retnonprod');
+                domainurl ='https://{!$Site.Domain}'
+        }
+        window.onload = function() {
+            var msg = {
+                "type" : "hide-spinner"
+            };
+            
+            // parent.postMessage(JSON.stringify(msg), 'https://{!$Site.Domain}');
+               parent.postMessage(JSON.stringify(msg), domainurl);
+        };
+
+        var caseId;
+        window.addEventListener("message", function(event) {
+            /*if (event.origin !== "https://{!$Site.Domain}") {
+                return;
+            }*/
+            if (event.origin !== domainurl) {
+                return;
+            }
+            var request = JSON.parse(event.data);
+            caseId = request.caseId;
+            console.log('**caseid'+caseId);
+            uploadFile();           
+        }, false);
+
+        var messages = {
+            show: function(heading, message, style) {
+                style = (typeof style !== undefined) ? style : 'SUCCESS';
+                //document.getElementById('message-heading').innerHTML = heading + ':';
+                //document.getElementById('message').innerHTML = message;
+                /*Please don't 
+                remove above comments*/
+                document.getElementById('message-heading').textContent = heading + ':';
+                document.getElementById('message').textContent = message;
+                if(style === 'SUCCESS') {
+                    var msg = {
+                        "type" : "show-message",
+                        "editMode" : {!NOT(ISBLANK(attID))},
+                        "header" : heading,
+                        "msg" : message
+                    };
+                    // parent.postMessage(JSON.stringify(msg), 'https://{!$Site.Domain}');
+                    parent.postMessage(JSON.stringify(msg), domainurl);
+                    return;
+                } else {
+                    document.getElementById('file-messages-container').className = 'file-messages'; 
+                    window.parent.document.getElementById('ret-upload-container').scrollTop = 0;
+                }
+            },
+            showErrorList: function(errorList) {
+                var errorMsg = '<ul>';
+                for(var i = 0; i < errorList.length; i++) {
+                    errorMsg += '<li>' + errorList[i] + '</li>';
+                }
+                errorMsg += '</ul>';
+                this.show('Error', errorMsg, 'ERROR');
+            },
+            hide: function() {
+                document.getElementById('file-messages-container').className = 'hidden';
+            }
+        }
+
+        var spinner = {
+            show: function() {
+                var buttons = window.parent.document.getElementById('modal-footer-buttons-new').childNodes;
+                for(i = 0; i < buttons.length; i++) {
+                    buttons[i].disabled = true;
+                }
+                document.getElementById('form-container').className = 'hidden';
+                document.getElementById('file-metadata-container').className = 'hidden';
+                document.getElementById('spinner').className = 'spinner';
+            },
+            hide: function() {
+                var buttons = window.parent.document.getElementById('modal-footer-buttons-new').childNodes;
+                for(i = 0; i < buttons.length; i++) {
+                    buttons[i].disabled = false;
+                }
+                window.parent.document.getElementById('modal-footer-buttons-new').style.display = 'block';
+                document.getElementById('form-container').className = 'form-container';
+                document.getElementById('file-metadata-container').className = '';
+                document.getElementById('spinner').className = 'hidden';
+            }
+        }
+
+        var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        };
+        function prepareFileName(AttachmentId){
+            var selectedDocType = document.getElementById('{!$Component.documentType}').value;
+            var leaseNum = '{!JSENCODE(leaseNumber)}';
+            var upsertedRET = document.getElementById('{!$Component.taxBillId}').value;
+            var existingName = document.getElementById('{!$Component.editAttName}').value;
+            var taxyr = document.getElementById('{!$Component.taxYear}').value;
+            var currentSizeMap = JSON.parse('{!JSENCODE(docMapValues)}');
+            var extension = existingName.substring(existingName.lastIndexOf("."));
+            if(AttachmentId != null)
+            {
+                if(upsertedRET != ''){
+                    return leaseNum+' - '+selectedDocType+' ('+ taxyr +')'+'_'+ AttachmentId+extension;
+                }else{
+                    return leaseNum+' - '+selectedDocType+' ('+ taxyr +')'+'_'+ AttachmentId;
+                }
+            }
+            
+            return leaseNum+' - '+selectedDocType+' ('+ taxyr +')';
+        }
+
+        function uploadAttachment25MB(filename, filecontent) {
+            var chkExe = filename.match(/.exe/i);
+            var chkCom = filename.match(/.com/i);
+            var chkBat = filename.match(/.bat/i);
+            var extension = filename.substring(filename.lastIndexOf("."));
+            
+            if( chkExe != null || chkBat != null || chkCom != null ){
+                messages.show('Error', 'The file types .exe, .com, .bat are not supported.', 'ERROR');
+                spinner.hide();
+                return;
+            }
+
+            var success = true;
+            var resultMsg;
+
+            var fileTobeNamed = prepareFileName(null)+extension;
+            var dmlResult;
+            try {
+                var upsertedRET = document.getElementById('{!$Component.taxBillId}').value;
+                var attach = new sforce.SObject('Attachment');
+                attach.Name = fileTobeNamed;
+                if(upsertedRET == ''){
+                    attach.ParentId = caseId; 
+                    attach.Body  = filecontent;
+                }
+                else{
+                    attach.Id = document.getElementById('{!$Component.taxAttID}').value;
+                }
+                var results1 = sforce.connection.upsert("Id",[attach]);
+                //Update the inserted attachment
+                var attachupdate = new sforce.SObject('Attachment');
+                AttachmentId = results1[0].id;
+                fileTobeNamed = prepareFileName(AttachmentId)+extension;
+                attachupdate.Name = fileTobeNamed;
+                attachupdate.id = AttachmentId
+                
+                var results2 = sforce.connection.update([attachupdate]);
+                
+                dmlResult = results2[0].getBoolean("success");
+              
+                if (!dmlResult) {
+                    resultMsg = results2;
+                    success = false;
+                }
+                else{
+                    // Now create RET_Document_Data__c metadata.
+                    var ret = new sforce.SObject('RET_Document_Data__c');
+                    var smallFileName;
+                    if(fileTobeNamed.length > 80){
+                        smallFileName = fileTobeNamed.substring(0,79);
+                    }else{
+                        smallFileName = fileTobeNamed;
+                    }   
+                    if(upsertedRET == '') {
+                        ret.Attachment_ID__c = results1[0].id;
+                    }
+                    ret.Full_File_Name__c     = fileTobeNamed;
+                    ret.Tax_Bill_Frequency__c = document.getElementById('{!$Component.billFreq}').value == '' ? null : document.getElementById('{!$Component.billFreq}').value;
+                    ret.Document_Type__c      = document.getElementById('{!$Component.documentType}').value;
+                    ret.Tax_Year__c           = document.getElementById('{!$Component.taxYear}').value == '' ? null : document.getElementById('{!$Component.taxYear}').value;
+                    ret.Tax_Block_Number__c   = document.getElementById('{!$Component.taxBlockNumber}').value;
+                    ret.Tax_Lot_Number__c     = document.getElementById('{!$Component.taxLotNumber}').value;
+                    ret.Tax_Period_Start__c   = new Date(document.getElementById('{!$Component.taxPeriodStart}').value);
+                    ret.Tax_Period_End__c     = new Date(document.getElementById('{!$Component.taxPeriodEnd}').value);
+                    ret.Tax_Authority_for_Document__c = document.getElementById('{!$Component.taxAuthforDoc}').value == '' ? null : document.getElementById('{!$Component.taxAuthforDoc}').value;
+                    ret.Tax_Bill_Due_Date__c = new Date(document.getElementById('{!$Component.taxBillDueDate}').value);
+                   
+                    if(success === true) {
+                        if(upsertedRET != '') {
+                            ret.Id = upsertedRET;
+                        }
+                        
+                        var results2 = sforce.connection.upsert("Id", [ret]);
+                        if (results2[0].getBoolean("success") != true) {
+                            resultMsg = results2;
+                            success = false;
+                        } else {
+                            resultMsg = '{!$Label.RET_File_Saved}';
+                        }
+                    }
+                }
+            } catch(err) {
+                resultMsg = err;
+                success = false;
+            }
+            
+            spinner.hide();
+            if(success === true) {
+                messages.show('Success', resultMsg, 'SUCCESS');
+            } else {
+                messages.show('Error', resultMsg, 'ERROR');
+            }
+        }
+
+        function fileSelected() {
+            var file = document.getElementById('fileToUpload').files[0];
+            
+            if (file) {
+                var fileSize = 0;
+                if (file.size > 1024 * 1024)
+                    fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB';
+                else
+                    fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
+
+                document.getElementById('fileName').innerHTML = file.name;
+                document.getElementById('fileSize').innerHTML = fileSize;
+                document.getElementById('fileType').innerHTML = file.type;
+                document.getElementById('file-data').className = 'file-data';
+                if (file.size > (25 * 1024 * 1024)) {
+                    messages.show('Error', '{!$Label.RET_File_Too_Large}', 'ERROR');
+                    return;
+                } else {
+                    messages.hide();
+                }
+            }
+        }
+
+        function uploadFile() {
+            if(valildateForm() == true) {
+                var RETId = document.getElementById('{!$Component.taxBillId}').value;
+                if(document.getElementById('{!$Component.taxBillId}').value != ''){
+                    spinner.show();
+                    uploadAttachment25MB('','');
+                }
+                else{ 
+                    console.log('**edit');   
+                    spinner.show();
+                    var file = document.getElementById('fileToUpload').files[0];
+                    var reader = new FileReader();
+                    reader.onload = loaded;
+                    reader.onerror = errorHandler;
+                    reader.readAsDataURL(file);
+                }
+            }
+
+        }
+        function loaded(evt) {
+            var filename = document.getElementById('fileToUpload').files[0].name;
+            var fileContent = String(evt.target.result);
+            fileContent = fileContent.substr(fileContent.indexOf(',') + 1);
+            uploadAttachment25MB(filename, fileContent);  
+        }
+        function errorHandler(evt) {
+            spinner.hide();
+            if (evt.target.error.name == 'NotReadableError') {
+                messages.show('Error', 'File could not be read.', 'ERROR');
+            }
+            else {
+                messages.show('Error', 'Unable to save your document due to a system error: ' + evt.target.error, 'ERROR');
+            }
+        }
+        function valildateForm() {
+            var resetElements = document.getElementsByClassName('value-missing');
+            while(resetElements.length) {
+                resetElements[0].classList.remove('value-missing');
+            }
+
+            var missingList = [];
+            var errorList = [];
+
+            if('{!JSENCODE(attID)}' == '' && document.getElementById('fileToUpload').files.length == 0) {
+                missingList.push('ret-file-input');
+            }            
+
+            if(document.getElementById('{!$Component.documentType}').value == ''){
+                missingList.push('{!$Component.documentType}');
+            }
+
+            var taxbillFreq = document.getElementById('{!$Component.billFreq}').value;
+            if(taxbillFreq == null || taxbillFreq == ''){
+                missingList.push('{!$Component.billFreq}');
+            }
+            var taxYear = document.getElementById('{!$Component.taxYear}').value;
+            if(taxYear != null && taxYear != '') {
+                if(taxYear.length != 4) {
+                    errorList.push('{!$Label.RET_Tax_Year_Length_Error}');
+                }
+                var yearIsNum = /^\d+$/.test(taxYear);
+                if(yearIsNum == false) {
+                    errorList.push('{!$Label.RET_Tax_Year_Format_Error}');  
+                }                
+            }
+            else {
+                missingList.push('{!$Component.taxYear}');
+            }
+
+            var startdt = document.getElementById('{!$Component.taxPeriodStart}').value;
+            if (startdt == null || startdt == ''){
+                missingList.push('{!$Component.taxPeriodStart}');
+            } else {
+                var stDate = new Date(startdt);
+                if(stDate == 'Invalid Date') {
+                    errorList.push('{!$Label.RET_Tax_Period_Start_Date_Format_Error}');
+                }
+            }
+            
+            var taxBillDueDate = document.getElementById('{!$Component.taxBillDueDate}').value;
+             if (taxBillDueDate == null || taxBillDueDate == ''){
+                missingList.push('{!$Component.taxBillDueDate}');
+            } else {
+                var taxbdate = new Date(taxBillDueDate);
+                console.log('**'+taxbdate);
+                if(taxbdate == 'Invalid Date') {
+                    errorList.push('{!$Label.RET_Tax_Bill_Due_Date_Format_Error}');
+                }
+            }
+
+            var taxAuthforDoc = document.getElementById('{!$Component.taxAuthforDoc}').value;
+            if(taxAuthforDoc == null || taxAuthforDoc == ''){
+                missingList.push('{!$Component.taxAuthforDoc}');
+            }
+            
+
+            var enddt = document.getElementById('{!$Component.taxPeriodEnd}').value;
+            if (enddt == null || enddt == '') {
+                missingList.push('{!$Component.taxPeriodEnd}');
+            } else {
+                var endDate = new Date(enddt);
+                if(stDate == 'Invalid Date') {
+                    resultMsg = '{!$Label.RET_Tax_Period_End_Date_Format_Error}';
+                }
+            }
+
+            if(stDate > endDate){
+                errorList.push('{!$Label.RET_Tax_Period_Date_Order_Error}');
+            }
+
+            if(missingList.length > 0 || errorList.length > 0) {
+                if(missingList.length > 0) {
+                    for(var i = 0; i < missingList.length; i++) {
+                        document.getElementById(missingList[i]).classList.add('value-missing');
+                    }
+                    errorList.push('{!$Label.RET_Required_Fields_Missing}');                    
+                }
+                messages.showErrorList(errorList);
+                return false;
+            } else {
+                return true;    
+            }
+            
+        }
+
+    </script>
+    <apex:outputPanel rendered="{!showForm}">
+        <div id="file-messages-container" class="hidden">
+            <span id="message-heading"></span>
+            <span id="message"></span>
+        </div>
+        <div id="form-container" class="form-container">
+            <apex:outputPanel id="isEditMode" rendered="{!showUpload}">
+                <div class="slds-form-element">
+                    <label for="fileToUpload" class="file-upload-label">Select a File to Upload:</label><br />
+                    <div class="slds-form-element__control ret-file-input">
+                        <div id="ret-file-input" class="slds-file-selector slds-file-selector_files">
+                            <div class="slds-file-selector__dropzone">
+                                <input type="file" name="fileToUpload" id="fileToUpload" onchange="fileSelected();" />
+                            </div>
+                        </div>
+                    </div> 
+        
+                    <div id="file-data" class="hidden">
+                        <div class="file-data-label">File Name:</div><div class="file-data-value" id="fileName"></div>
+                        <div class="file-data-label">File Size:</div><div class="file-data-value" id="fileSize"></div>
+                        <div class="file-data-label">File Type:</div><div class="file-data-value" id="fileType"></div>
+                    </div>
+                </div>
+            </apex:outputPanel>
+        </div>
+        <div id="file-metadata-container">
+            <div class="edit-column">
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label required" for="select-01">Document Type</label>
+                    <div class="slds-form-element__control">
+                        <div class="slds-select_container">
+                            <div class="requiredInput">
+                                <apex:inputField value="{!dataTemplate.Document_Type__c}" required="true" id="documentType" styleClass="slds-select"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-form-element">
+                    <div class="requiredBlock"></div>
+                    <label class="slds-form-element__label required" for="text-input-id-1">Tax Year</label>
+                    <div class="slds-form-element__control">
+                        <apex:inputField value="{!dataTemplate.Tax_Year__c}" required="true" id="taxYear" styleClass="slds-select"/>
+                    </div>
+                </div>
+              <!--  <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="text-input-id-1">Tax Block Number</label>
+                    <div class="slds-form-element__control">
+                          <apex:inputField value="{!dataTemplate.Tax_Block_Number__c}" id="taxBlockNumber" styleClass="slds-select"/>
+                    </div>
+                </div>-->
+                <div class="hidden">
+                    <div class="slds-form-element__control">
+                        <apex:InputText value="{!dataTemplate.Attachment_ID__c}" id="taxAttID" styleClass="slds-select"/>
+                    </div>
+                </div>
+                <!--<div class="slds-form-element">
+                    <label class="slds-form-element__label" for="text-input-id-1">Tax Lot Number</label>
+                    <div class="slds-form-element__control">
+                         <apex:inputField value="{!dataTemplate.Tax_Lot_Number__c}" id="taxLotNumber" styleClass="slds-select"/>
+                    </div>
+                </div>-->
+                 <div class="slds-form-element">
+                    <div class="requiredBlock"></div>
+                    <label class="slds-form-element__label required" for="text-input-id-1">Tax Bill Due Date</label>
+                    <div class="slds-form-element__control">
+                        <div class="slds-select_container">
+                            <div class="requiredInput">
+                                <apex:inputField value="{!dataTemplate.Tax_Bill_Due_Date__c}" id="taxBillDueDate" styleClass="slds-select"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label required" for="text-input-id-1">Tax Authority (e.g. Municipal, County)</label>
+                    <div class="slds-form-element__control">
+                        <div class="requiredInput">
+                          <apex:inputField value="{!dataTemplate.Tax_Authority_for_Document__c}" id="taxAuthforDoc" styleClass="slds-select"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="edit-column">
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label required" for="select-02">Tax Bill Frequency </label>
+                    <div class="slds-form-element__control">
+                        <div class="slds-select_container">
+                            <div class="requiredInput">
+                                <apex:inputField value="{!dataTemplate.Tax_Bill_Frequency__c}" required="true" id="billFreq" styleClass="slds-select" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label required" for="text-input-id-1">Tax Period Start</label>
+                    <div class="slds-form-element__control">
+                        <div class="slds-select_container">
+                            <div class="requiredInput">
+                                <apex:inputField value="{!dataTemplate.Tax_Period_Start__c}" required="true" id="taxPeriodStart" styleClass="slds-select"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label required" for="text-input-id-1">Tax Period End </label>
+                    <div class="slds-form-element__control">
+                        <div class="slds-select_container">
+                            <div class="requiredInput">
+                                <apex:inputField value="{!dataTemplate.Tax_Period_End__c}" required="true" id="taxPeriodEnd" styleClass="slds-select"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<!--
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label required" for="text-input-id-1">Tax Authority for Document</label>
+                    <div class="slds-form-element__control">
+                        <div class="requiredInput">
+                          <apex:inputField value="{!dataTemplate.Tax_Authority_for_Document__c}" id="taxAuthforDoc" styleClass="slds-select"/>
+                        </div>
+                    </div>
+                </div>-->
+
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="text-input-id-1">Tax Block Number</label>
+                    <div class="slds-form-element__control">
+                          <apex:inputField value="{!dataTemplate.Tax_Block_Number__c}" id="taxBlockNumber" styleClass="slds-select"/>
+                    </div>
+                </div>
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="text-input-id-1">Tax Lot Number</label>
+                    <div class="slds-form-element__control">
+                         <apex:inputField value="{!dataTemplate.Tax_Lot_Number__c}" id="taxLotNumber" styleClass="slds-select"/>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+         <div class="slds-modal__content" style="padding:10px;">
+             <h4>
+                 Privacy Act Notice
+             </h4>
+             <span style="font-size:10px;text-align:justify;">GSA collects and processes Real Estate Tax escalation documentation from individuals and businesses through this Real Estate Tax Portal (RET) pursuant to the terms of your GSA Lease Agreement and 40 U.S.C. Sec. 585.. GSA may use information you submit pursuant to its published Privacy Act system of records notice, <a href="https://www.federalregister.gov/documents/2008/04/25/E8-8934/privacy-act-of-1974-notice-of-updated-systems-of-records" target="_blank">GSA/PBS-5</a>, eLease.
+             <br/>Use of RET is intended to expedite the processing of your Real Estate Tax Escalation request. Your use of RET is voluntary; however, if you do not submit the requested information via this electronic portal it may impact the processing of your Real Estate Tax Adjustment. 
+             <br/>This is a gsa.gov website and is also subject to the <a href="https://www.gsa.gov/website-information/privacy-and-security-notice" target="_blank">GSA Privacy and Security Notice</a>.
+             </span>
+         </div>
+        <apex:inputHidden value="{!dataTemplate.Id}" id="taxBillId" />
+        <apex:inputHidden value="{!leaseNumber}" id="leaseNumber" />
+        <apex:inputHidden value="{!docMapValues}" id="docMapValues" />
+        <apex:inputHidden value="{!dataTemplate.Full_File_Name__c}" id="editAttName" />
+    </apex:outputPanel>
+    </apex:form>
+    <div id="spinner" class="hidden" style="height: 6rem;">
+        <div role="status" class="slds-spinner slds-spinner_medium">
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+        </div>
+    </div>
+    <div id="iframe-spacer">
+    </div>
+    
+</apex:page>

@@ -1,0 +1,181 @@
+<!-- 9-JUL-2020 achelsyn updated page with analytics script for user story sfws 766-->
+<apex:page controller="PBS_AAAP_AwardedOffersInfo" cache="true" sidebar="false" showHeader="false"
+           standardStylesheets="false">
+
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/demo_page.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+
+    <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+    <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+    <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+
+    <style>
+.tabbed-table table th { padding-left:5px !important; padding-right:6px !important;}
+#nav ul {
+    float: right;
+    list-style: none;
+    margin: 30px 0px 25px 20px;
+}
+h1.logo{clip: rect(0px,200px,70px,0px) !important;}
+
+
+    </style>
+
+    
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+        <ul>
+            <li>
+                <!--<a href="/AAAP/LoginPage">AAAP Home</a>->
+                <apex:outputLink value="/AAAP/PortalHome"
+                                 rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>AAAP Home</li>
+                </apex:outputLink>
+                <apex:outputLink value="/AAAP/LoginPage"
+                                 rendered="{!(ISPICKVAL($User.UserType,'Guest'))}">
+                    <li>AAAP Home</li>
+                </apex:outputLink>
+            </li>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>| {!$Label.site.logout}</li>
+            </apex:outputLink>
+            <li>|</li>
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>
+        </ul>
+    </div><!--/login-->
+
+
+    <div id="wrapper">
+        <!-- Header logo part starts Here -->
+        <!-- J. Rogers  Eliminate Headers
+        <h1 class="logo">GSA</h1>
+        <div id="nav">
+            <ul>
+                <li
+                    <!--<a href="/AAAP/LoginPage">AAAP Home</a>->
+                    <apex:outputLink value="/AAAP/PortalHome"
+                                     rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                    <li>AAAP Home</li>
+                    </apex:outputLink>
+                    <apex:outputLink value="/AAAP/LoginPage"
+                                     rendered="{!(ISPICKVAL($User.UserType,'Guest'))}">
+                        <li>AAAP Home</li>
+                    </apex:outputLink>
+                </li>
+                <!--<li><a href="/AAAP/PBS_AAAP_News_Updates">News &amp; Updates</a></li>
+                <li><a href="/AAAP/PBS_AAAP_About_AAAP">FAQs</a></li>->
+                <li><a href="/AAAP/Help">Help</a></li>
+                    <li><a href="/AAAP/UserRegistration" style="font-weight:normal;background-image:linear-gradient(#f9e5b8,#f5b351);border-radius:5px;"><font class="orange" style="font-weight:normal;color:#000;">Registration</font></a></li>
+            </ul>
+        </div><!--/nav->
+
+        <div id="hero-int">
+            <h2>AAAP</h2>
+        </div><!--/hero-->
+        <!-- Header logo part ends Here -->
+
+        <div id="content">
+
+            <apex:form id="myForm" styleClass="formwrap">
+                <h3 class="blue">Awarded Offers</h3>
+                <div>
+                    <p style="color:black;font-weight:bold; font-size:16px">Note: The Total Contract Value recited
+                        herein DOES NOT INCLUDE THE VALUE OF OFFEROR’S CONCESSIONS TO THE GOVERNMENT.</p>
+                </div>
+
+                <apex:pageBlock >
+                    <div class="tabbed-table">
+                        <div id="example_wrapper" class="dataTables_wrapper" role="grid">
+                            <apex:pageBlockTable value="{!awardOffers}" var="ao" StyleClass="tablesorter"
+                                                 style="border:0px; float:left;">
+
+                                <apex:column value="{!ao.PBS_AAAP_Offer_ID__r.PBS_AAAP_Building_Name__c}"
+                                             headerValue="Building Name"/>
+                                <apex:column headerValue="Building Address    ">{!ao.PBS_AAAP_Offer_ID__r.PBS_AAAP_Street_Address__c}
+                                    <br/>{!ao.PBS_AAAP_Offer_ID__r.PBS_AAAP_City__c}<br/>
+                                    {!ao.PBS_AAAP_Offer_ID__r.PBS_AAAP_State__c}
+                                    - {!ao.PBS_AAAP_Offer_ID__r.PBS_AAAP_ZipCode__c} </apex:column>
+                                <!-- <apex:column value="{!ao.PBS_AAAP_Offer_ID__r.Formula_RLP_Num__c}" headerValue="RLP NUmber"/> -->
+                                <!-- <apex:column value="{!ao.PBS_AAAP_Offer_ID__r.Formula_RLP_Title__c}" headerValue="RLP Title"/> -->
+                                <apex:column value="{!ao.PBS_AAAP_Offer_ID__r.Formula_RLP_Region__c}"
+                                             headerValue="Region"/>
+                                <apex:column value="{!ao.PBS_AAAP_NEW_GSA_LEASE_NUM__c}" headerValue="New GSA Lease#"/>
+                                <apex:column value="{!ao.PBS_AAAP_Total_Contract_Amount__c}"
+                                             headerValue="Contract Dollar Amount"/>
+                                <apex:column value="{!ao.PBS_AAAP_CONTRACT_AWARD_DATE__c}"
+                                             headerValue="Contract Award Date"/>
+                                <apex:column value="{!ao.PBS_AAAP_AWARDED_USF__c}"
+                                             headerValue="Awarded ANSI/BOMA OASF"/>
+                                <apex:column value="{!ao.PBS_AAAP_Agency_Requirement_ID__r.PBS_AAAP_LEASE_TERM__c}"
+                                             headerValue="Lease Term"/>
+                                <apex:column value="{!ao.PBS_AAAP_Offer_ID__r.PBS_AAAP_Owner_Name__c}"
+                                             headerValue="Owner Name"/>
+                                <!--apex:column headerValue="Owner Name">{!ao.PBS_AAAP_Offer_ID__r.PBS_AAAP_Owner_Name__c}</apex:column-->
+                                <!--
+                        <br/>{!ao.PBS_AAAP_Offer_ID__r.PBS_AAAP_Owner_Address__c}<br/>
+                                                            {!ao.PBS_AAAP_Offer_ID__r.PBS_AAAP_Owner_City__c}<br/>{!ao.PBS_AAAP_Offer_ID__r.PBS_AAAP_State__c} - {!ao.PBS_AAAP_Offer_ID__r.PBS_AAAP_ZipCode__c} </apex:column>
+                        
+                        <apex:column value="{!ao.LastModifiedDate}" headerValue="Updated"/ 
+                         -->
+                            </apex:pageBlockTable>
+                        </div>
+                    </div>
+                </apex:pageBlock>
+            </apex:form>
+        </div>  <!--/content-->
+
+    </div><!-- /Wrapper -->
+    <script>
+var j$ = jQuery.noConflict();  
+ j$(document).ready(function() {
+ j$(".tablesorter").dataTable( {
+        "sScrollY": "400px",
+        "bAutoWidth": true,
+        "bPaginate": true,
+        "bJQueryUI": true,
+        "bScrollCollapse": true
+        
+     } );
+     j$('.dataTables_length').css("display", "none");
+      j$('.myAppTable').find('.dataTables_filter').css("display", "none");
+      j$('.myAppTab').find('.dataTables_filter').css("display", "none");
+    j$(".tablesorter tr:odd").css("background-color", "#CFEEF8");
+    j$(".tablesorter tr:even").css("background-color", "#F3F3EC");
+});
+
+
+    </script>
+    <script src="{!URLFOR($Resource.gsa_common, 'scripts/jquery.dataTables.min.js')}" type="text/javascript"
+            charset="utf-8"></script>
+    <script type="text/javascript">
+            j$(document).ready(function() {              
+                oTable = j$('.tablesorter').dataTable({                  
+                    "bJQueryUI": true,
+                    "bInfo": false,
+                    "bLengthChange": false,
+                    "bFilter": false,                
+                    "sPaginationType": "full_numbers"               
+                    });
+                });  
+                
+                
+                
+                
+                j$(".popupLink").click(function(){
+                    var targetId = j$(this).attr("href");
+                    j$(targetId).css("display","block");
+                    return false;
+                });
+                j$(".popup").click(function(){
+                    j$(this).fadeOut(250);
+                    return false;
+                });
+                
+                                           
+
+
+    </script>
+    <c:SiteFooterUX />
+</apex:page>

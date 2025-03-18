@@ -1,0 +1,2757 @@
+<apex:page controller="PBS_AAAP_ControllerSpacesAndRates" showHeader="false" sidebar="false" docType="html-5.0"  standardStylesheets="true">
+    <c:PBS_AAAP_PortalPage_Begin ></c:PBS_AAAP_PortalPage_Begin>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+    <script type="text/javascript" src="{!$Label.AAAP_JQUERY_URL}"></script>
+    <script type="text/javascript" src="{!$Label.AAAP_JQUERYUI_URL}"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+
+    <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+    <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+    <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+
+    <script>
+
+        var date = new Date();
+        var days = 1;
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        var expires = "; expires=" + date.toGMTString();
+        var name = 'offerId';
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var value = url.searchParams.get('offerId');
+        if(value != null) {
+            document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + expires + "; path=/";
+        }
+
+        function MakeNullToZero() {
+            var maxvalue = $('[id*="outerspace_max"]').val();
+            var cont_aboa = $('[id*="q2_cont_aboa"]').val();
+            var q3_aboa = $('[id*="q3_aboa"]').val();
+            var newspace_min_in = $('[id*="q4_newspace_min_in"]').val();
+            var newspace_max_in = $('[id*="q4_newspace_max_in"]').val();
+
+            //alert(cont_aboa);
+
+            //if(maxvalue == ''null || maxvalue == undefined'') 
+            if (newspace_min_in == '' || newspace_min_in == null) {
+                $('[id*="q4_newspace_min_in"]').val('0.0');
+            }
+
+            if (q3_aboa == '' || q3_aboa == null) {
+                $('[id*="q3_aboa"]').val('0.0');
+            }
+
+            if (newspace_max_in == '' || newspace_max_in == null) {
+                $('[id*="q4_newspace_max_in"]').val('0.0');
+            }
+
+            if (maxvalue == '' || maxvalue == null) {
+                $('[id*="outerspace_max"]').val('0.0');
+            }
+
+            //if(cont_aboa == null || cont_aboa == undefined) 
+            if (cont_aboa == '' || cont_aboa == null) {
+                $('[id*="cont_aboa"]').val('0.0');
+            }
+
+        }
+
+    </script>
+
+    <script>
+        function validate(evt) {
+            var theEvent = evt || window.event;
+            var key = theEvent.keyCode || theEvent.which;
+            key = String.fromCharCode(key);
+            console.log(key);
+            var regex = /[0-9]|\./;
+            if (!regex.test(key)) {
+                theEvent.returnValue = false;
+                if (theEvent.preventDefault) theEvent.preventDefault();
+            }
+        }
+            var validate = function(e) {
+                  var t = e.value;
+                  e.value = (t.indexOf(".") >= 0) ? (t.substr(0, t.indexOf(".")) + t.substr(t.indexOf("."), 3)) : t;
+          }
+    </script>
+    <apex:outputPanel id="cssPanel">
+        <style type="text/css">
+            .ui-dialog {
+                background: #fff;
+                padding: 10px;
+                border: 1px solid #999;
+            }
+
+            .ui-dialog a {
+                float: right;
+                font-weight: bold;
+                padding: 3px;
+                color: #999;
+                text-transform: uppercase;
+                font-size: 10px;
+            }
+
+            #Modal_SpaceSummary_Ques1 {
+                width: 500px;
+            }
+
+            .steveStyle {
+                font-weight: bold;
+                color: black;
+                font-size: 18px;
+            }
+
+            .errMessage {
+                color: red;
+            }
+
+            #lean_overlay {
+                position: fixed;
+                z-index: 100;
+                top: 0px;
+                left: 0px;
+                height: 100%;
+                width: 100%;
+                background: none;
+                display: none;
+            }
+
+            .blueMessage {
+                color: #002BAD;
+            }
+
+            body .bPageBlock, body #bodyCell .bResource .secondaryPalette, body .secondaryPalette.bPageBlock, body .individualPalette .secondaryPalette.bPageBlock, body .bodyDiv .genericTable, body .genericPageBlockTable, body .bodyDiv .bSubBlock, body .bComponentBlock .bPageBlock, body .bMyDashboard .bPageBlock, body.rlHoverFrame .bPageBlock, body.subjectSelectionPopup div.choicesBox, body.lookupTab .secondaryPalette.bPageBlock, body.popupTab .secondaryPalette.bPageBlock, body.UserTagStatsPage .secondaryPalette.bPageBlock {
+                border-bottom: #fff;
+            }
+
+            body .pbBody table.list tr.headerRow td, body .pbBody table.list tr.headerRow th {
+                background: #999;
+            }
+
+            body .pbBody table.list tr th, body .pbBody table.list tr td {
+                border: 1px solid rgb(200, 200, 200);
+            }
+
+            body .pbBody table.list tr.headerRow th:first-child, body .pbBody table.list tr.dataRow td:first-child {
+                border-left-width: 1px;
+            }
+
+            body .pbBody table.list tr.headerRow td, body .pbBody table.list tr.headerRow th {
+                border: 0px;
+                background-color: #636161;
+            }
+
+            ul li, ol li {
+                margin-left: 0em;
+            }
+
+            .message {
+                background-color: #fff;
+                border-style: solid;
+                border-width: 0px;
+                color: #000;
+                padding: 6px 8px 6px 6px;
+                margin: 4px;
+            }
+
+            .col1 {
+                text-align: left;
+                width: 400px;
+                padding-bottom: 12px;
+                vertical-align: middle;
+                border-style: solid;
+                border-width: thin;
+            }
+
+            .col2 {
+                text-align: left;
+                width: 200px;
+                padding-bottom: 12px;
+                vertical-align: middle;
+                border-style: solid;
+                border-width: thin;
+            }
+
+            .col3 {
+                text-align: left;
+                width: 200px;
+                padding-bottom: 12px;
+                vertical-align: middle;
+                border-style: solid;
+                border-width: thin;
+            }
+
+            .col4 {
+                text-align: left;
+                width: 200px;
+                padding-bottom: 12px;
+                vertical-align: middle;
+                border-style: solid;
+                border-width: thin;
+            }
+
+            .col5 {
+                text-align: right;
+                width: 428px;
+            }
+
+            .col6 {
+                text-align: right;
+                width: 258px;
+            }
+
+            .col1Census {
+                text-align: left;
+                width: 400px;
+                border-bottom-color: #e2f4f9;
+                border-bottom-width: 4px;
+                border-bottom-style: solid;
+                padding-bottom: 12px;
+                vertical-align: middle;
+            }
+
+            .col2Census {
+                text-align: left;
+                width: 300px;
+                border-bottom-color: #e2f4f9;
+                border-bottom-width: 4px;
+                border-bottom-style: solid;
+                border-right-color: #e2f4f9;
+                border-right-width: 4px;
+                border-right-style: solid;
+                padding-bottom: 12px;
+                vertical-align: middle;
+            }
+
+            .col3Census {
+                text-align: left;
+                width: 300px;
+                border-bottom-color: #e2f4f9;
+                border-bottom-width: 4px;
+                border-bottom-style: solid;
+                padding-bottom: 12px;
+                vertical-align: middle;
+            }
+
+            .col4Census {
+                text-align: left;
+                width: 10px;
+                border-bottom-color: #e2f4f9;
+                border-bottom-width: 4px;
+                border-bottom-style: solid;
+                padding-bottom: 12px;
+            }
+
+            .pangrid_rates_1Class tbody tr:nth-child(1) td:nth-child(1) {
+                border-bottom: none;
+            }
+
+            .pangrid_rates_1Class tbody tr:nth-child(1) td:nth-child(2) {
+                border-bottom: none;
+            }
+
+            .pangrid_rates_1Class tbody tr:nth-child(1) td:nth-child(3) {
+                border-bottom: none;
+            }
+
+            .pangrid_rates_1Class tbody tr:nth-child(1) td:nth-child(4) {
+                border-bottom: none;
+            }
+
+            .pangrid_rates_1Class tbody tr:nth-child(9) td:nth-child(1) {
+                border-bottom: none;
+            }
+
+            .pangrid_rates_1Class tbody tr:nth-child(9) td:nth-child(2) {
+                border-bottom: none;
+            }
+
+            .pangrid_rates_1Class tbody tr:nth-child(9) td:nth-child(3) {
+                border-bottom: none;
+            }
+
+            .pangrid_rates_1Class tbody tr:nth-child(9) td:nth-child(4) {
+                border-bottom: none;
+            }
+
+            .pangrid_ratesNonCensus tbody tr:nth-child(1) td:nth-child(1) {
+                border-bottom: none;
+            }
+
+            .pangrid_ratesNonCensus tbody tr:nth-child(1) td:nth-child(2) {
+                border-bottom: none;
+            }
+
+            .pangrid_ratesNonCensus tbody tr:nth-child(1) td:nth-child(3) {
+                border-bottom: none;
+            }
+
+            .pangrid_ratesNonCensus tbody tr:nth-child(1) td:nth-child(4) {
+                border-bottom: none;
+            }
+
+            .pangrid_ratesNonCensus tbody tr:nth-child(11) td:nth-child(1) {
+                border-bottom: none;
+            }
+
+            .pangrid_ratesNonCensus tbody tr:nth-child(11) td:nth-child(2) {
+                border-bottom: none;
+            }
+
+            .pangrid_ratesNonCensus tbody tr:nth-child(11) td:nth-child(3) {
+                border-bottom: none;
+            }
+
+            .pangrid_ratesNonCensus tbody tr:nth-child(11) td:nth-child(4) {
+                border-bottom: none;
+            }
+
+            .tabbed-table table td {
+                background: #fff;
+            }
+
+            h2 {
+                color: #fff;
+                font-size: 80%;
+                font-weight: bold;
+                padding-left: 40px;
+                width: 80%;
+            }
+
+            .tabbed-table table th {
+                padding-left: 3px;
+                padding-right: 3px;
+                font-size: 12px important !;
+            }
+
+            .hr {
+                font-weight: bold;
+                font-size: 28px;
+                border-bottom: 1px solid #cccccc;
+                padding: 0 0 8px;
+                color: #002BAD;
+                padding-top: 15px;
+            }
+
+            .hr1 {
+                font-weight: bold;
+                font-size: 28px;
+                color: #002BAD;
+
+            }
+
+            .showPopup {
+                width: 500px;
+            }
+
+            .apexp {
+                margin-right: -25px;
+            }
+
+            .dataTables_wrapper {
+                margin-right: 28px;
+            }
+
+            .new-table {
+                width: 100%;
+                border-style: solid;
+                border-width: thin;
+                text-align: center;
+                background-color: #cee5e8;
+            }
+
+            .new-table tr {
+                border-style: solid;
+                border-width: thin;
+            }
+
+            .new-table td {
+                border-style: solid;
+                border-width: thin;
+                vertical-align: middle;
+                padding: 5px;
+                width: 25%;
+            }
+
+            /* The Modal (background) */
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                padding-top: 100px; /* Location of the box */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            }
+
+            /* Modal Content */
+            .modal-content {
+                background-color: rgb(238, 238, 238);
+                margin: auto;
+                padding: 20px;
+                border: 1px solid rgb(102, 102, 102);
+                border-radius: 5px;
+                width: 40%;
+            }
+
+            /* The Close Button */
+            .close {
+                color: #aaaaaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+                display: none;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            menu.table-options {top:40px;left:-350px;}
+            menu.table-options a {
+            border:1px solid #666666; 
+            border-radius:3px;padding:6px;
+            /*background-image:url(/resource/1334347636000/gsa_common/images/sprite.png);*/
+            background-color: #f0f0f0;
+            background-position:-5px 154px;color:#333333;font-size:12px;text-decoration:none;}
+            menu.table-options {
+                left: -752px !important;
+            }
+            menu.table-options a {
+                font-weight: bold !important;
+            }
+
+            .tabbed-table table tr {
+                height: 10px;
+            }
+
+            .tabbed-table table thead {
+                background-color: #999999;
+            }
+            .covid .col1 {
+                width:540px;
+            }
+            .covid .col2 {
+                width: 460px;
+                text-align: center;
+            }
+            
+            .infopopup {
+              position:fixed !important;
+              display:inline-block;
+              top:80% !important;
+              left:50% !important;
+              //width:700px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+              //transform: translate(-50%, -50%); !important;
+              
+           
+           }
+        
+        .infopopup1 {
+              position:fixed !important;
+              display:inline-block;
+              top:35% !important;
+              left:57% !important;
+              width:500px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+              //transform: translate(-50%, -50%); !important;
+              
+           
+           }
+        
+        .infopopup2 {
+              position:fixed !important;
+              display:inline-block;
+              top:40% !important;
+              left:50% !important;
+              //width:700px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+              //transform: translate(-50%, -50%); !important;
+              
+           
+           }
+        
+        .infopopup3 {
+              position:fixed !important;
+              display:inline-block;
+              top:50% !important;
+              left:50% !important;
+              width:700px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+              //transform: translate(-50%, -50%); !important;           
+           }
+        
+        .infopopup4 {
+              position:fixed !important;
+              display:inline-block;
+              top:60% !important;
+              left:50% !important;
+              //width:700px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+              //transform: translate(-50%, -50%); !important;   
+           }
+            .infopopup5 {
+              position:fixed !important;
+              display:inline-block;
+              top:70% !important;
+              left:50% !important;
+              //width:700px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+              //transform: translate(-50%, -50%); !important;          
+           }
+             .infopopup6 {
+              position:fixed !important;
+              display:inline-block;
+              top:31% !important;
+              left:57% !important;
+              width:500px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+              //transform: translate(-50%, -50%); !important;  
+           }
+            .infopopup7{
+              position:fixed !important;
+              display:inline-block;
+              top:54% !important;
+              left:57% !important;
+              width:500px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+              //transform: translate(-50%, -50%); !important;  
+           }
+        </style>
+    </apex:outputPanel>
+    <body>
+
+    <div id="wrapper">   
+        <c:inside_header offerId="{!offer.Id}"/>
+        <div id="content" class="space-rates">
+            <apex:panelGrid rendered="{!!isValidUser}">
+                <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+                <apex:messages styleClass="errMessage" id="message"/>
+            </apex:panelGrid>
+            <apex:panelGroup rendered="{!isValidUser}">
+                <c:PBS_AAAP_ProgressBar myValue="{!offer.Id}" step="5"/>
+            </apex:panelGroup>
+
+            <apex:form id="spaceAndRatesForm" styleClass="formwrap" rendered="{!isValidUser}"
+                       style="margin-right: 50px;">
+                <apex:inputHidden id="draftMsgFlag" value="{!draftMsgFlag}"/>
+                <apex:inputHidden value="{!pageUrl}" id="pgUrl"/>
+
+                <div class="hr">Space and Rates</div>
+                <apex:messages styleClass="errMessage"/>
+ 
+
+                <apex:outputPanel id="panel_outerspace" rendered="{!rendOuterSpace}">
+
+                    <apex:panelGrid id="pangrid_header" columns="1">
+                        <h4 class="grey">Space &amp; Rates Summary Page</h4>
+
+                    </apex:panelGrid>
+
+                    <!--<div class="clearfix">&nbsp;</div>-->
+                    <p style="padding-left: 7px;">
+                        <B>
+                            <apex:outputText id="txt_explain_buttons2" style="color:#002bad;"
+                                             value="{!QLabels.spaceType2}"></apex:outputText>
+                        </B>
+                    </p>
+                    <menu class="table-options" style="left:-710px !important;top: 20px !important;">
+                        <apex:commandLink id="btn_new_space" action="{!addNewSpace}" style="padding-left:56.5px;padding-right:56.5px;padding-top:7px;padding-bottom:7px;">Add Space</apex:commandLink>
+                    </menu>
+                    <br/>
+                    <br/>
+                    <menu class="table-options">
+                        <apex:commandLink id="act_edit_space" action="{!editSpace}" onclick="return checkSpaceSelected()" style="padding-left: 30px;padding-right: 30px;left: 42px;position: relative;">Edit</apex:commandLink>&nbsp;
+                        <apex:commandLink id="act_delete_space" action="{!deleteSpace}" onclick="return checkSpaceSelected()" style="position: relative;left: 42px;">Delete Space</apex:commandLink>
+                    </menu>
+
+                    <apex:actionFunction name="doInit" action="{!refreshNumbers}"/>
+
+                    <div style="float:right;position:relative;top:40px;left:140px;padding-bottom:10px;">&#9989; = Rates Entered</div>
+                    <apex:panelGrid id="pangrid_detail" columns="1" width="500px">
+
+
+
+                        <apex:panelGroup id="pgrp_detail_table">
+                            <apex:outputPanel id="detail">
+
+                                <apex:pageBlock id="pblck_detail">
+                                    <div class="tabbed-table">
+                                        <div id="example_wrapper" class="dataTables_wrapper" role="grid" style="margin-right:0px;text-align:left;border:0px;background-color:#FFF;">
+                                            <apex:pageBlockTable id="space_rates_table" var="detail" value="{!Details}" style="margin-left:0px;margin-right:0px;width:900px !important;">
+                                                <apex:column id="col_selected" style="text-align:end;width:25px;">
+
+                                                    <apex:inputCheckbox value="{!detail.selected}"
+                                                                      id="spaceChkBox"></apex:inputCheckbox>
+                                                    <apex:facet name="header">&nbsp;</apex:facet>
+                                                </apex:column>
+                                                <apex:column id="col_space_no" value="{!detail.spaceNo}">
+                                                    <apex:facet name="header"><span style="color:#FFF">Space #</span></apex:facet>
+                                                </apex:column>
+                                                <apex:column id="col_lease_type" value="{!detail.leaseType}">
+                                                    <apex:facet name="header"><span style="color:#FFF">Lease Type</span></apex:facet>
+                                                </apex:column>
+
+                                                <apex:column id="col_sqft_offer" value="{!detail.sqFtOffered}">
+                                                    <apex:facet name="header"><span style="color:#FFF">SF Offered</span></apex:facet>
+                                                </apex:column>
+                                                <apex:column id="col_10_5_fs" rendered="{!regionCode == '10/5 Term - All Regions'}" style="text-align:center;">
+                                                    <apex:outputText id="col_10_5_fs_val" value="{0, number, '$'#0.00}">
+                                                        <apex:param value="{!ROUND(detail.fiveFiveYrFS, 2)}"></apex:param>
+                                                    </apex:outputText>
+                                                    <apex:facet name="header"><span style="color:#FFF">10/5 Term</span></apex:facet>
+                                                </apex:column>
+                                                <apex:column id="col_25_16_fs" rendered="{!regionCode == 'Census'}" style="text-align:center;">
+                                                    <apex:outputText id="col_25_16_fs_val" value="{0, number, '$'#0.00}">
+                                                        <apex:param value="{!ROUND(detail.fiveYrFS, 2)}"></apex:param>
+                                                    </apex:outputText>
+                                                    <apex:facet name="header"><span style="color:#FFF">25/16 Term</span></apex:facet>
+                                                </apex:column>
+                                                <apex:column id="col_five_fs" style="text-align:center;" rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                                                    <apex:outputText id="col_five_fs_val" value="{0, number, '$'#0.00}">
+                                                        <apex:param value="{!ROUND(detail.fiveYrFS, 2)}"></apex:param>
+                                                    </apex:outputText>
+                                                    <apex:facet name="header"><span style="color:#FFF">17/15 TERM</span></apex:facet>
+                                                </apex:column>
+                                                <apex:column id="col_19_11_fs" rendered="{!regionCode == 'Census'}">
+                                                    <apex:outputText id="col_19_11_fs_val" value="{0, number, '$'#0.00}">
+                                                        <apex:param value="{!ROUND(detail.fiveFiveYrFS, 2)}"></apex:param>
+                                                    </apex:outputText>
+                                                    <apex:facet name="header"><span style="color:#FFF">19/11 TERM</span></apex:facet>
+                                                </apex:column>
+                                                <apex:column id="col_five_five_fs" rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}" style="text-align:center;">
+                                                    <apex:outputText id="col_five_five_fs_val"
+                                                                     value="{0, number, '$'#0.00}">
+                                                        <apex:param value="{!ROUND(detail.fiveFiveYrFS, 2)}"></apex:param>
+                                                    </apex:outputText>
+                                                    <apex:facet name="header"><span style="color:#FFF">15/13 TERM</span></apex:facet>
+                                                </apex:column>
+                                                <apex:column id="col_ten_fs" style="text-align:center;" rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                                                    <apex:outputText id="col_ten_fs_val" value="{0, number, '$'#0.00}">
+                                                        <apex:param value="{!ROUND(detail.tenYrFS, 2)}"></apex:param>
+                                                    </apex:outputText>
+                                                    <apex:facet name="header"><span style="color:#FFF">10/8 TERM</span></apex:facet>
+                                                </apex:column>
+                                            </apex:pageBlockTable>
+                                            <div class="clearfix">&nbsp;</div>
+                                            <apex:outputText >
+                                                <font color="#002bad"><b> Note : Refer to section 4 PRESENT VALUE
+                                                    PRICE EVALUATION (AAAP VARIATION) of the AAAP Request for Lease Proposal (RLP)
+                                                    for description of the present value price
+                                                    evaluation. </b></font>
+                                            </apex:outputText>
+
+                                        </div>
+                                    </div>
+                                </apex:pageBlock>
+                            </apex:outputPanel>
+
+                        </apex:panelGroup>
+                    </apex:panelGrid>
+                    <apex:commandButton id="btn_back" action="{!back}" value="Back" onclick="MakeNullToZero();"/>
+
+                    <apex:commandButton id="btn_continue" action="{!continueSave}" value="Next"
+                                        onclick="MakeNullToZero();" styleClass="btnJQSubmit"/>
+
+                    <apex:commandButton value="Exit Offer" action="{!actionCancel}"
+                                        onclick="if(confirm('Please make sure that, you have saved changes to the offer, before leaving from this page.')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}AAAP-PortalHome';return false;} else return false;"/>
+
+                </apex:outputPanel>
+
+                <apex:outputPanel id="panel_NewSpace" rendered="{!rendAddSpace}">
+                    <br/>
+                    <h4 class="grey">Space Information</h4>
+                    <apex:panelGrid id="pangrid_newSpace" columns="1">
+                        <apex:outputPanel id="pgrp_newspace_q0">
+                            <apex:actionRegion >
+                            <apex:outputText id="txt_newspace_q0" value="1. Is this space currently leased to a Government tenant?"/>
+                            <span class="required">*</span><br/>
+                            <apex:selectRadio value="{!newOrCont}">
+                                <apex:selectOptions value="{!items}"/>
+                                <apex:actionSupport event="onchange" action="{!setValsFor6}" reRender="question6, pgrp_newspace_q0" oncomplete="top.postMessage('Page Updated', document.location.origin);"/>
+                            </apex:selectRadio>
+                            </apex:actionRegion>
+                            <apex:outputPanel id="pgrp_newspace_q0A" rendered="{!IF(newOrCont != '', IF(newOrCont == 'TRUE', true, false), false)}">
+                                <div style="padding-left: 10px;">
+                                    <apex:outputText id="txt_rates_q1a" value="1a. Existing Lease Number"></apex:outputText>
+                                    <span class="required">*</span>
+                                    <a id="myBtn" href="#Modal_SpaceSummary_Ques1a"><img src="{!$Resource.Info_Icon}"/></a>
+
+                                    <div id="myModal" class="modal">
+
+                                        <!-- Modal content -->
+                                        <div class="modal-content">
+                                            <span class="close">&times;</span>
+                                            <p>If you have an expiring GSA lease number, enter as LXX12345 where XX is the state
+                                                abbreviation.
+                                                If you house a lease with another federal agency enter that number as it appears on the
+                                                lease and provide that number to the GSA Lease Contracting Officer.</p>
+                                        </div>
+
+                                    </div>
+                                    <script>
+                                        // Get the modal
+                                        var modal = document.getElementById("myModal");
+
+                                        // Get the button that opens the modal
+                                        var btn = document.getElementById("myBtn");
+
+                                        // Get the <span> element that closes the modal
+                                        var span = document.getElementsByClassName("close")[0];
+
+                                        // When the user clicks the button, open the modal
+                                        btn.onclick = function() {
+                                            modal.style.display = "block";
+                                        }
+
+                                        // When the user clicks on <span> (x), close the modal
+                                        span.onclick = function() {
+                                            modal.style.display = "none";
+                                        }
+
+                                        // When the user clicks anywhere outside of the modal, close it
+                                        window.onclick = function(event) {
+                                            if (event.target == modal) {
+                                                modal.style.display = "none";
+                                            }
+                                        }
+                                    </script>
+                                    <br/>
+                                    <apex:inputField id="q3_succspace_gsa_lease"
+                                                     value="{!space.PBS_AAAP_GSA_EXPIRE_LEASE_NUMBER__c}" styleClass="text"></apex:inputField>
+                                </div>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+
+                        <apex:actionRegion >
+                            <apex:outputText id="txt_newspace_q3" value="{!QLabels.spaceQ3New}"></apex:outputText>
+                            <span class="required">*</span>
+                            <br/>
+                            <br/>
+                            <apex:inputField id="q3_aboa" value="{!space.PBS_AAAP_SF_OFFERED__c}"></apex:inputField> SF
+
+                        </apex:actionRegion>
+
+                        <apex:outputPanel id="pgrp_newspace_q4">
+                            <apex:outputText id="txt_newspace_q4" value="{!QLabels.spaceQ4New}"/>
+                            <span class="required">*</span>
+                            <a class="popup" href="#txt_newspace_q4_pop"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+                            <div id="txt_newspace_q4_pop" class="infopopup6"
+                                 style="display:none;background:#eee;border:1px solid #666;border-radius:5px;padding:15px;margin-left:-191px;">
+                                <p>The AAAP defines contiguous as multiple suites/spaces within the same
+                                    building and on the same floor which can be combined and rented to a single tenant.
+                                </p>
+                            </div>
+                            <br/>
+                            <br/>
+                            <apex:inputField id="q4_newspace_min_in" value="{!space.PBS_AAAP_Max_Contiguous_Space__c}"/> SF
+                            <br/>
+                            <br/>
+                            <apex:outputText id="txt_newspace_q4_spacer" value="4. What is the minimum demisable ABOA SF available for lease to the Government?"/>
+                            <span class="required">*</span>
+                            <a class="popup" href="#txt_newspace_q4_spacer"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+                            <div id="txt_newspace_q4_spacer" class="infopopup1"
+                                 style="display:none;background:#eee;border:1px solid #666;border-radius:5px;padding:15px;margin-left:-191px;">
+                                <p>'Minimum Demisable' refers to the smallest contiguous amount of space available for lease of the amount of space
+                                    outlined in question #2 on this page.
+                                </p>
+                            </div>
+                            <br/>
+                            <br/>
+                            <apex:inputField id="q4_newspace_max_in" value="{!space.PBS_AAAP_MIN_OFFERABLE_SPACE__c}"/> SF
+                        </apex:outputPanel>
+
+                        <apex:outputPanel >
+                            <apex:outputText id="txt_newspace_q5" value="{!QLabels.spaceQ5}"></apex:outputText>
+                            <span class="required">*</span>
+                            <br/>
+                            <br/>
+                            <apex:inputField id="q5_newspace"
+                                             value="{!space.PBS_AAAP_DATE_SPACE_AVAILABILITY__c}"></apex:inputField>
+
+                        </apex:outputPanel>
+
+                    </apex:panelGrid>
+                    <br/>
+
+                </apex:outputPanel>
+
+                <apex:outputPanel id="panel_SuccSpace" rendered="{!rendSuccSpace}">
+                    <br/>
+                    <h4 class="grey">Continuing Need Space Information</h4>
+                    <br/><br/>
+
+                    &nbsp;&nbsp;<apex:outputText id="txt_succspace_q3" value="{!QLabels.spaceQ3Succ}"
+                                                 styleClass="fontcolor: #666666"></apex:outputText>
+                    <span class="required">*</span>
+                    <a class="popup" href="#Modal_SpaceSummary_Ques1"><img src="{!$Resource.Info_Icon}"/></a>
+                    <div id="Modal_SpaceSummary_Ques1"
+                         style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                        <p>If you have an expiring GSA lease number, enter as LXX12345 where XX is the state
+                            abbreviation.
+                            If you house a lease with another federal agency enter that number as it appears on the
+                            lease and provide that number to the GSA Lease Contracting Officer.
+                        </p>
+                    </div>
+                    <br/>
+                    <apex:panelGrid id="pangrid_SuccSpace" columns="2">
+
+
+                        <br></br>
+                        <br></br>
+
+                        <apex:outputPanel >
+                            <apex:outputText id="txt_succspace_q4" value="{!QLabels.spaceQ4Succ}"></apex:outputText>
+                            <span class="required">*</span>
+                        </apex:outputPanel>
+
+                        <br></br>
+                        <apex:inputField id="q4_succspace" value="{!space.PBS_AAAP_SF_OFFERED__c}"></apex:inputField>
+                        <br></br>
+
+                        <apex:outputPanel >
+                            <apex:outputText id="txt_succspace_q5" value="{!QLabels.spaceQ5}"></apex:outputText>
+                            <span class="required">*</span>
+                        </apex:outputPanel>
+                        <br></br>
+                        <apex:inputField id="q5_succspace"
+                                         value="{!space.PBS_AAAP_DATE_SPACE_AVAILABILITY__c}"></apex:inputField>
+                        <br></br>
+                    </apex:panelGrid>
+                    <br></br>
+
+                    <apex:outputPanel >
+
+
+                        <apex:commandButton value="Back" action="{!returnToSpaceRates}"
+                                            onclick="if(confirm('Please make sure that, you have saved changes to the offer, before leaving from this page.')){return true;} else return false;"/>
+                        <apex:commandButton id="btn_succspace_save_spc" action="{!saveSpace}"
+                                            value="Save Page"></apex:commandButton>
+                        <apex:commandButton id="btn_succspace_add_rates_spc" action="{!addRateAddSpace}"
+                                            value="Next to Enter Rates"></apex:commandButton>
+
+                    </apex:outputPanel>
+
+
+                </apex:outputPanel>
+
+                <apex:outputPanel id="panel_Rates" rendered="{!rendRates}">
+                    <br></br>
+                    <h4 class="grey">Rate Information</h4>
+                    <br></br>
+                    <apex:outputText value="6. The Tenant Improvement Allowance and Building Specific Amortized Capital figures auto populated below are placeholder values so that offerors can see how rate components, like Amortization Rate and Tenant Improvement Mark-ups, impact this figure and ultimately the calculation of the fully serviced rate. Offerors can override these placeholder figures with the actual  amounts published in a Project Specific Advertisement. When overriding these figures, be sure to pay close attention to the amounts for incumbent and new lessors, and enter the amount that applies to you."
+                            style="color:#002bad; font-size:14px"/>
+
+                    <apex:outputPanel id="question6">
+                        <table class="new-table" >
+                            <tr>
+                                <td></td>
+                                <td><span style="color:#002bad;"> Tenant Improvement Allowance</span></td>
+                                <td><span style="color:#002bad;">Building Specific Amortized Capital</span></td>
+                            </tr>
+                            <tr>
+                                <td><span style="color:#002bad;">Placeholder or enter actual figure from Ad</span></td>
+                                <td>
+                                    <apex:inputText id="uTI" styleClass="text" value="{!userIputTIA}">$</apex:inputText>
+                                    <script>
+                                        if($('[id*=uTI]').val() != null) {
+                                            if ($('[id*=uTI]').val().split('.')[1].length == 1) {
+                                                var existing = $('[id*=uTI]').val();
+                                                $('[id*=uTI]').val(existing + '0');
+                                            }
+                                        }
+                                    </script>
+                                </td>
+                                <td>
+                                    <apex:inputText id="uBSAC" styleClass="text" value="{!userInputBSAC}">$</apex:inputText>
+                                    <script>
+                                        if($('[id*=uTI]').val() != null) {
+                                            if ($('[id*=uBSAC]').val().split('.')[1].length == 1) {
+                                                var existing = $('[id*=uBSAC]').val();
+                                                $('[id*=uBSAC]').val(existing + '0');
+                                            }
+                                        }
+                                    </script>
+                                </td>
+                            </tr>
+                        </table>
+                    </apex:outputPanel>
+
+                    <br/>
+                    <apex:outputText value="Reference section 3 of the RLP for more information. All rate information below is per ABOA SF per year."
+                            style="color:#002bad; font-size:14px"/>
+                    <apex:panelGrid columns="2" columnClasses="col5, col6" rendered="{!regionCode == 'Census'}">
+                        <apex:outputText styleClass="steveStyle" value="Wave I"></apex:outputText><!-- weston -->
+                        <apex:outputText styleClass="steveStyle" value="Wave II"></apex:outputText><!--    weston -->
+                    </apex:panelGrid>
+
+
+                    <apex:panelGrid id="pangrid_rates_1" styleClass="pangrid_rates_1Class" columns="4"
+                                    rendered="{!regionCode == 'Census'}"
+                                    columnClasses="col1Census, col2Census, col3Census, col4Census"
+                                    style="table-layout: fixed;">
+                        <apex:outputText id="txt_rates_hdr_blank_1">&nbsp;</apex:outputText>
+                        <apex:outputText id="txt_rates_hdr_col1_1" value="{!QLabels.ratesCol1}"
+                                         style="font-weight:bold;"
+                                         rendered="{!regionCode != 'Census'}"></apex:outputText>
+                        <apex:outputText id="txt_rates_hdr_col2_1" value="{!QLabels.ratesCol2}"
+                                         style="font-weight:bold;"
+                                         rendered="{!regionCode != 'Census'}"></apex:outputText>
+                        <apex:outputText id="txt_rates_hdr_col3_1" value="{!QLabels.ratesCol3}"
+                                         style="font-weight:bold;"
+                                         rendered="{!regionCode != 'Census'}"></apex:outputText>
+                        <apex:outputText id="txt_rates_25_16_1"
+                                         value="25 month lease term (with Government termination rights after the 16th month)"
+                                         style="font-weight:bold;"
+                                         rendered="{!regionCode == 'Census'}"></apex:outputText>
+                        <apex:outputText id="txt_rates_19_11_1"
+                                         value="19 month lease term (with Government termination rights after the 11th month)"
+                                         style="font-weight:bold;"
+                                         rendered="{!regionCode == 'Census'}"></apex:outputText>
+                        <apex:outputText value="" rendered="{!regionCode == 'Census'}"/>
+
+                        <apex:outputText id="txt_rates_q1_1" value="{!QLabels.ratesQ1_Census}">
+                            <a class="popup" href="#ratesQ11popup"
+                               style="float:right;position:relative;left:-10px; top:-7px;"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+                            <div id="ratesQ11popup" class="infopopup3"
+                                 style="display:none;background:#eee;border:1px solid #666;border-radius:5px;padding:15px;margin-left:-191px;">
+                                <p>Enter shell rate per ABOA SF for the FIRM term (excluding the cost of tenant
+                                    improvements, services, and utilities).
+                                    <br/><br/>
+                                    Shell is predominantly defined in, but not limited to, section 3 of the Lease.
+
+                                </p>
+                            </div>
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q1_rates_5_1" value="{!rateE.fiveYrFS}" 
+                                                        style="width: 45px; text-align: right;">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q1_rates_5_5_1" value="{!rateE.fiveFiveYrFS}"
+                                                        style="width: 45px; text-align: right;">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != 'Census'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q1_rates_10_1" value="{!rateE.tenYrFS}"
+                                                        style="width: 45px; text-align: right;"
+                                                        rendered="{!regionCode != 'Census'}">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputText rendered="{!regionCode == 'Census'}"></apex:outputText>
+
+                        <apex:outputText id="txt_rates_q2_1" value="{!QLabels.ratesQ2}">
+                            <a class="popup" href="#ratesQ2popup"
+                               style="float:right;position:relative;left:-10px; top:-7px;"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+                            <div id="ratesQ2popup" class="showPopup"
+                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                <p>Operating costs rate per ABOA SF carried over from item #4 under the Operating Costs
+                                    tab.
+                                    To make changes, navigate back to the Operating Costs tab.
+                                </p>
+                            </div>
+
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText id="q2_rates_5_1" value="{0, number, #,##0.00}"
+                                                         style="margin: 3px;">
+                                            <apex:param id="q2_rates_5_val_1"
+                                                        value="{!rateE.fiveYrOpCosts}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText id="q2_rates_5_5_1" value="{0, number, #,##0.00}"
+                                                         style="margin: 3px;">
+                                            <apex:param id="q2_rates_5_5_val_1"
+                                                        value="{!rateE.fiveFiveYrOpCosts}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != 'Census'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText id="q2_rates_10_1" value="{0, number, #,##0.00}"
+                                                         rendered="{!regionCode != 'Census'}" style="margin: 3px;">
+                                            <apex:param id="q2_rates_10_val_1"
+                                                        value="{!rateE.tenYrOpCosts}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputText rendered="{!regionCode == 'Census'}"></apex:outputText>
+
+
+                        <apex:outputText id="txt_rates_q3_1"
+                                         value="{!IF(space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c, QLabels.ratesQ3New_1, QLabels.ratesQ3Succ_1)}"
+                                         style="width: 100px; text-align: right;">
+                            <a class="popup" href="#ratesQ3popup"
+                               style="float:right;position:relative;align-items:center;right:10px;top:12px;"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+                            <div id="ratesQ3popup" class="showPopup"
+                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                <p>The annual percentage rate (APR), compounded monthly, to be used by the Lessor to
+                                    amortize the Tenant Improvement Allowance (TIA) &amp; over the FIRM term of the
+                                    lease.
+                                </p>
+                            </div>
+
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;" width="10%">
+
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText >
+                                            <apex:inputText id="q3_rates_5_1" value="{!rateE.fiveYrAPR}"
+                                                            style="width: 45px; text-align: right;;"></apex:inputText>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        %
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;" width="10%">
+
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText >
+                                            <apex:inputText id="q3_rates_5_5_1" value="{!rateE.fiveFiveYrAPR}"
+                                                            style="width: 45px; text-align: right;"></apex:inputText>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        %
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputText rendered="{!regionCode == 'Census'}"></apex:outputText>
+
+                        <apex:outputText id="txt_rates_q4_1"
+                                         value="{!IF(space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c, QLabels.ratesQ4New, QLabels.ratesQ4Succ)}"
+                                         style="display:block;width:260px;">
+                            <a class="popup" href="#ratesQ4popup"
+                               style="float:right;position:relative;left:-10px;top:2px"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+                            <div id="ratesQ4popup" class="showPopup"
+                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                <p>The annual cost to amortize the estimated Tenant Improvement Allowance (TIA) over
+                                    the FIRM term, using the APR entered in #3 (above).
+                                    Note that the TI rent used in the evaluation of offers and resulting lease contract
+                                    will be based on the actual TIA for the specific requirement. Reference section 3 of
+                                    the RLP.
+                                </p>
+                            </div>
+
+
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText id="q4_rates_5_1" value="{0, number, #,##0.00}"
+                                                         style="margin: 3px;">
+                                            <apex:param id="q4_rates_5_val_1"
+                                                        value="{!ABS(rateE.fiveYrTIAmorCosts)}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText id="q4_rates_5_5_1" value="{0, number, #,##0.00}"
+                                                         style="margin: 3px;">
+                                            <apex:param id="q4_rates_5_5_val_1"
+                                                        value="{!ABS(rateE.fiveFiveYrTIAmorCosts)}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputText rendered="{!regionCode == 'Census'}"></apex:outputText>
+
+                        <apex:outputText id="txt_rates_q5_census_1"
+                                         value="4.{!IF(space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c,
+                                                 RIGHT(QLabels.ratesQ5New,LEN(QLabels.ratesQ5New)-2), RIGHT(QLabels.ratesQ5Succ,LEN(QLabels.ratesQ5Succ)-2) )}"
+                                         style="font-weight:bold;">
+
+                            <a class="popup" href="#ratesQ5Cpopup"
+                               style="float:right;position:relative;left:-10px;top:-7px"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+                            <div id="ratesQ5Cpopup" class="showPopup"
+                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                <p> The fully serviced lease rate for the FIRM term per ABOA SF, reflecting the
+                                    summation of the (above) shell, operating, and TI rent.
+                                </p>
+                            </div>
+
+
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;font-weight:bold;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText id="q5_rates_5_1" value="{0, number, #,##0.00}"
+                                                         style="font-weight:bold;margin: 3px;">
+                                            <apex:param id="q5_rates_5_val_1"
+                                                        value="{!rateE.fiveYrFirmTerm}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align:left;font-weight:bold;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;font-weight:bold;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText id="q5_rates_5_5_1" value="{0, number, #,##0.00}"
+                                                         style="font-weight:bold;margin:3px;">
+                                            <apex:param id="q5_rates_5_5_val_1"
+                                                        value="{!rateE.fiveFiveYrFirmTerm}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align:left;font-weight:bold;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputText rendered="{!regionCode == 'Census'}"></apex:outputText>
+
+                        <apex:outputText id="txt_rates_q7_1" value="5.{!IF(space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c,
+                                RIGHT(QLabels.ratesQ7New,LEN(QLabels.ratesQ7New)-2), RIGHT(QLabels.ratesQ7Succ,LEN(QLabels.ratesQ7Succ)-2))}"
+                                         style="display:block;width:264px;">
+
+                        </apex:outputText>
+                        <apex:outputPanel rendered="{!allow2ndTierRate && regionCode == 'Census'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;" width="10%">
+
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText rendered="{!allow2ndTierRate && regionCode == 'Census'}">
+                                            <apex:inputText id="q7_rates_5_1"
+                                                            value="{!rateE.fiveYrTIAmorCosts2}"></apex:inputText>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align:left;" width="50%">
+                                        %
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!Not(allow2ndTierRate) && regionCode == 'Census'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;" width="10%">
+
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText rendered="{!Not(allow2ndTierRate) && regionCode == 'Census'}"
+                                                         value="{0, number, ##0.00}" style="margin: 3px;">
+                                            <apex:param id="q7_rates_5r_1"
+                                                        value="{!rateE.fiveYrTIAmorCosts2}"></apex:param>
+                                            <!--<apex:outputText id="q7_rates_5r_1" value="{!rateE.fiveYrTIAmorCosts2}"></apex:outputText>-->
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align:left;" width="50%">
+                                        %
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!Not(allow2ndTierRate) && regionCode == 'Census'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;" width="10%">
+
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText rendered="{!Not(allow2ndTierRate) && regionCode == 'Census'}"
+                                                         value="{0, number, ##0.00}" style="margin: 3px;">
+                                            <apex:param id="q7_rates_5_5r_1"
+                                                        value="{!rateE.fiveFiveYrTIAmorCosts2}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align:left;" width="50%">
+                                        %
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+
+                        <apex:outputText rendered="{!regionCode == 'Census'}"></apex:outputText>
+
+
+
+                        <apex:outputText id="txt_amrt1_1" style="color:#102372;font-weight:bold;"
+                                         value="*Note: The RLP does not allow for a second tier TI rate. First tier rate is applied."
+                                         rendered="{!Not(allow2ndTierRate) && regionCode != 'Census'}"></apex:outputText>
+
+
+                        <apex:outputText id="txt_rates_q8_census_1" rendered="{!regionCode == 'Census'}"
+                  dir=""                       value="6.{!RIGHT(QLabels.ratesQ8,LEN(QLabels.ratesQ8)-2)}">
+
+                            <a class="popup" href="#ratesQ8popup"
+                               style="float:right;position:relative;left:-10px;top:-7px"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+                            <div id="ratesQ8popup" class="showPopup"
+                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                <p>The hourly overtime rate for heating and cooling beyond normal hours specified in the
+                                    Lease for the Space.
+                                </p>
+                            </div>
+
+
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q8_rates_5_1" value="{!rateE.fiveYrOTHvacCosts}"
+                                                        style="width: 45px; text-align: right;">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /Hour
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q8_rates_5_5_1" value="{!rateE.fiveFiveYrOTHvacCosts}"
+                                                        style="width: 45px; text-align: right;">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /Hour
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputText rendered="{!regionCode == 'Census'}"></apex:outputText>
+
+
+                        <apex:outputText id="txt_rates_q10_census_1"
+                                         value="7.{!RIGHT(QLabels.ratesQ10,LEN(QLabels.ratesQ10)-2)}">
+
+                            <a class="popup" href="#ratesQ10Cpopup"
+                               style="float:right;position:relative;left:-10px;top:-7px"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+                            <div id="ratesQ10Cpopup" class="showPopup"
+                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                <p> The number of months of free rent without any payment of shell rent, operating
+                                    expenses, or amortization of the Tenant Improvements over the FIRM term.
+                                </p>
+                            </div>
+
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;" width="10%">
+                                        #
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q10a_rates_5_1" value="{!rateE.fiveYrFreeRentFIRM}"
+                                                        style="width: 45px; text-align: right;"
+                                                        onkeyup="decimalOnly(this);">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        Months
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align:center;" width="10%">
+                                        #
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q10a_rates_5_5_1" value="{!rateE.fiveFiveYrFreeRentFIRM}"
+                                                        style="width: 45px; text-align: right;"
+                                                        onkeyup="decimalOnly(this);">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        Months
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputText rendered="{!regionCode == 'Census'}"></apex:outputText>
+                    </apex:panelGrid>
+                    <apex:panelGrid id="pangrid_rates" styleClass="{!IF(regionCode != '10/5 Term - All Regions',  'pangrid_ratesNonCensus' , 'pangrid_ratesNonCensus covid')}" columns="{!IF(regionCode != '10/5 Term - All Regions',  '4' , '2')}"
+                                    rendered="{!regionCode != 'Census'}" columnClasses="{!IF(regionCode != '10/5 Term - All Regions',  'col1, col2, col3, col4' , 'col1, col2')}"
+                                    style="table-layout: fixed;">
+                        <apex:outputText id="txt_rates_hdr_blank">&nbsp;</apex:outputText>
+                        <apex:outputText id="txt_rates_hdr_col1" value="{!QLabels.ratesCol1}"
+                                         style="font-weight:bold; display: block; width: 160px;"
+                                         rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}"></apex:outputText>
+                        <apex:outputText id="txt_rates_hdr_col2" value="{!QLabels.ratesCol2}"
+                                         style="font-weight:bold; display: block; width: 160px;"
+                                         rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}"></apex:outputText>
+                        <apex:outputText id="txt_rates_hdr_col3" value="{!QLabels.ratesCol3}"
+                                         style="font-weight:bold; display: block; width: 160px;"
+                                         rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}"></apex:outputText>
+                        <apex:outputText id="txt_rates_25_16"
+                                         value="25 month lease term (with Government termination rights after the 16th month)"
+                                         style="font-weight:bold;"
+                                         rendered="{!regionCode == 'Census'}"></apex:outputText>
+                        <apex:outputText id="txt_rates_19_11"
+                                         value="19 month lease term (with Government termination rights after the 11th month)"
+                                         style="font-weight:bold;"
+                                         rendered="{!regionCode == 'Census'}"></apex:outputText>
+                        <apex:outputText id="txt_rates_10_5"
+                                         value="{!QLabels.covidRatesCol1}"
+                                         style="font-weight:bold;"
+                                         rendered="{!regionCode == '10/5 Term - All Regions'}"></apex:outputText>
+                        <apex:outputText value="" rendered="{!regionCode == 'Census'}"/>
+                        <apex:outputText id="txt_rates_q1" value="{!IF(regionCode == '10/5 Term - All Regions',QLabels.ratesQ1Five,QLabels.ratesQ1)}">
+                            <a class="popup" href="#ratesQ1popup"
+                               style="float:right;position:relative;right:0px;top:-7px"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+                            <div id="ratesQ1popup" class="infopopup3"
+                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                 <p>Enter shell rate per ABOA SF for years 1 through {!IF(regionCode == '10/5 Term - All Regions','5','8')} (excluding the cost of tenant
+                                    improvements, BSAC, services, and utilities).<br/><br/>
+
+                                    The shell rental rate shall include, but is not limited to, property financing
+                                    (exclusive of TIs and BSAC), insurance, taxes,
+                                    management, and profit, for the building. The shell rental rate shall also include
+                                    all basic building systems and common area
+                                    buildout, including, but not limited to, base building lobbies, common areas, and
+                                    core areas, exclusive of the ABOA Space
+                                    offered as required in this RLP. All improvements in the base building, lobbies,
+                                    common areas, core areas and space, made
+                                    to come into compliance with the lease, shall be provided by the lessor, at the
+                                    lessor's expense.<br/><br/>
+
+                                    Shell is predominantly defined in, but not limited to, section 3 of the lease
+
+                                </p>
+                            </div>
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="{!IF(regionCode != '10/5 Term - All Regions','padding-top:0px;text-align:center;','padding-top:0px;text-align:right;')}" width="{!IF(regionCode != '10/5 Term - All Regions','10%','30%')}">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="{!IF(regionCode != '10/5 Term - All Regions','40%','20%')}">
+                                        <apex:inputText id="q1_rates_5" value="{!rateE.fiveYrFS}" onkeyup="validate(this)"
+                                                        onfocus="setTwoNumberDecimal(this)"
+                                                        style="width: 45px; text-align: right;">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: right;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q1_rates_5_5" value="{!rateE.fiveFiveYrFS}" onkeyup="validate(this)"
+                                                        style="width: 45px; text-align: right;">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q1_rates_10" value="{!rateE.tenYrFS}" onkeyup="validate(this)"
+                                                        style="width: 45px; text-align: right;"
+                                                        rendered="{!regionCode != 'Census'}">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputText rendered="{!regionCode == 'Census'}"></apex:outputText><!---->
+                        <apex:outputText id="txt_rates_q2" value="{!QLabels.ratesQ2}"
+                                         style="position:relative;left:-19px;">
+                            <a class="popup" href="#ratesQ2popup"><img src="{!$Resource.Info_Icon}"
+                                                                       style="float:right;position:relative;left:-10px;top:3px"/></a>
+                            <div id="ratesQ2popup" class="infopopup7"
+                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                <p>Operating costs rate per ABOA SF carried over from item #4 under the Operating Costs
+                                    page. To make changes,
+                                    navigate back to the Operating Costs page.<br/><br/>
+
+                                    Refer to sections 3 PRICING TERMS (AAAP VARIATION) and OPERATING COSTS
+                                    REQUIREMENTS INCLUDED IN THE
+                                    OFFER (AAAP VARIATION) of the RLP<br/><br/>
+
+                                    Refer to sections 1 OPERATING COST BASE and 2 OPERATING COSTS ADJUSTMENT of
+                                    the lease
+
+                                </p>
+                            </div>
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="{!IF(regionCode != '10/5 Term - All Regions','padding-top:0px;text-align:center;','padding-top:0px;text-align:right;')}" width="{!IF(regionCode != '10/5 Term - All Regions','10%','30%')}">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="{!IF(regionCode != '10/5 Term - All Regions','40%','20%')}">
+                                        <apex:outputText id="q2_rates_5" value="{0, number, #,##0.00}"
+                                                         style="margin: 3px;">
+                                            <apex:param id="q2_rates_5_val" value="{!rateE.fiveYrOpCosts}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText id="q2_rates_5_5" value="{0, number, #,##0.00}"
+                                                         style="margin: 3px;">
+                                            <apex:param id="q2_rates_5_5_val"
+                                                        value="{!rateE.fiveFiveYrOpCosts}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText id="q2_rates_10" value="{0, number, #,##0.00}"
+                                                         rendered="{!regionCode != 'Census'}" style="margin: 3px;">
+                                            <apex:param id="q2_rates_10_val" value="{!rateE.tenYrOpCosts}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputText rendered="{!regionCode == 'Census'}"></apex:outputText>
+
+                        <apex:outputText id="txt_rates_q3" rendered="{!regionCode != 'Census'}"
+                                         value="{!IF(space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c, QLabels.ratesQ3New, QLabels.ratesQ3Succ)}">
+
+                            <a class="popup" href="#ratesQ3popup"
+                               style="float:right;position:relative;align-items:center;top:12px;"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+                            <div id="ratesQ3popup" class="infopopup4"
+                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                <p>The annual percentage rate (APR), compounded monthly, to be used by the Lessor to
+                                    amortize the Tenant Improvement
+                                    Allowance (TIA) and Building Specific Amortized Capital (BSAC) over the first {!IF(regionCode == '10/5 Term - All Regions','5','8')}
+                                    years of the lease. This APR will apply to all three terms.<br/><br/>
+
+                                    Refer to section 3 PRICING TERMS (AAAP VARIATION) of the RLP
+
+                                </p>
+                            </div>
+
+                        </apex:outputText>
+                        <apex:outputPanel rendered="{!regionCode != 'Census'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q3_rates_5" value="{!rateE.fiveYrAPR}" onkeyup="validate(this)"
+                                                        style="width: 45px; text-align: right;"></apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        %
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q3_rates_5_5" value="{!rateE.fiveFiveYrAPR}" onkeyup="validate(this)"
+                                                        style="width: 45px; text-align: right;"></apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        %
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q3_rates_10" value="{!rateE.tenYrAPR}" onkeyup="validate(this)"
+                                                        style="width: 45px; text-align: right;"></apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        %
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <!--HERE-->
+                        <apex:outputText id="txt_rates_q4_0" rendered="{!regionCode != 'Census'}"
+                                         value="9b. Amortization Period">
+                        </apex:outputText>
+                        <apex:outputPanel rendered="{!regionCode != 'Census'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                      {!IF(regionCode != '10/5 Term - All Regions',  '8' , '5')}  Years
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        8 Years
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        8 Years
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputText id="txt_rates_q4" rendered="{!regionCode != 'Census'}"
+                                         value="{!IF(space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c, QLabels.ratesQ4New, QLabels.ratesQ4Succ)}">
+                            <a class="popup" href="#ratesQ4popup"
+                               style="float:right;position:relative;left:0px;"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+                            <div id="ratesQ4popup" class="infopopup4"
+                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                <p>
+
+                                    The annual cost to amortize the estimated placeholder Tenant Improvement Allowance (TIA)
+                                    over the first {!IF(regionCode == '10/5 Term - All Regions','5','8')} years of the lease, using the APR entered in #9a (above). Note that the
+                                    TI rent used in the evaluation of offers and resulting lease contract will be based on
+                                    the actual TIA for the specific requirement. The actual TIA for a given requirement will
+                                    be published in a project specific advertisement. Reference section 3 of the RLP.<br/><br/>
+
+                                    Refer to sections 3 PRICING TERMS (AAAP VARIATION) and TENANT IMPROVEMENTS INCLUDED
+                                    IN OFFER (AAAP VARIATION) of the RLP<br/><br/>
+
+                                    Refer to sections 1 TENANT IMPROVEMENT RENTAL ADJUSTMENT (AAAP VARIATION), 4 TENANT
+                                    IMPROVEMENTS PRICE PROPOSAL, and 5 TENANT IMPROVEMENT COMPONENTS of the lease 
+
+
+                                </p>
+                            </div>
+
+
+                        </apex:outputText>
+                        <apex:outputPanel rendered="{!regionCode != 'Census'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="{!IF(regionCode != '10/5 Term - All Regions','padding-top:0px;text-align:center;','padding-top:0px;text-align:right;')}" width="{!IF(regionCode != '10/5 Term - All Regions','10%','30%')}">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="{!IF(regionCode != '10/5 Term - All Regions','40%','20%')}">
+                                        <apex:outputText id="q4_rates_5" rendered="{!regionCode != 'Census'}"
+                                                         value="{0, number, #,##0.00}" style="margin: 3px;">
+                                            <apex:param id="q4_rates_5_val"
+                                                        value="{!ABS(rateE.fiveYrTIAmorCosts)}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText id="q4_rates_5_5" rendered="{!regionCode != 'Census'}"
+                                                         value="{0, number, #,##0.00}" style="margin: 3px;">
+                                            <apex:param id="q4_rates_5_5_val"
+                                                        value="{!ABS(rateE.fiveFiveYrTIAmorCosts)}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText id="q4_rates_10" rendered="{!regionCode != 'Census'}"
+                                                         value="{0, number, #,##0.00}" style="margin: 3px;">
+                                            <apex:param id="q4_rates_10_val"
+                                                        value="{!ABS(rateE.tenYrTIAmorCosts)}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+
+
+                        <apex:outputText id="txt_rates_qBSAC_PMT" rendered="{!regionCode != 'Census'}"
+                                         value="{!IF(space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c,  QLabels.ratesQBSACPmtNew, QLabels.ratesQBSACPmtSucc)}">
+                            <a class="popup" href="#ratesQ4apopup"
+                               style="float:right;position:relative;left:0px;"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+                            <div id="ratesQ4apopup" class="infopopup5"
+                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                <p>
+
+                                    The annual cost to amortize the estimated placeholder Building Specific Amortized Capital (BSAC) over years 1 through {!IF(regionCode == '10/5 Term - All Regions','5','8')},
+                                    using the APR entered in #9a (above). Note that the BSAC rent used in the evaluation of offers and resulting lease
+                                    contract will be based on the actual TIA for the specific requirement. The actual BSAC for a given requirement will
+                                    be published in a project specific advertisement. Reference section 3 of the RLP.<br/><br/>
+
+                                    Refer to sections 1 PRICING OF SECURITY REQUIREMENTS (AAAP VARIATION), 3 PRICING TERMS (AAAP VARIATION) and 3
+                                    SECURITY IMPROVEMENTS INCLUDED IN OFFER (AAAP VARIATION) of the RLP
+
+
+                                </p>
+                            </div>
+
+
+                        </apex:outputText>
+
+                        <apex:outputPanel rendered="{!regionCode != 'Census'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="{!IF(regionCode != '10/5 Term - All Regions','padding-top:0px;text-align:center;','padding-top:0px;text-align:right;')}" width="{!IF(regionCode != '10/5 Term - All Regions','10%','30%')}">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="{!IF(regionCode != '10/5 Term - All Regions','40%','20%')}">
+                                        <apex:outputText id="qBSAC_PMT_5" rendered="{!regionCode != 'Census'}"
+                                                         value="{0, number, #,##0.00}" style="margin: 3px;">
+                                            <apex:param id="qBSAC_PMT_5_val"
+                                                        value="{!ABS(rateE.fiveYrBSAC)}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText id="qBSAC_PMT_5_5" rendered="{!regionCode != 'Census'}"
+                                                         value="{0, number, #,##0.00}" style="margin: 3px;">
+                                            <apex:param id="qBSAC_PMT_5_5_val"
+                                                        value="{!ABS(rateE.fiveFiveYrBSAC)}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText id="qBSAC_PMT_10" rendered="{!regionCode != 'Census'}"
+                                                         value="{0, number, #,##0.00}" style="margin: 3px;">
+                                            <apex:param id="qBSAC_PMT_10_val"
+                                                        value="{!ABS(rateE.tenYrBSAC)}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputText id="txt_rates_q5_census" rendered="{!regionCode == 'Census'}"
+                                         value="3.{!IF(space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c, RIGHT(QLabels.ratesQ5New,LEN(QLabels.ratesQ5New)-2), RIGHT(QLabels.ratesQ5Succ,LEN(QLabels.ratesQ5Succ)-2) )}"
+                                         style="font-weight:bold;">
+                            <a class="popup" href="#ratesQ5popup"
+                               style="float:right;position:relative;left:-8px;top:-7px"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+                        </apex:outputText>
+                        <apex:outputText id="txt_rates_q5" rendered="{!regionCode != 'Census'}"
+                                         value="{!IF(space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c, QLabels.ratesQ5New,  QLabels.ratesQ5Succ)}"
+                                         style="font-weight:bold;">
+                            <a class="popup" href="#ratesQ5popup"
+                               style="float:right;position:relative;left:0px;top:-7px"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+                            <div id="ratesQ5popup" class="infopopup5"
+                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                <p> The fully serviced lease rate per ABOA SF for years 1 through {!IF(regionCode == '10/5 Term - All Regions','5','8')} of the lease,
+                                    reflecting the summation of the
+                                    (above) shell, operating, TI (placeholder), and BSAC (placeholder) rent.<br/><br/>
+
+                                    Refer to section 3 of the RLP
+
+                                </p>
+                            </div>
+
+
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="{!IF(regionCode != '10/5 Term - All Regions','padding-top:0px;text-align:center;','padding-top:0px;text-align:right;')}" width="{!IF(regionCode != '10/5 Term - All Regions','10%','30%')}">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="{!IF(regionCode != '10/5 Term - All Regions','40%','20%')}">
+                                        <apex:outputText id="q5_rates_5" value="{0, number, #,##0.00}"
+                                                         style="font-weight:bold;margin: 3px;">
+                                            <apex:param id="q5_rates_5_val"
+                                                        value="{!rateE.fiveYrFirmTerm}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        <apex:outputText value="/ABOA SF" style="font-weight:bold;"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText id="q5_rates_5_5" value="{0, number, #,##0.00}"
+                                                         style="font-weight:bold;margin: 3px;">
+                                            <apex:param id="q5_rates_5_5_val"
+                                                        value="{!rateE.fiveFiveYrFirmTerm}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        <apex:outputText value="/ABOA SF" style="font-weight:bold;"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:outputText id="q5_rates_10" value="{0, number, #,##0.00}"
+                                                         style="font-weight:bold;margin: 3px;"
+                                                         rendered="{!regionCode != 'Census'}">
+                                            <apex:param id="q5_rates_10_val"
+                                                        value="{!rateE.tenYrFirmTerm}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        <apex:outputText value="/ABOA SF" style="font-weight:bold;"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputText rendered="{!regionCode == 'Census'}"></apex:outputText>
+                    </apex:panelGrid>
+                        <!-- BREAK HERE-->
+                    <span style="color:#002bad">If using the placeholder figure, the fully serviced rate calculation (#10) will not reflect the amounts used in the actual lease document.</span>
+                    <br/>
+                    <br/>
+
+                    <apex:panelGrid id="pangrid_rates_2" styleClass="{!IF(regionCode != '10/5 Term - All Regions',  'pangrid_ratesNonCensus' , 'pangrid_ratesNonCensus covid')}" columns="{!IF(regionCode != '10/5 Term - All Regions',  '4' , '2')}"
+                                    rendered="{!regionCode != 'Census'}" columnClasses="{!IF(regionCode != '10/5 Term - All Regions',  'col1, col2, col3, col4' , 'col1, col2')}"
+                                    style="table-layout: fixed;">
+
+                        <apex:outputText id="txt_rates_q6" value="{!IF(regionCode == '10/5 Term - All Regions','11. Shell Rent (Yrs 6 - 10)',QLabels.ratesQ6)}"
+                                         rendered="{!regionCode != 'Census'}">
+
+                            <a class="popup" href="#ratesQ99popup"
+                               style="float:right;position:relative;left:0px;top:-7px"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+                            <div id="ratesQ99popup" class="infopopup"
+                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;margin-left: -547.5px;width:700px;">
+                                <p> Enter shell rate per ABOA SF beginning year {!IF(regionCode == '10/5 Term - All Regions','6','9')} through the end of the Lease
+                                    (excluding the TI, BSAC, and operating rent).
+                                    If unchanged, enter the rate from #7 (above).
+                                </p>
+                            </div>
+
+                        </apex:outputText>
+                        <apex:outputText rendered="{!!rlpGT2016 && regionCode != 'Census'}"></apex:outputText>
+                        <apex:outputPanel rendered="{!rlpGT2016 && regionCode != 'Census'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="{!IF(regionCode != '10/5 Term - All Regions','padding-top:0px;text-align:center;','padding-top:0px;text-align:right;')}" width="{!IF(regionCode != '10/5 Term - All Regions','10%','30%')}">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="{!IF(regionCode != '10/5 Term - All Regions','40%','20%')}">
+                                        <apex:inputText id="q6_rates_5" value="{!rateE.tenFiveYrOptTerm}" onkeyup="validate(this)"
+                                                        style="width: 45px; text-align: right;"
+                                                        rendered="{!rlpGT2016 && regionCode != 'Census'}"><span><apex:outputText value=""/></span></apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q6_rates_5_5" rendered="{!regionCode != 'Census'}"
+                                                        value="{!rateE.fiveFiveYrOptTerm}" onkeyup="validate(this)"
+                                                        style="width: 45px; text-align: right;left:28px"><span
+                                                style="left:29px;"><apex:outputText value=""/></span></apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q6_rates_10_8" rendered="{!regionCode != 'Census'}"
+                                                        value="{!rateE.tenEightYrOptTerm}" onkeyup="validate(this)"
+                                                        style="width: 45px; text-align: right;left:28px"><span
+                                                style="left:29px;"><apex:outputText value=""/></span></apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /ABOA SF
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!allow2ndTierRate && regionCode != 'Census'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q7_rates_5" value="{!rateE.fiveYrTIAmorCosts2}"
+                                                        rendered="{!allow2ndTierRate && regionCode != 'Census'}">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        %
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!allow2ndTierRate} && regionCode != 'Census'">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q7_rates_5_5" value="{!rateE.fiveFiveYrTIAmorCosts2}"
+                                                        rendered="{!allow2ndTierRate} && regionCode != 'Census'">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        %
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+
+                        <apex:outputPanel rendered="{!allow2ndTierRate && regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q7_rates_10" value="{!rateE.tenYrTIAmorCosts2}"
+                                                        rendered="{!allow2ndTierRate} && regionCode != 'Census'">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        %
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputText id="txt_rates_q8_census" rendered="{!regionCode == 'Census'}"
+                                         value="4.{!RIGHT(QLabels.ratesQ8,LEN(QLabels.ratesQ8)-2)}"></apex:outputText>
+                        <apex:outputText id="txt_rates_q8" value="{!QLabels.ratesQ8_7}"
+                                         rendered="{!regionCode != 'Census'}">
+                            <a class="popup" href="#ratesQ8popup"
+                               style="float:right;position:relative;left:0px;top:-7px"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+
+                            <div id="ratesQ8popup" class="infopopup"
+                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                <p>The hourly overtime rate for climate control beyond the government’s normal hours specified in the
+                                    lease for the space.<br/><br/>
+
+                                    Refer to Section 6 OVERTIME HVAC USAGE of the lease
+
+                                </p>
+                            </div>
+
+
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="{!IF(regionCode != '10/5 Term - All Regions','padding-top:0px;text-align:center;','padding-top:0px;text-align:right;')}" width="{!IF(regionCode != '10/5 Term - All Regions','10%','30%')}">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="{!IF(regionCode != '10/5 Term - All Regions','40%','20%')}">
+                                        <apex:inputText id="q8_rates_5" value="{!rateE.fiveYrOTHvacCosts}" onkeyup="validate(this)"
+                                                        style="width: 45px; text-align: right;">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /Hour
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q8_rates_5_5" value="{!rateE.fiveFiveYrOTHvacCosts}" onkeyup="validate(this)"
+                                                        style="width: 45px; text-align: right;">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /Hour
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+                                        $
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q8_rates_10" value="{!rateE.tenYrOTHvacCosts}" onkeyup="validate(this)"
+                                                        style="width: 45px; text-align: right;"
+                                                        rendered="{!regionCode != 'Census'}">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        /Hour
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputText rendered="{!regionCode == 'Census'}"></apex:outputText>
+
+                        <apex:outputText id="txt_rates_q10_census" rendered="{!regionCode == 'Census'}"
+                                         value="5.{!RIGHT(QLabels.ratesQ10,LEN(QLabels.ratesQ10)-2)}"></apex:outputText>
+                        <apex:outputText id="txt_rates_q10" value="{!QLabels.ratesQ10_8}"
+                                         rendered="{!regionCode != 'Census'}">
+                            <a class="popup" href="#ratesQ10popup"
+                               style="float:right;position:relative;left:0px;top:-7px"><img
+                                    src="{!$Resource.Info_Icon}"/></a>
+                            <div id="ratesQ10popup" class="infopopup"
+                                 style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                <p> Number of months of free rent (includes shell, operating, TI and BSAC rent) being
+                                    offered to the government in the
+                                    firm term. Free rent will be evaluated in accordance with the Present Value Price
+                                    Evaluation paragraph of the RLP
+                                    and will serve to reduce the net present value of the offer.<br/><br/>
+
+                                    Free rent will be evaluated in the first year (and consecutive succeeding years, as
+                                    applicable) in which it is offered.
+                                    The gross annual price is adjusted to reflect free rent.<br/><br/>
+
+                                    Refer to sections 3 PRICING TERMS (AAAP VARIATION) and 4 PRESENT VALUE PRICE
+                                    EVALUATION (AAAP VARIATION) of the RLP
+
+                                </p>
+                            </div>
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q10a_rates_5" value="{!rateE.fiveYrFreeRentFIRM}"
+                                                        style="width: 45px; text-align: right;"
+                                                        onkeyup="decimalOnly(this);">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        Months
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q10a_rates_5_5" value="{!rateE.fiveFiveYrFreeRentFIRM}"
+                                                        style="width: 45px; text-align: right;"
+                                                        onkeyup="decimalOnly(this);">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        Months
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!regionCode != 'Census' && regionCode != '10/5 Term - All Regions'}">
+                            <table style="text-align:center;" width="100%">
+                                <tr>
+                                    <td style="padding-top:0px;text-align: center;" width="10%">
+
+                                    </td>
+                                    <td style="padding-top:0px;text-align: right;" width="40%">
+                                        <apex:inputText id="q10a_rates_10" value="{!rateE.tenYrFreeRentFIRM}"
+                                                        style="width: 45px; text-align: right;"
+                                                        rendered="{!regionCode != 'Census'}"
+                                                        onkeyup="decimalOnly(this);">
+                                        </apex:inputText>
+                                    </td>
+                                    <td style="padding-top:0px;text-align: left;" width="50%">
+                                        Months
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+
+                        <apex:outputText rendered="{!regionCode == 'Census'}"></apex:outputText>
+                    </apex:panelGrid>
+                    
+                    <!-- 03/02/2020 Todd Brown  SFWS-1126 Add Rate For Enhanced Cleaning -->
+                   <!-- SGanti changed 7/15/2021
+                        <apex:panelGrid id="pangrid_q14">
+                        <apex:outputPanel rendered="{!regionCode != 'Census'}">
+                            <br/>
+                            <h4 class="grey">Rate for Routine Cleaning and Disinfection Requirements</h4>
+                            
+                            <br/>
+                            <br/>
+                     <!-- SGanti changed 7/15/2021  
+
+                            <apex:outputText rendered="{!regionCode != 'Census'}" id="txt_succspace_q14"
+                                             value="{!QLabels.spaceQ14}"></apex:outputText>
+                            <span class="required">*</span>
+                      
+                                <apex:outputText rendered="{!regionCode != 'Census'}" id="txt_ratesQ14popup"/>
+                                <a class="popup" href="#ratesQ14popup"
+                                   style="float:center;position:relative;left:0px;top:0px"><img src="{!$Resource.Info_Icon}"/></a>
+                                <div id="ratesQ14popup" class="showPopup"
+                                    style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                    <p> Do not include costs for this requirement in the operating rent. This rent component is not subject to 
+                                        CPI operating costs adjustments. The Government reserves the right to cancel these services and reduce 
+                                        the rent accordingly.<br/><br/>
+    
+                                        Refer to Section 3.03 Pricing Terms, sub-paragraph B. 2. of the RLP and Section 6.06 Janitorial Services, 
+                                        sub-paragraph N of the Lease.<br/><br/>
+                                    </p>
+                                </div>
+                            
+                            <br/>
+                            <br/>
+
+                            <apex:outputPanel rendered="{!regionCode != 'Census'}">
+                                $&nbsp;&nbsp;<apex:inputField id="q14_succspace"
+                                                 value="{!space.PBS_AAAP_Enhanced_Clean_Disinfect_Rate__c}">&nbsp;/ABOA&nbsp;SF</apex:inputField>
+                            </apex:outputPanel>
+                            
+                        </apex:outputPanel>
+                    </apex:panelGrid>
+                   -->
+                    <!--HEEERE-->
+                    <apex:panelGrid id="pangrid_SuccSpace_2" columns="2">
+                        <apex:outputPanel rendered="{!regionCode != 'Census'}">
+           <!-- SGanti updated 7/15/2021  
+                            <br></br>
+                            <h4 class="grey">Tenant Improvement Allowance - Mark Ups</h4>
+                            <br></br>
+                
+                            <apex:outputText rendered="{!regionCode != 'Census'}" id="txt_succspace_note"
+                                             value="{!IF(space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c,  QLabels.notation, QLabels.notationSucc)}"
+                                             style="font-style: italic;color:#002bad"></apex:outputText>
+                            <br></br>
+                            <br/>
+               -->  
+                            <apex:outputText rendered="{!regionCode != 'Census'}" id="txt_succspace_q6"
+                                             value="{!QLabels.spaceQ6}"></apex:outputText>
+                            <span class="required">*</span>
+                            <br></br>
+                            <br/>
+
+                            <apex:outputPanel rendered="{!regionCode != 'Census'}">
+                                <apex:inputField id="q6_succspace"
+                                                 value="{!space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c}">&nbsp;%</apex:inputField>
+                            </apex:outputPanel>
+
+                            <br/>
+                            <br/>
+                            <apex:panelGroup id="pgrp_succspace_q9" rendered="{!regionCode != 'Census'}">
+                                <apex:outputText id="txt_succspace_q9" value="{!QLabels.spaceQ9}"></apex:outputText>
+                                <span class="required">*</span>
+                                <apex:selectRadio styleClass="radioCell" id="q9_succspace_opts"
+                                                  value="{!FeePrcntgOrDollar}">
+                                    <apex:selectOptions id="sopts_succspace_q9" value="{!FeeOpts}"></apex:selectOptions>
+                                </apex:selectRadio>
+                                <apex:inputField id="q9_succspace"
+                                                 value="{!space.PBS_AAAP_ARCH_ENG_FEES__c}"></apex:inputField>
+                            </apex:panelGroup>
+                            <br></br>
+                            <br/>
+
+                            <br/>
+        <!-- SGanti updated 7/15/2021-->  
+                            <apex:panelGroup rendered="{!regionCode != 'Census'}">16. &nbsp;
+                                <apex:commandButton id="btn_calc_succ_total_markup" action="{!calcTotMarkup}"
+                                                    value="Calculate Mark-ups"></apex:commandButton>
+                            </apex:panelGroup>
+                        </apex:outputPanel>
+                    </apex:panelGrid>
+                    <br/>
+                    <table style="background-color: #cee5e8; border-width: thin; border-style: solid;">
+                        <tr>
+                            <td>
+                                <u>&nbsp;&nbsp;&nbsp;
+                                <apex:outputText id="q10_succspace" value="{0, number, $#,##0.00}"
+                                                 style="font-weight:bold;">
+                                    <apex:param id="q10_succspace_val"
+                                                value="{!space.PBS_AAAP_TOTAL_MARKUP__c}"></apex:param>
+                                </apex:outputText>&nbsp;&nbsp;&nbsp;</u>/ABOA SF of $<u>&nbsp;&nbsp;&nbsp;
+                                <apex:outputText id="q10_succspace_02" value="{0, number, $#,##0.00}"
+                                                 style="font-weight:bold;">
+                                    <apex:param id="q10_succspace_val_02"
+                                                value="{!userIputTIA}"></apex:param>
+                                </apex:outputText>&nbsp;&nbsp;&nbsp;</u>/ABOA SF will be used for architectural and engineering design (A/E) services and the Offeror’s project management fees associated with Tenant Improvements.
+                                <br/>
+                                <br/>
+                                <span style="color:#002bad">If using the placeholder figure, the total mark-ups calculation  (#16) will not reflect the amounts used in the actual lease document.</span>
+                            </td>
+                        </tr>
+                    </table>
+                    <apex:panelGroup >
+                        <apex:panelGrid columns="1">
+                            <apex:outputLabel id="warningMessageCensus" styleClass="blueMessage"
+                                              value="Note: Refer to section 4 PRESENT VALUE EVALUATION of the AAAP Request for Lease Proposals (RLP) for a description of the present value price evaluation."
+                                              rendered="{!regionCode == 'Census'}"/>
+                            <apex:outputLabel id="warningMessage" styleClass="blueMessage"
+                                              value="Note: Refer to section 4 PRESENT VALUE EVALUATION of the AAAP Request for Lease Proposals (RLP) for a description of the present value price evaluation."
+                                              rendered="{!regionCode != 'Census'}"/>
+                            <apex:outputPanel >
+                                <apex:commandButton id="btn_backToSpace" action="{!backToPreviousPage}"
+                                                    value="Back"></apex:commandButton>
+                                <apex:commandButton id="btn_saveRates" action="{!redirectToSpaceandRatesOnly}"
+                                                    value="Save Page" styleClass="btnJQSubmit"></apex:commandButton>
+                                <apex:commandButton id="btn_backToSpaceRates" action="{!redirectToSpaceandRates}"
+                                                    value="Next"></apex:commandButton>
+                            </apex:outputPanel>
+                        </apex:panelGrid>
+                    </apex:panelGroup>
+                    <!-- end syam -->
+
+                </apex:outputPanel>
+
+            </apex:form>
+        </div><!--/content-->
+    </div><!-- /Wrapper -->
+
+
+<script type="text/javascript">
+console.log('{!pageURLForRedirection}');
+if('{!JSENCODE(pageURLForRedirection)}' == '-'){
+}else if('{!JSENCODE(pageURLForRedirection)}' != ''){
+    window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';    
+} else{
+    window.parent.document.body.scrollTop = 0;
+    window.parent.document.documentElement.scrollTop = 0;
+        }
+
+        var JQ = jQuery.noConflict();
+
+        JQ(window).load(function() {
+
+            function readCookie(name) {
+                var nameEQ = name + "=";
+                var ca = document.cookie.split(';');
+                for(var i=0;i < ca.length;i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) === ' ') {
+                        c = c.substring(1,c.length);
+                    }
+                    if (c.indexOf(nameEQ) === 0) {
+                        return c.substring(nameEQ.length,c.length);
+                    }
+                }
+                return null;
+            }
+
+            var cookieId = readCookie('offerId');
+            console.log('****'+cookieId);
+
+            if(window.location.pathname.toLowerCase() == '/pbs_aaap_spacesandrates'){
+                window.history.pushState('page2', 'Title', '/AAAP/spacesAndRates?offerId='+cookieId);
+            }
+        });
+
+        JQ('td.col1:eq(7)').css('background-color','#cee5e8');
+        JQ('td.col2:eq(7)').css('background-color','#cee5e8');
+        JQ('td.col3:eq(7)').css('background-color','#cee5e8');
+        JQ('td.col4:eq(7)').css('background-color','#cee5e8');
+
+        JQ('td.col1:eq(10)').css('border-bottom-style','solid');
+        JQ('td.col2:eq(10)').css('border-bottom-style','solid');
+        JQ('td.col3:eq(10)').css('border-bottom-style','solid');
+        JQ('td.col4:eq(10)').css('border-bottom-style','solid');
+
+        JQ('td.col1:eq(10)').css('border-bottom-width','thin');
+        JQ('td.col2:eq(10)').css('border-bottom-width','thin');
+        JQ('td.col3:eq(10)').css('border-bottom-width','thin');
+        JQ('td.col4:eq(10)').css('border-bottom-width','thin');
+        
+        JQ('[id*=col_10_5_fs_val]').each(function () {
+            if (JQ(this).text() != ' $0.00' && JQ(this).text() != '') {
+                JQ(this).html('&#9989;');
+            } else {
+                JQ(this).html('&#10060;');
+            }
+        });
+
+        JQ('[id*=col_five_fs_val]').each(function () {
+            if (JQ(this).text() != ' $0.00' && JQ(this).text() != '') {
+                JQ(this).html('&#9989;');
+            } else {
+                JQ(this).html('&#10060;');
+            }
+        });
+
+        JQ('[id*=col_five_five_fs_val]').each(function () {
+            if (JQ(this).text() != ' $0.00' && JQ(this).text() != '') {
+                JQ(this).html('&#9989;');
+            } else {
+                JQ(this).html('&#10060;');
+            }
+        });
+
+        JQ('[id*=col_ten_fs_val]').each(function () {
+            if (JQ(this).text() != ' $0.00' && JQ(this).text() != '') {
+                JQ(this).html('&#9989;');
+            } else {
+                JQ(this).html('&#10060;');
+            }
+        });
+
+        JQ('.dataTables_length').css("display", "none");
+        JQ('.myAppTable').find('.dataTables_filter').css("display", "none");
+        JQ('.myAppTab').find('.dataTables_filter').css("display", "none");
+        JQ(".tablesorter tr:odd").css("background-color", "#CFEEF8");
+        JQ(".tablesorter tr:even").css("background-color", "#F3F3EC");
+
+        JQ(document).ready(function () {
+            var test = JQ('input[id=' + "{!$Component.spaceAndRatesForm.q3_opts}" + ']:checked').val();
+            if (test == 'All Available ABOA') {
+                // hide these elements
+                JQ("[id='{!$Component.spaceAndRatesForm.pgrp_newspace_q4}']").hide();
+                JQ("[id='{!$Component.spaceAndRatesForm.q4_newspace_min_in}']").hide();
+                JQ("[id='{!$Component.spaceAndRatesForm.txt_newspace_q4_spacer}']").hide();
+                JQ("[id='{!$Component.spaceAndRatesForm.q4_newspace_max_in}']").hide();
+                JQ("[id='{!$Component.spaceAndRatesForm.txt_newspace_q4}']").hide();
+
+            }
+        });
+
+
+        function checkSpaceSelected() {
+            var checkedLen = JQ("input[type='checkbox']:checked").length;
+
+            if (checkedLen == 1) {
+                return true;
+            } else {
+                alert("Please select one Space from Offered Spaces.");
+                return false;
+            }
+        }
+
+        function validateFields() {
+            var flag = false;
+            var lessorOverHead = JQ('input[id=' + "'{!$Component.spaceAndRatesForm.q6_newspace}'" + ']').val();
+            var architect = JQ('input[id=' + "'{!$Component.spaceAndRatesForm.q9_newspace}'" + ']').val();
+            var lessorOverHeadSucc = JQ('input[id=' + "'{!$Component.spaceAndRatesForm.q6_succspace}'" + ']').val();
+            var architectSucc = JQ('input[id=' + "'{!$Component.spaceAndRatesForm.q9_succspace}'" + ']').val();
+
+            if (lessorOverHead == '' || lessorOverHead <= 0 || lessorOverHeadSucc == '' || lessorOverHeadSucc <= 0) {
+
+                if (confirm("#6 on the Space page has a zero or blank value.  Please confirm you intended a ZERO or blank value."))
+                    flag = true;
+                else
+                    flag = false;
+
+            }
+            if (architect == '' || architect <= 0 || architectSucc == '' || architectSucc <= 0) {
+                if (confirm("#7 on the Space page has a zero or blank value.  Please confirm you intended a ZERO or blank value."))
+                    flag = true;
+                else
+                    flag = false;
+            }
+            return flag;
+        }
+
+        var SPACEANDRATES = SPACEANDRATES || {};
+
+
+        // function to flip the rendering boolean for "All ABOA" or the range of ABOA
+        SPACEANDRATES.renderRange = function () {
+            var test = JQ('input[id=' + "{!$Component.spaceAndRatesForm.q3_opts}" + ']:checked').val();
+            if (test == 'All Available ABOA') {
+                // hide these elements
+                JQ("[id='{!$Component.spaceAndRatesForm.pgrp_newspace_q4}']").hide();
+                JQ("[id='{!$Component.spaceAndRatesForm.q4_newspace_min_in}']").hide();
+                JQ("[id='{!$Component.spaceAndRatesForm.txt_newspace_q4_spacer}']").hide();
+                JQ("[id='{!$Component.spaceAndRatesForm.q4_newspace_max_in}']").hide();
+                JQ("[id='{!$Component.spaceAndRatesForm.txt_newspace_q4}']").hide();
+
+            } else {
+                // show these elements
+                JQ("[id='{!$Component.spaceAndRatesForm.pgrp_newspace_q4}']").show();
+                JQ("[id='{!$Component.spaceAndRatesForm.q4_newspace_min_in}']").show();
+                JQ("[id='{!$Component.spaceAndRatesForm.txt_newspace_q4_spacer}']").show();
+                JQ("[id='{!$Component.spaceAndRatesForm.q4_newspace_max_in}']").show();
+                JQ("[id='{!$Component.spaceAndRatesForm.txt_newspace_q4}']").show();
+
+            }
+            ;
+
+        };  // end renderRange
+
+        var region = '{!regionCode}';
+        console.log(region);
+        if(region == '10/5 Term - All Regions') {
+            f1 = document.getElementById('j_id0:spaceAndRatesForm:q1_rates_5').value;
+            f4 = document.getElementById('j_id0:spaceAndRatesForm:q3_rates_5').value;
+            f10 = document.getElementById('j_id0:spaceAndRatesForm:q6_rates_5').value;
+            f12 = document.getElementById('j_id0:spaceAndRatesForm:q8_rates_5').value;;
+            if (f1.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q1_rates_5').value = f1 + 0.00;
+                console.log('done');
+            }
+            if (f4.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q3_rates_5').value = f4 + 0.00;
+            }
+            if (f10.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q6_rates_5').value = f10 + 0.00;
+            }
+            if (f12.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q8_rates_5').value = f12 + 0.00;
+            }
+        }else if (region != 'Census') {
+            f1 = document.getElementById('j_id0:spaceAndRatesForm:q1_rates_5').value;
+            f2 = document.getElementById('j_id0:spaceAndRatesForm:q1_rates_5_5').value;
+            f3 = document.getElementById('j_id0:spaceAndRatesForm:q1_rates_10').value;
+            f4 = document.getElementById('j_id0:spaceAndRatesForm:q3_rates_5').value;
+            f5 = document.getElementById('j_id0:spaceAndRatesForm:q3_rates_5_5').value;
+            f6 = document.getElementById('j_id0:spaceAndRatesForm:q3_rates_10').value;
+            f10 = document.getElementById('j_id0:spaceAndRatesForm:q6_rates_5').value;
+            f11 = document.getElementById('j_id0:spaceAndRatesForm:q6_rates_5_5').value;
+            f12 = document.getElementById('j_id0:spaceAndRatesForm:q8_rates_5').value;
+            f13 = document.getElementById('j_id0:spaceAndRatesForm:q8_rates_5_5').value;
+            f14 = document.getElementById('j_id0:spaceAndRatesForm:q8_rates_10').value;
+            f18 = document.getElementById('j_id0:spaceAndRatesForm:q6_rates_10_8').value;
+
+            if (f1.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q1_rates_5').value = f1 + 0.00;
+            }
+            if (f2.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q1_rates_5_5').value = f2 + 0.00;
+            }
+            if (f3.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q1_rates_10').value = f3 + 0.00;
+            }
+            if (f4.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q3_rates_5').value = f4 + 0.00;
+            }
+            if (f5.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q3_rates_5_5').value = f5 + 0.00;
+            }
+            if (f6.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q3_rates_10').value = f6 + 0.00;
+            }
+            if (f10.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q6_rates_5').value = f10 + 0.00;
+            }
+            if (f11.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q6_rates_5_5').value = f11 + 0.00;
+            }
+            if (f12.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q8_rates_5').value = f12 + 0.00;
+            }
+            if (f13.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q8_rates_5_5').value = f13 + 0.00;
+            }
+            if (f14.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q8_rates_10').value = f14 + 0.00;
+            }
+            if (f18.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q6_rates_10_8').value = f18 + 0.00;
+            }
+
+        }
+        else if (region == 'Census') {
+            f1 = document.getElementById('j_id0:spaceAndRatesForm:q1_rates_5_1').value;
+            f2 = document.getElementById('j_id0:spaceAndRatesForm:q1_rates_5_5_1').value;
+            f3 = document.getElementById('j_id0:spaceAndRatesForm:q3_rates_5_1').value;
+            f4 = document.getElementById('j_id0:spaceAndRatesForm:q3_rates_5_5_1').value;
+            f5 = document.getElementById('j_id0:spaceAndRatesForm:q8_rates_5_1').value;
+            f6 = document.getElementById('j_id0:spaceAndRatesForm:q8_rates_5_5_1').value;
+            if (f1.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q1_rates_5_1').value = f1 + 0.00;
+            }
+            if (f2.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q1_rates_5_5_1').value = f2 + 0.00;
+            }
+            if (f3.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q3_rates_5_1').value = f3 + 0.00;
+            }
+            if (f4.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q3_rates_5_5_1').value = f4 + 0.00;
+            }
+            if (f5.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q8_rates_5_1').value = f5 + 0.00;
+            }
+            if (f6.split(".")[1].length == 1) {
+                document.getElementById('j_id0:spaceAndRatesForm:q8_rates_5_5_1').value = f6 + 0.00;
+            }
+        }
+
+        JQ(document).ready(function () {
+
+            SPACEANDRATES.renderRange();
+
+            //added by syam display msg when submitted offer is saved.
+            draftMsgFlag = JQ('input[id=' + "'{!$Component.spaceAndRatesForm.draftMsgFlag}'" + ']').val();
+            if (draftMsgFlag == 'true') {
+                var confirm1 = JQ('<div></div>').html("Your offer is no longer submitted. Offer status is updated to 'Draft' status and needs to be submitted again.").dialog({
+                    autoOpen: false,
+                    title: '',
+                    modal: true,
+                    position: ['center', 'center'],
+                    buttons: {
+                        'OK': function () {
+                            JQ(this).dialog('close');
+                        }
+                    }
+                });
+
+                confirm1.dialog('open');
+            }
+        });
+
+        function decimalOnly(e) {
+            console.log('Yes');
+            e.value = e.value.replace(/[.][0-9]+$/g, '');
+            if (e.value.split('.').length > 2) e.value = e.value.replace(/\.+$/, "");
+        };
+
+        function setTwoNumberDecimal(event) {
+            event.value = parseFloat(event.value).toFixed(2);
+        }
+
+
+    </script>
+
+
+    </body>
+    <c:SiteFooterUX />
+</apex:page>

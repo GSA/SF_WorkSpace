@@ -1,0 +1,171 @@
+<apex:page sidebar="false" standardStylesheets="false" showHeader="false">
+
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/demo_page.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+    <!-- <c:EnrollCSS /> -->
+    <!--<c:jQueryInit bDataTables="true" /> -->
+    <style>
+span.dropt {border-bottom: thin dotted; background: #ffeedd;}
+span.dropt:hover {text-decoration: none; background: #fefefe; z-index: 6; }
+span.dropt span {position: absolute; left: -9999px;
+  margin: 20px 0 0 0px; padding: 3px 3px 3px 3px;
+  border-style:solid; border-color:black; border-width:1px; z-index: 6;}
+span.dropt:hover span {left: 2%; background:rgb(236, 236, 236);} 
+span.dropt span {position: absolute; left: -9999px;
+  margin: 4px; padding: 3px 3px 3px 3px; text-indent:0in;
+  border-style:solid; border-color:#666; border-width:1px;}
+span.dropt:hover span {margin: 20px 0 0 170px; background:rgb(236, 236, 236); z-index:6;} 
+
+.sb-int {margin:10px;padding:10px;}
+#rightCol {width:620px; padding-right:20px;}
+.sb-int .bucket {margin-top:10px !important;}
+h3.blue {padding-top:15px;}
+.portalhome .apexp .selector {top:70px; left:0px;}
+menu.table-options {top:40px;left:-350px;}
+.tabbed-table table tr {height:35px;}
+menu.table-options a {border:1px solid#666666; border-radius:3px;padding:6px;background-image:url(https://gsa--aaap--c.cs12.visual.force.com/resource/1334347636000/gsa_common/images/sprite.png);background-position:-5px 145px;color:#333333;font-size:12px;text-decoration:none;}
+
+#lean_overlay {
+    position: fixed;
+    z-index:100;
+    top: 0px;
+    left: 0px;
+    height:100%;
+    width:100%;
+    background:none;
+    display: none;
+}
+
+    </style>
+
+
+    
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+        <ul>
+            <li><a href="/AAAP/PBS_AAAP_PortalHome">Home</a></li>
+            <li>|</li>
+            <li><a href="{!$Site.Prefix}/secur/logout.jsp">LOGOUT</a></li>
+            <!--
+        <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp" rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}"><li>| {!$Label.site.logout}</li></apex:outputLink>
+         ->
+        </ul>
+    </div><!--/login-->
+
+
+    <div id="wrapper" class="portalhome">
+        <!-- Header logo part starts Here -->
+        <h1 class="logo">GSA</h1>
+        <div id="nav" class="interior">
+            <ul>
+                <li><a href="/AAAP/PBS_AAAP_portalHome">AAAP Home</a></li>
+                <li><a href="/AAAP/pbs_aaap_userprofile">User Profile</a></li>
+                <li><a href="/AAAP/PBS_AAAP_Search_RLP">RLP &amp; Lease Documents</a></li>
+                <li><a href="/AAAP/PBS_AAAP_PortalNews_Updates">News &amp; Updates</a></li>
+                <!-- <li><a href="#">Resources</a></li> -->
+                <li><a href="/AAAP/PBS_AAAP_Help">Help</a></li>
+            </ul>
+        </div><!--/nav-->
+
+        <div id="hero-int">
+            <h2>AAAP</h2>
+        </div><!--/hero-->
+        <!-- Header logo part ends Here -->
+        <div id="content">
+
+            <body>
+            <div style="margin:20px !important;">
+                <h3 id="page-title" class="blue">Contact Us</h3>
+                <!--  ----------------------------------------------------------------------  -->
+                <!--  NOTE: Please add the following <META> element to your page <HEAD>.      -->
+                <!--  If necessary, please modify the charset parameter to specify the        -->
+                <!--  character set of your HTML page.                                        -->
+                <!--  ----------------------------------------------------------------------  -->
+
+                <!--  ----------------------------------------------------------------------  -->
+                <!--  NOTE: Please add the following <FORM> element to your page.             -->
+                <!--  ----------------------------------------------------------------------  -->
+
+                <form action="https://www.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8" method="POST"
+                      onSubmit="return validate()" Class="formwrap">
+
+                    <script type="text/javascript">
+function validate(){
+var user = document.getElementById('name');
+var subject = document.getElementById('subject');
+var description = document.getElementById('description');
+
+//Username not empty?
+if(user.value.length == 0 ){
+alert("Contact Name is a mandatory field")
+return false;
+}
+else{
+return true;
+}
+}
+
+                    </script>
+
+                    <input type="hidden" name="orgid" value="00D80000000PN58"></input>
+                    <input type="hidden" name="retURL" value="http://aaap.force.com/AAAP/PBS_AAAP_HomePage"/>
+
+                    <!--  ----------------------------------------------------------------------  -->
+                    <!--  NOTE: These fields are optional debugging elements. Please uncomment    -->
+                    <!--  these lines if you wish to test in debug mode.                          -->
+                    <!--  <input type="hidden" name="debug" value=1>                              -->
+                    <!--  <input type="hidden" name="debugEmail"                                  -->
+                    <!--  value="nikilesh.kopparthi@gsa.gov">                                     -->
+                    <!--  ----------------------------------------------------------------------  -->
+
+                    <table>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><label for="name">Contact Name</label></td>
+                            <br/>
+                            <td><input id="name" maxlength="80" name="name" size="20" type="text"/></td>
+                        </tr>
+                        <tr>
+                            <td><label for="email">Email</label></td>
+                            <td><input id="email" maxlength="80" name="email" size="20" type="text"/></td>
+                        </tr>
+                        <tr>
+                            <td><label for="phone">Phone</label></td>
+                            <td><input id="phone" maxlength="40" name="phone" size="20" type="text"/></td>
+                        </tr>
+                        <tr>
+                            <td><label for="subject">Subject</label></td>
+                            <td><input id="subject" maxlength="80" name="subject" size="20" type="text"/></td>
+                        </tr>
+                        <tr>
+                            <td><label for="description">Description</label></td>
+                            <td><textarea name="description"></textarea></td>
+                        </tr>
+
+                        <tr>
+                            <td></td>
+                            <td><input type="submit" name="submit"/></td>
+                        </tr>
+                    </table>
+
+                    <input type="hidden" id="external" name="external" value="1"/><br/>
+
+                </form>
+            </div><!-- end rightcol -->
+
+            </body>
+        </div><!--/content-->
+
+
+    </div><!-- /Wrapper -->
+    <c:SiteFooterUX />
+</apex:page>

@@ -1,0 +1,1094 @@
+<apex:page controller="PBS_AAAP_IdentifyWinnerController" id="pageid" action="{!actionSearch}" sidebar="false" showHeader="false">
+    <style>
+        
+        /***
+        .bPageBlock{
+                background : none !important;
+                border : none !important;
+        }
+    
+        .pbBody{
+                background : none !important;
+                border : none !important;
+        }
+        **/
+    
+        .buttonclass {
+            background-color: #75BFD7;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        /******** Modal CSS starts ********/
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 100; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 30%;
+        }
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        /******** Modal CSS ends *******/
+        .errMessage {
+            color: red;
+            font-weight: bold;
+        }
+        .gmnoprint img {
+            max-width: none;
+        }
+        div.tooltip {
+            width: 20px;
+            float: right;
+            display: inline;
+        }
+        div.tooltip span {
+            display: none;
+            font-weight: normal;
+            text-align: left;
+            padding: 3px 5px;
+            margin-left: 8px;
+            width: 250px;
+        }
+        div.tooltip:hover span {
+            display: inline;
+            position: absolute;
+            border: 1px solid #cccccc;
+            background: #FFC;
+            color: #000000;
+            z-index: 10000;
+        }
+        #BasemapToggle {
+            position: absolute;
+            background-color: #ffffff;
+            top: 20px;
+            left: 57px;
+            z-index: 5;
+        }
+        #BasemapToggle tbody td:hover {
+            background-color: #dddddd;
+            cursor: pointer;
+        }
+        #BasemapToggle td {
+            border: 1px solid #C0C0C0;
+            border-collapse: collapse;
+            height: 12px;
+            padding: 2px 3px 2px 3px;
+            font-size: 12px;
+            color: #000000;
+            font-weight: normal;
+        }
+    </style>
+    <apex:includescript value="{!$Resource.jspdf}"/>
+    <apex:includescript value="{!$Resource.html2canvas}"/>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
+    </link>
+    
+    <apex:messages styleClass="errMessage"/>
+    <apex:form id="form_ident_win">
+        
+        <script>
+            function exitComplete(){
+                window.print(); 
+            }
+        </script>
+        <!--
+        <apex:actionFunction name="saveMapImage" action="{!saveMapImage}" status="status" oncomplete="">
+            <apex:param name="imagedetails" value="" />
+            <apex:param name="imgname" value="" />
+        </apex:actionFunction>
+        <apex:actionFunction name="saveLastMapImage" action="{!saveMapImage}" status="status" oncomplete="openScreenShotPage();">
+            <apex:param name="imagedetails" value="" />
+            <apex:param name="imgname" value="" />
+        </apex:actionFunction>
+        -->
+
+        <!-- Modal Section -->
+        <div id="myModal" class="modal" >
+            <!-- Modal content -->
+            <div class="modal-content" style="border-radius: 18px;">
+                <span class="close" onclick="clodeModal();return falsel">&times;</span>
+                <p id="modalText"></p>
+                <br/>
+                <input type="button" value="Continue" onclick="openScreenShotPage();return false" ></input>
+            </div>
+        </div>
+        <apex:inputHidden id="projectId" value="{!agencyRecord.PBS_AAAP_Project_ID__c}"/>
+        <apex:inputHidden id="regionId" value="{!agencyRecord.PBS_AAAP_Region__c}"/>
+        <apex:inputHidden id="rlpAfter2016" value="{!rlpAfter2016}"/>
+        <div id="pdfIdentifyWinner">
+            <apex:actionFunction name="snapshotmethod" action="{!callCloningClass}" reRender="spaceTable" status="status">
+                <apex:param id="anode" name="node" value="" />
+                <apex:param id="bnode" name="list" value="" />
+            </apex:actionFunction>
+            <apex:actionFunction action="{!redirectHist}" name="histFunc"/>
+            <apex:actionFunction action="{!redirectHist2}" name="histFunc2"/>
+            <apex:actionStatus id="status">
+                <apex:facet name="start">
+                    <div class="waitingSearchDiv" id="el_loading" style="background-color: #fbfbfb; height:100%;opacity:0.65;width:100%;">
+                        <div class="waitingHolder" style="top: 100px; width: 91px;">
+                            <img class="waitingImage" src="/img/loading.gif" title="Please Wait..." />
+                            <span class="waitingDescription">Loading...</span>
+                        </div>
+                    </div>
+                </apex:facet>
+            </apex:actionStatus>
+
+            <br/>
+            <apex:commandButton value="Save PDF and Exit" action="{!deleteImages}" id="btn1" oncomplete="exitComplete();"/>
+            <br/>
+            <apex:pageBlock id="pgblck_ident_win" mode="edit"
+                            title="Identify Winner- {!agencyRecord.PBS_AAAP_Project_ID__c}">
+                
+                <apex:pageBlockSection id="pgBlckPV" columns="2" title="Present Value Evaluation Criteria">
+
+                    <!--    <apex:pageBlockSectionItem >
+                        <apex:outputText value="T.I $ used for firm term"/>
+                            <apex:outputText />
+                                </apex:pageBlockSectionItem>   Weston cut this for sprint 2 -->
+                    <apex:pageBlockSectionItem id="pgBlckSecItem_FIRM_TERM_NEW">
+                        <!--            <apex:outputText value="New Lease" >  Weston -->
+                        <apex:outputText value=" TI Allowance for New Space per ABOA SF">
+                            <div class="helpOrb tooltip" style="position:relative;left:10px">
+                                <span>
+                                Total Estimated TI Allowance for New Space / ABOA SF. Not an amortized annual rate.
+                                </span>
+                            </div>
+                            <!-- Weston says here's the info button steve wanted -->
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <!-- attempting to restrict input to 5 digits belw weston -->
+                            <apex:outputText value="{0, number, ###,###,###,##0.00}">
+                                <apex:param value="{!agencyRecord.PBS_AAAP_TIUSED_FOR_FIRM_TERM_NEW__c}" />
+                            </apex:outputText>
+                            <!-- <apex:outputText id="inp_FIRM_TERM_NEW" value="{!agencyRecord.PBS_AAAP_TIUSED_FOR_FIRM_TERM_NEW__c}"/>                                             -->
+                            <apex:inputCheckBox value="{!newLeaseArchAndEng}" disabled="true"/>
+                            <apex:outputText value="Include A&E"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="pgBlckSecItem_BSAC_per_ABOA" >
+                        <!--            <apex:outputText value="New Lease" >  Weston -->
+                        <apex:outputText value=" BSAC for New Space per ABOA SF">
+                            <div class="helpOrb tooltip" style="position:relative;left:10px">
+                                <span>
+                                Total Estimated BSAC for New Space / ABOA SF. Not an amortized annual rate.
+                                </span>
+                            </div>
+                            <!-- Weston says here's the info button steve wanted -->
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <!-- attempting to restrict input to 5 digits belw weston -->
+                            <!--<apex:inputField id="inp_BSAC_per_ABOA"  onchange="limitFive(this.value)" styleClass="numericField"
+                                value="{!agencyRecord.PBS_AAAP_BSAC_per_ABOA__c}"/>-->
+                            <apex:outputText value="{0, number, ###,###,###,##0.00}">
+                                <apex:param value="{!agencyRecord.PBS_AAAP_BSAC_per_ABOA__c}" />
+                            </apex:outputText>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="pgBlckSecItem_FIRM_TERM_SUCC" >
+                        <!-- Weston old text here, new below <apex:outputText value="Continuing Lease"/> -->
+                        <apex:outputText value="TI Allowance for Continuing Space per ABOA SF">
+                            <div class="helpOrb tooltip" style="position:relative;left:10px">
+                                <span>
+                                Total Estimated TI Allowance for Continuing Space / ABOA SF. Not an amortized annual rate.
+                                </span> <!-- Weston says here's the info button steve wanted -->
+                            </div>
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <!-- <apex:inputField id="inp_FIRM_TERM_SUCC" onchange="limitFive(this.value)" styleClass="numericField"
+                                value="{!agencyRecord.PBS_AAAP_TIUSED_FOR_FIRM_TERM_SUCC__c}"/> -->
+                            <apex:outputText value="{0, number, ###,###,###,##0.00}">
+                                <apex:param value="{!agencyRecord.PBS_AAAP_TIUSED_FOR_FIRM_TERM_SUCC__c}" />
+                            </apex:outputText>
+                            <apex:inputCheckBox value="{!succLeaseArchAndEng}" disabled="true"/>
+                            <apex:outputText value="Include A&E"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="pgBlckSecItem_Continuing_Space_per_ABOA_SF"  >
+                        <!--            <apex:outputText value="New Lease" >  Weston -->
+                        <apex:outputText value=" BSAC for Continuing Space per ABOA SF">
+                            <div class="helpOrb tooltip" style="position:relative;left:10px">
+                                <span>
+                                Total Estimated BSAC for Continuing Space / ABOA SF. Not an amortized annual rate.
+                                </span>
+                            </div>
+                            <!-- Weston says here's the info button steve wanted -->
+                        </apex:outputText>
+                        <apex:outputPanel >
+                            <!-- attempting to restrict input to 5 digits belw weston -->
+                            <!-- <apex:inputField id="inp_Continuing_Space_per_ABOA_SF" onchange="limitFive(this.value)" styleClass="numericField"
+                                value="{!agencyRecord.BSAC_for_Continuing_Space_per_ABOA_SF__c}"/>-->
+                            <apex:outputText value="{0, number, ###,###,###,##0.00}">
+                                <apex:param value="{!agencyRecord.BSAC_for_Continuing_Space_per_ABOA_SF__c}" />
+                            </apex:outputText>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="pgBlckSecItem_MOVE_DEFAULT"  >
+                        <!-- old text here, new below weston <apex:outputText value="Estimated $/ANSI BOMA ABOA Physical Move Costs"/>  -->
+                        <apex:outputText value="Estimated Physical Move Costs per ABOA SF"/>
+                        <!-- <apex:inputField id="inp_MOVE_DEFAULT" onchange="limitFive(this.value)" styleClass="numericField"
+                            value="{!agencyRecord.PBS_AAAP_MOVE_DEFAULT__c}"/>-->
+                        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+                            <apex:param value="{!agencyRecord.PBS_AAAP_MOVE_DEFAULT__c}" />
+                        </apex:outputText>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="pgBlckSecItem_TELCOMM_DEFAULT"  >
+                        <apex:outputText value="Estimated Telecom Costs per ABOA SF"/>
+                        <!-- <apex:inputField id="inp_TELCOMM_DEFAULT" onchange="limitFive(this.value)" styleClass="numericField"
+                            value="{!agencyRecord.PBS_AAAP_TELCOMM_DEFAULT__c}"/>-->
+                        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+                            <apex:param value="{!agencyRecord.PBS_AAAP_TELCOMM_DEFAULT__c}" />
+                        </apex:outputText>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="pgBlckSecItem_OTHER_UPFRONT_COSTS"  >
+                        <!--<apex:outputText value="Estimated $/ANSI BOMA ABOA Build out Cost, in excess of the TI for both a new and continuing lease"/>-->
+                        <!-- <apex:outputText value="Lump Sum Costs per ABOA SF in Excess of TI (New & Continuing)"/> Weston new text below -->
+                        <!-- weston -->
+                        <apex:outputText value="Lump Sum Costs per ABOA SF in excess of TI">
+                            <div class="helpOrb tooltip" style="position:relative;left:10px">
+                                <span>
+                                This variable no longer applies to Continuing space offers in the PV.
+                                </span>
+                            </div>
+                        </apex:outputText>
+                        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+                            <apex:param value="{!agencyRecord.PBS_AAAP_PV_OTHER_UPFRONT_COSTS__c}" />
+                        </apex:outputText>
+                        <!-- <apex:inputField id="inp_OTHER_UPFRONT_COSTS" onchange="limitFive(this.value)" styleClass="numericField"
+                            value="{!agencyRecord.PBS_AAAP_PV_OTHER_UPFRONT_COSTS__c}"/>-->
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                <!---------------------------------------- Search Criteria ------------------------------------------------->
+                <apex:pageBlockSection columns="2" title="Search Criteria">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Lease Term"/>
+                        <apex:outputPanel >
+                            <!--<apex:inputField value="{!agencyRecord.PBS_AAAP_LEASE_TERM__c}"/>-->
+                            <!-- <apex:selectList value="{!agencyRecord.PBS_AAAP_LEASE_TERM__c}" id="leaseterm" size="1">
+                                <apex:selectOptions value="{!leaseTermsList}"/>
+                                </apex:selectList> -->
+                            <apex:outputText value="{!agencyRecord.PBS_AAAP_LEASE_TERM__c}"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Type of Requirement"/>
+                        <apex:outputText value="{!agencyRecord.PBS_AAAP_TYPE_OF_REQUIREMENT__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <!--   weston deleted this   <apex:outputText value="Range of ANSI/BOMA "/>
+                            <apex:outputText />-->
+                        <!-- weston new below   <apex:outputText value="Min"/> -->
+                        <apex:outputText value="ABOA SF Min"/>
+                        <apex:outputText value="{!agencyRecord.PBS_AAAP_USF_REQ_MIN__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <!-- weston new below         <apex:outputText value="Max"/>  -->
+                        <apex:outputText value="ABOA SF Max"/>
+                        <apex:outputText value="{!agencyRecord.PBS_AAAP_USF_REQ_MAX__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <!--      <apex:outputText value="Minimum Contiguous ANSI/BOMA ABOA"/> weston new below   -->
+                        <apex:outputText value="Minimum Contiguous ABOA SF"/>
+                        <apex:outputText value="{!agencyRecord.PBS_AAAP_MIN_CONT_USF__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Proximity to Metro within 2640ft"/>
+                        <apex:outputText id="metroArea" styleClass="metroArea"
+                                         value="{!agencyRecord.PBS_AAAP_WALKABLE_2640_FEET_METRO__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Type of Delineated Area"/>
+                        <apex:outputText value="{!agencyRecord.PBS_AAAP_DELINEATED_AREA_TYPE__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Include HVAC Overtime"/>
+                        <apex:inputField value="{!agencyRecord.PBS_AAAP_Include_HVAC_Overtime__c}" styleClass="HVACOT"
+                                         id="HVACOT"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Alt. Delineated Area"/>
+                        <apex:outputText value="{!agencyRecord.PBS_AAAP_DELINEATED_AREA_TYPE_DESC__c}">
+                            <!--<apex:actionSupport event="onchange" rerender="altdelAreaTypeDesc" status="counterStatus"/>-->
+                        </apex:outputText>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Total # of Official parking Spaces"/>
+                        <apex:outputText id="q33" value="{0, number, #}">
+                            <apex:param value="{!parkingSpacesOnAgency}"></apex:param>
+                        </apex:outputText>
+                        <!-- <apex:outputLabel value="{!parkingSpacesOnAgency}" /> -->
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Alt. Delineated Area Descriptor"/>
+                        <!-- <apex:inputField value="{!agencyRecord.PBS_AAAP_DELINEATED_DESCRIPTION__c}"/>
+                            <apex:selectList value="{!agencyRecord.PBS_AAAP_DELINEATED_DESCRIPTION__c}" id="altdelAreaTypeDesc" size="1" >
+                            <apex:selectOptions value="{!delineatedAreaTypeDescList}"/>
+                            </apex:selectList> -->
+                        <apex:outputText value="{!agencyRecord.PBS_AAAP_DELINEATED_DESCRIPTION__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <!-- Ingnor Parking Requirement ----->
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Ignore Parking Requirement"/>
+                        <!--<apex:inputField value="{!isParkingRequirement}" styleClass="HVACOT"
+                            id="HVACOT"/>-->
+                        <apex:inputCheckbox label="Absent" value="{!isParkingRequirement}" disabled="{!disableParkingOption}"/>
+
+                    </apex:pageBlockSectionItem>
+                    <!-- Ingnor Parking Requirement ----->
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Estimated HVAC Overtime Hours"/>
+                        <apex:outputText value="{!agencyRecord.PBS_AAAP_HVAC_OVERTIME_HOURS__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <!-- <apex:pageBlockSectionItem >
+                        <apex:inputField value="{!agencyRecord.PBS_AAAP_DAY_TIME_CLEANING_REQ__c}"/>
+                        <apex:outputText value="Include Daytime Cleaning"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem />   -->
+
+                </apex:pageBlockSection>
+            
+                
+                <div id="ignoreMap" data-html2canvas-ignore="false">
+                    <apex:outputPanel id="map_canvas" layout="block"
+                                      style="width:800px; height:500px;padding:0;margin:0;position:relative;display:none;">
+                        <table id="BasemapToggle" style="position:absolute;">
+                            <tr>
+                                <td id="streetTab" onclick="streetViewToggle()" style="font-weight:bold;">
+                                    Street
+                                </td>
+                                <td id="satTab" onclick="satelliteViewToggle()">
+                                    Satellite
+                                </td>
+                            </tr>
+                        </table>
+                    </apex:outputPanel>
+                </div>                
+            </apex:pageBlock>
+            <br/>
+            <br/>
+            <apex:repeat value="{!lstDocIds}" var="doc">
+                <img src="/servlet/servlet.FileDownload?file={!doc}" style="width:85%"/>
+                <br/>
+                <br/>
+            </apex:repeat>
+            
+        </div>
+    </apex:form>
+    <!-- Java Script Code -->
+    <script src="https://js.arcgis.com/3.17/"></script>
+    <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+    <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/mootools/1.5.1/mootools-yui-compressed.js"></script>-->
+    <script type="text/javascript">
+        /*function setResult(){
+        
+                    var inp_FIRM_TERM_NEW = document.getElementById('{!$Component.form_ident_win.pgblck_ident_win.pgBlckPV.pgBlckSecItem_FIRM_TERM_NEW.inp_FIRM_TERM_NEW}');  
+        
+                    var inp_BSAC_per_ABOA = document.getElementById('{!$Component.form_ident_win.pgblck_ident_win.pgBlckPV.pgBlckSecItem_BSAC_per_ABOA.inp_BSAC_per_ABOA}');  
+        
+                    var inp_FIRM_TERM_SUCC = document.getElementById('{!$Component.form_ident_win.pgblck_ident_win.pgBlckPV.pgBlckSecItem_FIRM_TERM_SUCC.inp_FIRM_TERM_SUCC}');  
+        
+                    var inp_Continuing_Space_per_ABOA_SF = document.getElementById('{!$Component.form_ident_win.pgblck_ident_win.pgBlckPV.pgBlckSecItem_Continuing_Space_per_ABOA_SF.inp_Continuing_Space_per_ABOA_SF}');  
+        
+                    var inp_MOVE_DEFAULT = document.getElementById('{!$Component.form_ident_win.pgblck_ident_win.pgBlckPV.pgBlckSecItem_MOVE_DEFAULT.inp_MOVE_DEFAULT}');  
+        
+                    var inp_TELCOMM_DEFAULT = document.getElementById('{!$Component.form_ident_win.pgblck_ident_win.pgBlckPV.pgBlckSecItem_TELCOMM_DEFAULT.inp_TELCOMM_DEFAULT}');  
+        
+                    var inp_OTHER_UPFRONT_COSTS = document.getElementById('{!$Component.form_ident_win.pgblck_ident_win.pgBlckPV.pgBlckSecItem_OTHER_UPFRONT_COSTS.inp_OTHER_UPFRONT_COSTS}');  
+        
+                        inp_FIRM_TERM_NEW.readOnly=true;
+                        inp_BSAC_per_ABOA.readOnly=true;
+                        inp_FIRM_TERM_SUCC.readOnly=true;
+                        inp_Continuing_Space_per_ABOA_SF.readOnly=true;
+                        inp_MOVE_DEFAULT.readOnly=true;
+                        inp_TELCOMM_DEFAULT.readOnly=true;
+                        inp_OTHER_UPFRONT_COSTS.readOnly=true;
+            }
+            window.onload = setResult;*/
+
+        function limitFive(val) {  //weston trying to weed out non numbers, limit to size of number
+            //alert(val);
+            //   if(val != null){
+            if (isNaN(val) || val < 0 || val > 999.99) {
+                alert("Per ABOA SF rates are required, not lump sum values. Amounts greater than $999.99 will not be accepted by the system.");
+                val = 0;
+                location.reload(true);
+                //reloadPage();
+            }
+            //  }
+        }
+
+        var mapDiv = document.getElementById('{!$Component.form_ident_win.pgblck_ident_win.map_canvas}');
+        var map, editToolbar, tool, symbols, toolbar;
+        var shape = [];
+
+        $(document).ready(function () {
+            $(selectCellSelector).css("display", "none");
+            shape = {!shape};
+            if ({!shape}) {
+                $('#btn_rend_props').show();
+            } else {
+                $('#btn_rend_props').hide();
+            };
+            $(mapDiv).hide();
+
+            //added by syam 06/07/2016 to enable or disable Proximity to Metro within 2640ft
+            //enable only if the region is NCR else disable
+            //var region = $('#regionId').val();
+            var region = document.getElementById('{!$Component.form_ident_win.regionId}').value;
+            if (region == "National Capital Region") {
+                $("#metroArea").prop('disabled', false);
+            }
+            else {
+                $(".metroArea").prop('disabled', true);
+            }
+            //added by syam on 09/30/2016 to disable the HVAC if the RLP Year greater than 2016
+            var rlpAfter2016 = document.getElementById('{!$Component.form_ident_win.rlpAfter2016}').value;
+            if (rlpAfter2016 == 'true') {
+                $("input.HVACOT").attr("checked", false);
+                $("input.HVACOT").attr("disabled", true);
+            }
+            else {
+                $(".HVACOT").prop('disabled', false);
+            }
+            $('.numericField').on('keypress', function (key) {
+                val = $(this).val();
+                if (key.charCode == 13) {
+                    if (isNaN(val) || val < 0 || val > 999.99) {
+                        alert("Per ABOA SF rates are required, not lump sum values. Amounts greater than $999.99 will not be accepted by the system.");
+                        $(this).val(0);
+                        //document.getElementById('pdfIdentifyWinner').focus();
+                        location.reload(true);
+                        return false;
+                    }
+                }
+                //return true;
+            });
+        });
+
+        function postPlotOnMap(map, fd) {
+            var sel = "#selectCell_" + fd.spaceId + "_" + fd.offerId;
+            //alert(sel+" => "+fd.inBounds);
+            $(sel).css("display", fd.inBounds ? "" : "none");
+            $(sel).closest("tr").css("display", fd.inBounds ? "" : "none");
+        }
+
+        function renderMap() {
+            require([
+                "esri/map",
+                "dojo/domReady!"
+            ], function (Map) {
+
+                var shape_name = null;
+
+                var arrayOfCoordinates = [];
+                console.log('shape ' + shape);
+                if (shape) {
+                    if (shape.polygon) {
+                        renderPolygon();
+                    }
+                    else if (shape.circle) {
+                        arrayOfCoordinates = shape;
+                        renderCircle(arrayOfCoordinates, 'circle');
+                    }
+                    $(selectCellSelector).css("display", "");
+                    $('#generatePDF').show();
+                    $('#saveIdWinner').show();
+                    $('#generatePDF2').show();
+                }
+                else {
+                    console.log('No delineated area found');
+                }
+            });//end require
+
+        }
+
+        var selectCellSelector = "td[id$='selectColumn'],th[id$='selectColumnheader']";
+
+        var props = JSON.parse('{!JSENCODE(props)}');
+
+        function renderCircle(arrayOfCoordinates, shape_name) {
+
+            require([
+                "esri/map",
+                "esri/graphic",
+                "esri/geometry/Geometry",
+                "esri/geometry/Circle",
+                "esri/geometry/Point",
+                "esri/symbols/SimpleMarkerSymbol",
+                "esri/symbols/SimpleLineSymbol",
+                "esri/symbols/SimpleFillSymbol",
+                "esri/Color",
+                "esri/SpatialReference",
+                "dojo/domReady!"
+            ], function (
+                    Map, Graphic, Geometry, Circle,
+                    Point, SimpleMarkerSymbol,
+                    SimpleLineSymbol, SimpleFillSymbol, Color, SpatialReference
+            ) {
+                $(mapDiv).show();
+                map = new Map(mapDiv, {
+                    center: [-84.409939, 33.7528113],
+                    zoom: 8,
+                    basemap: "osm"
+                });
+                map.on("load", function () {
+                    var latlng = [];
+
+                    $(".latlng").each(function () {
+                        latlng.push($(this).text());
+                    });
+
+                    var centerPoint = null;
+                    var point = new Point([arrayOfCoordinates.circle.path.lng, arrayOfCoordinates.circle.path.lat]);
+                    var circle = new Circle(point, {
+                        radius: arrayOfCoordinates.circle.radius,
+                        geodesic: true
+                    });
+
+                    console.log('circle ' + JSON.stringify(circle));
+                    var symbolc = new SimpleFillSymbol({
+                        color: [80, 12, 0, 80],
+                        style: "esriSFSSolid",
+                        outline: {  // autocasts as esri/symbols/SimpleLineSymbol
+                            color: [128, 12, 0, 128],
+                            width: 2
+                        }
+                    });
+                    map.graphics.add(new Graphic(circle, symbolc));
+                    centerPoint = new Point(arrayOfCoordinates.circle.path.lng, arrayOfCoordinates.circle.path.lat);
+                    var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 15,
+                            new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([128, 0, 0]), 1),
+                            new Color([178, 34, 34]));
+
+                    map.setExtent(circle.getExtent(), true);
+                    var circleOnMap;
+                    map.graphics.graphics.forEach(function (a, i) {
+                        if (a.geometry.type == 'polygon') {
+                            console.log('this is polygon');
+                            circleOnMap = a.geometry;
+                        }//end if geometry polygon
+                    });//end each graphic
+                    //Identify which points lies within the circle
+
+                    $.each(props.formData, function () {
+                        var fd = this;
+                        fd.inBounds = false;
+                        var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 15,
+                                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([128, 0, 0]), 1), new Color([178, 34, 34]));
+                        var graphic = new Graphic(new Point(fd.Lng, fd.Lat), symbol);
+                        graphic.setAttributes({ "fd": fd });
+                        map.graphics.add(graphic);
+                    });
+
+                    map.graphics.graphics.forEach(function (a, i) {
+                        if (a.geometry.type == 'point' && circleOnMap.contains(map.graphics.graphics[i].geometry)) {
+                            $.each(props.formData, function (index) {
+                                if (this.Lng == a.geometry.x && this.Lat == a.geometry.y) {
+                                    this.inBounds = true;
+                                }//end if
+                            });//end loop through the properties
+                        }//end if
+                    });//end loop through all points
+
+                    $.each(props.formData, function () { postPlotOnMap(map, this); });
+
+                    map.graphics.on("mouse-over", function (e) {
+                        if (e.graphic.geometry.type == 'point') {
+                            map.infoWindow.setTitle('<div style=\"height:0px;\"></div>');
+                            var fd = e.graphic.attributes.fd;
+                            var content =
+                                    '<div style="font-size:8pt;padding: 0px 0px 0px 0px;"><table>' +
+                                    '<tr><th>Building Name</th><td>' + fd.buildingName + '</td></tr>' +
+                                    //'<tr><th>Space Name</th><td>'+fd.spaceName+'</td></tr>'+
+                                    //'<tr><th>Address</th><td>'+fd.street+'<br/>'+fd.city+'</td></tr>'+
+                                    '<tr><th>Address</th><td>' + fd.street + '</td></tr>' +
+                                    '<tr><th>Coordinates</th><td>' + fd.Lat + ', ' + fd.Lng + '</td></tr>' +
+                                    '</table></div>';
+                            map.infoWindow.setContent(content);
+                            map.infoWindow.show(e.graphic.geometry);
+                        }//end if point
+                    }); //end mouse over
+                    map.graphics.on("mouse-out", function (e) { map.infoWindow.hide(); });
+
+
+                    //          ReturnPropsToSF(JSON.stringify(props), true);
+                });// end map onload
+            });//end require
+        }
+
+        function renderPolygon() {
+
+            require([
+                "esri/map",
+                "esri/geometry/Circle",
+                "esri/geometry/Polygon",
+                "esri/geometry/Point",
+                "esri/symbols/SimpleMarkerSymbol",
+                "esri/symbols/SimpleLineSymbol",
+                "esri/symbols/SimpleFillSymbol",
+                "esri/graphic",
+                "esri/layers/GraphicsLayer",
+                "esri/Color",
+                "dojo/domReady!"
+            ], function (
+                    Map, Circle, Polygon, Point, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol,
+                    Graphic, GraphicsLayer, Color) {
+                $(mapDiv).show();
+                map = new Map(mapDiv, {
+                    center: [-84.409939, 33.7528113],
+                    zoom: 8,
+                    basemap: "osm"
+                });
+                map.on("load", function () {
+                    debugger;
+                    var latlng = [];
+                    var arrayOfCoordinatesInternal = [];
+                    var arrayOfCoordinates = [];
+                    $(".latlng").each(function () {
+                        latlng.push($(this).text());
+                    });
+                    $.each(shape.polygon.paths, function (index) {
+                        var coll = [];
+                        console.log('this is lng :' + this.lng);
+                        coll.push(parseFloat(this.lng));
+                        coll.push(parseFloat(this.lat));
+                        arrayOfCoordinatesInternal.push(coll);
+                    });//end each
+                    var lastFirstPoint = [];
+                    lastFirstPoint.push(parseFloat(shape.polygon.paths[0].lng));
+                    lastFirstPoint.push(parseFloat(shape.polygon.paths[0].lat));
+                    arrayOfCoordinatesInternal.push(lastFirstPoint);
+                    arrayOfCoordinates.push(arrayOfCoordinatesInternal);
+
+                    var symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+                            new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([128, 0, 0]), 2),
+                            new Color([128, 0, 0, 0.25])
+                    );
+
+                    var singleRingPolygon = new Polygon(arrayOfCoordinates);
+                    var gra = new Graphic(singleRingPolygon, symbol);
+                    map.graphics.add(gra);
+                    //map.centerAndZoom(gra.geometry.getCentroid());
+                    map.setExtent(singleRingPolygon.getExtent(), true);
+
+                    var polygonOnMap;
+                    map.graphics.graphics.forEach(function (a, i) {
+                        if (a.geometry.type == 'polygon') {
+                            polygonOnMap = a.geometry;
+                        }//end if
+                    });//end forEach
+
+                    $.each(props.formData, function () {
+                        var fd = this;
+                        fd.inBounds = false;
+                        var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 15,
+                                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([128, 0, 0]), 1), new Color([178, 34, 34]));
+                        var graphic = new Graphic(new Point(fd.Lng, fd.Lat), symbol);
+                        graphic.setAttributes({ "fd": fd });
+                        map.graphics.add(graphic);
+                    });
+
+                    map.graphics.graphics.forEach(function (a, i) {
+                        if (a.geometry.type == 'point' && polygonOnMap.contains(map.graphics.graphics[i].geometry)) {
+                            $.each(props.formData, function (index) {
+                                if (this.Lng == a.geometry.x && this.Lat == a.geometry.y) {
+                                    this.inBounds = true;
+                                }
+                            });//end each
+                        }//end if
+                    });//end map graphic
+
+                    $.each(props.formData, function () { postPlotOnMap(map, this); });
+
+                    map.graphics.on("mouse-over", function (e) {
+                        if (e.graphic.geometry.type == 'point') {
+                            map.infoWindow.setTitle('<div style=\"height:0px;\"></div>');
+                            var fd = e.graphic.attributes.fd;
+                            var content =
+                                    '<div style="font-size:8pt;padding: 0px 0px 0px 0px;"><table>' +
+                                    '<tr><th>Building Name</th><td>' + fd.buildingName + '</td></tr>' +
+                                    //'<tr><th>Space Name</th><td>'+fd.spaceName+'</td></tr>'+
+                                    //'<tr><th>Address</th><td>'+fd.street+'<br/>'+fd.city+'</td></tr>'+
+                                    '<tr><th>Address</th><td>' + fd.street + '</td></tr>' +
+                                    '<tr><th>Coordinates</th><td>' + fd.Lat + ', ' + fd.Lng + '</td></tr>' +
+                                    '</table></div>';
+                            map.infoWindow.setContent(content);
+                            map.infoWindow.show(e.graphic.geometry);
+                        }//end if point
+                    }); //end mouse over
+
+                    map.graphics.on("mouse-out", function (e) { map.infoWindow.hide(); });
+
+                });//end onload
+            });//end require
+            //screenshot();
+        }
+
+        function streetViewToggle() {
+            require([
+                "esri/map"], function (Map) {
+                map.setBasemap("osm");
+                $("#streetTab").css("font-weight", "bold");
+                $("#satTab").css("font-weight", "normal");
+
+            });
+
+        } //end streetViewToggle
+        function satelliteViewToggle() {
+            require([
+                "esri/map"], function (Map) {
+                map.setBasemap("hybrid");
+                $("#satTab").css("font-weight", "bold");
+                $("#streetTab").css("font-weight", "normal");
+            });
+
+        } // satelliteViewToggle
+
+        //added by syam for jSPDF
+        function pdfDownload() {
+            console.log("pdf generating ...");
+            //$("#ignoreMap").hide();
+            var pdf = new jsPDF('p', 'pt', 'a4');
+            var canvasToImage = function (canvas) {
+                var img = new Image();
+                var dataURL = canvas.toDataURL('image/png');
+                img.setAttribute('crossOrigin', 'anonymous');
+                img.src = dataURL;
+                return img;
+            };
+            var canvasShiftImage = function (oldCanvas, shiftAmt) {
+                shiftAmt = parseInt(shiftAmt) || 0;
+                if (!shiftAmt) { return oldCanvas; }
+                var newCanvas = document.createElement('canvas');
+                newCanvas.height = oldCanvas.height - shiftAmt;
+                newCanvas.width = oldCanvas.width;
+                var img = canvasToImage(oldCanvas);
+                var ctx = newCanvas.getContext('2d');
+                ctx.drawImage(img, 0, shiftAmt, img.width, img.height, 0, 0, img.width, img.height);
+                return newCanvas;
+            };
+
+
+            var canvasToImageSuccess = function (canvas) {
+                var pdf = new jsPDF('l', 'px'),
+                        pdfInternals = pdf.internal,
+                        pdfPageSize = pdfInternals.pageSize,
+                        pdfScaleFactor = pdfInternals.scaleFactor,
+                        pdfPageWidth = pdfPageSize.width,
+                        pdfPageHeight = pdfPageSize.height,
+                        totalPdfHeight = 0,
+                        htmlPageHeight = canvas.height,
+                        htmlScaleFactor = canvas.width / (pdfPageWidth * pdfScaleFactor),
+                        safetyNet = 0;
+                while (totalPdfHeight < htmlPageHeight && safetyNet < 15) {
+                    var newCanvas = canvasShiftImage(canvas, totalPdfHeight);
+                    pdf.addImage(newCanvas, 0, 0, pdfPageWidth, 0, 'png', safetyNet, 'SLOW');
+                    totalPdfHeight += (pdfPageHeight * pdfScaleFactor * htmlScaleFactor);
+                    if (totalPdfHeight < htmlPageHeight) {
+                        pdf.addPage();
+                    }
+                    safetyNet++;
+                }
+
+                var d = new Date,
+                        dformat = [(d.getMonth() + 1).padLeft(),
+                                    d.getDate().padLeft(),
+                                    d.getFullYear()].join('/') + ' ' +
+                                [d.getHours().padLeft(),
+                                    d.getMinutes().padLeft(),
+                                    d.getSeconds().padLeft()].join(':');
+                // alert(dformat);
+                var projectId = document.getElementById('{!$Component.form_ident_win.projectId}').value;
+                pdf.save('IdentifyWinner-' + projectId + '-' + dformat + '.pdf');
+                console.log("end of pdf generation");
+            };
+
+            html2canvas($('#pdfIdentifyWinner')[0], {
+                "useCORS": true,
+                "allowTaint": false,
+                "logging": true,
+                onrendered: function (canvas) {
+                    canvasToImageSuccess(canvas);
+                    $("#ignoreMap").show();
+                }
+            });
+            return true;
+        }
+
+        Number.prototype.padLeft = function (base, chr) {
+            var len = (String(base || 10).length - String(this).length) + 1;
+            return len > 0 ? new Array(len).join(chr || '0') + this : this;
+        }
+        function pdfDownload1() {
+            var doc = new jsPDF();
+            var elementHandler = {
+                '#Search': function (element, renderer) {
+                    return true;
+                }
+            };
+            var source = $('#pdfIdentifyWinner').html();
+            doc.fromHTML(
+                    source,
+                    15,
+                    15,
+                    {
+                        'width': 180, 'elementHandlers': elementHandler
+                    });
+
+            doc.output("dataurlnewwindow");
+        }
+
+        function unique(list) {
+            var result = [];
+            $.each(list, function(i, e) {
+                if ($.inArray(e, result) == -1) result.push(e);
+            });
+            return result;
+        }
+
+        function snapshot(Id){
+            var off = [];
+            $('tr.dataRow > td:nth-child(2)').find('a:visible').each(function() {
+                console.log('a03'+$(this).attr('href').split('/a03').pop());
+                off.push('a03'+$(this).attr('href').split('/a03').pop());
+            });
+
+            if(off.length === 0){
+                alert('ID winner cannot be saved because there are no offers that fall within the specified area');
+            } else {
+                var uniOff = unique(off);
+                var offStr = uniOff.toString();
+
+                snapshotmethod(Id, offStr);
+            }
+        }
+        var offerstr = '';
+
+
+        // this  will save the selected space ids
+        var selectedSpacedIds;
+        var selectedofferdIds;
+        function getcheckedOffers(){
+            debugger;
+            var selSpacedIds = [];
+            var selofferdIds = [];
+            var allCheckbox = document.querySelectorAll('[cbox="offer"]');
+            var selectedVal = [];
+            for(var i =0 ;i<allCheckbox.length; i++){
+                var val = allCheckbox[i];
+                if(val.checked){
+                    selSpacedIds.push(val.getAttribute('space'));
+                    selofferdIds.push(val.getAttribute('offer'));
+                }
+            }
+
+            // removing unique
+            var uniqueOfferArray = removeDuplicates(selofferdIds);
+            selectedofferdIds =   uniqueOfferArray.join();
+            selectedSpacedIds =   selSpacedIds.join();
+        }
+
+        function pdfGen(){
+            var offer = [];
+            $('tr.dataRow > td:nth-child(2)').find('a:visible').each(function() {
+                console.log('a03'+$(this).attr('href').split('/a03').pop());
+                offer.push('a03'+$(this).attr('href').split('/a03').pop());
+            });
+
+            // get selected records 
+            getcheckedOffers();
+            console.log('***'+selectedofferdIds.length);
+            console.log('***'+selectedSpacedIds.length);
+
+            if(selectedofferdIds.length !== 0 && selectedSpacedIds.length !== 0) {
+                // making apex method al to get offer, spaces, rate
+                Visualforce.remoting.Manager.invokeAction(
+                        '{!$RemoteAction.PBS_AAAP_IdentifyWinnerController.fetchCookieData}',
+                        selectedofferdIds, selectedSpacedIds,
+                        function (result, event) {
+                            if (event.status) {
+                                debugger;
+
+                                // getting count for total offers, space, rate ( forms and pv links are not displayed as it is not part of requirement )
+                                var allIds = result.split(';');
+                                var OfferCount = allIds[0];
+                                var spaceCount = allIds[1];
+                                var rateCount = allIds[2];
+
+                                document.getElementById('modalText').innerHTML = 'Total Number of screen shot is <br/>Offers : ' + OfferCount
+                                        + ' <br/>Space ' + spaceCount
+                                        + ' <br/>Rate ' + rateCount;
+                                document.getElementById('myModal').style.display = 'block';
+                            } else if (event.type === 'exception') {
+                                alert(event.message + "<br/>\n<pre>" + event.where + "</pre>");
+                            } else {
+                                alert(event.message);
+                            }
+                        },
+                        {escape: true}
+                );
+            } else {
+                alert('Please select the Offers you wish to capture by selecting the boxes on the left side of the table.');
+            }
+
+
+
+        }
+
+        function clodeModal(){
+            document.getElementById('myModal').style.display = 'none';
+        }
+
+        function openScreenShotPage(){
+            Visualforce.remoting.Manager.invokeAction(
+                    '{!$RemoteAction.PBS_AAAP_IdentifyWinnerController.fetchCookieData}',
+                    selectedofferdIds, selectedSpacedIds,
+                    function(result, event){
+                        if (event.status) {
+                            debugger;
+
+
+                            // results of offers, spaces, rates in same requense
+                            var spiltRes = result.split(';');
+                            var allIds = spiltRes[3].split(',');
+
+                            /** code to get space ids **/
+                            var selspaceids = [];
+                            var offerRecids = [];
+                            for(var i = 0;i<allIds.length;i++){
+                                var preFix = allIds[i].substring(0, 3);
+                                if(  preFix == '{!$Label.PBS_AAAP_SpaceKeyPrefix}'){
+                                    selspaceids.push(allIds[i]);
+                                }
+                                else if(preFix == '{!$Label.PBS_AAAP_OfferKeyPrefix}'){
+                                    offerRecids.push(allIds[i]);
+                                }
+                            }
+
+                            var urls = [];
+
+                            // *************** section to get Link for PV **************/
+                            var urlsArray = document.querySelectorAll('[Link="copyLink"]');
+                            for(var i =0 ;i<urlsArray.length; i++){
+                                var val = urlsArray[i];
+                                if(selspaceids.indexOf(val.getAttribute('sId')) != -1){
+
+                                    var url = val.href.replace("PBS_AAAP_PV_Summary_Page","PBS_AAAP_PV_Summary_PageImage");
+                                    url = replaceAll(url, '=', '#')
+                                    urls.push(url);
+                                }
+                            }
+                            var strURL = urls.join();
+
+                            // total count of screen shots
+                            var totallen = (allIds.length + urls.length +(offerRecids.length * 4) + 1);
+
+                            // combining all offers, space, rate in a string to store in cookie
+                            var stringArray = allIds.join();
+
+                            // making completedIds cookie
+                            document.cookie = "apex__completeIds=";
+
+                            // making cookie for those for which we have to take screen shots.
+                            document.cookie = "apex__offerIds="+stringArray;
+                            document.cookie = "apex__links="+strURL;
+                            document.cookie = "apex__agencyId={!JSENCODE($CurrentPage.parameters.agencyId)}";
+                            document.cookie = "apex__spaceids="+(selspaceids.join());
+                            document.cookie = "apex__offerRecids="+(offerRecids.join());
+
+                            //closing modal
+                            clodeModal();
+
+                            // opening new scrren to take screen shots
+                            window.open('/apex/PBS_AAAP_relatedListSnapShop?agencyId={!JSENCODE($CurrentPage.parameters.agencyId)}&current=1&total='+totallen,"_blank");
+                            //window.open("/apex/offerform1217_Image?formtype=offerform1217&offerId="+offerRecids[0]+"&current=0&total=total&isfirst=yes","_blank");
+                            //window.open(replaceAll(firstEle, '#', '=')+"&current=1&total="+totallen,"_blank");
+                            //window.open("/apex/PBS_AAAP_OfferImg?id="+firstEle+"&current=1&total="+totallen,"_blank");
+                            //window.open(urls[0]+"&current=1&total="+totallen,"_blank");
+
+                        } else if (event.type === 'exception') {
+                            alert(event.message + "<br/>\n<pre>" + event.where + "</pre>");
+                        } else {
+                            alert(event.message);
+                        }
+                    },
+                    {escape: true}
+            );
+        }
+
+        function escapeRegExp(string){
+            return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        }
+
+        function replaceAll(str, term, replacement) {
+            return str.replace(new RegExp(escapeRegExp(term), 'g'), replacement);
+        }
+
+        function removeDuplicates(arr){
+            let unique_array = []
+            for(let i = 0;i < arr.length; i++){
+                if(unique_array.indexOf(arr[i]) == -1){
+                    unique_array.push(arr[i])
+                }
+            }
+            return unique_array
+        }
+
+        function screenshot(){
+            html2canvas(document.body, {
+                "useCORS": true,
+                "allowTaint": false,
+                "logging": true,
+                onrendered: function(canvas) {
+                    document.body.appendChild(canvas);
+                    document.getElementById("theDiv").style.display = 'none';
+                }
+            });
+        }
+
+        function callActionFunction(){
+            copyImage(document.getElementsByTagName('canvas')[0].toDataURL());
+        }
+
+        
+        
+        $( document ).ready(function() {
+            renderMap();
+        });
+
+    </script>
+    
+</apex:page>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RET_Base_Tax_Year_Valid</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+  NOT(ISBLANK( RET_Base_Tax_Year__c )),
+  OR(
+  NOT(ISNUMBER( RET_Base_Tax_Year__c )),
+  LEN( RET_Base_Tax_Year__c ) != 4)
+)</errorConditionFormula>
+    <errorMessage>Base Tax Year should be a valid 4 digit year.</errorMessage>
+</ValidationRule>

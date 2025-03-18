@@ -1,0 +1,272 @@
+<apex:page controller="PBS_AAAP_relateListSnapCntrl" id="pageid" showHeader="False" sidebar="False" lightningStylesheets="true">
+    <apex:form id="form_ident_win"> 
+       <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/> -->
+        <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+        <apex:actionFunction action="{!captureImage}" name="captureImage" rerender="frm" oncomplete="captureDone();">
+            <apex:param assignTo="{!strImageBlob1}" name="strImageBlob1" value=""/>
+            <apex:param assignTo="{!strImagename}" name="imagename" value=""/>
+        </apex:actionFunction>
+        <div id ="loadingdiv" style="display:none;"> 
+            <div class="waitingSearchDiv" id="el_loading" style="background-color: #fbfbfb; height:100%;opacity:0.65;width:100%;">
+                <div class="waitingHolder" style="top: 100px; width: 91px;">
+                    <img class="waitingImage" src="/img/loading.gif" title="Please Wait..." />
+                    <span class="waitingDescription" id="waitingDesc">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <div class="container" id="mapDiv">
+            <apex:outputPanel id="tab_props" layout="block">
+                <apex:pageBlock title="List of Offers" rendered="{!showTable}" id="spaceTable">
+                    <apex:panelGrid columns="1" id="ofr_images">
+                        <apex:outputPanel >
+                            <input id="btn_rend_props" type="button" value="Render Properties to Map"
+                                onclick="renderMap();"></input>
+                            <input id="generatePDF" type="button" value="Create and Save Abstract of Offers"
+                                onclick="pdfDownload()" style="display:none"></input>
+                            <apex:outputPanel rendered="{!showSaveIdButton}" >
+                                <input id="saveIdWinner" type="button" value="Save ID Winner"
+                                    onclick="snapshot('{!JSENCODE(agencyRecord2.id)}')" style="display:none"></input>
+                            </apex:outputPanel>
+                            <input id="generatePDF" type="button" value="Generate PDF"
+                                onclick="pdfGen();return false;" ></input>                      
+                        </apex:outputPanel>
+                        <apex:outputPanel id="offerImages">
+                            <br/>
+                            <table>
+                                <tr>
+                                    <td style="width: 150px;">
+                                        <apex:image value="{!$Resource.Offer_EnergyStar}" title="Energy Star"/>
+                                        <br/>
+                                        <apex:outputLabel value="Energy Star"/>
+                                    </td>
+                                    <td style="width: 150px;">
+                                        <apex:image value="{!$Resource.Offer_Metro}" title="Near to Metro"/>
+                                        <br/>
+                                        <apex:outputLabel value="Metro"/>
+                                    </td>
+                                    <td style="width: 150px;">
+                                        <apex:image value="{!$Resource.Offer_Historic}" title="Historic Property"/>
+                                        <br/>
+                                        <apex:outputLabel value="Historic Property"/>
+                                    </td>
+                                    <td style="width: 150px;">
+                                        <apex:image value="{!$Resource.Offer_HubZone}" title="HubZone Area"/>
+                                        <br/>
+                                        <apex:outputLabel value="HubZone Area"/>
+                                    </td>
+                                    <td style="width: 150px;">
+                                        <apex:image value="{!$Resource.Offer_Awarded}" title="Offer Awarded"/>
+                                        <br/>
+                                        <apex:outputLabel value="Awarded"/>
+                                    </td>
+                                    <td style="width: 150px;">
+                                        <apex:image value="{!$Resource.Offer_Selected}" title="Offer Selected"/>
+                                        <br/>
+                                        <apex:outputLabel value="Selected"/>
+                                    </td>
+                                    <td style="width: 150px;">
+                                        <apex:image value="{!$Resource.Offer_Problems}" title="Building Problems"/>
+                                        <br/>
+                                        <apex:outputLabel value="Building Problems"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+                        <br/>
+                    </apex:panelGrid>
+                    <input type="hidden" id="hiddenValue" name="iwfJson" value="{!identifyWinnerFormJson}" />
+                    <div id="relatedscreenshot">
+                        <apex:pageBlockTable value="{!identifyWinnerForm}" var="c">
+                            <!--update by snehith 04/05/2018 - for displaying Offer name with link on the page-->
+                            <apex:column >                              
+                                <span id="{!c.spaceId}"></span>
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">Offer Name</apex:facet>
+                                <apex:outputLink value="/{!c.offerId}" target="_blank"> {!c.offerName} 
+                                </apex:outputLink>
+                            </apex:column>
+                            <apex:column value="{!c.buildingName}">
+                                <apex:facet name="header">Building</apex:facet>
+                            </apex:column>
+                            <apex:column value="{!c.city}">
+                                <apex:facet name="header">City</apex:facet>
+                            </apex:column>
+                            <apex:column value="{!c.street}">
+                                <apex:facet name="header">Street</apex:facet>
+                            </apex:column>
+                            <apex:column value="{!c.typeOfSpace}">
+                                <apex:facet name="header">Type of Space</apex:facet>
+                            </apex:column>
+                            <apex:column value="{!c.SFOfSpace}">
+                                <apex:facet name="header">SF of Space</apex:facet>
+                            </apex:column>
+                            <apex:column value="{!c.NewAndSucc}">
+                                <apex:facet name="header">New/Continuing</apex:facet>
+                            </apex:column>
+                            <!--<apex:column >
+                                <apex:outputText value="{0, number, $#,###.00}">
+                                    <apex:param id="q5_rates_5_val" value="{!c.fullServiceRentFirm}"></apex:param>
+                                </apex:outputText>
+                                <apex:facet name="header">Full Serv rent</apex:facet>
+                            </apex:column>-->
+                            <apex:column >
+                                <!-- <apex:outputText value="{0, number, $#,###.00}">
+                                    <apex:param value="{!c.PVCosts}"></apex:param>
+                                    </apex:outputText>  -->
+                                <!--
+                                    <apex:outputLink value="/apex/PBS_AAAP_PV_Summary_Page?offerId={!c.offerId}&agencyId={!agencyId}&pv={!c.PVCosts}"
+                                    target="_new">
+                                    
+                                    <apex:outputText value="{0, number, $#,###.00}">
+                                    <apex:param value="{!c.PVCosts}"/>
+                                    </apex:outputText>
+                                    </apex:outputLink> -->
+                                <apex:facet name="header">PV</apex:facet>
+                                $
+                                <apex:outputLink value="/apex/PBS_AAAP_PV_Summary_Page?offerId={!URLENCODE(JSINHTMLENCODE(c.offerId))}&agencyId={!URLENCODE(JSINHTMLENCODE(agencyId))}&spaceId={!URLENCODE(JSINHTMLENCODE(c.spaceId))}&pv={!c.PVCosts}&newLease={!c.newLease}&succeedingLease={!c.succLease}&physicalMoveCost={!c.physicalcosts}&otherupfrontcosts={!c.otherupfrontcosts}&telecommunicationsCost={!c.telecommcosts}&bsacperABOA={!c.BSACperABOA}&bsacForContinuingSpace={!c.bsacForContinuingSpace}" target="_blank" HTML-Link="copyLink">
+                                    <apex:outputText value="{0, number,#,###.00}">
+                                        <apex:param value="{!c.PVCosts}"/>
+                                    </apex:outputText>
+                                </apex:outputLink>
+                                <!--     <apex:outputText value="{0, number, $#,###.00}">
+                                    <apex:param value="{!c.PVCosts}"/>
+                                    </apex:outputText>  -->
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">Flags</apex:facet>
+                                <apex:image value="{!$Resource.Offer_EnergyStar}" height="20" width="20"
+                                    rendered="{!c.isEnergyStar}"/>
+                                <apex:image value="{!$Resource.Offer_Metro}" height="20" width="20"
+                                    rendered="{!c.isMetro}"/>
+                                <apex:image value="{!$Resource.Offer_Historic}" height="20" width="20"
+                                    rendered="{!c.isHistoricProperty}"/>
+                                <apex:image value="{!$Resource.Offer_HubZone}" height="20" width="20"
+                                    rendered="{!c.isHUBZONEArea}"/>
+                                <apex:image value="{!$Resource.Offer_Selected}" rendered="{!c.isSelected}"/>
+                                <apex:image value="{!$Resource.Offer_Awarded}" rendered="{!c.isAwarded}"/>
+                                <apex:image value="{!$Resource.Offer_Problems}" rendered="{!c.isBuildingProblem}"/>
+                            </apex:column>
+                            <apex:column rendered="{!showSelectButton || true}" id="selectColumn">
+                                <div id="selectCell_{!c.spaceId}_{!c.offerId}" style="display:block">
+                                    <apex:commandLink value="Select" action="{!actionSelectSpace}" id="selectSpaceButton">
+                                        <apex:param name="selectedSpaceId" assignTo="{!selectedSpaceId}"
+                                            value="{!c.spaceId}"
+                                            id="spaceParam"/>
+                                        <apex:param name="selectedOfferId" assignTo="{!selectedOfferId}"
+                                            value="{!c.offerId}"
+                                            id="offerParam"/>
+                                    </apex:commandLink>
+                                </div>
+                                <apex:facet name="header">Action</apex:facet>
+                            </apex:column>
+                            <apex:column styleClass="latlng">
+                                <apex:outputText value="{!c.buildingName}&&{!c.lng}&&{!c.lat}" styleClass="longitude"
+                                    style="display:none;"/>
+                            </apex:column>
+                        </apex:pageBlockTable>
+                    </div>
+                </apex:pageBlock>
+            </apex:outputPanel>
+        </div>
+    </apex:form>
+    <script type="text/javascript">    
+        $( document ).ready(function() {
+            
+            var showSpaces = window.location.search.substring(1).split('&histId')[0].split('=')[1];
+            var spaceArray = [];
+            console.log('*&*&*'+showSpaces.length);
+            if(showSpaces.length > 0){
+                spaceArray = showSpaces.split(',');
+            }
+            console.log('*&*&*'+spaceArray);
+            console.log('---->> '+spaceArray.length);
+            
+            if (spaceArray.length > 0) {
+                $('tr.dataRow > td:nth-child(1)').find('span').each(function() {
+                    if($.inArray(this.id, spaceArray) == -1){
+                        console.log('---->> '+this.Id);
+                        $(this).closest('tr').attr('style', 'display:none');
+                    }
+                });
+            }
+           
+            
+            var decodedCookie = document.cookie;
+            var spaceIds = '';
+            var cookData = decodedCookie.split(';');
+            for(var i = 0; i <cookData.length; i++) {
+                name = cookData[i].split('=')[0];
+                value = cookData[i].split('=')[1];
+                if(name.trim() == 'apex__spaceids'){
+                    spaceIds = value;
+                }
+            }
+            var allSpaces = spaceIds.split(',');
+            for(var ele=0;ele<allSpaces.length;ele++){
+                document.getElementById(allSpaces[ele]).innerHTML = '<img src="/img/checkbox_checked.gif" alt="Checked" width="21" height="16" class="checkImg" id="IsPublic_chkbox" title="Checked"/>';
+            }
+            
+            takePic();
+        }); 
+    
+              
+        
+        function takePic(){
+            html2canvas(document.body, 
+                {
+                    useCORS: true,
+                    onrendered: function(canvas){                           
+                            var total = '{!JSENCODE($CurrentPage.parameters.total)}'; 
+                            var current = '{!JSENCODE($CurrentPage.parameters.current)}';                                 
+                            document.body.appendChild(canvas);
+                            document.getElementById("mapDiv").style.display = 'none';
+                            document.getElementById("loadingdiv").style.display = '';                               
+                            document.getElementById("waitingDesc").innerHTML = 'Taking '+current+' of '+total;
+                            captureImage(document.getElementsByTagName('canvas')[0].toDataURL(),'Related_List');
+                            
+                        }
+                    });
+            return false;
+        }
+        
+        
+        function captureDone(){
+            debugger;
+            var total = '{!JSENCODE($CurrentPage.parameters.total)}';             
+            var current = '{!JSENCODE($CurrentPage.parameters.current)}';  
+            current = parseInt(current)+1;
+            var decodedCookie = {!JSENCODE('document.cookie')};
+            var links = '';
+            var cookData = decodedCookie.split(';');
+            for(var i = 0; i <cookData.length; i++) {
+                name = cookData[i].split('=')[0];
+                value = cookData[i].split('=')[1];
+                if(name.trim() == 'apex__links'){
+                    links = value;
+                }
+            }
+            
+            var linksArray = links.split(',');
+            
+            // getting first element
+            var firstEle = linksArray[0];
+            linksArray.shift();
+            var strLinks = linksArray.join();
+            document.cookie = "apex__links="+strLinks;
+            var newURL = replaceAll(firstEle, '#', '=')+'&current='+current+'&total='+total;
+            window.location.href = newURL;
+            
+        }
+        
+        function replaceAll(str, term, replacement) {
+          return str.replace(new RegExp(escapeRegExp(term), 'g'), replacement);
+        }
+        
+        function escapeRegExp(string){
+            return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        }
+        
+    </script>
+</apex:page>

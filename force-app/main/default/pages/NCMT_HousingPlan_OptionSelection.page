@@ -1,0 +1,27 @@
+<apex:page showHeader="true" standardController="NCMT_Project__c" extensions="NCMT_HousingPlan_OptionSelection" lightningStylesheets="true">
+    <apex:slds />
+    <apex:includeLightning />
+    <div id="lightningPage"></div>
+     <script> 
+        var HTMLJSencodedRecId = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.id))}';
+        var HTMLJSencodedRecordType = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.recordType))}';
+        var HTMLJSencodedType = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.templateType))}';
+    	var HTMLJSencodedHPbool = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.isHP))}';
+    	var HTMLJSencodedHPId = '{!JSENCODE(HTMLENCODE($CurrentPage.parameters.idHP))}';
+        $Lightning.use("c:NCMT_HousingPlan_OptionSelection_App", function(){
+            $Lightning.createComponent("c:NCMT_HousingPlan_OptionSelection", {
+                "id" : HTMLJSencodedRecId,
+                "templateRecordType" : HTMLJSencodedRecordType,
+                "templateType" : HTMLJSencodedType,
+                "isHP" : HTMLJSencodedHPbool,
+                "idHP" : HTMLJSencodedHPId
+            },
+            'lightningPage',
+                function(cmp){
+     
+                });
+        
+        });
+  </script> 
+    
+</apex:page>

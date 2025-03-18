@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PBS_AAAP_Offer__c</fullName>
+    <externalId>false</externalId>
+    <label>Offer</label>
+    <lookupFilter>
+        <active>true</active>
+        <errorMessage>You can only add Additional Tax Parcel Information to RSAP Offers.</errorMessage>
+        <filterItems>
+            <field>PBS_AAAP_Offer__c.RecordType.Name</field>
+            <operation>equals</operation>
+            <value>RSAP</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>PBS_AAAP_Offer__c</referenceTo>
+    <relationshipLabel>Additional Tax Parcel Informations</relationshipLabel>
+    <relationshipName>Additional_Tax_Parcel_Informations</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>

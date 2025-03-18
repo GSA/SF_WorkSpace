@@ -1,0 +1,1010 @@
+<apex:page controller="PBS_LOP_OperatingCostController" showHeader="false" standardStylesheets="false" sidebar="false">
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+    <!--Julia added from here-->
+    <apex:includescript value="{!$Resource.showpopupportalhome}"/>
+     <script type="text/javascript" src="{!$Label.AAAP_JQUERY_URL}"></script>
+    <script type="text/javascript" src="{!$Label.AAAP_JQUERYUI_URL}"></script>
+    <!--Julia to here-->
+        
+    <script type="text/javascript"
+        src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+    <head>
+        <style type="text/css">
+            .txtclass {
+                margin: 0;
+                padding: 0;
+                border: 0;
+                font-size: 100%;
+                font: inherit;
+                vertical-align: baseline;
+            }
+        
+            .col1 {
+            text-align: left;
+            width: 350px;
+            }
+            .col2 {
+            text-align: center;
+            width: 230px;
+            }
+            .col3 {
+            text-align: center;
+            width: 230px;
+            }
+            .tabbed-table table td {
+            background: #fff;
+            }
+            h2 {
+            color: #fff;
+            font-weight: bold;
+            padding-left: 40px;
+            width: 80%;
+            font-size: 18px;
+            }
+            .ui-dialog {
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #999;
+            }
+            .ui-dialog a {
+            float: right;
+            font-weight: bold;
+            padding: 3px;
+            color: #999;
+            text-transform: uppercase;
+            font-size: 10px;
+            }
+            #lean_overlay {
+            position: fixed;
+            z-index: 100;
+            top: 0px;
+            left: 0px;
+            height: 100%;
+            width: 100%;
+            background: #000;
+            display: none;
+            }
+            .errMessage {
+            color: red;
+            }
+            .errorMsg {
+            color: red !important;
+            }
+            
+            .hr {
+            font-weight: bold;
+            font-size: 28px;
+            border-bottom: 1px solid #cccccc;
+            padding: 0 0 8px;
+            color: #002BAD;
+            padding-top: 15px;
+            <!-- J. Rogers changed margin-left from 45px for alignment -->
+            margin: 0px;
+            }
+            /*Julia change from here*/
+            .testButton {
+            border: solid black 1px;
+            border-radius:3px;padding:6px;
+            background:url(../images/btn_grey.png) 0 0 no-repeat !important;
+            background-position:-5px 145px;color:#333333;
+            font-size:12px;
+            text-decoration:none;
+            width:130px; height:25px;
+            display:inline-block;
+            padding:7px 10px;
+            text-align: center;
+            font-weight: normal;
+            font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+            -webkit-font-smoothing: antialiased;
+            color:#000000;
+            }
+            
+            .continueButton{
+            padding: 0px 36px 3px 36px;
+            margin-right: 10px;
+            font-size: 13px;
+            font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+            color: #666666;
+            cursor:pointer; 
+            background-image: linear-gradient(#F8F8F8, #D3D3D3); 
+            border: solid #B0B0B0 1.25px; 
+            border-radius: 5px; 
+            height: 37px; 
+            width: 152px;
+            }
+            
+            .continueButton:hover {
+            background-image: linear-gradient(#D3D3D3, #F8F8F8);
+            border: solid #B0B0B0 1.25px; 
+            }
+            /*Julia change to here*/
+             .infopopup {
+              position:fixed !important;
+              display:inline-block;
+              top:21% !important;
+              left:50% !important;
+              //width:700px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+            //transform: translate(-50%, -50%); !important;
+            }
+             .infopopup1 {
+              position:fixed !important;
+              display:inline-block;
+              top:92% !important;
+              left:50% !important;
+              //width:700px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+            //transform: translate(-50%, -50%); !important;
+            }
+             .infopopup2 {
+              position:fixed !important;
+              display:inline-block;
+              top:94% !important;
+              left:50% !important;
+              //width:700px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+            //transform: translate(-50%, -50%); !important;
+            }
+            .infopopup3 {
+              position:fixed !important;
+              display:inline-block;
+              top:95% !important;
+              left:50% !important;
+              //width:700px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+            //transform: translate(-50%, -50%); !important;
+            }
+            .infopopup4 {	
+              position:fixed !important;	
+              display:inline-block;	
+              top:21% !important;	
+              left:60% !important;	
+              //width:700px !important;	
+              //height 800px !important;	
+              margin-left:-350px !important;	
+              margin-top:-350px !important;	
+            //transform: translate(-50%, -50%); !important;	
+            }
+        </style>
+        <!--apex:outputText id="javaScriptBlock">
+            function funOncomplete(){
+                console.log('fononcomplete');
+                if({!!isShowError}){
+                    centerPopup();
+                    loadPopup();
+                }
+            }
+        </apex:outputText-->
+    </head>
+    <!--body onload="centerPopup();loadPopup();"-->
+        
+    
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+        <ul>
+            <li><a href="/RSAP/portalHome">RSAP Home</a> </li>
+            <li>|</li>
+            <li><a href="/AAAP/portalHome">AAAP</a></li>
+            <li>|</li>
+            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
+                <apex:outputLink value="/AAAP/home/home.jsp">
+                    <li>{!$Label.site.login_button}</li>
+                </apex:outputLink>
+                <li> |</li>
+                <apex:outputLink value="/AAAP/ForgotPassword">
+                    <li>{!$Label.site.forgot_your_password_q}</li>
+                </apex:outputLink>
+                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
+                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
+                    <li>{!$Label.site.new_user_q}</li>
+                </apex:outputLink>
+            </apex:panelGroup>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>{!$Label.site.logout}</li>
+            </apex:outputLink>
+        </ul>
+    </div>
+    <!--/login-->
+    <div id="wrapper">
+        <c:lop_inside_header />
+        <div id="content" class="operating-cost">
+            <apex:panelGrid rendered="{!!isValidUser}">
+                <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+                <apex:messages styleClass="errMessage" id="message"/>
+            </apex:panelGrid>
+            <apex:panelGroup rendered="{!isValidUser}">
+                <apex:panelGrid columns="2" style="float:right">
+                    <a href="#" onclick="window.print();"></a>
+                    <apex:outputLabel style="padding-right:47px"></apex:outputLabel>
+                </apex:panelGrid>
+                <br/>
+                <c:lopHeader myOffer="{!lopOffer}" myProject="{!rlp}" offerDueDate="{!offerDueDate}"/>
+                <c:PBS_LOP_ProgressBar myValue="{!lopOffer.Id}" step="2" linksToViewModePage="{!isEditable}"/>
+            </apex:panelGroup>
+            
+            <apex:form id="opForm" rendered="{!isValidUser}">
+                <apex:actionFunction action="{!saveData}" name="saveTheForm" reRender="totalCal,q27,q33,q33Gov"  />
+                <div class="hr" style="width: 92%;">{!QLabels.opCostsPgHdr}</div>
+                <!-- J. Rogers changed margin-left from 45px for alignment -->
+                <div style="margin-left:0px;font-size: 14px;line-height: 145%;padding-top: 20px;letter-spacing: .01em;width:92%;">
+
+
+                    The worksheet on this page generates a GSA Form 1217, Lessor’s Annual Cost Statement,  which becomes an offer
+                    document upon submission of your final offer proposal. The column on the left for ‘Entire Building’ represents
+                    the total annual amounts for the entire building.  The column on the right for ‘Govt Leased Areas’
+                    represents the total annual amounts for the portion of the building offered to the Government for Lease.
+                    
+                </div>
+                <apex:inputHidden id="draftMsgFlag" value="{!draftMsgFlag}"/>
+                <apex:inputHidden id="pgUrl" value="{!pageUrl}"/>
+                <apex:outputPanel >
+                    <script>
+                        var errorExists = false;
+                    </script>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!(lopoffer.PBS_AAAP_Office_RSF_OFFERED__c == Null || lopoffer.PBS_AAAP_Office_RSF_OFFERED__c == 0
+                                            || lopoffer.PBS_AAAP_GEN_PURPOSE_RENTABLE__c == Null || lopoffer.PBS_AAAP_GEN_PURPOSE_RENTABLE__c == 0)}">
+                    <script>
+                        errorExists = true;
+                    </script>
+                </apex:outputPanel>
+                <!-- J. Rogers added margin-left -->
+                <apex:pageBlock html-style="margin-left:0px">
+                    <!--- Prorate changes start -->
+                    <apex:outputPanel id="pgBlockMessages">
+                    <apex:messages styleClass="errMessage">
+                    
+     
+                        </apex:messages>
+                        </apex:outputPanel>
+                    <!-- Prorate changes end -->
+                    <apex:outputPanel rendered="{!viewOnly}">
+                        <apex:outputLabel id="msgview" styleClass="errMessage" value="{!viewMsg}"/>
+                    </apex:outputPanel>
+                    <div class="tabbed-table">
+                        <!--h3 class="blue">Operating Costs</h3>-->
+                        <div id="example_wrapper_op" class="dataTables_wrapper" role="grid" style="background-color: #f6f6f6">
+                            <table id="offersTable" styleClass="tablesorter" style="border:0px; background-color:#fff;">
+                                <h2>&nbsp;</h2>
+                                <p></p>
+                                <h2 style="color:black">{!QLabels.lopopCostsSectOneHdr}</h2>
+                                <!-- Prorate changes start -->
+                                <div style="text-align: right;padding-right: 60px;">
+                                    <a class="popup" style="margin-top: 15px;" href="#Prorate_Info"><img
+                                            src="{!$Resource.Info_Icon}"/></a>
+                                        <div id="Prorate_Info" class="infopopup"
+                                            style="display:none; text-align: left; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                            <p>This button automatically populates the operating costs for the government leased areas by prorating the values for the entire building by 
+                                             the percent of the total building RSF the government would occupy in a lease. This function requires the For Entire Building column to be completed
+                                             first. Individual costs can still be edited manually after the button function is complete. Pressing the button will replace any values you have
+                                             previously entered in the For Govt Leased Areas column.</p>
+                                        </div>
+                                </div>
+                                <div style="padding: 0px 19px;padding-bottom:10px;text-align: right;padding-right: 70px;">
+                                    <!--from Santhosh: oncomplete="showModal(); return false;" I added oncomplete methods-->
+                                    <apex:commandButton action="{!checkValidations}" value="Prorate" reRender="pgBlockMessages" oncomplete="centerPopup();loadPopup();" styleClass="btnSave" />
+                                    <!--apex:commandButton action="{!checkValidations}" value="Prorate" reRender="pgBlockMessages,javaScriptBlock" oncomplete="funOncomplete();" styleClass="btnSave" /-->
+                                </div>
+                            <!-- Prorate changes end-->
+                                <!--<br/>-->
+                                <!--<span style="padding-left: 40px;">Lessor’s Annual Cost for Entire Building / Lessors Annual Cost for Government-Leased Area</span>-->
+                                <apex:panelGrid id="pangrid_sect1" columnClasses="col1, col2,col3" columns="3"
+                                    width="600px" frame="border" rules="all">
+                                    <apex:outputText id="txt_col_zero">&nbsp;</apex:outputText>
+                                    <apex:outputText id="txt_col_one_space" value="{!QLabels.lopOpCostCol1}"
+                                        style="font-weight:bold;"></apex:outputText>
+                                    <apex:outputText id="txt_col_one_spaceGov" value="{!QLabels.lopOpCostCol2}"
+                                        style="font-weight:bold;"></apex:outputText>
+                                    <apex:outputText id="txt_sub_sect_one" value="{!QLabels.opCostsSubSectOne}"
+                                        style="font-weight:bold;"></apex:outputText>
+                                    <apex:outputText id="txt_sub_sect_one_space">&nbsp;</apex:outputText>
+                                    <apex:outputText id="txt_sub_sect_one_spaceGov">&nbsp;</apex:outputText>
+                                    <apex:outputPanel >
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText id="txt_q5"
+                                            value="{!QLabels.lopopCostsQ5}"></apex:outputText>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q5" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_CLEANING_SALARIES__c}"></apex:inputField>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q5Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_CLEANING_SALARIES_GOV__c}"></apex:inputField>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel >
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText id="txt_q6"
+                                            value="{!QLabels.lopopCostsQ6}"></apex:outputText>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q6" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_CLEANING_SUPPLIES__c}"></apex:inputField>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q6Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_CLEANING_SUPPLIES_GOV__c}"></apex:inputField>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel >
+                                        
+                                        <p class="txtclass" style="padding-left:15px;">
+                                        <apex:outputText id="txt_q7"
+                                            value="{!QLabels.lopopCostsQ7}"></apex:outputText>
+                                        </p>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q7" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_CLEANING_CONTRACT_SERVICES__c}"></apex:inputField>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q7Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_CLEANING_CONTRACT_SERVICES_GOV__c}"></apex:inputField>
+                                    </apex:outputPanel>
+                                    <apex:outputText id="txt_sub_sect_two" value="{!QLabels.opCostsSubSectTwo}"
+                                        style="font-weight:bold;"></apex:outputText>
+                                    <apex:outputText id="txt_sub_sect_two_space">&nbsp;</apex:outputText>
+                                    <apex:outputText id="txt_sub_sect_two_spaceGov">&nbsp;</apex:outputText>
+                                    <apex:outputPanel >
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText id="txt_q8"
+                                            value="{!QLabels.lopopCostsQ8}"></apex:outputText>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q8" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_HEATING_SALARIES__c}"></apex:inputField>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q8Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_HEATING_SALARIES_GOV__c}"></apex:inputField>
+                                    </apex:outputPanel>
+                                    <apex:panelGroup id="pangrp_fuel">
+                                        <apex:outputPanel >
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <apex:outputText id="txt_q9"
+                                                value="{!QLabels.lopopCostsQ9}"></apex:outputText>
+                                            &nbsp;
+                                        </apex:outputpanel>
+                                        <apex:selectList id="select_q9" value="{!FuelType}" multiselect="false"
+                                            size="1">
+                                            <apex:selectOptions id="list_q9"
+                                                value="{!FuelTypeOpts}"></apex:selectOptions>
+                                        </apex:selectList>
+                                    </apex:panelGroup>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q9" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_HEATING_FUEL_COST__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q9Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_HEATING_FUEL_COST_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText id="txt_q10"
+                                            value="{!QLabels.lopopCostsQ10}"></apex:outputText>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q10" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_HEATING_MAINTENANCE__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q10Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_HEATING_MAINTENANCE_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputText id="txt_sub_sect_three" value="{!QLabels.opCostsSubSectThree}"
+                                        style="font-weight:bold;"></apex:outputText>
+                                    <apex:outputText id="txt_sub_sect_three_space">&nbsp;</apex:outputText>
+                                    <apex:outputText id="txt_sub_sect_three_spaceGov">&nbsp;</apex:outputText>
+                                    <apex:outputPanel >
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText id="txt_q11"
+                                            value="{!QLabels.lopopCostsQ11}"></apex:outputText>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q11" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_ELECTRICAL_POWER__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q11Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_ELECTRICAL_POWER_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText id="txt_q12"
+                                            value="{!QLabels.lopopCostsQ12}"></apex:outputText>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q12" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_ELECTRICAL_REPLACEMENT__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q12Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_ELECTRICAL_REPLACEMENT_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText id="txt_q13"
+                                            value="{!QLabels.lopopCostsQ13}"></apex:outputText>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q13" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_ELECTRICAL_SPECIALEQUIP__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q13Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_ELECTRICAL_SPECIALEQUIP_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        <p class="txtclass" style="padding-left:15px;">
+                                        <apex:outputText id="txt_q14"
+                                            value="{!QLabels.lopopCostsQ14}"></apex:outputText>
+                                        </p>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q14" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_ELECTRICAL_MAINTENANCE__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q14Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_ELECTRICAL_MAINTENANCE_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputText id="txt_sub_sect_four" value="{!QLabels.opCostsSubSectFour}"
+                                        style="font-weight:bold;"></apex:outputText>
+                                    <apex:outputText id="txt_sub_sect_four_space">&nbsp;</apex:outputText>
+                                    <apex:outputText id="txt_sub_sect_four_spaceGov">&nbsp;</apex:outputText>
+                                    <apex:outputPanel >
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText id="txt_q15"
+                                            value="{!QLabels.lopopCostsQ15}"></apex:outputText>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q15" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_PLUMBING_WATER__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q15Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_PLUMBING_WATER_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText id="txt_q16"
+                                            value="{!QLabels.lopopCostsQ16}"></apex:outputText>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q16" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_PLUMBING_SUPPLIES__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q16Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_PLUMBING_SUPPLIES_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText id="txt_q17"
+                                            value="{!QLabels.lopopCostsQ17}"></apex:outputText>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q17" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_PLUMBING_MAINTENANCE__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q17Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_PLUMBING_MAINTENANCE_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputText id="txt_sub_sect_five" value="{!QLabels.opCostsSubSectFive}"
+                                        style="font-weight:bold;"></apex:outputText>
+                                    <apex:outputText id="txt_sub_sect_five_space">&nbsp;</apex:outputText>
+                                    <apex:outputText id="txt_sub_sect_five_spaceGov">&nbsp;</apex:outputText>
+                                    <apex:outputPanel >
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText id="txt_q18"
+                                            value="{!QLabels.lopopCostsQ18}"></apex:outputText>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q18" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_AC_UTILITIES__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q18Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_AC_UTILITIES_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText id="txt_q19"
+                                            value="{!QLabels.lopopCostsQ19}"></apex:outputText>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q19" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_AC_MAINTENANCE__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q19Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_AC_MAINTENANCE_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputText id="txt_sub_sect_six" value="{!QLabels.opCostsSubSectSix}"
+                                        style="font-weight:bold;"></apex:outputText>
+                                    <apex:outputText id="txt_sub_sect_six_space">&nbsp;</apex:outputText>
+                                    <apex:outputText id="txt_sub_sect_six_spaceGov">&nbsp;</apex:outputText>
+                                    <apex:outputPanel >
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText id="txt_q20"
+                                            value="{!QLabels.lopopCostsQ20}"></apex:outputText>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q20" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_ELEVATOR_SALARIES__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q20Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_ELEVATOR_SALARIES_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText id="txt_q21" 
+                                            value="{!QLabels.lopopCostsQ21}"></apex:outputText>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q21" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_ELEVATOR_MAINTENANCE__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q21Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_ELEVATOR_MAINTENANCE_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputText id="txt_sub_sect_seven" value="{!QLabels.opCostsSubSectSeven}"
+                                        style="font-weight:bold;"></apex:outputText>
+                                    <apex:outputText id="txt_sub_sect_seven_space">&nbsp;</apex:outputText>
+                                    <apex:outputText id="txt_sub_sect_seven_spaceGov">&nbsp;</apex:outputText>
+                                    <apex:outputPanel >
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText id="txt_q22"
+                                            value="{!QLabels.lopopCostsQ22}"></apex:outputText>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q22" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_BLDG_ENGINEERCOST__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q22Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_BLDG_ENGINEERCOST_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText id="txt_q23"
+                                            value="{!QLabels.lopopCostsQ23}"></apex:outputText>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q23" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_SECURITY__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q23Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_SECURITY_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        <p class="txtclass" style="padding-left:16px;">
+                                        <apex:outputText id="txt_q24"
+                                            value="{!QLabels.lopopCostsQ24}"></apex:outputText>
+                                        </p>
+                                    </apex:outputpanel>
+                                    
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q24" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_SSTAX_WORKCOMP__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q24Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_SSTAX_WORKCOMP_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText id="txt_q25"
+                                            value="{!QLabels.lopopCostsQ25}"></apex:outputText>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q25" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_LANDSCAPING_MAINTENANCE__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q25Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_LANDSCAPING_MAINTENANCE_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText id="txt_q26"
+                                            value="{!QLabels.lopopCostsQ26}"></apex:outputText>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q26" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_TOTAL_OTHER_COSTS__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q26Gov"  onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_TOTAL_OTHER_COSTS_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputText id="txt_q27" value="{!QLabels.lopopCostsQ27}"
+                                        style="font-weight:bold;"></apex:outputText>
+                                    <apex:outputText id="q27" value="{0, number, currency}" style="font-weight:bold;">
+                                        <apex:param value="{!lopoffer.PBS_AAAP_SRVC_UTIL_TOTAL__c}"></apex:param>
+                                    </apex:outputText>
+                                       
+                                    <apex:outputPanel id="totalCal">
+                                        <div style="padding-top: 14px;">
+                                        <apex:outputText id="q27Gov" value="{0, number, currency}"
+                                                         style="font-weight:bold;">
+                                            <apex:param value="{!lopoffer.PBS_AAAP_SRVC_UTIL_TOTAL_GOV__c}"></apex:param>
+                                        </apex:outputText>
+                                        <br />
+                                        <apex:outputText value="{0, number, currency}">
+                                            <apex:param value="{!lopoffer.PBS_AAAP_OP_COST_COST_PER_RSF__c}"></apex:param>
+                                        </apex:outputText>/RSF - &nbsp;
+                                        <apex:outputText value="{0, number, currency}">
+                                            <apex:param value="{!lopoffer.PBS_AAAP_OP_COST_COST_PER_ABOA__c}"></apex:param>
+                                        </apex:outputText>/ABOA SF</div>
+                                    </apex:outputPanel>
+                                </apex:panelGrid>
+                                <p></p>
+                                <h2 style="color:black">{!QLabels.opCostsSectTwoHdr}</h2>
+                                <apex:panelGrid id="pangrid_sect3" width="600px" columnClasses="col1, col2, col3"
+                                    columns="3" frame="border" rules="all">
+                                    <apex:outputPanel >
+                                        <apex:outputText id="txt_q28"
+                                            value="{!QLabels.lopopCostsQ28}"></apex:outputText>
+                                        <a class="popup" href="#Modal_Bldg_Ques10"><img
+                                            src="{!$Resource.Info_Icon}"/></a>
+                                        <div id="Modal_Bldg_Ques10" class="infopopup1"
+                                            style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                            <p>Include all applicable real estate taxes imposed upon the property. This total cost shall be accounted for when defining the shell rent per ABOA SF on the Rates page and shall NOT be priced into the operating costs or elsewhere.</p>
+                                        </div>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q28" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_REAL_ESTATE_TAXES__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q28Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_REAL_ESTATE_TAXES_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        <apex:outputText id="txt_q29"
+                                            value="{!QLabels.lopopCostsQ29}"></apex:outputText>
+                                        <a class="popup" href="#Modal_Bldg_Ques11"><img
+                                            src="{!$Resource.Info_Icon}"/></a>
+                                        <div id="Modal_Bldg_Ques11" class="infopopup2"
+                                            style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                            <p>Enter the annual cost of fire, liability, and other insurance carried on the entire building in which the offered space is located. 
+                                            This total cost shall be accounted for when defining the shell rent per ABOA SF on the Rates page and shall NOT be priced into the operating costs or elsewhere.
+                                            </p>
+                                        </div>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q29" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_INSURANCE__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q29Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_INSURANCE_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        <apex:outputText id="txt_q30"
+                                            value="{!QLabels.lopopCostsQ30}"></apex:outputText>
+                                        <a class="popup" href="#Modal_Bldg_Ques12"><img
+                                            src="{!$Resource.Info_Icon}"/></a>
+                                        <div id="Modal_Bldg_Ques12" class="infopopup2"
+                                            style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                            <p>Enter the annual cost of wages, materials, and outside services used in repairs and maintenance of the building itself 
+                                            and all similar repairs and maintenance costs NOT including items already considered elsewhere such as heating, electrical,
+                                             plumbing, air conditioning, and elevators. This includes major repairs and changes in the nature of a permanent improvement 
+                                             such as annual cost to replace relatively short-lived items such as boilers, compressors, elevators, and roof coverings.
+                                              This total cost shall be accounted for when defining the shell rent per ABOA SF on the Rates page and shall NOT be priced 
+                                              into the operating costs or elsewhere.
+                                            </p>
+                                        </div>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q30" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_BUILDING_MAINTENANCE__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q30Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_BUILDING_MAINTENANCE_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputpanel >
+                                        <apex:outputText id="txt_q31"
+                                            value="{!QLabels.lopopCostsQ31}"></apex:outputText>
+                                        <a class="popup" href="#Modal_Bldg_Ques13"><img
+                                            src="{!$Resource.Info_Icon}"/></a>
+                                        <div id="Modal_Bldg_Ques13" class="infopopup3"
+                                            style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                            <p>Enter any lease commission cost for which the lessor may be responsible due to this government leasing action. 
+                                            This total cost shall be accounted for when defining the shell rent per ABOA SF on the Rates page and shall NOT be 
+                                            priced into the operating costs or elsewhere.
+                                            </p>
+                                        </div>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q31" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_LEASE_COMMISSION__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q31Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_LEASE_COMMISSION_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        <apex:outputText id="txt_q32"
+                                            value="{!QLabels.lopopCostsQ32}"></apex:outputText>
+                                        <a class="popup" href="#Modal_Bldg_Ques14"><img
+                                            src="{!$Resource.Info_Icon}"/></a>
+                                        <div id="Modal_Bldg_Ques14" class="infopopup3"
+                                            style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                            <p>Include annual administrative expenses such as agency fees, legal fees, auditing, and advertising. 
+                                            Do not include financial charges such as income or corporate taxes or organization expenses. Tenant 
+                                            improvement management fees shall not be included here and will be priced on the Rates page. This total 
+                                            cost shall be accounted for when defining the shell rent on the Rates page and shall NOT be priced into
+                                             the operating costs or elsewhere.
+                                            </p>
+                                        </div>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q32" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_MANAGEMENT__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputPanel >
+                                        $&nbsp;
+                                        <apex:inputField id="q32Gov" onchange="saveTheForm();"
+                                            value="{!lopoffer.PBS_AAAP_MANAGEMENT_GOV__c}"></apex:inputField>
+                                    </apex:outputpanel>
+                                    <apex:outputText id="txt_q33" value="{!QLabels.lopopCostsQ33}"
+                                        style="font-weight:bold;"></apex:outputText>
+                                    <apex:outputText id="q33" value="{0, number, currency}" style="font-weight:bold;">
+                                        <apex:param value="{!lopoffer.PBS_AAAP_SECT2_TOTAL__c}"></apex:param>
+                                    </apex:outputText>
+                                    <apex:outputText id="q33Gov" value="{0, number, currency}"
+                                        style="font-weight:bold;">
+                                        <apex:param value="{!lopoffer.PBS_AAAP_SECT2_TOTAL_GOV__c}"></apex:param>
+                                    </apex:outputText>
+                                </apex:panelGrid>
+                                <!-- added by syam for fy16 -->
+                                <p></p>
+                            </table>
+                            <div class="clearfix">&nbsp;</div>
+                        </div>
+                        <!-- /#example_wrapper -->
+                    </div>
+                    <!-- /tabbed-table -->
+                    <apex:outputPanel rendered="{!!viewOnly}"><!--{!!viewOnly}-->
+                        <apex:commandButton id="btn_back" action="{!back}" value="Back"/>
+                        <apex:commandButton id="btn_save_form" action="{!saveForm}" value="Save Page" styleClass="btnSave"/>
+                        <apex:commandButton id="btn_continue" action="{!continueSave}" value="Next" styleClass="btnJQSubmit"/>
+                        <!--  J. Rogers 2/15/2023 - Communities Upgrade
+                        <apex:commandButton value="Exit Offer" action="{!actionCancel}"
+                            onclick="if(confirm('Please make sure to hit save page before exiting your offer.  Changes will not be saved unless you hit Save Page.')){return true;} else return false;"/>
+                        -->
+                        <apex:commandButton value="Exit Offer"
+                            onclick="if(confirm('Are you sure you want to cancel editing this record without saving changes?')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}RSAP-PortalHome';return false;} else {return false;}"/>
+
+                        </apex:outputPanel>      
+                </apex:pageBlock>
+                <!--NEW VERSION FROM HERE-->
+                <div id="popupContact" class="infopopup4" style="display:none;">
+                 <h1>
+                     Warning
+                    </h1>
+                 <p id="contactArea">
+                        Selecting the 'Continue' button below will override any pre-existing values in the 'For Govt Leased Areas' column fields. Select the 'Cancel' button if there are values in that column that need to remain as they are. </p>         
+                        <br/>
+                        <br/>
+              
+                <br/>
+                <br/>
+                  <apex:commandButton value="Continue" action="{!Prorate}" onclick="disablePopup();hidelean();"  />
+                  <apex:commandButton value="Cancel" onclick="disablePopup();hidelean();"  />          
+              
+        </div>
+        <!--NEW VERSION TO HERE-->
+            </apex:form>
+        </div>
+        <!-- /content -->
+    </div>
+    <div id="backgroundPopup"></div>
+        <!--Julia to here. took out body tags-->
+    <!--</body-->
+    <!-- /wrapper -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    
+    <script type="text/javascript">
+        // j.rogers 2/14/2023  SFWS-2105
+		if('{!JSENCODE(pageURLForRedirection)}' != ''){
+            window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}'; //Todd Brown added JSENCODE to resolve Reflected XSS vulnerability
+        	window.parent.document.body = document.createElement('body');
+        }
+    	else{
+        	window.parent.document.body.scrollTop = 0;
+  			window.parent.document.documentElement.scrollTop = 0;
+       	}
+    </script>
+    <script type="text/javascript">
+        //alert('test');
+        JY = jQuery.noConflict();
+        JY(document).ready(function () {
+            //added by syam display msg when submitted offer is saved.
+            draftMsgFlag = JY('input[id=' + "'{!$Component.opForm.draftMsgFlag}'" + ']').val();
+            if (draftMsgFlag == 'true') {
+                var confirm1 = JY('<div></div>').html("Your offer is no longer submitted. Offer status is updated to 'Draft' status and needs to be submitted again.").dialog({
+                    autoOpen: false,
+                    title: '',
+                    modal: true,
+                    position: ['center', 'center'],
+                    buttons: {
+                        'OK': function () {
+                            JY(this).dialog('close');
+                        }
+                    }
+                });
+        
+                confirm1.dialog('open');
+            }
+        
+        });
+    </script>
+    
+    <!--Julia edit from here-->
+    <script type="text/javascript">
+                            // Popup window code
+                            function newPopup(url) {
+                                popupWindow = window.open(
+                                        url, 'popUpWindow', 'height=650,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=no')
+                            }
+                        </script>
+    
+    <script>
+    //from showpopupportalhome
+
+    //loading popup with jQuery magic!
+          var popupStatus = 0;
+
+function loadPopup(){
+    //console.log('loadpopup, errorexists: ' + errorExists);
+      if(!errorExists){
+    //alert(getCookie("apex__counter"));
+    //loads popup only if it is disabled   
+    if (popupStatus==0){// && (getCookie("apex__counter") == '1')) {
+        console.log('popup status is 0');
+        jQuery("#backgroundPopup").css({
+            "opacity": "0.7"
+        });
+        jQuery("#backgroundPopup").fadeIn("slow");
+        jQuery("#popupContact").fadeIn("slow");
+        popupStatus = 1;   
+        console.log('popupstatus is ' + popupStatus);
+    }
+          }
+}
+
+//disabling popup with jQuery magic!
+function disablePopup(){
+    console.log('disablepopup');
+    //disables popup only if it is enabled
+    console.log('popupstatus is ' + popupStatus);
+
+    if(popupStatus==1){
+        jQuery("#backgroundPopup").fadeOut("slow");
+        jQuery("#popupContact").fadeOut("slow");
+        popupStatus = 0;
+        deleteCookie("apex__counter");
+    }
+}
+
+//centering popup
+function centerPopup(){
+    //console.log('centerpopup, error exists: ' + errorExists);
+    if(!errorExists){
+    //request data for centering
+    var windowWidth = document.documentElement.clientWidth;
+    var windowHeight = document.documentElement.clientHeight;
+    var popupHeight = jQuery("#popupContact").height();
+    var popupWidth = jQuery("#popupContact").width();
+    //centering
+    jQuery("#popupContact").css({
+        "height": popupHeight,
+        "top": 35,
+        "left": windowWidth/2-popupWidth/2
+    });
+    //only need force for IE6
+    
+    jQuery("#backgroundPopup").css({
+        "height": windowHeight
+    });
+        }
+    
+}
+    
+    //from PBS_LOP_portalHome
+    function hidelean(){
+            setTimeout(hideL,500);
+        }
+
+        function hideL(){
+            jQuery("#lean_overlay").css("display","none");
+        }
+    
+    function radioButtonChange(){
+        console.log('radioButtonChange');
+        }
+
+    
+    //from modaljquery STATIC RESOURCE DON'T NEED THIS?
+    /*(function(jQuery){jQuery.fn.extend({leanModal:function(options){var defaults={top:100,overlay:0.5,closeButton:null};var overlay=$("<div id='lean_overlay'></div>");jQuery("body").append(overlay);options=$.extend(defaults,options);return this.each(function(){var o=options;jQuery(this).click(function(e){var modal_id=$(this).attr("href");jQuery("#lean_overlay").click(function(){close_modal(modal_id)});jQuery(o.closeButton).click(function(){close_modal(modal_id)});var modal_height=$(modal_id).outerHeight();var modal_width=$(modal_id).outerWidth();
+jQuery("#lean_overlay").css({"display":"block",opacity:0.2});jQuery("#lean_overlay").fadeTo(200,o.overlay);jQuery(modal_id).css({"display":"block","position":"fixed","opacity":0.2,"z-index":11000,"left":50+"%","margin-left":-(modal_width/2)+"px","top":o.top+"px"});jQuery(modal_id).fadeTo(200,1);e.preventDefault()})});function close_modal(modal_id){jQuery("#lean_overlay").fadeOut(200);$(modal_id).css({"display":"none"})}}})})(jQuery);*/
+    </script>
+    <!--Julia to here-->
+    <c:SiteFooterUX />
+</apex:page>

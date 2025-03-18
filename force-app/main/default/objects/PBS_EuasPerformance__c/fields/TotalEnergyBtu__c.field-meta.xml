@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TotalEnergyBtu__c</fullName>
+    <externalId>false</externalId>
+    <formula>((CwaterAmt__c*12000) + 
+(ElecAmt__c *3412.142) + 
+(GasAmt__c*1031) + 
+(OilAmt__c*138700) + 
+(SteamAmt__c*1000000))/1000000</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Total Energy BTU</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

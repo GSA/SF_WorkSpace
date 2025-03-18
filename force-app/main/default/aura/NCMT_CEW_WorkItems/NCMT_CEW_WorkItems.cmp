@@ -1,0 +1,507 @@
+<aura:component controller='NCMT_CEW_WorkItems_Ctrl' implements="lightning:isUrlAddressable,force:appHostable">
+    <aura:attribute name="selectedCat" type="String" />
+    <aura:attribute name="projectName" type="String" />
+
+    <aura:attribute name="pcsId" type="String" />
+    <aura:attribute name="categories" type="Map" />
+    <aura:attribute name='items' type='object' />
+
+    <aura:attribute name="wdCodes" type="Map" />
+    <aura:attribute name="abCodes" type="Map" />
+    <aura:attribute name='cewItems' type='object' />
+
+    <aura:attribute name='addRowNumber' type='Integer' />
+    <aura:attribute name="showAddRow" type="boolean" default="false"/>
+    <aura:attribute name='needABwdCodes' type='object' />
+
+    
+    <aura:attribute name="showConfirmSave" type="boolean" default="false"/>
+
+    <aura:attribute name="saveModalOpen" type="boolean" default="false"/>
+    <aura:attribute name='createdItems' type='object' />
+    <aura:attribute name="itemsCreated" type="boolean" default="false"/>
+    <aura:attribute name="messageText" type="string" />
+
+    <aura:attribute name="isModalOpen" type="boolean" default="false" />
+    <aura:attribute name="confirmBack" type="boolean" default="false" />
+
+    <aura:attribute name="showConfirm" type="boolean" default="false"/>
+    <aura:attribute name="currentDeleteTarget" type="String" />
+    
+    <aura:attribute name="showHelp" type="boolean" default="false" />
+    <!--<ltng:require scripts="{!$Resource.NCMT_CEW_Work_Item_Help}" afterScriptsLoaded="{!c.setHelp}" />-->
+	<aura:attribute name="helpText" type="string" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+
+    <div class="slds-page-header slds-page-header_record-home">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-work-order-item"
+                            title="Description of icon when needed">
+                            <lightning:icon iconName="standard:work_order_item" alternativeText="Items Icon" title="Items" />
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate"
+                                        title="CEW Work Items">CEW Work Items</span>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__col-actions">
+                <div class="slds-page-header__controls">
+                    <div>
+                            <div style="float:right;">
+                                <lightning:button label="Back" variant="neutral" iconName="utility:back" iconPosition="left"
+                                title="Success" onclick='{!c.openCloseConfirm}' />
+                                <lightning:button label="Help" variant="neutral" iconName="utility:help" iconPosition="left"
+                				title="Success" onclick="{!c.openHelpModal}" />
+                                <lightning:button label="View Current Items" variant="neutral" iconName="utility:list" iconPosition="left"
+                                title="Success" onclick="{!c.openModal}" />
+                                <aura:if isTrue="{!lessthan(v.items.length, 30)}">
+                                    <lightning:button label="Add Rows" variant="neutral" iconName="utility:add" iconPosition="left"
+                                        title="Success" onclick="{!c.showHideAddRows}" />
+                                </aura:if>
+                                <lightning:button label="Save" variant="brand" iconName="utility:save" iconPosition="left" title="Success"
+                                    onclick="{!c.handleSaveItems}" />
+                      
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-width-fill slds-wrap" style="margin:10px 5px 60px 20px;">
+        <div class="slds-tree__group-header" style="float:left;">
+            Project: {!v.projectName} <br/>
+            Cost Category: {!v.selectedCat}
+            <div class="color-text-required"><sup>*</sup> Complete all required fields</div>
+        </div>
+        
+        <div style="margin: 5px 0 5px 0; float:right;">
+            <aura:if isTrue="{!lessthan(v.items.length, 30)}">
+                <div class='info-msg msg'>
+                <lightning:icon title="Add" class="num-icon" iconName="utility:info" size="xx-small" alternativeText=">Num Items"  />
+                    Adding: {!v.items.length} Items
+                </div>
+                <aura:set attribute="else">
+                    <div class='warning-msg msg'>
+                        <lightning:icon title="Num" class="warn-icon"  iconName="utility:warning" size="xx-small" alternativeText=">Num Items" />
+                       Adding the Maximum Number of Items ({!v.items.length})
+                    </div>
+                </aura:set>
+            </aura:if>
+        </div>
+    </div>
+    <div class="item-container slds-form slds-width-fill slds-wrap" >
+        <div class="slds-form slds-width-fill">
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+                aria-multiselectable="true">
+                <tbody>
+                    <aura:iteration items="{!v.items}" var="item">
+                        <tr class="slds-form-element" onchange='{!c.showChanged}'>
+                            <!-- COL 1 -->
+                            <td>
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">&nbsp; </label>
+                                    <div class="slds-form-element__control">
+                                        <lightning:formattedNumber title="Row Number" value="{!item.index}" />
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="slds-form-element">
+                                    <span class="slds-text-color_error" style="{!if(item.Work_Item_Code__c == '' &amp;&amp; item.NCMT_CEW_Work_Description__c != '',  'color:rgb(194, 57, 52)', 'display:none')}">
+                                        Work Item Code Required<br/>
+                                    </span>
+                                    <div class="slds-form-element__control">
+                                        <lightning:input name="wiCode" label="Work Item Code" required="true" value='{!item.Work_Item_Code__c}'/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="slds-form-element">
+                                    <div class="slds-form-element__control slds-wrap">
+
+                                        <lightning:combobox aura:id="wdCode"
+                                        label="Work Description Code"
+                                        required="true"
+                                        name="{!item.index}"
+                                        placeholder="--Select a Work Description--"
+                                        value="{!item.NCMT_CEW_Work_Description__c}"
+                                        options="{!v.wdCodes}"
+                                        onchange='{!c.checkAbCodes}'
+                                       />
+                                    </div>
+                                </div>
+                            </td>
+                            <aura:if isTrue="{!item.needsAbCode == true }">
+                                <td>
+                                    <div class="slds-form-element">
+                                        <div class="slds-form-element__control slds-wrap">
+                                            <span class="slds-text-color_error" style="{!if(item.needsAbCode == true &amp;&amp; item.CEW_Project_Agency__c == '',  'color:rgb(194, 57, 52)', 'display:none')}">
+                                                AB Code Required<br/>
+                                            </span>
+                                            <lightning:combobox aura:id="abCode"
+                                            label="AB Code"
+                                            required=""
+                                            name="{!'' +'abCode=>'+index}"
+                                            placeholder="--Select an AB Code--"
+                                            value="{!item.CEW_Project_Agency__c}"
+                                            options="{!v.abCodes}"/>
+                                        </div>
+                                    </div>
+                                </td>
+                                <aura:set attribute="else">
+                                    <td></td>
+                                </aura:set>
+
+                            </aura:if>
+                            
+                            <td>
+                                <div class="slds-form-element">
+                                    <div class="slds-form-element__control">
+                                        <lightning:input name="desc" label="Description"  value='{!item.Description__c}' />
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="slds-form-element">
+                                    <div class="slds-form-element__control">
+                                        <lightning:input type="number" name="sqFt" label="SQ FT"  value='{!item.SQ_Ft__c}' />
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="slds-form-element">
+                                    <div class="slds-form-element__control">
+                                        <lightning:input name="unitRate" label="Unit Rate" value='{!item.Unit_Rate__c}'/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="slds-form-element">
+                                    <div class="slds-form-element__control">
+                                        <lightning:input name="uom" label="UOM" value='{!item.UOM__c}'/>
+                                    </div>
+                                </div>
+                            </td>                            
+                            <td>
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">&nbsp;</label>
+                                    <div class="slds-form-element__control">                                        
+                                        <button class="slds-button slds-button_icon slds-button_icon" title="Remove"
+                                        onclick="{!c.confirmRemove}" name='{!item.index}'>
+                                        <lightning:icon title="Remove" class="slds-button__icon" variant="error" iconName="utility:close"
+                                            size="xx-small" alternativeText=">Remove Item" />
+                                        <span class="slds-assistive-text">Remove Item</span>
+                                    </button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                    <aura:if isTrue="{!lessthan(v.items.length, 30)}">
+                    <tr class="slds-form-element" >
+                        <td colspan="8"> </td>
+                        <td>
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">&nbsp;</label>
+                                <div class="slds-form-element__control">                                        
+                                    <button class="slds-button slds-button_icon slds-button_icon" title="Add"
+                                    onclick="{!c.addRows}" >
+                                    <lightning:icon title="Add" class="slds-button__icon" variant="success" iconName="utility:add"
+                                        size="xx-small" alternativeText=">Add Item" />
+                                    <span class="slds-assistive-text">Add Item</span>
+                                </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </aura:if>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class=" cew-foot slds-grid slds-grid_align-spread slds-float_right slds-docked-form-footer">
+        <div class="slds-col" />
+        <div class="slds-col">
+            <lightning:button label="Back" variant="neutral" iconName="utility:back" iconPosition="left" onclick='{!c.openCloseConfirm}'
+                title="Success" />
+            <lightning:button label="Help" variant="neutral" iconName="utility:help" iconPosition="left"
+                title="Success" onclick="{!c.openHelpModal}" />
+            <lightning:button label="View Current Items" variant="neutral" iconName="utility:list" iconPosition="left"
+                title="Success" onclick="{!c.openModal}" />
+            <aura:if isTrue="{!lessthan(v.items.length, 30)}">
+                <lightning:button label="Add Rows" variant="neutral" iconName="utility:add" iconPosition="left"
+                    title="Success" onclick="{!c.showHideAddRows}" />
+            </aura:if>
+            <lightning:button label="Save" variant="brand" iconName="utility:save" iconPosition="left" title="Success"
+            onclick='{!c.handleSaveItems}' />
+        </div>
+    </div>
+    <aura:if isTrue="{!and(v.cewItems, v.isModalOpen)}">
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-docked-composer-modal"
+            aria-labelledby="dialog-heading-id-1" aria-describedby="dialog-content-id-1" aria-modal="true"
+            aria-hidden="true">
+            <div class="slds-modal__container">
+                <div class="slds-modal__content" id="modal-content-id">
+                    <section class="slds-docked-composer slds-grid slds-grid_vertical">
+                        <header class="slds-docked-composer__header slds-grid slds-shrink-none" aria-live="assertive">
+                            <div class="slds-media slds-media_center slds-no-space">
+                                <div class="slds-media__figure slds-m-right_x-small" style="margin-top:5px;">
+                                    <span class="slds-icon_container">
+                                        <lightning:icon class="slds-icon slds-icon_small slds-icon-text-default"
+                                            iconName="utility:list" size="x-small" alternativeText="list"
+                                            title="list" />
+                                    </span>
+                                </div>
+                                <div class="slds-media__body">
+                                    <h2 class="slds-truncate" id="dialog-heading-id-1" title="Header">CEW Work Items : {!v.selectedCat}</h2>
+                                </div>
+                            </div>
+                            <div class="slds-col_bump-left slds-shrink-none" style="margin-top:5px;">
+                                <button class="slds-button slds-button_icon slds-button_icon" title="Cancel"
+                                    onclick="{!c.closeModal}">
+                                    <lightning:icon title="Close" class="slds-button__icon" iconName="utility:close"
+                                        size="xx-small" alternativeText="Close" />
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                            </div>
+                        </header>
+                        <div class="slds-docked-composer__body" id="dialog-content-id-1">
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                            <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="" scope="col">
+                                    <div>Work Item Code</div>
+                                </th>
+                                <th class="" scope="col">
+                                     <div> Description</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div>AB Code</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div> Work Description Code</div>
+                                </th>
+                            </tr>
+                        </thead>
+                            <tbody>
+                            <aura:iteration  items="{!v.cewItems}" var="cewItem">
+                                    <tr class="slds-form-element">
+                                        <td>
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control">
+                                                    <lightning:formattedText value="{!cewItem.Work_Item_Code__c}" />
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control">
+                                                    <lightning:formattedText value="{!cewItem.Description__c}" />
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control">
+                                                    <lightning:formattedText value="{!cewItem.AB_Code__c}" />
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control">
+                                                    <lightning:formattedNumber  value="{!cewItem.WorkDescNumber__c}" />
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </aura:iteration>
+                            </tbody>
+                            </table>
+                        </div>
+                        <footer class="slds-docked-composer__footer slds-shrink-none">
+                            <!-- <div class="slds-col_bump-left slds-text-align_right">
+                                <button class="slds-button slds-button_brand">Current List Page</button>
+                            </div> -->
+                        </footer>
+                    </section>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+        <!-- saved item/error modal  -->
+    <aura:if isTrue='{!v.saveModalOpen}'>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-modal_small slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!v.messageText}</h2>
+                </header>
+
+                <aura:if isTrue="{!v.itemsCreated}">
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <aura:iteration items='{!v.createdItems}' var='ci'>
+                            <center>  
+                                <div>
+                                    CEW Item: <a id="{!ci.Id}" onclick='{!c.redirectToItem}'>
+                                    <ui:outputText class="field" value="{!ci.Work_Item_Code__c}"/></a> &nbsp;
+                                    <ui:outputText class="field" value="{!ci.Description__c}"/>
+                                </div>
+                            </center>
+                            <br/>
+                        </aura:iteration>
+                    </div>
+                    <!--###### MODAL BOX FOOTER Part Start ######-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="brand" 
+                                            label="Back to Project Cost Summary"
+                                            title="Back to Project Cost Summary"
+                                            onclick="{!c.redirectToPcs}"/>
+                    </footer>
+                    <aura:set attribute="else">
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                            <!-- ###### Errors in selection ######-->
+                            <p>{!v.createdItems}</p>
+                            <br/>
+                        </div>  
+                        <footer class="slds-modal__footer"> 
+                            
+                            <lightning:button label="Back"
+                                                title="Back"
+                                                onclick="{!c.closeSaveModal}"/>
+                        </footer> 
+                    </aura:set>
+                </aura:if>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+         
+    <!-- confirm remove item modal  -->
+    <aura:if isTrue="{!v.showConfirm}">
+        <!--Modal Box Start-->
+        <div role="dialog" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container">
+                <!--Modal Box Header Start-->
+                <header class="slds-modal__header">
+                    <h1 class="slds-text-heading--medium">Confirm Remove Item</h1>
+                </header>
+                <!--Modal Box Header End-->
+                    
+                <!--Modal Box Content Start-->
+                <div class="slds-modal__content slds-p-around--medium">
+                    <center><b>Are You Sure You Want to Remove This Item?</b></center>
+                </div>
+                <!--Modal Box Content End-->
+                    
+                <!--Modal Box Button Start-->
+                <footer class="slds-modal__footer">
+                    <lightning:button name='No' label='No' onclick='{!c.confirmRemove}'/>
+                    <lightning:button variant="brand" name='RemoveItem' label='Yes' onclick='{!c.removeLineItem}'/>
+                </footer>
+                <!--Modal Box Button End-->
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>            
+    </aura:if>
+        <!-- confirm save if missing wi codes modal  -->
+
+    <aura:if isTrue="{!v.showConfirmSave}">
+        <!--Modal Box Start-->
+        <div role="dialog" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container">
+                <!--Modal Box Header Start-->
+                <header class="slds-modal__header">
+                    <h1 class="slds-text-heading--medium">Confirm Save Items</h1>
+                </header>
+                <!--Modal Box Header End-->
+                    
+                <!--Modal Box Content Start-->
+                <div class="slds-modal__content slds-p-around--medium">
+                    <center>Some Modified Rows Have Not Been Assigned a Work Item Code<br/>
+                                Items without a Work Item Code will not be saved <br/><br/>
+                                <b>Are You Sure You Want To Continue?</b>
+                    </center>
+                </div>
+                <!--Modal Box Content End-->
+                    
+                <!--Modal Box Button Start-->
+                <footer class="slds-modal__footer">
+                    <lightning:button name='No' label='No' onclick='{!c.closeConfirmSave}'/>
+                    <lightning:button variant="brand" name='Yes' label='Yes' onclick='{!c.modalSaveItem}'/>
+                </footer>
+                <!--Modal Box Button End-->
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>            
+    </aura:if>
+    <!-- add item rows modal  -->
+    <aura:if isTrue="{!v.showAddRow}">
+        <!--Modal Box Start-->
+        <div role="dialog" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container">
+                <!--Modal Box Header Start-->
+                <header class="slds-modal__header">
+                    <h1 class="slds-text-heading--medium">Add Item Rows</h1>
+                </header>                    
+                <!--Modal Box Content Start-->
+                <div class="slds-modal__content slds-p-around--medium">
+                    <center><b>How Many Items Would You Like To Add?</b></center>
+                    <center><lightning:input  aura:id="rowNumber" name="rowNumber" value='{!v.addRowNumber}' /></center>
+
+                </div>
+                    
+                <!--Modal Box Button Start-->
+                <footer class="slds-modal__footer" name='footer'>
+                    <lightning:button name='Cancel' label='Cancel' onclick='{!c.showHideAddRows}'/>
+                    <lightning:button variant="brand" name='Add' label='Add' onclick='{!c.addRows}'/>
+                </footer>
+                <!--Modal Box Button End-->
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>            
+    </aura:if>
+    <aura:if isTrue="{!v.confirmBack}">
+        <!--Modal Box Start-->
+        <div role="dialog" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container">
+                <!--Modal Box Header Start-->
+                <header class="slds-modal__header">
+                    <h1 class="slds-text-heading--medium">Confirm Back</h1>
+                </header>
+                <!--Modal Box Header End-->
+                    
+                <!--Modal Box Content Start-->
+                <div class="slds-modal__content slds-p-around--medium">
+                    <center>Your Changes Will Not Be Saved<br/>
+                                <b>Are You Sure You Want To Continue?</b>
+                    </center>
+                </div>
+                <!--Modal Box Content End-->
+                    
+                <!--Modal Box Button Start-->
+                <footer class="slds-modal__footer">
+                    <lightning:button name='No' label='No' onclick='{!c.openCloseConfirm}'/>
+                    <lightning:button variant="brand" name='Yes' label='Yes' onclick='{!c.redirectToPcs}'/>
+                </footer>
+                <!--Modal Box Button End-->
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>            
+    </aura:if>
+    <!-- confirm remove item modal  -->
+
+</aura:component>

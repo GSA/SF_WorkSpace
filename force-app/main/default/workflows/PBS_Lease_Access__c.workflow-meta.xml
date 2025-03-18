@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Lease_Request_Approved</fullName>
+        <description>Lease Request Approved</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Requestor__c</field>
+            <type>userLookup</type>
+        </recipients>
+        <senderAddress>noreply-salesforce-ws@gsa.gov</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Lease_Request_Approved</template>
+    </alerts>
+    <alerts>
+        <fullName>Lease_Request_Denied</fullName>
+        <description>Lease Request Denied</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Requestor__c</field>
+            <type>userLookup</type>
+        </recipients>
+        <senderAddress>noreply-salesforce-ws@gsa.gov</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Lease_Request_Denied</template>
+    </alerts>
+    <alerts>
+        <fullName>Lease_Request_PendingApproved</fullName>
+        <description>Lease Request Pending Approval</description>
+        <protected>false</protected>
+        <recipients>
+            <field>PBS_OwnerEmail__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>noreply-salesforce-ws@gsa.gov</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Lease_Request_PendingApproval</template>
+    </alerts>
+</Workflow>

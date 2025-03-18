@@ -1,0 +1,590 @@
+<apex:page controller="PBS_AAAP_PV_SummaryController" showHeader="false" cache="true" standardStylesheets="false"
+           applyBodyTag="false" applyHtmlTag="false" lightningStylesheets="true">
+    <html>
+    <head>
+        
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>  
+        <script src="//cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+		
+        
+        <style>
+            @page {
+                size: letter;
+                -size: 9in 9in;
+                margin-left: 10mm;
+                margin-right: 10mm;
+                margin-top: 10mm;
+                margin-bottom: 8mm;
+                @top-center {
+                    -content: "PV Summary Page";
+                }
+                @bottom-right {
+                    content: "Page " counter(page) " of " counter(pages);
+                }
+            }
+            .page-break {
+                display:block;
+                page-break-after:always;
+            }
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 12px;
+                width: 100%;
+            }
+            .pbHeader{
+                text-align: center !important;
+                margin-left: 30%;
+                font-size: 22px;
+            }
+            .pbTitle, .mainTitle {
+                text-align: center !important;
+            }
+            hr {
+                position: relative;
+                top: 45px;
+            }
+            h3{
+                font-size: 18px;
+                -margin-bottom: 50px !important;                      
+            }
+            .offerLabel {
+                width: 30%;
+                padding-bottom: 10px !important;
+            }
+            .offerData {
+                width: 20%;
+                padding-bottom: 10px !important;
+            }
+            .spaceLabel {
+                width: 27%;
+                padding-bottom: 10px !important;                
+            }
+            .spaceData {
+                width: 23%;
+                -text-align: right !important;
+                padding-bottom: 10px !important;
+            }            
+            .noParkLabel {
+                width: 13% !important;
+                text-align: left !important;
+                padding-bottom: 10px !important;
+            }
+            .parkLabel {
+                width: 12% !important;
+                text-align: center !important;
+                padding-bottom: 10px !important;
+                font-weight: bold;
+            }
+            .parkData {
+                width: 15% !important;
+                text-align: center !important;
+                padding-bottom: 10px !important;
+            }
+            .parkDataLabel {
+                width: 15% !important;
+                text-align: left !important;
+                padding-left: 75px !important;
+                padding-bottom: 10px !important;
+            }
+            .leaseData {
+                width: 25%;
+                -text-align: right;
+                padding-left: 100px !important;
+                padding-bottom: 10px !important;
+            }
+            .leaseLabel {
+                width: 25%;
+                padding-bottom: 10px !important;
+            }
+            .noRentLabel {
+                width: 12.5% !important;
+                text-align: center !important;
+                padding-bottom: 10px !important;
+            }
+            .rentLabel {
+                width: 9% !important;
+                text-align: center !important;
+                padding-right: 5px;
+                padding-left: 5px;
+                margin: auto;
+                padding-bottom: 10px !important;
+                font-weight: bold;
+            }
+            .rentData {
+                width: 9% !important;
+                text-align: center !important;
+                padding-left: 10px;
+                padding-bottom: 10px !important;
+            }
+            .rentDataLabel {
+                width: 12.5% !important;
+                text-align: left !important;
+                padding-bottom: 10px !important;
+            }
+            .commentsData {
+                width: 100%;
+                padding-bottom: 10px !important;
+            }
+            .pvLabel {
+                font-weight: bold !important;
+                width: 75% !important;
+                padding-bottom: 10px !important;
+            }
+            .pvData {
+                padding-bottom: 10px !important;
+            }
+            .dataComments {
+                font-weight: bold !important;
+                width: 50% !important;
+                padding-bottom: 10px !important;
+            }
+            .dateData {
+                padding-bottom: 10px !important;
+            }
+            .dateLabel {
+                width: 45% !important;
+                font-weight: bold !important;
+                padding-bottom: 10px !important;
+            }
+
+
+
+
+        </style>
+    </head>
+    </html>
+	<apex:form id="frm">
+	<apex:actionFunction action="{!captureImage}" name="captureImage" rerender="frm" oncomplete="captureDone();">
+		<apex:param assignTo="{!strImageBlob}" name="imageBlob" value=""/>
+		<apex:param assignTo="{!strImagename}" name="imagename" value=""/>
+	</apex:actionFunction>
+	
+	<div id ="loadingdiv" style="display:none;position: absolute;"> 
+		<div class="waitingSearchDiv" id="el_loading" style="background-color: #fbfbfb; height:100%;opacity:0.65;width:100%;">
+			<div class="waitingHolder" style="top: 100px; width: 91px;">
+				<img class="waitingImage" src="/img/loading.gif" title="Please Wait..." />
+				<span class="waitingDescription" id="waitingDesc">Loading...</span>
+				
+			</div>
+		</div>
+	</div>
+	</apex:form>
+	
+	<div class="container" id="mapDiv">
+    <apex:pageBlock title="PV Summary Page">
+        <hr/>
+        <apex:pageBlockSection title="General Offer Information" columns="2" collapsible="false">
+            <apex:pageBlockSectionItem labelStyleClass="offerLabel" dataStyleClass="offerData">
+                <apex:outputLabel value="Offeror Name"/>
+                <apex:outputText value="{!lstOffer[0].PBS_AAAP_Signature_First_Name__c} {!lstOffer[0].PBS_AAAP_SIGNATURE_LAST_NAME__c}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem labelStyleClass="offerLabel" dataStyleClass="offerData">
+                <apex:outputLabel value="Street Address"/>
+                <apex:outputText value="{!lstOffer[0].PBS_AAAP_Street_Address__c}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem labelStyleClass="offerLabel" dataStyleClass="offerData">
+                <apex:outputLabel value="Offeror Email"/>
+                <apex:outputText value="{!lstOffer[0].PBS_AAAP_Email__c}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem labelStyleClass="offerLabel" dataStyleClass="offerData">
+                <apex:outputLabel value="City"/>
+                <apex:outputText value="{!lstOffer[0].PBS_AAAP_City__c}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem labelStyleClass="offerLabel" dataStyleClass="offerData">
+                <apex:outputLabel value="Building Name"/>
+                <apex:outputText value="{!lstOffer[0].PBS_AAAP_Building_Name__c}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem labelStyleClass="offerLabel" dataStyleClass="offerData">
+                <apex:outputLabel value="State"/>
+                <apex:outputText value="{!lstOffer[0].PBS_AAAP_State__c}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem labelStyleClass="offerLabel" dataStyleClass="offerData">
+                <apex:outputLabel value="Offer Name"/>
+                <apex:outputText value="{!lstOffer[0].Name}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem labelStyleClass="offerLabel" dataStyleClass="offerData">
+                <apex:outputLabel value="Space Detail"/>
+                <apex:outputText value="{!lstSpace[0].Name}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem labelStyleClass="offerLabel" dataStyleClass="offerData">
+                <apex:outputLabel value="Offer Last Modified"/>
+                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                    <apex:param value="{!lstOffer[0].LastModifiedDate}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem labelStyleClass="offerLabel" dataStyleClass="offerData">
+                <apex:outputLabel value="Type of Requirement"/>
+                <apex:outputText value="{!lstAgency[0].PBS_AAAP_TYPE_OF_REQUIREMENT__c}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem labelStyleClass="offerLabel" dataStyleClass="offerData">
+                <apex:outputLabel value="Lease Term"/>
+                <apex:outputText value="{!lstAgency[0].PBS_AAAP_LEASE_TERM__c}"/>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <br/>
+        <hr/>
+        <apex:pageBlockSection title="Offered Space Information" columns="2" collapsible="false">
+            <apex:pageBlockSectionItem labelStyleClass="spaceLabel" dataStyleClass="spaceData">
+                <apex:outputLabel value="ABOA SF Min"/>
+                <apex:outputText value="{!lstAgency[0].PBS_AAAP_USF_REQ_MIN__c}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem labelStyleClass="spaceLabel" dataStyleClass="spaceData">
+                <apex:outputLabel value="ABOA SF Max"/>
+                <apex:outputText value="{!lstAgency[0].PBS_AAAP_USF_REQ_MAX__c}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem labelStyleClass="spaceLabel" dataStyleClass="spaceData">
+                <apex:outputLabel value="TI Amortization Rate"/>
+                <apex:outputText value="{!lstRate[0].PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c}%"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem labelStyleClass="spaceLabel" dataStyleClass="spaceData">
+                <apex:outputLabel value="BSAC Amoritzation Rate"/>
+                <apex:outputText value="{!lstRate[0].PBS_AAAP_BSAC_RATE__c}%"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem labelStyleClass="spaceLabel" dataStyleClass="spaceData">
+                <apex:outputLabel value="Lessor OH Rate"/>
+                <apex:outputText value="{!lstSpace[0].PBS_AAAP_GC_OVERHEAD_AND_PROF__c}%"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem labelStyleClass="spaceLabel" dataStyleClass="spaceData">
+                <apex:outputLabel value="A/E Fee"/>
+                <apex:outputText value="{!lstSpace[0].PBS_AAAP_ARCH_ENG_FEES__c} {!lstSpace[0].PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem labelStyleClass="spaceLabel" dataStyleClass="spaceData">
+                <apex:outputLabel value="Months Free Rent"/>
+                <apex:outputText value="{0, number, #,###}">
+                    <apex:param value="{!lstRate[0].PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem labelStyleClass="spaceLabel" dataStyleClass="spaceData">
+                <apex:outputLabel value="Monthly Free Rent Value per ABOA SF"/>
+                <apex:outputText value="{0, number, $#,##0.00}">
+                    <apex:param value="{!freeRent1510}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <hr/>
+        <apex:pageBlockSection title="Parking" columns="5" collapsible="false">
+            <apex:pageBlockSectionItem dataStyleClass="noParkLabel">
+                <apex:outputLabel value=""/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="parkLabel">
+                <apex:outputLabel value="Res Surface"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="parkLabel">
+                <apex:outputLabel value="Non Res Surface"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="parkLabel">
+                <apex:outputLabel value="Res Structured"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="parkLabel">
+                <apex:outputText value="Non Res Structured"/>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="" columns="5" collapsible="false" showHeader="false">
+            <apex:pageBlockSectionItem dataStyleClass="parkDataLabel">
+                <apex:outputLabel value="Number"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="parkData">
+                <apex:outputText value="{!lstAgency[0].PBS_AAAP_TOT_RESEV_PARK_SPACES_SUR_LOT__c}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="parkData">
+                <apex:outputText value="{!lstAgency[0].PBS_AAAP_TOT_NONRESV_PARK_SPACES_SURLOT__c}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="parkData">
+                <apex:outputText value="{!lstAgency[0].PBS_AAAP_TOT_RESV_PARKING_SPACES_GARAGE__c}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="parkData">
+                <apex:outputText value="{!lstAgency[0].PBS_AAAP_TOT_NONRESV_PARK_SPACES_GARAGE__c}"/>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="" columns="5" collapsible="false" showHeader="false">
+            <apex:pageBlockSectionItem dataStyleClass="parkDataLabel">
+                <apex:outputLabel value="Monthly Rate"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="parkData">
+                <apex:outputText value="{0, number, $#,##0.00}">
+                    <apex:param value="{!lstOffer[0].PBS_AAAP_Monthly_cost_res_sur_park__c}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="parkData">
+                <apex:outputText value="{0, number, $#,##0.00}">
+                    <apex:param value="{!lstOffer[0].PBS_AAAP_Monthly_cost_nonres_sur_park__c}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="parkData">
+                <apex:outputText value="{0, number, $#,##0.00}">
+                    <apex:param value="{!lstOffer[0].PBS_AAAP_Monthly_cost_res_gar_park__c}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="parkData">
+                <apex:outputText value="{0, number, $#,##0.00}">
+                    <apex:param value="{!lstOffer[0].PBS_AAAP_Monthly_cost_nonres_gar_park__c}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <br/>
+        <hr/>
+        <apex:pageBlockSection title="RLP Settings" columns="2" collapsible="false">
+            <apex:pageBlockSectionItem rendered="{!tiNew}"
+                                       dataStyleClass="leaseData" labelStyleClass="leaseLabel">
+                <apex:outputLabel value="TI Allowance per ABOA SF"/>
+                <apex:outputText value="{0, number, $#,##0.00}">
+                    <apex:param value="{!lstAgency[0].PBS_AAAP_TIUSED_FOR_FIRM_TERM_NEW__c}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem rendered="{!!tiNew}"
+                                       dataStyleClass="leaseData" labelStyleClass="leaseLabel">
+                <apex:outputLabel value="TI Allowance per ABOA SF"/>
+                <apex:outputText value="{0, number, $#,##0.00}">
+                    <apex:param value="{!lstAgency[0].PBS_AAAP_TIUSED_FOR_FIRM_TERM_SUCC__c}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="leaseData" labelStyleClass="leaseLabel">
+                <apex:outputLabel value="BSAC Allowance per ABOA SF"/>
+               <apex:outputPanel >
+                        <apex:outputText value="{0, number, $#,##0.00}" rendered="{!bsacNew}">
+                            <apex:param value="{!lstAgency[0].PBS_AAAP_BSAC_per_ABOA__c}"/>
+                        </apex:outputText>
+                        <apex:outputText value="{0, number, $#,##0.00}" rendered="{!!bsacNew}">
+                            <apex:param value="{!lstAgency[0].BSAC_for_Continuing_Space_per_ABOA_SF__c}"/>
+                        </apex:outputText>
+                    </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="leaseData" labelStyleClass="leaseLabel">
+                <apex:outputLabel value="Discount Rate"/>
+                <apex:outputText value="{!lstRLP[0].PBS_AAAP_Discount_percent_Rate__c}%"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="leaseData" labelStyleClass="leaseLabel">
+                <apex:outputLabel value="Escalation Rate"/>
+                <apex:outputText value="{!lstRLP[0].PBS_AAAP_ESCALATION_PRCNT_RATE__c}%"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="leaseData" labelStyleClass="leaseLabel">
+                <apex:outputLabel value="Physical Move per ABOA SF"/>
+                <apex:outputText value="{0, number, $#,##0.00}">
+                    <apex:param value="{!lstAgency[0].PBS_AAAP_MOVE_DEFAULT__c}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="leaseData" labelStyleClass="leaseLabel">
+                <apex:outputLabel value="Telecom Move per ABOA"/>
+                <apex:outputText value="{0, number, $#,##0.00}">
+                    <apex:param value="{!lstAgency[0].PBS_AAAP_TELCOMM_DEFAULT__c}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="leaseData" labelStyleClass="leaseLabel">
+                <apex:outputLabel value="Lump Sum Over TI per ABOA"/>
+                <apex:outputText value="{0, number, $#,##0.00}">
+                    <apex:param value="{!lstAgency[0].PBS_AAAP_PV_OTHER_UPFRONT_COSTS__c}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <br/>
+        <hr/>
+        <apex:pageBlockSection title="Rate Info Required For PV" columns="8" collapsible="false">
+            <apex:pageBlockSectionItem dataStyleClass="noRentLabel">
+                <apex:outputLabel value=""/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="rentLabel">
+                <apex:outputLabel value="Shell"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="rentLabel">
+                <apex:outputLabel value="Operating"/>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="" columns="8" collapsible="false" showHeader="false">
+            <apex:pageBlockSectionItem dataStyleClass="rentDataLabel">
+                <apex:outputLabel value="{!IF(lstAgency[0].PBS_AAAP_Region__c == '10/5 Term - All Regions','Yrs 1 - 5 per ABOA SF','Yrs 1 - 8 per ABOA SF')}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="rentData">
+                <apex:outputText value="{0, number, $#,##0.00}">
+                    <apex:param value="{!lstRate[0].PBS_AAAP_BASE_RATE__c}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="rentData">
+                <apex:outputText value="{0, number, $#,##0.00}">
+                    <apex:param value="{!lstRate[0].PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="" columns="8" collapsible="false" showHeader="false">
+            <apex:pageBlockSectionItem dataStyleClass="rentDataLabel"
+                                       rendered="{!lstAgency[0].PBS_AAAP_LEASE_TERM__c != '10 years'}">
+                <apex:outputLabel value="{!IF(lstAgency[0].PBS_AAAP_Region__c == '10/5 Term - All Regions','Yrs 6 - 10 per ABOA SF','Yrs 9 - end of Lease per ABOA SF')}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="rentData"
+                                       rendered="{!lstAgency[0].PBS_AAAP_LEASE_TERM__c != '10 years'}">
+                <apex:outputText value="{0, number, $#,##0.00}">
+                    <apex:param value="{!lstRate[0].PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="rentData"
+                                       rendered="{!lstAgency[0].PBS_AAAP_LEASE_TERM__c != '10 years'}">
+                <apex:outputText value="{0, number, $#,##0.00}">
+                    <apex:param value="{!lstRate[0].PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <br/><br/>
+        <hr/>
+        <apex:pageBlockSection title="Present Value" columns="2" collapsible="false">
+            <apex:pageBlockSectionItem dataStyleClass="pvLabel">
+                <apex:outputLabel value="Present Value"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="pvData">
+                <apex:outputText value="{0, number, $#,###.00}">
+                    <apex:param value="{!pvValue}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <br/>
+        <hr/>
+        <apex:pageBlockSection title="Comments" columns="2" collapsible="false">
+            <apex:pageBlockSectionItem dataStyleClass="commentsData">
+                <apex:outputText id="comments" value="{!comments}"/>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <br/><br/>
+        <apex:pageBlockSection >
+            <apex:pageBlockSectionItem dataStyleClass="dateLabel">
+                <apex:outputLabel value="Report Generated"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="dateData">
+                <apex:outputText value=" {!NOW()} EST"/>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+	</div>
+	
+	<script type="text/javascript">            
+            window.onload = function(){						            	
+				takePic();
+            }        
+			var nextid = '';
+		
+        	function takePic(){
+            	html2canvas(document.body, 
+                        {
+                            useCORS: true,
+                            onrendered: function(canvas) 
+                            {                                  
+								var total = '{!JSENCODE($CurrentPage.parameters.total)}'; 
+								var current = '{!JSENCODE($CurrentPage.parameters.current)}';  								
+                                document.body.appendChild(canvas);
+                                document.getElementById("mapDiv").style.display = 'none';
+                                document.getElementById("loadingdiv").style.display = '';								
+								document.getElementById("waitingDesc").innerHTML = 'Taking '+current+' of '+total;								
+								captureImage(document.getElementsByTagName('canvas')[0].toDataURL(),('PBS_AAAP_PV_Summary_PageImage'+current));
+                                
+                            }
+                        });
+            return false;
+        }
+        
+        
+		function escapeRegExp(string){
+			return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+		}
+		
+		function replaceAll(str, term, replacement) {
+		  return str.replace(new RegExp(escapeRegExp(term), 'g'), replacement);
+		}
+		
+        function captureDone(){
+            debugger;                        
+			var total = '{!JSENCODE($CurrentPage.parameters.total)}';  			
+			var current = '{!JSENCODE($CurrentPage.parameters.current)}';  
+			current = parseInt(current)+1;
+            
+            decodedCookie = document.cookie;                 
+            var ids = '';
+            
+            /**
+            decodedCookie = document.cookie;                 
+            var ids = '';
+            decodedCookie = document.cookie;
+            var ca = decodedCookie.split(';');
+            for(var j = 0; j <ca.length; j++) {
+                name = ca[j].split('=')[0];
+                value = ca[j].split('=')[1];
+                if(name.trim() == 'apex__links'){
+                	ids = value;
+                }
+            }           
+            
+            
+            if(current == 3){
+                var allLId = ids.split(',');
+                
+                // chcking if the length is greater then 1
+                if(allLId.length > 1){
+                	allLId.shift();
+                    ids = allLId.join();
+                }
+            }
+            
+			
+           	// checking if we have ids in cookie
+            if(ids != ''){
+            	var allIds = ids.split(',');
+                var firstEle = allIds[0];
+                allIds.shift();
+                
+                var stringArray = allIds.join();
+                document.cookie = "apex__links="+stringArray;                 			
+				var newurl = replaceAll(firstEle, '#', '=')
+				window.location.href = newurl+'&current='+current+'&total='+total;   
+				
+            }
+            **/
+			
+			ids = '';
+			decodedCookie = {!JSENCODE('document.cookie')};
+			var ca = decodedCookie.split(';');
+			for(var j = 0; j <ca.length; j++) {
+				name = ca[j].split('=')[0];
+				value = ca[j].split('=')[1];
+				if(name.trim() == 'apex__offerIds'){
+					ids = value;
+				}
+			}
+			
+			var allIds = ids.split(',');
+			var firstEle = allIds[0];
+			allIds.shift();
+			var stringArray = allIds.join();
+			document.cookie = "apex__offerIds="+stringArray; 
+			window.location.href = "/apex/PBS_AAAP_OfferImg?id="+firstEle+'&current='+current+'&total='+total;
+			
+			/**
+            else{				
+				ids = '';
+				decodedCookie = document.cookie;
+				ca = decodedCookie.split(';');
+				for(var j = 0; j <ca.length; j++) {
+					name = ca[j].split('=')[0];
+					value = ca[j].split('=')[1];
+					if(name.trim() == 'apex__offerIds'){
+						ids = value;
+					}
+				}
+				
+				var allIds = ids.split(',');
+                var firstEle = allIds[0];
+                allIds.shift();
+                var stringArray = allIds.join();
+                document.cookie = "apex__offerIds="+stringArray; 
+                window.location.href = "/apex/PBS_AAAP_OfferImg?id="+firstEle+'&current='+current+'&total='+total; 
+            }
+			**/
+			
+			function replaceAll(str, term, replacement) {
+			  return str.replace(new RegExp(escapeRegExp(term), 'g'), replacement);
+			}
+			
+			function escapeRegExp(string){
+				return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+			}
+            
+        }
+	</script>
+</apex:page>

@@ -1,0 +1,258 @@
+<apex:page Controller="PBS_AAAP_UserProfileController" sidebar="false" showHeader="false" standardStylesheets="false"
+           cache="true">
+
+
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+
+    <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+    <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+    <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+
+    <style type="text/css">
+.ui-dialog {
+    background:#fff;
+    padding:10px;
+    border:1px solid #999;
+}
+ 
+.ui-dialog a {
+    float:right;
+    font-weight:bold;
+    padding:3px;
+    color:#999;
+    text-transform:uppercase;
+    font-size:10px;
+} 
+
+#lean_overlay {
+    position: fixed;
+    z-index:100;
+    top: 0px;
+    left: 0px;
+    height:100%;
+    width:100%;
+    background:none;
+    display: none;
+}
+
+.errMessage {color:red; }
+#nav ul {
+    float: right;
+    list-style: none;
+    margin: 30px 0px 25px 20px;
+}
+        h1.logo{clip: rect(0px,200px,70px,0px) !important;}
+
+    		#nav ul li a:hover, #nav ul li a.selected {
+               background-color: #EEEEEE;
+               border-radius: 5px;
+               border: 1px solid #cccccc;
+            }
+            #nav ul li a {
+                text-decoration: none;
+                color: #666666;
+                padding: 8px 18px;
+                border: 1px solid #ffffff;
+           }
+    </style>
+
+    <script src="https://jqueryjs.googlecode.com/files/jquery-3.4.1.min.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" type="text/javascript"></script>
+
+    
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+        <ul>
+            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
+                <apex:outputLink value="/AAAP/home/home.jsp">
+                    <li>{!$Label.site.login_button}</li>
+                </apex:outputLink>
+                <li> |</li>
+                <apex:outputLink value="/AAAP/ForgotPassword">
+                    <li>{!$Label.site.forgot_your_password_q}</li>
+                </apex:outputLink>
+                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
+                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
+                    <li>{!$Label.site.new_user_q}</li>
+                </apex:outputLink>
+            </apex:panelGroup>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>{!$Label.site.logout}</li>
+            </apex:outputLink>
+            <li>|</li>
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>
+        </ul>
+
+    </div><!--/login-->
+    <div id="wrapper">
+        <!--<c:inside_header rendered="{!!isLOP}"/>
+        <c:lop_inside_header rendered="{!isLOP}"/>-->
+
+        <!--  J. Rogers - Eliminate Headers
+            <h1 class="logo">GSA</h1>
+
+            <div id="nav">
+                <ul>
+                    <li><a id="link1" href="{!$Label.LOP_Community_Base_URL}AAAP-Help" style="">
+                        <font class="grey">AAAP Help</font>
+                    </a></li>
+                    
+                </ul>
+            </div>
+
+            <div id="hero-int2">
+                <h2>AAAP</h2>
+            </div>
+        -->
+
+
+        <div id="content" class="building"><!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
+
+
+            <apex:form styleClass="formwrap">
+                <apex:pageMessages />
+                <apex:outputPanel id="userDetail">
+                    <!--h2 class="page-title">User Profile</h2-->
+                    <h3 class="blue">User Profile</h3>
+                    <apex:outputPanel title="{!$Label.site.my_profile}" id="editUserDetail" rendered="{!isEdit}">
+
+                        <apex:panelGrid width="600" cellpadding="0" cellspacing="0" columns="2"
+                                        styleClass="topPanelContainer" style="align: center;">
+
+                            <apex:outputText value="First Name"/>
+                            <apex:inputField id="editfirstName" value="{!usrinfo.firstName}"/>
+                            <apex:outputText value="Last Name"/>
+                            <apex:inputField id="editlastName" value="{!usrinfo.lastName}"/>
+                            <apex:outputText value="Company Name"/>
+                            <apex:inputField id="editCompanyName" value="{!usrinfo.CompanyName}"/>
+                            <apex:outputText value="Title"/>
+                            <apex:inputField value="{!usrinfo.Title}"/>
+                            <apex:outputText value="Street"/>
+                            <apex:inputField id="editstreet" value="{!usrinfo.street}"/>
+                            <apex:outputText value="City"/>
+                            <apex:inputField id="editcity" value="{!usrinfo.city}"/>
+                            <apex:outputText value="State"/>
+                            <apex:inputField id="editstate" value="{!usrinfo.state}"/>
+                            <apex:outputText value="Zip/Postal Code"/>
+                            <apex:inputField id="editpostalcode" value="{!usrinfo.postalcode}"/>
+                            <apex:outputText value="Country"/>
+                            <apex:inputField id="editcountry" value="{!usrinfo.country}"/>
+                            <apex:outputText value="Phone"/>
+                            <apex:inputField id="editphone" value="{!usrinfo.phone}"/>
+                            <apex:outputText value="Phone Extension"/>
+                            <apex:inputField id="editAltphone" value="{!usrinfo.PBS_AAAP_Alternate_Phone__c}"/>
+                            <apex:outputText value="Email"/>
+                            <apex:inputField id="editemail" value="{!usrinfo.email}"/>
+                            
+                            <!--apex:outputPanel >
+                        <apex:outputText value="PIN* "/>
+                         <a class="popup" href="#Modal_UsPro_Pin"><img src="{!$Resource.Info_Icon}"/></a>
+                    <div id="Modal_UsPro_Pin" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                    <p>For additional security the Self-Select PIN (Personal Identification Number) must be an all-numeric six-digit code.</p>
+                    </div>
+                        </apex:outputPanel--><!--
+                        <apex:inputField value="{!usrinfo.PBS_AAAP_PIN__c}" required="true"/>  -->
+                            <!-- <apex:outputText value="States Of Interest"/>
+                            <apex:inputField id="editStatesOfInterest" value="{!usrinfo.PBS_AAAP_StatesOfInterest__c}"/> -->
+                        </apex:panelGrid>
+                        <br/>
+                        <apex:outputPanel id="editButtons" style="align: center;">
+                            <apex:commandButton id="save" value="Save" action="{!save}"/>
+                            <apex:commandButton id="cancel" value="Cancel"  onClick="cancelBackButton();return false;" /><!--  action="{!cancel}" immediate="true" -->
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                    <apex:outputPanel title="{!$Label.site.my_profile}" id="viewUserDetail" rendered="{!!isEdit}">
+
+                        <apex:panelGrid width="600" cellpadding="0" cellspacing="0" columns="2"
+                                        styleClass="topPanelContainer" style="align: center;">
+
+                            <apex:outputText value="First Name"/>
+                            <apex:outputField id="detailfirstName" value="{!usrinfo.firstName}"/>
+                            <apex:outputText value="Last Name"/>
+                            <apex:outputField id="detaillastName" value="{!usrinfo.lastName}"/>
+                            <apex:outputText value="Company Name"/>
+                            <apex:outputField id="detailCompanyName" value="{!usrinfo.CompanyName}"/>
+                            <apex:outputText value="Title"/>
+                            <apex:outputField value="{!usrinfo.Title}"/>
+                            <apex:outputText value="Street"/>
+                            <apex:outputField id="detailstreet" value="{!usrinfo.street}"/>
+                            <apex:outputText value="City"/>
+                            <apex:outputField id="detailcity" value="{!usrinfo.city}"/>
+                            <apex:outputText value="State"/>
+                            <apex:outputField id="detailstate" value="{!usrinfo.state}"/>
+                            <apex:outputText value="Zip Code*"/>
+                            <apex:outputField id="detailpostalcode" value="{!usrinfo.postalcode}"/>
+                            <apex:outputText value="Country"/>
+                            <apex:outputField id="detailcountry" value="{!usrinfo.country}"/>
+                            <apex:outputText value="Phone"/>
+                            <apex:outputField id="detailphone" value="{!usrinfo.phone}"/>
+                            <apex:outputText value="Phone Extension"/>
+                            <apex:outputField id="detailAltphone" value="{!usrinfo.PBS_AAAP_Alternate_Phone__c}"/>
+                            <apex:outputText value="Email"/>
+                            <apex:outputField id="detailemail" value="{!usrinfo.email}"/>
+                            <!--apex:outputPanel >
+                        <apex:outputText value="PIN* "/>
+                        <a class="popup" href="#Modal_UsPro_Pin"><img src="{!$Resource.Info_Icon}"/></a>
+                    <div id="Modal_UsPro_Pin" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                    <p>For additional security the Self-Select PIN (Personal Identification Number) must be an all-numeric six-digit code.</p>
+                    </div>
+                        </apex:outputPanel-->
+                            <!--
+                        <apex:outputText value="{!usrinfo.PBS_AAAP_PIN__c}" />
+                        <apex:outputText value="States Of Interest"/>
+                        <apex:outputField id="detailStatesOfInterest" value="{!usrinfo.PBS_AAAP_StatesOfInterest__c}"/>
+                        <apex:outputText value="Regions"/>
+                        <apex:outputField id="detailRegions" value="{!usrinfo.PBS_AAAP_Regions__c}"/>
+                        -->
+
+                        </apex:panelGrid>
+                        <br/><br/>
+                        <apex:outputPanel id="detailButtons" style="align: center;">
+                            <apex:commandButton id="edit" value="Update Account" action="{!edit}"/>
+                            <apex:commandButton id="remove" value="De-Register" action="{!actionredirecttoDeregister}"/>
+                            <apex:commandButton id="cancelButt" value="Cancel" onClick="cancelButton();return false;"/>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                </apex:outputPanel>
+
+            </apex:form>
+        </div>
+    </div>
+    <c:SiteFooterUX />
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            /* jrogers - Communities rewrite 1/29/2013 
+            var path = window.location.pathname;
+            console.log("path===> " + path);
+            
+            if(path == '/RSAP/userprofile'){
+                $('#link1').text('RSAP Help');
+                $('#link1').attr('href','/RSAP/Help');
+            }
+            */
+         
+           if ({!isLOP}){
+               
+                $('#link1').text('RSAP Help');
+               // j.rogers communities upgrade $('#link1').attr('href','/RSAP/Help');
+                 $('#link1').attr('href','{!$Label.LOP_Community_Base_URL}RSAP-Help');
+           }
+           /*  end Communities rewrite */
+        });
+
+        function cancelButton() {
+            window.history.back();
+        }
+        function cancelBackButton() {
+                window.history.go(-2);
+            }
+    </script>
+</apex:page>

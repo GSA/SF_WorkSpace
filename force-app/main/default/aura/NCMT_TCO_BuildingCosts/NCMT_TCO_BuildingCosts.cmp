@@ -1,0 +1,149 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId,lightning:isUrlAddressable" access="global" controller="NCMT_TCOBuildingCostsPerYear_LC">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <!--<aura:handler name="reRender" value="{!this}" action="{!c.reRender}"/>-->
+
+    <aura:attribute name="project" type="NCMT_TCO_Project" />
+    <aura:attribute name="projectName" type="String" />
+    <aura:attribute name="printMode" type="String" />
+    <aura:attribute name="isInit" type="Boolean" default="true"/>
+    <aura:attribute name="categories" type="List" />
+    <aura:attribute name="costDetails" type="List" />
+    <aura:attribute name="costs" type="List" />
+    <aura:attribute name="isLoaded" type="Boolean" default="false" />
+    
+    <aura:attribute name="selectedCostType" type="String" />
+    <aura:attribute name="selectedGrouping" type="String" />
+    <aura:attribute name="selectedCategory" type="String" />
+    <aura:attribute name="previousCategory" type="String" />
+    <aura:attribute name="selectedCostDetail" type="String" />
+    <aura:attribute name="displayCostType" type="String" />
+    <aura:attribute name="expenditureLink" type="String" />
+
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="totalData" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+
+    <lightning:card title="{!'Total Building Costs: ' +v.projectName}">
+        <aura:if isTrue="{! v.isLoaded }">
+            <lightning:layout multipleRows="true" class="headerLayout">
+                <lightning:layoutItem size="2" padding="around-small" class="headerCol">
+                    <h2 class="slds-text-heading_small" style="display:inline-block;">Start Construction:&nbsp;</h2> 
+                    <lightning:formattedDateTime value="{!v.project.record.Start_Construction__c}"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="2" padding="around-small" class="headerCol">
+                    <h2 class="slds-text-heading_small" style="display:inline-block;">Project Location:&nbsp;</h2> 
+                    <lightning:formattedText value="{!v.project.record.Location_Name__c}"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="2" padding="around-small" class="headerCol">
+                    <h2 class="slds-text-heading_small" style="display:inline-block;">Project Status:&nbsp;</h2> 
+                    <lightning:formattedText value="{!v.project.record.Project_Status__c}"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="6" padding="around-small" class="headerCol">
+                    <aura:if isTrue="{!and(v.printMode != 'true', v.deliverables.length!=0)}">
+                
+                        <button align="right" class="slds-button slds-button_brand" onclick="{!c.printMe}" id="prnBtn">Print View</button>
+                    </aura:if>
+                    <aura:if isTrue="{!v.printMode == 'true'}">
+                
+                        <button align="right" class="slds-button slds-button_brand" onclick="{!c.funPrint}" id="prnBtn">Print Page</button>
+                    </aura:if>
+                </lightning:layoutItem>
+            </lightning:layout>   
+
+
+                
+            <lightning:layout multipleRows="true" class="headerLayout">
+                <lightning:layoutItem size="2" padding="around-small" class="headerCol">
+                    <h2 class="slds-text-heading_small" style="display:inline-block;">Total Cost:&nbsp;</h2> <lightning:formattedNumber value="{!v.project.totalCost}" style="currency" maximumFractionDigits="0" minimumFractionDigits="0"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="2" padding="around-small" class="headerCol">
+                    <h2 class="slds-text-heading_small" style="display:inline-block;">Total Escalated Cost:&nbsp;</h2> <lightning:formattedNumber value="{!v.project.totalEscalated}" style="currency" maximumFractionDigits="0" minimumFractionDigits="0"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="2" padding="around-small" class="headerCol">
+                    <h2 class="slds-text-heading_small" style="display:inline-block;">Total Escalated &amp; Discounted Cost:&nbsp;</h2> <lightning:formattedNumber value="{!v.project.totalEscalatedDiscounted}" style="currency" maximumFractionDigits="0" minimumFractionDigits="0"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="6" padding="around-small" class="headerCol">
+                    
+                </lightning:layoutItem>
+            </lightning:layout>
+        </aura:if>
+    
+        <lightning:layout multipleRows="false" class="headerLayout">
+            <lightning:layoutItem size="2" padding="around-small"  flexibility="auto, no-grow">
+                <aura:if isTrue="{!v.printMode != 'true'}">
+                    <lightning:select name="costType" label="Display Cost" class="filterSelect" onchange="{!c.handleFilterChange}" value="{!v.selectedCostType}">
+                        <option value="cost">Constant Dollar</option>
+                        <option value="escalatedCost">Escalated Cost</option>
+                        <option value="escalatedDiscountedCost">Escalated &amp; Discounted Cost</option>
+                    </lightning:select>
+                </aura:if>
+                <aura:if isTrue="{!v.printMode == 'true'}">
+                    <h2 class="slds-text-heading_small" style="display:inline-block;">Cost Displayed:&nbsp;</h2> <lightning:formattedText value="{!v.displayCostType}"/>
+                </aura:if>
+            </lightning:layoutItem>
+
+            <lightning:layoutItem size="2" padding="around-small" >
+                <aura:if isTrue="{!v.printMode != 'true'}">
+                    <lightning:select name="grouping" label="Data Grouping" class="filterSelect" onchange="{!c.handleFilterChange}"  value="{!v.selectedGrouping}">
+                        <option value="cost">Detailed Costs</option>
+                        <option value="category">Category</option>
+                    </lightning:select>
+                </aura:if>
+               
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem size="2" padding="around-small">
+                <aura:if isTrue="{!v.printMode != 'true'}">
+                    <lightning:select name="grouping" label="Category" class="filterSelect"  
+                                    onchange="{!c.handleFilterChange}"  value="{!v.selectedCategory}">
+                        <aura:iteration items="{!v.categories}" var="item">
+                            <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                        </aura:iteration>
+                    </lightning:select>
+                </aura:if>
+              
+            </lightning:layoutItem>
+
+            <aura:if isTrue="{!v.selectedGrouping=='cost'}">
+                <lightning:layoutItem size="2" padding="around-small">
+                    <aura:if isTrue="{!v.printMode != 'true'}">
+                        <lightning:select name="costDetail" label="Cost Detail" class="filterSelect" 
+                                        onchange="{!c.handleFilterChange}"  value="{!v.selectedCostDetail}">
+                            <aura:iteration items="{!v.costDetails}" var="item">
+                                <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                            </aura:iteration>
+                        </lightning:select>
+                    </aura:if>
+                    
+                </lightning:layoutItem>
+            </aura:if>
+        </lightning:layout>
+        
+        <aura:if isTrue="{! !v.isLoaded }">
+            <lightning:spinner alternativeText="Loading" />
+        </aura:if>
+
+        <aura:if isTrue="{! v.isLoaded }">
+          
+            <lightning:datatable
+                        keyField="year"
+                        data="{! v.data }"
+                        columns="{! v.columns }"
+                        hideCheckboxColumn="true"
+                        class="lccTable"/>
+        </aura:if>
+
+        <!-- alignment issues
+        <aura:set attribute="footer">
+            <aura:if isTrue="{! v.isLoaded }">
+                <lightning:datatable
+                        keyField="year"
+                        data="{! v.totalData }"
+                        columns="{! v.columns }"
+                        hideCheckboxColumn="true"
+                        hideTableHeader="true"/>
+            </aura:if>
+        </aura:set>
+    -->
+    </lightning:card>
+</aura:component>

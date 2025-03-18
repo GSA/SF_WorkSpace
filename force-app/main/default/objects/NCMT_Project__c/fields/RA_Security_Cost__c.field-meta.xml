@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>RA_Security_Cost__c</fullName>
+    <externalId>false</externalId>
     <formula>IF((TEXT(Project_type__c) == &apos;Repair &amp; Alteration - Parametric Entry&apos; &amp;&amp; TEXT(RA_Estimate_Type__c) == &apos;Parametric Entry&apos;),
 (IF(TEXT(RA_Security__c) == &apos;Minimum upgrade to existing&apos;, (5.52 *  Gross_Area_Including_Parking__c), 
 IF(TEXT(RA_Security__c) == &apos;Upgrade: no blast&apos;, (14.91 * Gross_Area_Including_Parking__c),

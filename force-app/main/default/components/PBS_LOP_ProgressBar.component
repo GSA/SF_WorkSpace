@@ -1,0 +1,446 @@
+<apex:component controller="PBS_LOP_ProgressBarController" >
+    <script type="text/javascript">
+        
+          if('{!JSENCODE(pageURLForRedirection)}' != ''){
+            	window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
+            }  
+    
+        function saveThenGotoPage(url)
+        {
+            console.log('called**'+url);
+          
+            //alert('saveThenGotoPage');
+            $('[id*="pgUrl"]').val(url);
+            
+            if('{!linksToViewModePage}' == 'false') {   
+                btnJQSubmit1(url);
+            }
+            else{              
+                 
+                 $("input[type='submit'].btnJQSubmit:first").click();
+               // window.parent.location.href = url;
+               //  setTimeout(window.location.replace(url), 1000);
+            }  
+            //alert($('[id*="pgUrl"]').val(url));
+
+            /*  if ($("input[type='submit'].btnJQSubmit").val()  == undefined)
+            {
+                alert($("input[type='submit'].btnJQSubmit").val() );
+                $( "input[name*='btn_newspace_save_spc']" ).click();
+                console.log('undefined');
+                window.location.replace(url);
+            }
+            else
+            {
+                console.log('defined');
+             
+                 $("input[type='submit'].btnJQSubmit:first").click();
+                    window.parent.location.href = url;
+                   setTimeout(window.location.replace(url), 1000);
+            }*/
+        }
+
+    </script>
+
+    <apex:attribute name="myValue" description="This is the value for the component." type="String" />
+    <apex:attribute name="src" description="This is the helping variable to control the attachment navigation" type="String" />
+    <apex:attribute name="linksToViewModePage" description="When true, links will direct to viewonly pages.  Otherwise, the destination pages may be editable." type="String" required="false" />
+    <apex:attribute name="step" description="0 based index to state which step is the current" type="Integer" required="false" default="-1" />
+    <apex:attribute name="saveActionToInvoke" type="apexpages.action" description="Action to be invoked in the controller" required="false" />
+    <!-- <apex:attribute name="act" description="the action" type="apexpages.action"/>
+    <apex:attribute name="PageUrl" type="String" required="false" description="value to set"/> -->
+
+    <apex:outputPanel rendered="{!myValue == null || true}">
+
+        <style>
+
+            .steps-7 {
+                width: 859px;
+                height: 54px;
+                background-image: url({!URLFOR($Resource.PBS_AAAP_Chevron7Progression)});
+                background-repeat: no-repeat;
+                background-position: -2px {!(-2-step*100)}px;
+            }
+
+            /* J. Rogers - Changed Margin from "40px"*/
+            .steps {
+                margin-top:40px;
+                margin-bottom:40px;
+                margin-right:40px;
+                margin-left:0px;
+                padding: 0;
+                overflow: hidden;
+                border: 2px solid transparent;
+            }
+
+            .steps a {
+                color: #ffffff;
+            text-decoration: none;
+            }
+
+
+            /* Below Added by Bobby */
+            .steps span {
+                color: #ffffff;
+            text-decoration: none;
+                cursor:pointer;
+            }
+
+
+            .steps div {
+                text-align: center;
+                margin: auto;
+                position: relative;
+                height: 40px;
+            }
+
+            .steps p {
+
+                font-size: 10px !important;
+                text-transform: uppercase;
+                font-family: Segoe UI,Trebuchet,Arial,Sans-Serif;
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                padding: 0px;
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+                width: 115%;
+            }
+
+            .steps li {
+                float: left;
+                margin-left: 0;
+                width: 88px; /* 100 / number of steps */
+                height: 40px; /* total height */
+                list-style-type: none;
+                padding: 5px 5px 5px 30px; /* padding around text, last should include arrow width */
+                border-right: 3px solid transparent; /* width: gap between arrows, color: background of document */
+                position: relative;
+                vertical-align: middle;
+            }
+
+            /* remove extra padding on the first object since it doesnt have an arrow to the left */
+            .steps li:first-child {
+                padding-left: 5px;
+            }
+            /* white arrow to the left to "erase" background (starting from the 2nd object) */
+            .steps li:nth-child(n+2)::before {
+                position: absolute;
+                top: 0;
+                left: 0;
+                display: block;
+                border-left: 25px solid transparent; /* width: arrow width, color: background of document */
+                border-top: 25px solid transparent; /* width: half height */
+                border-bottom: 25px solid transparent; /* width: half height */
+                width: 0;
+                height: 0;
+                content: " ";
+            }
+            /* colored arrow to the right */
+            .steps li::after {
+                z-index: 1; /* need to bring this above the next item */
+                position: absolute;
+                top: 0;
+                right: -25px; /* arrow width (negated) */
+                display: block;
+                border-left: 25px solid transparent; /* width: arrow width */
+                border-top: 25px solid transparent; /* width: half height */
+                border-bottom: 25px solid transparent; /* width: half height */
+                width: 0;
+                height: 0;
+                content: " ";
+            }
+
+            /* Setup colors (both the background and the arrow) */
+
+            .steps li.current ~ li a {
+                color: rgb(102, 102, 102);
+            }
+
+            /* Below Added by Bobby */
+
+            .steps li.current ~ li span {
+                color: rgb(102, 102, 102);
+            }
+
+            .currentselection  {
+                color: white;
+            }
+
+            .wasselected  {
+                color: white;
+            }
+            /* Below Added by Bobby */
+
+        </style>
+
+
+        <apex:form id="frmId"> 
+            <script type="text/javascript">
+            console.log('{!pageURLForRedirection}');
+           // alert('{!pageURLForRedirection}');
+          //  alert('hi');
+            if('{!pageURLForRedirection}' != ''){
+                window.parent.location.href = '{!pageURLForRedirection}';
+            }
+            </script>
+           
+            <apex:actionFunction name="btnJQSubmit1"  reRender="frmId" action="{!redirectPage}">
+                <apex:param name="firstParam" assignTo="{!pageURL}" value="" />
+            </apex:actionFunction>
+
+
+       <!-- J. Rogers - Commented out center tab
+            <center -->
+                <ul class="steps steps-7">
+                    <li id="building-fundamentals-nav" class="{!if(step==0,'current', '')}">
+                        <span onclick="saveThenGotoPage('{!if(linksToViewModePage=="false",'/RSAP/Building?edit=false&offerId='+myValue,'/RSAP/Building?edit=true&offerId='+myValue)}');">
+                            <div>
+                                <p>Building Information</p>
+                            </div>
+                        </span>
+                    </li>
+                    <li id="building-details-nav" class="{!if(step==1,'current', '')}">
+                        <span onclick="saveThenGotoPage('{!if(linksToViewModePage=="false",'/RSAP/SpacesAndParking?edit=false&offerId='+myValue,'/RSAP/SpacesAndParking?edit=true&offerId='+myValue)}');">
+                            <div>
+                                <p>Space &amp; Parking</p>
+                            </div>
+                        </span>
+                    </li>
+                    <li id="property-owner-nav" class="{!if(step==2,'current', '')}">
+                        <span onclick="saveThenGotoPage('{!if(linksToViewModePage=="false",'/RSAP/OperatingCost?edit=false&offerId='+myValue,'/RSAP/OperatingCost?edit=true&offerId='+myValue)}');">
+                            <div>
+                                <p>Operating &amp; Ownership Costs</p>
+                            </div>
+                        </span>
+                    </li>
+                    <li id="operating-cost-nav" class="{!if(step==3,'current', '')}">
+                        <span onclick="saveThenGotoPage('{!if(linksToViewModePage=="false",'/RSAP/LeaseTerms?edit=false&offerId='+myValue,'/RSAP/LeaseTerms?edit=true&offerId='+myValue)}');">
+                            <div>
+                                <p>Lease Terms &amp; Conditions</p>
+                            </div>
+                        </span>
+                    </li>
+                    <li id="space-rates-nav" class="{!if(step==4,'current', '')}">
+                        <span onclick="saveThenGotoPage('{!if(linksToViewModePage=="false",'/RSAP/Rates?edit=false&offerId='+myValue,'/RSAP/Rates?edit=true&offerId='+myValue)}');">
+                            <div>
+                                <p>Rates</p>
+                            </div>
+                        </span>
+                    </li>
+                    <li id="parking-nav" class="{!if(step==5,'current','')}">
+                        <span onclick="saveThenGotoPage('{!if(linksToViewModePage=="false",'/RSAP/PropertyOwner?edit=false&offerId='+myValue,'/RSAP/PropertyOwner?edit=true&offerId='+myValue)}');">
+                            <div>
+                                <p>Property Owner &amp; Remarks</p>
+                            </div>
+                        </span>
+                    </li>
+                    <li id="attachments-nav" class="{!if(step==6,'current', '')}">
+                        <span onclick="saveThenGotoPage('{!if(linksToViewModePage=="false",'/RSAP/Attachments?edit=false&offerId='+myValue,'/RSAP/Attachments?edit=true&offerId='+myValue)}');">
+                            <div>
+                                <p>Attachments</p>
+                            </div>
+                        </span>
+                    </li>
+                </ul>
+                <!-- J. Rogers - Commented out center tab
+            </center  -->
+
+        </apex:form>
+
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{false}">
+        BBBBBBBBBBBBBBBBBBBB
+        <!--  https://css-tricks.com/triangle-breadcrumbs/ -->
+
+        In chrome on zoom, there is a 1 pixel bar 1 cant kill.  So we will use this code to create the background image...
+
+        <style>
+
+            .steps-7 {
+                width: 857px;
+            }
+
+            /* J. Rogers - Changed Margin from "40px"*/
+            .steps {
+                margin-top:40px;
+                margin-bottom:40px;
+                margin-right:40px;
+                margin-left:0px;
+                padding: 0;
+                overflow: hidden;
+                border: 2px solid rgb(181, 181, 181);
+            }
+
+            .steps a {
+                color: white;
+                text-decoration: none;
+            }
+
+            .steps div {
+                text-align: center;
+                margin: auto;
+                position: relative;
+                height: 40px;
+            }
+
+            .steps p {
+                font-size: 10px !important;
+                text-transform: uppercase;
+                font-family: Segoe UI,Trebuchet,Arial,Sans-Serif;
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                padding: 0px;
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+            }
+
+            .steps li {
+                float: left;
+                margin-left: 0;
+                width: 88px; /* 100 / number of steps */
+                height: 40px; /* total height */
+                list-style-type: none;
+                padding: 5px 5px 5px 30px; /* padding around text, last should include arrow width */
+                border-right: 3px solid rgb(181, 181, 181); /* width: gap between arrows, color: background of document */
+                position: relative;
+                vertical-align: middle;
+            }
+
+            /* remove extra padding on the first object since it doesnt have an arrow to the left */
+            .steps li:first-child {
+                padding-left: 5px;
+            }
+            /* white arrow to the left to "erase" background (starting from the 2nd object) */
+            .steps li:nth-child(n+2)::before {
+                position: absolute;
+                top: 0;
+                left: 0;
+                display: block;
+                border-left: 25px solid rgb(181, 181, 181); /* width: arrow width, color: background of document */
+                border-top: 25px solid transparent; /* width: half height */
+                border-bottom: 25px solid transparent; /* width: half height */
+                width: 0;
+                height: 0;
+                content: " ";
+            }
+            /* colored arrow to the right */
+            .steps li::after {
+                z-index: 1; /* need to bring this above the next item */
+                position: absolute;
+                top: 0;
+                right: -25px; /* arrow width (negated) */
+                display: block;
+                zborder-left: 25px solid rgb(0,54,98); /* width: arrow width */
+                border-left: 25px solid transparent; /* width: arrow width */
+                border-top: 25px solid transparent; /* width: half height */
+                border-bottom: 25px solid transparent; /* width: half height */
+                width: 0;
+                height: 0;
+                content: " ";
+            }
+
+            /* Setup colors (both the background and the arrow) */
+
+            /* Completed */
+            .steps li {
+                background-color: rgb(0,54,98);
+            }
+
+            .steps li::after {
+                border-left-color: rgb(0,54,98);
+            }
+
+            /* Current */
+            .steps li.current {
+                background-color: rgb(0,85,143);
+            }
+
+            .steps li.current::after {
+                border-left-color: rgb(0,85,143);
+            }
+
+            /* Following */
+            .steps li.current ~ li {
+                background-color: rgb(245, 245, 245);
+            }
+
+            .steps li.current ~ li a {
+                background-color: rgb(245, 245, 245);
+                color: rgb(102, 102, 102);
+            }
+
+            .steps li.current ~ li::after {
+                border-left-color: rgb(245, 245, 245);
+                zborder-left-color: pink;
+            }
+
+            /*
+
+                    .steps li:last-of-type {
+                        border-right: 3px solid red;
+                    }
+
+
+                Hover for completed and current
+            .steps li:hover {
+                background-color: #696
+            }
+
+            .steps li:hover::after {
+                border-left-color: #696
+            }
+            */
+        </style>
+       
+       <!-- J. Rogers - Commented out center tab
+        <center  -->
+           
+            <ul class="steps steps-7">
+                <li id="building-fundamentals-nav" class="{!if(step==0,'current', '')}">
+                    <a href="{!if(myValue==null,'#',if(linksToViewModePage=="false",'/AAAP/pbs_lop_building?edit=false&offerId='+myValue,'/AAAP/pbs_lop_building?edit=true&offerId='+myValue))}">
+                        <div><p>Building Fundamentals</p></div>
+                    </a>
+                </li>
+                <li id="building-details-nav" class="{!if(step==1,'current', '')}">
+                    <a href="{!if(myValue==null,'#',if(linksToViewModePage=="false",'/AAAP/pbs_lop_SpacesAndParking?edit=false&offerId='+myValue,'/AAAP/pbs_lop_SpacesAndParking?edit=true&offerId='+myValue))}">
+                        <div><p>Parking</p></div>
+                    </a>
+                </li>
+                <li id="property-owner-nav" class="{!if(step==2,'current', '')}">
+                    <a href="{!if(myValue==null,'#',if(linksToViewModePage=="false",'/AAAP/pbs_lop_operatingcost?edit=false&offerId='+myValue,'/AAAP/pbs_lop_operatingcost?edit=true&offerId='+myValue))}">
+                        <div><p>Operating &amp; Ownership Costs</p></div>
+                    </a>
+                </li>
+                <li id="operating-cost-nav" class="{!if(step==3,'current', '')}">
+                    <a href="{!if(myValue==null,'#',if(linksToViewModePage=="false",'/AAAP/PBS_LOP_LeaseTerms?edit=false&offerId='+myValue,'/AAAP/PBS_LOP_LeaseTerms?edit=true&offerId='+myValue))}">
+                        <div><p>Lease Terms &amp; Conditions</p></div>
+                    </a>
+                </li>
+                <li id="space-rates-nav" class="{!if(step==4,'current', '')}">
+                    <a href="{!if(myValue==null,'#',if(linksToViewModePage=="false",'/AAAP/pbs_lop_Rates?edit=false&offerId='+myValue,'/AAAP/pbs_lop_Rates?edit=true&offerId='+myValue))}">
+                        <div><p>Space &amp; Rates</p></div>
+                    </a>
+                </li>
+                <li id="parking-nav" class="{!if(step==5,'current','')}">
+                    <a href="{!if(myValue==null,'#',if(linksToViewModePage=="false",'/AAAP/pbs_lop_PropertyOwner?edit=false&offerId='+myValue,'/AAAP/pbs_lop_PropertyOwner?edit=true&offerId='+myValue))}">
+                        <div><p>Property Owner &amp; Remarks</p></div>
+                    </a>
+                </li>
+                <li id="attachments-nav" class="{!if(step==6,'current', '')}">
+                    <a href="{!if(myValue==null,'#',if(linksToViewModePage=="false",'/AAAP/pbs_lop_Attachments?edit=false&offerId='+myValue,'/AAAP/pbs_lop_Attachments?edit=true&offerId='+myValue))}">
+                        <div><p>Attachments</p></div>
+                    </a>
+                </li>
+            </ul>
+            <!-- J. Rogers - Commented out center tab
+        </center  -->
+
+
+
+    </apex:outputPanel>
+</apex:component>

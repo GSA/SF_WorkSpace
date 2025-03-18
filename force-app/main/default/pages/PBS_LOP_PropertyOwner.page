@@ -1,0 +1,350 @@
+<apex:page Controller="PBS_LOP_PropertyOwnerController" sidebar="false" showHeader="false" standardStylesheets="false"
+    cache="true">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+    <style>
+        textarea:focus-visible{
+            border: none !important;
+        }
+        .ui-dialog {
+        background: #fff;
+        padding: 10px;
+        border: 1px solid #999;
+        }
+        .ui-dialog a {
+        float: right;
+        font-weight: bold;
+        padding: 3px;
+        color: #999;
+        text-transform: uppercase;
+        font-size: 10px;
+        }
+        .errMessage {
+        color: red;
+        }
+        #lean_overlay {
+        position: fixed;
+        z-index: 100;
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        width: 100%;
+        background: none;
+        display: none;
+        }
+        
+        .infopopup1 {
+              position:fixed !important;
+              display:inline-block;
+              top:80% !important;
+              left:50% !important;
+              //width:700px !important;
+              //height 800px !important;
+              margin-left:-350px !important;
+              margin-top:-350px !important;
+            //transform: translate(-50%, -50%); !important;
+            }
+    </style>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript"
+        src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <script type="text/javascript">
+            console.log('{!pageURLForRedirection}');
+            if('{!JSENCODE(pageURLForRedirection)}' != ''){
+                window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
+                window.parent.document.body = document.createElement('body');
+            }
+    		else{
+        	window.parent.document.body.scrollTop = 0;
+  			window.parent.document.documentElement.scrollTop = 0;
+       		}
+    </script>
+    <script type="text/javascript">
+        //alert('test');
+        JY = jQuery.noConflict();
+        JY(document).ready(function () {
+            //added by syam display msg when submitted offer is saved.
+            draftMsgFlag = JY('input[id=' + "'{!$Component.newOffer.draftMsgFlag}'" + ']').val();
+            if (draftMsgFlag == 'true') {
+                var confirm1 = JY('<div></div>').html("Your offer is no longer submitted. Offer status is updated to 'Draft' status and needs to be submitted again.").dialog({
+                    autoOpen: false,
+                    title: '',
+                    modal: true,
+                    position: ['center', 'center'],
+                    buttons: {
+                        'OK': function () {
+                            JY(this).dialog('close');
+                        }
+                    }
+                });
+        
+                confirm1.dialog('open');
+            }
+        
+        });
+        
+        function disableFields() {
+            var checkBoxVal = JY('input[id=' + "'{!$Component.newOffer.sameAsOfferor}'" + ']').attr('checked');
+            var el = document.getElementById('{!$Component.newOffer.state}');
+            console.log('****'+checkBoxVal);
+            if (checkBoxVal == 'checked') {
+                //  JQ('input[id=' + "'{!$Component.newOffer.propownername}'" + ']').prop('disabled', true);
+                JY('input[id=' + "'{!$Component.newOffer.firstname}'" + ']').prop('disabled', true);
+                JY('input[id=' + "'{!$Component.newOffer.lastname}'" + ']').prop('disabled', true);
+                JY('input[id=' + "'{!$Component.newOffer.address}'" + ']').prop('disabled', true);
+                JY('input[id=' + "'{!$Component.newOffer.city}'" + ']').prop('disabled', true);
+                JY(el).attr('disabled', 'disabled');
+                JY('input[id=' + "'{!$Component.newOffer.zip}'" + ']').prop('disabled', true);
+                
+                document.getElementById('checkboxspan').classList.add("checked");
+                
+            }
+            else {
+                JY('input[id=' + "'{!$Component.newOffer.firstname}'" + ']').prop('disabled', false);
+                JY('input[id=' + "'{!$Component.newOffer.lastname}'" + ']').prop('disabled', false);
+                JY('input[id=' + "'{!$Component.newOffer.address}'" + ']').prop('disabled', false);
+                JY('input[id=' + "'{!$Component.newOffer.city}'" + ']').prop('disabled', false);
+                JY('input[id=' + "'{!$Component.newOffer.zip}'" + ']').prop('disabled', false);
+                JY(el).removeAttr('disabled');
+                document.getElementById('checkboxspan').classList.remove("checked");
+            }
+        
+        }
+            function validateZipcode() {
+            var flag = true;
+            var postalCodeRegex = /^([0-9]{5})(?:[-\s]*([0-9]{4}))?$/;
+            var zipCd = JY('input[id=' + "'{!$Component.newOffer.zip}'" + ']').val();
+            if (zipCd != '') {
+                flag = postalCodeRegex.test(zipCd);
+                if (!flag) {
+                    //alert('Please enter valid ZIP code in either 5-digit or 9-digit format, for example 12345 or 12345-6789.');
+                    var confirm1 = JY('<div></div>').html("Please enter valid ZIP code in either 5-digit or 9-digit format, for example 12345 or 12345-6789.").dialog({
+                        autoOpen: false,
+                        title: '',
+                        modal: true,
+                        position: ['center', 'center'],
+                        buttons: {
+                            'OK': function () {
+                                JY(this).dialog('close');
+                                JY('input[id=' + "'{!$Component.newOffer.zip}'" + ']').val("");
+                                JY('input[id=' + "'{!$Component.newOffer.zip}'" + ']').focus();
+                            }
+                        }
+                    });
+
+                    confirm1.dialog('open');
+                }
+
+            }
+            return flag;
+        }
+        
+        function setCheckboxClass(val){
+            debugger;
+            if(val == 'false') {
+                document.getElementById('checkboxspan').classList.remove("checked");
+            }
+             else {
+                document.getElementById('checkboxspan').classList.add("checked");
+                JY('[id*=interest] select').val('Owner');
+                JY('[id*=interest].selector span:first').text('Owner');
+                JY('[id*=OtherRelationshipPanel]').hide();
+            }
+            //alert(val);
+        }
+         function init() {        
+            updateremarksCounter();                    
+        }
+        function updateremarksCounter() {
+            var cnt = document.getElementById('{!$Component.newOffer.remarks}').value.length;
+            var c = cnt + '/1000';
+            document.getElementById('{!$Component.newOffer.remarksCounter}').innerText = c;
+        }
+    function blockSpecialChar(e){
+        console.log(e);
+        return e.key != '.'; //(e.charCode >= 48 && e.charCode <=57) || (e.charCode >= 97 && e.charCode <=122) || (e.charCode >= 65 && e.charCode <=90); 
+    }
+    </script>
+    <body onload="init()"> <!--onload="disableFields();"-->
+        
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+            <ul>
+                <li><a href="/RSAP/portalHome">RSAP Home</a> </li>
+                <li>|</li>
+                <li><a href="/AAAP/portalHome">AAAP</a></li>
+                <li>|</li>
+                <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
+                    <apex:outputLink value="/AAAP/home/home.jsp">
+                        <li>{!$Label.site.login_button}</li>
+                    </apex:outputLink>
+                    <li> |</li>
+                    <apex:outputLink value="/AAAP/ForgotPassword">
+                        <li>{!$Label.site.forgot_your_password_q}</li>
+                    </apex:outputLink>
+                    <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
+                    <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
+                        <li>{!$Label.site.new_user_q}</li>
+                    </apex:outputLink>
+                </apex:panelGroup>
+                <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                                 rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                    <li>{!$Label.site.logout}</li>
+                </apex:outputLink>
+            </ul>
+        </div  -->
+        <div id="wrapper">
+            <c:lop_inside_header />
+            <div id="content" class="property-owner">
+                <!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
+                <apex:panelGrid rendered="{!!isValidUser}">
+                    <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+                    <apex:messages styleClass="errMessage" id="message"/>
+                </apex:panelGrid>
+                <apex:panelGroup rendered="{!isValidUser}">
+                    <apex:panelGrid columns="2" style="float:right">
+                        <a href="#" onclick="window.print();"></a>
+                        <apex:outputLabel style="padding-right:47px"></apex:outputLabel>
+                    </apex:panelGrid>
+                    <br/>
+                    <c:lopHeader myOffer="{!lopOffer}" myProject="{!rlp}" offerDueDate=""/>
+                    <c:PBS_LOP_ProgressBar myValue="{!lopOffer.Id}" step="5" linksToViewModePage="{!isEditable}"/>
+                </apex:panelGroup>
+                <apex:form id="newOffer" styleClass="formwrap" rendered="{!isValidUser}">
+                    <h3 class="blue">Property Owner and Additional Remarks</h3>
+                    <apex:messages styleClass="errMessage"/>
+                    <apex:inputHidden id="draftMsgFlag" value="{!draftMsgFlag}"/>
+                    <apex:inputHidden id="pgUrl" value="{!pageUrl}"/>
+                    <apex:outputPanel rendered="{!viewOnly}">
+                        <apex:outputLabel id="msgview" styleClass="errMessage" value="{!viewMsg}"/>
+                    </apex:outputPanel>
+                    <h5 style = "color: black;padding-top: 15px;"><b>Property Owner Information</b></h5>
+                    <apex:panelGrid columns="2" id="theGridsection1">
+                        <apex:outputPanel >
+                            <apex:outputtext value="{!$Label.PBS_AAAP_Prop_Recorded_Ownr}"/>
+                            <span class="required">*</span>
+                        </apex:outputPanel>
+                        <apex:outputPanel >                             
+                            <apex:inputText value="{!lopOffer.PBS_AAAP_Owner_Name__c}" id="firstname" styleclass="text"/>
+                            <div class="checker">
+                            <span id="checkboxspan">                            
+                            <apex:inputCheckbox id="sameAsOfferor"
+                                value="{!sameOwner}">
+                                <apex:actionSupport action="{!copyUserDetails}" event="onclick" reRender="theGridsection1" oncomplete="setCheckboxClass('{!sameOwner}')"/>
+                            </apex:inputCheckbox>
+                            </span>
+                            </div>
+                            <apex:outputtext value="Check if same as offeror"/>
+                        </apex:outputPanel>
+                        <apex:outputPanel >
+                            <apex:outputtext value="2. Street Address:"/>
+                            <span class="required">*</span>
+                        </apex:outputPanel>
+                        <apex:inputField value="{!lopOffer.PBS_AAAP_Owner_Address__c}" id="address" styleclass="text"/>
+                        <apex:outputPanel >
+                            <apex:outputtext value="3. City:"/>
+                            <span class="required">*</span>
+                        </apex:outputPanel>
+                        <apex:inputField value="{!lopOffer.PBS_AAAP_Owner_City__c}" id="city" styleclass="text"/>
+                        <apex:outputPanel >
+                            <apex:outputtext value="4. State:"/>
+                            <span class="required">*</span>
+                        </apex:outputPanel>
+                        <apex:inputText value="{!lopOffer.PBS_AAAP_Owner_State__c}" id="state" styleclass="text"/>
+                        <apex:outputPanel >
+                            <apex:outputtext value="5. 9-Digit ZIP Code:"/>
+                            <span class="required">*</span>
+                        </apex:outputPanel>
+                        <apex:inputField value="{!lopOffer.PBS_AAAP_Owner_Zip__c}" id="zip" onblur="validateZipcode();" styleclass="text"/>
+                    </apex:panelGrid>
+                    <apex:panelGrid columns="1" id="theGridsection2" style="margin-top: -20px;">
+                        <div>
+                            <apex:actionRegion >
+                                <apex:outputtext value="{!$Label.LOP_RELATIONSHIP_TO_THE_PROPERTY_OWNER}"/>
+                                <span class="required">*</span>
+                                <a class="popup" href="#Modal_Prop_Ques6"><img src="{!$Resource.Info_Icon}"/></a><br/>
+                                <div id="Modal_Prop_Ques6" class = "infopopup1"
+                                    style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px">
+                                    <p>
+                                        If the offeror is not the owner of the Property, you must submit authorization from the ownership entity
+                                         to submit an offer on the ownership entity’s behalf.
+                                    </p>
+                                </div>
+                                <table>
+                                    <tr>  
+                                        <td>
+                                            
+                                            <div style="padding-top: 0px;margin-left: 15px !important;margin-bottom:-30px !important;">
+                                                <apex:inputField value="{!lopOffer.PBS_AAAP_OFFEROR_INTEREST__c}" id="interest">
+                                                    <apex:actionSupport event="onchange" action="{!showOfferorRelationShipOther}"
+                                                                        rerender="OtherRelationshipPanel"/>
+                                                </apex:inputField>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <apex:outputPanel id="OtherRelationshipPanel" style="padding-left: 20px;">
+                                                &nbsp;&nbsp;
+                                                <apex:outputText value="Other: " rendered="{!otherRelationShip}"/>
+                                                <apex:inputField value="{!lopOffer.PBS_AAAP_OFFEROR_INTEREST_OTHER__c}"
+                                                                 rendered="{!otherRelationShip}" styleclass="text"/>
+                                            </apex:outputPanel>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </apex:actionRegion>
+                        </div>
+                        <apex:outputPanel >
+                            <div style="margin-top: -20px;margin-letf: -3px;" >                           
+                            
+                            <apex:outputtext value="{!$Label.LOP_PROPERTY_OWNER_DUNS}"/>
+                            <span class="required">*</span>
+                            <a class="popup" href="#Modal_Prop_Ques15"><img src="{!$Resource.Info_Icon}"/></a><br/><br/>
+                            <div id="Modal_Prop_Ques15" class = "infopopup1"
+                                style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px">
+                                <p>
+                                   The Unique Entity Identifier (UEI) is a 12-character alphanumeric value assigned, managed, and owned by 
+                                   the federal government. The System for Award Management (SAM) located at 
+                                   <a style="text-decoration:none; color: blue;" href="https://SAM.GOV/" target="_blank">HTTPS://SAM.GOV</a>  
+                                    is the system that assigns a UEI. The Offeror must register their entity in <a style="text-decoration:none; color: blue;" href="https://SAM.GOV/" target="_blank">SAM.gov </a> 
+                                    when they want to bid on federal  contracts. SAM registration and the UEI is required prior to lease award, 
+                                    unless stated otherwise in the RLP. If you are not already registered in <a style="text-decoration:none; color: blue;" href="https://SAM.GOV/" target="_blank">SAM.gov</a>, please
+                                    begin the process to obtain one early to ensure compliance with the RLP. The registration service is free of charge.                                     
+                                </p>
+                            </div>
+                            <apex:inputField value="{!lopOffer.PBS_AAAP_DUNS_Number__c}" id="duns" style="margin-left: 15px !important;" />
+                        </div>
+                            
+                            </apex:outputPanel>
+                    </apex:panelGrid>
+                    <br/>
+                            <div border="2" class="bb" style="width:80%;"><h5 class="grey" style="padding-top: 0px !important;color:black;">Additional Remarks or Conditions with Respect to this Offer</h5>
+                               <span style="font-size: 14px;">Use this field to provide additional remarks or deviations to the RLP. Alternatively, note the attachment name in this field if you choose to supply this information as a document on the Attachments page.</span><br/>
+                                <span style="color:blue;"><h8>(1,000 characters max)</h8></span><br/><br/>
+                                <apex:inputField styleClass="aaapTextArea" value="{!lopOffer.PBS_AAAP_Offer_Additional_Remarks__c}" id="remarks" html-maxlength="1000" onkeyup="updateremarksCounter()" style="width:86%;border-radius: 4px;border: 0px;height: 80px;"/><br/>
+                                <div style="font-size: 14px;"><apex:outputText id="remarksCounter" />&#160;Characters Used</div>
+                            </div>
+                    <br/>
+                    <apex:outputPanel rendered="{!!viewOnly}"> <!--{!!viewOnly}-->
+                        <apex:commandButton value="Back" action="{!backToOfrParking}"/>
+                        <apex:commandButton value="Save Page" styleClass="btnSave" action="{!actionSavePropertyOwner2}" onclick="return validateZipcode();"/>
+                        <apex:commandButton value="Next" action="{!actionSavePropertyOwnerAndContinue}" styleClass="btnJQSubmit" onclick="return validateZipcode();"/>
+                        <!-- J. Rogers - Communities Upgrade
+                        <apex:commandButton value="Exit Offer" action="{!actionCancel}"
+                            onclick="if(confirm('Please make sure to hit save page before exiting your offer.  Changes will not be saved unless you hit Save Page.')){return true;} else return false;"/>
+                        -->
+                        <apex:commandButton value="Exit Offer"
+                            onclick="if(confirm('Are you sure you want to cancel editing this record without saving changes?')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}RSAP-PortalHome';return false;} else {return false;}"/>
+                   </apex:outputPanel>
+                </apex:form>
+            </div>
+            <!-- /content-->
+        </div>
+        <!-- /Wrapper -->
+    </body>
+    <c:SiteFooterUX />
+</apex:page>

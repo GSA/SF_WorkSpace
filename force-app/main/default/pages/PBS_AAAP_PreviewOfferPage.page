@@ -1,0 +1,288 @@
+<apex:page Controller="PBS_AAAP_OfferPreviewPageController" sidebar="false" showHeader="false"
+           standardStylesheets="false" >
+    
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+    <apex:includeScript value="/soap/ajax/34.0/connection.js"/>
+    <apex:includeScript value="/soap/ajax/34.0/apex.js"/>
+    <apex:includescript value="//code.jquery.com/jquery-1.11.1.min.js"/> 
+    <apex:includeScript value="{!URLFOR($Resource.jszip, 'jsZip/dist/jszip.js')}"/>
+    <!--<apex:includeScript value="{!$Resource.filesaver}"/>-->
+    <!--<apex:includeScript value="https://fastcdn.org/FileSaver.js/1.1.20151003/FileSaver.min.js"/>-->
+    <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"/>
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></apex:includeScript>
+    <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+    <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
+    <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" />
+        
+        <style>
+        a {
+            color: #002BAD;
+        }
+    a:hover {
+        color: #002BAD;
+    }
+    .tabbed-table table td {background:#fff;}
+    h2        {color:#fff; font-size:80%; font-weight:bold; padding-left:0px; width:80%;}     
+    
+    .tabbed-table table tr.even td {
+        background: #fff;
+        height: 10%;
+    }
+               
+               .apexp {
+                   width: 910px;
+                   margin: 0 0 0 0;
+               }
+               .tabbed-table table {
+                   margin: 2px !important;
+                   vertical-align: middle !important;
+                   width: 895px;
+                   border-left: 1px solid #999999;
+                   border-right: 1px solid #999999;
+                   border-bottom: 1px solid #999999;
+                   border-top: 1px solid #999999;
+                   width: 95% !important;
+               }
+               .tabbed-table h3 {
+                   padding-left: 5px !important; 
+                   border: none;
+                   float: left;
+               }
+               .tabbed-table table th {
+                   padding-left:5px;
+               }
+               .tabbed-table{
+                   float: none;
+               }
+               
+               </style>
+               <script type="text/javascript">
+                   // new lines added 1/5/2023
+                   console.log('{!pageURLForRedirection}');
+               if('{!JSENCODE(pageURLForRedirection)}' != ''){
+                   window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
+                   window.parent.document.body = document.createElement('body');
+               }
+               else{
+                   window.parent.document.body.scrollTop = 0;
+                   window.parent.document.documentElement.scrollTop = 0;
+               }
+               </script>
+    <script type="text/javascript">
+    
+    $( document ).ready(function() {
+        //alert('dd');
+        // calling action function to update offer
+        updateOffer();
+    });
+    
+    var zipFile = new JSZip();
+    var jsAtt;
+    function downloadAttachment(offerId, offerBuilding_Name)	
+    {        	
+        console.log('function called', offerId, offerBuilding_Name);	
+        $('#LoadingImage').show();	
+        Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.PBS_AAAP_OfferPreviewPageController.DownloadAllFiles}', offerId, function(result,event) {	
+            console.log('**'+event.status);	
+            console.log('** ' + event.message);	
+            if(event.status){	
+                jsAtt = result;	
+                $.each(jsAtt, function(key,value) {	
+                    compressFile(zipFile, value.attName, value.attEncodedBody);	
+                });	
+                downloadZip(zipFile,offerId,offerBuilding_Name);	
+                $('#LoadingImage').hide();	
+            }	
+        });	
+        
+    }
+    
+    
+    
+    
+    function compressFile(zipFile, name, data) {
+        zipFile.file(name, data, {base64:true});
+    }        
+    
+    function downloadZip(zipFile,offerId,offerBuilding_Name){
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+        if(dd<10) {
+            dd = '0'+dd
+        } 
+        if(mm<10) {
+            mm = '0'+mm
+        } 
+        today = mm + '/' + dd + '/' + yyyy;
+        var attachmentData = zipFile.generate({type:"blob"});
+        var fileName = offerBuilding_Name+' - Offer Document Bundle - '+today+'.zip';
+        saveAs(attachmentData,fileName);
+    }        
+    
+    
+    </script>
+    
+    <div id="wrapper">
+        <!-- J. Rogers  Comment out Header Links   
+<h1 class="logo">GSA</h1>
+<div id="nav" class="interior">
+<ul>
+<li></li>
+</ul>
+</div><!--/nav->
+<div style="!important; margin-top: 80px"/  
+
+<div id="hero-int">
+<!--<h2>AAAP</h2>->
+</div><!--/hero->
+-->
+        <apex:outputPanel rendered="{!$User.ContactId == Null}">
+            <style>
+                #content{
+                	padding-left:190px;
+                }
+            </style>
+        </apex:outputPanel>
+        <div id="content">
+            <apex:form id="newOffer" styleClass="formwrap">
+                <apex:actionFunction name="updateOffer" action="{!updateOfferDetails}" oncomplete=""/>
+                <h3 class="blue">View Offer</h3>
+                <!--<b><h3><apex:outputText value="Building Information"/></h3></b>-->
+                <apex:PanelGrid columns="2">
+                    <apex:outputLabel value="Building Name"/>
+                    <apex:outputText value="{!offerpdf.PBS_AAAP_Building_Name__c}"/>
+                    <apex:outputLabel value="Street Address"/>
+                    <apex:outputText value="{!offerpdf.PBS_AAAP_Street_Address__c}"/>
+                    <apex:outputLabel value="City"/>
+                    <apex:outputText value="{!offerpdf.PBS_AAAP_City__c}"/>
+                    <apex:outputLabel value="State"/>
+                    <apex:outputText value="{!offerpdf.PBS_AAAP_State__c}"/>
+                    <apex:outputLabel value="Country"/>
+                    <apex:outputText value="{!offerpdf.PBS_AAAP_Country__c}"/>
+                    <apex:outputLabel value="Zip Code"/>
+                    <apex:outputText value="{!offerpdf.PBS_AAAP_ZipCode__c}"/>
+                    
+                    
+                </apex:PanelGrid>
+                <br/>
+                
+                <apex:pageBlock >
+                    <div id="searchTable" class="tabbed-table">
+                        <h3>Attachments List</h3>
+                        <apex:pageBlockTable value="{!seqNumList}" var="ofratt" id="theTable" rowClasses="odd,even">
+                            <apex:column value="{!ofratt.i}">
+                                <apex:facet name="header">Attachment #</apex:facet>
+                            </apex:column>
+                            <apex:column value="{!ofratt.offratts.PBS_AAAP_Attachment_Type__c}">
+                                <apex:facet name="header">Attachment Type</apex:facet>
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">Attachment Name</apex:facet>
+                                <apex:outputText value="{!ofratt.file.Name}"/>
+                                <!--
+<apex:repeat value="{!ofratt.offratts.Attachments}" var="a">
+<apex:outputText value="{!a.Name}"/>
+</apex:repeat>
+-->
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">Date Submitted</apex:facet>
+                                <apex:outputText value="{0,date,MM/dd/yyyy}">
+                                    <apex:param value="{!ofratt.file.createddate}"/>
+                                </apex:outputText>
+                                <!--
+<apex:repeat value="{!ofratt.offratts.Attachments}" var="a">
+<apex:outputText value="{0,date,MM/dd/yyyy}">
+<apex:param value="{!a.createddate}"/>
+</apex:outputText>
+</apex:repeat>
+-->
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">View File</apex:facet>
+                                <apex:outputLink target="_blank"
+                                                 value="{!ofratt.file.link}">
+                                    <apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
+                                                style="align: right;" alt="Salesforce" title="Salesforce"/>
+                                </apex:outputLink>
+                                <!--
+<apex:repeat value="{!ofratt.offratts.Attachments}" var="a">
+<apex:outputLink target="_blank"
+value="/servlet/servlet.FileDownload?file={!a.id}">
+<apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
+style="align: right;" alt="Salesforce" title="Salesforce"/>
+</apex:outputLink>
+</apex:repeat>
+-->
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">Delete File</apex:facet>
+                                
+                                <apex:commandLink action="{!actionDeleteAttachment}"
+                                                  onclick="var con = confirm('Are you sure?');if(con==false)return false;">
+                                    <apex:image url="{!URLFOR($Resource.gsa_common, '/images/delete-icon.png')}"
+                                                style="align: right;" alt="delete" title="Delete"/>
+                                    <apex:Param assignTo="{!attachmentId}" name="attId"
+                                                value="{!ofratt.offratts.Id}"/>
+                                </apex:commandLink>
+                                
+                            </apex:column>
+                            
+                        </apex:pageBlockTable>
+                        <br/>
+                    </div>
+                </apex:pageBlock>
+                <br/>
+                <div>
+                    <h3 class="blue">Forms</h3>
+                    
+                    
+                    
+                    
+                    <apex:PanelGrid columns="1">
+                        <!--<apex:commandLink action="{!redirectToExpectedPage}">
+<apex:param assignTo="{!show1217}" value="true"/>
+Lessor's Annual Cost Statement (Form 1217)</apex:commandLink>
+<apex:commandLink action="{!redirectToExpectedPage}">
+<apex:param assignTo="{!show1217Attachment}" value="True"/>
+Lessor's Annual Cost Statement (Form 1217 attachment)</apex:commandLink>
+<!-- apex:commandLink action="{!show1364}">1364 Form (Form 1364)</apex:commandLink>
+<apex:commandLink action="{!redirectToExpectedPage}">
+<apex:param assignTo="{!show1364}" value="True"/>
+GSA Form 1364C - STANDARD</apex:commandLink>
+<apex:commandLink action="{!redirectToExpectedPage}">
+<apex:param assignTo="{!show1364RateStructure}" value="True"/>
+Rate Structure (Form 1364 Rate Structure)</apex:commandLink>
+<!--<apex:commandLink action="{!show1364RateStructure}">Attachment #1 - Rate Structure (Attachment to GSA Form 1364-A)</apex:commandLink>
+<apex:commandLink action="{!redirectToExpectedPage}">
+<apex:param assignTo="{!show1364Attachment}" value="True"/>
+Proposal to Lease Space (Form 1364C)</apex:commandLink>
+<!--<apex:commandLink action="{!show1364Attachment}">Attachment to GSA Form 1364A</apex:commandLink>-->
+                        
+                        
+                        
+                        
+                        
+                        <apex:repeat value="{!lstPageWrapper}" var="pg">
+                            <br/>
+                            <apex:commandLink action="{!redirectToExpectedPage}" target="_blank">
+                                <apex:param name="formName" assignTo="{!formName}" value="{!pg.formName}"/>
+                                {!pg.linkName}</apex:commandLink>
+                            <br/>
+                        </apex:repeat>
+                        {!formName}
+                    </apex:PanelGrid>
+                    
+                    <br/>
+                    <div id="LoadingImage" style="display:none;float:left;position:relative;top:-7px;"><img src="{!$Resource.PBS_AAAP_loading_gif_image}" style="float: left; margin: 8px;" /></div>
+                    <apex:commandButton value="Download All Files" onclick="downloadAttachment('{!JSENCODE(offerpdf.Id)}','{!JSENCODE(offerpdf.PBS_AAAP_Building_Name__c)}');return false;"/>
+                    <apex:commandButton value="Close Window" onclick="window.top.close()"/>
+                </div>
+            </apex:form>
+            
+        </div>
+    </div>
+</apex:page>

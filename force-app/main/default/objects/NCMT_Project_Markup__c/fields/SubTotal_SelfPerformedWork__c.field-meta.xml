@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>SubTotal_SelfPerformedWork__c</fullName>
+    <externalId>false</externalId>
     <formula>SubTotal_w_o_SubCon__c+ (SubTotal_w_o_SubCon__c*(Prime_Con_SelfWork_HomeOff_Overhead__c+ Prime_Con_SelfWork_JobSiteOverhead__c+ (1 + Prime_Con_SelfWork_HomeOff_Overhead__c+ Prime_Con_SelfWork_JobSiteOverhead__c)*(
 Prime_Con_SelfWork_Profit__c + (1+Prime_Con_SelfWork_Profit__c)*(Prime_Con_SelfWork_Commission__c+(1+Prime_Con_SelfWork_Commission__c)*(Prime_Con_SelfWork_Bond__c+Professional_Services_Fees_SelfWork__c*(1+Prime_Con_SelfWork_Bond__c))))))</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>

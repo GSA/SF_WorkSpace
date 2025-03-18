@@ -1,0 +1,180 @@
+<apex:page Controller="PBS_AAAP_HomePageController" sidebar="false" standardStylesheets="false" showHeader="false" docType="html-5.0">
+  <c:PBS_AAAP_PortalPage_Begin ></c:PBS_AAAP_PortalPage_Begin>
+  <div id="wrapper">
+
+  <!-- J. Rogers  Eliminate Headers
+    <h1 class="logo">GSA</h1>
+    <div id="nav">
+      <ul>
+        <li><a class="selected" href="/AAAP/PBS_AAAP_HomePage">Lease Offer Platform home</a></li>
+        <li><a href="/AAAP/PBS_AAAP_News_Updates">News &amp; Updates</a></li>
+        <li><a href="/AAAP/PBS_AAAP_About_AAAP">FAQs</a></li>
+        <li><a href="/AAAP/PBS_AAAP_Sitehelp">Help</a></li>
+        <li><a href="/AAAP/PBS_AAAP_UserRegistration"><font class="orange">Registration</font></a></li>
+      </ul>
+    </div>
+
+    <div id="hero-int2" />
+  -->
+
+    <h4 style="border-bottom: 2px solid #cccccc;padding-bottom: 2px;"></h4>
+    <div id="content">
+      <div id="rightCol">
+        <!--h4 class="blue" style="padding-top: 8px;">GSA's Lease Offer Platform</h4-->
+        <p>
+
+
+          <font class="bluetitle">GSA's Lease Offer Platform</font>
+        </p>
+        <h4 style="border-bottom: 1px solid #cccccc;padding-top: 2px;"></h4>
+
+
+        <!--   <p>
+
+
+               <font class="redtitle">The Lease Offer Platform (LOP) is the new homepage for GSA's Automated Advanced Acquisition Program (AAAP).</font>
+           </p> -->
+
+        <p>The <strong>Lease Offer Platform (LOP)</strong> provides the opportunity for building owners and
+          building owner representatives to electronically offer building space to the Federal Government.
+          The offer submission process is completely web-enabled, allowing all registered participants to
+          submit and update offers for lease space to the Federal Government within specified
+          timeframes, in response to a Request for Lease Proposal (RLP) package. The <strong>Lease Offer
+            Platform</strong> consists of:</p>
+
+        <p class="tab"> The <a href="http://www.gsa.gov/aaap" target="_blank"> <strong>Automated Advanced
+              Acquisition Program (AAAP)</strong></a> is a multiple award lease procurement tool. The AAAP
+          allows the market to compete for multiple federal leases
+          by submitting a single offer through a simple online portal. The AAAP collects best and final
+          offers, for generic office space needs, that remain in a secure database
+          throughout the fiscal year (Oct 1 - Sept 30). Offerors are encouraged to submit all available office
+          space, for three lease term options, with consideration to GSA's
+          minimum requirements. The AAAP positions the GSA to expeditiously address the future leasing needs
+          of the Government.</p>
+
+        <p class="tab"><strong><font color="red">COMING SOON: </font></strong> The <strong>Requirement Specific
+            Acquisition Program (RSAP)</strong> is a single award lease procurement tool. The RSAP migrates
+          GSA's traditional lease procurement
+          method to an e-commerce procurement and transaction tool, collecting online offers for a specific
+          space requirement. The RSAP uses a single RLP for a specific space
+          requirement and allows offerors to tailor initial offers by utilizing a streamlined workflow. The
+          RSAP positions the GSA to address complex space requirements
+          electronically.</p>
+
+
+        <!-- <p><strong>To register, please go to the <a href="/AAAP/PBS_AAAP_UserRegistration">offeror registration</a> page</strong>. &nbsp;&nbsp;For additional help, contact <a href="/AAAP/PBS_AAAP_ContactUs">AAAP.Manager@gsa.gov</a>.</p> -->
+
+
+        <p>
+          <span style="font-size:120%;"> <strong>Who Are We?</strong></span>
+        </p>
+        <p>
+
+          The General Services Administration (GSA) is the "business side" of the U.S. government.
+          The GSA is an independent agency of the United States government, established in 1949 to help manage
+          and support the basic functioning of federal agencies,
+          to include leasing space for federal agencies, so that government employees have space to perform
+          their work.
+          Today’s GSA lease portfolio consists of more than 8,000 leases, consisting of about 192 million RSF
+          with a total contract value exceeding 5.6 billion dollars in annual rent. </p>
+
+        <div class="greybox">
+          <h4>View AAAP Solicitations for Offer Package</h4>
+          <apex:form id="regionForm">
+
+
+            <div>
+
+
+              <apex:outputPanel id="other_rlp_data" layout="block">
+                <h5 style="margin-bottom:10px;">Select a Region: <a class="popup"
+                                                                    href="#Modal_Bldg_Home"><img
+                            src="{!$Resource.Info_Icon}"/></a></h5>
+
+                <div id="Modal_Bldg_Home"
+                     style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:5px;">
+                  <p>Identify your region based on your property location. For more information on the
+                    GSA regions, go to the GSA Regions site</p>
+                </div>
+
+                <span id="regionerror" for="region"
+                      style="color:red;display:none;font-family:Arial,Helvetica,sans-serif;font-size:12px;">Please select a region<br/></span>
+                <apex:selectList value="{!selectedRegion}" id="region" size="1">
+                  <apex:selectOptions value="{!regions}"/>
+                </apex:selectList>
+                <apex:commandButton value="View RLPs" action="{!actionShowRLPs}"
+                                    onclick="return validate();"/>
+              </apex:outputPanel>
+            </div>
+
+
+            <BR/>
+          </apex:form>
+          <img src="{!URLFOR($Resource.gsa_common, 'images/maps.gif')}" alt="Map showing different regions"/>
+          <p>For more information about regions, go to the <a href="http://www.gsa.gov/portal/category/22227"
+                                                              target="_new">GSA Regions</a> site.</p>
+        </div> <!--/greybox-->
+
+      </div> <!--/rightCol-->
+
+      <div id="sidebar" class="sb-hp">
+        <div class="bucket">
+          <h4 style="font-size:96%;"><U>Lease Offer Platform Login</U></h4>
+          <!--<p><strong>Current user?</strong>
+              Please login.</p> -->
+
+          <c:SiteLogin />
+        </div>  <!--/bucket-->
+
+        <div class="bucket">
+          <h4>AAAP Resources</h4>
+          <P>
+            Check out these links for additional AAAP information
+          </P>
+          <ul>
+            <li><a class="arrow-link" href="/AAAP/PBS_AAAP_About_AAAP">FAQ</a></li>
+            <li><a class="arrow-link" href="/AAAP/PBS_AAAP_Web_To_Lead">Register for AAAP Email List</a>
+            </li>
+            <li><a class="arrow-link" href="/AAAP/PBS_AAAP_Update_Email_Registration">Update AAAP Email List
+                Registration</a></li>
+            <li><a class="arrow-link" href="/AAAP/PBS_AAAP_AwardedOffersInfo">Awarded Offers</a></li>
+          </ul>
+          <p>&nbsp;</p>
+          <p>&nbsp;</p>
+          <p>&nbsp;</p>
+        </div>  <!--/bucket-->
+
+        <div class="bucket">
+          <!-- <h4>Contact Us</h4><!--webaaap.manager changed to AAAP.manager-->
+          <p>For more information contact <a href="/AAAP/PBS_AAAP_ContactUs">AAAP.Manager@gsa.gov</a></p>
+        </div>  <!--/bucket-->
+
+
+        <div class="bucket">
+          <h4>RSAP Resources</h4>
+          <p>More information to come when RSAP goes live.<BR/> For more information contact <a
+                    href="mailto:LOP.Manager@gsa.gov">LOP.Manager@gsa.gov</a></p>
+        </div>  <!--/bucket-->
+
+
+      </div>  <!--/sidebar-->
+
+    </div>  <!--/content-->
+
+  </div><!-- /Wrapper -->
+
+  <script type="text/javascript">
+function validate(){
+    var region = document.getElementById('{!$Component.regionForm.region}').value;
+    if(region==""){
+        j$("#regionerror").css("display", "inline");
+        return false;
+    }else{
+        j$("#regionerror").css("display", "none");
+        return true;
+    }
+}
+  </script>
+
+  <c:PBS_AAAP_PortalPage_End ></c:PBS_AAAP_PortalPage_End>
+</apex:page>

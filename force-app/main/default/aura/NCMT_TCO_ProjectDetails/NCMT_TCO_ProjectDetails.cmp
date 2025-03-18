@@ -1,0 +1,99 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId,lightning:isUrlAddressable" access="global" controller="NCMT_TCOReportDataSelector">
+    <ltng:require scripts="{!$Resource.Chart_JS_2_9_3 +'/Chart.min.js'}"/>
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:handler name="render" value="{!this}" action="{!c.onRender}"/>
+
+
+    <aura:attribute name="reportData" type="NCMT_TCO_ReportData" />
+    <aura:attribute name="reportType" type="String" />
+    <aura:attribute name="urlReportType" type="String" />
+    <aura:attribute name="printMode" type="String" />
+    <aura:attribute name="id" type="String" />
+    <aura:attribute name="isLoaded" type="Boolean"/>
+    <aura:attribute name="activeSections" type="List" default="[]"/>
+    <aura:attribute name="selectedCostType" type="String" />
+    <aura:attribute name="displayCostType" type="String" />
+
+    <lightning:card title="{!'TCO Project Details'}">
+    
+        <lightning:layout multipleRows="true" class="headerLayout">
+          <aura:if isTrue="{!v.printMode != 'true'}">
+              <lightning:layoutItem padding="around-small" class="headerCol" size="4" >
+                <lightning:select name="reportType" label="Show" class="filterSelect" onchange="{!c.reportChange}" value="{!v.reportType}">
+                    <option value="BasicInputs">Basic Inputs</option>
+                    <option value="BasicCostOutputs">Basic Cost Outputs</option>
+                    <option value="DetailedCostOutputs">Detailed Cost Outputs</option>
+                    <option value="DetailedSummary">Detailed Summary</option>
+                    <option value="ExpenditureCurveStacked">Expenditure Curve</option>
+                </lightning:select>
+              </lightning:layoutItem>
+            </aura:if>
+            <lightning:layoutItem size="2" padding="around-small"  flexibility="auto, no-grow">
+                <aura:if isTrue="{!v.printMode != 'true'}">
+                    <lightning:select name="costType" label="Display Cost" class="filterSelect" onchange="{!c.reportChange}" value="{!v.selectedCostType}">
+                        <option value="cost">Constant Dollar</option>
+                        <option value="escalatedCost">Escalated Cost</option>
+                        <option value="escalatedDiscountedCost">Escalated &amp; Discounted Cost</option>
+                    </lightning:select>
+                </aura:if>
+                <aura:if isTrue="{!v.printMode == 'true'}">
+                    <h2 class="slds-text-heading_small" style="display:inline-block;">Cost Displayed:&nbsp;</h2> <lightning:formattedText value="{!v.displayCostType}"/>
+                </aura:if>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="6" padding="around-small" class="printHeader">
+                <aura:if isTrue="{!v.printMode != 'true'}">
+            
+                    <button align="right" class="slds-button slds-button_brand" onclick="{!c.printMe}" id="prnBtn">Print View</button>
+                </aura:if>
+                <aura:if isTrue="{!v.printMode == 'true'}">
+            
+                    <button align="right" class="slds-button slds-button_brand" onclick="{!c.funPrint}" id="prnBtn">Print Page</button>
+                </aura:if>
+            </lightning:layoutItem>
+        </lightning:layout>   
+    
+    </lightning:card>
+    <aura:if isTrue="{! !v.isLoaded }">
+        <lightning:spinner alternativeText="Loading" />
+    </aura:if>
+
+    <lightning:accordion allowMultipleSectionsOpen="true" activeSectionName="{!v.activeSections}">
+
+      <aura:iteration items="{!v.reportData.sections}" var="section">
+  
+        <lightning:accordionSection name="{!section.name}" label="{!section.headerLabel}">
+        
+          <!--PROJECT DATA CELLS-->
+          <lightning:layout multipleRows="true" class="sectionHeader">
+            
+            <!--CHARTS-->
+            <aura:iteration items="{!section.charts}" var="chart">
+              <lightning:layoutItem size="12" padding="around-small" class="labelCol">
+                <div class="{!'chart-container-' +chart.uniqueId}" style="position: relative; height:80vh; width:80vw">
+                  <canvas id="{!chart.uniqueId}"></canvas>
+                </div>
+              </lightning:layoutItem>
+            </aura:iteration>
+
+            <!--DATA CELLS-->
+            <aura:iteration items="{!section.dataCells}" var="cell">
+              <lightning:layoutItem size="2" padding="around-small" class="labelCol">
+                <lightning:formattedText value="{!cell.valueMeta.fieldLabel}"/>
+              </lightning:layoutItem>
+              <lightning:layoutItem size="2" padding="around-small" class="dataCol">
+                <aura:if isTrue="{!cell.valueMeta.dataType=='text'}">
+                  <lightning:formattedText value="{!cell.value}"/>
+                </aura:if>
+                <aura:if isTrue="{!cell.valueMeta.dataType=='datetime'}">
+                  <lightning:formattedDateTime value="{!cell.value}" year="numeric" month="numeric" day="numeric" timeZone="UTC"/>
+                </aura:if>
+                <aura:if isTrue="{!cell.valueMeta.dataType=='number'}">
+                  <lightning:formattedNumber value="{!cell.value}" style="{!cell.valueMeta.numberStyle}" maximumFractionDigits="{!cell.valueMeta.maximumFractionDigits}" minimumFractionDigits="{!cell.valueMeta.minimumFractionDigits}"/>
+                </aura:if>
+              </lightning:layoutItem>
+            </aura:iteration>
+          </lightning:layout>
+        </lightning:accordionSection>
+      </aura:iteration><!-- END SECTION ITERATION-->
+    </lightning:accordion>
+</aura:component>
