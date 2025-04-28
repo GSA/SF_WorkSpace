@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>PBS_AAAP_Agency_Requirement__c$PBS_AAAP_Project_ID__c</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Agency_Requirement__c.Offer_Select_Award_Info__r$PBS_AAAP_Offer_ID__c</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Agency_Requirement__c.Offer_Select_Award_Info__r$PBS_AAAP_isSelected__c</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Agency_Requirement__c.Offer_Select_Award_Info__r$PBS_AAAP_IsAwarded__c</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Agency_Requirement__c.Offer_Select_Award_Info__r$LastModifiedDate</field>
+    </columns>
+    <filter>
+        <criteriaItems>
+            <column>PBS_AAAP_Agency_Requirement__c$PBS_AAAP_RLP_Number__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>contains</operator>
+            <value>17-CENSUS</value>
+        </criteriaItems>
+    </filter>
+    <format>Tabular</format>
+    <name>Locations and Offers</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Agency_with_Awards__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <sortColumn>PBS_AAAP_Agency_Requirement__c.Offer_Select_Award_Info__r$PBS_AAAP_IsAwarded__c</sortColumn>
+    <sortOrder>Desc</sortOrder>
+    <timeFrameFilter>
+        <dateColumn>PBS_AAAP_Agency_Requirement__c.Offer_Select_Award_Info__r$PBS_AAAP_OFFER_SELECTION_DATE__c</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

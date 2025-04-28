@@ -10,27 +10,50 @@
 				{!v.errors}
 			</ui:message>
 		</aura:if>
-        <aura:if isTrue="{!v.userType == 'POC'}">
-        	<h2>Pending Lease Access Approvals</h2> 
-            <c:RET_LeaseAccessApproval statusFilters="['Requested']" />
-            <br/><br/>
+        
+      	<!-- <c:RET_HomeHeader/> -->
+        <aura:if isTrue="{! v.userType == 'Guest'}">
+            <div>
+                <!-- <h1 class="top-textarea-heading" style="border-bottom: none;">Manage lease</h1> -->
+                <span style="font-size: 12pt; font-family: Arial;">Existing GSA lessors can use this web application to submit lease-related documentation as directed by the lease contract or GSA personnel. This includes, but is not limited to:</span>
+                <ul class="slds-list_dotted" style="font-size: 12pt; font-family: Arial; padding-top:12px; padding-bottom:12px;">
+                    <li>Tax adjustment requests</li>
+                    <li>Tax appeal requests</li>
+                    <li>Novation documentation</li>
+                    <li>Water quality tests</li>
+                    <li>Other lease documentation, as directed</li>
+                </ul>
+                <span style="font-size: 12pt; font-family: Arial;">Select the Login/Registration link at the top right corner of the page to register or log in to an existing account.</span>
+            </div>
         </aura:if>
+	    <aura:if isTrue="{! v.userType != 'Guest'}">
+            <div style="padding-bottom: 1.5em;">
+                <!-- <h1 class="top-textarea-heading">Manage lease</h1> -->
+                <span style="font-size: 12pt; font-family: Arial;">Existing GSA lessors can use this web application to submit lease-related documentation as directed by the lease contract or GSA personnel.</span>
+            </div>
+            <div style="padding-bottom: 1.5em;">
+                <h2 class="mid-textarea-heading">How to use this page</h2>
+                <ul style="font-size: 12pt; font-family: Arial;">
+                    <li>Step 1 - Add a lease to the My leases table using the Search leases button at the bottom of this page.</li>
+                    <li>Step 2 - Send documents to GSA by using the ‘Manage’ button for the associated lease in the My leases table.</li>
+                </ul>
+            </div>
+        </aura:if>        
         
-        <h2>All Leases</h2>
-		<c:RET_LeaseList statusFilters="['Draft', 'Submitted', 'Pending', 'Under Review']" />
-		<!--
-		<h2>Completed Tax Submissions</h2>
-		<c:RET_LeaseList statusFilters="['Determination Made']" />
-		-->
-		<br />
-        
-        <h2>Create New Tax Submission</h2>
-			If your lease is not listed in the table above, you can search for a lease and create a tax submission
-			by clicking the button below.<br /><br />
-		<div class="action-buttons-centered">
-			<ui:button label="Create New Tax Submission" press="{!c.findLease}" />
-		</div>
-
+        <!-- Replaced for 2024-2025 RET Surge
+        <h2>All Leases</h2> -->
+		<aura:if isTrue="{! v.userType != 'Guest'}">
+            <h2 class="mid-textarea-heading">My leases</h2>
+            <c:RET_LeaseList statusFilters="['Draft', 'Submitted', 'Pending', 'Under Review']" />
+    
+            <h2 class="mid-textarea-heading">Search leases</h2>
+            <span style="font-size: 12pt; font-family: Arial;">If your lease is not listed in the table above, click the button below and follow the instructions for finding the correct lease.  A lease must be listed in the table above in order to submit documents meant for that lease.</span>
+                <br /><br />
+            <div class="action-buttons-centered">
+                <!-- <ui:button label="Search leases" press="{!c.findLease}" /> -->
+                <button type="button" onclick="{!c.findLease}" class="slds-button slds-button_brand">Search leases</button> 
+        	</div> 
+        </aura:if>
 	</div>
 
     <div id="spinner" class="hidden">

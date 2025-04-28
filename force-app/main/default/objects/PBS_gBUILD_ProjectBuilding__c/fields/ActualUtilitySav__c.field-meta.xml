@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ActualUtilitySav__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Actual savings when calculated at a project building level</description>
+    <inlineHelpText>Enter calculated building-level utility savings (Btu/yr).</inlineHelpText>
+    <label>Utility Savings Actual</label>
+    <referenceTo>PBS_gBUILD_UtilitySavings__c</referenceTo>
+    <relationshipLabel>gBUILD Project Buildings (Utility Savings Actual)</relationshipLabel>
+    <relationshipName>gBUILD_Project_Buildings</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

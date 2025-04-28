@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Bldg_Supp_Escalated_Cost__c</fullName>
-    <externalId>false</externalId>
     <formula>Bldg_Supp_Cost__c  * 
 ((1 + TCO_Lifecycle_Input__r.TCO_Project_Cost_Rate__r.Janitorial_Esc_Rate__c )^ 
 (Year__c-1))</formula>

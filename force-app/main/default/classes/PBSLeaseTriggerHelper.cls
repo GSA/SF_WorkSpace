@@ -1,13 +1,15 @@
 public without sharing class PBSLeaseTriggerHelper {
+
     @testVisible public String RET_Lease_Access_Requestor_Comments_POC = 'Auto creaing Lease Access records for POC user';
     @testVisible public boolean isSandboxEnv = RET_LeaseShareUtility.isSandboxEnv;
     @testVisible public boolean isMaskPOCEmails = RET_LeaseShareUtility.getIsMaskPOCEmails();
     @testVisible public String RET_Email_Append = '.invalid';
+
     public void OnBeforeInsert(List<PBS_Lease__c> newList){
         List<PBS_Lease__c> newPOCLeaseList = new List<PBS_Lease__c>();
         
         for(PBS_Lease__c newLs : newList){
-            validateLSREmail(newLs);
+            validateLSREmail(newLs); //checks for properly formatted email and also adds ".invalid" on the end in sandboxes
             if(newLs.LSR_Contact_Email__c == null) { // No POC information on new Lease, Do nothing
                 continue;
             } else if(newLs.LSR_Contact_Email__c != null) { // New Lease has POC information, find and update owner.
@@ -38,10 +40,10 @@ public without sharing class PBSLeaseTriggerHelper {
         List<PBS_Lease__c> removedPOCLeaseList = new List<PBS_Lease__c>();
         List<PBS_Lease__c> newPOCLeaseList = new List<PBS_Lease__c>();
         List<PBS_Lease__c> changedPOCLeaseList = new List<PBS_Lease__c>();
-        Id castIronUserId = RET_LeaseShareUtility.getCastIronUserId(); //Cast IronPrd user ID
+        Id castIronUserId = RET_LeaseShareUtility.getCastIronUserId();
         
         for(PBS_Lease__c newLs : newList){
-            validateLSREmail(newLs);
+            validateLSREmail(newLs); //checks for properly formatted email and also adds ".invalid" on the end in sandboxes
             PBS_Lease__c oldLS = oldMap.get(newLs.Id);
             if(newLs.LSR_Contact_Email__c == null && oldLs.LSR_Contact_Email__c == null) { //No POC before/after update, Do nothing
                 continue;
@@ -51,15 +53,16 @@ public without sharing class PBSLeaseTriggerHelper {
                 newPOCLeaseList.add(newLs);
             } else if(newLs.LSR_Contact_Email__c != null && oldLs.LSR_Contact_Email__c != null && oldLs.OwnerId == castIronUserId ) { //POC user registered since last update, update owner of lease as this POC user
                 newPOCLeaseList.add(newLs);
-            } else if(newLs.LSR_Contact_Email__c != null && oldLs.LSR_Contact_Email__c != null && newLs.LSR_Contact_Email__c  != oldLs.LSR_Contact_Email__c) { // POC on this Lease got changed, Find new POC user and assign him as owern and revoke access from old POC
+            } else if(newLs.LSR_Contact_Email__c != null && oldLs.LSR_Contact_Email__c != null && newLs.LSR_Contact_Email__c  != oldLs.LSR_Contact_Email__c) { // POC on this Lease got changed, Find new POC user and assign him as owner and revoke access from old POC
                 changedPOCLeaseList.add(newLs);
             } else if(newLs.LSR_Contact_Email__c != null && oldLs.LSR_Contact_Email__c != null && newLs.LSR_Contact_Email__c  == oldLs.LSR_Contact_Email__c) { // No Change to POC, do Nothing.
                 continue;
             }
         }
+        /* Commented out for 2024-2025 RET Surge to remove Access Request/Approval functionality */
         if(removedPOCLeaseList != null && removedPOCLeaseList.size() > 0){
-            RET_LeaseShareUtility.revokeRETLeaseAccess(removedPOCLeaseList); //Remove access for leases from RET users
-            RET_LeaseShareUtility.revokePOCLeaseAccess(removedPOCLeaseList); //Updating status of POC Lease Access to 'Access Revoked'
+            //RET_LeaseShareUtility.revokeRETLeaseAccess(removedPOCLeaseList); //Remove access for leases from RET users
+            RET_LeaseShareUtility.approvePOCLeaseAccess(removedPOCLeaseList); //Updating status of POC Lease Access to 'Approved'
             for(PBS_Lease__c ls : removedPOCLeaseList){
                 if(castIronUserId != null){ ls.OwnerId = castIronUserId;}
             }
@@ -67,9 +70,10 @@ public without sharing class PBSLeaseTriggerHelper {
         if(newPOCLeaseList != null && newPOCLeaseList.size() > 0){
             updateLeaseWithPOC(newPOCLeaseList, false,true  );
         }
+        /* Commented out for 2024-2025 RET Surge to remove Access Request/Approval functionality */
         if(changedPOCLeaseList != null && changedPOCLeaseList.size() > 0){
-            RET_LeaseShareUtility.revokeRETLeaseAccess(changedPOCLeaseList); //Remove access for leases from RET users
-            RET_LeaseShareUtility.revokePOCLeaseAccess(changedPOCLeaseList); //Updating status of POC Lease Access to 'Access Revoked'
+            //RET_LeaseShareUtility.revokeRETLeaseAccess(changedPOCLeaseList); //Remove access for leases from RET users
+            RET_LeaseShareUtility.approvePOCLeaseAccess(changedPOCLeaseList); //Updating status of POC Lease Access to 'Approved'
             updateLeaseWithPOC(changedPOCLeaseList, false,false);
         }
     }
@@ -109,6 +113,7 @@ public without sharing class PBSLeaseTriggerHelper {
         }
         List<PBS_Lease_Access__c> updatePOCLsacList = new List<PBS_Lease_Access__c>();
         List<PBS_Lease_Access__c> existingLeaseAccessList = [select Id, PBS_Lease__c, Requestor__c, Status__c from PBS_Lease_Access__c where PBS_Lease__c IN :leaseIdOwnerIdMap.keySet() and Requestor__c IN :leaseIdOwnerIdMap.values()];
+        system.debug('leaseIdOwnerIdMap '+existingLeaseAccessList);
         if(leaseIdOwnerIdMap.size() > 0 && existingLeaseAccessList != null && existingLeaseAccessList.size() > 0){ //Loop through existing poc LeaseAccess records to update them.
             for(Id lsID : leaseIdOwnerIdMap.keySet()){
                 for(PBS_Lease_Access__c existingLsac : existingLeaseAccessList){
@@ -120,6 +125,7 @@ public without sharing class PBSLeaseTriggerHelper {
                 }
             }
         }
+        
         if(leaseIdOwnerIdMap.size() > 0){ //Create new Lease Access record for POC user with status = 'POC'
             system.debug('leaseIdOwnerIdMap.keyset() **** '+leaseIdOwnerIdMap.keyset());
             for(Id lsID : leaseIdOwnerIdMap.keySet()){
@@ -140,13 +146,13 @@ public without sharing class PBSLeaseTriggerHelper {
         }
         
         if(createNewPOCList.size() > 0){
-            Id castIronUserId = RET_LeaseShareUtility.getCastIronUserId(); //Cast IronPrd user ID
+            Id castIronUserId = RET_LeaseShareUtility.getCastIronUserId(); 
             for(PBS_Lease__c ls : createNewPOCList){
                 if(castIronUserId != null){ ls.OwnerId = castIronUserId;}
             }
-            // Send email to LSR_Contact_Email__c to ask them to register(WF/PB)
         }
         
+   /* SFWS-3750  - Remove the functionality to Create Community User   
         //New functionality to add Users
         System.debug('New User');
         if(newUserFlag == true){
@@ -165,18 +171,14 @@ public without sharing class PBSLeaseTriggerHelper {
                     System.debug('New User');
                     //Create new user functionality here
                     if((ls.LSR_Last_Name__c != Null && ls.LSR_Last_Name__c != '')){
-                    if(!existingContacts.containsKey(ls.LSR_Contact_Email__c)){
-                    	Contact con = createContact(ls);
-                    	contactList.add(con);    
-                    }else{
-                        contactList.add(existingContacts.get(ls.LSR_Contact_Email__c));
+                        if(!existingContacts.containsKey(ls.LSR_Contact_Email__c)){
+                            Contact con = createContact(ls);
+                            contactList.add(con);    
+                        }else{
+                            contactList.add(existingContacts.get(ls.LSR_Contact_Email__c));
+                        }
+                        newUsersList.add(createUser(ls));    
                     }
-                    
-                    //contactMap.put(ls.LSR_Email_Text__c, con);
-                    
-                    	newUsersList.add(createUser(ls));    
-                    }
-                    
                 }else  {
                     User usr = userList.get(leaseNameExistingAaapRetPOCIdMap.get(ls.Name));
                     if(usr.Profile.Name == RET_LeaseShareUtility.AAAP_Customer_Profile){
@@ -206,7 +208,6 @@ public without sharing class PBSLeaseTriggerHelper {
                 }catch(Exception e){
                     System.debug('Error occurred while inserting users '+ e);
                 }
-                
             }
             
             if(!updateUserList.isEmpty()){
@@ -218,21 +219,21 @@ public without sharing class PBSLeaseTriggerHelper {
                 updateUsersPermission(userIdSet);
             }
             
-        }
+        }*/
     } 
-    
+    /* SFWS-3750  - Remove the functionality to Create Community User 
     public static Map<String,Contact> searchContactsWithEmail(Map<string, string> leasePOCMap){
         System.debug('Contact: ' + leasePOCMap);
         Map<String,Contact> contactsEmail = new Map<String,Contact>();
         for(Contact c : [Select Id,Email from Contact where Email IN :leasePOCMap.values()
                          AND AccountId =: RET_LeaseShareUtility.RET_Account_Id]){
-         	contactsEmail.put(c.Email,c);	                    
+            contactsEmail.put(c.Email,c);                       
         }
         System.debug('Number Con: ' + contactsEmail.size()); 
         return contactsEmail;
     }
     
-        public static Map<string, Id> searchAaapRetUsersByEmail(Map<string, string> leasePOCMap){
+    public static Map<string, Id> searchAaapRetUsersByEmail(Map<string, string> leasePOCMap){
         Map<String, Id> leaseNameExistingPOCIdMap = new Map<String, Id>();
         for(User u : [select id, Name, Email, UserName, profile.Name, profileId from user where Email IN :leasePOCMap.values() and (profile.Name = :RET_LeaseShareUtility.RET_CCP_Profile OR profile.name= :RET_LeaseShareUtility.AAAP_Customer_Profile) and isActive = true]) {
             for(string leaseName : leasePOCMap.keyset()){
@@ -243,8 +244,9 @@ public without sharing class PBSLeaseTriggerHelper {
          }
         system.debug('leaseNameExistingPOCIdMap.keyset() ***** *'+ leaseNameExistingPOCIdMap.keyset());
         return leaseNameExistingPOCIdMap;
-    }
-        public static Map<string, Id> searchUsersByEmail(Map<string, string> leasePOCMap){
+    }*/
+    
+    public static Map<string, Id> searchUsersByEmail(Map<string, string> leasePOCMap){
             Map<String, Id> leaseNameExistingPOCIdMap = new Map<String, Id>();
             for(User u : [select id, Name, Email, UserName from user where Email IN :leasePOCMap.values() and profile.Name = :RET_LeaseShareUtility.RET_CCP_Profile and isActive = true]) {
                 for(string leaseName : leasePOCMap.keyset()){
@@ -255,31 +257,34 @@ public without sharing class PBSLeaseTriggerHelper {
             }
             system.debug('leaseNameExistingPOCIdMap.keyset() ***** *'+ leaseNameExistingPOCIdMap.keyset());
             return leaseNameExistingPOCIdMap;
-        }
+    }
         
-        public void validateLSREmail(PBS_Lease__c lease){
+    public void validateLSREmail(PBS_Lease__c lease){
             if(lease.LSR_Email_Text__c != null && lease.LSR_Email_Text__c != ''){
                 String emailRegex = '([a-zA-Z0-9_\\-\\.\\+]+)@((\\[a-z]{1,3}\\.[a-z]{1,3}\\.[a-z]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,8}|[0-9]{1,3})';
                 Pattern MyPattern = Pattern.compile(emailRegex);
                 Matcher match = MyPattern.matcher(lease.LSR_Email_Text__c);
                 
                 if (match.matches()){
-                    if(isSandboxEnv && isMaskPOCEmails && !Test.isRunningTest()){lease.LSR_Contact_Email__c = lease.LSR_Email_Text__c+RET_Email_Append;}
-                    else{lease.LSR_Contact_Email__c = lease.LSR_Email_Text__c;}
+                    if(isSandboxEnv && isMaskPOCEmails && !Test.isRunningTest()){
+                        lease.LSR_Contact_Email__c = lease.LSR_Email_Text__c+RET_Email_Append;
+                    } else{
+                        lease.LSR_Contact_Email__c = lease.LSR_Email_Text__c;
+                    }
                 }else {
                     lease.LSR_Contact_Email__c = null;
                 }
             } else if(lease.LSR_Email_Text__c == null || lease.LSR_Email_Text__c == ''){
                 lease.LSR_Contact_Email__c = null;
             }
-        }
+    }
         
-        public static Contact createContact(PBS_Lease__c ls){
+   /* public static Contact createContact(PBS_Lease__c ls){
             //return new Contact(lastName= ls.LSR_Last_Name__c, firstName = ls.LSR_First_Name__c, email = ls.LSR_Email_Text__c, accountId = RET_LeaseShareUtility.RET_Account_Id);
-        	return new Contact(lastName= ls.LSR_Last_Name__c, firstName = ls.LSR_First_Name__c, email = ls.LSR_Contact_Email__c, accountId = RET_LeaseShareUtility.RET_Account_Id);
-        }
+            return new Contact(lastName= ls.LSR_Last_Name__c, firstName = ls.LSR_First_Name__c, email = ls.LSR_Contact_Email__c, accountId = RET_LeaseShareUtility.RET_Account_Id);
+    }
         
-        public static User createUser(PBS_Lease__c ls){
+      public static User createUser(PBS_Lease__c ls){
             User newUser = new User();
             newUser.FirstName = ls.LSR_First_Name__c;
             newUser.lastName = ls.LSR_Last_Name__c;
@@ -300,10 +305,10 @@ public without sharing class PBSLeaseTriggerHelper {
             newUser.TimeZoneSidKey = 'America/New_York';
             
             return newUser;
-        }
-        
-        @future
-        public static void updateUsersProfile(Set<Id> updateUserProfileSet){
+    }
+      
+    @future
+    public static void updateUsersProfile(Set<Id> updateUserProfileSet){
             List<User> userList = new List<User>([SELECT Id,profileId FROM User WHERE Id IN :updateUserProfileSet]);
             for(User usr : userList){
                 usr.ProfileId = RET_LeaseShareUtility.RET_CCP_Profile_Id;
@@ -313,10 +318,10 @@ public without sharing class PBSLeaseTriggerHelper {
             }catch(Exception e){
                 System.debug('Error occurred while updating user profile in future method ' + e);
             }
-        }
+    }
         
-        @future
-        public static void updateUsersPermission(Set<Id> updateUserProfileSet){
+    @future
+    public static void updateUsersPermission(Set<Id> updateUserProfileSet){
             List<PermissionSetAssignment> permissionSetList = new List<PermissionSetAssignment>();
             //PermissionSet GSArETcOMMPermissionSetId = RET_LeaseShareUtility.RET_AAAP_PemissionSet_Id;
             
@@ -331,5 +336,5 @@ public without sharing class PBSLeaseTriggerHelper {
             } catch(Exception e){
                 System.debug('Error occurred in permission set future method '+ e);
             }
-        }
-    }
+    }*/
+}

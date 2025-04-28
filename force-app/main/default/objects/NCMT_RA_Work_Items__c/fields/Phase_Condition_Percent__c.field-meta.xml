@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Phase_Condition_Percent__c</fullName>
-    <externalId>false</externalId>
     <formula>IF(TEXT(Work_Item_Phase__r.Work_Conditions__c) == &apos;Vacant work area: clear path travel&apos;,
 if(RA_WI_Lookup_Detail__r.Flag1__c == 2, 0.02,0) ,
 IF(TEXT(Work_Item_Phase__r.Work_Conditions__c) == &apos;Vacant work area: difficult path travel&apos;,if(RA_WI_Lookup_Detail__r.Flag1__c == 1,0.01,if(RA_WI_Lookup_Detail__r.Flag1__c == 2,0.1,0)),

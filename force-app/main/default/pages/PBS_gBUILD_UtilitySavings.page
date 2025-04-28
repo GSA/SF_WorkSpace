@@ -1,0 +1,59 @@
+<apex:page controller="PBS_gBUILD_UtilitySavingsController"  tabStyle="PBS_gBUILD_PBuildingKPM__tab" sidebar="false" >
+    <c:PBS_gBUILD_InitializeScripts />  
+    <apex:form >
+        <apex:sectionHeader title="Utility Savings: {!contextName}" />
+        <apex:pageMessages />           
+        <apex:pageBlock >
+            <apex:pageblockButtons >
+                <apex:commandButton action="{!edit}" value="Edit" rendered="{!viewMode}" />
+                <apex:commandButton action="{!save}" value="Save" rendered="{!editMode}" />
+                <apex:commandButton action="{!cancel}" value="Cancel" rendered="{!editMode}" />        
+            </apex:pageblockButtons>            
+            <apex:pageBlockSection columns="1" title="Baseline">
+                <apex:outputField value="{!item.Phase__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.AnnualEnergyBaseline__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.AnnualWaterBaseline__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!item.AnnualEnergyBaseline__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!item.AnnualWaterBaseline__c}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="1" title="Expected Savings">
+                <apex:outputField rendered="{!viewMode}" value="{!item.ChilledWaterSav__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.ElectricSav__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.GasSav__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.OilSav__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.SteamSav__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.OtherEnergySav__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.SourceOtherEnergySav__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.TotEnergySavCalculated__c}" styleClass="calculated" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.TotEnergySavUserReported__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.WaterSav__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.TotAnnualEnergyCostSavCalculatedF__c}" styleClass="calculated" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.ImplementationPrice__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.FinanceContractorMarkup__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.EcmTotCost__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.OtherRelatedCostSav__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.SourceOtherRelatedSav__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.TotAnnualCostSavF__c}" styleClass="calculated" />
+                <apex:outputField rendered="{!viewMode}" value="{!item.CalculatedSimplePaybackF__c}" styleClass="calculated" />                
+                <apex:inputField rendered="{!editMode}" value="{!item.ChilledWaterSav__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!item.ElectricSav__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!item.GasSav__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!item.OilSav__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!item.SteamSav__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!item.OtherEnergySav__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!item.SourceOtherEnergySav__c}" />              
+                <!-- <apex:inputField rendered="{!editMode}" value="{!item.TotEnergySavCalculated__c}" styleClass="calculated" /> -->               
+                <apex:inputField rendered="{!editMode}" value="{!item.TotEnergySavUserReported__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!item.WaterSav__c}" />
+                <!-- <apex:inputField rendered="{!editMode}" value="{!item.TotAnnualEnergyCostSavCalculated__c}" styleClass="calculated" /> -->
+                <apex:inputField rendered="{!editMode}" value="{!item.ImplementationPrice__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!item.FinanceContractorMarkup__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!item.EcmTotCost__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!item.OtherRelatedCostSav__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!item.SourceOtherRelatedSav__c}" />
+                <!-- <apex:inputField rendered="{!editMode}" value="{!item.TotAnnualCostSav__c}" styleClass="calculated" /> -->
+                <!-- <apex:inputField rendered="{!editMode}" value="{!item.CalculatedSimplePayback__c}" styleClass="calculated" /> -->
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Parking_Cost_Adjusted__c</fullName>
-    <externalId>false</externalId>
     <formula>(Parking_Cost__c + (Parking_Cost__c * P100_Percentage__c)) * Project_Name__r.Core_Shell_Adjustment_Factor__c</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Parking Cost Adjusted</label>

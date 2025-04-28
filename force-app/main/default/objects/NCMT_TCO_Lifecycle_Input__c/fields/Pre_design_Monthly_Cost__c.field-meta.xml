@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Pre_design_Monthly_Cost__c</fullName>
-    <externalId>false</externalId>
     <formula>If(And(Planning_and_Pre_design__c &lt;&gt; 0, Not(IsBlank(Planning_and_Pre_design__c))),(NCMT_Project__r.EDRC__c * NCMT_Project__r.Total_ECC__c  * 0.15) /  Planning_and_Pre_design__c, 0)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Pre-design Monthly Cost</label>

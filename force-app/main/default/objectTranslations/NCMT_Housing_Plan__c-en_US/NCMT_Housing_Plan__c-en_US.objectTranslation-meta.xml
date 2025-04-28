@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>NCMT Housing Plan</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>NCMT Housing Plans</value>
+    </caseValues>
+    <layouts>
+        <layout>NCMT Housing Plan Default Layout</layout>
+        <sections>
+            <label><!-- Common Area --></label>
+            <section>Common Area</section>
+        </sections>
+        <sections>
+            <label><!-- Conference/Training - Conference/classroom --></label>
+            <section>Conference/Training - Conference/classroom</section>
+        </sections>
+        <sections>
+            <label><!-- Courthouse specific --></label>
+            <section>Courthouse specific</section>
+        </sections>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Data Center --></label>
+            <section>Data Center</section>
+        </sections>
+        <sections>
+            <label><!-- Industrial --></label>
+            <section>Industrial</section>
+        </sections>
+        <sections>
+            <label><!-- Medical Spaces --></label>
+            <section>Medical Spaces</section>
+        </sections>
+        <sections>
+            <label><!-- Non-Rentable --></label>
+            <section>Non-Rentable</section>
+        </sections>
+        <sections>
+            <label><!-- Office - General Office --></label>
+            <section>Office - General Office</section>
+        </sections>
+        <sections>
+            <label><!-- Project Information --></label>
+            <section>Project Information</section>
+        </sections>
+        <sections>
+            <label><!-- Secured and Hardened Spaces --></label>
+            <section>Secured and Hardened Spaces</section>
+        </sections>
+        <sections>
+            <label><!-- Special Spaces --></label>
+            <section>Special Spaces</section>
+        </sections>
+        <sections>
+            <label><!-- Special Spaces - Exhibit hall/museum space --></label>
+            <section>Special Spaces - Exhibit hall/museum space</section>
+        </sections>
+        <sections>
+            <label><!-- Storage --></label>
+            <section>Storage</section>
+        </sections>
+        <sections>
+            <label><!-- US Marshal specific --></label>
+            <section>US Marshal specific</section>
+        </sections>
+        <sections>
+            <label><!-- Unfinished Shell --></label>
+            <section>Unfinished Shell</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>NCMT Housing Plan User Defined Layout</layout>
+        <sections>
+            <label><!-- Conference/Training - Conference/classroom --></label>
+            <section>Conference/Training - Conference/classroom</section>
+        </sections>
+        <sections>
+            <label><!-- Courthouse specific --></label>
+            <section>Courthouse specific</section>
+        </sections>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Data Center --></label>
+            <section>Data Center</section>
+        </sections>
+        <sections>
+            <label><!-- Industrial --></label>
+            <section>Industrial</section>
+        </sections>
+        <sections>
+            <label><!-- Medical Spaces --></label>
+            <section>Medical Spaces</section>
+        </sections>
+        <sections>
+            <label><!-- NCMT Other Costs --></label>
+            <section>NCMT Other Costs</section>
+        </sections>
+        <sections>
+            <label><!-- Non-Rentable --></label>
+            <section>Non-Rentable</section>
+        </sections>
+        <sections>
+            <label><!-- Office - General Office --></label>
+            <section>Office - General Office</section>
+        </sections>
+        <sections>
+            <label><!-- Project Information --></label>
+            <section>Project Information</section>
+        </sections>
+        <sections>
+            <label><!-- Secured and Hardened Spaces --></label>
+            <section>Secured and Hardened Spaces</section>
+        </sections>
+        <sections>
+            <label><!-- Special Spaces --></label>
+            <section>Special Spaces</section>
+        </sections>
+        <sections>
+            <label><!-- Special Spaces - Exhibit hall/museum space --></label>
+            <section>Special Spaces - Exhibit hall/museum space</section>
+        </sections>
+        <sections>
+            <label><!-- Storage --></label>
+            <section>Storage</section>
+        </sections>
+        <sections>
+            <label><!-- US Marshal specific --></label>
+            <section>US Marshal specific</section>
+        </sections>
+        <sections>
+            <label><!-- Unfinished Shell --></label>
+            <section>Unfinished Shell</section>
+        </sections>
+    </layouts>
+    <recordTypes>
+        <description><!-- Record type for Gross Area and Useable Area record type --></description>
+        <label><!-- Default --></label>
+        <name>Default</name>
+    </recordTypes>
+    <recordTypes>
+        <description><!-- Record type for User Defined Housing Plan Entry --></description>
+        <label><!-- User Defined --></label>
+        <name>User_Defined</name>
+    </recordTypes>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Housing Plan Type selected must be New Fit Out for New Construction projects --></errorMessage>
+        <name>Check_NewFitOut_for_NewConstruction_Proj</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- No Space Plans are entered for User Defined Housing Plan --></errorMessage>
+        <name>Check_for_Space_Plans_Entered</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- For a Project of Type Gross Area or Useable Area, User cannot add user defined housing plan. --></errorMessage>
+        <name>Custom_Housing_Plan_Per_Project</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- A Project can have only one custom housing plan record. --></errorMessage>
+        <name>One_Custom_Housing_Plan_Per_Project</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- A Project can have only one housing plan record. --></errorMessage>
+        <name>One_Default_Housing_Plan_Per_Project</name>
+    </validationRules>
+</CustomObjectTranslation>

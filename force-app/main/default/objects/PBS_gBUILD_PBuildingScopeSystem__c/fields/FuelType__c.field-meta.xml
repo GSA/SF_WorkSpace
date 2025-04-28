@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FuelType__c</fullName>
+    <description>Please indicate the system&apos;s fuel type:</description>
+    <inlineHelpText>Please indicate the system&apos;s fuel type.</inlineHelpText>
+    <label>Fuel Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>BioFuel</fullName>
+                <default>false</default>
+                <label>BioFuel</label>
+            </value>
+            <value>
+                <fullName>DualFuel</fullName>
+                <default>false</default>
+                <label>DualFuel</label>
+            </value>
+            <value>
+                <fullName>NaturalGas</fullName>
+                <default>false</default>
+                <label>NaturalGas</label>
+            </value>
+            <value>
+                <fullName>Oil</fullName>
+                <default>false</default>
+                <label>Oil</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>Propane</fullName>
+                <default>false</default>
+                <label>Propane</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

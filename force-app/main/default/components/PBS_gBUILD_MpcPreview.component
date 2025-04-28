@@ -1,0 +1,257 @@
+<apex:component controller="PBS_gBUILD_MpcPreviewCController">
+ 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<style>
+    #na, #waiver, #plannedbutnotstarted, #inprogressimplementing, #implementationcomplete, #challengenotontrack, #none, #reviewrequired{
+        display: inline;
+        text-wrap:normal;
+        width: 200px;
+    }
+</style>
+<script>
+    //window.setTimeout(function() { setParams("{!key}"); }, 5);
+    var jq$ = jQuery.noConflict();
+    jq$( document ).ready(function() {
+        //$("#na").hide();
+        //$("#waiver").hide();
+        //$("#plannedbutnotstarted").hide();
+        //$("#inprogressimplementing").hide();
+        //$("#implementationcomplete").hide();
+        //$("#none").hide();
+        jq$("div#na").each(function(){
+           jq$(this).hide();
+        });
+        jq$("div#waiver").each(function(){
+            jq$(this).hide();
+        });
+        jq$("div#plannedbutnotstarted").each(function(){
+            jq$(this).hide();
+        });
+        jq$("div#inprogressimplementing").each(function(){
+            jq$(this).hide();
+        });
+        jq$("div#implementationcomplete").each(function(){
+            jq$(this).hide();
+        });
+        jq$("div#challengenotontrack").each(function(){
+            jq$(this).hide();
+        });
+        jq$("div#reviewrequired").each(function(){
+            jq$(this).hide();
+        });
+        jq$("div#none").each(function(){
+            jq$(this).hide();
+        });
+        jq$('[id^="nampcPreview"]').hide();
+        jq$('[id^="waivermpcPreview"]').hide();
+        jq$('[id^="plannedbutnotstartedmpcPreview"]').hide();
+        jq$('[id^="inprogressimplementingmpcPreview"]').hide();
+        jq$('[id^="implementationcompletempcPreview"]').hide();
+        jq$('[id^="challengenotontrackmpcPreview"]').hide();
+        jq$('[id^="reviewrequiredmpcPreview"]').hide();
+        jq$('[id^="nonempcPreview"]').hide();
+    });    
+    
+    function changeVal(val, status){
+       //alert('status') 
+       if(val == "N/A"){
+            var id = '#na'+status
+                jq$(id).show();
+                jq$('[id^="waivermpcPreview"]').hide();
+                jq$('[id^="plannedbutnotstartedmpcPreview"]').hide();
+                jq$('[id^="inprogressimplementingmpcPreview"]').hide();
+                jq$('[id^="implementationcompletempcPreview"]').hide();
+                jq$('[id^="challengenotontrackmpcPreview"]').hide();
+                jq$('[id^="reviewrequiredmpcPreview"]').hide();
+            }else if(val == "Waiver"){
+                var id = '#waiver'+status
+                jq$(id).show();
+                jq$('[id^="nampcPreview"]').hide();
+                jq$('[id^="plannedbutnotstartedmpcPreview"]').hide();
+                jq$('[id^="inprogressimplementingmpcPreview"]').hide();
+                jq$('[id^="implementationcompletempcPreview"]').hide();
+                jq$('[id^="challengenotontrackmpcPreview"]').hide();
+                jq$('[id^="reviewrequiredmpcPreview"]').hide();
+            }else if(val == "Planned but not started"){
+                var id = '#plannedbutnotstarted'+status
+                jq$(id).show();
+                jq$('[id^="nampcPreview"]').hide();
+                jq$('[id^="waivermpcPreview"]').hide();
+                jq$('[id^="inprogressimplementingmpcPreview"]').hide();
+                jq$('[id^="implementationcompletempcPreview"]').hide();  
+                jq$('[id^="challengenotontrackmpcPreview"]').hide();
+                jq$('[id^="reviewrequiredmpcPreview"]').hide();
+            }else if(val == "Implementation in progress"){
+                var id = '#inprogressimplementing'+status
+                jq$(id).show();
+                jq$('[id^="nampcPreview"]').hide();
+                jq$('[id^="waivermpcPreview"]').hide();
+                jq$('[id^="plannedbutnotstartedmpcPreview"]').hide();
+                jq$('[id^="implementationcompletempcPreview"]').hide();  
+                jq$('[id^="challengenotontrackmpcPreview"]').hide();
+                jq$('[id^="reviewrequiredmpcPreview"]').hide();
+            }else if(val == "Implementation complete"){
+                var id = '#implementationcomplete'+status
+                jq$(id).show();
+                jq$('[id^="nampcPreview"]').hide();
+                jq$('[id^="waivermpcPreview"]').hide();
+                jq$('[id^="plannedbutnotstartedmpcPreview"]').hide();
+                jq$('[id^="inprogressimplementingmpcPreview"]').hide();  
+                jq$('[id^="challengenotontrackmpcPreview"]').hide();
+                jq$('[id^="reviewrequiredmpcPreview"]').hide();
+            }else if(val == "Challenge/ not on track"){
+                var id = '#challengenotontrack'+status
+                jq$(id).show();
+                jq$('[id^="nampcPreview"]').hide();
+                jq$('[id^="waivermpcPreview"]').hide();
+                jq$('[id^="plannedbutnotstartedmpcPreview"]').hide();
+                jq$('[id^="inprogressimplementingmpcPreview"]').hide();
+                jq$('[id^="implementationcompletempcPreview"]').hide();
+                jq$('[id^="reviewrequiredmpcPreview"]').hide();
+             }else if(val == "Review Required"){
+                var id = '#reviewrequired'+status
+                jq$(id).show();
+                jq$('[id^="nampcPreview"]').hide();
+                jq$('[id^="waivermpcPreview"]').hide();
+                jq$('[id^="plannedbutnotstartedmpcPreview"]').hide();
+                jq$('[id^="inprogressimplementingmpcPreview"]').hide();
+                jq$('[id^="implementationcompletempcPreview"]').hide();
+                jq$('[id^="challengenotontrackmpcPreview"]').hide();  
+            }else {
+                //var id = '#none'+status
+                //jq$(id).show();
+                jq$('[id^="nampcPreview"]').hide();
+                jq$('[id^="waivermpcPreview"]').hide();
+                jq$('[id^="plannedbutnotstartedmpcPreview"]').hide();
+                jq$('[id^="inprogressimplementingmpcPreview"]').hide();
+                jq$('[id^="implementationcompletempcPreview"]').hide();  
+                jq$('[id^="challengenotontrackmpcPreview"]').hide();
+                jq$('[id^="reviewrequiredmpcPreview"]').hide();
+            }
+
+    }
+</script>
+    <apex:attribute name="pageController" 
+        type="PBS_gBUILD_PageBaseController" 
+        assignTo="{!pageController}" 
+        required="true" 
+        description="The controller for the page." />
+    <apex:attribute name="key" 
+        type="String" 
+        assignTo="{!key}" 
+        required="true" 
+        description="The key given to this component so the page can easily get access to it" />
+    <apex:attribute name="viewMode" 
+        type="Boolean" 
+        assignTo="{!viewMode}" 
+        required="true" 
+        description="When true, render in view mode, else edit mode" />
+    <apex:attribute name="isDesignReviewer" 
+        type="Boolean" 
+        assignTo="{!isDesignReviewer}" 
+        required="false" 
+        description="When true, the current user is a design reviewer" />
+    <apex:pageBlockSection title="GPC Status Information" columns="1">
+        <apex:outputPanel rendered="{!(showExistingMpcUpdates==false)}">
+            <span class="mpcNoFields">There have not been any GPC status updates yet.</span>
+        </apex:outputPanel>    
+        <apex:outputPanel rendered="{!showExistingMpcUpdates}">
+            <apex:pageBlockTable value="{!mus}" var="z">
+                <apex:column headerValue="Action" rendered="false">
+                    <apex:commandLink action="{!open}" value="Open">
+                        <apex:param name="id" value="{!z.id}" assignTo="{!actionId}"/>                
+                    </apex:commandLink>
+                </apex:column>
+                <apex:column headerValue="Type">
+                    <apex:outputText value="GPC" rendered="{!z.RecordType.DeveloperName=='MPC'}" />
+                    <apex:outputText value="DR" rendered="{!z.RecordType.DeveloperName!='MPC'}" />
+                </apex:column>
+                <apex:column headerValue="Status">
+                    <apex:outputField value="{!z.Status__c}" styleClass="enum" />                                        
+                    <apex:outputField value="{!z.DesignReviewStatus__c}" styleClass="enum" />
+                </apex:column>
+                <apex:column headerValue="Comment" value="{!z.Comments__c}" />                
+                <apex:column headerValue="Date" value="{!z.CreatedDate}" />
+                <apex:column headerValue="Reviewer" value="{!z.CreatedById}" rendered="false" />
+            </apex:pageBlockTable>     
+        </apex:outputPanel>    
+        <apex:outputPanel rendered="{!(editMode&&!isDesignReviewer)}">            
+            <table class="mpcPreview list" width="100%">
+                <tr>
+                    <th></th>
+                    <th>GPC Status</th>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                        <td>
+                            <apex:inputField value="{!mpcEdit.Status__c}" styleClass="enum" />                          
+                        </td>
+                </tr>                                
+                <tr>
+                    <th>Comment</th>
+                    <td><apex:inputField value="{!mpcEdit.Comments__c}" /></td>
+                </tr>                   
+            </table>
+        </apex:outputPanel>                    
+        <apex:outputPanel rendered="{!(editMode&&isDesignReviewer)}">            
+            <table class="mpcPreview list" width="100%" id="mpcPreview">
+                <tr>
+                    <th></th>
+                    <th>GPC Status</th>
+                    <th>Design Review</th>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td>
+                        <apex:inputField value="{!mpcEdit.Status__c}" styleClass="enum{!key}" id="status" onchange="changeVal(this.options[this.selectedIndex].value,'{!key}');"/>
+                            
+                            <div id="plannedbutnotstarted{!key}">
+                                Studies, analyses, preliminary calculations and cost estimates, Life Cycle Cost, narratives, commissioning plan, or negotiations are planned for the associated GPC.  
+                            </div>
+                            <div id="inprogressimplementing{!key}">
+                                Design of system(s), detailed calculations and cost estimates, preparation of construction documents, actual construction associated with the GPC, or execution of the Commissioning Plan.  
+                            </div>
+                            <div id="implementationcomplete{!key}">
+                                Work that has been fully installed, tested and approved by the Commissioning Agent, and all warranties, certificates, and instructions have been submitted to the owner.
+                            </div>
+                            <div id="waiver{!key}">
+                                Work at any phase of the associated GPC that will NOT be performed due to an approved waiver (must describe the waiver and the individual who approved it).  
+                            </div>
+                            <div id="na{!key}">
+                                Either: (1) work that has already been deemed not feasible;
+                                 or (2) work that is not in the scope of the project.
+                            </div>  
+                            <div id="challengenotontrack{!key}">
+                                There is difficulty meeting this GPC. The project team is determining whether the requirement is technically or financially feasible (Please add explanatory comment).  
+                            </div>
+                            <div id="reviewrequired{!key}">
+                                Review is required to validate current status, because multiple 2012 GPCs -- with different reported statuses -- merged into this new one.
+                            </div>
+                            <div id="none{!key}">
+                                None  
+                            </div>
+                            
+                    </td>
+                    <td><apex:inputField value="{!drEdit.DesignReviewStatus__c}" styleClass="enum" /></td>
+                </tr>  
+                <tr style="display:none">
+                    <th>Design Review Recommendations</th>
+                    <td>&nbsp;</td>
+                    <td><apex:inputField value="{!drEdit.Recommendations__c}" /></td>
+                </tr>                   
+                <tr>
+                    <th>Comment</th>
+                    <td><apex:inputField value="{!mpcEdit.Comments__c}" /></td>
+                    <td><apex:inputField value="{!drEdit.Comments__c}" /></td>
+                </tr>                   
+            </table>
+        </apex:outputPanel>    
+        <!-- <apex:actionRegion>
+        <apex:actionFunction action="{!setParams}" name="setParams" rerender="dummy">
+                <apex:param name="param1" assignTo="{!param1}" value="{!key}" />                
+            </apex:actionFunction>
+            <apex:outputPanel id="dummy"/>
+        </apex:actionRegion>     -->            
+    </apex:pageBlockSection>                                        
+</apex:component>

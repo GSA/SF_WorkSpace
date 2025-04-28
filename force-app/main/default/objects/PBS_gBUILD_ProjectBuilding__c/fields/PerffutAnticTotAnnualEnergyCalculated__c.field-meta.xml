@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PerffutAnticTotAnnualEnergyCalculated__c</fullName>
+    <description>The total calculated anticipated energy consumption reported in above utilities in MMBTU.</description>
+    <externalId>false</externalId>
+    <formula>((PerffutAnticChilledWater__c * 12000) + (PerffutAnticElectric__c * 3412.142) + (PerffutAnticGas__c * 1031) + (PerffutAnticOil__c * 138700) + (PerffutAnticSteam__c * 1000000)) / 1000000</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>The total calculated anticipated energy consumption reported in above utilities in MMBTU.</inlineHelpText>
+    <label>Total Projected Energy Consumption MMBTU</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,33 @@
+<apex:component >
+    <apex:attribute name="myValue" description="This is the value for the component." type="String" />
+    <apex:attribute name="myEdit" description="This is the value for the editability." type="String" />
+    <apex:outputPanel rendered="{!myValue != null}">
+    <ul class="process-lop">      
+      <li class="building-sub-nav-lop"><a href="/AAAP/pbs_lop_building?offerId={!myValue}&edit={!myEdit}"><DIV style="position:absolute;left:15px;" font-color="black">Building</DIV><DIV style="position:relative;left:45px;top:15px" font-color="black">Fundamentals</DIV></a></li>
+      <!-- <li class="building-sub-nav-lop1"><a href="/AAAP/pbs_lop_building?offerId={!myValue}&edit={!myEdit}"><DIV style="position:absolute;left:100px;" font-color="black">Building</DIV><DIV style="position:relative;left:45px;top:15px" font-color="black">Details</DIV></a></li> -->
+      <li class="parking-sub-nav-lop"><a href="/AAAP/pbs_lop_SpacesAndParking?offerId={!myValue}&edit={!myEdit}"><DIV style="position:absolute;left:180px;" font-color="black">Parking</DIV></a></li>
+      <li class="property-owner-sub-nav-lop"><a href="/AAAP/pbs_lop_PropertyOwner?offerId={!myValue}&edit={!myEdit}"><DIV style="position:absolute;left:295px;" font-color="black">Property</DIV><DIV style="position:relative;left:45px;top:15px" font-color="black">Owner</DIV></a></li>
+      <!--
+      <li class="reps-certs-sub-nav-lop"><a href="/AAAP/pbs_lop_RepsAndCerts?offerId={!myValue}&edit={!myEdit}"><DIV style="position:absolute;left:415px;" font-color="black">Reps</DIV><DIV style="position:relative;left:30px;top:15px" font-color="black">&amp; Certs</DIV></a></li>
+      -->
+      
+      <li class="operating-cost-sub-nav-lop"><a href="/AAAP/pbs_lop_operatingcost?offerId={!myValue}&edit={!myEdit}"><DIV style="position:absolute;left:520px;" font-color="black">Operating</DIV><DIV style="position:relative;left:33px;top:15px" font-color="black">Cost</DIV></a></li>
+      <li class="lease-terms-sub-nav-lop"><a href="/AAAP/PBS_LOP_LeaseTerms?offerId={!myValue}&edit={!myEdit}"><DIV style="position:absolute;left:625px;" font-color="black">LEASE TERMS &amp;</DIV><DIV style="position:relative;left:28px;top:15px" font-color="black">CONDITIONS</DIV></a></li>
+      <li class="space-rates-sub-nav-lop"><a href="/AAAP/pbs_lop_Rates?offerId={!myValue}&edit={!myEdit}" ><DIV style="position:absolute;left:765px;" font-color="black">Space</DIV><DIV style="position:relative;left:20px;top:15px" font-color="black">&amp; Rates</DIV></a></li>
+      <li class="attachments-sub-nav-lop"><a href="/AAAP/pbs_lop_Attachments?offerId={!myValue}&edit={!myEdit}" ><DIV style="position:absolute;left:865px;" font-color="black">Attachments</DIV></a></li>      
+    </ul> 
+    </apex:outputPanel>   
+    <apex:outputPanel rendered="{!myValue == null}">
+    <ul class="process-lop">      
+      <li class="building-sub-nav-lop"><a href="#">Building <br/>Fundamentals</a></li>
+     <!--  <li class="building-sub-nav-lop1"><a href="#">Building <br/>Details</a></li> -->
+      <li class="parking-sub-nav-lop"><a href="#">Spaces &amp; Parking</a></li>
+      <li class="property-owner-sub-nav-lop"><a href="#">Property<br />Owner</a></li>
+      <!-- <li class="reps-certs-sub-nav-lop"><a href="#">Reps<br />&amp; Certs</a></li> -->
+      <li class="operating-cost-sub-nav-lop"><a href="#">Operating<br  />Cost</a></li>
+        <li class="lease-terms-sub-nav-lop"><a href="#">Lease Terms<br  />&amp; Conditions</a></li>
+      <li class="space-rates-sub-nav-lop"><a href="#">Rates</a></li>
+      <li class="attachments-sub-nav-lop"><a href="#">Attachments</a></li>      
+    </ul>
+</apex:outputPanel>
+</apex:component>

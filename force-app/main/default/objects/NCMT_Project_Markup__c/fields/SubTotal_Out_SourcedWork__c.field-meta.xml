@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>SubTotal_Out_SourcedWork__c</fullName>
-    <externalId>false</externalId>
     <formula>SubTotal_with_SubCon__c + (SubTotal_with_SubCon__c *(Prime_Con_OSWork_Homeoff_Overhead__c + Prime_Con_OSWork_Jobsite_Overhead__c + (1 + Prime_Con_OSWork_Homeoff_Overhead__c + Prime_Con_OSWork_Jobsite_Overhead__c)*(
 Prime_Con_OSWork_Profit__c + (1+Prime_Con_OSWork_Profit__c)*(Prime_Con_OSWork_Commission__c+(1+Prime_Con_OSWork_Commission__c)*(Prime_Con_OSWork_Bond__c+Professional_Services_Fees_OSWork__c*(1+Prime_Con_OSWork_Bond__c))))))</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>

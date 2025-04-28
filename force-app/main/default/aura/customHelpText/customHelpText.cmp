@@ -1,0 +1,21 @@
+<aura:component >
+  <aura:attribute name="text" type="String" required="true"/>
+
+  <div class="slds-form-element__icon">
+    <a href="javascript:void(0);" class="slds-form-element__icon slds-align-middle"
+      onclick="{!c.handleOnClick}"
+      onmouseout="{!c.handleMouseLeave}"
+      onmouseover="{!c.handleMouseEnter}"
+      tabindex="-1">
+      <lightning:icon class="slds-icon-text-default ms-help-icon" size="xx-small"
+        iconName="utility:info"/>
+      <span class="slds-assistive-text">Help</span>
+	</a>
+    <div aura:id="divHelp" class="slds-popover slds-popover_tooltip slds-nubbin_left-top ms-help-popup-in-header slds-hide"
+      role="tooltip" aria-live="polite" >
+      <div class="slds-popover__body ms-help-popup-body">
+	    <ui:outputText value="{!v.text}"/>
+	  </div>
+    </div>
+  </div>
+</aura:component>

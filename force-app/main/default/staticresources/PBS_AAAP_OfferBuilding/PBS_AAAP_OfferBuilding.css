@@ -1,0 +1,341 @@
+.ui-dialog {
+    background: #fff;
+    padding: 10px;
+    border: 1px solid #999;
+}
+
+.ui-dialog a {
+    float: right;
+    font-weight: bold;
+    padding: 3px;
+    color: #999;
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
+.myButton {
+    color: white !important;
+    background: red !important;
+    border-left: 0px !important;
+    border-top: 0px !important;
+    border-bottom: 0px !important;
+    border-right: 0px !important;
+    width: 60px !important;
+    height: 22px !important;
+}
+
+.blueMessage {
+    color: #002BAD;
+    font-weight: bold;
+}
+
+.errMessage {
+    color: red;
+}
+
+#lean_overlay {
+    position: fixed;
+    z-index: 100;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    background: none;
+    display: none;
+}
+
+body .bPageBlock,
+body #bodyCell .bResource .secondaryPalette,
+body .secondaryPalette.bPageBlock,
+body .individualPalette .secondaryPalette.bPageBlock,
+body .bodyDiv .genericTable,
+body .genericPageBlockTable,
+body .bodyDiv .bSubBlock,
+body .bComponentBlock .bPageBlock,
+body .bMyDashboard .bPageBlock,
+body.rlHoverFrame .bPageBlock,
+body.subjectSelectionPopup div.choicesBox,
+body.lookupTab .secondaryPalette.bPageBlock,
+body.popupTab .secondaryPalette.bPageBlock,
+body.UserTagStatsPage .secondaryPalette.bPageBlock {
+    border-bottom: #fff;
+}
+
+body .pbBody table.list tr.headerRow td,
+body .pbBody table.list tr.headerRow th {
+    background: #999;
+}
+
+body .pbBody table.list tr th,
+body .pbBody table.list tr td {
+    border: 1px solid rgb(200, 200, 200);
+}
+
+body .pbBody table.list tr.headerRow th:first-child,
+body .pbBody table.list tr.dataRow td:first-child {
+    border-left-width: 1px;
+}
+
+body .pbBody table.list tr.headerRow td,
+body .pbBody table.list tr.headerRow th {
+    border: 0px;
+}
+
+ul li,
+ol li {
+    margin-left: 0em;
+}
+
+.message {
+    background-color: #fff;
+    border-style: solid;
+    border-width: 0px;
+    color: #000;
+    padding: 6px 8px 6px 6px;
+    margin: 4px;
+}
+
+.col1 {
+    text-align: left;
+    width: 400px;
+}
+
+.col2 {
+    text-align: center;
+    width: 230px;
+}
+
+.col3 {
+    text-align: center;
+    width: 230px;
+}
+
+.col4 {
+    text-align: center;
+    width: 230px;
+}
+
+.tabbed-table table td {
+    background: #fff;
+}
+
+h2 {
+    color: #fff;
+    font-size: 80%;
+    font-weight: bold;
+    padding-left: 40px;
+    width: 80%;
+}
+
+.tabbed-table table th {
+    padding-left: 3px;
+    padding-right: 3px;
+    font-size: 12px !important;
+}
+
+.hr {
+    font-weight: bold;
+    font-size: 28px;
+    border-bottom: 1px solid #cccccc;
+    padding: 0 0 8px;
+    color: #002BAD;
+    padding-top: 15px;
+}
+
+.mainForm {
+    margin-right: 50px;
+}
+
+menu.table-options {
+    top: 40px;
+    left: -350px;
+}
+
+
+
+#addressTable tbody tr:hover {
+    background-color: #f7ff00;
+}
+
+#addressTable tr {
+    cursor: pointer;
+}
+
+
+
+
+
+.instructions {
+    color: #002bad;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px !important;
+}
+
+.popupModal {
+    display: none;
+    background: #eee;
+    border: 1px solid #666;
+    border-radius: 5px;
+    padding: 15px;
+    width: 75%;
+}
+
+.popupModal ul {
+    list-style: disc
+}
+
+.popupModal li {
+    margin-left: 1.5em
+}
+
+.buttonNormal {
+    text-align: center;
+    vertical-align: middle;
+    height: 29px;
+    width: 150px;
+    color: #666666;
+    display: inline-block;
+    cursor: pointer;
+    border: 1px solid #a7a7a7;
+    background: linear-gradient(#FDFDFD, #CFCFCF);
+    font-weight: 700;
+}
+
+.buttonNormal:hover {
+    background: linear-gradient(#CFCFCF, #FDFDFD) !important
+}
+
+.addressSuggestionResult {
+    background-color: lightgray;
+    cursor: pointer;
+}
+
+.addressSuggestionResult:hover {
+    background-color: #f7ff00;
+}
+
+/*From the SiteFooterUX component*/
+h3.blue {
+    padding-top: 10px;
+    clear: both;
+}
+
+textarea {
+    resize: none;
+}
+
+ul.process {
+    margin-bottom: 10px;
+}
+
+.radioCell {
+    margin-top: -18px;
+}
+
+#lean_overlay {
+    position: fixed;
+    z-index: 100;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    background: #000;
+    display: none;
+}
+
+
+#address-container {
+    display: block;
+}
+
+#coordinate-container {
+    display: none;
+}
+
+
+/* Suggestive Search Textbox */
+
+.suggestive-search {
+    display: inline-block;
+}
+
+.suggestive-search--input {}
+
+.suggestive-search--input.address {
+    width: 336px;
+    background: #ccc;
+    border-radius: 3px;
+    box-shadow: inset 1px 2px 2px #999, inset -1px 2px 2px #999;
+}
+
+.suggestive-search--results {
+    position: absolute;
+    display: none;
+    box-shadow: rgb(68, 68, 68) 2px 2px 5px;
+    background-color: white;
+    padding: 5px 0px;
+    z-index: 9999;
+}
+
+.suggestive-search--results li {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.suggestive-search--results li:hover {
+    background-color: #EEEEEE;
+}
+
+
+/* Map */
+.map {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    padding: 0;
+    margin: 20px 0 0 0;
+}
+
+.map--view-menu,
+.map--layer-menu {
+    position: absolute;
+    background-color: #ffffff;
+    top: 20px;
+    z-index: 5;
+}
+
+.map--view-menu {
+    left: 57px;
+}
+
+.map--layer-menu {
+    right: 10px;
+}
+
+.map--view-item,
+.map--layer-item {
+    border: 1px solid #C0C0C0;
+    border-collapse: collapse;
+    height: 12px;
+    padding: 5px 10px !important;
+    font-size: 12px;
+    color: #000000;
+    font-weight: normal;
+}
+
+.map--view-item:hover,
+.map--layer-item:hover,
+.map--layer-item.active {
+    background-color: #dddddd;
+    cursor: pointer;
+}
+
+.map--layer-item.active {
+    font-weight: bold;
+}
+
+.esriPopup .title {
+    margin-right: 40px;
+    padding: 4px;
+    display: block;
+}

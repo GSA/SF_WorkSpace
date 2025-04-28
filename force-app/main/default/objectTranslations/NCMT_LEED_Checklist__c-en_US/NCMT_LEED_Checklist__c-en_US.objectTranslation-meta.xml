@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>LEED Checklist</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>LEED Checklist</value>
+    </caseValues>
+    <layouts>
+        <layout>NCMT LEED Checklist</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Energy &amp; Atmosphere --></label>
+            <section>Energy &amp; Atmosphere</section>
+        </sections>
+        <sections>
+            <label><!-- Fields --></label>
+            <section>Fields</section>
+        </sections>
+        <sections>
+            <label><!-- Indoor Environmental Quality --></label>
+            <section>Indoor Environmental Quality</section>
+        </sections>
+        <sections>
+            <label><!-- Innovation --></label>
+            <section>Innovation</section>
+        </sections>
+        <sections>
+            <label><!-- Integrative Process --></label>
+            <section>Integrative Process</section>
+        </sections>
+        <sections>
+            <label><!-- Location &amp; Transportation --></label>
+            <section>Location &amp; Transportation</section>
+        </sections>
+        <sections>
+            <label><!-- Materials &amp; Resources --></label>
+            <section>Materials &amp; Resources</section>
+        </sections>
+        <sections>
+            <label><!-- Prerequisites --></label>
+            <section>Prerequisites</section>
+        </sections>
+        <sections>
+            <label><!-- Regional Priority --></label>
+            <section>Regional Priority</section>
+        </sections>
+        <sections>
+            <label><!-- Sustainable Sites --></label>
+            <section>Sustainable Sites</section>
+        </sections>
+        <sections>
+            <label><!-- System Information --></label>
+            <section>System Information</section>
+        </sections>
+        <sections>
+            <label><!-- Water Efficiency --></label>
+            <section>Water Efficiency</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>NCMT LEED Prereq Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Energy &amp; Atmosphere --></label>
+            <section>Energy &amp; Atmosphere</section>
+        </sections>
+        <sections>
+            <label><!-- Indoor Environmental Quality --></label>
+            <section>Indoor Environmental Quality</section>
+        </sections>
+        <sections>
+            <label><!-- Materials &amp; Resources --></label>
+            <section>Materials &amp; Resources</section>
+        </sections>
+        <sections>
+            <label><!-- Sustainable Sites --></label>
+            <section>Sustainable Sites</section>
+        </sections>
+        <sections>
+            <label><!-- System Information --></label>
+            <section>System Information</section>
+        </sections>
+        <sections>
+            <label><!-- Water Efficiency --></label>
+            <section>Water Efficiency</section>
+        </sections>
+    </layouts>
+    <recordTypes>
+        <description><!-- Leed Checklist --></description>
+        <label><!-- LEED Checklist --></label>
+        <name>LEED_Checklist</name>
+    </recordTypes>
+    <recordTypes>
+        <description><!-- LEED Prerequisite --></description>
+        <label><!-- LEED Prerequisite --></label>
+        <name>LEED_Prerequisite</name>
+    </recordTypes>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- All LEED Prerequisites need to be checked --></errorMessage>
+        <name>LEED_All_Prereqs_need_to_be_checked</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 3, 4, or 6. --></errorMessage>
+        <name>LEED_USR_Mod_EA_Point_Chk_1</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 through 18. --></errorMessage>
+        <name>LEED_USR_Mod_EA_Point_Chk_2</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 1. --></errorMessage>
+        <name>LEED_USR_Mod_EA_Point_Chk_3</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, or 2. --></errorMessage>
+        <name>LEED_USR_Mod_EA_Point_Chk_4</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, 2, or 3. --></errorMessage>
+        <name>LEED_USR_Mod_EA_Point_Chk_5</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 1. --></errorMessage>
+        <name>LEED_USR_Mod_EA_Point_Chk_6</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, or 2. --></errorMessage>
+        <name>LEED_USR_Mod_EA_Point_Chk_7</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, or 2. --></errorMessage>
+        <name>LEED_USR_Mod_IEQ_Point_Chk_1</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, 2, or 3. --></errorMessage>
+        <name>LEED_USR_Mod_IEQ_Point_Chk_2</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 1. --></errorMessage>
+        <name>LEED_USR_Mod_IEQ_Point_Chk_3</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, or 2. --></errorMessage>
+        <name>LEED_USR_Mod_IEQ_Point_Chk_4</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 1. --></errorMessage>
+        <name>LEED_USR_Mod_IEQ_Point_Chk_5</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, or 2. --></errorMessage>
+        <name>LEED_USR_Mod_IEQ_Point_Chk_6</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, 2, or 3. --></errorMessage>
+        <name>LEED_USR_Mod_IEQ_Point_Chk_7</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 1. --></errorMessage>
+        <name>LEED_USR_Mod_IEQ_Point_Chk_8</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 1. --></errorMessage>
+        <name>LEED_USR_Mod_IEQ_Point_Chk_9</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 1. --></errorMessage>
+        <name>LEED_USR_Mod_IP_Point_Chk_1</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, 2, 3, 4, or 5. --></errorMessage>
+        <name>LEED_USR_Mod_Innovation_Point_Chk_1</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 1. --></errorMessage>
+        <name>LEED_USR_Mod_Innovation_Point_Chk_2</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 8, 10, 12, or 16. --></errorMessage>
+        <name>LEED_USR_Mod_LT_Point_Chk_1</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 1. --></errorMessage>
+        <name>LEED_USR_Mod_LT_Point_Chk_2</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, or 2. --></errorMessage>
+        <name>LEED_USR_Mod_LT_Point_Chk_3</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, 2, 3, 4, or 5. --></errorMessage>
+        <name>LEED_USR_Mod_LT_Point_Chk_4</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, 2, 3, or 5. --></errorMessage>
+        <name>LEED_USR_Mod_LT_Point_Chk_5</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 1. --></errorMessage>
+        <name>LEED_USR_Mod_LT_Point_Chk_6</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 1. --></errorMessage>
+        <name>LEED_USR_Mod_LT_Point_Chk_7</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 1. --></errorMessage>
+        <name>LEED_USR_Mod_LT_Point_Chk_8</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 3, or 5. --></errorMessage>
+        <name>LEED_USR_Mod_MR_Point_Chk_1</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, or 2. --></errorMessage>
+        <name>LEED_USR_Mod_MR_Point_Chk_2</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, or 2. --></errorMessage>
+        <name>LEED_USR_Mod_MR_Point_Chk_3</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, or 2. --></errorMessage>
+        <name>LEED_USR_Mod_MR_Point_Chk_4</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, or 2. --></errorMessage>
+        <name>LEED_USR_Mod_MR_Point_Chk_5</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, 2, 3, 4. --></errorMessage>
+        <name>LEED_USR_Mod_RP_Point_Chk_1</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 1. --></errorMessage>
+        <name>LEED_USR_Mod_SS_Point_Chk_1</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 2. --></errorMessage>
+        <name>LEED_USR_Mod_SS_Point_Chk_2</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 1. --></errorMessage>
+        <name>LEED_USR_Mod_SS_Point_Chk_3</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 2, or 3. --></errorMessage>
+        <name>LEED_USR_Mod_SS_Point_Chk_4</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, or 2. --></errorMessage>
+        <name>LEED_USR_Mod_SS_Point_Chk_5</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 1. --></errorMessage>
+        <name>LEED_USR_Mod_SS_Point_Chk_6</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, or 2. --></errorMessage>
+        <name>LEED_USR_Mod_WE_Point_Chk_1</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, 2, 3, 4, 5, or 6. --></errorMessage>
+        <name>LEED_USR_Mod_WE_Point_Chk_2</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0, 1, or 2. --></errorMessage>
+        <name>LEED_USR_Mod_WE_Point_Chk_3</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- This field&apos;s value is outside of the acceptable range.  Please adjust to a value of 0 or 1. --></errorMessage>
+        <name>LEED_USR_Mod_WE_Point_Chk_4</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- A Project can have only one LEED data record. --></errorMessage>
+        <name>One_LEED_Per_Project</name>
+    </validationRules>
+</CustomObjectTranslation>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>StageAtComish__c</fullName>
+    <description>At what stage was the commissioning brought in?</description>
+    <inlineHelpText>Select the stage (Pre-Project, Preliminary Design, 35% Schematic Design, 90%/Construction Documents, 50% Construction, Project Closeout/ Occupancy )at which Commissioning was brought into the project.</inlineHelpText>
+    <label>Stage At Commissioning</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>35PercentSchematicDesign</fullName>
+                <default>false</default>
+                <label>35PercentSchematicDesign</label>
+            </value>
+            <value>
+                <fullName>50PercentConstruction</fullName>
+                <default>false</default>
+                <label>50PercentConstruction</label>
+            </value>
+            <value>
+                <fullName>90PercentConstructionDocuments</fullName>
+                <default>false</default>
+                <label>90PercentConstructionDocuments</label>
+            </value>
+            <value>
+                <fullName>PreliminaryDesign</fullName>
+                <default>false</default>
+                <label>PreliminaryDesign</label>
+            </value>
+            <value>
+                <fullName>PreProject</fullName>
+                <default>false</default>
+                <label>PreProject</label>
+            </value>
+            <value>
+                <fullName>ProjectCloseoutOccupancy</fullName>
+                <default>false</default>
+                <label>ProjectCloseoutOccupancy</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

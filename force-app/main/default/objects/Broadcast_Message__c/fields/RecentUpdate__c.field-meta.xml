@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>RecentUpdate__c</fullName>
     <description>Evaluates if a record has been updated in the past 7 days, if so, marked as true</description>
-    <externalId>false</externalId>
     <formula>LastModifiedDate  &gt; NOW()-7</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>RecentUpdate</label>

@@ -1,5 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>Labor_Hours_Update</fullName>
+        <field>Labor_Hours_F__c</field>
+        <formula>NCMT_Master_Format_Lookup__r.Labor_Hours_txt__c</formula>
+        <name>Labor Hours Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Total_Cost_O_P</fullName>
+        <field>Total_Cost_OP__c</field>
+        <formula>Total_Cost_OP_f__c</formula>
+        <name>Total Cost O&amp;P</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Equipment_Cost</fullName>
+        <field>Equipment_Unit_Cost__c</field>
+        <formula>Equipment_Unit_Cost_f__c</formula>
+        <name>Update Equipment Cost</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Installation_Cost</fullName>
+        <field>Installation_Cost__c</field>
+        <formula>Installation_Cost_f__c</formula>
+        <name>Update Installation Cost</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Labor_Unit_Cost</fullName>
+        <field>Labor_Unit_Cost__c</field>
+        <formula>Labor_Unit_Cost_f__c</formula>
+        <name>Update Labor Unit Cost</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Material_Unit_cost</fullName>
+        <field>Material_Unit_Cost__c</field>
+        <formula>Material_Unit_Cost_f__c</formula>
+        <name>Update Material Unit cost</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
     <rules>
         <fullName>NCMT Assembly Lookup Updates</fullName>
         <actions>

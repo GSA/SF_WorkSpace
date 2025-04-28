@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>RET Document Data</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>RET Document Data</value>
+    </caseValues>
+    <layouts>
+        <layout>RET Document Data Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Document Information --></label>
+            <section>Document Information</section>
+        </sections>
+        <sections>
+            <label><!-- Tax Information --></label>
+            <section>Tax Information</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- The Base Tax Year must be a valid 4 digit year. --></errorMessage>
+        <name>Validate_Base_Tax_Year</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Tax Period End Date should be after the Tax Period Start Date. --></errorMessage>
+        <name>Validate_Tax_Period_End_Date</name>
+    </validationRules>
+</CustomObjectTranslation>

@@ -1,0 +1,12 @@
+<apex:component >
+    <apex:attribute name="html" 
+        type="string" 
+        required="true"
+        description="a set of HTML instructions to be output" />
+        
+    <apex:outputPanel rendered="{!(html!=null)}">
+        <div class="message">
+            <c:PBS_gBUILD_OutputHTML html="{!html}" />
+        </div>
+    </apex:outputPanel>
+</apex:component>

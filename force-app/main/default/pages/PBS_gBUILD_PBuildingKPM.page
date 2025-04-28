@@ -1,0 +1,1116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<apex:page controller="PBS_gBUILD_PBuildingKPMController" tabstyle="PBS_gBUILD_PBuildingKPM__tab" sidebar="false">
+  <c:PBS_gBUILD_InitializeScripts />
+  <apex:form >
+    <apex:pageMessages id="pageMessages" />
+    <c:PBS_gBUILD_PageInstructions html="{!AppConfig.PageKpmIntro__c}" />
+    <apex:outputPanel rendered="{!showPageContent}" >
+        <apex:pageBlock >
+          <apex:pageBlockButtons >
+            <apex:commandButton action="{!edit}" value="Edit" rendered="{!viewMode}" disabled="{!readonlyMode}"/>
+            <apex:commandButton action="{!save}" value="Save" rendered="{!editMode}" disabled="{!readonlyMode}"/>
+            <apex:commandButton action="{!cancel}" value="Cancel" rendered="{!editMode}" immediate="true" />
+            <apex:commandButton action="{!approve}" value="Approve"  rendered="{!viewMode}" disabled="{!!isApproveEnabled}" styleClass="approve"/>
+          </apex:pageBlockButtons>
+          <apex:tabPanel switchType="client" id="theTabPanel">
+            <apex:tab label="Performance Projections" id="tabPerformanceProjections">
+              <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabKpmPerfProjIntro__c}" />
+              <apex:pageblocksection title="Building Baseline Performance" columns="1">
+                <apex:outputPanel id="BaselineEuasPanel" rendered="{!showBaselineEuasPanel}">
+                    <apex:pageBlockTable value="{!euasPerfItems}" var="z" title="EUAS Performance Data">
+                      <apex:column headerValue="Action">
+                        <apex:commandLink action="{!openEuasItem}" value="Open">
+                          <apex:param name="p1" value="{!z.id}" assignTo="{!actionId}"/>
+                        </apex:commandLink>
+                      </apex:column>
+                      <apex:column headerValue="Fiscal Year">
+                        <apex:outputText value="{0, number, 0000}">
+                            <apex:param value="{!z.FiscalYear__c}" />
+                        </apex:outputText>
+                      </apex:column>
+                      <apex:column headerValue="Months" rendered="{!debugMode}">
+                        <apex:outputText value="{!z.MonthCnt__c}" />
+                      </apex:column>
+                      <apex:column headerValue="GSF">
+                        <apex:outputField value="{!z.Gsf__c}" />
+                      </apex:column>
+                      <apex:column headerValue="Category">
+                        <apex:outputField value="{!z.Building_Category__c}" />
+                      </apex:column>
+                      <apex:column headerValue="Designation">
+                        <apex:outputField value="{!z.Building_Designation__c}" />
+                      </apex:column>
+                      <apex:column headerValue="Total Energy (MMBTU)" styleClass="calculated">
+                        <apex:outputField value="{!z.TotalEnergyBtu__c}" />
+                      </apex:column>
+                      <apex:column headerValue="kBTU/GSF/Year" styleClass="calculated">
+                        <apex:outputField value="{!z.EnergyUsageIntensity__c}" />
+                      </apex:column>
+                      <apex:column headerValue="Chilled Water (Ton-Hr)">
+                        <apex:outputField value="{!z.CwaterAmt__c}" />
+                      </apex:column>
+                      <apex:column headerValue="Electric (kWH)">
+                        <apex:outputField value="{!z.ElecAmt__c}" />
+                      </apex:column>
+                      <apex:column headerValue="Gas (CubicFt)">
+                        <apex:outputField value="{!z.GasAmt__c}" />
+                      </apex:column>
+                      <apex:column headerValue="Oil (Gallon)">
+                        <apex:outputField value="{!z.OilAmt__c}" />
+                      </apex:column>
+                      <apex:column headerValue="Steam (Mlb)">
+                        <apex:outputField value="{!z.SteamAmt__c}" />
+                      </apex:column>
+                      <apex:column headerValue="Water (Gallon)">
+                        <apex:outputField value="{!z.WaterAmt__c}" />
+                      </apex:column>
+                    </apex:pageBlockTable>
+                    Please indicate if EUAS represents accurate baseline performance of the building/facility prior to project start:
+                    <apex:selectRadio value="{!perffutIsEuasReferenceYearRep}" disabled="{!viewMode}" styleClass="isEuasReferenceYearRepSection{!if(viewMode,'',' MLP MSP MEP')}">
+                      <apex:selectOptions value="{!yesNoSelectOptions}" />
+                    </apex:selectRadio>
+                    <p></p>
+                </apex:outputPanel>
+                <script type="text/javascript">
+                    var euasRadios;
+                    j$(document).ready(function () {
+                        euasRadios = j$(".isEuasReferenceYearRepSection input");
+                        euasRadios.change(ShowProperEuasRepresentativeSection);
+                        ShowProperEuasRepresentativeSection();
+                    });
+
+                    function ShowProperEuasRepresentativeSection() {
+                        if (!{!showBaselineEuasPanel} || euasRadios[1].checked) {
+                            j$(".euasRepresentativeSection").show();
+                            j$(".euasRepresentativeSection1").show();
+                            j$(".euasRepresentativeSection0").hide();
+                        }
+                        else if (euasRadios[0].checked) {
+                            j$(".euasRepresentativeSection").show();
+                            j$(".euasRepresentativeSection0").show();
+                            j$(".euasRepresentativeSection1").hide();
+                        }
+                    }
+                </script>
+                <apex:outputPanel id="euasRepresentative" styleClass="euasRepresentativeSection" style="display:none" >
+                    <apex:outputPanel styleClass="euasRepresentativeSection0" style="display:none">
+                      <apex:pageblocksection title="Please select year of EUAS data to be referenced as the building/facility's baseline performance:">
+                        <apex:selectList value="{!fiscalYearValue}" multiselect="false" size="1" disabled="{!viewMode}">
+                          <apex:selectOptions value="{!euasYears}"/>
+                        </apex:selectList>
+                      </apex:pageblocksection>
+                    </apex:outputPanel>
+                    <apex:outputPanel styleClass="euasRepresentativeSection1" style="display:none">
+                      <apex:pageblocksection title="Please provide appropriate baseline information for the building/facility prior to project start:">
+                        <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutModelType__c}"/>
+                        <apex:inputField rendered="{!editMode}" value="{!pb.PerffutModelType__c}"/>
+                        <p></p>
+                        <apex:pageBlockTable value="{!proBlist}" var="z">
+                          <apex:column headerValue="Building GSF">
+                            <apex:outputField rendered="{!viewMode}" value="{!z.Perffutgsf__c }"/>
+                            <apex:inputField rendered="{!editMode}" value="{!z.Perffutgsf__c }"/>
+                          </apex:column>
+                          <apex:column headerValue="Total Energy (MMBTU)" styleClass="calculated" rendered="{!viewMode}">
+                            <apex:outputField value="{!z.PerffutTotEnergy__c}"/>
+                          </apex:column>
+                          <apex:column headerValue="kBTU/GSF/Year" styleClass="calculated" rendered="{!viewMode}">
+                            <apex:outputField value="{!z.PerffutEnergyUsageIntensity__c}" />
+                          </apex:column>
+                          <apex:column headerValue="Chilled Water (Ton-Hr)">
+                            <apex:outputField rendered="{!viewMode}" value="{!z.PerffutChilledWater__c}"/>
+                            <apex:inputField rendered="{!editMode}" value="{!z.PerffutChilledWater__c}"/>
+                          </apex:column>
+                          <apex:column headerValue="Electric (kWH)">
+                            <apex:outputField rendered="{!viewMode}" value="{!z.PerffutElectric__c}"/>
+                            <apex:inputField rendered="{!editMode}" value="{!z.PerffutElectric__c}"/>
+                          </apex:column>
+                          <apex:column headerValue="Gas (CubicFt)">
+                            <apex:outputField rendered="{!viewMode}" value="{!z.Perffutgas__c }"/>
+                            <apex:inputField rendered="{!editMode}" value="{!z.Perffutgas__c }"/>
+                          </apex:column>
+                          <apex:column headerValue="Oil (Gallon)">
+                            <apex:outputField rendered="{!viewMode}" value="{!z.Perffutoil__c }"/>
+                            <apex:inputField rendered="{!editMode}" value="{!z.Perffutoil__c }"/>
+                          </apex:column>
+                          <apex:column headerValue="Steam (Mlb)">
+                            <apex:outputField rendered="{!viewMode}" value="{!z.PerffutSteam__c }"/>
+                            <apex:inputField rendered="{!editMode}" value="{!z.PerffutSteam__c }"/>
+                          </apex:column>
+                          <apex:column headerValue="Water (Gallon)">
+                            <apex:outputField rendered="{!viewMode}" value="{!z.Perffutwater__c }"/>
+                            <apex:inputField rendered="{!editMode}" value="{!z.Perffutwater__c }"/>
+                          </apex:column>
+                        </apex:pageBlockTable>
+                      </apex:pageblocksection>
+                    </apex:outputPanel>
+                  <apex:pageblocksection title="Other" columns="1">
+                      Please provide any comments regarding the building/facility's baseline performance:
+                      <p></p>
+                      <apex:outputfield rendered="{!viewMode}" value="{!pb.PerffutComments__c}" />
+                      <apex:inputfield rendered="{!editMode}" value="{!pb.PerffutComments__c}" />
+                  </apex:pageblocksection>
+                </apex:outputPanel>
+              </apex:pageblocksection>
+              <p></p>
+              <apex:pageblocksection title="Utility Rates: Cost Per Unit" columns="1">
+                <apex:pageBlockTable value="{!ecus}" var="z" style="dataTable">
+                    <apex:column headerValue="Utility">
+                        <span title="{!z.Help}">{!z.Label}</span>
+                    </apex:column>
+                    <apex:column headerValue="EUAS FY{!fiscalYearValue}" rendered="{!(euasCost!=null)}">
+                        <apex:outputText value="{!z.eVal}" />
+                    </apex:column>
+                    <apex:column headerValue="Override">
+                        <apex:outputText rendered="{!viewMode}" value="{!z.oVal}"/>                 
+                        <apex:inputText rendered="{!editMode}" value="{!z.oVal}"/>
+                    </apex:column>
+                </apex:pageBlockTable>
+              </apex:pageblocksection>
+              <apex:pageblocksection title="Anticipated Performance and Savings" columns="1">
+                <i>Changing this value will automatically save the form.</i><br />
+                <apex:selectRadio value="{!utilitySavingsContext}" disabled="{!viewMode}" styleClass="{!if(viewMode,'','MLP MSP MEP')}" >
+                  <apex:selectOptions value="{!savingsContextSelectOptions}"/>
+                  <apex:actionSupport event="onchange" action="{!savingsContextRadioChanged}" reRender="utilitySavings,pageMessages"/>
+                </apex:selectRadio>
+                <p></p>
+                <apex:outputPanel id="utilitySavings">
+                  <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabKpmAnticImpactScopeIntro__c}" rendered="{!showUtilitySavingsTypeImpactScope}" />
+                  <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabKpmAnticImpactBuildingIntro__c}" rendered="{!showUtilitySavingsTypeImpactBuilding}" />
+                  <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabKpmAnticPerformanceBuildingIntro__c}" rendered="{!showUtilitySavingsTypePerformanceBuilding}" />
+                  <apex:pageBlockTable value="{!utilitySavingsItems}" var="z" title="Impact" rendered="{!showUtilityImpactTable}">
+                    <apex:column headerValue="Action">
+                      <apex:commandLink action="{!openUtilitySavingsItem}" value="Open">
+                        <apex:param name="p1" value="{!z.anticipated.id}" assignTo="{!actionId}"/>
+                        <apex:param name="p2" value="{!z.contextName}" assignTo="{!actionContextName}"/>
+                      </apex:commandLink>
+                    </apex:column>
+                    <apex:column headerValue="Context">
+                      <apex:outputText value="{!z.contextName}" />
+                    </apex:column>                
+                    <apex:column headerValue="Total Estimated Annual Energy Savings (MMBTU)" styleClass="calculated">
+                      <apex:outputField value="{!z.anticipated.TotEnergySavCalculated__c}" />
+                    </apex:column>
+                    <apex:column headerValue="Total Estimated Energy Cost Savings ($)" styleClass="calculated">
+                      <apex:outputField value="{!z.anticipated.TotAnnualEnergyCostSavCalculatedF__c}" />
+                    </apex:column>
+                    <apex:column headerValue="Total Estimated Annual Water Savings (Gal)">
+                      <apex:outputField value="{!z.anticipated.WaterSav__c}" />
+                    </apex:column>
+                    <!--
+                    <apex:column headerValue="Modified At">
+                      <apex:outputField value="{!z.anticipated.LastModifiedDate}" />
+                    </apex:column>
+                    <apex:column headerValue="Modified By">
+                      <apex:outputField value="{!z.anticipated.LastModifiedById}" />
+                    </apex:column>
+                    -->
+                  </apex:pageBlockTable>                            
+                  <apex:outputPanel rendered="{!showUtilityPerformanceTable}">
+                      <apex:pageblocksection title="Energy Usage Intensity (EUI) Target" columns="1" >
+                        <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutEnergyUsageIntensityGoal__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!pb.PerffutEnergyUsageIntensityGoal__c}" />
+                      </apex:pageblocksection>              
+                      <apex:pageblocksection title="Anticipated Performance and Savings (Performance Building Level)" columns="1" >
+                        <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutAnticChilledWater__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutAnticElectric__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutAnticGas__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutAnticOil__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutAnticSteam__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutAnticWater__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutAnticTotAnnualEnergyCalculated__c}" styleClass="calculated" />
+                        <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutAnticAnnualEnergyCalculated__c}" styleClass="calculated" />
+                        <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutAnticAnnualWaterCalculated__c}" styleClass="calculated" />
+                        <apex:inputField rendered="{!editMode}" value="{!pb.PerffutAnticChilledWater__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!pb.PerffutAnticElectric__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!pb.PerffutAnticGas__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!pb.PerffutAnticOil__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!pb.PerffutAnticSteam__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!pb.PerffutAnticWater__c}" />
+                      </apex:pageblocksection>                  
+                  </apex:outputPanel>
+                  <apex:pageblocksection title="Calculated Energy and Water Reductions" columns="1" rendered="{!showUtilitySavingsTypePerformanceBuilding&&viewMode}">
+                   <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutAnticEnergyConsumptionReduction__c}" styleClass="calculated" />
+                   <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutAnticCWaterConsumptionReduction__c}" styleClass="calculated" />
+                    <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutAnticElectricConsumptionReduction__c}" styleClass="calculated" />
+                    <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutAnticGasConsumptionReduction__c}" styleClass="calculated" />
+                    <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutAnticOilConsumptionReduction__c}" styleClass="calculated" />
+                    <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutAnticSteamConsumptionReduction__c}" styleClass="calculated" />
+                    <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutAnticWaterConsumptionReduction__c}" styleClass="calculated" />
+                  </apex:pageblocksection>
+                  <apex:pageblocksection title="Energy Consumption Comments" columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutAnticEnergyConsumptionNarr__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!pb.PerffutAnticEnergyConsumptionNarr__c}" />
+                  </apex:pageblocksection>
+                  <apex:pageblocksection title="Energy Model, Energy Study, or Supporting Documentation" columns="1" >
+                    <span>Please upload any supporting documentation, calculations or models to support reported performance projections. If project is a New Construction or Modernization, this can also be provided within MPC 4 for reference for  compliance.</span>
+                    <c:PBS_gBUILD_Upload pageController="{!this}" key="KpmEnergyModel" viewMode="{!viewMode}" />            
+                  </apex:pageblocksection>
+                </apex:outputPanel>
+              </apex:pageblocksection>
+              <apex:pageblocksection title="Gross Square Footage" columns="1" id="gsfSection">
+                <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutGsfDirectionalChange__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutGsfAnticipated__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutGsfComments__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.PerffutGsfDirectionalChange__c}" styleClass="MSP" />
+                <apex:inputField rendered="{!editMode}" value="{!pb.PerffutGsfAnticipated__c}" styleClass="MLP MEP" />
+                <apex:inputField rendered="{!editMode}" value="{!pb.PerffutGsfComments__c}" styleClass="MSP" />
+              </apex:pageblocksection>          
+            </apex:tab>
+              <apex:tab label="LEED/SITES" id="tabLeed">
+              <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabKpmLEEDIntro__c}" />
+              <apex:pageBlockSection title="LEED Information" columns="1">
+                <apex:outputField rendered="{!viewMode}" value="{!pb.LEEDGoal__c}" styleClass="enum"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.LEEDGoal__c}" styleClass="enum MLP"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.LEEDExemptionNumber__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.LEEDExemptionNumber__c}"/>
+                <apex:pageBlockSectionItem >
+                    <span></span>
+                    <span>Email <a mailto="don.horn@gsa.gov">don.horn@gsa.gov</a> for an exemption number and waiver.</span>
+                </apex:pageBlockSectionItem>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.LEEDExemptionDate__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.LEEDExemptionDate__c}"/>
+                <apex:pageBlockSectionItem >
+                    <span>LEED Exemption Waiver Attachments</span>
+                    <c:PBS_gBUILD_Upload pageController="{!this}" key="KpmLeedWaiver" viewMode="{!viewMode}" />            
+                </apex:pageBlockSectionItem>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.LEEDRatingSys__c}" styleClass="enum"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.LEEDVersion__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.LEEDRegisteredWithUSGBC__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.LEEDRegistrationNumber__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.LEEDRegistrationDate__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.LEEDWasCertified__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.LEEDCertificationDate__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.LEEDCertificationLvl__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.LEEDRatingSys__c}" styleClass="enum MLP"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.LEEDVersion__c}" styleClass="enum MLP"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.LEEDRegisteredWithUSGBC__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.LEEDRegistrationNumber__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.LEEDRegistrationDate__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.LEEDWasCertified__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.LEEDCertificationDate__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.LEEDCertificationLvl__c}"/>
+                <apex:pageBlockSectionItem >
+                    <span>LEED Credit Attachments</span>
+                    <c:PBS_gBUILD_Upload pageController="{!this}" key="KpmLEEDCredit" viewMode="{!viewMode}" />
+                </apex:pageBlockSectionItem>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.LEEDComments__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.LEEDComments__c}"/>
+              </apex:pageBlockSection>
+                <!-- SITES Information section begin -->
+              <apex:pageBlockSection title="SITES Information" columns="1">
+                <!-- view Mode -->
+                <apex:outputField rendered="{!viewMode}" value="{!pb.SITESBeingPursued__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!pb.SITESVersion__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.SITESRegistrationNumber__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!pb.SITESGoal__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.SITESCertificationLvl__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.SITESCertificationDate__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.SITESComments__c}"/>
+                  
+                <!-- edit Mode -->
+                <apex:inputField rendered="{!editMode}" value="{!pb.SITESBeingPursued__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!pb.SITESVersion__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!pb.SITESRegistrationNumber__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.SITESGoal__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.SITESCertificationLvl__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.SITESCertificationDate__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.SITESComments__c}"/>
+              </apex:pageBlockSection>
+                <!-- SITES Information section END -->
+            </apex:tab>
+            <apex:tab label="Energy Star" id="tabEnergyStar">
+              <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabKpmEnergyStarIntro__c}" />
+              <apex:pageBlockSection columns="1" title="Target Ratings">
+                <apex:outputField rendered="{!viewMode}" value="{!pb.EstarTargetRating__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.EstarPersuingEnergyStarCertification__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.EstarTargetRating__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.EstarPersuingEnergyStarCertification__c}"/>
+              </apex:pageBlockSection>
+              <apex:pageBlockSection columns="1" title="Baseline">
+                <apex:outputField rendered="{!viewMode}" value="{!pb.EstarBaselineWeeklyOperatingHours__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.EstarBaselineWorkersOnMainShift__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.EstarBaselineCntPcs__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.EstarBaselineWeeklyOperatingHours__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.EstarBaselineWorkersOnMainShift__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.EstarBaselineCntPcs__c}"/>
+              </apex:pageBlockSection>
+              <apex:pageBlockSection columns="1" title="Anticipated">
+                <apex:outputField rendered="{!viewMode}" value="{!pb.EstarAnticipatedWeeklyOperatingHours__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.EstarAnticipatedWorkersOnMainShift__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.EstarAnticipatedCntPcs__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.EstarAnticipatedWeeklyOperatingHours__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.EstarAnticipatedWorkersOnMainShift__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.EstarAnticipatedCntPcs__c}"/>
+              </apex:pageBlockSection>
+            </apex:tab>
+            <apex:tab label="Waste Management" id="tabWasteManagement">
+              <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabKpmWmIntro__c}" />
+              <apex:pageBlockSection columns="1" title="General">
+                <apex:pageBlockSectionItem >
+                    <span>Are you performing any Waste Diversion or Materials Management as part of this project?</span>
+                    <apex:selectRadio value="{!engagedInWasteWasteMaterialsMgmt}" disabled="{!viewMode}" styleClass="wmmRadioSection">
+                      <apex:selectOptions value="{!yesNoSelectOptions}"/>
+                    </apex:selectRadio>
+                </apex:pageBlockSectionItem>
+              </apex:pageBlockSection>
+                <script type="text/javascript">
+                    var wmmRadios;
+                    j$(document).ready(function () {
+                        wmmRadios = j$(".wmmRadioSection input");
+                        wmmRadios.change(ShowProperWMSection);
+                        ShowProperWMSection();
+                    });
+
+                    function ShowProperWMSection() {
+                        if (wmmRadios[0].checked) {
+                            j$(".wmmmSection").show();
+                        }
+                        else if (wmmRadios[1].checked) {
+                            j$(".wmmmSection").hide();
+                        }
+                    }
+                </script>
+              <apex:outputPanel styleClass="wmmmSection" style="display:none">
+                <apex:pageBlockSection columns="1" title="Sustainability Plan Goal: Waste Diversion by Weight at Project Completion">
+                  <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabKpmWmApgIntro__c}" />
+                  <apex:outputField rendered="{!viewMode}" value="{!pb.WasteMaterialsCDWasteWeight__c}"/>
+                  <apex:outputField rendered="{!viewMode}" value="{!pb.WasteMaterialsCDWasteDivertedWeight__c}"/>
+                  <apex:inputField rendered="{!editMode}" value="{!pb.WasteMaterialsCDWasteWeight__c}" />
+                  <apex:inputField rendered="{!editMode}" value="{!pb.WasteMaterialsCDWasteDivertedWeight__c}"/>
+                  
+                  <iframe src="/apex/gBUILD_PBSChatter" width="100%" height="350px" scrolling="yes" target="_blank"></iframe>
+                  <!--<apex:iframe src="/apex/gBUILD_PBSChatter" width="100%" height="350px" scrolling="yes" />-->
+                  <!--<chatter:FeedWithFollowers entityId="{!pb.Id}" rendered="{!viewMode}" showHeader="false" /> -->
+                  
+                </apex:pageBlockSection>
+                <apex:pageBlockSection columns="1" title="C&D Waste Diversion Targets, Progress and Strategies">
+                  <apex:outputField rendered="{!viewMode}" value="{!pb.WasteWstdivTarget__c}"/>
+                  <apex:outputField rendered="{!viewMode}" value="{!pb.WasteWstdivAt50PctConstruction__c}"/>
+                  <apex:outputField rendered="{!viewMode}" value="{!pb.WasteWstdivAverageMonthly__c}"/>
+                  <apex:outputField rendered="{!viewMode}" value="{!pb.WasteWstdivAtCloseout__c}"/>
+                  <apex:outputField rendered="{!viewMode}" value="{!pb.WasteWstdivDate__c}"/>
+                  <apex:outputField rendered="false" value="{!pb.WasteHaulerContact__c}"/>
+                  <apex:outputField rendered="{!viewMode}" value="{!pb.WasteWasteLeedOnTrackMeetRequirements__c}"/>
+                  <apex:outputField rendered="{!viewMode}" value="{!pb.WasteWasteLeedComments__c}"/>
+                  <apex:outputField rendered="{!viewMode}" value="{!pb.WasteWstdivMethodDonation__c}"/>
+                  <apex:outputField rendered="{!viewMode}" value="{!pb.WasteWstdivMethodRecyclingSalvageYard__c}"/>
+                  <apex:outputField rendered="{!viewMode}" value="{!pb.WasteWstdivMethodReuseForProjectUse__c}"/>
+                  <apex:outputField rendered="{!viewMode}" value="{!pb.WasteWstdivMethodOtherText__c}"/>
+                  <apex:outputField rendered="{!viewMode}" value="{!pb.WasteWstdivMethodComments__c}"/>
+                  <apex:inputField rendered="{!editMode}" value="{!pb.WasteWstdivTarget__c}" styleClass="MLP" />
+                  <apex:inputField rendered="{!editMode}" value="{!pb.WasteWstdivAt50PctConstruction__c}"/>
+                  <apex:inputField rendered="{!editMode}" value="{!pb.WasteWstdivAverageMonthly__c}"/>
+                  <apex:inputField rendered="{!editMode}" value="{!pb.WasteWstdivAtCloseout__c}"/>
+                  <apex:inputField rendered="{!editMode}" value="{!pb.WasteWstdivDate__c}"/>
+                  <apex:inputField rendered="false" value="{!pb.WasteHaulerContact__c}"/>
+                  <apex:inputField rendered="{!editMode}" value="{!pb.WasteWasteLeedOnTrackMeetRequirements__c}"/>
+                  <apex:inputField rendered="{!editMode}" value="{!pb.WasteWasteLeedComments__c}"/>
+                  <apex:inputField rendered="{!editMode}" value="{!pb.WasteWstdivMethodDonation__c}"/>
+                  <apex:inputField rendered="{!editMode}" value="{!pb.WasteWstdivMethodRecyclingSalvageYard__c}"/>
+                  <apex:inputField rendered="{!editMode}" value="{!pb.WasteWstdivMethodReuseForProjectUse__c}"/>
+                  <apex:inputField rendered="{!editMode}" value="{!pb.WasteWstdivMethodOtherText__c}"/>
+                  <apex:inputField rendered="{!editMode}" value="{!pb.WasteWstdivMethodComments__c}"/>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection columns="1" title="Materials Management">
+                  <apex:outputField rendered="{!viewMode}" value="{!pb.WasteMaterialsProjectValueRecycledPct__c}"/>
+                  <apex:outputField rendered="{!viewMode}" value="{!pb.WasteMaterialsRecycledInstldDatePct__c}"/>
+                  <apex:outputField rendered="{!viewMode}" value="{!pb.WasteMaterialsBldgReuseAchievedDate__c}"/>
+                  <apex:outputField rendered="{!viewMode}" value="{!pb.WasteMaterialsComment__c}"/>
+                  <apex:inputField rendered="{!editMode}" value="{!pb.WasteMaterialsProjectValueRecycledPct__c}"/>
+                  <apex:inputField rendered="{!editMode}" value="{!pb.WasteMaterialsRecycledInstldDatePct__c}"/>
+                  <apex:inputField rendered="{!editMode}" value="{!pb.WasteMaterialsBldgReuseAchievedDate__c}"/>
+                  <apex:inputField rendered="{!editMode}" value="{!pb.WasteMaterialsComment__c}"/>
+                </apex:pageBlockSection>
+              </apex:outputPanel>
+            </apex:tab>
+            <apex:tab label="M&V" id="tabMV">
+              <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabKpmMvIntro__c}" />
+              <apex:outputPanel styleClass="euasRepresentativeSection" style="display:none" rendered="{!viewMode}">
+                  <apex:pageBlockSection columns="1" title="EUAS Building Data: Post-Project Period of Performance">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="EUAS Baseline Performance Year" for="euasBaselinePerformanceYear"/>
+                        <apex:outputText value="{!euasBaselinePerformanceYear}" id="euasBaselinePerformanceYear"/> 
+                    </apex:pageBlockSectionItem>
+                    <apex:outputField value="{!pb.Rahd_ProjectParentId__r.SubstantiallyCompleteDate__c}"/>
+                    <table border="1" width="100%" class="list">
+                        <thead class="rich-table-thead">
+                            <tr class="headerRow">
+                                <th>Period</th>
+                                <th>Metric</th>
+                                <th>October</th>
+                                <th>November</th>
+                                <th>December</th>
+                                <th>January</th>
+                                <th>February</th>
+                                <th>March</th>
+                                <th>April</th>
+                                <th>May</th>
+                                <th>June</th>
+                                <th>July</th>
+                                <th>August</th>
+                                <th>September</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="dataRow first">
+                                <th>EUAS Baseline</th>
+                                <th>Total Energy (MMBTU)</th>
+                                <td><a href="/{!euasBaselineByMonth[01].id}">{!euasBaselineByMonth[01].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[02].id}">{!euasBaselineByMonth[02].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[03].id}">{!euasBaselineByMonth[03].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[04].id}">{!euasBaselineByMonth[04].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[05].id}">{!euasBaselineByMonth[05].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[06].id}">{!euasBaselineByMonth[06].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[07].id}">{!euasBaselineByMonth[07].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[08].id}">{!euasBaselineByMonth[08].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[09].id}">{!euasBaselineByMonth[09].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[10].id}">{!euasBaselineByMonth[10].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[11].id}">{!euasBaselineByMonth[11].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[12].id}">{!euasBaselineByMonth[12].TotalEnergyBtu__c}</a></td>
+                            </tr>
+                            <tr class="dataRow">
+                                <th>EUAS Results</th>
+                                <th>Total Energy (MMBTU)</th>
+                                <td><a href="/{!euasActualsByMonth[01].id}">{!euasActualsByMonth[01].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[02].id}">{!euasActualsByMonth[02].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[03].id}">{!euasActualsByMonth[03].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[04].id}">{!euasActualsByMonth[04].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[05].id}">{!euasActualsByMonth[05].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[06].id}">{!euasActualsByMonth[06].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[07].id}">{!euasActualsByMonth[07].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[08].id}">{!euasActualsByMonth[08].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[09].id}">{!euasActualsByMonth[09].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[10].id}">{!euasActualsByMonth[10].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[11].id}">{!euasActualsByMonth[11].TotalEnergyBtu__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[12].id}">{!euasActualsByMonth[12].TotalEnergyBtu__c}</a></td>
+                            </tr>
+                            <tr class="dataRow">
+                                <th>EUAS Baseline</th>
+                                <th>kBTU/GSF/Year</th>
+                                <td><a href="/{!euasBaselineByMonth[01].id}">{!euasBaselineByMonth[01].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[02].id}">{!euasBaselineByMonth[02].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[03].id}">{!euasBaselineByMonth[03].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[04].id}">{!euasBaselineByMonth[04].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[05].id}">{!euasBaselineByMonth[05].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[06].id}">{!euasBaselineByMonth[06].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[07].id}">{!euasBaselineByMonth[07].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[08].id}">{!euasBaselineByMonth[08].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[09].id}">{!euasBaselineByMonth[09].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[10].id}">{!euasBaselineByMonth[10].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[11].id}">{!euasBaselineByMonth[11].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[12].id}">{!euasBaselineByMonth[12].EnergyUsageIntensity__c}</a></td>
+                            </tr>
+                            <tr class="dataRow">
+                                <th>EUAS Results</th>
+                                <th>kBTU/GSF/Year</th>
+                                <td><a href="/{!euasActualsByMonth[01].id}">{!euasActualsByMonth[01].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[02].id}">{!euasActualsByMonth[02].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[02].id}">{!euasActualsByMonth[03].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[03].id}">{!euasActualsByMonth[04].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[04].id}">{!euasActualsByMonth[05].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[05].id}">{!euasActualsByMonth[06].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[06].id}">{!euasActualsByMonth[07].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[07].id}">{!euasActualsByMonth[08].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[08].id}">{!euasActualsByMonth[09].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[09].id}">{!euasActualsByMonth[10].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[10].id}">{!euasActualsByMonth[11].EnergyUsageIntensity__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[11].id}">{!euasActualsByMonth[12].EnergyUsageIntensity__c}</a></td>
+                            </tr>
+                            <tr class="dataRow">
+                                <th>EUAS Baseline</th>
+                                <th>Chilled Water (Ton-Hr)</th>
+                                <td><a href="/{!euasBaselineByMonth[01].id}">{!euasBaselineByMonth[01].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[02].id}">{!euasBaselineByMonth[02].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[03].id}">{!euasBaselineByMonth[03].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[04].id}">{!euasBaselineByMonth[04].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[05].id}">{!euasBaselineByMonth[05].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[06].id}">{!euasBaselineByMonth[06].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[07].id}">{!euasBaselineByMonth[07].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[08].id}">{!euasBaselineByMonth[08].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[09].id}">{!euasBaselineByMonth[09].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[10].id}">{!euasBaselineByMonth[10].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[11].id}">{!euasBaselineByMonth[11].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[12].id}">{!euasBaselineByMonth[12].CwaterAmt__c}</a></td>
+                            </tr>
+                            <tr class="dataRow">
+                                <th>EUAS Results</th>
+                                <th>Chilled Water (Ton-Hr)</th>
+                                <td><a href="/{!euasActualsByMonth[01].id}">{!euasActualsByMonth[01].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[02].id}">{!euasActualsByMonth[02].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[03].id}">{!euasActualsByMonth[03].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[04].id}">{!euasActualsByMonth[04].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[05].id}">{!euasActualsByMonth[05].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[06].id}">{!euasActualsByMonth[06].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[07].id}">{!euasActualsByMonth[07].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[08].id}">{!euasActualsByMonth[08].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[09].id}">{!euasActualsByMonth[09].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[10].id}">{!euasActualsByMonth[10].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[11].id}">{!euasActualsByMonth[11].CwaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[12].id}">{!euasActualsByMonth[12].CwaterAmt__c}</a></td>
+                            </tr>
+                            <tr class="dataRow">
+                                <th>EUAS Baseline</th>
+                                <th>Electric (kWH)</th>
+                                <td><a href="/{!euasBaselineByMonth[01].id}">{!euasBaselineByMonth[01].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[02].id}">{!euasBaselineByMonth[02].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[03].id}">{!euasBaselineByMonth[03].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[04].id}">{!euasBaselineByMonth[04].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[05].id}">{!euasBaselineByMonth[05].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[06].id}">{!euasBaselineByMonth[06].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[07].id}">{!euasBaselineByMonth[07].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[08].id}">{!euasBaselineByMonth[08].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[09].id}">{!euasBaselineByMonth[09].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[10].id}">{!euasBaselineByMonth[10].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[11].id}">{!euasBaselineByMonth[11].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[12].id}">{!euasBaselineByMonth[12].ElecAmt__c}</a></td>
+                            </tr>
+                            <tr class="dataRow">
+                                <th>EUAS Results</th>
+                                <th>Electric (kWH)</th>
+                                <td><a href="/{!euasActualsByMonth[01].id}">{!euasActualsByMonth[01].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[02].id}">{!euasActualsByMonth[02].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[03].id}">{!euasActualsByMonth[03].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[04].id}">{!euasActualsByMonth[04].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[05].id}">{!euasActualsByMonth[05].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[06].id}">{!euasActualsByMonth[06].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[07].id}">{!euasActualsByMonth[07].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[08].id}">{!euasActualsByMonth[08].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[09].id}">{!euasActualsByMonth[09].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[10].id}">{!euasActualsByMonth[10].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[11].id}">{!euasActualsByMonth[11].ElecAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[12].id}">{!euasActualsByMonth[12].ElecAmt__c}</a></td>
+                            </tr>
+                            <tr class="dataRow">
+                                <th>EUAS Baseline</th>
+                                <th>Gas (CubicFt)</th>
+                                <td><a href="/{!euasBaselineByMonth[01].id}">{!euasBaselineByMonth[01].GasAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[02].id}">{!euasBaselineByMonth[02].GasAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[03].id}">{!euasBaselineByMonth[03].GasAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[04].id}">{!euasBaselineByMonth[04].GasAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[05].id}">{!euasBaselineByMonth[05].GasAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[06].id}">{!euasBaselineByMonth[06].GasAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[07].id}">{!euasBaselineByMonth[07].GasAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[08].id}">{!euasBaselineByMonth[08].GasAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[09].id}">{!euasBaselineByMonth[09].GasAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[10].id}">{!euasBaselineByMonth[10].GasAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[11].id}">{!euasBaselineByMonth[11].GasAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[12].id}">{!euasBaselineByMonth[12].GasAmt__c}</a></td>
+                            </tr>
+                            <tr class="dataRow">
+                                <th>EUAS Results</th>
+                                <th>Gas (CubicFt)</th>
+                                <td><a href="/{!euasActualsByMonth[01].id}">{!euasActualsByMonth[01].GasAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[02].id}">{!euasActualsByMonth[02].GasAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[03].id}">{!euasActualsByMonth[03].GasAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[04].id}">{!euasActualsByMonth[04].GasAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[05].id}">{!euasActualsByMonth[05].GasAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[06].id}">{!euasActualsByMonth[06].GasAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[07].id}">{!euasActualsByMonth[07].GasAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[08].id}">{!euasActualsByMonth[08].GasAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[09].id}">{!euasActualsByMonth[09].GasAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[10].id}">{!euasActualsByMonth[10].GasAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[11].id}">{!euasActualsByMonth[11].GasAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[12].id}">{!euasActualsByMonth[12].GasAmt__c}</a></td>
+                            </tr>
+                            <tr class="dataRow">
+                                <th>EUAS Baseline</th>
+                                <th>Oil (Gallon)</th>
+                                <td><a href="/{!euasBaselineByMonth[01].id}">{!euasBaselineByMonth[01].OilAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[02].id}">{!euasBaselineByMonth[02].OilAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[03].id}">{!euasBaselineByMonth[03].OilAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[04].id}">{!euasBaselineByMonth[04].OilAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[05].id}">{!euasBaselineByMonth[05].OilAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[06].id}">{!euasBaselineByMonth[06].OilAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[07].id}">{!euasBaselineByMonth[07].OilAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[08].id}">{!euasBaselineByMonth[08].OilAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[09].id}">{!euasBaselineByMonth[09].OilAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[10].id}">{!euasBaselineByMonth[10].OilAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[11].id}">{!euasBaselineByMonth[11].OilAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[12].id}">{!euasBaselineByMonth[12].OilAmt__c}</a></td>
+                            </tr>
+                            <tr class="dataRow">
+                                <th>EUAS Results</th>
+                                <th>Oil (Gallon)</th>
+                                <td><a href="/{!euasActualsByMonth[01].id}">{!euasActualsByMonth[01].OilAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[02].id}">{!euasActualsByMonth[02].OilAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[03].id}">{!euasActualsByMonth[03].OilAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[04].id}">{!euasActualsByMonth[04].OilAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[05].id}">{!euasActualsByMonth[05].OilAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[06].id}">{!euasActualsByMonth[06].OilAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[07].id}">{!euasActualsByMonth[07].OilAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[08].id}">{!euasActualsByMonth[08].OilAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[09].id}">{!euasActualsByMonth[09].OilAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[10].id}">{!euasActualsByMonth[10].OilAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[11].id}">{!euasActualsByMonth[11].OilAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[12].id}">{!euasActualsByMonth[12].OilAmt__c}</a></td>
+                            </tr>
+                            <tr class="dataRow">
+                                <th>EUAS Baseline</th>
+                                <th>Steam (Mlb)</th>
+                                <td><a href="/{!euasBaselineByMonth[01].id}">{!euasBaselineByMonth[01].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[02].id}">{!euasBaselineByMonth[02].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[03].id}">{!euasBaselineByMonth[03].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[04].id}">{!euasBaselineByMonth[04].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[05].id}">{!euasBaselineByMonth[05].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[06].id}">{!euasBaselineByMonth[06].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[07].id}">{!euasBaselineByMonth[07].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[08].id}">{!euasBaselineByMonth[08].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[09].id}">{!euasBaselineByMonth[09].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[10].id}">{!euasBaselineByMonth[10].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[11].id}">{!euasBaselineByMonth[11].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[12].id}">{!euasBaselineByMonth[12].SteamAmt__c}</a></td>
+                            </tr>
+                            <tr class="dataRow">
+                                <th>EUAS Results</th>
+                                <th>Steam (Mlb)</th>
+                                <td><a href="/{!euasActualsByMonth[01].id}">{!euasActualsByMonth[01].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[02].id}">{!euasActualsByMonth[02].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[03].id}">{!euasActualsByMonth[03].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[04].id}">{!euasActualsByMonth[04].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[05].id}">{!euasActualsByMonth[05].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[06].id}">{!euasActualsByMonth[06].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[07].id}">{!euasActualsByMonth[07].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[08].id}">{!euasActualsByMonth[08].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[09].id}">{!euasActualsByMonth[09].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[10].id}">{!euasActualsByMonth[10].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[11].id}">{!euasActualsByMonth[11].SteamAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[12].id}">{!euasActualsByMonth[12].SteamAmt__c}</a></td>
+                            </tr>
+                            <tr class="dataRow">
+                                <th>EUAS Baseline</th>
+                                <th>Water (Gallon)</th>
+                                <td><a href="/{!euasBaselineByMonth[01].id}">{!euasBaselineByMonth[01].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[02].id}">{!euasBaselineByMonth[02].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[03].id}">{!euasBaselineByMonth[03].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[04].id}">{!euasBaselineByMonth[04].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[05].id}">{!euasBaselineByMonth[05].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[06].id}">{!euasBaselineByMonth[06].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[07].id}">{!euasBaselineByMonth[07].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[08].id}">{!euasBaselineByMonth[08].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[09].id}">{!euasBaselineByMonth[09].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[10].id}">{!euasBaselineByMonth[10].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[11].id}">{!euasBaselineByMonth[11].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasBaselineByMonth[12].id}">{!euasBaselineByMonth[12].WaterAmt__c}</a></td>
+                            </tr>
+                            <tr class="dataRow last">
+                                <th>EUAS Results</th>
+                                <th>Water (Gallon)</th>
+                                <td><a href="/{!euasActualsByMonth[01].id}">{!euasActualsByMonth[01].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[02].id}">{!euasActualsByMonth[02].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[03].id}">{!euasActualsByMonth[03].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[04].id}">{!euasActualsByMonth[04].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[05].id}">{!euasActualsByMonth[05].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[06].id}">{!euasActualsByMonth[06].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[07].id}">{!euasActualsByMonth[07].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[08].id}">{!euasActualsByMonth[08].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[09].id}">{!euasActualsByMonth[09].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[10].id}">{!euasActualsByMonth[10].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[11].id}">{!euasActualsByMonth[11].WaterAmt__c}</a></td>
+                                <td><a href="/{!euasActualsByMonth[12].id}">{!euasActualsByMonth[12].WaterAmt__c}</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <apex:outputPanel rendered="{!euasBaselinePerformanceYear>0}">
+                        <table border="1" width="100%" class="list">
+                            <thead class="rich-table-thead">
+                                <tr class="headerRow">
+                                    <th>Period</th>
+                                    <th>Metric</th>
+                                    <apex:repeat value="{!euasActualYears}" var="z">
+                                        <th>FY{!z}</th>
+                                    </apex:repeat>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="dataRow first">
+                                    <th>EUAS Baseline</th>
+                                    <th>Total Energy (MMBTU)</th>
+                                    <apex:repeat value="{!euasActualYears}">
+                                        <td><a href="/{!euasByYear[euasBaselinePerformanceYear].id}">{!euasByYear[euasBaselinePerformanceYear].TotalEnergyBtu__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Results</th>
+                                    <th>Total Energy (MMBTU)</th>
+                                    <apex:repeat value="{!euasActualYears}" var="z">
+                                        <td><a href="/{!euasByYear[z].id}">{!euasByYear[z].TotalEnergyBtu__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Baseline</th>
+                                    <th>kBTU/GSF/Year</th>
+                                    <apex:repeat value="{!euasActualYears}">
+                                        <td><a href="/{!euasByYear[euasBaselinePerformanceYear].id}">{!euasByYear[euasBaselinePerformanceYear].EnergyUsageIntensity__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Results</th>
+                                    <th>kBTU/GSF/Year</th>
+                                    <apex:repeat value="{!euasActualYears}" var="z">
+                                        <td><a href="/{!euasByYear[z].id}">{!euasByYear[z].EnergyUsageIntensity__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Baseline</th>
+                                    <th>Chilled Water (Ton-Hr)</th>
+                                    <apex:repeat value="{!euasActualYears}">
+                                        <td><a href="/{!euasByYear[euasBaselinePerformanceYear].id}">{!euasByYear[euasBaselinePerformanceYear].CwaterAmt__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Results</th>
+                                    <th>Chilled Water (Ton-Hr)</th>
+                                    <apex:repeat value="{!euasActualYears}" var="z">
+                                        <td><a href="/{!euasByYear[z].id}">{!euasByYear[z].CwaterAmt__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Baseline</th>
+                                    <th>Electric (kWH)</th>
+                                    <apex:repeat value="{!euasActualYears}">
+                                        <td><a href="/{!euasByYear[euasBaselinePerformanceYear].id}">{!euasByYear[euasBaselinePerformanceYear].ElecAmt__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Results</th>
+                                    <th>Electric (kWH)</th>
+                                    <apex:repeat value="{!euasActualYears}" var="z">
+                                        <td><a href="/{!euasByYear[z].id}">{!euasByYear[z].ElecAmt__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Baseline</th>
+                                    <th>Gas (CubicFt)</th>
+                                    <apex:repeat value="{!euasActualYears}">
+                                        <td><a href="/{!euasByYear[euasBaselinePerformanceYear].id}">{!euasByYear[euasBaselinePerformanceYear].GasAmt__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Results</th>
+                                    <th>Gas (CubicFt)</th>
+                                    <apex:repeat value="{!euasActualYears}" var="z">
+                                        <td><a href="/{!euasByYear[z].id}">{!euasByYear[z].GasAmt__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Baseline</th>
+                                    <th>Oil (Gallon)</th>
+                                    <apex:repeat value="{!euasActualYears}">
+                                        <td><a href="/{!euasByYear[euasBaselinePerformanceYear].id}">{!euasByYear[euasBaselinePerformanceYear].OilAmt__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Results</th>
+                                    <th>Oil (Gallon)</th>
+                                    <apex:repeat value="{!euasActualYears}" var="z">
+                                        <td><a href="/{!euasByYear[z].id}">{!euasByYear[z].OilAmt__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Baseline</th>
+                                    <th>Steam (Mlb)</th>
+                                    <apex:repeat value="{!euasActualYears}">
+                                        <td><a href="/{!euasByYear[euasBaselinePerformanceYear].id}">{!euasByYear[euasBaselinePerformanceYear].SteamAmt__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Results</th>
+                                    <th>Steam (Mlb)</th>
+                                    <apex:repeat value="{!euasActualYears}" var="z">
+                                        <td><a href="/{!euasByYear[z].id}">{!euasByYear[z].SteamAmt__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Baseline</th>
+                                    <th>Water (Gallon)</th>
+                                    <apex:repeat value="{!euasActualYears}">
+                                        <td><a href="/{!euasByYear[euasBaselinePerformanceYear].id}">{!euasByYear[euasBaselinePerformanceYear].WaterAmt__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow last">
+                                    <th>EUAS Results</th>
+                                    <th>Water (Gallon)</th>
+                                    <apex:repeat value="{!euasActualYears}" var="z">
+                                        <td><a href="/{!euasByYear[z].id}">{!euasByYear[z].WaterAmt__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!euasBaselinePerformanceYear<1}">
+                        <table border="1" width="100%" class="list">
+                            <thead class="rich-table-thead">
+                                <tr class="headerRow">
+                                    <th>Period</th>
+                                    <th>Metric</th>
+                                    <apex:repeat value="{!euasActualYears}" var="z">
+                                        <th>FY{!z}</th>
+                                    </apex:repeat>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="dataRow first">
+                                    <th>EUAS Baseline</th>
+                                    <th>Total Energy (MMBTU)</th>
+                                    <apex:repeat value="{!euasActualYears}">
+                                        <td>N/A</td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Results</th>
+                                    <th>Total Energy (MMBTU)</th>
+                                    <apex:repeat value="{!euasActualYears}" var="z">
+                                        <td><a href="/{!euasByYear[z].id}">{!euasByYear[z].TotalEnergyBtu__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Baseline</th>
+                                    <th>kBTU/GSF/Year</th>
+                                    <apex:repeat value="{!euasActualYears}">
+                                        <td>N/A</td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Results</th>
+                                    <th>kBTU/GSF/Year</th>
+                                    <apex:repeat value="{!euasActualYears}" var="z">
+                                        <td><a href="/{!euasByYear[z].id}">{!euasByYear[z].EnergyUsageIntensity__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Baseline</th>
+                                    <th>Chilled Water (Ton-Hr)</th>
+                                    <apex:repeat value="{!euasActualYears}">
+                                        <td>N/A</td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Results</th>
+                                    <th>Chilled Water (Ton-Hr)</th>
+                                    <apex:repeat value="{!euasActualYears}" var="z">
+                                        <td><a href="/{!euasByYear[z].id}">{!euasByYear[z].CwaterAmt__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Baseline</th>
+                                    <th>Electric (kWH)</th>
+                                    <apex:repeat value="{!euasActualYears}">
+                                        <td>N/A</td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Results</th>
+                                    <th>Electric (kWH)</th>
+                                    <apex:repeat value="{!euasActualYears}" var="z">
+                                        <td><a href="/{!euasByYear[z].id}">{!euasByYear[z].ElecAmt__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Baseline</th>
+                                    <th>Gas (CubicFt)</th>
+                                    <apex:repeat value="{!euasActualYears}">
+                                        <td>N/A</td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Results</th>
+                                    <th>Gas (CubicFt)</th>
+                                    <apex:repeat value="{!euasActualYears}" var="z">
+                                        <td><a href="/{!euasByYear[z].id}">{!euasByYear[z].GasAmt__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Baseline</th>
+                                    <th>Oil (Gallon)</th>
+                                    <apex:repeat value="{!euasActualYears}">
+                                        <td>N/A</td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Results</th>
+                                    <th>Oil (Gallon)</th>
+                                    <apex:repeat value="{!euasActualYears}" var="z">
+                                        <td><a href="/{!euasByYear[z].id}">{!euasByYear[z].OilAmt__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Baseline</th>
+                                    <th>Steam (Mlb)</th>
+                                    <apex:repeat value="{!euasActualYears}">
+                                        <td>N/A</td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Results</th>
+                                    <th>Steam (Mlb)</th>
+                                    <apex:repeat value="{!euasActualYears}" var="z">
+                                        <td><a href="/{!euasByYear[z].id}">{!euasByYear[z].SteamAmt__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow">
+                                    <th>EUAS Baseline</th>
+                                    <th>Water (Gallon)</th>
+                                    <apex:repeat value="{!euasActualYears}">
+                                        <td>N/A</td>
+                                    </apex:repeat>
+                                </tr>
+                                <tr class="dataRow last">
+                                    <th>EUAS Results</th>
+                                    <th>Water (Gallon)</th>
+                                    <apex:repeat value="{!euasActualYears}" var="z">
+                                        <td><a href="/{!euasByYear[z].id}">{!euasByYear[z].WaterAmt__c}</a></td>
+                                    </apex:repeat>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </apex:outputPanel>
+                  </apex:pageBlockSection>
+              </apex:outputPanel>
+
+
+
+              <apex:pageBlockSection columns="1" title="{!if(showUtilitySavingsTypeImpactScope,'Actual Performance and Savings (Impact Scope Level)','Actual Performance and Savings (Impact Building Level)')}" rendered="{!showUtilityImpactTable}">
+
+
+<c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabKpmActualImpactScopeIntro__c}" rendered="{!showUtilitySavingsTypeImpactScope}" />
+<c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabKpmActualImpactBuildingIntro__c}" rendered="{!showUtilitySavingsTypeImpactBuilding}" />
+
+
+
+
+                  <apex:pageBlockTable value="{!utilitySavingsItems}" var="z" title="Impact" rendered="{!showUtilityImpactTable}">
+                    <apex:column headerValue="Action">
+                      <apex:commandLink action="{!openUtilitySavingsItem}" value="Open">
+                        <apex:param name="p1" value="{!z.actual.id}" assignTo="{!actionId}"/>
+                        <apex:param name="p2" value="{!z.contextName}" assignTo="{!actionContextName}"/>
+                      </apex:commandLink>
+                    </apex:column>
+                    <apex:column headerValue="Context">
+                      <apex:outputText value="{!z.contextName}" />
+                    </apex:column>                
+                    <apex:column headerValue="Total Estimated Annual Energy Savings (MMBTU)" styleClass="calculated">
+                      <apex:outputField value="{!z.anticipated.TotEnergySavCalculated__c}" />
+                    </apex:column>
+                    <apex:column headerValue="Total Actual Annual Energy Savings (MMBTU)" styleClass="calculated">
+                      <apex:outputField value="{!z.actual.TotEnergySavCalculated__c}" />
+                    </apex:column>
+                    <apex:column headerValue="Total Estimated Energy Cost Savings ($)" styleClass="calculated">
+                      <apex:outputField value="{!z.anticipated.TotAnnualEnergyCostSavCalculatedF__c}" />
+                    </apex:column>
+                    <apex:column headerValue="Total Actual Energy Cost Savings ($)" styleClass="calculated">
+                      <apex:outputField value="{!z.actual.TotAnnualEnergyCostSavCalculatedF__c}" />
+                    </apex:column>
+                    <apex:column headerValue="Total Estimated Annual Water Savings (Gal)">
+                      <apex:outputField value="{!z.anticipated.WaterSav__c}" />
+                    </apex:column>
+                    <apex:column headerValue="Total Actual Annual Water Savings (Gal)">
+                      <apex:outputField value="{!z.actual.WaterSav__c}" />
+                    </apex:column>
+                    <!--
+                    <apex:column headerValue="Modified At">
+                      <apex:outputField value="{!z.actual.LastModifiedDate}" />
+                    </apex:column>
+                    <apex:column headerValue="Modified By">
+                      <apex:outputField value="{!z.actual.LastModifiedById}" />
+                    </apex:column>
+                    -->
+                  </apex:pageBlockTable>                            
+
+            </apex:pageBlockSection>
+            <apex:pageblocksection title="Actual Performance and Savings (Performance Building Level)" columns="1" rendered="{!showUtilityPerformanceTable}" >
+
+
+
+
+<c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabKpmActualPerformanceBuildingIntro__c}" rendered="{!showUtilitySavingsTypePerformanceBuilding}" />
+
+
+
+                <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutActualChilledWater__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutActualElectric__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutActualGas__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutActualOil__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutActualSteam__c}" />
+                <apex:outputField rendered="{!viewMode}" value="{!pb.PerffutActualWater__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!pb.PerffutActualChilledWater__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!pb.PerffutActualElectric__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!pb.PerffutActualGas__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!pb.PerffutActualOil__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!pb.PerffutActualSteam__c}" />
+                <apex:inputField rendered="{!editMode}" value="{!pb.PerffutActualWater__c}" />
+            </apex:pageBlockSection>
+
+              <apex:pageBlockSection columns="1" title="Performance Analysis and Assessment" >
+                <apex:outputField rendered="{!viewMode}" value="{!pb.PerfAnalReportedPerfNarr__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.PerfAnalOperationalChangesNarr__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.PerfAnalImpactNewStuffNarr__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.PerfAnalBehavioralChangesNarr__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.PerfAnalReportedPerfNarr__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.PerfAnalOperationalChangesNarr__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.PerfAnalImpactNewStuffNarr__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.PerfAnalBehavioralChangesNarr__c}"/>
+              </apex:pageBlockSection>
+              <apex:pageBlockSection columns="1" title="M&V Information and Case Study" >
+                <apex:outputField rendered="{!viewMode}" value="{!pb.MVContractorName__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!pb.MVNarr__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.MVContractorName__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!pb.MVNarr__c}"/>
+                <apex:pageBlockSectionItem >
+                    <span>M&amp;V Plan</span>
+                    <c:PBS_gBUILD_Upload pageController="{!this}" key="KpmMvPlan" viewMode="{!viewMode}" />            
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <span>M&amp;V Results</span>
+                    <c:PBS_gBUILD_Upload pageController="{!this}" key="KpmMvResult" viewMode="{!viewMode}" />            
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <span>Project Final Case Study</span>
+                    <c:PBS_gBUILD_Upload pageController="{!this}" key="KpmMvCaseStudy" viewMode="{!viewMode}" />            
+                </apex:pageBlockSectionItem>
+              </apex:pageBlockSection>
+              <apex:pageBlockSection columns="1" title="Recovery Act LSAR Energy Conservation Measures" >
+<c:PBS_gBUILD_SectionInstructions html="{!AppConfig.PageKpmIntro__c}" />
+                <apex:pageBlockTable value="{!ecms}" var="z" title="Proposed Energy Conservation Measures">
+                  <apex:column headerValue="ECM #">
+                    <apex:outputField value="{!z.EcmId__c}" />
+                  </apex:column>
+                  <apex:column headerValue="CSI Code">
+                    <apex:outputField value="{!z.EcmCsiCode__c}" />
+                  </apex:column>
+                  <apex:column headerValue="ECM">
+                    <apex:outputField value="{!z.EcmMeasure__c}" />
+                  </apex:column>
+                  <apex:column headerValue="Anticipated Cost ($)">
+                    <apex:outputField value="{!z.EcmAnticipatedCost__c}" />
+                  </apex:column>
+                  <apex:column headerValue="Anticipated Annual Savings (BTU)">
+                    <apex:outputField value="{!z.EcmAnticipatedAnnualSav__c}" />
+                  </apex:column>
+                  <apex:column headerValue="Implemented">
+                    <apex:outputField rendered="{!viewMode}" value="{!z.EcmImplemented__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!z.EcmImplemented__c}" />
+                  </apex:column>
+                  <apex:column headerValue="Actual Cost ($)">
+                    <apex:outputField rendered="{!viewMode}" value="{!z.EcmActualCost__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!z.EcmActualCost__c}" />
+                  </apex:column>
+                  <apex:column headerValue="Actual Energy Savings (BTU)">
+                    <apex:outputField rendered="{!viewMode}" value="{!z.EcmActualEnergySav__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!z.EcmActualEnergySav__c}" />
+                  </apex:column>
+                  <apex:column headerValue="Actual Water Savings (Gallons)">
+                    <apex:outputField rendered="{!viewMode}" value="{!z.EcmActualWaterSav__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!z.EcmActualWaterSav__c}" />
+                  </apex:column>
+                  <apex:column headerValue="Comment">
+                    <apex:outputField rendered="{!viewMode}" value="{!z.Narr__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!z.Narr__c}" />
+                  </apex:column>
+                </apex:pageBlockTable>
+              </apex:pageBlockSection>
+            </apex:tab>
+          </apex:tabPanel>
+        </apex:pageBlock>
+     </apex:outputPanel>
+  </apex:form>
+</apex:page>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Market_Escalation_Markup_Impact__c</fullName>
-    <externalId>false</externalId>
     <formula>IF( RecordType.Name ==&apos;DES O&amp;P Project Markup&apos;,(SubTotal_BidFactor__c * Market_Escalation__c ), (Total_CECCA__c * Market_Escalation__c ))</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Market Escalation Markup Impact</label>

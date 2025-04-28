@@ -1,0 +1,31 @@
+<apex:component >
+    <apex:attribute name="html" 
+        type="string" 
+        required="true"
+        description="a set of HTML instructions to be output" />
+        
+    <apex:outputPanel rendered="{!(html!=null)}">
+        <apex:panelBar >
+            <apex:panelBarItem label="Introduction" headerClass="IntroHeader" contentClass="IntroText" contentStyle="display:none">            
+                <c:PBS_gBUILD_OutputHTML html="{!html}" />
+            </apex:panelBarItem>
+            <script type="text/javascript">
+                j$('<span style="margin-right:.25cm; cursor:pointer; font-weight:bold" onclick="IntroToggle()"><span class="IntroExpand" title="Expand Intro Text">+</span><span class="IntroCollapse"  title="Collapse Intro Text" style="display:none">-</span></span>').prependTo(".IntroHeader");
+                function IntroToggle()
+                {
+                    j$(".IntroExpand,.IntroCollapse,.IntroText").toggle();
+                    var v = j$.cookies.get("showIntro");
+                    j$.cookies.set("showIntro", v=="0" ? "1" : "0");
+                }
+                j$(document).ready(function () {
+                    var v = j$.cookies.get("showIntro");
+                    if (v!="0")
+                    {
+                        j$(".IntroExpand,.IntroCollapse,.IntroText").toggle();
+                    }
+                });            
+            </script>        
+        </apex:panelBar>        
+        <p></p>
+    </apex:outputPanel>
+</apex:component>

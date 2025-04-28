@@ -1,0 +1,199 @@
+<apex:page controller="PBS_gBUILD_PBuildingCloseoutController" tabstyle="PBS_gBUILD_PBuildingCloseout__tab" sidebar="false">
+  <c:PBS_gBUILD_InitializeScripts />
+  <apex:form >
+    <apex:pageMessages />
+    <c:PBS_gBUILD_PageInstructions html="{!AppConfig.PageBuildingCloseoutIntro__c}" />
+    <apex:outputPanel rendered="{!showPageContent}" >    
+      <apex:pageBlock >
+        <apex:pageblockButtons >
+          <apex:commandButton action="{!edit}" value="Edit" rendered="{!viewMode}" disabled="{!readonlyMode}"/>
+          <apex:commandButton action="{!save}" value="Save" rendered="{!editMode}" disabled="{!readonlyMode}"/>
+          <apex:commandButton action="{!cancel}" value="Cancel" rendered="{!editMode}" immediate="true" />
+          <apex:commandButton action="{!approve}" value="Approve"  rendered="{!viewMode}" disabled="{!!isApproveEnabled}" styleClass="approve"/>
+        </apex:pageblockButtons>
+        <apex:pageBlockSection title="Project Turnover" columns="1">
+        
+         <apex:pageBlockSection title="Commissioning Information" columns="1">
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnComishPlannedStart__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnComishPlannedCertification__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnComishSysManual__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnComishAllSysWork__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnComishAllSysWorkNoExpln__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnComishIsMvPlanComplete__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnComishIsMvPlanCompleteNoExpln__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnComishPlannedStart__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnComishPlannedCertification__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnComishSysManual__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnComishAllSysWork__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnComishAllSysWorkNoExpln__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnComishIsMvPlanComplete__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnComishIsMvPlanCompleteNoExpln__c}" styleClass="MLP"/>
+            <apex:pageBlockSectionItem >
+              <span>Commissioning Information Attachments</span>
+              <c:PBS_gBUILD_Upload contextualTitle="Building Closeout: Commissioning Information Attachments" epmCatalog="{!epmCatalog}"  pageController="{!this}" key="pbcCia" viewMode="{!viewMode}" />
+            </apex:pageBlockSectionItem>
+          </apex:pageBlockSection>
+          
+      <!--     <apex:pageBlockSection title="Key Performance Measures" columns="1"> -->
+<!--          
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnKpmAnticipatedEnergyIntensity__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnKpmAnticipatedEnergyIntensity__c}"/>
+-->            
+       <!--      <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnBlineKpmAntEnergyIntnstyCnfrm__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnBlineKpmAntEnergyIntnstyCnfrm__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnBlineKpmOccSpaceUseComments__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnBlineKpmOccSpaceUseComments__c}"/>
+          </apex:pageBlockSection>
+          <apex:pageBlockSection title="Scope Changes" columns="1">
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnBlineGreenProductsEasyProcure__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnBlineGreenProductsEasyProcure__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnBlineGreenProdsEasyProcNexpln__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnBlineGreenProdsEasyProcNexpln__c}"/>
+          </apex:pageBlockSection>
+          <apex:pageBlockSection title="Building Information Modeling (BIM) Questions" columns="1">
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnBlineIsBimInContract__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnBlineIsBimInContract__c}"/>
+          </apex:pageBlockSection> -->
+          <apex:pageBlockSection title="Design Intent Narratives" columns="1">
+            <c:PBS_gBUILD_SectionInstructions html="In order to ensure optimal performance of the building systems touched during the project, please provide the original design intent in relation to the scope categories below. This section will be used by the building operators, building managers, and regional FMSP representatives." />
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnDsgnIntBlineEnvelopeNarr__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnDsgnIntBlineHvacNarr__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnDsgnIntBlineLightingNarr__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnDsgnIntBlineRenergyNarr__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnDsgnIntBlineWaterNarr__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnDsgnIntBlineEnvelopeNarr__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnDsgnIntBlineHvacNarr__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnDsgnIntBlineLightingNarr__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnDsgnIntBlineRenergyNarr__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnDsgnIntBlineWaterNarr__c}"/>            
+            <apex:pageBlockSectionItem >
+              <span>Design Intent Narratives Attachments</span>
+              <c:PBS_gBUILD_Upload contextualTitle="Building Closeout: Design Intent Narratives Attachments" epmCatalog="{!epmCatalog}"  pageController="{!this}" key="pbcDina" viewMode="{!viewMode}" />
+            </apex:pageBlockSectionItem>
+          </apex:pageBlockSection>
+         
+          <apex:pageBlockSection title="Compliance and Requirements Checklist" columns="1">
+            <c:PBS_gBUILD_SectionInstructions html="P-100 Project Closeout Compliance Checklist - Reference for these questions/items: PBS P-100 March 2005: Turnover Documents (Page 295-296 Appendix A)" />
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnP100ReceivedRedline__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnP100ReceivedRedlineLoc__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnP100DocsRedlineUpdated__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnP100DocsRedlineUpdatedLoc__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnP100AeFinalRecordDrawings__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnP100AeFinalRecordDrawingsLoc__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnP100OperationsManual__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnP100OperationsManualLoc__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnP100TrainingMaterials__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnP100TrainingMaterialsLoc__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnP100EqpMaintVideosHard__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnP100EqpMaintVideosHardLoc__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnP100EqpMaintVideosSoft__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnP100EqpMaintVideosSoftLoc__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnP100ReceivedRedline__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnP100ReceivedRedlineLoc__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnP100DocsRedlineUpdated__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnP100DocsRedlineUpdatedLoc__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnP100AeFinalRecordDrawings__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnP100AeFinalRecordDrawingsLoc__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnP100OperationsManual__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnP100OperationsManualLoc__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnP100TrainingMaterials__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnP100TrainingMaterialsLoc__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnP100EqpMaintVideosHard__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnP100EqpMaintVideosHardLoc__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnP100EqpMaintVideosSoft__c}" styleClass="MLP"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnP100EqpMaintVideosSoftLoc__c}" styleClass="MLP"/>
+          </apex:pageBlockSection>
+          <apex:pageBlockSection title="Other Project Closeout Compliance" columns="1">
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnOtherTrainingVideotaped__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnOtherTrainingVideotapedLoc__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnOtherReceivedMaterials__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnOtherReceivedMaterialsLoc__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnOtherTrainingVideotaped__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnOtherTrainingVideotapedLoc__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnOtherReceivedMaterials__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnOtherReceivedMaterialsLoc__c}"/>
+            <apex:pageBlockSectionItem >
+              <span>Other Project Closeout Compliance Attachments</span>
+              <c:PBS_gBUILD_Upload contextualTitle="Building Closeout: Other Project Closeout Compliance Attachments" epmCatalog="{!epmCatalog}"  pageController="{!this}" key="pbcOpcca" viewMode="{!viewMode}" />
+            </apex:pageBlockSectionItem>
+          </apex:pageBlockSection>
+            
+                <apex:pageBlockSection title="Light-Touch Measurement & Verification (M&V) Performance Review Process" columns="1">
+<!--  Weston: they wanted to change the text displayed on the screen as above from below
+            <apex:pageBlockSection title="Key Performance Measures" columns="1">
+            
+<!--          
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnKpmAnticipatedEnergyIntensity__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnKpmAnticipatedEnergyIntensity__c}"/>
+-->            
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnBlineKpmAntEnergyIntnstyCnfrm__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnBlineKpmAntEnergyIntnstyCnfrm__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnBlineKpmOccSpaceUseComments__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnBlineKpmOccSpaceUseComments__c}"/>
+          </apex:pageBlockSection>
+          <apex:pageBlockSection title="Scope Changes" columns="1">
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnBlineGreenProductsEasyProcure__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnBlineGreenProductsEasyProcure__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnBlineGreenProdsEasyProcNexpln__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnBlineGreenProdsEasyProcNexpln__c}"/>
+          </apex:pageBlockSection>
+          <apex:pageBlockSection title="Building Information Modeling (BIM) Questions" columns="1">
+            <apex:outputField rendered="{!viewMode}" value="{!clo.ProjturnBlineIsBimInContract__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.ProjturnBlineIsBimInContract__c}"/>
+          </apex:pageBlockSection>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="Lessons Learned, Best Practices and Publicity" columns="1">
+          <apex:pageBlockSection title="Best Practices" columns="1">
+            <c:PBS_gBUILD_SectionInstructions html="Best Practices/Lessons Learned: Project work towards our sustainability goals will continue to be reported and analyzed within GSA to help inform future design decisions.  The Office of Design and Construction will use the information requested below as a framework for defining requirements and providing support to future GSA projects.  In order to facilitate further success and continue innovation with future GSA projects, please provide any best practices or lessons learned, both positive and negative.  The Office of Design and Construction will use this feedback to make improvements to future projects." />
+            <apex:outputField rendered="{!viewMode}" value="{!clo.LsnsBestpracLesson1__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.LsnsBestpracLesson2__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.LsnsBestpracLesson3__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.LsnsBestpracLesson1__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.LsnsBestpracLesson2__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.LsnsBestpracLesson3__c}"/>
+            <apex:pageBlockSectionItem >
+              <span>Lessons Learned, Best Practices and Publicity Attachments</span>
+              <c:PBS_gBUILD_Upload contextualTitle="Building Closeout: Lessons Learned, Best Practices and Publicity Attachments" epmCatalog="{!epmCatalog}"  pageController="{!this}" key="pbcLlbppa" viewMode="{!viewMode}" />
+            </apex:pageBlockSectionItem>
+          </apex:pageBlockSection>
+          <apex:pageBlockSection title="Success Stories" columns="1">
+            <c:PBS_gBUILD_SectionInstructions html="GSA often gets inquiries for stories or narratives about individual project successes. From your perspective, please provide any success stories to brag about your project delivery, performance, approaches, innovative methodologies or technologies, or any other relevant narratives you would want included when we tell your project's story (e.g. impressive technology installed, substantial realized energy savings, positive impact on the community or environment.)" />
+            <apex:outputField rendered="{!viewMode}" value="{!clo.LsnsSuccessStoriesStory1__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.LsnsSuccessStoriesStory2__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.LsnsSuccessStoriesStory3__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.LsnsSuccessStoriesStory1__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.LsnsSuccessStoriesStory2__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.LsnsSuccessStoriesStory3__c}"/>
+            <apex:pageBlockSectionItem >
+              <span>Success Stories Attachments</span>
+              <c:PBS_gBUILD_Upload contextualTitle="Building Closeout: Success Stories Attachments" epmCatalog="{!epmCatalog}"  pageController="{!this}" key="pbcSsa" viewMode="{!viewMode}" />
+            </apex:pageBlockSectionItem>
+          </apex:pageBlockSection>
+          <apex:pageBlockSection title="Humanistic Stories" columns="1">
+            <c:PBS_gBUILD_SectionInstructions html="External media sources often solicit GSA for humanistic/personal stories as a result of your project. GSA would like to collect narratives, photos and factsheets from completed projects in order to be prepared to respond to external requests on the positive effects from these investments. From your project's perspective, please provide any stories that might speak to the effects your project has had on the people or communities involved (e.g. jobs created, vendor/contractor success stories, advanced training to GSA personnel, or tenant work life improvements.)" />
+            <apex:outputField rendered="{!viewMode}" value="{!clo.LsnsHumanisticStoriesStory1__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.LsnsHumanisticStoriesStory2__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.LsnsHumanisticStoriesStory3__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.LsnsHumanisticStoriesStory1__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.LsnsHumanisticStoriesStory2__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.LsnsHumanisticStoriesStory3__c}"/>
+            <apex:pageBlockSectionItem >
+              <span>Humanistic Stories Attachments</span>
+              <c:PBS_gBUILD_Upload contextualTitle="Building Closeout: Humanistic Stories Attachments" epmCatalog="{!epmCatalog}"  pageController="{!this}" key="pbcHsa" viewMode="{!viewMode}" />
+            </apex:pageBlockSectionItem>
+          </apex:pageBlockSection>
+          <apex:pageBlockSection title="Publicity" columns="1"> 
+            <apex:outputField rendered="{!viewMode}" value="{!clo.LsnsPublicityProjectHasRep__c}"/>
+            <apex:outputField rendered="{!viewMode}" value="{!clo.LsnsPublicityContact__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.LsnsPublicityProjectHasRep__c}"/>
+            <apex:inputField rendered="{!editMode}" value="{!clo.LsnsPublicityContact__c}"/>
+          </apex:pageBlockSection>
+         
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="Other Closeout Files" columns="1">
+          <c:PBS_gBUILD_Upload contextualTitle="Building Closeout: Other" epmCatalog="{!epmCatalog}"  pageController="{!this}" key="pbcOther" viewMode="{!viewMode}" />
+        </apex:pageBlockSection>
+      </apex:pageBlock>
+    </apex:outputPanel>
+  </apex:form>
+</apex:page>

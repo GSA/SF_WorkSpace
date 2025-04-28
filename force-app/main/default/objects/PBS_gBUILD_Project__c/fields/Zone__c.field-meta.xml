@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Zone__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(isnumber(text(ProjectId__r.txtRegion__c)),
+
+CASE(
+value(text(ProjectId__r.txtRegion__c)), 
+1,&apos;A&apos;,
+2,&apos;A&apos;,
+3,&apos;A&apos;,
+11,&apos;A&apos;,
+4,&apos;B&apos;,
+5,&apos;B&apos;,
+6,&apos;B&apos;,
+7,&apos;B&apos;,
+8,&apos;C&apos;,
+9,&apos;C&apos;,
+10,&apos;C&apos;,
+null),
+null)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Zone</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

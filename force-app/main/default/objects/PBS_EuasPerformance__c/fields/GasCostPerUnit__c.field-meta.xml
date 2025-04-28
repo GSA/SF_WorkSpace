@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>GasCostPerUnit__c</fullName>
     <description>CWater Cost per Unit</description>
-    <externalId>false</externalId>
     <formula>if(or(ISNULL(GasAmt__c), GasAmt__c=0),NULL, GasCost__c/GasAmt__c)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <inlineHelpText>CWater Cost per Unit</inlineHelpText>

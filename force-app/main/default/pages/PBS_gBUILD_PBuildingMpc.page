@@ -1,0 +1,31 @@
+<apex:page controller="PBS_gBUILD_PBuildingMpcController" sidebar="false" tabstyle="PBS_gBUILD_PBuildingCompliance__tab">
+  <c:PBS_gBUILD_InitializeScripts />
+  <apex:form >
+    <apex:pageMessages />
+    <c:PBS_gBUILD_PageInstructions html="{!AppConfig.PageMpcIntro__c}" />
+    <apex:pageBlock >
+      <ul>
+        <li><a href="/apex/PBS_gBUILD_PBuildingMpcID">{!mpcCategoryIntegratedDesign} (1-3)</a></li>
+        <li><a href="/apex/PBS_gBUILD_PBuildingMpcEP">{!mpcCategoryEnergyPerformance} (4-14)</a></li>
+        <li><a href="/apex/PBS_gBUILD_PBuildingMpcW">{!mpcCategoryWater} (15-22)</a></li>
+        <li><a href="/apex/PBS_gBUILD_PBuildingMpcIEQ">{!mpcCategoryIndoorEnvironmentalQuality} (23-33)</a></li>
+        <li><a href="/apex/PBS_gBUILD_PBuildingMpcM">{!mpcCategoryMaterials} (34-39)</a></li>
+      </ul>
+    </apex:pageBlock>
+    <b>You will be redirected momentarily</b>
+      <script type="text/javascript">
+          var u = "" + window.location;
+//          alert(u);
+          var mpc = u.match(/num=\d+/)[0].substring(4);
+          if (mpc >= 34) u = "PBS_gBUILD_PBuildingMpcM";
+          else if (mpc >= 23) u = "PBS_gBUILD_PBuildingMpcIEQ";
+          else if (mpc >= 15) u = "PBS_gBUILD_PBuildingMpcW";
+          else if (mpc >= 4) u = "PBS_gBUILD_PBuildingMpcEP";
+          else u = "PBS_gBUILD_PBuildingMpcID";
+          u = "/apex/" + u + "?num=" + mpc + "#mpc" + mpc;
+//          alert(u);
+          window.location.replace(u);
+//          https://workspace--wsdev--c.cs12.visual.force.com/apex/PBS_gBUILD_PBuildingMpc?buildingId=JBT___LA&id=a1UV0000000I6DcMAK&num=9#mpc9
+      </script>
+  </apex:form>
+</apex:page>

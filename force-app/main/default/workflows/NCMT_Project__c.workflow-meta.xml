@@ -40,4 +40,84 @@
         <senderType>CurrentUser</senderType>
         <template>unfiled$public/NCMT_Rejected_Email</template>
     </alerts>
+    <fieldUpdates>
+        <fullName>IsCheckboxField</fullName>
+        <field>IsApprovalProcess__c</field>
+        <literalValue>1</literalValue>
+        <name>IsCheckboxField</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>IsUnCheckboxField</fullName>
+        <field>IsApprovalProcess__c</field>
+        <literalValue>0</literalValue>
+        <name>IsUnCheckboxField</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>SetGrossSQFt</fullName>
+        <field>Gross_Area__c</field>
+        <literalValue>1</literalValue>
+        <name>SetGrossSQFt</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Status_Cancelled</fullName>
+        <field>Project_Status__c</field>
+        <literalValue>Cancelled</literalValue>
+        <name>Update Status - Cancelled</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Status_Complete</fullName>
+        <field>Project_Status__c</field>
+        <literalValue>Final</literalValue>
+        <name>Update Status - Complete</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Status_Draft</fullName>
+        <field>Project_Status__c</field>
+        <literalValue>Draft</literalValue>
+        <name>Update Status - Draft</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Status_Final</fullName>
+        <field>Project_Status__c</field>
+        <literalValue>Final</literalValue>
+        <name>Update Status - Final</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Status_Pending_Approvals</fullName>
+        <field>Project_Status__c</field>
+        <literalValue>Pending Approvals</literalValue>
+        <name>Update Status - Pending Approvals</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
 </Workflow>

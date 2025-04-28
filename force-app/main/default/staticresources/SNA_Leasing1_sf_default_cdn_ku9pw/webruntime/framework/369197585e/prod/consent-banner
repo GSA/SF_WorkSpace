@@ -1,0 +1,76 @@
+!function(sfmc){class ConsentBannerTrackingMode{static EXPERIENCE_SERVICES=new ConsentBannerTrackingMode("EXPERIENCE_SERVICES");static DATA_CLOUD=new ConsentBannerTrackingMode("DATA_CLOUD");constructor(value){this.value=value.toUpperCase()}}class ConsentBannerConsentMode{static REQUIRED=new ConsentBannerConsentMode("REQUIRED");static NOT_REQUIRED=new ConsentBannerConsentMode("NOT_REQUIRED");constructor(value){this.value=value.toUpperCase()}}class ConsentCookie{static#DEFAULT_TTL_DAYS=365;#orgId=null;#domain=null;constructor(orgId,domain){this.#orgId=orgId,this.#domain=domain}exists(){return null!==this.get()}get(){var value=document.cookie.split("; ").find(row=>row.startsWith(this.#getCookieName()))?.split("=")[1]??null;return null!==value?"true"===value.toLowerCase():null}set(value,days=ConsentCookie.#DEFAULT_TTL_DAYS){let cookiePayload=this.#getCookieName()+"="+(value??"")+";";cookiePayload+=" Path=/;","https:"===location.protocol&&(cookiePayload+=" Secure;"),cookiePayload+=" SameSite=Strict;",days&&((value=new Date).setTime(value.getTime()+24*days*60*60*1e3),cookiePayload=cookiePayload+" Expires="+value.toUTCString()+";"),cookiePayload=cookiePayload+" Domain="+this.#domain+";",document.cookie=cookiePayload}async clear(){var name=this.#getCookieName();document.cookie=name+"=; Expires=Thu, 01 Jan 1970 00:00:01 GMT; Domain="+this.#domain+"; Path=/;"}#getCookieName(){return void 0===this.#orgId?"sfmc_consent":"sfmc_consent_"+this.#orgId}}class ExperienceServicesConsentManager{#cookieDomain=null;constructor(cookieDomain){this.#cookieDomain=cookieDomain}setConsent(event,value){return null==event?(console.error("Failed to register consent with Experience Services Web SDK."),!1):(event.target.dispatchEvent(new CustomEvent("experience_interaction",{bubbles:!0,composed:!0,detail:{name:"set-cookie-domain",domain:this.#cookieDomain}})),event.target.dispatchEvent(new CustomEvent("experience_interaction",{bubbles:!0,composed:!0,detail:{name:"set-consent",value:value}})),!0)}}class DataCloudConsentManager{#cookieDomain=null;constructor(cookieDomain){this.#cookieDomain=cookieDomain}setConsent(event,value){return"undefined"==typeof SalesforceInteractions||null==event?(console.error("Failed to register consent with Data Cloud Web SDK."),!1):(event={provider:"Salesforce Marketing Cloud",purpose:SalesforceInteractions.ConsentPurpose.Tracking,status:value?SalesforceInteractions.ConsentStatus.OptIn:SalesforceInteractions.ConsentStatus.OptOut},SalesforceInteractions.init({consents:[event],cookieDomain:this.#cookieDomain??window.location.hostname}).then(()=>{}),!0)}}class ConsentManager{#orgId;#cookieDomain;#trackingMode;#consentMode;#consentManager;constructor(orgId,trackingMode,consentMode,isSalesforceDomain){this.#cookieDomain=this.#getETLD(isSalesforceDomain),this.#orgId=orgId,this.#trackingMode=new ConsentBannerTrackingMode(trackingMode),this.#consentMode=new ConsentBannerConsentMode(consentMode),this.#consentManager=new(this.#trackingMode.value===ConsentBannerTrackingMode.DATA_CLOUD.value?DataCloudConsentManager:ExperienceServicesConsentManager)(this.getCookieDomain())}hasExplicitConsent(){var cookie=new ConsentCookie(this.#orgId,this.getCookieDomain());return this.#consentMode.value===ConsentBannerConsentMode.NOT_REQUIRED.value||cookie.exists()}initConsent(event){var cookie=new ConsentCookie(this.#orgId,this.getCookieDomain());this.#consentMode.value===ConsentBannerConsentMode.NOT_REQUIRED.value?this.#consentManager.setConsent(event,!0):cookie.exists()?this.#consentManager.setConsent(event,cookie.get()):this.#consentManager.setConsent(event,!1)}getConsent(){var cookie;return!!this.hasExplicitConsent()&&(cookie=new ConsentCookie(this.#orgId,this.getCookieDomain()),this.#consentMode.value===ConsentBannerConsentMode.NOT_REQUIRED.value||(cookie.get()??!1))}getCookieDomain(){return this.#cookieDomain}setConsent(event,value){new ConsentCookie(this.#orgId,this.getCookieDomain()).set(value),this.#consentManager.setConsent(event,value)}clearConsent(){new ConsentCookie(this.#orgId,this.getCookieDomain()).clear()}#getETLD(isSalesforceDomain){var cookieDomain=window.location.hostname;if(isSalesforceDomain)return cookieDomain;let domain="/";try{var domains=cookieDomain.split(".");for(domain=domains.pop();0<domains.length&&!this.#doesCookieExist("_sfmc_pc");)domain=domains.pop()+"."+domain,document.cookie="_sfmc_pc=true; Domain="+domain+"; Path=/;";return domain}finally{this.#deleteCookie("_sfmc_pc",domain)}}#doesCookieExist(cookieName){return null!=new RegExp(cookieName+"=([^;]+)").exec(document.cookie)}#deleteCookie(cookieName,domain){document.cookie=cookieName+"=; Expires=Thu, 01 Jan 1970 00:00:01 GMT; Domain="+domain+"; Path=/;"}}sfmc.ConsentBanner=class ConsentBanner{static#DEFAULT_BANNER_MESSAGE="We use cookies to enhance your browsing experience, serve personalized content or ads, and analyze web traffic. By accepting, you consent to our use of cookies.";static#DEFAULT_BANNER_COLOR="#FFFFFF";static#DEFAULT_BANNER_TEXT_COLOR="#000000";static#DEFAULT_BANNER_POSITION="top";static#DEFAULT_BANNER_FONT_FAMILY="serif";static#DEFAULT_ALLOW_BUTTON_COLOR="#FFFFFF";static#DEFAULT_ALLOW_BUTTON_TEXT_COLOR="#000000";static#DEFAULT_DECLINE_BUTTON_COLOR="#FFFFFF";static#DEFAULT_DECLINE_BUTTON_TEXT_COLOR="#000000";static#DEFAULT_PRIVACY_POLICY_TEXT="Review our privacy policy";static#DEFAULT_TRACKING_MODE=ConsentBannerTrackingMode.EXPERIENCE_SERVICES.value;static#DEFAULT_CONSENT_MODE=ConsentBannerConsentMode.REQUIRED.value;static#DEFAULT_IS_SALESFORCE_DOMAIN=!0;#rootElement=null;#consentManager;constructor(config={}){Object.assign(this,config),this.#rootElement=null,this.#consentManager=new ConsentManager(this.orgId,this.trackingMode??ConsentBanner.#DEFAULT_TRACKING_MODE,this.consentMode??ConsentBanner.#DEFAULT_CONSENT_MODE,this.isSalesforceDomain??ConsentBanner.#DEFAULT_IS_SALESFORCE_DOMAIN),document.addEventListener("DOMContentLoaded",event=>{this.#onLoad(event)})}get consentManager(){return this.#consentManager}#onLoad(event){this.consentManager.initConsent(event),this.consentManager.hasExplicitConsent()||this.#appendHtml(document.body)}#onAccept(event){this.consentManager.setConsent(event,!0),this.#rootElement.style.display="none"}#onReject(event){this.consentManager.setConsent(event,!1),this.#rootElement.style.display="none"}#appendHtml(element){this.#rootElement=document.createElement("div"),this.#rootElement.innerHTML=this.#toHtml(),element.appendChild(this.#rootElement),this.#appendText("#sfmc-consent-banner-message-content",this.#_bannerMessage),this.#appendText("#sfmc-consent-banner-privacy-policy-link",this.#_privacyPolicyText),this.#appendText("#sfmc-consent-banner-info-link",this.#_infoText),document.querySelector("#sfmc-consent-banner-accept-button").addEventListener("click",event=>{this.#onAccept(event)}),document.querySelector("#sfmc-consent-banner-decline-button").addEventListener("click",event=>{this.#onReject(event)})}#appendText(elementId,text){null!==text&&null!==(elementId=document.querySelector(elementId))&&(text.endsWith(".")||(text+="."),text=document.createTextNode(text),elementId.appendChild(text))}get#_bannerMessage(){return this.bannerMessage??ConsentBanner.#DEFAULT_BANNER_MESSAGE}get#_bannerColor(){return this.bannerColor??ConsentBanner.#DEFAULT_BANNER_COLOR}get#_bannerTextColor(){return this.bannerTextColor??ConsentBanner.#DEFAULT_BANNER_TEXT_COLOR}get#_bannerPosition(){return(this.bannerPosition??ConsentBanner.#DEFAULT_BANNER_POSITION).toLowerCase()}get#_bannerFontFamily(){return this.bannerFontFamily??ConsentBanner.#DEFAULT_BANNER_FONT_FAMILY}get#_allowButtonColor(){return this.allowButtonColor??ConsentBanner.#DEFAULT_ALLOW_BUTTON_COLOR}get#_allowButtonTextColor(){return this.allowButtonTextColor??ConsentBanner.#DEFAULT_ALLOW_BUTTON_TEXT_COLOR}get#_declineButtonColor(){return this.declineButtonColor??ConsentBanner.#DEFAULT_DECLINE_BUTTON_COLOR}get#_declineButtonTextColor(){return this.declineButtonTextColor??ConsentBanner.#DEFAULT_DECLINE_BUTTON_TEXT_COLOR}get#_privacyPolicyText(){return this.privacyPolicyText??ConsentBanner.#DEFAULT_PRIVACY_POLICY_TEXT}get#_privacyPolicyLink(){var url=this.privacyPolicyUrl??null;return null===url?"":`<a id="sfmc-consent-banner-privacy-policy-link" href="${encodeURI(url)}"></a>`}get#_infoText(){return this.infoText??null}get#_infoLink(){var url=this.infoUrl??null;return null===url?"":`<a id="sfmc-consent-banner-info-link" href="${encodeURI(url)}"></a>`}#toHtml(){return`
+<style>
+    #sfmc-consent-banner {
+        background-color: ${this.#_bannerColor};
+        box-shadow: 2px 2px 5px 2px #DDD;
+        border-radius: 0.35rem;
+        ${this.#_bannerPosition}: 2rem;
+        color: ${this.#_bannerTextColor};
+        display: grid;
+        font-family: ${this.#_bannerFontFamily};
+        font-size: 1rem;
+        grid-template-columns: 1fr 250px;
+        left: 0;
+        margin: 0 auto;
+        min-width: 240px;
+        padding: 1rem 2rem;
+        position: fixed;
+        right: 0;
+        width: 70%;
+        z-index: 999;
+    }
+    
+    #sfmc-consent-banner button {
+        border-radius: 0.35rem;
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+    }
+    
+    #sfmc-consent-banner-message {
+        padding: 0 1rem; 
+        align-self: center;
+    }
+    
+    #sfmc-consent-banner-message script {
+        display: inline;
+    }
+    
+    #sfmc-consent-banner-buttons {
+        align-self: center;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        justify-self: center;
+        padding: 1em;
+    }
+    
+    #sfmc-consent-banner-accept-button {
+        border: 1px solid ${this.#_allowButtonTextColor};
+        background-color: ${this.#_allowButtonColor};
+        color: ${this.#_allowButtonTextColor};
+    }
+    
+    #sfmc-consent-banner-decline-button {
+        border: 1px solid ${this.#_declineButtonTextColor};
+        background-color: ${this.#_declineButtonColor};
+        color: ${this.#_declineButtonTextColor};
+    }
+    
+    @media screen and (max-width: 600px) {
+        #sfmc-consent-banner {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+<div id="sfmc-consent-banner" tabindex="-1">
+    <div id="sfmc-consent-banner-message">
+        <span id="sfmc-consent-banner-message-content"></span>
+        <span id="sfmc-consent-banner-message-privacy-policy">${this.#_privacyPolicyLink}</span>
+        <span id="sfmc-consent-banner-message-info">${this.#_infoLink}</span>
+    </div>
+    <div id="sfmc-consent-banner-buttons">
+        <button id="sfmc-consent-banner-accept-button">Accept</button>
+        <button id="sfmc-consent-banner-decline-button">Reject</button>        
+    </div>
+</div>
+`}}}(window.sfmc=window.sfmc||{});

@@ -1,0 +1,79 @@
+import { LightningElement, track, wire, api } from 'lwc';
+import { NavigationMixin, CurrentPageReference } from 'lightning/navigation';
+
+import getColumnsAndRecords from '@salesforce/apex/RET_ShowSubmittedAttachmentsController.getColumnsAndRecords';
+
+export default class RET_ShowSubmittedAttachments extends NavigationMixin( LightningElement ) {
+
+    @api tableName;
+    @api leaseNumber = '';
+    @api isDisabledDelete = false;
+    label;
+    columns = [];
+    data = [];
+    @track sortBy;
+    @track sortDirection;
+
+    @wire(CurrentPageReference)
+    getStateParameters(currentPageReference) {
+        if (currentPageReference) {
+            this.leaseNumber = currentPageReference.state.leaseNumber;
+            console.log('leaseNumber: ' + this.leaseNumber);
+        }
+    }
+
+    connectedCallback() {
+        this.callGetColumnsAndRecords();
+    }
+
+    @api 
+    callGetColumnsAndRecords(){
+         getColumnsAndRecords({ datatableName: this.tableName, leaseNumber: this.leaseNumber, isDisabledDelete:this.isDisabledDelete})
+        .then(result => {
+            console.log('getColumnsAndRecords result: ', JSON.stringify(result));
+            this.columns = result.columns;
+            this.data = result.records;
+            this.label = result.label;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
+    doSorting(event) {
+        this.sortBy = event.detail.fieldName;
+        this.sortDirection = event.detail.sortDirection;
+        this.sortData(this.sortBy, this.sortDirection);
+    }
+
+    sortData(fieldname, direction) {
+        let parseData = JSON.parse(JSON.stringify(this.data));
+        let keyValue = (a) => {
+            return a[fieldname];
+        };
+        let isReverse = direction === 'asc' ? 1: -1;
+        parseData.sort((x, y) => {
+            x = keyValue(x) ? keyValue(x) : ''; 
+            y = keyValue(y) ? keyValue(y) : '';
+            return isReverse * ((x > y) - (y > x));
+        });
+        this.data = parseData;
+    }    
+
+    handleRowAction(event) {
+        console.log('handleRowAction');
+        const actionName = event.detail.action.name;
+        const row = event.detail.row;
+        console.log(row);
+        switch (actionName) {
+            case 'VIEW FILE':
+                window.open(row.PreviewLink, '_blank');
+                break;
+            default:
+        }
+    }
+
+    get dataHasRecords(){
+        return this.data.length > 0;
+    }
+}

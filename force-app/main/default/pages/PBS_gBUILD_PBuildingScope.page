@@ -1,0 +1,130 @@
+<apex:page controller="PBS_gBUILD_PBuildingScopeController" sidebar="false">
+    <c:PBS_gBUILD_InitializeScripts />  
+    <script type="text/javascript">
+        j$(document).ready(function () {        
+            var renderL2 = <apex:outputText value="{!renderL2}" />;
+            var renderL3 = <apex:outputText value="{!renderL3}" />;
+            if (renderL2)
+            {
+                j$(".scopeL2").css("display", "");
+                if (renderL3)
+                {
+                    j$(".scopeL3").css("display", "");
+                }
+            }
+            j$(".scopeTable").dataTable(
+                {
+                    "iDisplayLength": -1,
+                    "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]]
+                }
+            );
+        });
+    </script>
+    <style type="text/css">
+        .s1selected,.s2selected 
+        {
+            background-color: #FFFFCC;
+            font-weight: bold;
+        }
+        .s3addedOuterSpan
+        {
+            color:red;
+            text-decoration:line-through;       
+        }
+        .s3added
+        {
+            color:black;
+        }
+    </style>
+    <apex:form >
+        <apex:pageMessages />           
+        <c:PBS_gBUILD_PageInstructions html="{!AppConfig.PageScopeIntro__c}" />
+        <apex:outputPanel rendered="{!showPageContent}" >
+        <apex:pageBlock title="Step 1: Add Scope to this Project's Building {!buildingId}">
+            <apex:outputPanel rendered="{!readonlyMode}">
+                You do not have permissions to add scope to this project
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!readWriteMode}">
+                <table border="0">
+                    <tr>
+                        <td valign="top" class="scopeL1">
+                            <apex:pageBlockTable value="{!scopeOptionsLevel1rendered}" var="s">
+                                <apex:facet name="header">Step 1A</apex:facet>
+                                <apex:column headerValue="Category">                            
+                                    <apex:commandLink action="{!clickLevel1}" value="{!s.label}" styleclass="{!if(s.value==scopeOptionLevel1Val, 's1selected', '')}">
+                                        <apex:param name="id" value="{!s.value}" assignTo="{!scopeOptionLevel1Val}"/>               
+                                    </apex:commandLink>
+                                </apex:column>
+                            </apex:pageBlockTable>                  
+                        </td>
+                        <td valign="top" class="scopeL2" style="display:none">
+                            <div style="font-size:1cm; font-weight: bold">&rarr;</div>
+                        </td>
+                        <td valign="top" class="scopeL2" style="display:none">
+                            <apex:pageBlockTable value="{!scopeOptionsLevel2rendered}" var="s">
+                                <apex:facet name="header">Step 1B</apex:facet>
+                                <apex:column headerValue="Scope">                           
+                                    <apex:commandLink action="{!clickLevel2}" value="{!s.label}" styleclass="{!if(s.value==scopeOptionLevel2Val, 's2selected', '')}">
+                                        <apex:param name="id" value="{!s.value}" assignTo="{!scopeOptionLevel2Val}"/>               
+                                    </apex:commandLink>
+                                </apex:column>
+                            </apex:pageBlockTable>                  
+                        </td>
+                        <td valign="top" class="scopeL3" style="display:none">
+                            <div style="font-size:1cm; font-weight: bold">&rarr;</div>
+                        </td>
+                        <td valign="top" class="scopeL3" style="display:none">
+                            <apex:pageBlockTable value="{!scopeOptionsLevel3rendered}" var="s">
+                                <apex:facet name="header">Step 1C</apex:facet>
+                                <apex:column headerValue="Action">                         
+                                    <apex:commandLink action="{!clickLevel3}" value="Add" rendered="{!s.canSelect}">
+                                        <apex:param name="id" value="{!s.value}" assignTo="{!scopeOptionLevel3Val}"/>               
+                                    </apex:commandLink>
+                                    <apex:outputText rendered="{!(!s.canSelect)}" value="Add" styleClass="disabledLink" />
+                                </apex:column>
+                                <apex:column headerValue="Details" value="{!s.label}" />                         
+                            </apex:pageBlockTable>                  
+                        </td>
+                    </tr>
+                </table>
+            </apex:outputPanel>            
+        </apex:pageBlock>
+        <apex:pageBlock >
+            <apex:pageBlockSection title="Step 2: Project Scope impacting Building {!buildingId}" columns="1">      
+                <apex:pageBlockTable value="{!scopeSystems}" var="z" styleClass="scopeTable">
+                    <apex:column headerValue="Action">                          
+                        <apex:commandLink action="{!open}" value="Open">
+                            <apex:param name="id" value="{!z.scopeSystem.id}" assignTo="{!selectedScopeSystemId}"/>             
+                            <apex:param name="code" value="{!z.scopeSystem.RecordType.DeveloperName}" assignTo="{!selectedRecordType}"/>             
+                        </apex:commandLink>
+                    </apex:column>
+                    <apex:column headerValue="RecordType" rendered="{!(hasPermissionGbAppConfig)}">
+                        <apex:outputText value="{!z.scopeSystem.RecordType.DeveloperName}" />                                             
+                    </apex:column>
+                    <apex:column headerValue="Category">
+                        <apex:outputText value="{!z.BusinessNameL1}" />                                             
+                    </apex:column>
+                    <apex:column headerValue="Scope">                           
+                        <apex:outputText value="{!z.BusinessNameL2}" />                                             
+                    </apex:column>
+                    <apex:column headerValue="Detail">                          
+                        <apex:outputText value="{!z.BusinessNameL3}" />                                             
+                    </apex:column>
+                    <apex:column headerValue="System Count">                            
+                        <apex:outputText value="{!z.systemCountMsg}" />                                             
+                    </apex:column>
+                    <apex:column headerValue="In Scope?">
+                        <apex:outputText value="{!if(isnull(z.scopeSystem.DescopedAt__c),'✓','X')}" style="{!if(isnull(z.scopeSystem.DescopedAt__c),'color:green;font-weight:bold','color:red;font-weight:bold')}" />
+                    </apex:column>
+                    <apex:column headerValue="Modified At">
+                        <apex:outputField value="{!z.scopeSystem.LastModifiedDate}" />
+                    </apex:column>
+                    <apex:column headerValue="Modified By">
+                        <apex:outputField value="{!z.scopeSystem.LastModifiedById}" />
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>                                    
+        </apex:pageBlock>
+        </apex:outputPanel>
+    </apex:form>
+</apex:page>

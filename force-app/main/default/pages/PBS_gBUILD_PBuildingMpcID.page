@@ -1,0 +1,265 @@
+<apex:page controller="PBS_gBUILD_PBuildingMpcController" sidebar="false" tabstyle="PBS_gBUILD_PBuildingCompliance__tab">
+  <c:PBS_gBUILD_InitializeScripts />
+  <apex:form >
+    <apex:pageMessages />
+    <c:PBS_gBUILD_PageInstructions html="{!AppConfig.PageMpcIntro__c}" />
+    <apex:pageBlock >
+      <apex:pageBlockButtons >
+        <apex:commandButton action="{!edit}" value="Edit" rendered="{!viewMode}" disabled="{!readonlyMode}"/>
+        <apex:commandButton action="{!save}" value="Save" rendered="{!editMode}" disabled="{!readonlyMode}"/>
+        <apex:commandButton action="{!cancel}" value="Cancel" rendered="{!editMode}" immediate="true" />
+        <apex:commandButton action="{!approve}" value="Approve"  rendered="{!viewMode}" disabled="{!!isApproveEnabled}" styleClass="approve"/>
+      </apex:pageBlockButtons>
+      <!-- RITM0604555 - Added - disabledTabClass for apex:tabPanel, disabled & title for apex:tab tags -->
+      <apex:tabPanel switchType="client" id="theTabPanel" selectedTab="CURRENT" disabledTabClass="disabledTab">
+        <apex:tab label="{!mpcCategoryIntegratedDesign}" name="CURRENT" id="tab1">
+          <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabMpcIntDsgnIntro__c}" />
+          <a name="mpc1"></a>
+          <apex:pageBlockSection title="{!MpcLabel1}" columns="1">
+            <!-- Integrated Design: 1. Integrated Sustainable / Green Design Plan -->
+            <c:PBS_gBUILD_MpcInstructions mpcNum="1" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview1" viewMode="{!viewMode}" id="mpcPreview1" />
+            <!--<c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="1" viewMode="{!viewMode}" /> -->
+            <apex:pageBlockSection title="Integrated Design Team Disciplines/Frequency" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustAverageMeetingFrequency__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustAverageMeetingFrequency__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Integrated Design Team Disciplines" columns="2" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustAverageMeetingFrequency__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustClientOwnersRep__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustLeedAccreditedProf__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustComishAgent__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustCertLightingDsgnrEng__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustGsaHpgbTeamMember__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustSiteOperatorsBldgMngr__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustMechanicalEngineer__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustElectricUtilityRep__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustElectricalEngineer__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustArchitect__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustGeneralContractor__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustConstructionMngr__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustSubcontractors__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustCivilEngineer__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustAcousticsEngineer__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustLandscapeArchitect__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustBldgUsersFacilityMngr__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustEnergyCnsltnt__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustEnvtlBldgCnsltnt__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustIeqCnsltnt__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustInteriorDesigner__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustPlumbingEngineer__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustStructuralEngineer__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustWasteMgmtCnsltnt__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustSustainabilityCnsltnt__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustOtherSpecialized__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustOther__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustAverageMeetingFrequency__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustClientOwnersRep__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustLeedAccreditedProf__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustComishAgent__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustCertLightingDsgnrEng__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustGsaHpgbTeamMember__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustSiteOperatorsBldgMngr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustMechanicalEngineer__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustElectricUtilityRep__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustElectricalEngineer__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustArchitect__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustGeneralContractor__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustConstructionMngr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustSubcontractors__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustCivilEngineer__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustAcousticsEngineer__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustLandscapeArchitect__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustBldgUsersFacilityMngr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustEnergyCnsltnt__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustEnvtlBldgCnsltnt__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustIeqCnsltnt__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustInteriorDesigner__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustPlumbingEngineer__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustStructuralEngineer__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustWasteMgmtCnsltnt__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustSustainabilityCnsltnt__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustOtherSpecialized__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustOther__c}"/>
+            </apex:pageBlockSection>
+            <!-- <apex:pageBlockSection title="List of Integrated Design Team Meetings" columns="1" > -->
+            <!--  <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc1d2" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" /> -->
+            <!--</apex:pageBlockSection>-->
+            <apex:pageBlockSection title="Integrated Design Narratives" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustIntegratedDesignNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustIntegratedDesignNarr__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Building Operations Narrative" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnIntSustBldgOperationsNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnIntSustBldgOperationsNarr__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="List of Integrated Design Team Meetings; Basis of Design and Latest Design Review Drawings or Specifications; and Supporting documents such as LEED Waivers, P100 Waivers, RRE Waivers, or other explanatory HPGB information" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" readableWaiverKeyPattern="Mpc[TOKEN]Waivers" readableWaiverKeyTokens="1" readableUploadKeys="Mpc1d2,Mpc1d3" key="Gpc1" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            </apex:pageBlockSection>
+          <a name="mpc2"></a>
+          <apex:pageBlockSection title="{!MpcLabel2}" columns="1">
+            <!-- Integrated Design: 2. Commissioning Agent - Independent Agent -->
+            <c:PBS_gBUILD_MpcInstructions mpcNum="2" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview2" viewMode="{!viewMode}" id="mpcPreview2" />
+            <!--<c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="2" viewMode="{!viewMode}" />-->
+            <!-- <apex:pageBlockSection title="Commissioning Agent: Refer to 1.8 for contact information">
+              <c:PBS_gBUILD_MpcNoFields />
+            </apex:pageBlockSection> -->
+            <apex:pageBlockSection title="Commissioning Agent Contract" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnComishagtIndContractHolder__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnComishagtIndContractHldrOther__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnComishagtIndContractHolder__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnComishagtIndContractHldrOther__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Date Commissioning Agent Hired and Design" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnComishagtIndDateHired__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnComishagtIndDateStarted__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnComishagtIndStageAtComish__c}" styleClass="enum" />
+              <apex:outputField rendered="{!viewMode}" value="{!pb.IntdsgnComishagtIndDsgnComplBeforeCA__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnComishagtIndDateHired__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnComishagtIndDateStarted__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnComishagtIndStageAtComish__c}" styleClass="enum" />
+              <apex:inputField rendered="{!editMode}" value="{!pb.IntdsgnComishagtIndDsgnComplBeforeCA__c}"/>
+            </apex:pageBlockSection>
+            <!-- <apex:pageBlockSection title="Commissioning Design Review/Plan" columns="1" >
+              <c:PBS_gBUILD_MpcNoFields />
+            </apex:pageBlockSection> -->
+            <!-- <apex:pageBlockSection title="If project has no Commissioning Agent due to minimal scope: Please indicate how the project is coordinating with building operations and maintenance for optimal performance." columns="1" > -->
+              <!-- <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc2d4" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" /> -->
+            <!-- </apex:pageBlockSection> -->
+            
+            <!--<c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="3" viewMode="{!viewMode}" /> -->
+            <apex:pageBlockSection title="If project has no Commissioning Agent due to minimal scope: Please indicate how the project is coordinating with building operations and maintenance for optimal performance; Commissioning Plan for the Systems Touched; and Supporting documents such as LEED Waivers, P100 Waivers, RRE Waivers, or other explanatory HPGB information" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" readableWaiverKeyPattern="Mpc[TOKEN]Waivers" readableWaiverKeyTokens="2,3" readableUploadKeys="Mpc2d4,Mpc3d1" key="Gpc2" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+          </apex:pageBlockSection> 
+          <a name="mpc3"></a>
+          <apex:pageBlockSection title="{!MpcLabel3}" columns="1">
+            <!-- Integrated Design: 3. Commissioning Agent - Tailored to Size and Complexity -->
+            <c:PBS_gBUILD_MpcInstructions mpcNum="3" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview3" viewMode="{!viewMode}" id="mpcPreview3" />
+            <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="3" viewMode="{!viewMode}" />-->
+           <!--  <apex:pageBlockSection title="Commissioning Plan for the Systems Touched" columns="1" >-->
+             <!--  <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc3d1" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />-->
+           <!--  </apex:pageBlockSection>-->
+          </apex:pageBlockSection>
+          <a name="mpc4"></a>
+          <apex:pageBlockSection title="{!MpcLabel4}" columns="1">
+            <!-- Energy Performance: 4. Energy Efficiency - Reduce Fossil-fuels by 55% and Energy Usage by 20% or 30% (ASHRAE) -->
+            <c:PBS_gBUILD_MpcInstructions mpcNum="4" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview4" viewMode="{!viewMode}" />
+           <!--  <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="4" viewMode="{!viewMode}" />
+            <apex:pageBlockSection title="Target Finder Report and Inputs/Outputs" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc4d1" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="ASHRAE 90.1 2007 Baseline Building Calculations" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc4d2" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Building As Designed - % Reduction ASHRAE 90.1 2007 Calculations" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc4d3" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Energy Model or Energy Study" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc4d4" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>-->
+           <!-- from mps39 -->             
+            <apex:pageBlockSection title="For new sites, was your building located within 1/4 mile of fixed route, high-frequency bus service or 1/2 mile of commuter rail, light rail, or subway stations" columns="1" rendered="{!projType=='NewConstruction'}">
+              <apex:outputField rendered="{!viewMode}" value="{!pb.TranspSubmReqNewSitesCommuterFriendly__c}" />
+              <apex:inputField rendered="{!editMode}" value="{!pb.TranspSubmReqNewSitesCommuterFriendly__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="For existing buildings/sites, did you develop a plan to connect the location with existing transit network, coordinating with the local transit agency as necessary?" columns="1" rendered="{!projType=='PartialModernizations'}">
+              <apex:outputField rendered="{!viewMode}" value="{!pb.TranspSubmReqExistingTransportNtwk__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.TranspSubmReqExistingTransportNtwk__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Did you evaluate and incorporate site selection (new sites) and design strategies (new and existing sites) to increaseI tenants' use of commuting alternatives to single occupancy vehicles including: transit, bicycling, walking, carpooling, hybrid electric vehicles, plug-in hybrid electric vehicles, and plug-in electric vehicles?" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.TranspSubmReqCommutingAltConsidered__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.TranspSubmReqCommutingAltConsidered__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Did you minimize automobile parking onsite in accordance with new GSA parking policy?" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.TranspSubmReqGsaParkingPolicy__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.TranspSubmReqGsaParkingPolicy__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Did you provide onsite bicycle parking facilities for at least 5 percent of building users by?" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.TranspSubmReqBikeFacilitiesProvided__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.TranspSubmReqBikeFacilitiesIndoor__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.TranspSubmReqBikeFacilitiesOutdoor__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.TranspSubmReqBikeFacilitiesProvided__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.TranspSubmReqBikeFacilitiesIndoor__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.TranspSubmReqBikeFacilitiesOutdoor__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Did you design pedestrian and bicycle paths onsite to connect with and provide safe, clear access directly to adjacent neighborhood streets, pedestrian routes, and neighborhood amenities?" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.TranspSubmReqBikeFacilitiesBikePath__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.TranspSubmReqBikeFacilitiesBikePath__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Transportation Measures: Please indicate which specific transportation measures or strategies are part of your project" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.TranspSubmReqMsrsPublicTransp__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.TranspSubmReqMsrsShuttleService__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.TranspSubmReqMsrsBicycleParking__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.TranspSubmReqMsrsLockersShowers__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.TranspSubmReqMsrsAltFuelParkSpotsCrtd__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.TranspSubmReqMsrsAltFuelParkSpots__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.TranspSubmReqMsrsHybridRefuelStnsCrtd__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.TranspSubmReqMsrsHybridRefuelStations__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.TranspSubmReqMsrsCarpoolSpotsCrtd__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.TranspSubmReqMsrsCarpoolSpots__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.TranspSubmReqMsrsPublicTransp__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.TranspSubmReqMsrsShuttleService__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.TranspSubmReqMsrsBicycleParking__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.TranspSubmReqMsrsLockersShowers__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.TranspSubmReqMsrsAltFuelParkSpotsCrtd__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.TranspSubmReqMsrsAltFuelParkSpots__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.TranspSubmReqMsrsHybridRefuelStnsCrtd__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.TranspSubmReqMsrsHybridRefuelStations__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.TranspSubmReqMsrsCarpoolSpotsCrtd__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.TranspSubmReqMsrsCarpoolSpots__c}"/>
+            </apex:pageBlockSection>
+          <c:PBS_gBUILD_MpcWaivers pageController="{!this}" readableWaiverKeyTokens="39" mpcNum="4" viewMode="{!viewMode}" />
+          </apex:pageBlockSection>
+          <a name="mpc5"></a>
+          <apex:pageBlockSection title="{!MpcLabel5}" columns="1">
+            <!-- Energy Performance: 5. Measurement &amp; Verification - Advanced Meters -->
+            <c:PBS_gBUILD_MpcInstructions mpcNum="5" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview5" viewMode="{!viewMode}" />
+           <!--  <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="5" viewMode="{!viewMode}" />
+            <apex:pageBlockSection title="Advanced Meters Narrative (LEED EA Measurement and Verification)" columns="1">
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfMVAdvmtrsNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfMVAdvmtrsNarr__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Advanced Meters - Submetering Description" columns="1">
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfMVAdvmtrsSubMeteringNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfMVAdvmtrsSubMeteringNarr__c}"/>
+            </apex:pageBlockSection>-->
+          </apex:pageBlockSection>
+          <apex:pageBlockSection title="Other Integrated Design and Climate Files" columns="1">
+            <c:PBS_gBUILD_Upload contextualTitle="Building MPC Integrated Design: Other" epmCatalog="{!uploadCatalog}"  pageController="{!this}" key="pbmidOther" viewMode="{!viewMode}" />
+          </apex:pageBlockSection>                    
+        </apex:tab>
+        <apex:tab label="{!mpcCategoryEnergyPerformance}" id="tab2" ontabenter="location.replace('/apex/PBS_gBUILD_PBuildingMpcEP')" disabled="{!editMode}"
+                  title="{!IF(editMode=true,'Please click save before moving to another tab.','')}">
+          <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabMpcEnergyPerfIntro__c}" />
+          <a href="/apex/PBS_gBUILD_PBuildingMpcEP">{!mpcCategoryEnergyPerformance}</a>
+        </apex:tab>
+        <apex:tab label="{!mpcCategoryWater}" id="tab3" ontabenter="location.replace('/apex/PBS_gBUILD_PBuildingMpcW')" disabled="{!editMode}"
+                  title="{!IF(editMode=true,'Please click save before moving to another tab.','')}">
+          <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabMpcWaterIntro__c}" />
+          <a href="/apex/PBS_gBUILD_PBuildingMpcW">{!mpcCategoryWater}</a>
+        </apex:tab>
+        <apex:tab label="{!mpcCategoryIndoorEnvironmentalQuality}" id="tab4" ontabenter="location.replace('/apex/PBS_gBUILD_PBuildingMpcIEQ')" disabled="{!editMode}"
+                  title="{!IF(editMode=true,'Please click save before moving to another tab.','')}">
+          <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabMpcIeqIntro__c}" />
+          <a href="/apex/PBS_gBUILD_PBuildingMpcIEQ">{!mpcCategoryIndoorEnvironmentalQuality}</a>
+        </apex:tab>
+        <apex:tab label="{!mpcCategoryMaterials}" id="tab5" ontabenter="location.replace('/apex/PBS_gBUILD_PBuildingMpcM')" disabled="{!editMode}"
+                  title="{!IF(editMode=true,'Please click save before moving to another tab.','')}">
+          <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabMpcMaterialsIntro__c}" />
+          <a href="/apex/PBS_gBUILD_PBuildingMpcM">{!mpcCategoryMaterials}</a>
+        </apex:tab>
+      </apex:tabPanel>
+    </apex:pageBlock>
+  </apex:form>
+</apex:page>

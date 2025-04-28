@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ActiveAAAPUsers</fullName>
+    <columns>CORE.USERS.EMAIL</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>CORE.USERS.LAST_LOGIN</columns>
+    <columns>CORE.USERS.ACTIVE</columns>
+    <columns>PBS_AAAP_LEGACY_USER_ID__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>CORE.PROFILE.NAME</field>
+        <operation>equals</operation>
+        <value>AAAP Customer Portal</value>
+    </filters>
+    <label>Active AAAP Customer Portal Users</label>
+</ListView>

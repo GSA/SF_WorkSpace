@@ -5,10 +5,14 @@
         <description>GSA Email Notification</description>
         <protected>false</protected>
         <recipients>
+            <field>GSA_Contact_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <recipients>
             <field>GSA_Inbox__c</field>
             <type>email</type>
         </recipients>
-        <senderAddress>noreply-salesforce-ws@gsa.gov</senderAddress>
+        <senderAddress>noreply@gsa.gov</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/RET_Case_Notification_GSA</template>
     </alerts>
@@ -19,7 +23,7 @@
         <recipients>
             <type>owner</type>
         </recipients>
-        <senderAddress>noreply-salesforce-ws@gsa.gov</senderAddress>
+        <senderAddress>noreply@gsa.gov</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/RET_Case_Notification_Lessor</template>
     </alerts>

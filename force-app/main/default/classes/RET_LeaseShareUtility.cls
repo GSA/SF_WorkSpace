@@ -7,15 +7,10 @@ public without sharing class RET_LeaseShareUtility {
     public static final string RET_UserType_POC = 'POC';
     public static final string RET_UserType_RET = 'RET';
     public static final string RET_Access_Level_Edit = 'Edit';
-    //Profile updated
-    //@testVisible public static final string RET_CCP_Profile  = 'GSA RET Community Plus User';
     @testVisible public static final string RET_CCP_Profile = 'GSA RET Community Plus Login User';
     @testVisible public static final string RET_PermissionSet  = 'RET_Community_User_CRED';
     @testVisible public static final String RET_Integration_User_Name = 'Cast IronPrd';
-    //added limit clause to below to remove vulnerability
     @testVisible public static final boolean isSandboxEnv = [SELECT Id, InstanceName, IsSandbox  FROM Organization limit 1].isSandbox;
-    //@testVisible 
-    //public static final string RET_CCP_Profile_Id  = [select id, Name from profile where Name = 'GSA RET Community Plus User'].Id;
     @testVisible 
     public static final string RET_CCP_Profile_Id  = [select id, Name from profile where Name = 'GSA RET Community Plus Login User'].Id;
     @testVisible 
@@ -28,6 +23,19 @@ public without sharing class RET_LeaseShareUtility {
     public static final string AAAP_Customer_Profile  = 'AAAP Customer Portal';
     
     public static final ID RETRecordType = [select ID from RecordType where sobjecttype = 'Case' and Name = 'Real Estate Taxes'].ID;
+
+    public static Id getCastIronUserId(){
+        User[] intUser = [select Id, Name from user where Name = :RET_LeaseShareUtility.RET_Integration_User_Name Limit 1];
+        if(intUser[0] != null) {
+           return intUser[0].Id;
+        }
+        return null;
+    }    
+
+    @testVisible public static boolean getIsMaskPOCEmails(){
+         try { RET_Settings__mdt settings = [SELECT ComponentCheckbox__c FROM RET_Settings__mdt  WHERE developername='MaskPOCEmails' LIMIT 1]; return settings.ComponentCheckbox__c; } catch (Exception e) { return true; }  
+    }
+    /* Commented out for 2024-2025 RET Surge to remove all Access Request/Approval functionality
     public static List<PBS_Lease_Access__c> getLeaseAccessList(List<String> statusFilters, Integer selectedPage, Integer pageSize) {
         Integer queryOffset = pageSize * (selectedPage - 1);
         List<PBS_Lease_Access__c> leaseAccessList = [select id, PBS_Lease__c, PBS_Lease__r.Lease_Number__c, PBS_Lease__r.Building_Name__c, 
@@ -37,16 +45,13 @@ public without sharing class RET_LeaseShareUtility {
         return leaseAccessList;
     }
     
-    @testVisible public static boolean getIsMaskPOCEmails(){
-         try { RET_Settings__mdt settings = [SELECT ComponentCheckbox__c FROM RET_Settings__mdt  WHERE developername='MaskPOCEmails' LIMIT 1]; return settings.ComponentCheckbox__c; } catch (Exception e) { return true; }  
-    }
-    
+    /* Commented out for 2024-2025 RET Surge to remove all Access Request/Approval functionality
     public static Integer getPendingApprovalsCount(List<String> statusFilters) {
         List<AggregateResult> countResult = [Select count(Id) result from PBS_Lease_Access__c where PBS_Lease__r.OwnerId = :UserInfo.getUserId() and Status__c IN :statusFilters];
         Integer rowCount = (Integer)countResult[0].get('result'); 
         return rowCount;
     }
-    
+
     public static Boolean ApproveRejectLeaseAccess(List<PBS_Lease_Access__c> lsacList, String descision) {
         Boolean result;
         if(descision == 'Approve'){
@@ -71,7 +76,8 @@ public without sharing class RET_LeaseShareUtility {
         }
         return leaseLeaseAccessMap;
     }
-    
+    */
+    /* Commented out for 2024-2025 RET Surge to remove all Access Request/Approval functionality
     public static Boolean ApproveLeaseAccess(List<PBS_Lease_Access__c> lsacList) {
         Boolean result;
         List<sObject> insertList = new List<sObject>();
@@ -110,7 +116,8 @@ public without sharing class RET_LeaseShareUtility {
         }
         return result;
     }
-    
+    */
+    /* Commented out for 2024-2025 RET Surge to remove old approach of sharing access to Leases and Cases
     public static boolean InsertLeaseAndCaseShares(List<PBS_Lease_Access__c> lsacList) {
         system.debug('inside InsertLeaseAndCaseShares** ');
         List<sObject> sharesList = new List<sObject>();
@@ -140,7 +147,7 @@ public without sharing class RET_LeaseShareUtility {
         }
         return leaseShareList;
     } 
-    
+
     public static Map<Id,Id> getLeaseOwnerMap(List<PBS_Lease_Access__c> lsacList) {
         List<id> leaseIds = new List<Id>();
         for(PBS_Lease_Access__c lsac : lsacList) {
@@ -158,7 +165,8 @@ public without sharing class RET_LeaseShareUtility {
         }
         return leaseAccessIdLeaseOwnerIdMap;
     }
-    
+    */
+    /* Commented out for 2024-2025 RET Surge to remove old approach of sharing access for Leases and Cases
     public static void InsertCaseShares(List<PBS_Lease_Access__c> lsacList) {
         List<sObject> sharesList = CreateCaseShares(lsacList);
         if(sharesList != null && sharesList.size() > 0){
@@ -221,7 +229,6 @@ public without sharing class RET_LeaseShareUtility {
     public static void removeLeaseAndCaseShares(List<PBS_Lease_Access__c> lsacList){
         removeLeaseShares(lsacList);
         removeCaseShares(lsacList);
-        
     }
     
     public static void removeLeaseShares(List<PBS_Lease_Access__c> lsacList){
@@ -287,20 +294,79 @@ public without sharing class RET_LeaseShareUtility {
             delete deleteCaseShareList;
         }
     }
-    
+
     public static void revokePOCLeaseAccess(List<PBS_Lease__c> newList){
         List<PBS_Lease_Access__c> revokePOCLeaseAccessList = new List<PBS_Lease_Access__c>();
         Map<Id, Id> leaseOwnerIdMap = new Map<Id,Id>();
         for(PBS_Lease__c ls : newList){
             leaseOwnerIdMap.put(ls.Id, ls.OwnerId);
         }
-        for(PBS_Lease_Access__c lsac : [select id, Status__c from PBS_Lease_Access__c where Status__c = :RET_LeaseShareUtility.RET_Access_Status_POC and PBS_Lease__c IN :leaseOwnerIdMap.keySet() and Requestor__c IN :leaseOwnerIdMap.values()]){
+        for(PBS_Lease_Access__c lsac : [select id, Status__c from PBS_Lease_Access__c where (Status__c = :RET_LeaseShareUtility.RET_Access_Status_POC OR Status__c = :RET_LeaseShareUtility.RET_Access_Status_POC) and PBS_Lease__c IN :leaseOwnerIdMap.keySet() and Requestor__c IN :leaseOwnerIdMap.values()]){
             lsac.status__c = RET_LeaseShareUtility.RET_Access_Status_Revoked;
             revokePOCLeaseAccessList.add(lsac);
         }
-        if(revokePOCLeaseAccessList.size() > 0) {update revokePOCLeaseAccessList;}
+        //if(revokePOCLeaseAccessList.size() > 0) {update revokePOCLeaseAccessList;}
+    }
+    */
+    //SFWS-3756 - So the user can still end up seeing this lease on their home page
+    public static void approvePOCLeaseAccess(List<PBS_Lease__c> newList){
+        List<PBS_Lease_Access__c> approvePOCLeaseAccessList = new List<PBS_Lease_Access__c>();
+        Map<Id, Id> leaseOwnerIdMap = new Map<Id,Id>();
+        for(PBS_Lease__c ls : newList){
+            leaseOwnerIdMap.put(ls.Id, ls.OwnerId);
+        }
+        if(leaseOwnerIdMap.size()>0)
+        updateOrDeleteLeaseAccessRecords(leaseOwnerIdMap);
     }
     
+    //Update the Lease Access record by its status of POC to Approved when there is no child lease access record has Approved status record, else delete the POC record
+    public static void updateOrDeleteLeaseAccessRecords(Map<Id, Id> leaseOwnerIdMap) {
+        // Step 1: Query parent (PBS_Lease__c) and child (PBS_Lease_Access__r) records
+        List<PBS_Lease__c> leases = [
+            SELECT Id, (SELECT Id, Status__c FROM PBS_Lease_Access__r where (Status__c = :RET_LeaseShareUtility.RET_Access_Status_POC OR Status__c = :RET_LeaseShareUtility.RET_Access_Status_Approved)) // and PBS_Lease__c IN :leaseOwnerIdMap.keySet() and Requestor__c IN :leaseOwnerIdMap.values()
+            FROM PBS_Lease__c WHERE Id IN : leaseOwnerIdMap.keyset()
+        ];
+        //Collection to perform DML
+        List<PBS_Lease_Access__c> recordsToDelete = new List<PBS_Lease_Access__c>();
+        List<PBS_Lease_Access__c> recordsToUpdate = new List<PBS_Lease_Access__c>();
+        
+        // Iterate over each Lease and its child LeaseAccess records
+        for (PBS_Lease__c lease : leases) {
+            List<PBS_Lease_Access__c> leaseAccesses = lease.PBS_Lease_Access__r;
+            // Separate child records by their statuses
+            List<PBS_Lease_Access__c> pocRecords = new List<PBS_Lease_Access__c>();
+            Boolean hasApproved = false;
+            for (PBS_Lease_Access__c leaseAccess : leaseAccesses) {
+                if (leaseAccess.Status__c == RET_LeaseShareUtility.RET_Access_Status_POC) {
+                    pocRecords.add(leaseAccess);
+                } else if (leaseAccess.Status__c == RET_LeaseShareUtility.RET_Access_Status_Approved) {
+                    hasApproved = true;
+                }
+            }
+            // Process based on conditions
+            if (hasApproved) {
+                // If there's an Approved status, delete POC records
+                recordsToDelete.addAll(pocRecords);
+            } else {
+                // If no Approved status, update POC to Approved
+                for (PBS_Lease_Access__c pocRecord : pocRecords) {
+                    pocRecord.Status__c = RET_LeaseShareUtility.RET_Access_Status_Approved; 
+                    recordsToUpdate.add(pocRecord);
+                }
+            }
+        }
+        
+        // Step 4: Perform DML operations
+        if (!recordsToDelete.isEmpty()) {
+            delete recordsToDelete;
+        }
+        if (!recordsToUpdate.isEmpty()) {
+            update recordsToUpdate;
+        }
+    }
+    
+
+    /* Commented out for 2024-2025 RET Surge to remove Access Request/Approval functionality 
     public static void revokeRETLeaseAccess(List<PBS_Lease__c> newList){
         List<PBS_Lease_Access__c> revokeRETLeaseAccessList = new List<PBS_Lease_Access__c>();
         Map<Id, Id> leaseOwnerIdMap = new Map<Id,Id>();
@@ -313,21 +379,13 @@ public without sharing class RET_LeaseShareUtility {
         }
         if(revokeRETLeaseAccessList.size() > 0) {update revokeRETLeaseAccessList;}
     }
-        
-    public static Id getCastIronUserId(){
-        User[] intUser = [select Id, Name from user where Name = :RET_LeaseShareUtility.RET_Integration_User_Name Limit 1];
-        if(intUser[0] != null) {
-           return intUser[0].Id;
-        }
-        return null;
-    }    
-    
+    */  
     @AuraEnabled
     public static List<PBS_Lease_Access__c> getPBSLeaseAccessRecords(String leaseNumber){
             return [Select Id, PBS_Lease__c, Requestor__c,Requestor__r.Name, Status__c from PBS_Lease_Access__c 
                                        where PBS_Lease__r.Name=:leaseNumber AND Status__c=:RET_Access_Status_Approved];
     }
-    
+    /* Commented out for 2024-2025 RET Surge to remove Access Request/Approval functionality
     @AuraEnabled
     public static void revokePBSLeaseAccess(List<Id> leaseAccessIds){
         List<PBS_Lease_Access__c> leaseAccessToUpdate = new List<PBS_Lease_Access__c>();
@@ -340,9 +398,10 @@ public without sharing class RET_LeaseShareUtility {
             update leaseAccessToUpdate;
         }
     }
+    */
     @AuraEnabled
     public static string getUserType() {
-        system.debug('getUserType apexCntrl method');
+        /*system.debug('getUserType apexCntrl method');
         String uType;
         String countQuery = 'select count() from PBS_Lease_Access__c where Requestor__c = \''+ UserInfo.getUserId()+'\' and Status__c = \'' +RET_LeaseShareUtility.RET_Access_Status_POC+'\'';
         Integer count= database.countQuery(countQuery);
@@ -352,6 +411,8 @@ public without sharing class RET_LeaseShareUtility {
             uType = RET_UserType_RET; // setting default community userType as 'RET'
         }
         system.debug('uType *** *'+uType);
-        return uType;
+        return uType; */
+        return UserInfo.getUserType();
     }
+    
 }

@@ -1,5 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>Update_Construction_Contingency_Impact</fullName>
+        <field>Construction_Contingency_Impact__c</field>
+        <formula>ECCA__c *  Construction_Contingency__c</formula>
+        <name>Update Construction Contingency Impact</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Developer_Fee_Impact</fullName>
+        <field>Developer_Fee_Impact__c</field>
+        <formula>SubTotal_CMc_f__c * Developer_Fee__c</formula>
+        <name>Update Developer Fee Impact</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Developer_ProServices_Impact</fullName>
+        <field>Developer_Professional_Services_Impact__c</field>
+        <formula>(SubTotal_CMc_f__c * (1+ Developer_Fee__c )) * Professional_Services_Developer_Fee__c</formula>
+        <name>Update Developer ProServices Impact</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_EDRC</fullName>
+        <field>EDRC_Estimated_Design_and_Review_Cost__c</field>
+        <formula>IF(TEXT(EDRC_Input_Type__c) ==&apos;Percent&apos;, Total_EDRC__c/100, IF(ECC__c&lt;&gt;0,(Total_EDRC__c/ECC__c),Total_EDRC__c))</formula>
+        <name>Update EDRC</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_EDRC_Impact</fullName>
+        <field>EDRC_Impact__c</field>
+        <formula>IF(RecordType.Name != &apos;DES O&amp;P Project Markup&apos;, (ECC__c *  EDRC_Estimated_Design_and_Review_Cost__c), 0)</formula>
+        <name>Update EDRC Impact</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_EMIC</fullName>
+        <field>EMIC_Estimated_Management_Inspection_Co__c</field>
+        <formula>IF(TEXT(EMIC_Input_Type__c)==&apos;Percent&apos;, Total_EMIC__c/100, IF(ECC__c &lt;&gt; 0,(Total_EMIC__c/ECC__c),Total_EMIC__c))</formula>
+        <name>Update EMIC</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_EMIC_Impact</fullName>
+        <field>EMIC_Impact__c</field>
+        <formula>IF(RecordType.Name != &apos;DES O&amp;P Project Markup&apos;, 
+( ETPC__c  - ( ECC__c + EDRC_Impact__c ))
+, 0)</formula>
+        <name>Update EMIC Impact</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Gross_Receipts_Impact</fullName>
+        <field>Gross_Receipts_Impact__c</field>
+        <formula>Sub_Total_Lessor__c *  Gross_Receipt_State_Construction__c</formula>
+        <name>Update Gross Receipts Impact</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Lessor_Fee_Impact</fullName>
+        <field>Lessor_Fee_impact__c</field>
+        <formula>SubTotal_Developer__c * Lessor_Fee__c</formula>
+        <name>Update Lessor Fee Impact</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Lessor_Pro_Services_Impact</fullName>
+        <field>Lessor_Professional_Services_Impact__c</field>
+        <formula>(SubTotal_Developer__c * (1 + Lessor_Fee__c)) *  Professional_Services_Lessor_Fee__c</formula>
+        <name>Update Lessor Pro Services Impact</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Market_Escalation_Impact</fullName>
+        <field>Market_Escalation_Impact__c</field>
+        <formula>IF( RecordType.Name ==&apos;DES O&amp;P Project Markup&apos;,(SubTotal_BidFactor__c *  Market_Escalation__c ), (Total_CECCA__c *  Market_Escalation__c ))</formula>
+        <name>Update Market Escalation Impact</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
     <rules>
         <fullName>NCMT Update Markup Impacts</fullName>
         <actions>

@@ -35,6 +35,26 @@
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/PBS_AAAP_AAAPsendGrexSubmissionConfirmation</template>
     </alerts>
+    <fieldUpdates>
+        <fullName>SetEmail</fullName>
+        <field>PBS_AAAP_AgencyRequirement_Manager_Email__c</field>
+        <formula>PBS_AAAP_AGENCY_REQUIREMENT_ID__r.PBS_AAAP_AASN_AAAP_MANAGER__r.Email</formula>
+        <name>SetEmail</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>setProjectNumber</fullName>
+        <field>PBS_AAAP_GREX_Project_Number__c</field>
+        <formula>PBS_AAAP_AGENCY_REQUIREMENT_ID__r.PBS_AAAP_Project_ID__c</formula>
+        <name>setProjectNumber</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
     <rules>
         <fullName>PBS_AAAP_AAAPsendGrexSubmissionConfirmation</fullName>
         <actions>

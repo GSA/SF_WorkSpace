@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>WaterCostPerUnit__c</fullName>
     <description>CWater Cost per Unit</description>
-    <externalId>false</externalId>
     <formula>if(or(ISNULL(WaterAmt__c), WaterAmt__c=0),NULL, WaterCost__c/WaterAmt__c)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <inlineHelpText>CWater Cost per Unit</inlineHelpText>

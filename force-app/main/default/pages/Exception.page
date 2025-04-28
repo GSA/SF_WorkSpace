@@ -1,0 +1,116 @@
+<apex:page sidebar="false" standardStylesheets="false" showHeader="false" >
+
+<apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/demo_page.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+
+<apex:includescript value="{!$Resource.showpopup}"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="{!URLFOR($Resource.modaljquery)}"></script>
+<apex:stylesheet value="{!$Resource.showpopupcss}"/>
+<!-- <c:EnrollCSS /> -->
+<!--<c:jQueryInit bDataTables="true" /> -->
+<style>
+span.dropt {border-bottom: thin dotted; background: #ffeedd;}
+span.dropt:hover {text-decoration: none; background: #fefefe; z-index: 6; }
+span.dropt span {position: absolute; left: -9999px;
+  margin: 20px 0 0 0px; padding: 3px 3px 3px 3px;
+  border-style:solid; border-color:black; border-width:1px; z-index: 6;}
+span.dropt:hover span {left: 2%; background:rgb(236, 236, 236);} 
+span.dropt span {position: absolute; left: -9999px;
+  margin: 4px; padding: 3px 3px 3px 3px; text-indent:0in;
+  border-style:solid; border-color:#666; border-width:1px;}
+span.dropt:hover span {margin: 20px 0 0 170px; background:rgb(236, 236, 236); z-index:6;} 
+
+.sb-int {margin:10px;padding:10px;}
+#rightCol {width:620px; padding-right:20px;}
+.sb-int .bucket {margin-top:10px !important;}
+h3.blue {padding-top:15px;}
+.portalhome .apexp .selector {top:70px; left:0px;}
+menu.table-options {top:40px;left:-350px;}
+.tabbed-table table tr {height:35px;}
+menu.table-options a {border:1px solid#666666; border-radius:3px;padding:6px;background-image:url(https://gsa--aaap--c.cs12.visual.force.com/resource/1334347636000/gsa_common/images/sprite.png);background-position:-5px 145px;color:#333333;font-size:12px;text-decoration:none;}
+
+#lean_overlay {
+    position: fixed;
+    z-index:100;
+    top: 0px;
+    left: 0px;
+    height:100%;
+    width:100%;
+    background:none;
+    display: none;
+}
+</style>
+
+
+
+<!--div id="login">
+    <ul>
+        <li><a href="/AAAP/PBS_AAAP_PortalHome">Home</a></li>
+        <li>|</li>
+        <li><a href="{!$Site.Prefix}/secur/logout.jsp">LOGOUT</a></li>
+        <!-- 
+        <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp" rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}"><li>| {!$Label.site.logout}</li></apex:outputLink>
+         -->
+    <!--/ul-->  
+<!--/div--><!--/login-->
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+    <ul>
+        <li><a href="/AAAP/PBS_AAAP_HomePage">Home</a></li>
+        <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp" rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}"><li>| {!$Label.site.logout}</li></apex:outputLink>
+        <li>|</li>
+        <li><a href="http://www.gsa.gov/">About GSA</a></li>
+    </ul>  
+</div><!--/login-->
+
+<div id="wrapper" class="portalhome">
+
+<!-- Header logo part starts Here -->
+<!-- J. Rogers  Eliminate Headers
+    <h1 class="logo">GSA</h1>
+    <div id="nav">
+        <ul>
+            <li><a href="/AAAP/PBS_AAAP_HomePage">AAAP Home</a></li>
+            <li><a class="selected"  href="/AAAP/PBS_AAAP_News_Updates">News &amp; Updates</a></li>
+            <li><a href="/AAAP/PBS_AAAP_About_AAAP">FAQs</a></li>
+            <!--Fixed Help Link on help page 2/27/2013->
+            <li><a href="/AAAP/PBS_AAAP_SiteHelp">Help</a></li>
+            <li><a href="/AAAP/PBS_AAAP_UserRegistration">Registration</a></li>
+        </ul>
+    </div><!--/nav->
+  
+    <div id="hero-int">
+        <h2>AAAP</h2>
+    </div><!--/hero-->
+    <!-- Header logo part ends Here ->
+ 
+    <div style="background-color: white !important; background: none; border:none">
+        <span style="top:10px;position: relative;font-size: 18pt;font-weight: 650;color: #002bac;">GSA's Automated Advanced Acquisition Program</span>
+      </div>
+    -->
+
+    <div id="content">
+    
+    <apex:form styleClass="formwrap">
+
+
+           
+<p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
+<span style='font-family:"Arial","sans-serif"'></span>
+<span style='mso-tab-count:1'>   </span>
+<span style='mso-spacerun:yes'>  </span>
+<font style="color:red;font-family:Arial,Helvetica,sans-serif;font-size:18px;">
+                &nbsp;<u>Error</u>: <br/></font>
+ <font style="color:red;font-family:Arial,Helvetica,sans-serif;font-size:16px;">&nbsp;We are unable to process your request. &nbsp; <apex:outputText value="{!$Label.site.error}"> <apex:param value="{!$Site.ErrorDescription}"/> </apex:outputText> <br/>
+ &nbsp;Please go back to the home page and try again. If problem persists, please contact <a href="mailto:lop.manager@gsa.gov" target="_blank">lop.manager@gsa.gov. </a> </font></p>
+</apex:form>
+</div><!--/content--> 
+      
+</div><!-- /Wrapper -->
+<script>
+   $(".popup").leanModal();
+</script>
+<c:SiteFooterUX ></c:SiteFooterUX>
+</apex:page>

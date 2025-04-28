@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PerffutAnticEnergyConsumptionReduction__c</fullName>
+    <formula>if (
+   Text(PerffutIsEuasReferenceYearRep__c)=&apos;Yes&apos;,
+   if(EuasBaselinePerformanceYear__r.TotalEnergyBtu__c&lt;1,0,(EuasBaselinePerformanceYear__r.TotalEnergyBtu__c-PerffutAnticTotAnnualEnergyCalculated__c)/EuasBaselinePerformanceYear__r.TotalEnergyBtu__c),
+   if(PerffutTotEnergy__c&lt;1,0,(PerffutTotEnergy__c-PerffutAnticTotAnnualEnergyCalculated__c)/PerffutTotEnergy__c)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Energy Consumption Reduction (%)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>4</scale>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NavigationMenu xmlns="http://soap.sforce.com/2006/04/metadata">
+    <container>Leasing</container>
+    <containerType>Network</containerType>
+    <label>Default Navigation</label>
+    <navigationMenuItem>
+        <label>AAAP</label>
+        <position>1</position>
+        <publiclyAvailable>true</publiclyAvailable>
+        <subMenu>
+            <navigationMenuItem>
+                <label>Home</label>
+                <position>0</position>
+                <publiclyAvailable>true</publiclyAvailable>
+                <target>/AAAP-PortalHome</target>
+                <type>InternalLink</type>
+            </navigationMenuItem>
+            <navigationMenuItem>
+                <label>RLP and Lease Documents</label>
+                <position>1</position>
+                <publiclyAvailable>false</publiclyAvailable>
+                <target>/AAAP-Search-RLP</target>
+                <type>InternalLink</type>
+            </navigationMenuItem>
+            <navigationMenuItem>
+                <label>Help</label>
+                <position>2</position>
+                <publiclyAvailable>true</publiclyAvailable>
+                <target>/AAAP-Help</target>
+                <type>InternalLink</type>
+            </navigationMenuItem>
+        </subMenu>
+        <type>MenuLabel</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <label>RSAP</label>
+        <position>2</position>
+        <publiclyAvailable>true</publiclyAvailable>
+        <subMenu>
+            <navigationMenuItem>
+                <label>Home</label>
+                <position>0</position>
+                <publiclyAvailable>true</publiclyAvailable>
+                <target>/RSAP-PortalHome</target>
+                <type>InternalLink</type>
+            </navigationMenuItem>
+            <navigationMenuItem>
+                <label>Help</label>
+                <position>1</position>
+                <publiclyAvailable>true</publiclyAvailable>
+                <target>/RSAP-Help</target>
+                <type>InternalLink</type>
+            </navigationMenuItem>
+        </subMenu>
+        <type>MenuLabel</type>
+    </navigationMenuItem>
+</NavigationMenu>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>InstType__c</fullName>
+    <description>Please indicate if new system installation is part of a full replacement, partial replacement or installation for a new building.</description>
+    <inlineHelpText>Please indicate if new system installation is part of a full replacement, partial replacement or installation for a new building.</inlineHelpText>
+    <label>Installation Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>FullReplacement</fullName>
+                <default>false</default>
+                <label>FullReplacement</label>
+            </value>
+            <value>
+                <fullName>InstallationForNewBuilding</fullName>
+                <default>false</default>
+                <label>InstallationForNewBuilding</label>
+            </value>
+            <value>
+                <fullName>PartialReplacement</fullName>
+                <default>false</default>
+                <label>PartialReplacement</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -4,12 +4,9 @@
         <name>GSA_Email_Notification</name>
         <label>GSA Email Notification</label>
         <locationX>176</locationX>
-        <locationY>323</locationY>
+        <locationY>431</locationY>
         <actionName>Case.GSA_Email_Notification</actionName>
         <actionType>emailAlert</actionType>
-        <connector>
-            <targetReference>RET_Case_Submission</targetReference>
-        </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>SObjectRowId</name>
@@ -18,14 +15,18 @@
             </value>
         </inputParameters>
         <nameSegment>Case.GSA_Email_Notification</nameSegment>
+        <offset>0</offset>
     </actionCalls>
     <actionCalls>
         <name>RET_Case_Submission</name>
         <label>RET Case Submission</label>
         <locationX>176</locationX>
-        <locationY>431</locationY>
+        <locationY>323</locationY>
         <actionName>Case.RET_Case_Submission</actionName>
         <actionType>emailAlert</actionType>
+        <connector>
+            <targetReference>GSA_Email_Notification</targetReference>
+        </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>SObjectRowId</name>
@@ -34,9 +35,16 @@
             </value>
         </inputParameters>
         <nameSegment>Case.RET_Case_Submission</nameSegment>
+        <offset>0</offset>
     </actionCalls>
     <apiVersion>62.0</apiVersion>
     <description>SFWS-3482 : This flow replaces the WFR, RET Case Submission and that is deactivated. This flow sends an email notifications to the GSA Inbox and Case owner.</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>Fsubject</name>
+        <dataType>String</dataType>
+        <expression>&apos;Lease documents were submitted for Lease&apos; + {!$Record.Lease_Number__c}</expression>
+    </formulas>
     <interviewLabel>RET : Case : After Save : Email GSA, Case Owner {!$Flow.CurrentDateTime}</interviewLabel>
     <label>RET : Case : After Save : Email GSA, Case Owner</label>
     <processMetadataValues>
@@ -62,11 +70,34 @@
         <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>GSA_Email_Notification</targetReference>
+            <targetReference>RET_Case_Submission</targetReference>
         </connector>
+        <filterFormula>{!$Record.RecordType.DeveloperName} = &apos;Real_Estate_Taxes&apos;  &amp;&amp;   ISCHANGED({!$Record.Status})  &amp;&amp;  ISPICKVAL({!$Record.Status}, &apos;Submitted&apos;)</filterFormula>
         <object>Case</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <textTemplates>
+        <name>RETCaseNotificationGSA</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Lease documents were submitted by {!$Record.Owner:User.Email} for Lease {!$Record.Lease_Number__c} at {!$Record.Street_Address_1__c} in {!$Record.City__c},  {!$Record.State_Code__c}.
+
+The date of submission is {!$Record.RET_Last_Submission_Date__c}.
+
+Additional comments by Lessor : {!$Record.RET_Submission_Comments__c}
+
+Please access the G-REX Lease File to review the submitted documents and process per the Real Estate Tax clause of the lease.</text>
+    </textTemplates>
+    <variables>
+        <description>Real Estate Tax</description>
+        <name>varRecordTypeId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>012t000000008RFAAY</stringValue>
+        </value>
+    </variables>
 </Flow>

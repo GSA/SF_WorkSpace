@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>R11_Selected_Offers</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>R11 Selected Offers</label>
+        <sharedTo>
+            <group>AAAP_Region_11</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>PBS_AAAP_isSelected__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingGuestRules>
+        <fullName>Offer_Select_Award_Info_Guest_User_Update</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Offer Select Award Info Guest User Update</label>
+        <sharedTo>
+            <guestUser>AAAP_Registration</guestUser>
+        </sharedTo>
+        <criteriaItems>
+            <field>PBS_AAAP_IsAwarded__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
+    <sharingGuestRules>
+        <fullName>Offer_Select_Award_Info_Guest_User_Update_Community</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Leasing Offer Select Award Info Sharing</label>
+        <sharedTo>
+            <guestUser>Leasing</guestUser>
+        </sharedTo>
+        <criteriaItems>
+            <field>PBS_AAAP_IsAwarded__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
+</SharingRules>

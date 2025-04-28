@@ -1,0 +1,23 @@
+<apex:page controller="PBS_gBUILD_PContactsRoleDetailController"  tabStyle="PBS_gBUILD_Contacts__tab" sidebar="false" >
+    <c:PBS_gBUILD_InitializeScripts />  
+    <apex:form >
+        <apex:pageMessages />           
+        <c:PBS_gBUILD_PageInstructions html="{!AppConfig.PageContactsItemIntro__c}" />
+        <apex:pageBlock >
+            <apex:pageblockButtons >
+                <apex:commandButton action="{!save}" value="Save" />
+                <apex:commandButton action="{!saveAndNew}" value="Save & New" />
+                <apex:commandButton action="{!cancel}" value="Cancel" immediate="true" />        
+            </apex:pageblockButtons>
+            <apex:pageBlockSection title="User Role Information" columns="1">
+                <apex:inputField value="{!Container.OwnerId}" required="true"/>           
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Role Name" for="role_name"/>
+                    <apex:selectList value="{!Role}" multiselect="false" id="role_name" required="true">
+                        <apex:selectOptions value="{!Roles}"/>
+                    </apex:selectList>            
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

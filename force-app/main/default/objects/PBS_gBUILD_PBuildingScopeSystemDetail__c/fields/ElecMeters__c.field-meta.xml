@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ElecMeters__c</fullName>
+    <description>Please indicate if the new system is a steam or a water boiler:</description>
+    <inlineHelpText>Please indicate if the new system is a steam or a water boiler:</inlineHelpText>
+    <label>Electricity Meter Installed</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Steam</fullName>
+                <default>false</default>
+                <label>Steam</label>
+            </value>
+            <value>
+                <fullName>WaterCooled</fullName>
+                <default>false</default>
+                <label>WaterCooled</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

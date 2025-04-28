@@ -1,0 +1,73 @@
+<!-- 
+/******************************************************************************************************************
+*   Copyright ©2011 Acumen Solutions, Inc. All Rights Reserved.  This software and source code is proprietary to Acumen Solutions, 
+
+Inc. ("Acumen") and is protected by copyright and other intellectual property laws.  
+*   This source code may only be used by an authorized licensee of Acumen and may only be used by such licensee in accordance with 
+
+the terms and conditions of an executed license agreement between such licensee
+*   and Acumen (the "License Agreement").  This source code may not be reproduced, published, or disclosed to others except as 
+
+provided in the License Agreement.  
+*
+* Description: Javascript and code for loading overlay used on some pages.
+* 
+* 
+*
+* Modification Log:
+* -----------------------------------------------------------------------------------------------------------------
+* Mod ID        |   Date        | Mod Author        | Brief Mod Description 
+* -----------------------------------------------------------------------------------------------------------------
+* 00001         |               | Joe Grefenstette  | Initial code creation.
+* -----------------------------------------------------------------------------------------------------------------
+* 
+*
+*******************************************************************************************************************/
+-->
+<apex:component >
+    
+    <script type="text/javascript">
+        var j$ = jQuery.noConflict();
+        j$(window).scroll(function () {j$.fancybox.resize();});
+        var message;
+        var bClose = false;
+        j$(document).ready(function() {
+            j$("#AddUserDialog").fancybox({'modal': true, 'opacity': true, 'showCloseButton' : false});
+        });
+    
+        function showProgressBar(message ) {
+            document.getElementById('messageText1').innerHTML = message;
+            j$.fancybox.center();
+            j$("#AddUserDialog").trigger('click');
+             bClose = false;
+        }
+        function hideProgressBar() {
+                j$.fancybox.close();
+                bClose = true;
+        }
+        
+        setTimeout('if (bClose) hideProgressBar()',300);
+        </script>
+
+    <!-- Begin Loading Panel -->
+    <a id="AddUserDialog" href="#loadingPanel" style="display: none">
+    <div id="loadingPanel" style="width: 335">
+        <div class="sideBuffer" style="width: 55px; height: 45px;"></div>
+            <div class="middleSpace" style="width: 335; height: 10"></div>
+                <div>
+                    <center>
+                       <img src="{!URLFOR($Resource.resources_Master, '/custom/images/schoolforceLogo.png')}" alt="" />
+                    </center>
+                </div>
+               <div style="display: inline">
+                   <center>
+                       <div style="display: inline">
+                           <img src="{!URLFOR($Resource.resources_Master, '/custom/images/AjaxLoader.gif')}" style='width: 100; height: 100; vertical-align: middle' alt="" />
+                           <p id="messageText1"
+                              style="horizontal-align: center; font-weight: bold; vertical-align: middle; width: 400px; text-align: center; color: black" />
+                       </div>
+                   </center>
+               </div>
+        </div>
+    </a>
+</apex:component>

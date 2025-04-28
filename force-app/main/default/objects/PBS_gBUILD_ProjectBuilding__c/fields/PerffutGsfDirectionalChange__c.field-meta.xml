@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PerffutGsfDirectionalChange__c</fullName>
+    <description>Indicates directional change of GSF as a result of this project</description>
+    <inlineHelpText>Indicate if GSF will increase, decrease, or remain unchanged as a result of this project.</inlineHelpText>
+    <label>Change in GSF</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Increase</fullName>
+                <default>false</default>
+                <label>Increase</label>
+            </value>
+            <value>
+                <fullName>Unchanged</fullName>
+                <default>false</default>
+                <label>Unchanged</label>
+            </value>
+            <value>
+                <fullName>Decrease</fullName>
+                <default>false</default>
+                <label>Decrease</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

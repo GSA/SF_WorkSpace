@@ -1,0 +1,20 @@
+<apex:page controller="PBS_gBUILD_ProjectCreateGbuildController" sidebar="false" tabStyle="PBS_gBUILD_Projects__tab">
+    <c:PBS_gBUILD_InitializeScripts />
+    <apex:form >
+        <apex:pageMessages />           
+        <c:PBS_gBUILD_PageInstructions html="{!AppConfig.PageCreateGbIntro__c}" />
+        <apex:pageBlock title="Create new gBUILD Project">
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!create}" value="Create Project and Add Buildings" />
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection columns="1">
+                <apex:inputField value="{!pbsProj.txtRegion__c}" required="true" styleClass="enum" />
+                <apex:inputField value="{!proj.ProjectType__c}" required="true" styleClass="enum" />
+                <apex:inputField value="{!pbsProj.txtProgramArea_FullCode__c}" required="true" styleClass="enum"/>
+                <apex:inputField value="{!pbsProj.txtLongName__c}" required="true" styleClass="text"/>
+                <apex:inputField value="{!pbsProj.txtProjectDescription__c}"  />
+                <apex:inputField value="{!proj.BudgetActivityCode__c}" required="true" styleClass="enum"/>
+            </apex:pageBlockSection>        
+        </apex:pageBlock>
+    </apex:form>    
+</apex:page>

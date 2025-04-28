@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<HomePageComponent xmlns="http://soap.sforce.com/2006/04/metadata">
+    <body>aaaaaa2
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+function HideNonHomepageTabs()
+
+{
+
+alert(123);
+
+fda;
+
+   for (el in document.getElementsByName(&quot;h2&quot;))
+
+   {
+
+      if (el.className==&quot;brandPrimaryFgr&quot;&amp;&amp;el.innerHTML==&quot;PBS_gBUILD_HomeTabs&quot;)
+
+      {
+
+         el = el.parentNode;
+
+         alert(el+&quot;=el  el.className=&quot;+el.className);
+
+         el.style.display=&quot;none&quot;;
+
+         break;
+
+      }   
+
+
+   }
+
+ 
+
+   var appName = document.getElementById(&quot;tsidLabel&quot;).innerHTML;
+
+   if (appName!=&quot;gBUILD&quot;) return;
+
+ 
+
+}
+
+HideNonHomepageTabs();
+
+&lt;/script&gt;
+
+bbbbb</body>
+    <pageComponentType>htmlArea</pageComponentType>
+    <width>narrow</width>
+</HomePageComponent>

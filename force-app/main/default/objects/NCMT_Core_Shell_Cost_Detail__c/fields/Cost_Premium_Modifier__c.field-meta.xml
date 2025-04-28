@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Cost_Premium_Modifier__c</fullName>
-    <externalId>false</externalId>
     <formula>if( Project_Cost_Summary__r.Project_Name__r.RecordType.Name == &quot;New Construction - TCO&quot; , Case(Core_Shell_Cost_Parameter__r.Core_Shell_Cost_Parameter_Identifier__c,
 &apos;CC21&apos;,IF(Unit_Cost__c==0, 0,(TCO_Performance_Input__r.Slab_Unit_Cost__c/Unit_Cost__c)), 
 &apos;CC167&apos;,TCO_Performance_Input__r.Wall_Nom_Cost_Modifier__c ,

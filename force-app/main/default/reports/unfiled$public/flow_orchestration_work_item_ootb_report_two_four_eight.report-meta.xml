@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>FlowOrchestrationStepInstance.FlowOrchestrationWorkItems$Name</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationStepInstance.FlowOrchestrationWorkItems$CreatedDate</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationStepInstance.FlowOrchestrationWorkItems$CreatedBy</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationStepInstance.FlowOrchestrationWorkItems$LastModifiedDate</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationStepInstance.FlowOrchestrationWorkItems$LastModifiedBy</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationStepInstance.FlowOrchestrationWorkItems$Assignee.User</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationStepInstance.FlowOrchestrationWorkItems$Assignee.Group</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationStepInstance.FlowOrchestrationWorkItems$Status</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationStepInstance.FlowOrchestrationWorkItems$Id</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationStepInstance$Name</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationStepInstance$Label</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationStepInstance$Status</field>
+    </columns>
+    <description>What orchestration work items were created and what&apos;s the current status of each work item?</description>
+    <format>Tabular</format>
+    <name>Sample Report: Orchestration Work Items</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>flow_orchestration_work_item_ootb_crt_two_four_eight__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <sortColumn>FlowOrchestrationStepInstance.FlowOrchestrationWorkItems$LastModifiedDate</sortColumn>
+    <sortOrder>Desc</sortOrder>
+    <timeFrameFilter>
+        <dateColumn>FlowOrchestrationStepInstance.FlowOrchestrationWorkItems$CreatedDate</dateColumn>
+        <interval>INTERVAL_CURRENT</interval>
+    </timeFrameFilter>
+</Report>

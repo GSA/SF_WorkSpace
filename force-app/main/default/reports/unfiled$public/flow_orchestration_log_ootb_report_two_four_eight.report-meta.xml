@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>FlowOrchestrationLog$OrchestrationInstance</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationLog$StageName</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationLog$StepName</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationLog$Kind</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationLog$Timestamp</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationLog$Assignee</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationLog$AssigneeType</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationLog$Actor</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationLog$Duration</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationLog$Comments</field>
+    </columns>
+    <description>What orchestration run logs were created and what happened in their associated orchestration runs?</description>
+    <format>Tabular</format>
+    <name>Sample Report: Orchestration Run Logs</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>flow_orchestration_log_ootb_crt_two_four_eight__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <sortColumn>FlowOrchestrationLog$Timestamp</sortColumn>
+    <sortOrder>Desc</sortOrder>
+    <timeFrameFilter>
+        <dateColumn>FlowOrchestrationLog$Timestamp</dateColumn>
+        <interval>INTERVAL_CURRENT</interval>
+    </timeFrameFilter>
+</Report>

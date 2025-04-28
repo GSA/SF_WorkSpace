@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LightingTypeBaseline__c</fullName>
+    <description>Lighting Type Baseline dropdown</description>
+    <inlineHelpText>Please indicate the building&apos;s existing predominant lighting type which will be replaced as part of the project.</inlineHelpText>
+    <label>Existing Predominant Lighting Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Halogen</fullName>
+                <default>false</default>
+                <label>Halogen</label>
+            </value>
+            <value>
+                <fullName>HighLowPressureSodium</fullName>
+                <default>false</default>
+                <label>HighLowPressureSodium</label>
+            </value>
+            <value>
+                <fullName>Incandescent</fullName>
+                <default>false</default>
+                <label>Incandescent</label>
+            </value>
+            <value>
+                <fullName>T12</fullName>
+                <default>false</default>
+                <label>T12</label>
+            </value>
+            <value>
+                <fullName>T8</fullName>
+                <default>false</default>
+                <label>T8</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Request to Register</name>
+    <style>none</style>
+    <subject>RET Community Registration Email</subject>
+    <textOnly>Hello,
+
+GSA&apos;s Public Buildings Service records indicate that you are now the lessor for the below lease contract. Your lease may contain a clause that requires you to submit tax documentation annually through GSA&apos;s Real Estate Tax Portal. Please register within the Portal at the below link AS SOON AS POSSIBLE,
+
+Lease : {!PBS_Lease__c.Lease_Number__c}
+Register URL: {!$Label.RET_EXTERNAL_HOST}
+
+Thanks,</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

@@ -1,0 +1,15 @@
+<template>
+  <template if:true={dataHasRecords}>
+	<h1 class="custom-table-heading">{label}</h1>
+	<lightning-datatable class="" key-field="Id" data={data} columns={columns} sorted-by={sortBy}
+		sorted-direction={sortDirection} onsort={doSorting} onrowaction={handleRowAction} hide-checkbox-column>
+	</lightning-datatable>
+  </template>
+  <template if:false={dataHasRecords}>
+	<h1 class="custom-table-heading">{label}</h1>
+	<lightning-datatable class="" key-field="Id" data={data} columns={columns} sorted-by={sortBy}
+		sorted-direction={sortDirection} onsort={doSorting} onrowaction={handleRowAction} hide-checkbox-column>
+	</lightning-datatable>    
+	<div class="" style="font-weight: 800">No records to display</div>
+  </template>
+</template>

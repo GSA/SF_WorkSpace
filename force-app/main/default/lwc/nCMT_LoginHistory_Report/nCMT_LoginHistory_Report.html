@@ -1,0 +1,71 @@
+<template>
+    <article class="slds-card">
+        <div class="slds-card__header slds-grid projectBody">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title" style="text-align:center">
+                        <span style="font-size: 23px;
+                font-weight: 600;
+                text-transform: uppercase;width:100%">NCMT User Log Report</span>
+                    </h2>
+                </div>
+                <div class="slds-no-flex">
+                    <button class="slds-button slds-button_neutral hideButton" onclick={printPage} id="prnBtn">Print Page</button>
+                    <button class="slds-button slds-button_neutral hideButton" id="DownloadCSVFile" onclick={downloadCSVFile}>Download as CSV</button>
+                </div>
+            </header>
+        </div>
+    </article> 
+    <template if:true={loaded}>
+        <div class="slds-card__body projectBody">
+            <div class="slds-form slds-grid">
+                <div class="slds-col width50">
+                    <table class="projectParamterTable" style="width:100%">
+                        <tr style="font-size: 15px;
+                        font-weight: 700;
+                        text-transform: uppercase;">
+                            <th colspan="3" style="border:none">Total number of Active Users during last {projectDetails.numday} days: {projectDetails.usrCount}</th>
+                        </tr>
+                        <tr style="height: 15px;">
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                        </tr>
+                        <tr>
+                            <th class="slds-text-align_center" style="background-color:lightgrey;width: 10%;"><b>Name</b></th>
+                            <td class="slds-text-align_center" style="background-color:lightgrey;width: 10%;"><b>Username</b></td>
+                            <td class="slds-text-align_center" style="background-color:lightgrey;width: 10%;"><b>Email</b></td>
+                            <td class="slds-text-align_center" style="background-color:lightgrey;width: 10%;"><b>User Level</b></td>
+                            <td class="slds-text-align_center" style="background-color:lightgrey;width: 5%;"><b>Region</b></td>
+                            <td class="slds-text-align_center" style="background-color:lightgrey;width: 10%;"><b>Profile</b></td>
+                            <td class="slds-text-align_center" style="background-color:lightgrey;width: 10%;"><b>Last Login</b></td>
+                            <td class="slds-text-align_center" style="background-color:lightgrey;width: 5%;"><b>Active</b></td>
+                        </tr>
+                        <template for:each={projectDetails.usrList} for:item="userlistvalues">
+                            <tr key={userlistvalues.Id}>
+                                <td>{userlistvalues.Name}</td>
+                                <td>{userlistvalues.Username}</td>
+                                <td>{userlistvalues.Email}</td>
+                                <td>{userlistvalues.NCMT_User_Level__c}</td>
+                                <td>{userlistvalues.NCMT_UserRegionCode__c}</td>
+                                <td>{userlistvalues.Profile.Name}</td>
+                                <td><lightning-formatted-date-time value={userlistvalues.LastLoginDate} year="numeric" month="numeric" day="numeric" hour="2-digit"
+                                    minute="2-digit" time-zone-name="short" hour12="true"></lightning-formatted-date-time></td>
+                                <td>{userlistvalues.IsActive}</td>
+                            </tr> 
+                        </template>
+                     </table>
+                    
+                </div>
+            </div>
+        </div> 
+    </template>  
+    <template if:true={showError}>
+        <p>NO RECORD TO DISPLAY</p>
+    </template> 
+</template>

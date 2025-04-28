@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>CEW Work Item</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>CEW Work Items</value>
+    </caseValues>
+    <layouts>
+        <layout>NCMT CEW Work Item Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- AB Code required for Work Codes 6 7 8 --></errorMessage>
+        <name>If_wicode_is_6_7_8_ABcode_not_null</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- New_CEW_Item --></label>
+        <name>New_CEW_Item</name>
+    </webLinks>
+</CustomObjectTranslation>

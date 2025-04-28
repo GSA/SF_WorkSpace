@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AffectedSpaceOutdoor__c</fullName>
+    <description>Dropdown for space affected by system</description>
+    <inlineHelpText>Please select the applicable space type included in outdoor lighting application.</inlineHelpText>
+    <label>Affected Space Outdoor</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Outdoor Parking Lot</fullName>
+                <default>false</default>
+                <label>Outdoor Parking Lot</label>
+            </value>
+            <value>
+                <fullName>Site Lighting</fullName>
+                <default>false</default>
+                <label>Site Lighting</label>
+            </value>
+            <value>
+                <fullName>Outdoor Parking Structure</fullName>
+                <default>false</default>
+                <label>Outdoor Parking Structure</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

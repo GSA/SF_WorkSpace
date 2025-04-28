@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingGuestRules>
+        <fullName>Guest_User_Access</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>A setting in the Winter &apos;21 release will impact user registration on the external site. In order to prepare for this so that there is no disruption in registration, this sharing rule ensures that the Guest User has read access to the &apos;AAAP Customer Portal&apos;.</description>
+        <label>Guest User Access</label>
+        <sharedTo>
+            <guestUser>AAAP_Registration</guestUser>
+        </sharedTo>
+        <criteriaItems>
+            <field>PBS_AAAP_LEASE_TERM__c</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
+    <sharingGuestRules>
+        <fullName>Guest_User_Access_Community</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>A setting in the Winter &apos;21 release will impact user registration on the external site. In order to prepare for this so that there is no disruption in registration, this sharing rule ensures that the Guest User has read access to the &apos;AAAP Customer Portal&apos;.</description>
+        <label>Leasing Agency Requirement Sharing</label>
+        <sharedTo>
+            <guestUser>Leasing</guestUser>
+        </sharedTo>
+        <criteriaItems>
+            <field>PBS_AAAP_LEASE_TERM__c</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
+</SharingRules>

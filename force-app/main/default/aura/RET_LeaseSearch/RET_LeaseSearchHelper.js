@@ -110,6 +110,7 @@
 	cancelTaxSubmission: function() {
 		document.getElementById('confirm-create-submission').style.display = 'none';
 	},
+    /* Commented out for 2024-2025 RET Surge to no longer use lease access functionality
     requestLeaseAccess: function(component, event){
         document.getElementById('confirm-create-submission').style.display = 'none';
         var leaseId = component.get("v.selectedLeaseId");
@@ -161,12 +162,16 @@
             this.findLease(component);
         });
 	  	$A.enqueueAction(action); 
-    },
-	startTaxSubmission: function(component) {
+    }, */
+	startTaxSubmission: function(component, event) {
 		this.showSpinner();
+        var leaseId =event.getSource().get('v.value');;
+        console.log(leaseId);
+       /* var selectedLease = event.currentTarget;
+		var leaseId = selectedLease.dataset.leaseid;*/
 		var action = component.get("c.createNewCase");
-		action.setParams({ "leaseId" : component.get("v.selectedLeaseId") });
-	    
+		//action.setParams({ "leaseId" : component.get("v.selectedLeaseId") });
+	    action.setParams({ "leaseId" : leaseId});
 	    action.setCallback(this, function(response) {
 	    	this.hideSpinner();
 	        var state = response.getState();
@@ -174,10 +179,10 @@
 	        	var newCase = response.getReturnValue();
 				var urlEvent = $A.get("e.force:navigateToURL");
     			urlEvent.setParams({
-					"url": "/edit-tax-submission?id=" + newCase.Id
+					//"url": "/edit-tax-submission?id=" + newCase.Id 
+					 "url": "/"
 				});
 				urlEvent.fire();
-
 	        } else {
 			    var toastEvent = $A.get("e.force:showToast");
 			    toastEvent.setParams({

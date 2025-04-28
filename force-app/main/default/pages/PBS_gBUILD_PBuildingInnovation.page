@@ -1,0 +1,40 @@
+<apex:page controller="PBS_gBUILD_PBuildingInnovationController" tabstyle="PBS_gBUILD_PBuildingInnovation__tab" sidebar="false" >
+    <c:PBS_gBUILD_InitializeScripts />  
+    <apex:form >
+        <apex:pageMessages />           
+        <c:PBS_gBUILD_PageInstructions html="{!AppConfig.PageInnovationIntro__c}" />
+        <apex:outputPanel rendered="{!showPageContent}" >        
+        <apex:pageBlock title="Innovative Technology">
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!add}" value="New" disabled="{!readonlyMode}"/>
+                <apex:commandButton action="{!approve}" value="Approve"  rendered="{!viewMode}" disabled="{!!isApproveEnabled}" styleClass="approve"/>
+            </apex:pageBlockButtons>            
+            <apex:pageBlockTable value="{!items}" var="z" styleClass="dataTable">
+                <apex:column headerValue="Action">
+                    <apex:commandLink action="{!open}" value="Open">
+                        <apex:param value="{!z.id}" name="actionId" assignTo="{!actionId}" />
+                    </apex:commandLink>
+                    <apex:outputPanel rendered="{!readWriteMode}">                                      
+                        &nbsp;|&nbsp;
+                        <apex:commandLink action="{!del}" value="Del" styleClass="delCmd">
+                            <apex:param value="{!z.id}" name="actionId" assignTo="{!actionId}" />
+                        </apex:commandLink>
+                    </apex:outputPanel>                     
+                </apex:column>              
+                <apex:column headerValue="Funding Status">
+                    <apex:outputText value="{!z.FundingStatus__c}"/>
+                </apex:column>              
+                <apex:column headerValue="Problem Statement">
+                    <apex:outputText value="{!z.ProblemStatement__c}"/>
+                </apex:column>
+                <apex:column headerValue="Technology">
+                    <apex:outputText value="{!z.TechDescription__c}"/>
+                </apex:column>
+                <apex:column headerValue="Impact">
+                    <apex:outputText value="{!z.PotentialImpact__c }"/>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>       
+       </apex:outputPanel>
+    </apex:form>
+</apex:page>

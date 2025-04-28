@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AverageBtuCost__c</fullName>
+    <formula>(CASE(ParentProjectBuilding__r.PerffutCostsChilledWater__c,0, 
+ParentProjectBuilding__r.EuasBaselinePerformanceYear__r.CwaterCostPerUnit__c, 
+ParentProjectBuilding__r.PerffutCostsChilledWater__c 
+)/12000 
++ 
+CASE(ParentProjectBuilding__r.PerffutCostsElectric__c,0, 
+ParentProjectBuilding__r.EuasBaselinePerformanceYear__r.ElecCostPerUnit__c, 
+ParentProjectBuilding__r.PerffutCostsElectric__c 
+)/3412.142 
++ 
+CASE(ParentProjectBuilding__r.PerffutCostsGas__c,0, 
+ParentProjectBuilding__r.EuasBaselinePerformanceYear__r.GasCostPerUnit__c, 
+ParentProjectBuilding__r.PerffutCostsGas__c 
+)/1031 
++ 
+CASE(ParentProjectBuilding__r.PerffutCostsOil__c,0, 
+ParentProjectBuilding__r.EuasBaselinePerformanceYear__r.OilCostPerUnit__c, 
+ParentProjectBuilding__r.PerffutCostsOil__c 
+)/138700 
++ 
+CASE(ParentProjectBuilding__r.PerffutCostsSteam__c,0, 
+ParentProjectBuilding__r.EuasBaselinePerformanceYear__r.SteamCostPerUnit__c, 
+ParentProjectBuilding__r.PerffutCostsSteam__c 
+)/1000000)/NonZeroBtuCosts__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Average Btu Cost</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>10</scale>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

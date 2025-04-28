@@ -1,0 +1,17 @@
+<template>
+	<ul class='error'>
+		<template for:each={errors} for:item="error">
+			<li key={error}>{error}</li>
+		</template>
+	</ul>
+
+	<c-r-e-t_-upload-attachment onfileupload={handleFileUpload}></c-r-e-t_-upload-attachment><br/><br/>
+	<c-r-e-t_-show-attachments table-name="RET_Show_Draft_Attachments" data-id="RET_Show_Draft_Attachments"></c-r-e-t_-show-attachments><br/>
+	<c-r-e-t_-submit-attachments oncancel={handleCancel}></c-r-e-t_-submit-attachments> <br/><br/>
+	
+	<c-r-e-t_-show-submitted-attachments table-name="RET_Show_Submitted_Attachments" data-id="RET_Show_Submitted_Attachments"></c-r-e-t_-show-submitted-attachments><br/>
+	<div class="btn-container">
+		<input class="btn" type="button" varient="submit" value="Back" onclick ={handleExitSubmission} />
+		<div class="space"></div>
+    </div>
+</template>

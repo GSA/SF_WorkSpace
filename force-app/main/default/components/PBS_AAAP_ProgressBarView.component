@@ -1,0 +1,61 @@
+<apex:component >
+    <apex:attribute name="myValue" description="This is the value for the component." type="String" />
+    <apex:attribute name="linksToViewModePage" description="When true, links will direct to viewonly pages.  Otherwise, the destination pages may be editable." type="Boolean" required="false" />
+    <apex:outputPanel rendered="{!myValue == null || true}">
+        <ul class="process">
+            <li class="building-sub-nav">
+                <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerbuildingview?offerId='+myValue,'/AAAP/pbs_aaap_offerbuilding?offerId='+myValue))}" style="position:relative;left:0px;">
+                    <div>
+                        Building<br />Fundamentals
+                    </div>
+                </a>
+            </li>
+            <li class="buildingdetails-sub-nav">
+                <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerbuildingdetailsview?offerId='+myValue,'/AAAP/pbs_aaap_offerbuildingdetails?offerId='+myValue))}" style="position:relative;left:15px;">
+                    <div>
+                        Building <br />Detail
+                    </div>
+                </a>
+            </li>
+            <li class="parking-sub-nav">
+                <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerParkingview?offerId='+myValue,'/AAAP/pbs_aaap_offerParking?offerId='+myValue))}" style="position:relative;left:30px">
+                    <div>
+                        Parking
+                    </div>
+                </a>
+            </li>
+            <li class="property-owner-sub-nav">
+                <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerPropertyOwnerview?offerId='+myValue,'/AAAP/pbs_aaap_offerPropertyOwner?offerId='+myValue))}" style="position:relative;left:45px">
+                    <div>
+                    Property
+                    <br />Owner
+                    </div>
+                </a>
+            </li>
+            <!-- <li class="reps-certs-sub-nav"><a href="#">Reps<br />&amp; Certs</a></li> -->
+            <li class="operating-cost-sub-nav">
+                <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_operatingcostsview?offerId='+myValue,'/AAAP/pbs_aaap_operatingcosts?offerId='+myValue))}" style="position:relative;left:60px">
+                    <div>
+                    Operating
+                    <br />Cost
+                    </div>
+                </a>
+            </li>
+            <li class="space-rates-sub-nav">
+                <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_SpacesAndRatesview?offerId='+myValue,'/AAAP/pbs_aaap_SpacesAndRates?offerId='+myValue))}" style="position:relative;left:75px">
+                    <div>
+                    Space
+                    <br />&amp; Rates
+                    </div>
+                </a>
+            </li>
+            <li class="attachments-sub-nav">
+                <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerAttachmentsview?offerId='+myValue,'/AAAP/pbs_aaap_offerAttachments?offerId='+myValue))}" style="position:relative;left:90px">
+                    <div>
+                    Attachments
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </apex:outputPanel>
+</apex:component>

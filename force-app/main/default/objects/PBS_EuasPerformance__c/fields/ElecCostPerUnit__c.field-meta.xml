@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>ElecCostPerUnit__c</fullName>
     <description>CWater Cost per Unit</description>
-    <externalId>false</externalId>
     <formula>if(or(ISNULL(ElecAmt__c), ElecAmt__c=0),NULL, ElecCost__c/ElecAmt__c)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <inlineHelpText>CWater Cost per Unit</inlineHelpText>

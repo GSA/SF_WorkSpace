@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Total_Cost_Adjusted__c</fullName>
-    <externalId>false</externalId>
     <formula>IF( TEXT(Project_Name__r.Project_type__c) != &apos;Repair &amp; Alteration - Work Item Detail&apos; ,(Core_Shell_Total_Cost_Adjusted__c +  Security_Cost_Adjusted__c +  TRCS_Cost_Adjusted__c +  TI_Cost_Adjusted__c + Other_Direct_Costs__c ),(GSA_Costs__c + GSAPkg_Costs__c + Tenant_RWA_Costs__c + Tenant_Amortized_Costs__c + Other_Direct_Costs__c ))</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Total Cost Adjusted</label>

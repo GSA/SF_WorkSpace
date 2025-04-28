@@ -1,0 +1,81 @@
+<apex:page sidebar="false" controller="PBS_gBUILD_HelpController" tabstyle="PBS_gBUILD_Help__tab">
+    <c:PBS_gBUILD_InitializeScripts />
+    <apex:form >
+        <apex:pageMessages />
+        <c:PBS_gBUILD_PageInstructions html="{!AppConfig.PageTrainingIntro__c}" />
+        <apex:tabPanel switchType="client">
+            <apex:tab label="Help">
+                <apex:pageBlock >
+                    <apex:pageBlockSection title="Key Contacts">
+                        <a href="mailto:{!AppConfig.HelpDeskEmail__c}">{!AppConfig.HelpDeskEmail__c}</a>
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection title="Quick Questions">
+                        <chatter:feedWithFollowers entityId="{!AppConfig.TrainingFeedEntityId__c}" showHeader="true" />
+                    </apex:pageBlockSection>
+                </apex:pageBlock>
+            </apex:tab>
+            <apex:tab label="Documents">
+                <apex:pageBlock >
+                    <apex:pageBlockSection title="Files">
+                        <apex:pageBlockTable value="{!docs}" var="z" styleClass="dataTable">
+                            <apex:column headerValue="Action">
+                                <apex:outputLink value="/servlet/servlet.FileDownload?file={!z.id}" target="_blank" rendered="{!(z.url==null)}">Open</apex:outputLink>                
+                                <apex:outputLink value="{!z.url}" target="_blank" rendered="{!(z.url!=null)}">Open</apex:outputLink>                
+                            </apex:column>
+                            <apex:column headerValue="File Name">
+                                <apex:outputText value="{!z.Name}" />
+                            </apex:column>
+                            <apex:column headerValue="Created At">
+                                <apex:outputText value="{!z.CreatedDate}" />
+                            </apex:column>
+                            <apex:column headerValue="Description">
+                                <apex:outputText value="{!z.Description}" />
+                            </apex:column>
+                        </apex:pageBlockTable>            
+                    </apex:pageBlockSection>
+                </apex:pageBlock>
+            </apex:tab>
+            <apex:tab label="Diagnostics">
+                <apex:pageBlock >
+                    <apex:pageBlockSection title="Groups">
+                        <apex:pageBlockTable value="{!MyGroups}" var="z">
+                            <apex:column headerValue="Name" value="{!z.DeveloperName}" />                         
+                            <apex:column headerValue="Type" value="{!z.Type}" />                         
+                        </apex:pageBlockTable>                  
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection title="Permission Sets">
+                        <apex:pageBlockTable value="{!permissionSetNames}" var="z">
+                            <apex:column headerValue="Name" value="{!z}" />                         
+                        </apex:pageBlockTable>                  
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection title="Other">                             
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Profile Name" for="profile_name"/>
+                            <apex:outputText value="{!$Profile.Name}" id="profile_name"/> 
+                        </apex:pageBlockSectionItem>                    
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="User Role" for="userrole_name"/>
+                            <apex:outputText value="{!$UserRole.Name}" id="userrole_name"/> 
+                        </apex:pageBlockSectionItem>                    
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="User Username" for="user_username"/>
+                            <apex:outputText value="{!$User.Username}" id="user_username"/> 
+                        </apex:pageBlockSectionItem>                    
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="User UITheme" for="user_uitheme"/>
+                            <apex:outputText value="{!$User.UITheme}" id="user_uitheme"/> 
+                        </apex:pageBlockSectionItem>                    
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Is CP User" for="cp_user"/>
+                            <apex:outputText value="{!isCustomerPortalUser}" id="cp_user"/> 
+                        </apex:pageBlockSectionItem>                    
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Is View All Projects CP Account" for="cp_viewAll"/>
+                            <apex:outputText value="{!isViewAllProjectsCustomerPortalAccount }" id="cp_viewAll"/> 
+                        </apex:pageBlockSectionItem>                    
+                    </apex:pageBlockSection>
+                </apex:pageBlock>
+            </apex:tab>
+        </apex:tabPanel>
+    </apex:form>
+</apex:page>

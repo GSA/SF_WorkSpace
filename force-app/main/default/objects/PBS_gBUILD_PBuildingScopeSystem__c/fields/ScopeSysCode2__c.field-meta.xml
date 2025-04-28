@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ScopeSysCode2__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE(RecordType.DeveloperName,
+&apos;AMBF_Any&apos;,&apos;AMS_AdvancedMeteringForBuildingFacility&apos;,
+&apos;SM_Any&apos;,&apos;AMS_Submetering&apos;,
+&apos;F_NewReplacement&apos;,&apos;BE_Facade&apos;,
+&apos;F_RepairsOrAlterationsToExistingFacade&apos;,&apos;BE_Facade&apos;,
+&apos;R_NewReplacement&apos;,&apos;BE_Roof&apos;,
+&apos;R_RepairsOrAlterationsToExistingRoof&apos;,&apos;BE_Roof&apos;,
+&apos;Windows_NewApplication&apos;,&apos;BE_Windows&apos;,
+&apos;Windows_ReplOrRepairsExistingWindows&apos;,&apos;BE_Windows&apos;,
+&apos;CM_Any&apos;,&apos;BTUI_CommissioningMeasures&apos;,
+&apos;AH_NewReplacement&apos;,&apos;HVAC_AirHandler&apos;,
+&apos;AH_RepairsOrAlterations&apos;,&apos;HVAC_AirHandler&apos;,
+&apos;B_NewReplacement&apos;,&apos;HVAC_Boilers&apos;,
+&apos;B_RepairsOrAlterations&apos;,&apos;HVAC_Boilers&apos;,
+&apos;Chl_NewReplacement&apos;,&apos;HVAC_Chillers&apos;,
+&apos;Chl_RepairsOrAlterations&apos;,&apos;HVAC_Chillers&apos;,
+&apos;C_NewControls&apos;,&apos;HVAC_Controls&apos;,
+&apos;C_RepairsOrAlterations&apos;,&apos;HVAC_Controls&apos;,
+&apos;CT_NewReplacement&apos;,&apos;HVAC_CoolingTower&apos;,
+&apos;CT_RepairsOrAlterations&apos;,&apos;HVAC_CoolingTower&apos;,
+&apos;IDLS_Any&apos;,&apos;IEQ_IndoorDaylightingOrStrategies&apos;,
+&apos;TCVM_Any&apos;,&apos;IEQ_ThermalComfortAndVentilationMeasures&apos;,
+&apos;IL_Daylighting&apos;,&apos;L_IndoorLighting&apos;,
+&apos;IL_LightingControls&apos;,&apos;L_IndoorLighting&apos;,
+&apos;IL_NewApplication&apos;,&apos;L_IndoorLighting&apos;,
+&apos;IL_OtherLightingImprovements&apos;,&apos;L_IndoorLighting&apos;,
+&apos;IL_RetrofitOrReplacement&apos;,&apos;L_IndoorLighting&apos;,
+&apos;OL_LightingControls&apos;,&apos;L_OutdoorLighting&apos;,
+&apos;OL_NewApplication&apos;,&apos;L_OutdoorLighting&apos;,
+&apos;OL_RetrofitOrReplacement&apos;,&apos;L_OutdoorLighting&apos;,
+&apos;Other_ChilledWaterHotH2OAndSteamDistSys&apos;,&apos;Other_OtherScope&apos;,
+&apos;BM_NewSystem&apos;,&apos;RE_Biomass&apos;,
+&apos;G_NewSystem&apos;,&apos;RE_Geothermal&apos;,
+&apos;PV_NewInstallationOrArrays&apos;,&apos;RE_Photovoltaic&apos;,
+&apos;PV_RepairsOrAlterations&apos;,&apos;RE_Photovoltaic&apos;,
+&apos;ST_NewSystem&apos;,&apos;RE_SolarThermal&apos;,
+&apos;ST_PassiveSolarHeatingVentilation&apos;,&apos;RE_SolarThermal&apos;,
+&apos;Wind_NewInstallationOrTurbines&apos;,&apos;RE_Wind&apos;,
+&apos;IWC_FixtureReplacementWithLowFlow&apos;,&apos;Water_IndoorWaterConservation&apos;,
+&apos;IWC_NewLowFlowFixtures&apos;,&apos;Water_IndoorWaterConservation&apos;,
+&apos;IWC_ProcessEquipmentReductionMeasures&apos;,&apos;Water_IndoorWaterConservation&apos;,
+IF(OR(RecordType.DeveloperName = &apos;OWC_OnsiteSewerOrStormwaterTreatmentSys&apos;,RecordType.DeveloperName=&apos;OWC_WaterAndSewerConservationSystems&apos;,RecordType.DeveloperName=&apos;OWC_WaterEfficientIrrigAndLandscaping&apos;)
+,&apos;Water_OutdoorWaterConservation&apos;,&apos;&apos;))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Scope System Code L2</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -20,10 +20,17 @@ global with sharing class SiteLoginController {
         System.debug('Offer Type is ****'+offerType);
         // return Site.login(username, password, '/home/home.jsp');
         if (startUrl == ''||startUrl == null) {
+            // Set the cookie path dynamically based on the offer type.
+            String cookiePath;
+            if(offerType == 'AAAP'){
+                cookiePath = '/AAAP';
+            } else{
+               cookiePath = '/RSAP'; 
+            }
             // Set a cookie for checking if logging in the first time
             Cookie counter = ApexPages.currentPage().getCookies().get('counter');
             if (counter == null) {
-                counter = new Cookie('counter', '1', '/', -1, true);
+                counter = new Cookie('counter', '1', cookiePath, -1, true);
                 ApexPages.currentPage().setCookies(new Cookie[] {counter});
             }
              if(offerType == 'AAAP')                        
@@ -46,7 +53,6 @@ global with sharing class SiteLoginController {
        }   
        else
         return Site.login(username1, password1, startUrl);
-       
     }
     
     /*
@@ -67,42 +73,40 @@ global with sharing class SiteLoginController {
         options.add(new SelectOption('AAAP','AAAP Offer'));
         return options;
     }
-
-       
-    global SiteLoginController () {
-        
+    
+    global SiteLoginController () {  
         offerType = 'AAAP';
     }
     
-    //Snethith - commented below code in order to create a test class on its own 04/18/18
-    //@IsTest(SeeAllData=true) global static void testSiteLoginController () {
-    //    // Instantiate a new controller with all parameters in the page
-    //    SiteLoginController controller = new SiteLoginController ();
-    //    controller.username = 'test@salesforce.com';
-    //    controller.password = '123456'; 
+    /*Snethith - commented below code in order to create a test class on its own 04/18/18
+    @IsTest(SeeAllData=true) global static void testSiteLoginController () {
+        Instantiate a new controller with all parameters in the page
+        SiteLoginController controller = new SiteLoginController ();
+        controller.username = 'test@salesforce.com';
+        controller.password = '123456'; 
                 
-    //    System.assertEquals(controller.login(),null);
+        System.assertEquals(controller.login(),null);
         
-    //    ApexPages.currentPage().getParameters().put('startURL', '/apex/PBS_AAAP_PortalHome');    
-    //    System.assertEquals(controller.login(),null);                       
-    //} 
+        ApexPages.currentPage().getParameters().put('startURL', '/apex/PBS_AAAP_PortalHome');    
+        System.assertEquals(controller.login(),null);                       
+    } 
     
-    // @IsTest(SeeAllData=true) global static void testSiteLoginController1 () {
-    //    // Instantiate a new controller with all parameters in the page
-    //    SiteLoginController controller = new SiteLoginController ();
-    //    controller.username = 'test@salesforce.com';
-    //    controller.password = '123456'; 
-    //    controller.getItems();
-    //     controller.offerType = 'Traditional';
-    //     controller.selectTab = 'Home';
-    //     controller.userid = '1231313213';
-    //     controller.pin = '3456';
-    //    System.assertEquals(controller.login(controller.username, controller.password),null);   
-    //    ApexPages.currentPage().getParameters().put('startURL', '/apex/PBS_AAAP_PortalHome');    
-    //    System.assertEquals(controller.login(controller.username, controller.password),null);   
-    //     ApexPages.currentPage().getParameters().put('startURL', '');    
-    //     controller.offerType = 'Traditional';
-    //    System.assertEquals(controller.login(),null); 
+     @IsTest(SeeAllData=true) global static void testSiteLoginController1 () {
+        Instantiate a new controller with all parameters in the page
+        SiteLoginController controller = new SiteLoginController ();
+        controller.username = 'test@salesforce.com';
+        controller.password = '123456'; 
+        controller.getItems();
+        controller.offerType = 'Traditional';
+        controller.selectTab = 'Home';
+        controller.userid = '1231313213';
+        controller.pin = '3456';
+        System.assertEquals(controller.login(controller.username, controller.password),null);   
+        ApexPages.currentPage().getParameters().put('startURL', '/apex/PBS_AAAP_PortalHome');    
+        System.assertEquals(controller.login(controller.username, controller.password),null);   
+        ApexPages.currentPage().getParameters().put('startURL', '');    
+        controller.offerType = 'Traditional';
+        System.assertEquals(controller.login(),null); 
          
-    //}    
+    }  */  
 }

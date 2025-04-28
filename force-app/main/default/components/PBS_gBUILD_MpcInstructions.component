@@ -1,0 +1,17 @@
+<apex:component controller="PBS_gBUILD_MpcInstructionsCController">
+    <apex:attribute name="mpcNum" 
+        type="Integer" 
+        assignTo="{!mpcNum}" 
+        required="true" 
+        description="The mpc number" />
+    <apex:attribute name="projType" 
+        type="String" 
+        assignTo="{!projType}" 
+        required="true" 
+        description="The type of project" />    
+    <div class="message">
+      <apex:outputText value="{!instructions}" escape="false" /> 
+        <!-- commented line 15  for story SFWS- 1945-->
+       <!-- <apex:outputText value="{!JSENCODE(HTMLENCODE(instructions))}" escape="false" />-->
+    </div>
+</apex:component>

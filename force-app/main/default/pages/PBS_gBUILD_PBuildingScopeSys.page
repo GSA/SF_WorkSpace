@@ -1,0 +1,1190 @@
+<apex:page controller="PBS_gBUILD_PBuildingScopeSysController" sidebar="false" tabStyle="PBS_gBUILD_PBuildingScope__tab">
+    <c:PBS_gBUILD_InitializeScripts />  
+    <apex:form >
+        <apex:sectionHeader title="Scope Detail: {!sectionTitle}" />
+        <apex:pageMessages />           
+        <c:PBS_gBUILD_PageInstructions html="{!scopeInfo.detailPageIntro}" />
+        <apex:outputPanel rendered="{!showPageContent}" >        
+        <apex:pageBlock title="Step 2: {!if(scopeInfo.detailPageDetailTitle==null,'Details', scopeInfo.detailPageDetailTitle)}" >
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!edit}" value="Edit" rendered="{!viewMode}" disabled="{!readonlyMode}" />
+                <apex:commandButton action="{!descope}" value="Descope" rendered="{!editMode}" disabled="{!readonlyMode}" />
+                <apex:commandButton action="{!save}" value="Save" rendered="{!editMode}" disabled="{!readonlyMode}" />
+                <apex:commandButton action="{!cancel}" value="Cancel" rendered="{!editMode}" immediate="true" />
+                <apex:commandButton action="{!approve}" value="Approve"  rendered="{!viewMode}" disabled="{!!isApproveEnabled}" styleClass="approve"/>
+            </apex:pageBlockButtons>        
+            <apex:outputPanel rendered="{!(scopeInfo.detailPageDetailIntro!=null)}">
+                <div class="message">
+                  <!--  <apex:outputText value="{!scopeInfo.detailPageDetailIntro}" escape="false" />-->
+                  <!-- Replaced line 18 with line 20 for story PBS- 1701-->
+                  <apex:outputText value="{{!JSENCODE(htmlEncode(scopeInfo.detailPageDetailIntro))}}" escape="false" />  
+                </div>
+            </apex:outputPanel>                                    
+            <div style="display:none" id="descopeDiv">
+                <apex:inputField value="{!scopeSystem.DescopingReason__c}" />
+            </div>
+            <div id="dialog-form" title="De-Scope this item" style="background-color:white;">
+                <fieldset>
+                    <label for="jsDescopingReason">Reason</label>
+                    <input type="text" name="jsDescopingReason" id="jsDescopingReason" class="text ui-widget-content ui-corner-all" style="width:100%" />
+                </fieldset>
+            </div>                      
+            <script type="text/javascript">
+                var executeDescope = false;
+                var descopeButton = j$("input[type='submit'][value='Descope']");
+                j$("#dialog-form").dialog({
+                    autoOpen: false,
+                    height: 200,
+                    width: 400,
+                    modal: true,
+                    buttons: {
+                        "De-Scope": function () {
+                            var reason = j$("#jsDescopingReason").val();
+                            //alert(reason);
+                            executeDescope = true;
+                            j$("#descopeDiv textarea").val(reason);
+                            j$(this).dialog("close");
+                            descopeButton.trigger("click");
+                        },
+                        Cancel: function () {
+                            //alert("CANCEL");
+                            executeDescope = false;
+                            j$(this).dialog("close");
+                        }
+                    },
+                    close: function () {
+                    }
+                });
+                descopeButton.click(function () {
+                    if (executeDescope) {
+                        executeDescope = false;
+                        //alert("tiggered");return false;
+                        return true;
+                    }
+                    j$("#dialog-form").dialog("open");
+                    return false;
+                });
+            </script>                       
+            <apex:pageBlockSection title="Basic Tracking Information" columns="2">
+              <apex:outputField value="{!scopeSystem.CreatedById}"/>
+              <apex:outputField value="{!scopeSystem.CreatedDate}"/>
+              <apex:outputField value="{!scopeSystem.LastModifiedById}"/>
+              <apex:outputField value="{!scopeSystem.LastModifiedDate}"/>
+            </apex:pageBlockSection>                                              
+            <!-- Summary Information  View ----------------------------------------------------------->                     
+            <apex:outputPanel rendered="{!recordTypeId == 'AMBF_Any'}" >
+                <!-- Advanced Metering Systems:Advanced Metering for Building/Facility:Any -->
+                <apex:pageBlockSection title="Please indicate the utility being metered and how many meters will be installed" columns="2" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ChillH20Tracked__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ChillH20Meters__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ElecTracked__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ElecMeters__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.GasoilTracked__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.GasoilMeters__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SteamTracked__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SteamMeters__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.WaterTracked__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.WaterMeters__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.EmrggenfuelTracked__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.EmrggenfuelMeters__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ChillH20Tracked__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ChillH20Meters__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ElecTracked__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ElecMeters__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.GasoilTracked__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.GasoilMeters__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SteamTracked__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SteamMeters__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.WaterTracked__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.WaterMeters__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.EmrggenfuelTracked__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.EmrggenfuelMeters__c}" />
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="Meter Connectivity: Please indicate the connectivity and monitoring for installed advanced meters" columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.RemoteMonitoringCentral__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.RemoteMonitoringRegional__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.LocalMonitoringBas__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.Utility__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.RemoteMonitoringCentral__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.RemoteMonitoringRegional__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.LocalMonitoringBas__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.Utility__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.DemandResponseProgram__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="Existing Meters: Were advanced meters in place prior to project start?" columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.AdvMetersInPlacePriorStart__c}" />                                                           
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.AdvMetersInPlacePriorStart__c}" />                                                           
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="Energy Management System (EMS)* - Will you be installing an Automated EMS?" columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.InstallingAutomatedEms__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.PlugTimers__c}" />                                                           
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.InstallingAutomatedEms__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.PlugTimers__c}" />                                                           
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'SM_Any'}">
+                <!-- Advanced Metering Systems:Submetering:Any -->
+                <apex:pageBlockSection title="Please indicate the type of submetering installed" columns="1" >                                      
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.TenantSubmetering__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SysSubmetering__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.TenantSubmetering__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SysSubmetering__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="Existing Meters: Were submeters in place prior to project start?" columns="1" >                   
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SubmeteringInPlacePriorStart__c}" />                                                         
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SubmeteringInPlacePriorStart__c}" />                                                         
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'F_NewReplacement'}">
+                <!-- Building Envelope :Façade:New/Replacement -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >                                        
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SingleFacade__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewDoubleSkinFacade__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SolarFacade__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.VegFacadeScreenWall__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewVestibuleEntrance__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SingleFacade__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewDoubleSkinFacade__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SolarFacade__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.VegFacadeScreenWall__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewVestibuleEntrance__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'F_RepairsOrAlterationsToExistingFacade'}">
+                <!-- Building Envelope :Façade:Repairs or Alterations to Existing Façade -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >                                        
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SingleFacade__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewDoubleSkinFacade__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SolarFacade__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.VegFacadeScreenWall__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewVestibuleEntrance__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.RepaintingMasonry__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.InsulationInst__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.Weatherization__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SingleFacade__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewDoubleSkinFacade__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SolarFacade__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.VegFacadeScreenWall__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewVestibuleEntrance__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.RepaintingMasonry__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.InsulationInst__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.Weatherization__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'R_NewReplacement'}">
+                <!-- Building Envelope :Roof:New/Replacement -->
+                <apex:pageBlockSection title="New Roof Information" columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.HistoricRoof__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SriValue__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.InsulationActualRValueInstld__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.Slope__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.TotRoofSqFt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.HistoricRoof__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SriValue__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.InsulationActualRValueInstld__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.Slope__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.TotRoofSqFt__c}" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'R_RepairsOrAlterationsToExistingRoof'}">
+                <!-- Building Envelope :Roof:Repairs or Alterations to Existing Roof -->
+                <apex:pageBlockSection title="Roof Information" columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.HistoricRoof__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SriValue__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.InsulationActualRValueInstld__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.Slope__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.TotRoofSqFt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.HistoricRoof__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SriValue__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.InsulationActualRValueInstld__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.Slope__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.TotRoofSqFt__c}" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'Windows_NewApplication'}">
+                <!-- Building Envelope :Windows:New Application -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ReflSolarWindowTinting__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.FixedWindows__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OperableWindows__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.CaulkSealWindows__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OutdoorSolarCntrl__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ReflSolarWindowTinting__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.FixedWindows__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OperableWindows__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.CaulkSealWindows__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OutdoorSolarCntrl__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="Window Details" columns="1" >                                     
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SysCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.WindowGlazingType__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SysCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.WindowGlazingType__c}" styleClass="enum" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'Windows_ReplOrRepairsExistingWindows'}">
+                <!-- Building Envelope :Windows:Replacement or Repairs of Existing Windows -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ReflSolarWindowTinting__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.FixedWindows__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OperableWindows__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.CaulkSealWindows__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OutdoorSolarCntrl__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ReflSolarWindowTinting__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.FixedWindows__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OperableWindows__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.CaulkSealWindows__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OutdoorSolarCntrl__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="Window Details" columns="1" >                                     
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.WindowGlazingType__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SysCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.WindowGlazingType__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SysCnt__c}" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'EPSLS_Any'}">
+                <!-- Building Tune-up or Utility Improvements :Electrical Peak Shaving / Load Shifting:Any -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >                  
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.GasCooling__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ThermalEnergyStorage__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.GasCooling__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ThermalEnergyStorage__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'APLR_Any'}">
+                <!-- Building Tune-up or Utility Improvements :Appliance/Plug-Load Reduction:Any -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >                 
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.DelampVendingMachines__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.EnergystarProducts__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.PlugTimers__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ReplaceAirCooledIceEqp__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ReplaceRefrigerators__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                     
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.DelampVendingMachines__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.EnergystarProducts__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.PlugTimers__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ReplaceAirCooledIceEqp__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ReplaceRefrigerators__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                     
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'ERPI_Any'}">
+                <!-- Building Tune-up or Utility Improvements :Energy Related Process Improvements:Any -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.IndustrialProcessImprovement__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ProductionManufacturingImprovements__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.RecyclingOtherWasteStreamReductions__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                     
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.IndustrialProcessImprovement__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ProductionManufacturingImprovements__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.RecyclingOtherWasteStreamReductions__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                     
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'EUDS_Any'}">
+                <!-- Building Tune-up or Utility Improvements :Energy/Utility Distribution Systems:Any -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.GasDistributionSysInst__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.PowerFactorCorrection__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.PowerQualityUpgs__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.TransformersInst__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                     
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.GasDistributionSysInst__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.PowerFactorCorrection__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.PowerQualityUpgs__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.TransformersInst__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                     
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'CM_Any'}">
+                <!-- Building Tune-up or Utility Improvements :Commissioning Measures:Any -->
+                <apex:pageBlockSection title="Did your project complete a recommissioning study prior to project initiation?" columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.RecommStudyDonePriorInitiation__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.RecommStudyDonePriorInitiation__c}" />
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="Please indicate what systems or type of commissioning the project is planning to complete:" columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ComishFireSuppressionAlarmSys__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ComishInteriorPlumbingSysAutomation__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ComishExteriorPlumbingSysAutomation__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ComishHvacAutomation__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ComishElectricalSysAutomation__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ComishLightingSysAutomation__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ComishBldgEnvelope__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ThermalImaging__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.BlowerDoorTest__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.EnhComish__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                     
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ComishFireSuppressionAlarmSys__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ComishInteriorPlumbingSysAutomation__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ComishExteriorPlumbingSysAutomation__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ComishHvacAutomation__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ComishElectricalSysAutomation__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ComishLightingSysAutomation__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ComishBldgEnvelope__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ThermalImaging__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.BlowerDoorTest__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.EnhComish__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                     
+                </apex:pageBlockSection>                
+            </apex:outputPanel>                     
+            <apex:outputPanel rendered="{!recordTypeId == 'RA_Any'}">
+                <!-- Building Tune-up or Utility Improvements :Rate Adjustments:Any -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ChangeMoreFavorableRateSchedule__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.EnergyCostReducThroughRateAdj__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.EnergyServiceBillingMeterAuditingRecs__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.LowerEnergyCostSuppliers__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                     
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ChangeMoreFavorableRateSchedule__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.EnergyCostReducThroughRateAdj__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.EnergyServiceBillingMeterAuditingRecs__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.LowerEnergyCostSuppliers__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                     
+                </apex:pageBlockSection>                
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordTypeId == 'AH_NewReplacement'}">
+                <!-- HVAC:Air Handler:New/Replacement -->
+                <apex:pageBlockSection title="Type of Replacement or Installation" columns="1" >                    
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.InstType__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.RplcType__c}" styleClass="enum" />
+                  <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ChilledBeam__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.RadiantFlooring__c}" styleClass="enum" />    <!-- SD  -->                
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.InstType__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.RplcType__c}" styleClass="enum" />   
+                  <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ChilledBeam__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.RadiantFlooring__c}" styleClass="enum" />  <!-- SD  -->                      
+                </apex:pageBlockSection>                
+            </apex:outputPanel>                         
+            <apex:outputPanel rendered="{!recordTypeId == 'AH_RepairsOrAlterations'}">
+                <!-- HVAC:Air Handler:Repairs or Alterations -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.DemandCntrlVentlForAhu__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.MotorRplcs__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.UpgEconomizers__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.UvLighting__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.InstallVfdsOnAirHandlerUnits__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.CondensateCollection__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.IncludesTerminalUnitRplcs__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.VariantRefrigerantFlowSys__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.DedicatedOutdoorAirSys__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.EnergyRecovery__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ChilledBeam__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.RadiantFlooring__c}" />   <!-- SD  -->  
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                     
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.DemandCntrlVentlForAhu__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.MotorRplcs__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.UpgEconomizers__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.UvLighting__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.InstallVfdsOnAirHandlerUnits__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.CondensateCollection__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.IncludesTerminalUnitRplcs__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.VariantRefrigerantFlowSys__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.DedicatedOutdoorAirSys__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.EnergyRecovery__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ChilledBeam__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.RadiantFlooring__c}" />   <!-- SD  -->  
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                     
+                </apex:pageBlockSection>                
+            </apex:outputPanel>             
+            <apex:outputPanel rendered="{!recordTypeId == 'B_NewReplacement'}">
+                <!-- HVAC:Boilers:New/Replacement -->
+                <apex:pageBlockSection title="Summary of New Boiler Installations:" columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.InstType__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.InstType__c}" styleClass="enum" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordTypeId == 'B_RepairsOrAlterations'}">
+                <!-- HVAC:Boilers:Repairs or Alterations -->
+                <apex:pageBlockSection title="Please indicate the system's fuel type:" columns="1" >                                        
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.FuelType__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.FuelType__c}" styleClass="enum" />
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.UpgHeatExchanger__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.UpgBoilerCntrls__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.BoilerCntrlsUpgType__c}" styleClass="enum"/>
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.BoilerDecentralization__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ReplacePumps__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                     
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.UpgHeatExchanger__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.UpgBoilerCntrls__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.BoilerCntrlsUpgType__c}" styleClass="enum"/>
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.BoilerDecentralization__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ReplacePumps__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                     
+                </apex:pageBlockSection>                
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordTypeId == 'Chl_NewReplacement'}">
+                <!-- HVAC:Chillers:New/Replacement -->
+                <apex:pageBlockSection title="Summary of New Chillers Installations:" columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.InstType__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.InstType__c}" styleClass="enum" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'Chl_RepairsOrAlterations'}">
+                <!-- HVAC:Chillers:Repairs or Alterations -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ThermalStorageSys__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.UpgCntrls__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.VfdsInstldOnExistingChiller__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.WatersideEconomizer__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ReplaceChillerPumps__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ReplaceCondensorPumps__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                 
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ThermalStorageSys__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.UpgCntrls__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.VfdsInstldOnExistingChiller__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.WatersideEconomizer__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ReplaceChillerPumps__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ReplaceCondensorPumps__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                 
+                </apex:pageBlockSection>                
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordTypeId == 'C_RepairsOrAlterations'}">
+                <!-- HVAC:Controls (Building Automation Systems / EMCS):Repairs or Alterations -->
+                <apex:pageBlockSection title="Please indicate the system protocol for controls:" columns="1" >                                  
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.Protocol__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.Protocol__c}" styleClass="enum" />
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >                                        
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.CarbonDioxideSpaceSensors__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OutsideAirModulationInfo__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.HartmanLoop__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.AdvMeteringConnectedBas__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.LightingCntrlsInterface__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.LoadSheddingProgrammingUtilityRebate__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.RemoteMonitoring__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                 
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.CarbonDioxideSpaceSensors__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OutsideAirModulationInfo__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.HartmanLoop__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.AdvMeteringConnectedBas__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.LightingCntrlsInterface__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.LoadSheddingProgrammingUtilityRebate__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.RemoteMonitoring__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                 
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'C_NewControls'}">
+                <!-- HVAC:Controls (Building Automation Systems / EMCS):New Controls -->
+                <apex:pageBlockSection title="Smart Buildings Program:" columns="1" >                   
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SmartBldgsProgram__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SmartBldgsProgram__c}" />
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="If this is part of the smart buildings program, please indicate what systems are included:" columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.Elevators__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.CardReaders__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.VideoCameras__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.Bas__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.AdvMeters__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.Elevators__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.CardReaders__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.VideoCameras__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.Bas__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.AdvMeters__c}" />
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="Please indicate the system protocol for new controls:" columns="1" >                                      
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SysProtocol__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SysProtocol__c}" styleClass="enum" />
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >                                        
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.CarbonDioxideSpaceSensors__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OutsideAirModulationInfo__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.HartmanLoop__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.AdvMeteringConnectedBas__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.LightingCntrlsInterface__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.LoadSheddingProgrammingUtilityRebate__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.RemoteMonitoring__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                 
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.CarbonDioxideSpaceSensors__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OutsideAirModulationInfo__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.HartmanLoop__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.AdvMeteringConnectedBas__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.LightingCntrlsInterface__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.LoadSheddingProgrammingUtilityRebate__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.RemoteMonitoring__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                 
+                </apex:pageBlockSection>                
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordTypeId == 'Other_ExhaustAirsideRecoverySystems'}">
+                <!-- HVAC:Other:Exhaust Airside Recovery Systems  -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >                                        
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.HeatWheel__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExhaustAirHeatExchanger__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.RunAroundCoils__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                 
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.HeatWheel__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExhaustAirHeatExchanger__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.RunAroundCoils__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                 
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'Other_Refrigeration'}">
+                <!-- HVAC:Other:Refrigeration -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >                                        
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.RplcIceEqpHighEfficiencyUnits__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                 
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.RplcIceEqpHighEfficiencyUnits__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                 
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'IL_Daylighting'}">
+                <!-- Lighting:Indoor Lighting:Daylighting -->
+                <apex:pageBlockSection title="Please indicate what daylighting elements, improvements or measures are being implemented." columns="1" >                 
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SensorDrivenElectricalShades__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.DaylightHarvestingSensors__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SensorCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SensorAreaCntrld__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SensorDrivenElectricalShades__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.DaylightHarvestingSensors__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SensorCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SensorAreaCntrld__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="Was the building originally designed to include daylighting strategies?" columns="1" >                  
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OriginallyIntendedForDaylighting__c}" />                                                         
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OriginallyIntendedForDaylighting__c}" />                                                         
+                </apex:pageBlockSection>                
+            </apex:outputPanel>                         
+            <apex:outputPanel rendered="{!recordTypeId == 'IL_LightingControls'}">
+                <!-- Lighting:Indoor Lighting:Lighting Controls -->
+                <apex:pageBlockSection title="Please indicate what lighting controls elements, improvements or measures are being implemented." columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.BasInterfaceLighting__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.BiLevelSwitching__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.DigitalBallastsAndOrDigitalCntrls__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OccVacancySensors__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SensorCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SensorAreaCntrld__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OccVacancySensorsForTaskLighting__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.StairwellCntrls__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.TimeScheduling__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.Dali__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OccupantCntrllability__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.BasInterfaceLighting__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.BiLevelSwitching__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.DigitalBallastsAndOrDigitalCntrls__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OccVacancySensors__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SensorCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SensorAreaCntrld__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OccVacancySensorsForTaskLighting__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.StairwellCntrls__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.TimeScheduling__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.Dali__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OccupantCntrllability__c}" />
+                </apex:pageBlockSection>                    
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'IL_RetrofitOrReplacement'}">
+                <!-- Lighting:Indoor Lighting:Retrofit or Replacement -->
+                <apex:pageBlockSection title="General Information" columns="1" >                    
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.BaselineLightingPowerDensity__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.AnticipatedLightingPowerDensity__c}" />                      
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SqFtOfApplication__c}" />  
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.LightingTypeBaseline__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.BaselineLightingPowerDensity__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.AnticipatedLightingPowerDensity__c}" />                      
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SqFtOfApplication__c}" />  
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.LightingTypeBaseline__c}" styleClass="enum" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'IL_NewApplication'}">
+                <!-- Lighting:Indoor Lighting:New Application -->
+                <apex:pageBlockSection title="General Information" columns="1" >                    
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.AnticipatedLightingPowerDensity__c}" />                      
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SqFtOfApplication__c}" />  
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.AnticipatedLightingPowerDensity__c}" />                      
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SqFtOfApplication__c}" />  
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'OL_NewApplication'}">
+                <!-- Lighting:Outdoor Lighting:New Application -->
+                <apex:pageBlockSection title="General Information" columns="1" >                    
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.AnticipatedLightingPowerDensity__c}" />                      
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SqFtOfApplication__c}" />  
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.AnticipatedLightingPowerDensity__c}" />                      
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SqFtOfApplication__c}" />  
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'OL_RetrofitOrReplacement'}">
+                <!-- Lighting:Outdoor Lighting:Retrofit or Replacement -->
+                <apex:pageBlockSection title="General Information" columns="1" >                    
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.BaselineLightingPowerDensity__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.AnticipatedLightingPowerDensity__c}" />                      
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SqFtOfApplication__c}" />  
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.LightingTypeBaseline__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.BaselineLightingPowerDensity__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.AnticipatedLightingPowerDensity__c}" />                      
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SqFtOfApplication__c}" /> 
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.LightingTypeBaseline__c}" styleClass="enum" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'BG_NewSystem'}">
+                <!-- Renewable Energy:Biogas:New System -->
+                <apex:pageBlockSection title="General Information" columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SysCost__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SysCost__c}" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'BG_RepairsOrAlterations'}">
+                <!-- Renewable Energy:Biogas:Repairs or Alterations -->
+                <!-- NONE BY DESIGN -->
+            </apex:outputPanel>     
+            <apex:outputPanel rendered="{!recordTypeId == 'BM_NewSystem'}">
+                <!-- Renewable Energy:Biomass:New System -->
+                <apex:pageBlockSection title="General Information" columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.FuelSource__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.AnnualSysProduction__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SysCost__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.FuelSource__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.AnnualSysProduction__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SysCost__c}" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'BM_RepairsOrAlterations'}">
+                <!-- Renewable Energy:Biomass:Repairs or Alterations -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope:" columns="1" >                 
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ReplaceFeedSys__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.UpgCntrls__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ReplaceFeedSys__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.UpgCntrls__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                </apex:pageBlockSection>                
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordTypeId == 'DG_Any'}">
+                <!-- Renewable Energy:Distributed Generation:Any -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >                    
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.CogenerationSysInst__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.MicroturbinesInstld__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.FuelCellsInst__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.CogenerationSysInst__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.MicroturbinesInstld__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.FuelCellsInst__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                </apex:pageBlockSection>                
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordTypeId == 'G_NewSystem'}">
+                <!-- Renewable Energy:Geothermal:New System -->
+                <apex:pageBlockSection title="Number of wells: Please provide number of wells drilled as part of this geothermal application." columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SysCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SysCnt__c}" />
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="Well depth: Please provide average well depth for new wells." columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.WellDepth__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.WellDepth__c}" />
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="System Details: Please indicate whether this geothermal system is cooling or heating dominant and enter the associated system and well size." columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.DominantType__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.Tottonnage__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.Tonnageperwell__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.Totmmbtu__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.Mmbtuperwell__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.DominantType__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.Tottonnage__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.Tonnageperwell__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.Totmmbtu__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.Mmbtuperwell__c}" />
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="Geothermal Well Drilling Cost - Please provide the total cost for drilling the geothermal wells." columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SysCost__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SysCost__c}" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordTypeId == 'G_RepairsOrAlterations'}">
+                <!-- Renewable Energy:Geothermal:Repairs or Alterations -->
+                <!-- NONE BY DESIGN -->
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordTypeId == 'PV_NewInstallationOrArrays'}">
+                <!-- Renewable Energy:Photovoltaic:New Installation or Arrays -->
+                <apex:pageBlockSection title="General Information" columns="1" >                                        
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.UrlPvTrackingWebsite__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SysCost__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.UrlPvTrackingWebsite__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SysCost__c}" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'PV_RepairsOrAlterations'}">
+                <!-- Renewable Energy:Photovoltaic:Repairs or Alterations -->
+                <apex:pageBlockSection title="Please indicate which elements, features, or work items are included in your scope." columns="1" >                                        
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.UpgReplaceInverters__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.UpgReplaceInverters__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                </apex:pageBlockSection>                
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordTypeId == 'ST_NewSystem'}">
+                <!-- Renewable Energy:Solar Thermal:New System -->
+                <apex:pageBlockSection title="General Information" columns="1" >                                        
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ForDomesticHotWater__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ForHeat__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SysType__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ForDomesticHotWater__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ForHeat__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SysType__c}" styleClass="enum" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'ST_PassiveSolarHeatingVentilation'}">
+                <!-- Renewable Energy:Solar Thermal:Passive Solar Heating Ventilation -->
+                <!-- NONE BY DESIGN -->
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'ST_RepairsOrAlterations'}">
+                <!-- Renewable Energy:Solar Thermal:Repairs or Alterations -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >                                        
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.WaterTankRplc__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.WaterTankRplc__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                </apex:pageBlockSection>                
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordTypeId == 'Wind_NewInstallationOrTurbines'}">
+                <!-- Renewable Energy:Wind:New Installation or Turbines -->
+                <apex:pageBlockSection title="General Information" columns="1" >                    
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SysCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.AverageWindSpeedArea__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.AnnualEnergyProductionEffEst__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SysCost__c}" />                                                          
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SysCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.AverageWindSpeedArea__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.AnnualEnergyProductionEffEst__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SysCost__c}" />                                                          
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'Wind_RepairsOrAlterations'}">
+                <!-- Renewable Energy:Wind:Repairs or Alterations -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >                                        
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                </apex:pageBlockSection>                
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordTypeId == 'IWC_NewLowFlowFixtures'}">
+                <!-- Water:Indoor Water Conservation:New Low-Flow Fixtures (Recommended for New Construction) -->
+                <apex:pageBlockSection title="Urinals" columns="2" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewUrinalsWaterless__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewUrinalsWaterlessCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewUrinals0Pt125Gpf__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewUrinals0Pt125Cnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewUrinals0Pt5Gpf__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewUrinals0Pt5GpfCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewUrinalsSensors__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewUrinalsSensorsCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewUrinalsWaterless__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewUrinalsWaterlessCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewUrinals0Pt125Gpf__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewUrinals0Pt125Cnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewUrinals0Pt5Gpf__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewUrinals0Pt5GpfCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewUrinalsSensors__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewUrinalsSensorsCnt__c}" />
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="Water Closets" columns="2" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWC1Pt28GpfToilets__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWC1Pt28GpfToiletsCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWC1Pt6GpfToilets__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWC1Pt6GpfToiletsCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWCUltraLowToilet__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWCUltratolowToiletCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWCPressureAssistToilet__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWCPressureAssistToiletCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWCLavAerators__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWCLavAeratorsCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWCLavSensors__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWCLavSensorsCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWCToiletSensors__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWCToiletSensorsCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWCDualFlushValves__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWCDualFlushValvesCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWC1Pt28GpfToilets__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWC1Pt28GpfToiletsCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWC1Pt6GpfToilets__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWC1Pt6GpfToiletsCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWCUltraLowToilet__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWCUltratolowToiletCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWCPressureAssistToilet__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWCPressureAssistToiletCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWCLavAerators__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWCLavAeratorsCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWCLavSensors__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWCLavSensorsCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWCToiletSensors__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWCToiletSensorsCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWCDualFlushValves__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWCDualFlushValvesCnt__c}" />
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="Other" columns="2" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherLowFlowShowerheads__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherLowFlowShowerheadsCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherLowFlowFaucets__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherLowFlowFaucetsCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherLavAerators__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherLavAeratorsCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherLavSensors__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherLavSensorsCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherWatersenseFempDevices__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherWatersenseFempDevicesCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherLowFlowShowerheads__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherLowFlowShowerheadsCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherLowFlowFaucets__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherLowFlowFaucetsCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherLavAerators__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherLavAeratorsCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherLavSensors__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherLavSensorsCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherWatersenseFempDevices__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherWatersenseFempDevicesCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'IWC_FixtureReplacementWithLowFlow'}">
+                <!-- Water:Indoor Water Conservation:Fixture Replacement with Low Flow -->
+                <apex:pageBlockSection title="Existing Fixture Information: Please provide counts of the existing fixtures being removed or replaced." columns="1" >                                        
+                    <apex:pageBlockSection title="Urinals" columns="2" >                                        
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExistUrinals0Pt5Gpf__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExistUrinals0Pt5GpfCnt__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExistUrinalsPt61Gpf__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExistUrinalsPt61GpfCnt__c}" />                           
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExistUrinals23Gpf__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExistUrinals23GpfCnt__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExistUrinals4PlusGpf__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExistUrinals4PlusGpfCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExistUrinals0Pt5Gpf__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExistUrinals0Pt5GpfCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExistUrinalsPt61Gpf__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExistUrinalsPt61GpfCnt__c}" />                           
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExistUrinals23Gpf__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExistUrinals23GpfCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExistUrinals4PlusGpf__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExistUrinals4PlusGpfCnt__c}" />
+                    </apex:pageBlockSection>                
+                    <apex:pageBlockSection title="Water Closets" columns="2" >                                      
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExistToilets02Gpf__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExistToilets02GpfCnt__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExistToilets35Gpf__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExistToilets35GpfCnt__c}" />
+                       <!--   <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExistToilets4PlusGpf__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExistToilets4PlusGpfCnt__c}" /> SD 020416-->
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExistToilets68Gpf__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExistToilets68GpfCnt__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExistToilets9PlusGpf__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ExistToilets9PlusGpfCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExistToilets02Gpf__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExistToilets02GpfCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExistToilets35Gpf__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExistToilets35GpfCnt__c}" />
+                       <!--    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExistToilets4PlusGpf__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExistToilets4PlusGpfCnt__c}" /> SD 020416--> 
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExistToilets68Gpf__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExistToilets68GpfCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExistToilets9PlusGpf__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ExistToilets9PlusGpfCnt__c}" />
+                    </apex:pageBlockSection>                
+                    <apex:pageBlockSection title="Other" columns="1" >                                      
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                    </apex:pageBlockSection>                
+                </apex:pageBlockSection>                
+                <apex:pageBlockSection title="New Fixture Counts - Please indicate the type of low flow fixtures being installed and provide estimated counts of each type." columns="1" >                                      
+                    <apex:pageBlockSection title="Urinals" columns="2" >
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewUrinalsWaterless__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewUrinalsWaterlessCnt__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewUrinals0Pt125Gpf__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewUrinals0Pt125Cnt__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewUrinals0Pt5Gpf__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewUrinals0Pt5GpfCnt__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewUrinalsSensors__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewUrinalsSensorsCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewUrinalsWaterless__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewUrinalsWaterlessCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewUrinals0Pt125Gpf__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewUrinals0Pt125Cnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewUrinals0Pt5Gpf__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewUrinals0Pt5GpfCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewUrinalsSensors__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewUrinalsSensorsCnt__c}" />
+                    </apex:pageBlockSection>                
+                    <apex:pageBlockSection title="Water Closets" columns="2" >
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWC1Pt28GpfToilets__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWC1Pt28GpfToiletsCnt__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWC1Pt6GpfToilets__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWC1Pt6GpfToiletsCnt__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWCUltraLowToilet__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWCUltratolowToiletCnt__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWCPressureAssistToilet__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWCPressureAssistToiletCnt__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWCDualFlushValves__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewWCDualFlushValvesCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWC1Pt28GpfToilets__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWC1Pt28GpfToiletsCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWC1Pt6GpfToilets__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWC1Pt6GpfToiletsCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWCUltraLowToilet__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWCUltratolowToiletCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWCPressureAssistToilet__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWCPressureAssistToiletCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWCDualFlushValves__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewWCDualFlushValvesCnt__c}" />
+                    </apex:pageBlockSection>                
+                    <apex:pageBlockSection title="Other" columns="2" >
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherLowFlowShowerheads__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherLowFlowShowerheadsCnt__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherLowFlowFaucets__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherLowFlowFaucetsCnt__c}" />                            
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherLavAerators__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherLavAeratorsCnt__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherLavSensors__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherLavSensorsCnt__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherWatersenseFempDevices__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NewOtherWatersenseFempDevicesCnt__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherLowFlowShowerheads__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherLowFlowShowerheadsCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherLowFlowFaucets__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherLowFlowFaucetsCnt__c}" />                            
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherLavAerators__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherLavAeratorsCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherLavSensors__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherLavSensorsCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherWatersenseFempDevices__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NewOtherWatersenseFempDevicesCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                    </apex:pageBlockSection>                
+                </apex:pageBlockSection>                
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordTypeId == 'IWC_ProcessEquipmentReductionMeasures'}">
+                <!-- Water:Indoor Water Conservation:Process Equipment Reduction Measures -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >                 
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.RplcWaterCooledEqpAirCooledEqp__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.RplcOnceThroughCoolingSys__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ModifyEqpClosedLoopSys__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SidestreamFiltration__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.RplcWaterCooledEqpAirCooledEqp__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.RplcOnceThroughCoolingSys__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ModifyEqpClosedLoopSys__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SidestreamFiltration__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                                                                                                                                                             
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'OWC_OnsiteSewerOrStormwaterTreatmentSys'}">
+                <!-- Water:Outdoor Water Conservation:Onsite Sewer or Stormwater Treatment Systems -->
+                <!-- NONE BY DESIGN -->
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'OWC_WaterEfficientIrrigAndLandscaping'}">
+                <!-- Water:Outdoor Water Conservation:Water Efficient Irrigation and Landscaping -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.IrrigationMeter__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.IrrigationSmartCntrller__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.InstallEfficientSprinklers__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.InstallRainSensingTech__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.LowNoWaterLandscaping__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.Hydrozoning__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                 
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.IrrigationMeter__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.IrrigationSmartCntrller__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.InstallEfficientSprinklers__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.InstallRainSensingTech__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.LowNoWaterLandscaping__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.Hydrozoning__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                 
+                </apex:pageBlockSection>        
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'OWC_WaterAndSewerConservationSystems'}">
+                <!-- Water:Outdoor Water Conservation:Water and Sewer Conservation Systems -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.RainwaterCollection__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.StormWaterCollectionAbsorption__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.StormwaterTradingCreditsAvailable__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.GrayWaterSysInstld__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.CondensateRecovery__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                     
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.RainwaterCollection__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.StormWaterCollectionAbsorption__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.StormwaterTradingCreditsAvailable__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.GrayWaterSysInstld__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.CondensateRecovery__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                                                     
+                </apex:pageBlockSection> 
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordTypeId == 'CT_NewReplacement'}">
+                <!-- HVAC:Cooling Tower:New/Replacement -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope:" columns="1" >                                     
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.CoolingTowerMeter__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.FillRplc__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NonChemicalWaterTreatment__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.WatersideEconomizer__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.CoolingTowerMeter__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.FillRplc__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NonChemicalWaterTreatment__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.WatersideEconomizer__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'CT_RepairsOrAlterations'}">
+                <!-- HVAC:Cooling Tower:Repairs or Alterations -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope:" columns="1" >                                     
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.CoolingTowerMeter__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.FillRplc__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NonChemicalWaterTreatment__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.WatersideEconomizer__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.VfdsPremiumMotorRplc__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.CoolingTowerMeter__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.FillRplc__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NonChemicalWaterTreatment__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.WatersideEconomizer__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.VfdsPremiumMotorRplc__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'Other_ChilledWaterHotH2OAndSteamDistSys'}">
+                <!-- HVAC:Other:Any -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope:" columns="1" >       
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.PipingInsulationInst__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.HotWaterHeaterRepairRplc__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SteamTrapRepairRplc__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.CondensateCollection__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />                 
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.PipingInsulationInst__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.HotWaterHeaterRepairRplc__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SteamTrapRepairRplc__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.CondensateCollection__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />                 
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'IDLS_Any'}">
+                <!-- Indoor Environmental Quality:Indoor Daylighting or Lighting Strategies:Any -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope:" columns="1" >                                     
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ClerestoryIndoorGlazing__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.GlazingGlareCntrl__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.LightShelves__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.ReflectanceIndoorSurfaces__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ClerestoryIndoorGlazing__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.GlazingGlareCntrl__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.LightShelves__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.ReflectanceIndoorSurfaces__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'TCVM_Any'}">
+                <!-- Indoor Environmental Quality:Thermal Comfort and Ventilation Measures:Any -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope:" columns="1" >                                     
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.RebalancingAir__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.RebalancingWater__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OccupantThermalComfortSys__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.TaskAmbientConditioningSys__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.UnderfloorAirDistributionDataCenter__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.UnderfloorAirDistribNontodataCenter__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.DedicatedOutdoorAirSys__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.RebalancingAir__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.RebalancingWater__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OccupantThermalComfortSys__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.TaskAmbientConditioningSys__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.UnderfloorAirDistributionDataCenter__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.UnderfloorAirDistribNontodataCenter__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.DedicatedOutdoorAirSys__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'IL_OtherLightingImprovements'}">
+                <!-- Lighting:Indoor Lighting:Other Lighting Improvements
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope:" columns="1" >                                     
+                </apex:pageBlockSection>                
+                -->
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'OL_LightingControls'}">
+                <!-- Lighting:Outdoor Lighting:Lighting Controls -->
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope:" columns="1" >                      
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OccVacancySensors__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SensorCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.SensorAreaCntrld__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.PhotocellsDaylightSwitching__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.TimeScheduling__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.BiLevel__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NoCntrl__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OccVacancySensors__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SensorCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.SensorAreaCntrld__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.PhotocellsDaylightSwitching__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.TimeScheduling__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.BiLevel__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NoCntrl__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.OtherSpecify__c}" />
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+            <apex:outputPanel rendered="{!recordTypeId == 'Other_Any'}">
+                <!-- Other Category:Other Scope:Chilled Water/ Hot Water and Steam Distribution Systems 
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope:" columns="1" >                                     
+                </apex:pageBlockSection>                
+                -->
+            </apex:outputPanel>         
+            <apex:outputPanel >
+                <!-- ALL -->
+                <apex:pageBlockSection title="Narrative" columns="1" >                  
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.Narr__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NarrTbd__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!scopeSystem.NarrTbdText__c}" />                  
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.Narr__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NarrTbd__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!scopeSystem.NarrTbdText__c}" />                  
+                </apex:pageBlockSection>                
+            </apex:outputPanel>         
+        </apex:pageBlock>
+        <apex:pageBlock title="Step 3: {!if(scopeInfo.detailPageSystemTitle==null,'Systems', scopeInfo.detailPageSystemTitle)}" rendered="{!renderSystemInformation}" >
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!newSystem}" value="New" disabled="{!readonlyMode}" />
+            </apex:pageBlockButtons>        
+            <apex:outputPanel rendered="{!(scopeInfo.detailPageSystemIntro!=null)}"> 
+               <div class="message">
+                   <!-- <apex:outputText value="{!scopeInfo.detailPageSystemIntro}" escape="false"/>-->
+                    <!-- Replaced line 1160 with line 1162 for story PBS- 1701-->
+                   <apex:outputText value="{!JSENCODE(htmlEncode(scopeInfo.detailPageSystemIntro))}" escape="false"/> 
+                </div>
+            </apex:outputPanel>                                    
+            <apex:pageBlockTable value="{!systemInfos}" var="z" styleClass="dataTable">
+                <apex:column headerValue="Action">
+                    <apex:commandLink action="{!openSystem}" value="Open">
+                        <apex:param name="p1" value="{!z.ssd.id}" assignTo="{!paramSystemInfoId}"/>             
+                    </apex:commandLink>
+                    <apex:outputPanel rendered="{!readWriteMode}">                  
+                         &nbsp;|&nbsp;  
+                        <apex:commandLink action="{!deleteSystem}" value="Del" styleClass="delCmd">
+                            <apex:param name="p2" value="{!z.ssd.id}" assignTo="{!paramSystemInfoId}"/>             
+                        </apex:commandLink>
+                    </apex:outputPanel>                     
+                </apex:column>
+                <apex:column headerValue="Label">
+                    <apex:outputText value="{!z.ssd.Label__c}" />
+                </apex:column>              
+                <apex:column headerValue="Modified At">
+                    <apex:outputField value="{!z.ssd.LastModifiedDate}" />
+                </apex:column>
+                <apex:column headerValue="Modified By">
+                    <apex:outputField value="{!z.ssd.LastModifiedById}" />
+                </apex:column>
+            </apex:pageBlockTable>          
+        </apex:pageBlock>       
+        </apex:outputPanel>
+    </apex:form>
+</apex:page>

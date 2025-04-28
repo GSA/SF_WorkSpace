@@ -1,0 +1,28 @@
+<apex:component controller="PBS_gBUILD_LinkListCController">
+    <apex:attribute name="linkListName" 
+        type="String" 
+        assignTo="{!Name}" 
+        required="true" 
+        description="The name of the link list app config object" />
+    <apex:attribute name="linkListName" 
+        type="String" 
+        assignTo="{!Name}" 
+        required="true" 
+        description="The name of the link list app config object" />
+    <apex:attribute name="linkTarget" 
+        type="String" 
+        assignTo="{!Target}" 
+        required="false" 
+        description="The target window for links to open in" />
+
+    <div style="background-color:#FFFFAA;padding:10px">
+        <h2>{!Title}</h2>
+        <ul style="padding:0">        
+            <apex:repeat value="{!links}" var="z">
+                <li>
+                    <apex:outputLink value="{!z.Reference}" target="{!Target}">{!z.Text}</apex:outputLink>
+                </li>
+            </apex:repeat>        
+        </ul>
+    </div>    
+</apex:component>

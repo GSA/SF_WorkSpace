@@ -1,0 +1,95 @@
+<apex:page controller="PBS_gBUILD_PContactsController" tabstyle="PBS_gBUILD_Contacts__tab" sidebar="false">
+    <c:PBS_gBUILD_InitializeScripts />  
+    <apex:form >
+        <apex:pageMessages />           
+        <c:PBS_gBUILD_PageInstructions html="{!AppConfig.PageContactsIntro__c}" />
+        <apex:outputPanel rendered="{!showPageContent}" >
+            <apex:pageBlock >
+                <apex:pageBlockButtons >
+                    <apex:commandButton action="{!add}" value="New Internal User Role" disabled="{!readonlyMode}"/>
+                    <apex:commandButton action="{!edit}" value="Edit" rendered="{!viewMode}" disabled="{!readonlyMode}" />
+                    <apex:commandButton action="{!save}" value="Save" rendered="{!editMode}" disabled="{!readonlyMode}" />
+                    <apex:commandButton action="{!cancel}" value="Cancel" rendered="{!editMode}" />
+                </apex:pageBlockButtons>            
+                <apex:pageBlockSection title="Internal Users explicitly assigned to this project">
+                    <apex:pageBlockTable value="{!ProjectActors}" var="z" styleClass="dataTable">
+                        <apex:column headerValue="Action" rendered="{!readWriteMode}">
+                            <apex:commandLink action="{!del}" value="Del" styleClass="delCmd" rendered="{!z.RowCause!='Owner'}">
+                                <apex:param name="id" value="{!z.ShareId}" assignTo="{!actionId}"/>              
+                            </apex:commandLink>
+                        </apex:column>
+                        <apex:column headerValue="Name">
+                            <apex:outputLink rendered="{!z.Link!=null}" value="{!z.Link}">{!z.Name}</apex:outputLink>
+                            <apex:outputText rendered="{!z.Link==null}" value="{!z.Name}" />
+                        </apex:column>
+                        <apex:column headerValue="Access Level">
+                            <apex:outputText value="{!z.AccessLevel}" />
+                        </apex:column>
+                        <apex:column headerValue="Reason">
+                            <apex:outputText value="{!z.RowCause}" />
+                        </apex:column>
+                    </apex:pageBlockTable>
+                </apex:pageBlockSection>                   
+                <apex:pageBlockSection title="Customer Portal Users explicitly assigned to this project" columns="2">
+                    <apex:inputField rendered="{!editMode}" value="{!pro.CpViewer1__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!pro.CpEditor1__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!pro.CpViewer2__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!pro.CpEditor2__c}" /> 
+                    <apex:inputField rendered="{!editMode}" value="{!pro.CpViewer3__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!pro.CpEditor3__c}" />  
+                     <apex:inputField rendered="{!editMode}" value="{!pro.CpViewer4__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!pro.CpEditor4__c}" />  
+                     <apex:inputField rendered="{!editMode}" value="{!pro.CpViewer5__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!pro.CpEditor5__c}" />  
+                     <apex:inputField rendered="{!editMode}" value="{!pro.CpViewer6__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!pro.CpEditor6__c}" />  
+                     <apex:inputField rendered="{!editMode}" value="{!pro.CpViewer7__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!pro.CpEditor7__c}" />  
+                     <apex:inputField rendered="{!editMode}" value="{!pro.CpViewer8__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!pro.CpEditor8__c}" />  
+                     <apex:inputField rendered="{!editMode}" value="{!pro.CpViewer9__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!pro.CpEditor9__c}" />  
+                     <apex:inputField rendered="{!editMode}" value="{!pro.CpViewer10__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!pro.CpEditor10__c}" />                    
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpViewer1__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpEditor1__c}" /> 
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpViewer2__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpEditor2__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpViewer3__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpEditor3__c}" />  
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpViewer4__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpEditor4__c}" />  
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpViewer5__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpEditor5__c}" />  
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpViewer6__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpEditor6__c}" />  
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpViewer7__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpEditor7__c}" />  
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpViewer8__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpEditor8__c}" />  
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpViewer9__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpEditor9__c}" />  
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpViewer10__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!pro.CpEditor10__c}" />                                        
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Internal Users with access due to membership in global gBUILD groups">
+                    <apex:pageBlockTable value="{!GlobalActors}" var="z" styleClass="dataTable">
+                        <apex:column headerValue="Name">
+                            <apex:outputLink rendered="{!z.Link!=null}" value="{!z.Link}">{!z.Name}</apex:outputLink>
+                            <apex:outputText rendered="{!z.Link==null}" value="{!z.Name}" />
+                        </apex:column>
+                        <apex:column headerValue="Type">
+                            <apex:outputText value="{!z.Type}" />
+                        </apex:column>
+                        <apex:column headerValue="Access Level">
+                            <apex:outputText value="{!z.AccessLevel}" />
+                        </apex:column>
+                        <apex:column headerValue="Reason">
+                            <apex:outputText value="{!z.RowCause}" />
+                        </apex:column>
+                    </apex:pageBlockTable>
+                </apex:pageBlockSection>                               
+            </apex:pageBlock>
+        </apex:outputPanel>
+    </apex:form>
+</apex:page>

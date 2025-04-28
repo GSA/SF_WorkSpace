@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CalculatedSimplePaybackF__c</fullName>
+    <description>Calculated Simple Payback
+if(isnull(TotAnnualCostSavF__c),null,nullvalue(EcmTotCost__c,1)/TotAnnualCostSavF__c)</description>
+    <externalId>false</externalId>
+    <formula>EcmTotCost__c/TotAnnualCostSavF__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>The total cost of the investment divided by the projected annual cash inflow.</inlineHelpText>
+    <label>Calculated Simple Payback (Years)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

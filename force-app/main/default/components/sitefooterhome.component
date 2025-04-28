@@ -1,0 +1,93 @@
+<apex:component id="footerComponent">    
+   
+    <!-- J. Rogers SWFS 2347   Commenting out Footer Links -->
+    <!-- div id="footer">
+        <ul>
+            <div style="float: left;">
+            <li><span class="footer-logo">Lease Offer Platform</span></li>
+            </div>
+            <div style="float: right;"><li>|</li>
+            <!--<li><a href="/AAAP/Privacy_And_Security" target="popup"
+                   onclick="window.open('/AAAP/Privacy_And_Security','popup','width=800,height=600'); return false;">Privacy
+                    and Security Policy</a></li>->
+               <!-- <li><a href="#" target="popup"
+                   onclick="window.parent.location.href = '{!$Label.LOP_Community_Base_URL}'; return false;">Privacy
+                    and Security Policy</a></li> ->
+                <li><a href="{!$Label.LOP_Community_Base_URL}AAAP-Privacy-And-Security" target="popup"
+                    onclick="window.open('{!$Label.LOP_Community_Base_URL}AAAP-Privacy-And-Security','popup','width=800,height=600'); return false;">Privacy
+                    and Security Policy</a></li>
+            <li>|</li></div>
+            
+        </ul>
+    </div  -->
+    <!--/login-->
+    <script>
+    jQuery(".popup").leanModal();
+
+    </script>
+
+    <!-- <script src="{!$Label.AAAP_JQUERY_URL}"></script> -->
+    <!-- *** Todd Brown updated the above old JQuery v1.7.2 lib to the below latest v3.5.1 lib -->
+    <script src="{!$Label.AAAP_JQUERY_URL_V3_5_1}"></script>
+    <!-- <script src="{!URLFOR($Resource.uniform)}" type="text/javascript" charset="utf-8"></script> -->
+    <!-- *** Todd Brown updated the above uniform JQuery lib to the below version that corrects broken MS IE opacity and binding scripts -->
+    <script src="{!URLFOR($Resource.UniformJQueryLib)}" type="text/javascript" charset="utf-8"></script>
+
+    <script type="text/javascript" charset="utf-8">
+function showPopup(id) {
+    var popup = document.getElementById(id);
+    popup.style.display = 'block';
+}
+jQuery(document).ready(function () {
+    jQuery("input:submit,input:checkbox,input:text, input:password, input:button, button").uniform();
+    //added by syam to fix the calendar issue with the uniform style class to the select components. so we omitted calendar select fields from applying uniform style class.
+    jQuery("select").each(function () {
+        var el = jQuery(this);
+        var eid = el.prop('id');
+
+        if (eid != 'calMonthPicker' && eid != 'calYearPicker') {
+            console.log('eid is ' + eid);
+            el.uniform();
+        }
+    });
+    
+            jQuery(document).keyup(function(e){
+                //alert("inside of the keyup, e.keyCode="+e.keyCode);
+                if(e.keyCode==27){
+                    jQuery('#lean_overlay:visible').click();
+                }
+            });    
+    
+});
+    </script>
+        
+    <style>
+h3.blue {
+    padding-top: 10px;
+    clear: both;
+}
+
+textarea {
+    resize: none;
+}
+
+ul.process {
+    margin-bottom: 10px;
+}
+
+.radioCell {
+    margin-top: -18px;
+}
+
+#lean_overlay {
+    position: fixed;
+    z-index: 100;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    background: #000;
+    display: none;
+}
+    </style>
+</apex:component>

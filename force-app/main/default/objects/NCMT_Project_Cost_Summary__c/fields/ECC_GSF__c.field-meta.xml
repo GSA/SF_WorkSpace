@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>ECC_GSF__c</fullName>
-    <externalId>false</externalId>
     <formula>IF( Project_Name__r.RecordType.Name &lt;&gt; &apos;Parking Garage&apos;, ECC__c / Project_Name__r.Total_GSF__c,ECC__c / Project_Name__r.Parking_Garage_Gross_Area_SF__c)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>ECC/GSF</label>

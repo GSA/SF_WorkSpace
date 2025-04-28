@@ -1,0 +1,35 @@
+<apex:component controller="PBS_gBUILD_EmbedReportCController">
+    <apex:attribute name="reportId" 
+        type="String" 
+        assignTo="{!reportId}" 
+        required="true" 
+        description="The report or dashboard ID" />
+    <apex:attribute name="zIndex" 
+        type="Integer" 
+        assignTo="{!zIndex}" 
+        required="false" 
+        description="The z-Index of this div" />            
+    <apex:attribute name="width" 
+        type="Integer" 
+        assignTo="{!width}" 
+        required="false" 
+        description="The width in pixels of the embedded report" />    
+    <apex:attribute name="height" 
+        type="Integer" 
+        assignTo="{!height}" 
+        required="false" 
+        description="The height in pixels of the embedded report" />                
+                
+    <div style="position:relative;top:-150px;z-index:{!zIndex}};display:none" class="embeddedReport">
+        <div style="position:absolute;width:100%;height:150px;background-color:white">
+        </div>
+        <iframe src="/{!reportId}?isdtp=nv" frameborder="0" scrolling="no" height="{!heightAttrVal}" width="{!widthAttrVal}" id="{!frameId}" />        
+    </div>        
+ 
+    <script type="text/javascript">
+        var profileName = "{!$Profile.Name}".toLowerCase();
+        if (profileName.indexOf("portal") == -1) {
+            j$(".embeddedReport").css("display", "");
+        }
+    </script>    
+</apex:component>

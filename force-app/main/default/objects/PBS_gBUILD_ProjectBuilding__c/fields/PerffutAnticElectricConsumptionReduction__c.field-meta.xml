@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PerffutAnticElectricConsumptionReduction__c</fullName>
+    <description>If EUAS is representative, the percentage difference calculates with the EUAS electic baseline. If EUAS is not representative, the calculation uses the manually entered electric baseline information.</description>
+    <formula>if (
+Text(PerffutIsEuasReferenceYearRep__c)=&apos;Yes&apos;,
+if(EuasBaselinePerformanceYear__r.ElecAmt__c&lt;1,0,(EuasBaselinePerformanceYear__r.ElecAmt__c-PerffutAnticElectric__c)/EuasBaselinePerformanceYear__r.ElecAmt__c),
+if(PerffutElectric__c&lt;1,0,(PerffutElectric__c-PerffutAnticElectric__c)/PerffutElectric__c)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>This field provides a electric consumption percentage reduction between the user selected electric consumption baseline and the anticipated electric consumption.</inlineHelpText>
+    <label>Electric Consumption Reduction (%)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>4</scale>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

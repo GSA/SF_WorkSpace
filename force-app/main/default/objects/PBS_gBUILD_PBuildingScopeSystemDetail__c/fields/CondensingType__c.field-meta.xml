@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CondensingType__c</fullName>
+    <description>Please indicate if the new system is condensing or non-condensing:</description>
+    <inlineHelpText>Please indicate if the new boiler(s) are condensing or non-condensing.</inlineHelpText>
+    <label>Boiler Type (Condensing/Non-Condensing)</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Condensing</fullName>
+                <default>false</default>
+                <label>Condensing</label>
+            </value>
+            <value>
+                <fullName>NonCondensing</fullName>
+                <default>false</default>
+                <label>NonCondensing</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

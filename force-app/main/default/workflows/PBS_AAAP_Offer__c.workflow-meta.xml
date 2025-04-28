@@ -33,6 +33,26 @@
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/PBS_AAAP_sendGrexSubmissionFailuretoGREX</template>
     </alerts>
+    <fieldUpdates>
+        <fullName>HubZone_Identifier_Revert</fullName>
+        <field>PBS_AAAP_HUBZONE_IDENTIFIER__c</field>
+        <literalValue>No</literalValue>
+        <name>HubZone Identifier Revert</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Hubzone_Identifier</fullName>
+        <field>PBS_AAAP_HUBZONE_IDENTIFIER__c</field>
+        <literalValue>Yes</literalValue>
+        <name>Update Hubzone Identifier</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
     <rules>
         <fullName>HubZone Identifier</fullName>
         <actions>

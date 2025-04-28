@@ -1,0 +1,113 @@
+<apex:page controller="PBS_gBUILD_FileManagerController" sidebar="false">
+    <apex:includeScript value="{!URLFOR($Resource.PBS_gBUILD_JQuery, '/RahdJQuery/jquery-1.8.0.min.js')}"  />   
+    <script type="text/javascript">
+        var j$ = jQuery.noConflict();
+        j$(document).ready(function () {
+            var jdocg = null;
+            j$("input[type='hidden']").each(function () {
+                if (this.name.substring(this.name.length - 5) == ":docg") {
+                    jdocg = j$(this);
+                }
+            });
+            j$("input[type='file']").change(function () {
+                //alert("file has data");
+                j$("input[name='selectedDocument']").removeAttr("checked");
+                jdocg.val('');
+                //alert('j$("#docg").val()=' + jdocg.val());
+            });
+            j$("input[name='selectedDocument']").change(function () {
+                //alert("radio has data");
+                j$("input[type='file']").val(null);
+                jdocg.val(j$(this).val());
+                //alert('j$("#docg").val()=' + jdocg.val());
+            });
+        });
+    </script>    
+    <style type="text/css">
+        #AppBodyHeader {
+            display: none;
+        }
+    </style>
+    <apex:form >
+    <apex:sectionHeader title="gBUILD File Manager" subtitle="{!subtitle}" />
+    <apex:pageMessages />    
+    <apex:outputPanel rendered="{!(intro!=null)}">
+        <apex:panelBar >
+            <apex:panelBarItem label="Introduction">{!intro}</apex:panelBarItem>
+        </apex:panelBar>        
+        <br/>
+    </apex:outputPanel>
+    <script type="text/javascript">
+        j$(".rich-panelbar-header-act,.rich-panelbar-content-exterior").css("display", "");
+    </script>    
+    <apex:inputHidden value="{!selectedDocumentId}" id="docg" />
+    <apex:pageBlock rendered="{!inputMode}" title="Document">
+        <apex:pageBlockButtons >
+            <!---<apex:commandButton value="Upload" action="{!upload}"/> ---> 
+         <!--     <apex:commandButton value="Link ePM File" action="{!upload}"/>  -->     
+        </apex:pageBlockButtons>
+        <apex:pageBlockSection title="Properties" columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Description" for="upload__desc"/>
+                <apex:inputTextArea value="{!file.Description}" id="upload__desc"/> 
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Tags" for="upload__tags"/>
+                <apex:inputText value="{!tags}" id="upload__tags"/> 
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+  <!---      <apex:pageBlockSection title="Either upload new document" columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="The file" for="upload__file"/>
+                <apex:inputFile value="{!file.body}" filename="{!file.name}" contenttype="{!file.contenttype}" filesize="{!file.BodyLength}" id="upload__file" />
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>   --->
+        <apex:pageBlockSection title="select existing document">
+            <apex:pageBlockTable value="{!Docs}" var="z" styleClass="dataTable">
+                <apex:column headerValue="Action">
+                    <input type="radio" name="selectedDocument" value="{!z.id}"/> Select
+                    &nbsp;|&nbsp;
+                    <apex:outputLink value="/servlet/servlet.FileDownload?file={!z.id}" target="_blank" rendered="{!(z.url==null)}">Open</apex:outputLink>                
+                    <apex:outputLink value="{!z.url}" target="_blank" rendered="{!(z.url!=null)}">Open</apex:outputLink>                
+                </apex:column>
+                <apex:column headerValue="File Name">
+                    <apex:outputText value="{!z.Name}" />
+                </apex:column>
+                <apex:column headerValue="Created At">
+                    <apex:outputText value="{!z.CreatedDate}" />
+                </apex:column>
+                <apex:column headerValue="Description">
+                    <apex:outputText value="{!z.Description}" /> 
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    <apex:pageBlock rendered="{!uploadedMode}" title="Upload Successful">
+        <apex:pageBlockButtons >
+            <apex:commandButton value="Upload another file" action="{!uploadAgain}"/>                
+        </apex:pageBlockButtons>
+        <apex:pageBlockSection title="Upload results" columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="File Name" for="uploaded_fileName"/>
+                <apex:outputText value="{!file.name}" id="uploaded_fileName"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="File Size" for="uploaded_fileSize"/>
+                <apex:outputText value="{!file.BodyLength}" id="uploaded_fileSize"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Content Type" for="uploaded_contentType"/>
+                <apex:outputText value="{!file.contenttype}" id="uploaded_contentType"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="devName" for="uploaded_devname"/>
+                <apex:outputText value="{!file.developerName}" id="uploaded_devname"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="folderId" for="uploaded_folder"/>
+                <apex:outputText value="{!file.folderId}" id="uploaded_folder"/>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+  </apex:form>
+</apex:page>

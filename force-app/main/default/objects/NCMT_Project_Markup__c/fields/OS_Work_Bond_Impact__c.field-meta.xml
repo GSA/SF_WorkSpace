@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>OS_Work_Bond_Impact__c</fullName>
-    <externalId>false</externalId>
     <formula>IF( RecordType.Name !=&apos;DES O&amp;P Project Markup&apos;, SubTotal_with_SubCon__c * Prime_Con_OSWork_Bond__c * (1 + Prime_Con_OSWork_Homeoff_Overhead__c + Prime_Con_OSWork_Jobsite_Overhead__c) * (1 + Prime_Con_OSWork_Profit__c) * (1 + Prime_Con_OSWork_Commission__c), 0)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>OS Work Bond Impact</label>

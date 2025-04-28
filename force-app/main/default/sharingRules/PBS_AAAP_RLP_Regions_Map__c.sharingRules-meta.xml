@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingGuestRules>
+        <fullName>Guest_User_Access_on_Regions_Map</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Guest User Access on Regions Map</label>
+        <sharedTo>
+            <guestUser>AAAP_Registration</guestUser>
+        </sharedTo>
+        <criteriaItems>
+            <field>PBS_AAAP_RLP_State__c</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
+    <sharingGuestRules>
+        <fullName>Guest_User_Access_on_Regions_Map_Community</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Leasing Regions Map Sharing</label>
+        <sharedTo>
+            <guestUser>Leasing</guestUser>
+        </sharedTo>
+        <criteriaItems>
+            <field>PBS_AAAP_RLP_State__c</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
+</SharingRules>

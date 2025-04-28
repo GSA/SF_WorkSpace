@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>Update_PS_Total</fullName>
+        <description>Update total field</description>
+        <field>Total__c</field>
+        <formula>if  ( text (Type__c)  == &apos;CECC&apos;,  Current_Fee__c +  What_s_Added_b_c_of_salary_escalation__c ,  Added_b_c_of_Construction_Escalation_ECC__c)</formula>
+        <name>Update PS Total</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Total</fullName>
+        <field>Total__c</field>
+        <formula>Current_Fee__c + Added_b_c_of_Construction_Escalation_ECC__c +  What_s_Added_b_c_of_salary_escalation__c</formula>
+        <name>Update Total</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
     <rules>
         <fullName>NCMT PS Total Update</fullName>
         <actions>

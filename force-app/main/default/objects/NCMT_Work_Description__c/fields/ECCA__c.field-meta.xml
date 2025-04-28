@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>ECCA__c</fullName>
-    <externalId>false</externalId>
     <formula>if((text(Number__c) == &quot;6&quot; || text(Number__c) == &quot;8&quot;),
 (Total_Direct_Cost__c * NCMT_Project__r.CECAMultiplier__c *( 1+NCMT_Project__r.Total_Escalation__c)),
 (Total_Direct_Cost__c * NCMT_Project__r.CECAMultiplier__c *( 1+NCMT_Project__r.Total_Escalation__c + NCMT_Project__r.Total_Escalation_CPE__c))

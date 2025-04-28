@@ -1,0 +1,72 @@
+<apex:page id="Registration" showHeader="false" controller="SiteRegisterController" title="{!$Label.site.register}">
+  <apex:composition template="{!$Site.Template}">
+    <apex:define name="body">  
+      <center>
+        <apex:panelGrid bgcolor="white" columns="1"> 
+          <br/>
+          <br/>
+          <apex:panelGrid width="758" cellpadding="0" cellspacing="0" bgcolor="white" columns="1" styleClass="topPanelContainer"> 
+            <br/>
+            <apex:outputPanel layout="block" styleClass="topPanel">
+              <apex:panelGrid width="758" cellpadding="0" cellspacing="0" bgcolor="white" columns="2"> 
+                <apex:image url="{!URLFOR($Resource.SiteSamples, 'img/clock.png')}"/>
+                <apex:panelGroup >
+                  <br/>
+                  <apex:outputText styleClass="title" value="{!$Label.site.user_registration}"/>
+                  <br/>
+                  <apex:form >
+                  <apex:panelGrid columns="2" style="margin-top:1em;">
+
+						<apex:outputText value="First Name : "/>
+						<apex:inputField value="{!c.FirstName}"/>
+						
+						<apex:outputText value="Last Name : "/>
+						<apex:inputField value="{!c.LastName}"/>
+						
+						<apex:outputText value="Company : "/>
+						<apex:inputField value="{!c.PBS_AAAP_Company__c}"/>
+						
+						<apex:outputText value="Street : "/>
+						<apex:inputText value="{!c.MailingStreet}"/>
+						
+						<apex:outputText value="City"/>
+						<apex:inputText value="{!c.Mailingcity}"/>
+						
+						<apex:outputText value="State"/>
+						<apex:inputText value="{!c.Mailingstate}"/>
+						
+						<apex:outputText value="Postal Code : "/>
+						<apex:inputText value="{!c.MailingPostalCode}"/>
+						
+						<apex:outputText value="Country : "/>
+						<apex:inputText value="{!c.MailingCountry}"/>
+						
+						<apex:outputText value="Phone : "/>
+						<apex:inputField value="{!c.Phone}"/>
+						
+						<apex:outputText value="Email : "/>
+						<apex:inputField value="{!c.Email}"/>
+						
+						<apex:outputText value="Website URL : "/>
+						<apex:inputField value="{!c.PBS_AAAP_Website__c}"/>
+						
+						<apex:outputText value="States of Interest : "/>
+						<apex:inputField value="{!c.PBS_AAAP_StatesOfInterest__c}"/>
+						
+						<apex:commandButton onclick="return confirm('Are you sure you want to create this portal user in your org?')" action="{!createPortaluser}" value="Save" id="theButton" />
+						<apex:commandButton rerender="pageBlockId" action="{!reset}" value="Reset" />
+
+                    </apex:panelGrid> 
+                    </apex:form>                  
+                  <br/>
+                </apex:panelGroup>
+              </apex:panelGrid> 
+             </apex:outputPanel>
+            <c:SitePoweredBy />
+          </apex:panelGrid> 
+       </apex:panelGrid>
+      </center>
+      <br/>
+    </apex:define>
+  </apex:composition>
+</apex:page>

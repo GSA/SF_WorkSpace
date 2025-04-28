@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <block>
+        <blockInfo>
+            <blockId>B1</blockId>
+            <joinTable>x</joinTable>
+        </blockInfo>
+        <columns>
+            <field>PBS_gBUILD_Project__c.UNID__c</field>
+        </columns>
+        <columns>
+            <field>PBS_gBUILD_Project__c.ProjectId__c</field>
+        </columns>
+        <columns>
+            <field>FK_$PBS_Building__c.Building_Name__c</field>
+        </columns>
+        <columns>
+            <field>FK_$PBS_Building__c.Region_Code__c</field>
+        </columns>
+        <columns>
+            <field>FK_$PBS_Building__c.Location_Code_Plus__c</field>
+        </columns>
+        <columns>
+            <field>PBS_gBUILD_Project__c.ProjectType__c</field>
+        </columns>
+        <format>Summary</format>
+        <name>gBUILD Projects with gBUILD Proj block 1</name>
+        <params>
+            <name>co</name>
+            <value>1</value>
+        </params>
+        <reportType>CustomEntityCustomEntity$PBS_gBUILD_Project__c$PBS_gBUILD_ProjectBuilding__c@PBS_gBUILD_ProjectBuilding__c.BldgId__c</reportType>
+        <scope>organization</scope>
+        <showGrandTotal>true</showGrandTotal>
+        <showSubTotals>true</showSubTotals>
+        <sortColumn>PBS_gBUILD_Project__c.ProjectId__c</sortColumn>
+        <sortOrder>Asc</sortOrder>
+        <timeFrameFilter>
+            <dateColumn>PBS_gBUILD_Project__c.FirstPaymentDue__c</dateColumn>
+            <interval>INTERVAL_CUSTOM</interval>
+        </timeFrameFilter>
+    </block>
+    <blockInfo>
+        <blockId xsi:nil="true"/>
+        <joinTable>x</joinTable>
+    </blockInfo>
+    <format>MultiBlock</format>
+    <name>gBUILD Project and Building Basics</name>
+    <reportType>CustomEntityCustomEntity$PBS_gBUILD_Project__c$PBS_gBUILD_ProjectBuilding__c@PBS_gBUILD_ProjectBuilding__c.BldgId__c</reportType>
+    <showDetails>true</showDetails>
+</Report>

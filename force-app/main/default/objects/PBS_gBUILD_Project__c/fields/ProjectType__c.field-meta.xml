@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ProjectType__c</fullName>
+    <description>Small Projects: Minor improvements of systems/conditions
+Lim. Scope: Improvement of single/limited component(s)
+Partial Mod: Replace/restore some major systems
+Full Mod: Replace/restore all major components
+New Con: New structures/building extensions</description>
+    <inlineHelpText>Small Projects: Minor improvements of systems/conditions
+Lim. Scope: Improvement of single/limited component(s)
+Partial Mod: Replace/restore some major systems
+Full Mod: Replace/restore all major components
+New Con: New structures/building extensions</inlineHelpText>
+    <label>Project Type</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>NewConstruction</fullName>
+                <default>false</default>
+                <label>NewConstruction</label>
+            </value>
+            <value>
+                <fullName>FullModernization</fullName>
+                <default>false</default>
+                <label>FullModernization</label>
+            </value>
+            <value>
+                <fullName>PartialModernizations</fullName>
+                <default>false</default>
+                <label>PartialModernizations</label>
+            </value>
+            <value>
+                <fullName>LimitedScope</fullName>
+                <default>false</default>
+                <label>LimitedScope</label>
+            </value>
+            <value>
+                <fullName>SmallProject</fullName>
+                <default>false</default>
+                <label>SmallProject</label>
+            </value>
+            <value>
+                <fullName>EnergyDivision</fullName>
+                <default>false</default>
+                <label>EnergyDivision</label>
+            </value>
+            <value>
+                <fullName>EnergyDiv - ENE0000</fullName>
+                <default>false</default>
+                <label>EnergyDiv - ENE0000</label>
+            </value>
+            <value>
+                <fullName>EnergyDiv - ENWTR000</fullName>
+                <default>false</default>
+                <label>EnergyDiv - ENWTR000</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

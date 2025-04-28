@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>OpeEff_Modifier__c</fullName>
-    <externalId>false</externalId>
     <formula>CASE( TEXT(Operational_efficiency__c),
 &quot;Typical&quot;,  Ease_of_Access_Parameter__r.Typical_EOA__c ,
 &quot;Easy&quot;,  Ease_of_Access_Parameter__r.Easy_EOA__c ,

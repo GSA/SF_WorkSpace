@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Lease Request Pending Approval</name>
+    <style>none</style>
+    <subject>RET Lease Access Request</subject>
+    <textOnly>Hello,
+
+GSA&apos;s Public Buildings Service records indicate that you are the lessor for the below lease contract. The following request has been received for this user to submit Real Estate tax documentation on your behalf.
+
+Please approve or deny access as soon as possible.
+
+Lease: {!PBS_Lease_Access__c.PBS_Lease__c}
+Requestor Name: {!PBS_Lease_Access__c.Requestor__c}
+Requestor Email: {!PBS_Lease_Access__c.Requestor_Email__c}
+Requestor Comments: {!PBS_Lease_Access__c.Requestor_Comments__c}
+
+RET Community Url: {!$Label.RET_EXTERNAL_HOST}
+For more information, please visit ret.gsa.gov
+Thank You</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

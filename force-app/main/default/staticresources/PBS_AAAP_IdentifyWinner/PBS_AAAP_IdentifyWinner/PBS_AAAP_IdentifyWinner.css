@@ -1,0 +1,207 @@
+.buttonclass {
+    background-color: #75BFD7;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+/******** Modal CSS starts ********/
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 100;
+    /* Sit on top */
+    padding-top: 100px;
+    /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/******** Modal CSS ends *******/
+.errMessage {
+    color: red;
+    font-weight: bold;
+}
+
+.gmnoprint img {
+    max-width: none;
+}
+
+div.tooltip {
+    display: inline;
+}
+
+div.tooltip span {
+    display: none;
+    font-weight: normal;
+    text-align: left;
+    padding: 3px 5px;
+    margin-left: 8px;
+    width: 250px;
+}
+
+div.tooltip:hover span {
+    display: inline;
+    position: absolute;
+    border: 1px solid #cccccc;
+    background: #FFC;
+    color: #000000;
+    z-index: 10000;
+}
+
+#BasemapToggle {
+    position: absolute;
+    background-color: #ffffff;
+    top: 20px;
+    left: 57px;
+    z-index: 5;
+}
+
+#BasemapToggle tbody td:hover {
+    background-color: #dddddd;
+    cursor: pointer;
+}
+
+#BasemapToggle td {
+    border: 1px solid #C0C0C0;
+    border-collapse: collapse;
+    height: 12px;
+    padding: 2px 3px 2px 3px;
+    font-size: 12px;
+    color: #000000;
+    font-weight: normal;
+}
+
+.myTable {
+    counter-reset: rowCounter;
+}
+
+.myTable .row {
+    counter-increment: rowCounter;
+}
+
+.myTable .row .counter::before {
+    content: counter(rowCounter);
+}
+
+
+#layers{
+    right: 20px;
+}
+
+.map-menu-table {
+    position: absolute;
+    background-color: #ffffff;
+    top: 18px;
+    z-index: 5;
+}
+
+.map-menu-table td {
+    border: 1px solid #C0C0C0;
+    border-collapse: collapse;
+    height: 12px;
+    padding: 2px 3px 2px 3px;
+    font-size: 12px;
+    //color: #000000;
+    //font-weight: normal;
+}
+
+//.map-menu-table td:hover {
+//    cursor: pointer;
+//}
+
+.map-menu-table span1 {
+    color: #808080;
+    font-weight: 300;
+}
+
+.map-menu-table span2 {
+    color: #000000;
+    font-weight: normal;
+}
+
+.map-menu-table span1:hover {
+    cursor: default;
+}
+
+.map-menu-table span2:hover {
+    cursor: pointer;
+}
+
+.map-menu-table td.active{
+    background: silver;
+    font-weight: bold;
+}
+
+
+.esriPopup .title div{
+    margin-right: 70px;
+}
+
+.esriPopup .sizer{
+    width: auto;
+}
+
+
+.marker-table td:last-child{
+    white-space:nowrap;
+}
+
+.lessor-layer-point--address{
+    font-weight: bold;
+    padding: 3px 3px 10px 3px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid silver;
+    color: darkgoldenrod;
+    white-space: nowrap;
+}
+
+.lessor-layer-point--details td:first-child{
+    font-weight:bold;
+}
+
+.lessor-layer-point--details td:last-child{
+    white-space: nowrap;
+}

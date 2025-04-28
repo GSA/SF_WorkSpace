@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ScopeSysCode1__c</fullName>
+    <description>Scope Category code</description>
+    <externalId>false</externalId>
+    <formula>CASE(RecordType.DeveloperName,
+&apos;AMBF_Any&apos;,&apos;AdvancedMeteringSystems&apos;,
+&apos;SM_Any&apos;,&apos;AdvancedMeteringSystems&apos;,
+&apos;F_NewReplacement&apos;,&apos;BuildingEnvelope&apos;,
+&apos;F_RepairsOrAlterationsToExistingFacade&apos;,&apos;BuildingEnvelope&apos;,
+&apos;R_NewReplacement&apos;,&apos;BuildingEnvelope&apos;,
+&apos;R_RepairsOrAlterationsToExistingRoof&apos;,&apos;BuildingEnvelope&apos;,
+&apos;Windows_NewApplication&apos;,&apos;BuildingEnvelope&apos;,
+&apos;Windows_ReplOrRepairsExistingWindows&apos;,&apos;BuildingEnvelope&apos;,
+&apos;CM_Any&apos;,&apos;BuildingTuneUpOrUtilityImprovements&apos;,
+&apos;AH_NewReplacement&apos;,&apos;HVAC&apos;,
+&apos;AH_RepairsOrAlterations&apos;,&apos;HVAC&apos;,
+&apos;B_NewReplacement&apos;,&apos;HVAC&apos;,
+&apos;B_RepairsOrAlterations&apos;,&apos;HVAC&apos;,
+&apos;C_NewControls&apos;,&apos;HVAC&apos;,
+&apos;C_RepairsOrAlterations&apos;,&apos;HVAC&apos;,
+&apos;Chl_NewReplacement&apos;,&apos;HVAC&apos;,
+&apos;Chl_RepairsOrAlterations&apos;,&apos;HVAC&apos;,
+&apos;CT_NewReplacement&apos;,&apos;HVAC&apos;,
+&apos;CT_RepairsOrAlterations&apos;,&apos;HVAC&apos;,
+&apos;IDLS_Any&apos;,&apos;IndoorEnvironmentalQuality&apos;,
+&apos;TCVM_Any&apos;,&apos;IndoorEnvironmentalQuality&apos;,
+&apos;IL_Daylighting&apos;,&apos;Lighting&apos;,
+&apos;IL_LightingControls&apos;,&apos;Lighting&apos;,
+&apos;IL_NewApplication&apos;,&apos;Lighting&apos;,
+&apos;IL_OtherLightingImprovements&apos;,&apos;Lighting&apos;,
+&apos;IL_RetrofitOrReplacement&apos;,&apos;Lighting&apos;,
+&apos;OL_LightingControls&apos;,&apos;Lighting&apos;,
+&apos;OL_NewApplication&apos;,&apos;Lighting&apos;,
+&apos;OL_RetrofitOrReplacement&apos;,&apos;Lighting&apos;,
+&apos;Other_ChilledWaterHotH2OAndSteamDistSys&apos;,&apos;OtherCategory&apos;,
+&apos;BM_NewSystem&apos;,&apos;RenewableEnergy&apos;,
+&apos;G_NewSystem&apos;,&apos;RenewableEnergy&apos;,
+&apos;PV_NewInstallationOrArrays&apos;,&apos;RenewableEnergy&apos;,
+&apos;PV_RepairsOrAlterations&apos;,&apos;RenewableEnergy&apos;,
+&apos;ST_NewSystem&apos;,&apos;RenewableEnergy&apos;,
+&apos;ST_PassiveSolarHeatingVentilation&apos;,&apos;RenewableEnergy&apos;,
+&apos;Wind_NewInstallationOrTurbines&apos;,&apos;RenewableEnergy&apos;,
+&apos;IWC_FixtureReplacementWithLowFlow&apos;,&apos;Water&apos;,
+&apos;IWC_NewLowFlowFixtures&apos;,&apos;Water&apos;,
+&apos;IWC_ProcessEquipmentReductionMeasures&apos;,&apos;Water&apos;,
+&apos;OWC_OnsiteSewerOrStormwaterTreatmentSys&apos;,&apos;Water&apos;,
+&apos;OWC_WaterAndSewerConservationSystems&apos;,&apos;Water&apos;,
+&apos;OWC_WaterEfficientIrrigAndLandscaping&apos;,&apos;Water&apos;,
+&apos;&apos;)</formula>
+    <inlineHelpText>Scope Category code</inlineHelpText>
+    <label>Scope System Code L1</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

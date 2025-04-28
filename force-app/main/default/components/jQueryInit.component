@@ -1,0 +1,46 @@
+<apex:component >
+<apex:attribute name="bClueTip" description="Boolean to indicate whether cluetip plugin should be included" type="boolean" required="false"/>
+<apex:attribute name="bLoadingPanel" description="Boolean to indicate whether loadingPanel component should be included" type="boolean" required="false"/>
+<apex:attribute name="bDataTables" description="Boolean to indicate whether dataTables plugin should be included" type="boolean" required="false"/>
+<apex:attribute name="bColorPicker" description="Boolean to indicate whether colorPicker plugin should be included" type="boolean" required="false"/>
+
+    <apex:includeScript value="{!URLFOR($Resource.resources_Master, '/jQuery/js/jquery-1.6.2.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.resources_Master, '/jQuery/js/jquery-ui-1.8.16.custom.min.js')}" />
+        <link
+        href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css"
+        rel="stylesheet" type="text/css" />
+        <apex:stylesheet value="{!URLFOR($Resource.resources_Master, '/jQuery/css/smoothness/jquery-ui-1.8.11.custom.css')}" />
+
+    <apex:variable value="{!bLoadingPanel}" var="bc" rendered="{!IF(bLoadingPanel==true, true, false)}">
+    	<script type="text/javascript"
+        	src="{!URLFOR($Resource.resources_Master,'/plugin/fancybox/jquery.fancybox-1.3.4.pack.js')}" /> 
+
+    	<script type="text/javascript"
+        	src="{!URLFOR($Resource.resources_Master,'/plugin/fancybox/jquery.easing-1.4.pack.js')}" />
+    	<apex:stylesheet value="{!URLFOR($Resource.resources_Master,'/plugin/fancybox/jquery.fancybox-1.3.4.css')}" />
+    	<c:loadingPanel />
+	</apex:variable>
+        
+    <apex:variable value="{!bClueTip}" var="bc" rendered="{!IF(bCluetip==true, true, false)}">
+     	<apex:includeScript value="{!URLFOR($Resource.resources_Master, '/plugin/cluetip/cluetip/jquery.cluetip.js')}"/>
+ 	 	<apex:stylesheet value="{!URLFOR($Resource.resources_Master, '/plugin/cluetip/cluetip/jquery.cluetip.css')}"/>
+ 	</apex:variable>
+    
+    <apex:variable value="{!bDataTables}" var="dt" rendered="{!IF(bDataTables==true, true, false)}">
+        <apex:includeScript value="{!URLFOR($Resource.resources_Master, '/plugin/dataTables/dataTables.js')}" />    
+    </apex:variable>
+    
+    
+    <apex:variable value="{!bColorPicker}" var="cp" rendered="{!IF(bColorPicker==true, true, false)}">
+        <apex:includeScript value="{!URLFOR($Resource.resources_Master, '/plugin/colorPicker/js/mColorPicker.js')}" />
+        <script>
+        	$.fn.mColorPicker.init.allowTransparency  = false;
+        	$.fn.mColorPicker.init.showLogo =false;        
+        </script>
+    	<style>
+        	#mColorPickerFooter {display:none;}
+        	#mColorPickerImg { background-image: url('{!URLFOR($Resource.resources_Master, '/plugin/colorPicker/images/picker.png')}') ;
+    	</style>
+    </apex:variable>
+    
+</apex:component>

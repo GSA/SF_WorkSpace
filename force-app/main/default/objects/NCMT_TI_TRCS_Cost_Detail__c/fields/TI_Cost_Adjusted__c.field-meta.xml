@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>TI_Cost_Adjusted__c</fullName>
-    <externalId>false</externalId>
     <formula>IF(( Cost_Category__c  = &apos;F20&apos;),0.00, TI_Total_Cost__c *  Project_Cost_Summary__r.Project_Name__r.TI_Adjustment_Factor__c  
 )</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>

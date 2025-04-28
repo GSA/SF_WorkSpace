@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Building_O_M_Cost_SF__c</fullName>
-    <externalId>false</externalId>
     <formula>IF(Project_Name__r.Total_GSF__c ==0,0,
 ((Annual_Janitorial_Cost__c + Ann_Bldg_Shell_Clean_Cost__c + Ann_Bldg_Supp_Cost__c + Ann_Landscape_Cost__c + Ann_Routine_Maint_Cost__c + Ann_Minor_Repair_Cost__c + Ann_Bldg_Mgmt_Cost__c )/ Project_Name__r.Total_GSF__c))</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>

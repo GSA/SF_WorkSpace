@@ -8,7 +8,7 @@
 	<aura:attribute name="totalCases" type="Integer" default="0" />
 	<aura:attribute name="resultsHaveNext" type="Boolean" default="false" />
 	<aura:attribute name="resultsHavePrev" type="Boolean" default="false" />
-    <aura:attribute name="manageAccessModalOpen" type="Boolean" default="false" />
+    <!-- <aura:attribute name="manageAccessModalOpen" type="Boolean" default="false" /> -->
     <aura:attribute name="leaseNumber" type="String" default="" />
 	<aura:handler name="init" action="{!c.loadLeases}" value="{!this}" />
 	<aura:handler name="change" value="{!v.statusFilters}" action="{!c.loadLeases}" />
@@ -19,7 +19,7 @@
 			<table class="lease-list-table">
 				<thead>
 					<tr class="slds-text-title_caps">
-						<th scope="col"></th>
+						<!--<th scope="col"></th>-->
 						<th scope="col">Lease</th>
 						<th scope="col">Effective Date</th>
 						<th scope="col">Expiration Date</th>
@@ -28,16 +28,17 @@
 						<th scope="col">State</th>
 						<th scope="col">Zip Code</th>
 						<th scope="col">Lessor</th>
-                        <th scope="col">Access Status</th>
+                        <!-- Repurposed column for 2024-2025 RET Surge
+                        <th scope="col">Access Status</th> -->
+                        <th scope="col"></th>
 						
 					</tr>
 				</thead>
 				<tbody>	
 					<aura:iteration items="{!v.wrapperList}" var="wrapper" indexVar="indx">
 						<tr class="lease-information">
-						<!--	<th scope="row" class="lease-number">{!wrapper.lease.Short_Lease_Number__c}</th>-->
-							<td>
-                                <div class="slds-m-top--xx-small slds-m-bottom--xx-small">
+<!--SFWS-3874				<td>
+                                <div class="slds-m-top-xx-small slds-m-bottom-xx-small">
                                     <div id="{!wrapper.lease.Id + 'plus' + indx}" class="slds-show" >
                                     	<lightning:buttonicon tabindex="{!indx}" name="{!wrapper.lease.Id}" onclick="{!c.showHidePanel}" iconName="utility:add" size="x-small" alternativeText="Show row details"/>
 									</div>
@@ -46,6 +47,7 @@
                                 	</div>
                             	</div>
                             </td>
+-->
 							<th scope="row" class="lease-number">{!wrapper.lease.Lease_Number__c}</th>
                             <td>{!wrapper.lease.Lease_Effective_Date__c}</td>
 							<td>{!wrapper.lease.Lease_Expiration_Date__c}</td>
@@ -54,7 +56,7 @@
 							<td>{!wrapper.lease.Building_State_Code__c}</td>
 							<td>{!wrapper.lease.Building_Zip_Code__c}</td>
 							<td>{!wrapper.lease.Lessor__c}</td>
-                            
+                            <!-- Repurposed column for 2024-2025 RET Surge to remove access request & approval functionality
                             <aura:if isTrue="{!wrapper.leaseAccess.Status__c == 'POC'}">
                             	<td>
                                     <button type="button" onclick="{!c.manageAccess}" id="{!wrapper.lease.Lease_Number__c}" class="slds-button slds-button_brand">Manage</button> 
@@ -62,8 +64,11 @@
                                 <aura:set attribute="else">
                                 	<td>{!wrapper.leaseAccess.Status__c}</td>
                                 </aura:set>
-                            </aura:if>
-                            
+                            </aura:if> -->
+                           	<td>
+                                <button type="button" onclick="{!c.manageLease}" id="{!wrapper.lease.Lease_Number__c}" class="slds-button slds-button_brand">Manage</button> 
+                            </td>
+
 						</tr>
 						<tr class="case-information" id="{!wrapper.lease.Id}" style="display:none;">
 							<td colspan="8" class="case-list-table">
@@ -105,17 +110,17 @@
 				</span>
 				<span class="page-totals">
 					Showing page {!v.selectedPage} of {!v.totalPages}
-					<aura:if isTrue="{!v.totalCases == 1}">
+					<!-- <aura:if isTrue="{!v.totalCases == 1}">
 							(Total 1 tax submission
 						<aura:set attribute="else">
 							(Total {!v.totalCases} tax submissions
 						</aura:set>
 					</aura:if>
-					for
+					for -->
 					<aura:if isTrue="{!v.totalLeases == 1}">
-							1 lease).
+							(Total 1 lease).
 						<aura:set attribute="else">
-							{!v.totalLeases} leases).
+							(Total {!v.totalLeases} leases).
 						</aura:set>
 					</aura:if>
                     <!--moved this to align the chevron - ramesh-->
@@ -145,35 +150,52 @@
 					</ui:inputSelect>
 				</span>
 
-			<!--	<span class="navigate-right">
-					<aura:if isTrue="{!v.resultsHaveNext}">
-						<a onclick="{!c.navigateRight}">
-							<lightning:icon iconName="utility:chevronright" size="small" />
-						</a>
-						<aura:set attribute="else">
-							<lightning:icon iconName="utility:chevronright" size="small" />
-						</aura:set>
-					</aura:if>
-				</span>-->
+
 			</div>
 		</div>
 
 		<aura:set attribute="else">
-			No tax submissions found.
+            <div class="ret-lease-table-container">
+                <table class="lease-list-table">
+                    <thead>
+                        <tr class="slds-text-title_caps">
+                            <!--<th scope="col"></th>-->
+                            <th scope="col">Lease</th>
+                            <th scope="col">Effective Date</th>
+                            <th scope="col">Expiration Date</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">City</th>
+                            <th scope="col">State</th>
+                            <th scope="col">Zip Code</th>
+                            <th scope="col">Lessor</th>
+                            <!-- Repurposed column for 2024-2025 RET Surge
+                            <th scope="col">Access Status</th> -->
+                            <th scope="col"></th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+            			<span style="font-family: Arial; font-size: 12pt">
+                        	No leases found.
+                        </span>
+                    </tbody>
+                </table>
+            </div>
 		</aura:set>
 	</aura:if>
 	
+    <!-- Commented out for 2024/2025 RET Surge which eliminated old Lease Access Approval process
     <aura:if isTrue="{!v.manageAccessModalOpen}">
         <div role="dialog" tabindex="-1" aria-labelledby="header43" class="panel slds-modal slds-fade-in-open">
             <div class="slds-modal__container" style="width:75%!important;max-width:100%!important">
 				<div class="slds-modal__header">
-					<button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.closeModal}">
+					<button class="slds-button slds-modal__close slds-button-icon-inverse" title="Close" onclick="{!c.closeModal}">
 						X<span class="slds-assistive-text">Cancel</span>
 					</button>
-					<h2 id="header43" class="slds-text-heading--medium">Manage Access For {!v.leaseNumber}</h2>
+					<h2 id="header43" class="slds-text-heading-medium">Manage Access For {!v.leaseNumber}</h2>
 				</div>
                                            
-				<div class="slds-modal__content slds-p-around--medium ">
+				<div class="slds-modal__content slds-p-around-medium ">
 					<div class="slds-clearfix slds-card inlineEditEnabled groupDependentFieldEnabled  allow-horizontal-form wide-input-break forceDetailPanelDesktop">
 						<c:RET_ManageLeaseAccess leaseNumber="{!v.leaseNumber}"/>
 					</div>
@@ -189,7 +211,7 @@
             </div>
         </div>
        
-        <div class="slds-backdrop slds-backdrop--open"></div>
+        <div class="slds-backdrop slds-backdrop-open"></div>
     </aura:if>
-	
+ 	-->
 </aura:component>

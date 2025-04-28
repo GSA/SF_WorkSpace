@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Total_Equip_O_P_Cost_Adj__c</fullName>
-    <externalId>false</externalId>
     <formula>IF(Item_Type__c==&apos;Assemblies&apos;, ( Equipment_Assembly_Cost__c),((DES_Lookup_Detail__r.Equipment_Unit_O_P_Cost__c ))) * Location_Multiplier_wf__c * Quantity__c</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Total Equip O&amp;P Cost Adj</label>

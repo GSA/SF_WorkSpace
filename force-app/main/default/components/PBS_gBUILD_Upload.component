@@ -1,0 +1,108 @@
+<apex:component controller="PBS_gBUILD_UploadCController" allowDML="true">
+    <apex:attribute name="pageController" 
+        type="PBS_gBUILD_PageBaseController" 
+        assignTo="{!pageController}" 
+        required="true" 
+        description="The controller for the page."
+        />        
+    <apex:attribute name="key" 
+        type="String" 
+        assignTo="{!key}" 
+        required="true" 
+        description="The key given to this component so the page can easily get access to it"
+        />
+    <apex:attribute name="viewMode" 
+        type="Boolean" 
+        assignTo="{!viewMode}" 
+        required="true" 
+        description="When true, render in view mode, else edit mode"
+        />
+    <apex:attribute name="tags"
+        type="String"
+        assignTo="{!tags}"
+        required="false"
+        description="CSV list of tags to be applied to the upload"
+        />
+    <apex:attribute name="epmCatalog"
+        type="String"
+        assignTo="{!epmCatalog}"
+        required="false"
+        description="The catalog to which this item should be uploaded"
+        />
+    <apex:attribute name="desc"
+        type="String"
+        assignTo="{!description}"
+        required="false"
+        description="A default description for the document to be uploaded"
+        />
+    <apex:attribute name="contextualTitle"
+        type="String"
+        assignTo="{!contextualTitle}"
+        required="false"
+        description="A title that can be passed into the file manager to provide the user with some context"
+        />
+    <apex:attribute name="controlTitle"
+        type="String"
+        assignTo="{!controlTitle}"
+        required="false"
+        description="A title that will be used on this control"
+        />
+    <apex:attribute name="intro"
+        type="String"
+        assignTo="{!intro}"
+        required="false"
+        description="Introductory text"
+        />
+    <apex:attribute name="readableWaiverKeyPattern"
+        type="String"
+        assignTo="{!readableWaiverKeyPattern}"
+        required="false"
+        description="A MPC Number pattern that will be parsed that are associated with Waivers."
+        />
+    <apex:attribute name="readableWaiverKeyTokens"
+        type="String"
+        assignTo="{!readableWaiverKeyTokens}"
+        required="false"
+        description="Alternate CSV list of MPC Numbers whose files are displayed associated with Waivers."
+        />
+    <apex:attribute name="readableUploadKeys"
+        type="String"
+        assignTo="{!readableUploadKeys}"
+        required="false"
+        description="Alternate CSV list of MPC Numbers whose files are displayed associated with Uploads."
+        />
+    
+    <apex:outputPanel id="fileListPanel">    
+        <apex:pageBlock title="Legacy File Attachments">
+            <apex:pageBlockButtons >
+         <!--       <apex:outputPanel rendered="{!editMode}">
+                    <button onclick="window.open('{!fileManagerUrl}', 'sfEpmUpload', 'scrollbars=1,menubar=0,toolbar=0,height=768,width=1024');return false;">Link ePM File</button>
+                </apex:outputPanel> -->
+            </apex:pageBlockButtons>
+            <apex:pageBlockTable value="{!docInfos}" var="z">
+                <apex:column headerValue="Action">            
+                    <apex:outputLink value="/servlet/servlet.FileDownload?file={!z.document.id}" target="_blank" rendered="{!z.document.url==null}">Open</apex:outputLink>                
+                    <apex:outputLink value="{!z.document.url}" target="_blank" rendered="{!z.document.url!=null}">Open</apex:outputLink>                
+                    <apex:outputPanel rendered="{!editMode}">
+                        &nbsp;|&nbsp;
+                        <apex:commandLink action="{!del}" value="Unlink" styleClass="delCmd" reRender="fileListPanel"  >
+                            <apex:param name="id" value="{!z.document.id}" assignTo="{!actionId}"/>                
+                        </apex:commandLink>                    
+                    </apex:outputPanel>
+                </apex:column>
+                <apex:column headerValue="File Name">
+                    <apex:outputText value="{!z.document.name}" />
+                </apex:column>
+                <apex:column headerValue="Description">
+                    <apex:outputText value="{!z.document.description}" />
+                </apex:column>                
+                <apex:column headerValue="Uploaded At">
+                    <apex:outputField value="{!z.document.LastModifiedDate}" />
+                </apex:column>
+                <apex:column headerValue="Uploaded By">
+                    <apex:outputField value="{!z.document.LastModifiedById}" />
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:outputPanel>    
+</apex:component>

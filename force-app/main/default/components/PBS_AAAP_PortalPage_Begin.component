@@ -1,0 +1,28 @@
+<apex:component id="PBS_AAAP_PortalPage_Begin">
+    <apex:stylesheet value="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <!-- <apex:includescript value="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"/> -->
+    <!-- <apex:includescript value="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"/> -->
+    <!-- *** Todd Brown updated the above old JQuery libs with the below latest v3.5.1 library -->
+    <apex:includescript value="{!$Label.AAAP_JQUERY_URL_V3_5_1}"/>
+    <apex:includescript value="{!URLFOR($Resource.PBS_AAAP_HELPERS)}" />
+    <script type="text/javascript">
+        var jq = jQuery;
+        var j$ = jQuery;
+    </script>
+    <div id="login"  style="background-color:pink">
+        <!-- J. Rogers  Comment out Footer Links   
+        <ul>
+            <li><a href="#" onclick="window.parent.location.href = '{!$Label.LOP_Community_Base_URL}AAAP-PortalHome'">AAAP Home</a></li>
+            <li>|</li>
+            <li><a href="#" onclick="window.parent.location.href = '{!$Label.LOP_Community_Base_URL}RSAP-PortalHome'">RSAP</a></li>
+            <apex:outputPanel rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+            
+                <li>| <a href="#" onclick="window.parent.location.href = '{!$Site.Prefix}/secur/logout.jsp'">{!$Label.site.logout}</a></li>
+            
+                </apex:outputPanel>
+            <!--<li>|</li>
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>->
+        </ul   -->
+    </div>
+</apex:component>

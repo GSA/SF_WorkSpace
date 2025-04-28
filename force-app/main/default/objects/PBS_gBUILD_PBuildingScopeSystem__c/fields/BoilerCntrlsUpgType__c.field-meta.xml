@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BoilerCntrlsUpgType__c</fullName>
+    <description>Boiler Controls Upgrade Type</description>
+    <inlineHelpText>If the boiler controls will be upgraded as part of the project building scope, please select the type of upgrade (Building Automation System (BAS) controls or fuel controls).</inlineHelpText>
+    <label>Type of Boiler Controls Upgrade</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>BasControls</fullName>
+                <default>false</default>
+                <label>BasControls</label>
+            </value>
+            <value>
+                <fullName>FuelControls</fullName>
+                <default>false</default>
+                <label>FuelControls</label>
+            </value>
+            <value>
+                <fullName>BasControlsOrFuelControls</fullName>
+                <default>false</default>
+                <label>BasControlsOrFuelControls</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

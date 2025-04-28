@@ -1,0 +1,154 @@
+<apex:page standardController="NCMT_Project__c" extensions="NCMT_TreeRelatedListController" lightningStylesheets="true">
+    <apex:includeLightning />
+   <apex:slds />
+   <head>
+        <style>
+            a.action{
+                color:#015ba7;
+                text-decoration:none;
+                font-weight: normal;
+            }
+            a:hover.action{
+                color:#015ba7;
+                text-decoration:underline;
+                font-weight: normal;
+            }
+        </style>    
+    </head>
+    
+    <apex:form styleClass="slds-container_xx-large"  >
+        
+        <apex:pageBlock id="TreeList" rendered="{!NOT(treestruc.size== 0)}">
+          
+            <apex:pageBlockTable value="{!treestruc}" var="tree" styleClass="slds-text-body_small" >
+                
+                <!--<apex:column HeaderValue="Action" width="60" >
+                    <apex:commandLink value="Edit" styleClass="action" action="{!editTree}" target="_parent" >
+                        <apex:param value="{!tree.id}" name="treeId"/>
+                    </apex:commandLink> 
+
+                    &nbsp;| &nbsp; 
+
+                    <apex:commandLink value="Del" onclick="return confirm('Are you sure?')" styleClass="action" action="{!deleteTree}" target="_parent">
+                        <apex:param value="{!tree.id}" name="treeId"/> 
+                    </apex:commandLink>
+
+                </apex:column>-->
+                
+
+                <apex:column style="background-color:{!IF(!tree.Include_In_Estimate__c,'#f2f2f2',IF((tree.RecordType.Name=='Tree Leaf' || tree.RecordType.Name=='Tree Leaf O&P'),'#e9fce9','white'))};">
+                    <apex:facet name="header">
+                        <apex:outputPanel >
+                            <apex:outputText value="Tree Id "/>
+                            <apex:image value="/s.gif" styleClass="helpIcon" title="System generated output."/>
+                        </apex:outputPanel>
+                    </apex:facet>
+
+                    <apex:outputLink value="/{!tree.id}" target="_parent">{!tree.Name}</apex:outputLink>
+                </apex:column>
+                
+                <apex:column style="background-color:{!IF(!tree.Include_In_Estimate__c,'#f2f2f2',IF((tree.RecordType.Name=='Tree Leaf' || tree.RecordType.Name=='Tree Leaf O&P'),'#e9fce9','white'))};">
+                    <apex:facet name="header">
+                        <apex:outputPanel >
+                            <apex:outputText value="Branch Name "/>
+                            <apex:image value="/s.gif" styleClass="helpIcon" title="User-defined based on nomenclature defined in the User Guide."/>
+                        </apex:outputPanel>
+                    </apex:facet>
+                    <apex:outputLink style="margin-left:0px; text-decoration:underline;color:{!IF(!tree.Include_In_Estimate__c,'black','#ff8080')};font-weight:bold;font-style: oblique;" rendered="{!tree.Level__c == 0}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}</apex:outputLink>
+                    <apex:outputLink style="margin-left:20px;color:{!IF(!tree.Include_In_Estimate__c,'black','#D2691E')};font-weight:bold;font-style: italic;" rendered="{!tree.Level__c == 1}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:40px;color:{!IF(!tree.Include_In_Estimate__c,'black','#6495ED')};font-weight:bold;font-style: oblique;" rendered="{!tree.Level__c == 2}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:60px;color:{!IF(!tree.Include_In_Estimate__c,'black','green')};font-style: normal;" rendered="{!tree.Level__c == 3}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:80px;color:{!IF(!tree.Include_In_Estimate__c,'black','#800000')};font-style: italic;" rendered="{!tree.Level__c == 4}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:100px;color:{!IF(!tree.Include_In_Estimate__c,'black','blue')};font-style: oblique;" rendered="{!tree.Level__c == 5}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:120px;color:{!IF(!tree.Include_In_Estimate__c,'black','indigo')};font-style: italic;" rendered="{!tree.Level__c == 6}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:140px;color:{!IF(!tree.Include_In_Estimate__c,'black','#F0E68C')};font-style: oblique;" rendered="{!tree.Level__c == 7}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:140px;color:{!IF(!tree.Include_In_Estimate__c,'black','olive')};font-style: italic;" rendered="{!tree.Level__c == 8}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:140px;color:{!IF(!tree.Include_In_Estimate__c,'black','#E6E6FA')};font-style: oblique;" rendered="{!tree.Level__c == 9}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:140px;color:{!IF(!tree.Include_In_Estimate__c,'black','#FFFACD')};font-style: italic;" rendered="{!tree.Level__c == 10}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:140px;color:{!IF(!tree.Include_In_Estimate__c,'black','#F08080')};font-style: oblique;" rendered="{!tree.Level__c == 11}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:140px;color:{!IF(!tree.Include_In_Estimate__c,'black','#E0FFFF')};font-style: italic;" rendered="{!tree.Level__c == 12}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:140px;color:{!IF(!tree.Include_In_Estimate__c,'black','#FFB6C1')};font-style: oblique;" rendered="{!tree.Level__c == 13}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:140px;color:{!IF(!tree.Include_In_Estimate__c,'black','#FFA07A')};font-style: italic;" rendered="{!tree.Level__c == 14}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:140px;color:{!IF(!tree.Include_In_Estimate__c,'black','#20B2AA')};font-style: oblique;" rendered="{!tree.Level__c == 15}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:140px;color:{!IF(!tree.Include_In_Estimate__c,'black','#87CEFA')};font-style: italic;" rendered="{!tree.Level__c == 16}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:140px;color:{!IF(!tree.Include_In_Estimate__c,'black','#778899')};font-style: oblique;" rendered="{!tree.Level__c == 17}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:140px;color:{!IF(!tree.Include_In_Estimate__c,'black','#B0C4DE')};font-style: italic;" rendered="{!tree.Level__c == 18}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:140px;color:{!IF(!tree.Include_In_Estimate__c,'black','#FFFFE0')};font-style: oblique;" rendered="{!tree.Level__c == 19}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+                    <apex:outputLink style="margin-left:140px;color:{!IF(!tree.Include_In_Estimate__c,'black','#FAF0E6')};font-style: italic;" rendered="{!tree.Level__c >= 20}" value="/{!tree.id}" target="_parent">{!tree.Branch_Name__c}   </apex:outputLink>
+
+                </apex:column>
+                
+                <!--<apex:column value="{!tree.Level__c}" />
+                <apex:column value="{!tree.Order__c}" />-->
+                <apex:column style="background-color:{!IF(!tree.Include_In_Estimate__c,'#f2f2f2',IF((tree.RecordType.Name=='Tree Leaf' || tree.RecordType.Name=='Tree Leaf O&P'),'#e9fce9','white'))};" value="{!tree.Total_Direct_Cost__c}">
+                    <apex:facet name="header">
+                        <apex:outputPanel >
+                            <apex:outputText value="Total Direct Cost "/>
+                            <apex:image value="/s.gif" styleClass="helpIcon" title="Auto populated. Cost of work in place without subcontractor markups."/>
+                        </apex:outputPanel>
+                    </apex:facet>                
+                </apex:column>
+                
+                <apex:column style="background-color:{!IF(!tree.Include_In_Estimate__c,'#f2f2f2',IF((tree.RecordType.Name=='Tree Leaf' || tree.RecordType.Name=='Tree Leaf O&P'),'#e9fce9','white'))};" value="{!tree.Total_Cost__c}">
+                    <apex:facet name="header">
+                        <apex:outputPanel >
+                            <apex:outputText value="Total Cost w.SubconMarkups "/>
+                            <apex:image value="/s.gif" styleClass="helpIcon" title="Auto populated. Cost of work in place including subcontractor markups."/>
+                        </apex:outputPanel>
+                    </apex:facet>
+                </apex:column>
+                
+                <apex:column style="background-color:{!IF(!tree.Include_In_Estimate__c,'#f2f2f2',IF((tree.RecordType.Name=='Tree Leaf' || tree.RecordType.Name=='Tree Leaf O&P'),'#e9fce9','white'))};" value="{!tree.Relatedtree__r.name}">
+                    <apex:facet name="header">
+                        <apex:outputPanel >
+                            <apex:outputText value="Parent "/>
+                            <apex:image value="/s.gif" styleClass="helpIcon" title="ID of the Parent for the branch"/>
+                        </apex:outputPanel>
+                    </apex:facet>                        
+                </apex:column>
+                
+                <apex:column style="background-color:{!IF(!tree.Include_In_Estimate__c,'#f2f2f2',IF((tree.RecordType.Name=='Tree Leaf' || tree.RecordType.Name=='Tree Leaf O&P'),'#e9fce9','white'))};" value="{!tree.Parent_Node_Desc__c}">
+                    <apex:facet name="header">
+                        <apex:outputPanel >
+                            <apex:outputText value="Parent Description "/>
+                            <apex:image value="/s.gif" styleClass="helpIcon" title="Description of the Parent for the branch"/>
+                        </apex:outputPanel>
+                    </apex:facet>                                        
+                </apex:column>
+                
+
+                <apex:column style="background-color:{!IF(!tree.Include_In_Estimate__c,'#f2f2f2',IF((tree.RecordType.Name=='Tree Leaf' || tree.RecordType.Name=='Tree Leaf O&P'),'#e9fce9','white'))};" value="{!tree.description__c}">
+                    <apex:facet name="header">
+                        <apex:outputPanel >
+                            <apex:outputText value="Description "/>
+                            <apex:image value="/s.gif" styleClass="helpIcon" title="Description of the Parent"/>
+                        </apex:outputPanel>
+                    </apex:facet>                        
+                </apex:column>           
+
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        
+        
+            <!-- NO RESULTS MESSAGE -->
+        <apex:pageBlock title="NCMT Tree Structures" rendered="{!treestruc.size==0}">
+            <!--<div style="margin:-35px 0px 12px 30%;">
+                <apex:commandLink value="New NCMT Tree Structure" action="{!newTree}" target="_parent" styleClass="btn" style="text-decoration:none;padding:4px;"/>
+            </div>-->
+            
+                <div class="bRelatedList" style="margin:25px 0px 50px 0px;">
+                    <table class="list">
+                        <tbody>
+                            <tr class="headerRow">
+                                <th class="noRowsHeader">
+                                    No records to display.    
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        </apex:pageBlock>
+    
+    </apex:form>
+   
+</apex:page>

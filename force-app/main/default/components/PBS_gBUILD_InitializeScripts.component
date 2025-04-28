@@ -1,0 +1,401 @@
+<apex:component >
+    <apex:includeScript value="{!URLFOR($Resource.PBS_gBUILD_JQuery, '/RahdJQuery/jquery-1.8.0.min.js')}"  /> 
+    <apex:includeScript value="{!URLFOR($Resource.PBS_gBUILD_JQuery, '/RahdJQuery/jquery-ui-1.8.23.custom.min.js')}"  /> 
+    <apex:includeScript value="{!URLFOR($Resource.PBS_gBUILD_JQuery, '/RahdJQuery/jquery.cookies.2.2.0.min.js')}"  /> 
+    <apex:includeScript value="{!URLFOR($Resource.PBS_gBUILD_JQuery, '/RahdJQuery/jquery.dataTables.min.js')}"  />
+    <apex:stylesheet value="{!URLFOR($Resource.PBS_gBUILD_JQuery, '/RahdJQuery/css/smoothness/jquery-ui-1.8.23.custom.css')}"  />   
+    <apex:stylesheet value="{!URLFOR($Resource.PBS_gBUILD_JQuery, '/RahdJQuery/css/jquery.dataTables.css')}"  />   
+    
+    <style type="text/css">
+        .projectMandatoryField
+        {
+            font-weight:bold; 
+            font-size:.5cm; 
+            color:red; 
+            cursor:arrow        
+        }
+        .disabledLink
+        {
+            color: gray;
+            font-style: italic;
+        }
+        .emphasize
+        {
+            font-weight: bold;
+        }
+        input.text{
+            width: 40%
+        }
+        
+        #tabContainer,.tabsNewBar {
+            display: none;
+        }
+
+        #phHeader {
+            background-color: green;
+        }
+
+        #buildingSelector {
+            font-weight: bold;
+            font-size: 14px;
+            background-color: #FFFFCC;
+        }
+
+        .calculated {
+            color: #FA7D61;
+            text-color: #FA7D61;
+            font-style: italic;
+            font-weight: bold;
+            background-color: #F2F2F2;
+        }
+
+        #breadcrumbBar {
+            padding: 0;
+            margin: 0;
+            padding-bottom: 21px;
+            font-weight: bold;
+        }
+
+            #breadcrumbBar li {
+                padding: 0;
+                margin: 0;
+                float: left;
+                padding-right: 8px;
+                list-style: disc inside;
+            }
+
+                #breadcrumbBar li.first {
+                    list-style: none;
+                }
+
+        .mpcNoFields {
+            background-color: #FFFFCC;
+            font-style: italic;
+            font-weight: bold;
+        }
+        
+        .rich-tab-active{
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .rich-tab-inactive{
+            font-size: 12px;
+        }
+        .disabledTab { color:grey !important; font-size:12px;}
+    </style>            
+    <script type="text/javascript">
+
+        var isCustomerPortalTheme = "{!$User.UITheme}" == "PortalDefault" || "{!$User.UIThemeDisplayed}" == "PortalDefault";
+
+        var j$ = jQuery.noConflict();
+
+        j$(document).ready(function () {
+            //alert("JQ="+j$("#tsidLabel")[0].innerText);
+            initializeGUI();
+            j$(".dataTable").dataTable(
+                {
+                    "iDisplayLength": 25,
+                    "aLengthMenu": [[25, 50, 100, 500, -1], [25, 50, 100, 500, "All"]]
+                }
+            );
+            j$(".delCmd").each(function () {
+                var oldAction = this.onclick;
+                this.onclick = function () {
+                    var ret = confirm("Are you sure you want to delete this item?");
+                    if (ret) {
+                        oldAction();
+                    }
+                    return ret;
+                }
+            });
+            j$("textarea").css("width", "40%");
+            j$(".calculated").css("color", "#FA7D61"); //based on css ordering, we must do this here...
+            j$("select.enum option").each(function (index) {
+                j$(this).html(splitCamelCase(j$(this).html()));
+            });
+
+            var machine = cookieGet("apex__PBS_gBUILD_WfMachine");
+            if (machine == "WFM_LargeProject") {
+                j$(".MLP").css("background-color", "#FFFFAA").after("<span class='projectMandatoryField' title='This is needs to be completed for Large Projects'>*</span>");
+            }
+            else if (machine == "WFM_SmallProject") {
+                j$(".MSP").css("background-color", "#FFFFAA").after("<span class='projectMandatoryField' title='This is needs to be completed for Small Projects'>*</span>");
+            }
+            else if (machine == "WFM_EcoeProject") {
+                j$(".MEP").css("background-color", "#FFFFAA").after("<span class='projectMandatoryField' title='This is needs to be completed for Energy Division Projects'>*</span>");
+            }
+
+            setupFormApproval();
+        });
+
+        //http://stackoverflow.com/questions/2559759/how-do-i-convert-camelcase-into-human-readable-names-in-java
+        function splitCamelCase(s) {
+            if (s == null) return null;
+            return s
+                   // insert a space between lower & upper
+                   .replace(/([a-z])([A-Z])/g, '$1 $2')
+                   // space before last upper in a sequence followed by lower
+                   .replace(/\b([A-Z]+)([A-Z])([a-z])/, '$1 $2$3')
+                   // uppercase the first character
+                   .replace(/^./, function (str) { return str.toUpperCase(); })
+        }
+
+        function hasData(v) {
+            if (v == "" || v == null || v == "undefined") {
+                return false;
+            }
+            return true;
+        }
+
+        function split(s, delim) {
+            s = "" + s;
+            if (!hasData(s)) {
+                return new Array();
+            }
+            if (s.indexOf(delim) == -1) {
+                return [s];
+            }
+            return s.split(delim);
+        }
+
+        function cookieGet(name) {
+            try {
+                var v = j$.cookies.get(name);
+                var v2 = v.replace(/"/g, '');
+                return v2;
+            }
+            catch (ex) {
+                return null;
+            }
+        }
+
+        function indentSectionHeaders() {
+            var colors = [null, "#33B7D1", "#66FF33"];
+            j$(".pbSubheader,.pbSubsection").each(function () {
+                var jel = j$(this);
+                var depth = jel.parents("div.pbSubsection").length;
+                jel.css("margin-left", "" + (0.5 * depth) + "cm");
+                if (jel.hasClass("pbSubheader")) {
+                    var color = colors[depth % colors.length];
+                    if (color != null) {
+                        jel.css("background-color", color);
+                    }
+                }
+            });
+        }
+
+        function initializeGUI() {
+            indentSectionHeaders();
+            var footer = '<div>Green Building Upgrade Information Lifecycle Database (gBUILD)</div>';
+
+            var tabSectionSeparatorHtml = isCustomerPortalTheme ? '' : '<li style="font-weight:bold; border:0; padding:0">|</li>';
+
+            j$(".bPageFooter").children().before(footer);
+
+            var pid = cookieGet("apex__PBS_gBUILD_ProjectId");
+            var projectSeparatorTabs = j$("a[title='Help Tab'],a[title='Project Basics Tab'],a[title='Project Basics Tab - Selected']").parent();
+            var projectBuildingSeparatorTabs = j$("a[title='Help Tab'],a[title='Project Basics Tab'],a[title='Project Basics Tab - Selected'],a[title='Building Basics Tab'],a[title='Building Basics Tab - Selected']").parent();
+
+            var projectTabs = j$("a[title='Project Basics Tab'],a[title='Funding Sources Tab'],a[title='Financials Tab'],a[title='Roles Tab'],a[title='Workflow Tab'],a[title='Buildings Tab'],a[title='Workflow Tab']").parent();
+            var buildingTabs = j$("a[title='Project Basics Tab'],a[title='Building Basics Tab'],a[title='Scope Tab'],a[title='KPM Tab'],a[title='Compliance Tab'],a[title='Closeout Tab'],a[title='Innovation Tab']").parent();
+            if (isCustomerPortalTheme) {
+                projectTabs = projectTabs.parent();
+                buildingTabs = buildingTabs.parent();
+            }
+
+            j$("a[title='Home Tab']").parent().css("display", "none");
+            //j$("#AllTab_Tab").css("display", "none");  //hides the PLUS sign in the tab bar that allows users to add additional tabs.
+            projectTabs.css("display", "none");
+            buildingTabs.css("display", "none");
+
+            var pageName = cookieGet("apex__PBS_gBUILD_PageName");
+            var hasProject = hasData(pid);
+            if (hasProject) {
+                var pname = cookieGet("apex__PBS_gBUILD_ProjectName");
+                var pnameField = cookieGet("apex__PBS_gBUILD_ProjectNameField");
+                var bid = cookieGet("apex__PBS_gBUILD_BuildingId");
+                var bids = split(cookieGet("apex__PBS_gBUILD_BuildingIds"), "`");
+                var bnames = split(cookieGet("apex__PBS_gBUILD_BuildingNames"), "`");
+                var bname = null;
+                var buildingOptions = "";
+                for (var x = 0; x < bids.length; ++x) {
+                    if (!hasData(bids[x])) continue;
+                    var sel = false;
+                    if (bids[x] == bid && bid != null && bid != "") {
+                        bname = bnames[x];
+                        sel = true;
+                    }
+                    buildingOptions += '<option value="' + bids[x] + '" ' + (sel ? 'selected="selected"' : '') + '>' + bnames[x] + ' (' + bids[x] + ')</option>';
+                }
+                var managePage = pageName == "Manage Buildings";
+                var buildingsDropdown = '<select id="buildingSelector">';
+                buildingsDropdown += '<option' + (managePage || bname != null ? ' disabled="disabled"' : '') + '>Select a Building</option>';
+                buildingsDropdown += '<option value="Manage" ' + (managePage ? 'selected="selected"' : '') + '>Add / Remove Buildings...</option>';
+                buildingsDropdown += buildingOptions;
+                buildingsDropdown += '</select>';
+                j$("a[title='Buildings Tab'],a[title='Buildings Tab - Selected']").parent().html(buildingsDropdown);
+                j$("#buildingSelector").change(function () {
+                    var val = j$(this).val();
+                    if (val == "Manage") {
+                        location = "/apex/PBS_gBUILD_PBuildingsManage";
+                    }
+                    else {
+                        location = "/apex/PBS_gBUILD_PBuildingBasics?buildingId=" + val;
+                    }
+                });
+                         // alert("bname=["+bname+"]"); 
+                if (hasData(bname)) {
+                    buildingTabs.css("display", "");
+                    projectBuildingSeparatorTabs.before(tabSectionSeparatorHtml);
+                }
+                else {
+                    projectTabs.css("display", "");
+                    projectSeparatorTabs.before(tabSectionSeparatorHtml);
+                }
+            }
+            else {
+                j$("a[title='Projects Tab']").parent().css("display", "");
+            }
+
+            var extraBreadcrumbs = cookieGet("apex__PBS_gBUILD_ExtraBreadcrumbs");
+            var bar = '<div id="contextBar">';
+            if (hasProject) {
+                bar += '<h2>' + pname + (bname == null ? "" : " - " + bname) + '</h2>';
+            }
+            /*
+            bar += '<ul id="breadcrumbBar">' +
+                    '<li class="first"><a href="/apex/PBS_gBUILD_Projects">Projects</a></li>';
+            if (hasProject) {
+                bar += '<li><a href="/apex/PBS_gBUILD_ProjectBasics?projectId=' + pid + '">Project (' + pnameField + ')</a></li>';
+            }
+            if (hasData(bid)) {
+                bar += '<li><a href="/apex/PBS_gBUILD_PBuildingBasics?pbuildingId=' + bid + '">Building (' + bid + ')</a></li>';
+            }
+            if (hasData(extraBreadcrumbs)) {
+                var bcp = split(extraBreadcrumbs, ",");
+                for (var z = 0; z < bcp.length; z += 2) {
+                    bar += '<li><a href="/apex/' + bcp[z + 1] + '">' + bcp[z] + '</a></li>';
+                }
+            }
+            if (hasData(pageName)) {
+                bar += '<li>' + pageName + '</li>';
+            }
+            bar += '</ul>';
+            */
+            //breadcrumb bar vvvvvvvvvvvv
+            var divider = '<span style="font-weight:bold;font-size:.4cm"> → </span>';
+            bar += '<div id="breadcrumbBar">' +
+                    '<a href="/apex/PBS_gBUILD_Projects">Projects</a>';
+            if (hasProject) {
+                bar += divider + '<a href="/apex/PBS_gBUILD_ProjectBasics?projectId=' + pid + '">Project (' + pnameField + ')</a>';
+            }
+            if (hasData(bid)) {
+                bar += divider + '<a href="/apex/PBS_gBUILD_PBuildingBasics?pbuildingId=' + bid + '">Building (' + bid + ')</a>';
+            }
+            if (hasData(extraBreadcrumbs)) {
+                var bcp = split(extraBreadcrumbs, ",");
+                for (var z = 0; z < bcp.length; z += 2) {
+                    bar += divider + '<a href="/apex/' + bcp[z + 1] + '">' + bcp[z] + '</a>';
+                }
+            }
+            if (hasData(pageName)) {
+                bar += divider + pageName;
+            }
+            bar += '</div>';
+            //breadcrumb bar ^^^^^^^^^^^^
+            bar += '</div>';
+            if (pageName != "Home" && pageName != "gBUILD Home" && pageName != "Projects") {
+                j$("#tabContainer,.tabsNewBar").before(bar);
+            }
+            j$("#tabContainer,.tabsNewBar").css("display", "block");
+
+            var componentId = j$("#noBuilding").parent().attr("id");
+            j$(".noSidebarCell").children().each(function () {
+                var jel = j$(this);
+                if (jel.attr("id") == componentId) return;
+                //                jel.css("display", "none");
+            });
+        }
+
+        var executeApprovePostbackNow = false;        
+        
+        function setupFormApproval() {
+            j$(".approve").click(function () {
+                if (executeApprovePostbackNow) return true;
+                j$("#approveForm").dialog("open");
+                return false;
+            });
+            j$("#jsApproveReason").css("width", "100%");
+            j$("#approveForm").dialog({
+                autoOpen: false,
+                height: 350,
+                width: 400,
+                modal: true,
+                buttons: {
+                    "Save": function () {
+                        j$(this).dialog("close");
+                        j$(this).addClass("approve");
+                        var reason = j$("#jsApproveReason").val();
+                        var approved = j$("#jsApprovedForReporting").val();
+                        //alert(approved);
+                        
+                        if (approved == '<please select>') {
+                          alert('Please select a value for Approved for reporting.');
+                          return false;
+                          }
+                        
+                        j$("form").each(function () {
+                            var action = j$(this).attr("action");
+                            if (action == null) action = "";
+                            if (action.indexOf("?") < 0) {
+                                action += "?zzzz=1";
+                            }
+                            action += "&approveReason=" + encodeURI(reason);
+                            action += "&approvedForReporting=" + encodeURI(approved);
+                            j$(this).attr("action", action);
+                            //alert(action);
+                        });
+                        
+                        //
+                        if (confirm("Do you want to Save the changes?") === true) {
+                           executeApprovePostbackNow = true;
+                           j$(".approve").click();
+                           return true;
+                         } else {
+                          j$(this).dialog("close");
+                          
+                          return false;
+                         }
+					     
+                    },
+                    Cancel: function () {
+                        //alert("CANCEL");
+                        j$(this).dialog("close");
+                        return false;
+                    }
+                }
+            });
+        }
+    </script>    
+    <div class="message errorM3" id="noProject" style="display:none">
+        This page requires a project to have been selected.  Please return to the project list and select an active project.
+    </div>
+    <div class="message errorM3" id="noBuilding" style="display:none">
+        This page requires a building to have been selected.  Please return to the manage buildings page for this project and select an active building.
+    </div>    
+ 
+    <div title="Approve this form" style="display:none" class="modalForm" id="approveForm">
+        <fieldset>
+            <label for="jsApprovedForReporting">Approved for reporting?</label>
+            <select name="jsApprovedForReporting" id="jsApprovedForReporting" style="width:100%" class="required">
+                <option disabled="disabled" selected="selected" value="">&lt;please select&gt;</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+            <label for="jsApproveReason">Notes</label>
+            <br />
+            <textarea rows="8" cols="200" name="jsApproveReason" id="jsApproveReason" style="width:100%"></textarea>
+        </fieldset>
+    </div>                      
+</apex:component>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>CUST_NAME</field>
+    </columns>
+    <columns>
+        <field>PBS_Small_Projects_Historical_Database__c.Scope_Description__c</field>
+    </columns>
+    <columns>
+        <field>PBS_Small_Projects_Historical_Database__c.ePM__c</field>
+    </columns>
+    <columns>
+        <field>PBS_Small_Projects_Historical_Database__c.Building_Name__c</field>
+    </columns>
+    <columns>
+        <field>PBS_Small_Projects_Historical_Database__c.PBSBuilding_Number__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>PBS_Small_Projects_Historical_Database__c.Total_Project_Cost__c</field>
+    </columns>
+    <columns>
+        <field>PBS_Small_Projects_Historical_Database__c.PBS_Project_Name__c</field>
+    </columns>
+    <description>Search based on Scope Description</description>
+    <filter>
+        <criteriaItems>
+            <column>PBS_Small_Projects_Historical_Database__c.Scope_Description__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>contains</operator>
+            <value></value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>PBS_Small_Projects_Historical_Database__c.City__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Scope Description Report</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CustomEntity$PBS_Small_Projects_Historical_Database__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>false</showGrandTotal>
+    <showSubTotals>false</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>PBS_Small_Projects_Historical_Database__c.Design_Award_Date__c</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

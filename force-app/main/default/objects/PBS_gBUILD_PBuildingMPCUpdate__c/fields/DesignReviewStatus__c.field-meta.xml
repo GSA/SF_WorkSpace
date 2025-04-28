@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DesignReviewStatus__c</fullName>
+    <description>MPC Design Review Status Dropdown</description>
+    <inlineHelpText>MPC Design Review Status Dropdown</inlineHelpText>
+    <label>Design Review Status</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Concur / on track</fullName>
+                <default>false</default>
+                <label>Concur / on track</label>
+            </value>
+            <value>
+                <fullName>No - needs more information</fullName>
+                <default>false</default>
+                <label>No - needs more information</label>
+            </value>
+            <value>
+                <fullName>No - not on track / potential issues</fullName>
+                <default>false</default>
+                <label>No - not on track / potential issues</label>
+            </value>
+            <value>
+                <fullName>Review Required</fullName>
+                <default>false</default>
+                <label>Review Required</label>
+            </value>
+            <value>
+                <fullName>N/A</fullName>
+                <default>false</default>
+                <label>N/A</label>
+            </value>
+            <value>
+                <fullName>P100 Scope Determination Form or Waiver is needed but not yet approved</fullName>
+                <default>false</default>
+                <label>P100 Scope Determination Form or Waiver is needed but not yet approved</label>
+            </value>
+            <value>
+                <fullName>P100 Scope Determination Form was approved</fullName>
+                <default>false</default>
+                <label>P100 Scope Determination Form was approved</label>
+            </value>
+            <value>
+                <fullName>P100 Waiver was approved</fullName>
+                <default>false</default>
+                <label>P100 Waiver was approved</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

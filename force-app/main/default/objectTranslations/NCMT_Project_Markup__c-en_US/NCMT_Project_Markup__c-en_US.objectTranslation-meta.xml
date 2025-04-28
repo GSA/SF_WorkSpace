@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>NCMT Project Markup</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>NCMT Project Markups</value>
+    </caseValues>
+    <layouts>
+        <layout>NCMT Project Markup Layout</layout>
+        <sections>
+            <label><!-- CECCA --></label>
+            <section>CECCA</section>
+        </sections>
+        <sections>
+            <label><!-- Construction Manager as Constructor (CMc) --></label>
+            <section>Construction Manager as Constructor (CMc)</section>
+        </sections>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Developer - Design Build Bridging, Design Build owned and Built to Suit Lease --></label>
+            <section>Developer - Design Build Bridging, Design Build owned and Built to Suit Lease</section>
+        </sections>
+        <sections>
+            <label><!-- ECC --></label>
+            <section>ECC</section>
+        </sections>
+        <sections>
+            <label><!-- ECCA --></label>
+            <section>ECCA</section>
+        </sections>
+        <sections>
+            <label><!-- EDRC --></label>
+            <section>EDRC</section>
+        </sections>
+        <sections>
+            <label><!-- EMIC --></label>
+            <section>EMIC</section>
+        </sections>
+        <sections>
+            <label><!-- Lessor - TI Leasing --></label>
+            <section>Lessor - TI Leasing</section>
+        </sections>
+        <sections>
+            <label><!-- Markups - % User Input --></label>
+            <section>Markups - % User Input</section>
+        </sections>
+        <sections>
+            <label><!-- Prime Contractor Markups - Out-Sourced Work --></label>
+            <section>Prime Contractor Markups - Out-Sourced Work</section>
+        </sections>
+        <sections>
+            <label><!-- Prime Contractor Markups - Self Performed Work --></label>
+            <section>Prime Contractor Markups - Self Performed Work</section>
+        </sections>
+        <sections>
+            <label><!-- Project Premium Markups --></label>
+            <section>Project Premium Markups</section>
+        </sections>
+        <sections>
+            <label><!-- Site &amp; Design Contingency --></label>
+            <section>Site &amp; Design Contingency</section>
+        </sections>
+        <sections>
+            <label><!-- Special Tax --></label>
+            <section>Special Tax</section>
+        </sections>
+        <sections>
+            <label><!-- Total ETPC --></label>
+            <section>Total ETPC</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>NCMT Project Markup O&amp;P PageLayout</layout>
+        <sections>
+            <label><!-- Bid Factor --></label>
+            <section>Bid Factor</section>
+        </sections>
+        <sections>
+            <label><!-- Construction Contingency User Input --></label>
+            <section>Construction Contingency User Input</section>
+        </sections>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- ECC --></label>
+            <section>ECC</section>
+        </sections>
+        <sections>
+            <label><!-- ECCA --></label>
+            <section>ECCA</section>
+        </sections>
+    </layouts>
+    <recordTypes>
+        <description><!-- For O&amp;P Cost depending on project delivery method --></description>
+        <label><!-- DES O&amp;P Project Markup --></label>
+        <name>DES_O_P_Project_Markup</name>
+    </recordTypes>
+    <recordTypes>
+        <description><!-- Depending on project delivery method --></description>
+        <label><!-- DES Project Markup --></label>
+        <name>DES_Project_Markup</name>
+    </recordTypes>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- For the selected project delivery method, it cannot apply. --></errorMessage>
+        <name>Check_for_Developer_Dev_Fees</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- For the selected project delivery method, it cannot apply. --></errorMessage>
+        <name>Check_for_Developer_Prof_Serv_Fees</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Total of AE, CM, Cx of EDRC Percent is more than 100% --></errorMessage>
+        <name>Check_for_EDRC_Input_Type</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Total of AE, CM, Cx of EMIC Percent is more than 100% --></errorMessage>
+        <name>Check_for_EMIC_Input_Type</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- For the selected project delivery method, it cannot apply. --></errorMessage>
+        <name>Check_for_Lessor_Les_Fees</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- For the selected project delivery method, it cannot apply. --></errorMessage>
+        <name>Check_for_Lessor_Prof_Serv_Fees</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- For the selected project delivery method, it cannot apply. --></errorMessage>
+        <name>Check_for_PrimeCon_Prof_Serv_Fees</name>
+    </validationRules>
+</CustomObjectTranslation>

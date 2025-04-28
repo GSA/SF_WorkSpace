@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PerffutAnticCWaterConsumptionReduction__c</fullName>
+    <description>If EUAS is representative, the percentage difference calculates with the EUAS chilled water baseline. If EUAS is not representative, the calculation uses the manually entered chilled water baseline information.</description>
+    <formula>if (
+Text(PerffutIsEuasReferenceYearRep__c)=&apos;Yes&apos;,
+if(EuasBaselinePerformanceYear__r.CwaterAmt__c&lt;1,0,(EuasBaselinePerformanceYear__r.CwaterAmt__c- PerffutAnticChilledWater__c)/EuasBaselinePerformanceYear__r.CwaterAmt__c),
+if( PerffutChilledWater__c&lt;1,0,(PerffutChilledWater__c-PerffutAnticChilledWater__c)/PerffutChilledWater__c)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>This field provides a chilled water consumption percentage reduction between the user selected chilled water consumption baseline and the anticipated chilled water consumption.</inlineHelpText>
+    <label>Chilled Water Consumption Reduction (%)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>4</scale>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SysType__c</fullName>
+    <description>System type dropdown</description>
+    <inlineHelpText>Select the solar thermal system type that is being used.</inlineHelpText>
+    <label>System Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>DrainbackAndGlycolSystems</fullName>
+                <default>false</default>
+                <label>DrainbackAndGlycolSystems</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>PassiveThermosiphon</fullName>
+                <default>false</default>
+                <label>PassiveThermosiphon</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,267 @@
+<apex:page Controller="PBS_LOP_AttachmentsController" sidebar="false" showHeader="false"
+           standardStylesheets="false" cache="true">
+
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/demo_page.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+    <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+    <script type="text/javascript"
+            src="{!$Label.AAAP_JQUERYUI_URL}"></script>
+    <script src="{!URLFOR($Resource.modaljquery)}"></script>
+    <apex:includescript value="{!$Resource.showpopup}"/>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+        <apex:outputPanel id="pageURLForRedirection">
+        <script type="text/javascript">
+                console.log('{!pageURLForRedirection}');
+                if('{!JSENCODE(pageURLForRedirection)}' != ''){
+                	window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
+                    window.parent.document.body = document.createElement('body');
+                }
+    			else{
+                window.parent.document.body.scrollTop = 0;
+                window.parent.document.documentElement.scrollTop = 0;
+                }
+        </script>
+</apex:outputPanel>
+    <style>
+        .errMessage {
+            color:red;
+        }
+
+    </style>
+    <head>
+
+        <style type="text/css">
+
+            h4        {  font-weight:normal; color:#666666; font-size:12px; !imporant}
+
+        </style>
+
+
+        <style type="text/css">
+            #lean_overlay {
+                position: fixed;
+                z-index:100;
+                top: 0px;
+                left: 0px;
+                height:100%;
+                width:100%;
+                background:none;
+                display: none;
+            }
+
+            .ui-dialog {
+                background:#fff;
+                padding:10px;
+                border:1px solid #999;
+            }
+
+            .ui-dialog a {
+                float:right;
+                font-weight:bold;
+                padding:3px;
+                color:#999;
+                text-transform:uppercase;
+                font-size:10px;
+            }
+            #Modal_Prop_Ques15{
+                width: 500px;
+            }
+
+            .col1   {text-align: left;
+                width: 400px;}
+            .col2   {text-align: center;
+                width: 230px;}
+            .tabbed-table table td {background:#fff;}
+            h2        {color:#fff; font-size:80%; font-weight:bold; padding-left:40px; width:80%;}
+
+            .offerTitle{font-size:16px;
+                color:#002bad;
+                font-weight:bold;
+            }
+            p, .formwrap td {
+                padding-top: 10px; !important
+            }
+
+
+        </style>
+
+        <style type="text/css">
+            p.thick {color:red;font-weight:bold;}
+
+
+            #searchTable.tabbed-table h3 {float:none !important; font-size:20px;}
+            #searchTable.tabbed-table table {margin:0px;width:800px !important; border:0px;}
+            #searchTable.tabbed-table  {width:800px;padding:0px;margin-top:20px; border:0px;background:none;}
+            #searchTable.tabbed-table table tr {height:20px !important;}
+            #searchTable.tabbed-table table td.labelCol {background:#ccc; font-weight:bold;}
+            #searchTable.tabbed-table table td {width:25%;}
+            .tabbed-table table {width:800px !important;}
+            .tabbed-table {width:800px !important;}
+
+
+        </style>
+        <script src="{!$Label.AAAP_JQUERY_URL}"></script>
+        <script type="text/javascript"
+                src="{!$Label.AAAP_JQUERYUI_URL}"></script>
+        <script src="{!URLFOR($Resource.modaljquery)}"></script>
+        <apex:includescript value="{!$Resource.showpopup}"/>
+        <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+    </head>
+
+    
+<!-- J. Rogers  Eliminate Headers
+<div id="login">
+        <ul>
+            <li><a href="/RSAP/portalHome">RSAP Home</a> </li>
+            <li>|</li>
+            <li><a href="/AAAP/portalHome">AAAP</a></li>
+            <li>|</li>
+            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
+                <apex:outputLink value="/AAAP/home/home.jsp">
+                    <li>{!$Label.site.login_button}</li>
+                </apex:outputLink>
+                <li> |</li>
+                <apex:outputLink value="/AAAP/ForgotPassword">
+                    <li>{!$Label.site.forgot_your_password_q}</li>
+                </apex:outputLink>
+                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
+                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
+                    <li>{!$Label.site.new_user_q}</li>
+                </apex:outputLink>
+            </apex:panelGroup>
+            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
+                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
+                <li>{!$Label.site.logout}</li>
+            </apex:outputLink>
+        </ul>
+    </div -->
+    <div id="wrapper">
+        <c:lop_inside_header />
+        <div id="content" class="attachments-lop">
+            <!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
+            <apex:panelGrid rendered="{!!isValidUser}">
+                <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+                <apex:messages styleClass="errMessage" id="errmessage"/>
+            </apex:panelGrid>
+            <apex:panelGroup rendered="{!isValidUser}">
+                <apex:panelGrid columns="2" style="float:right"><a href="#" onclick="window.print();"></a>
+                    <apex:outputLabel style="padding-right:47px"></apex:outputLabel>
+                </apex:panelGrid>
+                <br/>
+                <!--<c:lopHeader myOffer="{!submitOffer}" myProject="{!project}" offerDueDate="{!offerDueDate}"/>-->
+                <!--<c:lopProgressBar myValue="{!submitOffer.Id}"/>-->
+                <c:PBS_LOP_ProgressBar src="attachmentack" myValue="{!submitOffer.Id}" step="6" linksToViewModePage="{!isEditable}"/>
+            </apex:panelGroup>
+
+
+            <apex:form id="offerattachmentsform" styleClass="formwrap" rendered="{!isValidUser}">
+
+                <apex:actionFunction name="refreshForms" action="{!uploadFormsOnFinalSubmit}">
+                </apex:actionFunction>
+
+                <apex:outputPanel ><h3 class="blue" style="margin-bottom: 12px;">Submit Offer</h3></apex:outputPanel>
+                <apex:messages styleClass="errMessage"/>
+                <div id="err1" style="color:red; display:none; margin-bottom: 12px; margin-top: 20px;">
+                    You must confirm you have read the RLP and declare your deviation intentions.
+                </div>
+                <apex:panelGrid columns="2" id="SubmitSection">
+                    <apex:outputPanel >
+                        <apex:outputText style="color:black;margin-bottom: 12px;"
+                                         value="This application will auto-generate forms based on the information entered into the application. Signature on these forms is not required, as submission through the application is deemed equivalent."></apex:outputText>
+                        <br/>
+                        <br/>
+                        <div style="margin-right: 5%;margin-bottom: 12px;">
+                        <apex:outputText style="color:black;font-size:12pt;font-weight:bold;"
+                                         value="By submitting this offer, the offeror agrees to lease the premises described within the offer to the United States of America upon the Lease Contracting Officer’s acceptance of the offer. The offeror acknowledges they have read and fully understand the Request for Lease Proposals and agrees to honor the terms and conditions specified in their offer and to full compliance with and acceptance of the Request for Lease Proposals and its attachments AND:"></apex:outputText>
+                        </div>
+                    </apex:outputPanel>
+
+
+                </apex:panelGrid>
+
+                <apex:PanelGrid columns="2">
+                    <apex:outputText >
+                        <div>The Offeror IS NOT requesting deviations.</div>
+                        </apex:outputText>
+                    <!--<apex:selectRadio value="{!submitOffer.PBS_AAAP_ACCEPTED_TERMS_AND_COND__c}" id="rlpRadio">-->
+                    <apex:selectRadio style="margin-top: -25px;position: absolute;" value="{!termsAndConditions}" id="rlpRadio">
+                        <!-- J. Rogers - added oncomplete -->
+                        <apex:actionSupport action="{!renderRLPSection}" event="onclick" reRender="rlpSec" oncomplete="top.postMessage('Page Updated', document.location.origin);"/>
+                        <apex:selectOptions value="{!items}"/>
+
+                    </apex:selectRadio>
+                </apex:PanelGrid>
+                <apex:outputPanel id="rlpSec">
+                    <apex:panelGrid style="margin-right: 30px;" columns="2" id="rlpSection"
+                                    rendered="{!showSection}">
+                        <apex:inputCheckbox id="rlpCheckBox" value="{!rlpCheckBox}">
+                            <!-- <apex:actionSupport action="{!copyUserDetails}" event="onclick" reRender="theGridsection1" oncomplete="disableFields();"/> -->
+                        </apex:inputCheckbox>
+                            <apex:outputText value="The Offeror IS requesting deviations as stated in the ‘Additional Remarks or Conditions with Respect to this Offer’ box in the ‘Property Owner and Additional Remarks’ section."/>
+                    </apex:panelGrid>
+                </apex:outputPanel>
+
+                <br/>
+                <!-- <h1><b><apex:outputText value="Electronic Signature"/></b></h1> <br/> -->
+                <apex:panelGrid columns="1">
+                    <apex:outputText value="Offeror First Name"/>
+                    <apex:inputText value="{!usrinfo.firstName }" disabled="true"/>
+                    <apex:outputText value="Offeror Last Name"/>
+                    <apex:inputText value="{!usrinfo.lastName}" disabled="true"/>
+                    <!--
+                    <apex:outputText value="Submission Date"/>
+                    <apex:inputText value="{!DateSubmitted}" disabled="true"/>-->
+                </apex:panelGrid>
+                <br/><br/>
+
+                <apex:actionFunction action="{!actionSubmitOffer2}" name="updateOffer" Rerender="statuses" status="Status1" onComplete="CallWebService_JS();"/>
+                <apex:actionFunction action="{!refreshForms2}" name="CallWebService_JS" status="Status2" reRender="statuses, pageURLForRedirection"/>
+
+                <apex:outputPanel id="statuses">
+                    <apex:actionStatus id="Status1" startText="Loading..." />
+                    <apex:actionStatus id="Status2" startText="Submitting..." />
+                </apex:outputPanel>
+
+                <!--<apex:commandButton onClick="check();return false;" value="Submit Offer" />
+                <apex:commandButton action="{!actionCancelSubmitOffer}" value="Cancel"/> -->
+
+                <a href="#" class="buttongreen" id="submitoffer" onclick="check();return false;" style="margin-right:5px;position:relative;top:-2px;">Submit Offer</a>
+                <apex:commandButton action="{!actionCancelSubmitOffer}" value="Cancel"/>
+            </apex:form>
+        </div>
+    </div>
+    <script type="application/javascript">
+        function check(){
+            var rad = $("input[type='radio']:checked").val();
+            if(rad == 'Yes'){
+                console.log('1'+rad);
+                $('#err1').css('display','none');
+                $('#submitoffer').hide();
+                updateOffer();
+                
+            } else if(rad == 'No') {
+                console.log('2'+rad);
+                var chk = $("input[type='checkbox']").prop('checked');
+                if(chk){
+                    console.log(chk);
+                    $('#err1').css('display','none');
+                    $('#submitoffer').hide();
+                    updateOffer();
+                } else {
+                    console.log(chk);
+                    $('#err1').css('display','block');
+                    $('html, body').animate({scrollTop: '0px'}, 300);
+                }
+            } else {
+                $('#err1').css('display','block');
+                $('html, body').animate({scrollTop: '0px'}, 300);
+            }
+            top.postMessage('Page Updated', document.location.origin);
+        }
+
+    </script>
+    <c:SiteFooterUX />
+</apex:page>

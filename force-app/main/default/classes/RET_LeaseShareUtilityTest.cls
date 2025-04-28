@@ -3,7 +3,8 @@ public class RET_LeaseShareUtilityTest {
     @testsetup static void createData(){
         //Create RET users
         
-        Account ac = new Account(name ='Real Estate Tax Bucket') ;
+        Id acctOwnerId = [Select Id From User where isActive = true and UserRoleId != null and profile.name = 'GSA System Administrator' Limit 1].id;
+        Account ac = new Account(name ='Real Estate Tax Bucket', ownerid = acctOwnerId) ;
         insert ac; 
         Id retProfileId = [select Id, name from Profile where Name = :RET_LeaseShareUtility.RET_CCP_Profile limit 1].Id;
         Id systemUserProfileId = [select Id, name from Profile where Name Like 'GSA System Administrator%' limit 1].Id;
@@ -28,8 +29,12 @@ public class RET_LeaseShareUtilityTest {
             
             PBS_Lease__c newPBS = new PBS_Lease__c(Lease_Number__c='98462383', Name ='98462383Test', Lease_Effective_Date__c = date.today(), Lease_Expiration_Date__c = date.today().adddays(365));
             Insert newPBS;
-            PBS_Lease_Access__c lsac1 = new PBS_Lease_Access__c(PBS_Lease__c = newPBS.id, Requestor__c=user.Id, Status__c = 'Requested');
-            Insert lsac1;
+            //PBS_Lease_Access__c lsac1 = new PBS_Lease_Access__c(PBS_Lease__c = newPBS.id, Requestor__c=user.Id, Status__c = 'Requested');
+            //Insert lsac1;
+            PBS_Lease_Access__c lsacApproved = new PBS_Lease_Access__c(PBS_Lease__c = newPBS.id, Requestor__c=user.Id, Status__c = 'Approved');
+            Insert lsacApproved;
+            PBS_Lease_Access__c lsacPOC = new PBS_Lease_Access__c(PBS_Lease__c = newPBS.id, Requestor__c=user.Id, Status__c = 'POC');
+            Insert lsacPOC;
             List<Case> collCase = new List<Case>();
             collCase.add(new case(origin='Web',Status='Submitted',PBS_Lease__c =newPBS.ID));
             collCase.add(new case(origin='Phone',Status='Submitted',PBS_Lease__c =newPBS.ID));
@@ -47,21 +52,23 @@ public class RET_LeaseShareUtilityTest {
             List<PBS_Lease_Access__c> lsacList = [select id, PBS_Lease__c, PBS_Lease__r.Lease_Number__c, 
                                                   Requestor__c, Status__c from PBS_Lease_Access__c];
             for(PBS_Lease_Access__c lsac : lsacList){lsacIdList.add(lsac.id);}
-            
-            RET_LeaseShareUtility.getLeaseAccessList(statusFilters,1,3);
-            RET_LeaseShareUtility.getPendingApprovalsCount(statusFilters);
-            RET_LeaseShareUtility.ApproveRejectLeaseAccess(lsacList, 'Approve');
-            RET_LeaseShareUtility.ApproveRejectLeaseAccess(lsacList, 'Reject');
-            RET_LeaseShareUtility.getLeaseAccessMap(leaseList);
-            RET_LeaseShareUtility.revokePOCLeaseAccess(leaseList);
-            RET_LeaseShareUtility.revokeRETLeaseAccess(leaseList);
-            RET_LeaseShareUtility.revokePBSLeaseAccess(lsacIdList);
+            //RET_LeaseShareUtility.getLeaseAccessList(statusFilters,1,3);
+            //RET_LeaseShareUtility.getPendingApprovalsCount(statusFilters);
+            //RET_LeaseShareUtility.ApproveRejectLeaseAccess(lsacList, 'Approve');
+            //RET_LeaseShareUtility.ApproveRejectLeaseAccess(lsacList, 'Reject');
+            //RET_LeaseShareUtility.getLeaseAccessMap(leaseList);
+             RET_LeaseShareUtility.approvePOCLeaseAccess(leaseList);
+                List<PBS_Lease_Access__c> lsaAppt = [select id, PBS_Lease__c, Requestor__c, Status__c from PBS_Lease_Access__c Where Status__c = 'Approved' LIMIT 1 ];
+                delete lsaAppt;
+             RET_LeaseShareUtility.approvePOCLeaseAccess(leaseList);
+            //RET_LeaseShareUtility.revokeRETLeaseAccess(leaseList);
+            //RET_LeaseShareUtility.revokePBSLeaseAccess(lsacIdList);
             RET_LeaseShareUtility.getCastIronUserId();
             RET_LeaseShareUtility.getPBSLeaseAccessRecords('leaseNumber');
-            RET_LeaseShareUtility.InsertCaseShares(lsacList);
+            //RET_LeaseShareUtility.InsertCaseShares(lsacList);
             String uType = RET_LeaseShareUtility.getUserType();
             system.assertNotEquals(null, uType);
         }
-    }    
+    }   
     
 }

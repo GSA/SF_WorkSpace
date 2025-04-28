@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PerffutAnticGasConsumptionReduction__c</fullName>
+    <description>If EUAS is representative, the percentage difference calculates with the EUAS gas baseline. If EUAS is not representative, the calculation uses the manually entered gas baseline information.</description>
+    <formula>if (
+   Text(PerffutIsEuasReferenceYearRep__c)=&apos;Yes&apos;,
+   if( EuasBaselinePerformanceYear__r.GasAmt__c &lt;1,0,(EuasBaselinePerformanceYear__r.GasAmt__c-PerffutAnticGas__c )/EuasBaselinePerformanceYear__r.GasAmt__c),
+   if(PerffutGas__c&lt;1,0,(PerffutGas__c-PerffutAnticGas__c)/PerffutGas__c)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>This field provides a gas consumption percentage reduction between the user selected gas consumption baseline and the anticipated gas consumption.</inlineHelpText>
+    <label>Gas Consumption Reduction (%)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>4</scale>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

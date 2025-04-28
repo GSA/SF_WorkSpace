@@ -36,4 +36,24 @@
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/Lease_Request_PendingApproval</template>
     </alerts>
+    <fieldUpdates>
+        <fullName>POC_Email_Update</fullName>
+        <field>PBS_OwnerEmail__c</field>
+        <formula>PBS_Lease__r.Owner:User.Email</formula>
+        <name>POC Email Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>Populate POC Email</fullName>
+        <actions>
+            <name>POC_Email_Update</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>false</active>
+        <formula>NOT(ISPICKVAL(Status__c, &apos;&apos;))</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
 </Workflow>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>IntdsgnComishagtIndContractHolder__c</fullName>
+    <description>Who is the Commissioning Agent contract with?</description>
+    <inlineHelpText>Please select the commissioning agent for this contract.</inlineHelpText>
+    <label>Contract Holder</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Cmc</fullName>
+                <default>false</default>
+                <label>Cmc</label>
+            </value>
+            <value>
+                <fullName>Gsa</fullName>
+                <default>false</default>
+                <label>Gsa</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>Other:PleaseSpecify</fullName>
+                <default>false</default>
+                <label>Other:PleaseSpecify</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

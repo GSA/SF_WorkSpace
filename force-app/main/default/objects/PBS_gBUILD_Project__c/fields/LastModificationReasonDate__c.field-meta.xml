@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LastModificationReasonDate__c</fullName>
+    <description>A project&apos;s last modification date.</description>
+    <label>Last Modification Reason Date</label>
+    <summarizedField>PBS_gBUILD_WorkflowHistory__c.CreatedDate</summarizedField>
+    <summaryFilterItems>
+        <field>PBS_gBUILD_WorkflowHistory__c.RecordTypeId</field>
+        <operation>equals</operation>
+        <value>Last Modified Reason</value>
+    </summaryFilterItems>
+    <summaryForeignKey>PBS_gBUILD_WorkflowHistory__c.Rahd_ProjectParentId__c</summaryForeignKey>
+    <summaryOperation>max</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

@@ -1,0 +1,105 @@
+<apex:page controller="PBS_gBUILD_PBuildingsManageController" sidebar="false" tabStyle="PBS_gBUILD_Buildings__tab">
+    <c:PBS_gBUILD_InitializeScripts />
+    <apex:form >
+        <apex:pageMessages />           
+        <c:PBS_gBUILD_PageInstructions html="{!AppConfig.PageManageBuildingsIntro__c}" />
+        <apex:outputPanel rendered="{!showPageContent}" >
+        <apex:pageBlock title="Buildings associated with this project">
+            <apex:pageBlockTable value="{!linkedBuildings}" var="b" styleClass="dataTable">
+                <apex:column headerValue="Action">
+                    <apex:outputPanel rendered="{!(readWriteMode&&pbsProjectCreatedInGbuild)}">
+                        <apex:commandLink action="{!unlink}" value="Unlink">
+                            <apex:param name="p3" value="{!b.pbaId}" assignTo="{!paramPbaId}"/>             
+                        </apex:commandLink>
+                        &nbsp;|&nbsp;
+                    </apex:outputPanel>
+                    <apex:commandLink action="{!openLinkedBuilding}" value="Open">
+                        <apex:param name="p1" value="{!b.building.Location_Code_Plus__c}" assignTo="{!paramBuildingId}"/>              
+                    </apex:commandLink>
+                </apex:column>
+                <apex:column headerValue="Location Code">
+                    <apex:outputText value="{!b.building.Location_Code_Plus__c}" />
+                </apex:column>
+                <apex:column headerValue="Building Name">
+                    <apex:outputText value="{!b.building.Building_Name__c}" />
+                </apex:column>
+                <apex:column headerValue="Address">
+                    <apex:outputText value="{!b.building.Street_Address__c}" />
+                </apex:column>
+                <apex:column headerValue="City">
+                    <apex:outputText value="{!b.building.City__c}" />
+                </apex:column>
+                <apex:column headerValue="State">
+                    <apex:outputText value="{!b.building.State_Code__c}" />
+                </apex:column>
+                <apex:column headerValue="Region">
+                    <apex:outputText value="{!b.building.Region_Code__c}" />
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        <apex:pageBlock title="Buildings in region {!regionCode} not associated with this project">
+            <apex:outputPanel >
+                <apex:commandButton value="Previous" action="{!prevPage}" disabled="{!(!allowPrev)}" />
+                Page #<apex:outputLabel value="{!(1+PageNum)}"/>
+                <apex:commandButton value="Next" action="{!nextPage}" disabled="{!(!allowNext)}" />
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <apex:inputText value="{!filterExpr}" />
+                <apex:commandButton value="Filter" action="{!filter}" />
+            </apex:outputPanel>
+            <apex:pageBlockTable value="{!buildings}" var="b">
+                <apex:column headerValue="Action">
+                    <apex:outputPanel rendered="{!(readWriteMode&&pbsProjectCreatedInGbuild)}">
+                        <apex:commandLink action="{!link}" value="Link">
+                            <apex:param name="p2" value="{!b.id}" assignTo="{!paramBuildingId}"/>              
+                        </apex:commandLink>
+                        &nbsp;|&nbsp;
+                    </apex:outputPanel>
+                    <apex:commandLink action="{!openUnlinkedBuilding}" value="View">
+                        <apex:param name="p1" value="{!b.id}" assignTo="{!paramBuildingId}"/>              
+                    </apex:commandLink>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">
+                        <apex:commandLink action="{!resort}" value="Location Code{!IF(sortExpr=='Location_Code_Plus__c',' '+IF(sortDir='ASC','▼','▲'),'')}">
+                            <apex:param value="Location_Code_Plus__c" assignTo="{!resortVal}" ></apex:param>
+                        </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputText value="{!b.Location_Code_Plus__c}" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">
+                        <apex:commandLink action="{!resort}" value="Building Name{!IF(sortExpr=='Building_Name__c',' '+IF(sortDir='ASC','▼','▲'),'')}">
+                            <apex:param value="Building_Name__c" assignTo="{!resortVal}" ></apex:param>
+                        </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputText value="{!b.Building_Name__c}" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">
+                        <apex:commandLink action="{!resort}" value="Address{!IF(sortExpr=='Street_Address__c',' '+IF(sortDir='ASC','▼','▲'),'')}">
+                            <apex:param value="Street_Address__c" assignTo="{!resortVal}" ></apex:param>
+                        </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputText value="{!b.Street_Address__c}" />
+                </apex:column>
+                <apex:column headerValue="City">
+                    <apex:facet name="header">
+                        <apex:commandLink action="{!resort}" value="City{!IF(sortExpr=='City__c',' '+IF(sortDir='ASC','▼','▲'),'')}">
+                            <apex:param value="City__c" assignTo="{!resortVal}" ></apex:param>
+                        </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputText value="{!b.City__c}" />
+                </apex:column>
+                <apex:column headerValue="State">
+                    <apex:facet name="header">
+                        <apex:commandLink action="{!resort}" value="State{!IF(sortExpr=='State_Code__c',' '+IF(sortDir='ASC','▼','▲'),'')}">
+                            <apex:param value="State_Code__c" assignTo="{!resortVal}" ></apex:param>
+                        </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputText value="{!b.State_Code__c}" />
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        </apex:outputPanel>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>NCMT Other Cost</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>NCMT Other Costs</value>
+    </caseValues>
+    <layouts>
+        <layout>LPOE Other Cost Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Other Capital Renewal Cost Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Other Cost Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Other Direct Cost Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Other Housing Plan Option Cost Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Housing Plan Info --></label>
+            <section>Housing Plan Info</section>
+        </sections>
+    </layouts>
+    <recordTypes>
+        <description><!-- LPOE Other Cost --></description>
+        <label><!-- LPOE - Other Cost --></label>
+        <name>LPOE_Other_Cost</name>
+    </recordTypes>
+    <recordTypes>
+        <description><!-- For TCO - User Option --></description>
+        <label><!-- Other Capital Cost --></label>
+        <name>Other_Capital_Cost</name>
+    </recordTypes>
+    <recordTypes>
+        <description><!-- For TCO - User Option --></description>
+        <label><!-- Other Capital Renewal Cost --></label>
+        <name>Other_Capital_Renewal_Cost</name>
+    </recordTypes>
+    <recordTypes>
+        <description><!-- Other Facilities - Other Cost --></description>
+        <label><!-- Other Facilities - Other Cost --></label>
+        <name>Other_Facilities_Other_Cost</name>
+    </recordTypes>
+    <recordTypes>
+        <description><!-- Other Facilities - Other Direct Cost --></description>
+        <label><!-- Other Facilities - Other Direct Cost --></label>
+        <name>Other_Facilities_Other_Direct_Cost</name>
+    </recordTypes>
+    <recordTypes>
+        <label><!-- Other Housing Plan Cost --></label>
+        <name>Other_Housing_Plan_Cost</name>
+    </recordTypes>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- For Cost Based On &apos;Other&apos;, Enter Other Area value --></errorMessage>
+        <name>Check_Cost_Based_On_Other</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Frequency should be greater than 0 --></errorMessage>
+        <name>Check_Frequency_For_Capital_Renewal_Cost</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Choose correct Other Cost Record Type for related project --></errorMessage>
+        <name>Check_for_OtherCost_Record_Type</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- LPOE_Other_Cost --></label>
+        <name>LPOE_Other_Cost</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Other_Capital_Cost --></label>
+        <name>Other_Capital_Cost</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Other_Capital_Renewal_Cost --></label>
+        <name>Other_Capital_Renewal_Cost</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Other_Direct_Cost --></label>
+        <name>Other_Direct_Cost</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Other_Project_Site_Cost --></label>
+        <name>Other_Project_Site_Cost</name>
+    </webLinks>
+</CustomObjectTranslation>

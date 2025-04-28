@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CpEditor9__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Customer Portal Contact who has EDIT rights.</description>
+    <inlineHelpText>Customer Portal Contact who has EDIT rights.</inlineHelpText>
+    <label>Customer Portal Editor 9</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>Contact.Account.Name</field>
+            <operation>contains</operation>
+            <value>gBUILD</value>
+        </filterItems>
+        <isOptional>true</isOptional>
+    </lookupFilter>
+    <referenceTo>Contact</referenceTo>
+    <relationshipLabel>gBUILD Projects (Customer Portal Editor 9)</relationshipLabel>
+    <relationshipName>gBUILD_ProjectsSdsm</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>WntyProviderType__c</fullName>
+    <description>The type of the warranty provider</description>
+    <inlineHelpText>Please provide the type of warranty provided.</inlineHelpText>
+    <label>Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Installer</fullName>
+                <default>false</default>
+                <label>Installer</label>
+            </value>
+            <value>
+                <fullName>Manufacturer</fullName>
+                <default>false</default>
+                <label>Manufacturer</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>Other,PleaseSpecify:</fullName>
+                <default>false</default>
+                <label>Other,PleaseSpecify:</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

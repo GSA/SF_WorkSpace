@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>FlowOrchestrationInstance$Name</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationInstance$CreatedDate</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationInstance$CreatedBy</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationInstance$LastModifiedDate</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationInstance$LastModifiedBy</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationInstance$Status</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationInstance$FlowDefinition</field>
+    </columns>
+    <columns>
+        <field>FlowOrchestrationInstance$Id</field>
+    </columns>
+    <description>What orchestration runs have been created and what&apos;s the current status of each run?</description>
+    <format>Tabular</format>
+    <name>Sample Report: Orchestration Runs</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>flow_orchestration_run_ootb_crt_two_four_eight__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <sortColumn>FlowOrchestrationInstance$Name</sortColumn>
+    <sortOrder>Desc</sortOrder>
+    <timeFrameFilter>
+        <dateColumn>FlowOrchestrationInstance$CreatedDate</dateColumn>
+        <interval>INTERVAL_CURRENT</interval>
+    </timeFrameFilter>
+</Report>

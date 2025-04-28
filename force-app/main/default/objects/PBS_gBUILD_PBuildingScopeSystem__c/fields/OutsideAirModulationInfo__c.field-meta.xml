@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OutsideAirModulationInfo__c</fullName>
+    <description>Outside Air modulation or information pick list</description>
+    <inlineHelpText>If carbon dioxide space sensors are included in project, select if outside air modulation or information only.</inlineHelpText>
+    <label>Outside Air Modulation Or Info</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>InformationOnly</fullName>
+                <default>false</default>
+                <label>InformationOnly</label>
+            </value>
+            <value>
+                <fullName>OutsideAirModulation</fullName>
+                <default>false</default>
+                <label>OutsideAirModulation</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

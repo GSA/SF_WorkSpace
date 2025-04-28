@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Installation_Cost_f__c</fullName>
-    <externalId>false</externalId>
     <formula>(Quantity__c * (NCMT_Master_Format_Lookup__r.Hourly_Rate_txt__c +  NCMT_Master_Format_Lookup__r.Equipment_Unit_Cost__c))/ Conversion_Factor__c</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Installation Unit Cost f</label>

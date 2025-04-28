@@ -1,0 +1,432 @@
+<apex:page controller="PBS_gBUILD_PBuildingScopeDetController" sidebar="false" tabStyle="PBS_gBUILD_PBuildingScope__tab">
+    <c:PBS_gBUILD_InitializeScripts />  
+    <apex:form >
+        <apex:sectionHeader title="Scope System: {!sectionTitle}" />
+        <apex:pageMessages />           
+        <c:PBS_gBUILD_PageInstructions html="{!if(scopeInfo.systemsPageIntro==null,scopeInfo.detailPageIntro,scopeInfo.systemsPageIntro)}" />
+        <apex:outputPanel rendered="{!showPageContent}" >
+        <apex:pageBlock title="Step 3: {!if(scopeInfo.detailPageSystemTitle==null,'System Information', scopeInfo.detailPageSystemTitle)}" >
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!edit}" value="Edit" rendered="{!viewMode}" disabled="{!readonlyMode}"/>
+                <apex:commandButton action="{!save}" value="Save" rendered="{!editMode}" disabled="{!readonlyMode}"/>
+                <apex:commandButton action="{!saveAndNew}" value="Save & New" rendered="{!editMode}" disabled="{!readonlyMode}"/>
+                <apex:commandButton action="{!cancel}" value="Cancel" rendered="{!editMode}" immediate="true" />
+            </apex:pageBlockButtons>        
+            <apex:outputPanel rendered="{!(scopeInfo.systemsPageSystemIntro!=null)}">
+                <div class="message">
+                    <apex:outputText value="{!scopeInfo.systemsPageSystemIntro}" />
+                </div>
+            </apex:outputPanel>                                          
+            <apex:pageBlockSection title="Basic Tracking Information" columns="2" rendered="{!ssd.id!=null}">
+              <apex:outputField value="{!ssd.CreatedById}"/>
+              <apex:outputField value="{!ssd.CreatedDate}"/>
+              <apex:outputField value="{!ssd.LastModifiedById}"/>
+              <apex:outputField value="{!ssd.LastModifiedDate}"/>
+            </apex:pageBlockSection>                                              
+            <!-- System Information View ----------------------------------------------------------->
+            <apex:outputPanel rendered="{!recordType == 'R_NewReplacement'}">
+                <!-- Building Envelope :Roof:New/Replacement -->
+                <apex:pageBlockSection title="System Information." columns="1" >                    
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.Rooftype__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.SqFtOfApplication__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.Coolrooftype__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.Rooftypeothertext__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.Rooftype__c}" styleClass="enum"/>
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.SqFtOfApplication__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.Coolrooftype__c}" styleClass="enum"/>
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.Rooftypeothertext__c}" />
+                </apex:pageBlockSection>                    
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordType == 'R_RepairsOrAlterationsToExistingRoof'}">
+                <!-- Building Envelope :Roof:Repairs or Alterations to Existing Roof -->
+                <apex:pageBlockSection title="System Information." columns="1" >                    
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.RepairedRoofType__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.SqFtOfApplication__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.RepairedCoolRoofType__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.Rooftypeothertext__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.RepairedRoofType__c}" styleClass="enum"/>
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.SqFtOfApplication__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.RepairedCoolRoofType__c}" styleClass="enum"/>
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.Rooftypeothertext__c}" />
+                </apex:pageBlockSection>                    
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordType == 'AH_NewReplacement'}">
+                <!-- HVAC:Air Handler:New/Replacement -->
+                <apex:pageBlockSection title="System Information." columns="1" >                    
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.SysCnt__c}" />                        
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.TotCfmNewAirHandlers__c}" />                     
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.MotorSizeHpNewAirHandlers__c}" />                        
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.VsdCnt__c}" />                       
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.SysCnt__c}" />                        
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.TotCfmNewAirHandlers__c}" />                     
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.MotorSizeHpNewAirHandlers__c}" />                        
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.VsdCnt__c}" />                       
+                </apex:pageBlockSection>                    
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >                    
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.DemandCntrlVentlForAhu__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.UpgEconomizers__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.UvLighting__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.UniqueFiltration__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.CondensateCollection__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.IncludesTerminalUnitRplcs__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.VarRefrigerantFlowSys__c}" />                        
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.CarbonDioxideSpaceSensors__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.DedicatedOutdoorAirSys__c}" />                       
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.DemandCntrlVentlForAhu__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.UpgEconomizers__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.UvLighting__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.UniqueFiltration__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.CondensateCollection__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.IncludesTerminalUnitRplcs__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.VarRefrigerantFlowSys__c}" />                        
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.CarbonDioxideSpaceSensors__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.DedicatedOutdoorAirSys__c}" />                       
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.OtherSpecify__c}" />
+                </apex:pageBlockSection>                    
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordType == 'B_NewReplacement'}">
+                <!-- HVAC:Boilers:New/Replacement -->
+                <apex:pageBlockSection title="System Information." columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.CondensingType__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.BoilerCapacity__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.FuelType__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.CondensateRecovery__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.CondensingType__c}" styleClass="enum"/>                   
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.BoilerCapacity__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.FuelType__c}" styleClass="enum"/>                     
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.CondensateRecovery__c}" />
+                </apex:pageBlockSection>                    
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >                    
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.BoilerExhaustStackRecovery__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.HeatExchangerBoilerLoopBldgLoop__c}" />                      
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.Cogeneration__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.SummerBoiler__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.BoilerExhaustStackRecovery__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.HeatExchangerBoilerLoopBldgLoop__c}" />                      
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.Cogeneration__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.SummerBoiler__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.OtherSpecify__c}" />
+                </apex:pageBlockSection>                    
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordType == 'Chl_NewReplacement'}">
+                <!-- HVAC:Chillers:New/Replacement -->
+                <apex:pageBlockSection title="System Information." columns="1" >                    
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.ChillerInstType__c}" styleClass="enum"/>
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.ChillerType__c}" styleClass="enum"/>
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.ChillerCapacity__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.RefrigerantType__c}" styleClass="enum"/>
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.RefrigerantTypeOtherText__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.ChillerInstType__c}" styleClass="enum"/>
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.ChillerType__c}" styleClass="enum"/>
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.ChillerCapacity__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.RefrigerantType__c}" styleClass="enum"/>
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.RefrigerantTypeOtherText__c}" />
+                </apex:pageBlockSection>                    
+                <apex:pageBlockSection title="Please indicate the elements, features, or types included in your scope." columns="1" >                    
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.CoolingSysCriteria__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.HeatRecovery__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.Vfds__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.WatersideEconomizers__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.VarPrimaryPumping__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.ConstantVolume__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.Primarysecondary__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.AbsorptionChiller__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.MagneticBearingCompressor__c}" />                        
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.CoolingSysCriteria__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.HeatRecovery__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.Vfds__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.WatersideEconomizers__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.VarPrimaryPumping__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.ConstantVolume__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.Primarysecondary__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.AbsorptionChiller__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.MagneticBearingCompressor__c}" />                        
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.OtherSpecify__c}" />
+                </apex:pageBlockSection>                    
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordType == 'BG_NewSystem'}">
+                <!-- Renewable Energy:Biogas:New System -->
+                <!-- NONE BY DESIGN -->
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordType == 'BM_NewSystem'}">
+                <!-- Renewable Energy:Biomass:New System -->
+                <!-- NONE BY DESIGN -->
+            </apex:outputPanel>                     
+            <apex:outputPanel rendered="{!recordType == 'G_NewSystem'}">
+                <!-- Renewable Energy:Geothermal:New System -->
+                <!-- NONE BY DESIGN -->
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordType == 'PV_NewInstallationOrArrays'}">
+                <!-- Renewable Energy:Photovoltaic:New Installation or Arrays -->
+                <apex:pageBlockSection title="PV Information and Details" columns="1" >                 
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.PvInstType__c}" styleClass="enum"/>
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.SolarModuleType__c}" styleClass="enum"/>
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.SolarModuleTypeOtherText__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.SqFtOfApplication__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.SysCnt__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.PanelRating__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.PvInstType__c}" styleClass="enum"/>
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.SolarModuleType__c}" styleClass="enum"/>
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.SolarModuleTypeOtherText__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.SqFtOfApplication__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.SysCnt__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.PanelRating__c}" />
+                </apex:pageBlockSection>                                            
+                <apex:pageBlockSection title="PV System Capacity and Annual Production" columns="1" >                   
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.PvSysCapacity__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.AnnualEnergyProductionEfficiency__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.PvSysCapacity__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.AnnualEnergyProductionEfficiency__c}" />
+                </apex:pageBlockSection>                    
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordType == 'ST_NewSystem'}">
+                <!-- Renewable Energy:Solar Thermal:New System -->
+                <apex:pageBlockSection title="System Information." columns="1" >                    
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.SolarThermalSysCapacity__c}" />                      
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.AnnualEnergyProductionEfficiency__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.SysCost__c}" />                  
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.SolarThermalSysCapacity__c}" />                      
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.AnnualEnergyProductionEfficiency__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.SysCost__c}" />                  
+                </apex:pageBlockSection>                    
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordType == 'Wind_NewInstallationOrTurbines'}">           
+                <!-- Renewable Energy:Wind:New Installation or Turbines -->
+                <apex:pageBlockSection title="System Information." columns="1" >
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.WindTurbineCapacity__c}" />                  
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.WindTurbineCapacity__c}" />                  
+                </apex:pageBlockSection>                    
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordType == 'IL_NewApplication'}">
+                <!-- Lighting:Indoor Lighting:New Application -->
+                <apex:pageBlockSection title="Space Information." columns="1" >                 
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.AffectedSpace__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.AffectedSpaceOtherText__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.AnticipatedLightingPowerDensity__c}" />                      
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.AffectedSpace__c}" styleClass="enum"/>
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.AffectedSpaceOtherText__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.AnticipatedLightingPowerDensity__c}" />                      
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Indoor Light Sources: Please indicate what light sources are part of lighting application for this space." columns="2" >
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.CompactFluorescent__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.LEDIsLightingSource__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.T5T5HoLamps__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.T8Lamps__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.FiberOpticLightingTechnologies__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.SpectrallyEnhLighting__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.CompactFluorescent__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.LEDIsLightingSource__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.T5T5HoLamps__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.T8Lamps__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.FiberOpticLightingTechnologies__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.SpectrallyEnhLighting__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.OtherSpecify__c}" />
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Indoor Light Fixtures: Please indicate what light fixtures are part of lighting application for this space." columns="2" >
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.Downlights__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.PendantDirectIndirect__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.RecessedHighPerfLensed__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.UnderCabinetAndOrDesktopTaskLighting__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.Wallwashing__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.WrkstatSpecificPendantDigitalCntrl__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.GridLayIn__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.CeilingMountedPendantUplight__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.CeilingMountedPendantoutUplight__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.SurfaceMounted__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.Downlights__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.PendantDirectIndirect__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.RecessedHighPerfLensed__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.UnderCabinetAndOrDesktopTaskLighting__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.Wallwashing__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.WrkstatSpecificPendantDigitalCntrl__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.GridLayIn__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.CeilingMountedPendantUplight__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.CeilingMountedPendantoutUplight__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.SurfaceMounted__c}" />
+                </apex:pageBlockSection>                    
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordType == 'IL_RetrofitOrReplacement'}">
+                <!-- Lighting:Indoor Lighting:Retrofit or Replacement -->
+                <apex:pageBlockSection title="Space Information." columns="1" >                 
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.AffectedSpace__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.AffectedSpaceOtherText__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.AnticipatedLightingPowerDensity__c}" />                      
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.AffectedSpace__c}" styleClass="enum" />                        
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.AffectedSpaceOtherText__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.AnticipatedLightingPowerDensity__c}" />                      
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Indoor Light Sources: Please indicate what light sources are part of lighting application for this space." columns="2" >
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.CompactFluorescent__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.LEDIsLightingSource__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.T5T5HoLamps__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.T8Lamps__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.FiberOpticLightingTechnologies__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.SpectrallyEnhLighting__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.CompactFluorescent__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.LEDIsLightingSource__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.T5T5HoLamps__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.T8Lamps__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.FiberOpticLightingTechnologies__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.SpectrallyEnhLighting__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.OtherSpecify__c}" />
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Indoor Light Fixtures: Please indicate what light fixtures are part of lighting application for this space." columns="2" >
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.Downlights__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.PendantDirectIndirect__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.RecessedHighPerfLensed__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.UnderCabinetAndOrDesktopTaskLighting__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.Wallwashing__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.WrkstatSpecificPendantDigitalCntrl__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.GridLayIn__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.CeilingMountedPendantUplight__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.CeilingMountedPendantoutUplight__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.SurfaceMounted__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.Downlights__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.PendantDirectIndirect__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.RecessedHighPerfLensed__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.UnderCabinetAndOrDesktopTaskLighting__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.Wallwashing__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.WrkstatSpecificPendantDigitalCntrl__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.GridLayIn__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.CeilingMountedPendantUplight__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.CeilingMountedPendantoutUplight__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.SurfaceMounted__c}" />
+                </apex:pageBlockSection>                    
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordType == 'OL_NewApplication'}">
+                <!-- Lighting:Outdoor Lighting:New Application -->
+                <apex:pageBlockSection title="Space Information." columns="1" >                 
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.AffectedSpaceOutdoor__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.AffectedSpaceOtherText__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.AnticipatedLightingPowerDensity__c}" />                      
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.AffectedSpaceOutdoor__c}" styleClass="enum"/>                        
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.AffectedSpaceOtherText__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.AnticipatedLightingPowerDensity__c}" />                      
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Outdoor Light Sources: Please indicate what light sources are part of lighting application for this space." columns="2" >
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.Fluorescent__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.LEDIsLightingSource__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.Hid__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.Induction__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.SpectrallyEnhLighting__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.SodiumVapor__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.Fluorescent__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.LEDIsLightingSource__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.Hid__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.Induction__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.SpectrallyEnhLighting__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.SodiumVapor__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.OtherSpecify__c}" />
+                </apex:pageBlockSection>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordType == 'OL_RetrofitOrReplacement'}">
+                <!-- Lighting:Outdoor Lighting:Retrofit or Replacement -->
+                <apex:pageBlockSection title="Space Information." columns="1" >                 
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.AffectedSpaceOutdoor__c}" styleClass="enum" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.AffectedSpaceOtherText__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.AnticipatedLightingPowerDensity__c}" />                      
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.AffectedSpaceOutdoor__c}" styleClass="enum"/>                        
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.AffectedSpaceOtherText__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.AnticipatedLightingPowerDensity__c}" />                      
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Outdoor Light Sources: Please indicate what light sources are part of lighting application for this space." columns="2" >
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.Fluorescent__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.LEDIsLightingSource__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.Hid__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.Induction__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.SpectrallyEnhLighting__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.SodiumVapor__c}" />
+                    <apex:outputField rendered="{!viewMode}" value="{!ssd.OtherSpecify__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.Fluorescent__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.LEDIsLightingSource__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.Hid__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.Induction__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.SpectrallyEnhLighting__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.SodiumVapor__c}" />
+                    <apex:inputField rendered="{!editMode}" value="{!ssd.OtherSpecify__c}" />
+                </apex:pageBlockSection>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!scopeInfo.allowExtendedLED}">
+                <apex:pageBlockSection title="Lighting Source: LED Information" columns="1" >                 
+                    <apex:pageBlockSection title="Basic LED information" columns="1" >
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.SqFtOfApplication__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.SysCnt__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.LEDAverageReportedLifespanUnit__c}" styleClass="enum" />
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.LEDAverageReportedLifespan__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.SysCost__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.SqFtOfApplication__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.SysCnt__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.LEDAverageReportedLifespanUnit__c}" styleClass="enum"/>
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.LEDAverageReportedLifespan__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.SysCost__c}" />
+                    </apex:pageBlockSection>                    
+                    <apex:pageBlockSection title="LED manufacturer information" columns="1" >
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.LEDMfgName__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.LEDMfgState__c}" styleClass="enum" />
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.LEDMfgLocOther__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.LEDMfgName__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.LEDMfgState__c}" styleClass="enum" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.LEDMfgLocOther__c}" />
+                    </apex:pageBlockSection>                    
+                </apex:pageBlockSection>
+            </apex:outputPanel>                         
+            <apex:outputPanel rendered="{!scopeInfo.allowManufacturer}">
+                <apex:pageBlockSection title="Please input the manufacturer information." columns="1" >                 
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.MfgName__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.MfgState__c}" styleClass="enum" />
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.MfgLocOther__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.MfgName__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.MfgState__c}" styleClass="enum" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.MfgLocOther__c}" />
+                </apex:pageBlockSection>
+            </apex:outputPanel>             
+            <apex:outputPanel rendered="{!scopeInfo.allowWarranty}">
+                <apex:pageBlockSection title="Please input the warranty information." columns="1" >                 
+                    <apex:pageBlockSection title="Duration" columns="2" >
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.WntyEffectiveDate__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.WntyDuration__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.WntyOneYearFollowUp__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.WntyEffectiveDate__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.WntyDuration__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.WntyOneYearFollowUp__c}" />
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection title="Provider" columns="2" >                                                   
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.WntyProviderType__c}" styleClass="enum" />
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.WntyProviderTypeOther__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.WntyProviderName__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.WntyProviderType__c}" styleClass="enum" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.WntyProviderTypeOther__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.WntyProviderName__c}" />
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection title="POC" columns="2" >                                                                                
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.WntyPOCName__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.WntyPOCEmail__c}" />
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.WntyPOCPhone__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.WntyPOCName__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.WntyPOCEmail__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.WntyPOCPhone__c}" />
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection title="ARRA" columns="2" rendered="{!scopeInfo.allowArraWarranty}" >                                                                                                         
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.WntyARRACompliance__c}" styleClass="enum" />
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.WntyARRAComplianceExpln__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.WntyARRACompliance__c}" styleClass="enum"/>
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.WntyARRAComplianceExpln__c}" />
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection title="Other" columns="2" >                                                                                                                                      
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.WntyUncertaintyReason__c}" styleClass="enum" />
+                        <apex:outputField rendered="{!viewMode}" value="{!ssd.WntyUncertaintyReasonExpln__c}" />
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.WntyUncertaintyReason__c}" styleClass="enum"/>
+                        <apex:inputField rendered="{!editMode}" value="{!ssd.WntyUncertaintyReasonExpln__c}" />
+                    </apex:pageBlockSection>
+                </apex:pageBlockSection>                
+            </apex:outputPanel>                     
+        </apex:pageBlock>
+        </apex:outputPanel>
+    </apex:form>
+</apex:page>

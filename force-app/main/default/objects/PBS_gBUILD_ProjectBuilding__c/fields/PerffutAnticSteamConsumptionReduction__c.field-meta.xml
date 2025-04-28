@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PerffutAnticSteamConsumptionReduction__c</fullName>
+    <description>If EUAS is representative, the percentage difference calculates with the EUAS steam baseline. If EUAS is not representative, the calculation uses the manually entered steam baseline information.</description>
+    <formula>if (
+   Text(PerffutIsEuasReferenceYearRep__c)=&apos;Yes&apos;,
+   if(EuasBaselinePerformanceYear__r.SteamAmt__c&lt;1,0,(EuasBaselinePerformanceYear__r.SteamAmt__c-PerffutAnticSteam__c)/EuasBaselinePerformanceYear__r.SteamAmt__c),
+   if(PerffutSteam__c&lt;1,0,(PerffutSteam__c-PerffutAnticSteam__c)/PerffutSteam__c)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>This field provides a steam consumption percentage reduction between the user selected steam consumption baseline and the anticipated steam consumption.</inlineHelpText>
+    <label>Steam Consumption Reduction (%)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>4</scale>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

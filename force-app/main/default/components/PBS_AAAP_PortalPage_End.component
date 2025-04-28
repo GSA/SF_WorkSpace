@@ -1,0 +1,40 @@
+<apex:component id="PBS_AAAP_PortalPage_End">
+    <!-- J. Rogers  Comment out Footer Links   
+    <div id="footer">
+        <ul>
+            <li><span class="footer-logo">Lease Offer Platform</span></li>
+            <!--<li><a href="/AAAP/PBS_AAAP_Help">Help</a></li>  ->
+            <li>|</li>
+            <li>
+                <a href="/AAAP/PBS_AAAP_Privacy_And_Security" target="popup"
+                   onclick="window.open('/AAAP/PBS_AAAP_Privacy_And_Security','popup','width=800,height=600'); return false;">
+                    Privacy
+                    and Security Policy
+                </a>
+            </li>
+            <li>|</li>
+            <!--li><a href="/AAAP/PBS_AAAP_ContactUs">Contact Us</a></li->
+        </ul  
+    </div>
+-->
+    <script type="text/javascript">
+        jq(".popup").leanModal();
+        //CONTROLLING EVENTS IN jQuery
+        jq(document).ready(function(){
+            jq(document).keyup(function(e){
+            // alert("inside of the keyup, e.keyCode="+e.keyCode);
+                if(e.keyCode==27){
+                    jq('div:visible').each(function(n,v){
+                        var id = v.id;
+                        if (id.startsWith("Modal")){
+                            //alert("due to escape key, want to close ["+id+"]");
+                            jq("#lean_overlay").click();
+                            return;
+                        }
+                    });
+                    //disablePopup();
+                }
+            });
+        });
+    </script>
+</apex:component>

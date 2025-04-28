@@ -1,0 +1,339 @@
+<apex:page controller="PBS_gBUILD_PBuildingMpcController" sidebar="false" tabstyle="PBS_gBUILD_PBuildingCompliance__tab">
+  <c:PBS_gBUILD_InitializeScripts />
+  <apex:form >
+    <apex:pageMessages />
+    <c:PBS_gBUILD_PageInstructions html="{!AppConfig.PageMpcIntro__c}" />
+    <apex:pageBlock >
+      <apex:pageBlockButtons >
+        <apex:commandButton action="{!edit}" value="Edit" rendered="{!viewMode}" disabled="{!readonlyMode}"/>
+        <apex:commandButton action="{!save}" value="Save" rendered="{!editMode}" disabled="{!readonlyMode}"/>
+        <apex:commandButton action="{!cancel}" value="Cancel" rendered="{!editMode}" immediate="true" />
+        <apex:commandButton action="{!approve}" value="Approve"  rendered="{!viewMode}" disabled="{!!isApproveEnabled}" styleClass="approve"/>
+      </apex:pageBlockButtons>
+      <!-- RITM0604555 - Added - disabledTabClass for apex:tabPanel, disabled & title for apex:tab tags -->
+      <apex:tabPanel switchType="client" id="theTabPanel" selectedTab="CURRENT" disabledTabClass="disabledTab">
+        <apex:tab label="{!mpcCategoryIntegratedDesign}" id="tab1" ontabenter="location.replace('/apex/PBS_gBUILD_PBuildingMpcID')" disabled="{!editMode}"
+                  title="{!IF(editMode=true,'Please click save before moving to another tab.','')}">
+          <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabMpcIntDsgnIntro__c}" />
+          <a href="/apex/PBS_gBUILD_PBuildingMpcID">{!mpcCategoryIntegratedDesign}</a>
+        </apex:tab>
+        <apex:tab label="{!mpcCategoryEnergyPerformance}" id="tab2" ontabenter="location.replace('/apex/PBS_gBUILD_PBuildingMpcEP')" disabled="{!editMode}"
+                  title="{!IF(editMode=true,'Please click save before moving to another tab.','')}">
+          <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabMpcEnergyPerfIntro__c}" />
+          <a href="/apex/PBS_gBUILD_PBuildingMpcEP">{!mpcCategoryEnergyPerformance}</a>
+        </apex:tab>
+        <apex:tab label="{!mpcCategoryWater}" name="CURRENT" id="tab3">
+          <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabMpcWaterIntro__c}" />
+          <a name="mpc11"></a>
+          <apex:pageBlockSection title="{!MpcLabel11}" columns="1">
+            <!-- Energy Performance: 11. Choose Proper Glazing- Frames, Glass, Films, Gasses -->
+            <c:PBS_gBUILD_MpcInstructions mpcNum="11" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview11" viewMode="{!viewMode}" />
+            <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="11" viewMode="{!viewMode}" />
+            <apex:pageBlockSection title="Glazing Systems Narrative" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfProperGlazingNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfProperGlazingNarr__c}"/>
+            </apex:pageBlockSection>-->
+            <!-- from mps15 -->
+            <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="15" viewMode="{!viewMode}" /> -->
+            <apex:pageBlockSection title="Indoor Potable Water Scope ID and Narrative" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterIndoorPoth2oNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterIndoorPoth2oNarr__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Indoor Potable Water LCC Figures" columns="2" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterIndoorPoth2oLccfigsSir__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterIndoorPoth2oLccfigsPbckpd__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterIndoorPoth2oLccfigsSir__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterIndoorPoth2oLccfigsPbckpd__c}"/>
+            </apex:pageBlockSection>
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <!-- <apex:pageBlockSection title="Indoor Potable Water Calculations" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc15d3" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Indoor Potable Water Life Cycle Cost Analysis" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc15d4" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Indoor Water Reduction Plumbing / Fixture Schedule" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc15d5" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection> -->
+            <!-- from mps18 -->
+            <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="18" viewMode="{!viewMode}" /> -->
+            <apex:pageBlockSection title="Cooling Tower Potable Water Use Narrative" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterCoolingTowerPoth20Narr__c}" />
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterCoolingTowerPoth20Narr__c}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Cooling Tower Potable Water LCC Figures" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterCoolingTowerPoth20LccfigsSir__c}" />
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterCoolingTowerPoth20LccfigsPbckpd__c}" />
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterCoolingTowerPoth20LccfigsSir__c}" />
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterCoolingTowerPoth20LccfigsPbckpd__c}" />
+            </apex:pageBlockSection>
+            <!-- <apex:pageBlockSection title="Cooling Tower Potable Water Use Calculations" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc18d2" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Cooling Tower Potable Water Use Life Cycle Cost Analysis" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc18d3" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection> -->
+            <!-- from mps20 -->
+             <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="20" viewMode="{!viewMode}" /> -->
+            <!-- <c:PBS_gBUILD_MpcNoFields /> -->
+            <!-- from mps21 -->
+            <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="21" viewMode="{!viewMode}" /> -->
+            <!-- <c:PBS_gBUILD_MpcNoFields /> -->
+            <!-- from mps22 -->
+            <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="22" viewMode="{!viewMode}" /> -->
+            <apex:pageBlockSection title="Meter Cooling Tower Scope" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterMeterCoolingTowerScopeBleed__c}" />
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterMeterCoolingTowerScopeMeterFeed__c}" />
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterMeterCoolingTowerScopeBleed__c}" />
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterMeterCoolingTowerScopeMeterFeed__c}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Indoor Potable Water Calculations; Indoor Potable Water Life Cycle Cost Analysis; Indoor Water Reduction Plumbing / Fixture Schedule; Cooling Tower Potable Water Use Calculations; Cooling Tower Potable Water Use Life Cycle Cost Analysis; and Supporting documents such as LEED Waivers, P100 Waivers, RRE Waivers, or other explanatory HPGB information" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" readableWaiverKeyPattern="Mpc[TOKEN]Waivers" readableWaiverKeyTokens="15,18,20,21,22" readableUploadKeys="Mpc15d3,Mpc15d4,Mpc15d5,Mpc18d2,Mpc18d3" key="Gpc11" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+          </apex:pageBlockSection>
+          <a name="mpc12"></a>
+          <apex:pageBlockSection title="{!MpcLabel12}" columns="1">
+            <!-- Energy Performance: 12. Cooling &amp; Heating Plants Use LCC Methodology / Equipment -->
+            <c:PBS_gBUILD_MpcInstructions mpcNum="12" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview12" viewMode="{!viewMode}" />
+            <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="12" viewMode="{!viewMode}" />
+            <apex:pageBlockSection title="Cooling and Heating Plants Narrative" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfCoolingHeatingPlantsNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfCoolingHeatingPlantsNarr__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Cooling and Heating Plants LCC Figures" columns="2" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfCoolingHeatingPlantsLccfigsSir__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfCoolingHeatingPlantsLccfigsPckPd__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfCoolingHeatingPlantsLccfigsSir__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfCoolingHeatingPlantsLccfigsPckPd__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Cooling &amp; Heating Plants Support Calculations" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc12d3" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Cooling &amp; Heating Plants Life Cycle Cost Analysis" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc12d4" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>-->
+            <!-- from mps16 -->
+            <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="16" viewMode="{!viewMode}" /> -->
+            <apex:pageBlockSection title="Outdoor Potable Water Narrative" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterOutdoorPoth2oNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterOutdoorPoth2oNarr__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Outdoor Potable Water LCC Figures" columns="2" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterOutdoorPoth2oLccfigsSir__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterOutdoorPoth2oLccfigsPbckpd__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterOutdoorPoth2oLccfigsSir__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterOutdoorPoth2oLccfigsPbckpd__c}"/>
+            </apex:pageBlockSection>
+            <!-- <apex:pageBlockSection title="Outdoor Potable Water - Irrigation Calculations" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc16d3" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Outdoor Potable Water Life Cycle Cost Analysis" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc16d4" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection> -->
+            <apex:pageBlockSection title="Outdoor Potable Water - Irrigation Calculations; Outdoor Potable Water Life Cycle Cost Analysis; and Supporting documents such as LEED Waivers, P100 Waivers, RRE Waivers, or other explanatory HPGB information" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" readableWaiverKeyPattern="Mpc[TOKEN]Waivers" readableWaiverKeyTokens="16" readableUploadKeys="Mpc16d3,Mpc16d4" key="Gpc12" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+          </apex:pageBlockSection>
+          <a name="mpc13"></a>
+          <apex:pageBlockSection title="{!MpcLabel13}" columns="1">
+            <c:PBS_gBUILD_MpcInstructions mpcNum="13" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview13" viewMode="{!viewMode}" />
+            <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="13" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcNoFields />-->
+            <!-- from mps17 -->
+            <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="17" viewMode="{!viewMode}" /> -->
+            <apex:pageBlockSection title="Rainwater Capture Narrative" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterCaprainNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterCaprainNarr__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Rainwater Capture LCC Figures" columns="2" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterCaprainLccfigsSir__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterCaprainLccfigsPbckpd__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterCaprainLccfigsSir__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterCaprainLccfigsPbckpd__c}"/>
+            </apex:pageBlockSection>
+            <!-- <apex:pageBlockSection title="Rainwater Capture Life Cycle Cost Analysis" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc17d3" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection> -->
+            <apex:pageBlockSection title="Rainwater Capture Life Cycle Cost Analysis; and Supporting documents such as LEED Waivers, P100 Waivers, RRE Waivers, or other explanatory HPGB information" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" readableWaiverKeyPattern="Mpc[TOKEN]Waivers" readableWaiverKeyTokens="17" readableUploadKeys="Mpc17d3" key="Gpc13" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+          </apex:pageBlockSection>
+          <a name="mpc14"></a>
+          <apex:pageBlockSection title="{!MpcLabel14}" columns="1">
+            <!-- Energy Performance: 14. HVAC Use - LCC Methodology, Chillers &amp; Boilers, Radiant Space Conditioning, Natural or Hybrid Ventilation, Space, Geothermal, Energy -->
+            <c:PBS_gBUILD_MpcInstructions mpcNum="14" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview14" viewMode="{!viewMode}" />
+            <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="14" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcNoFields />-->
+            <!-- from mps19 -->
+            <apex:pageBlockSection title="Square Footage of Ground Area Disturbed" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.SqFtOfApplication__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.SqFtOfApplication__c}"/>
+            </apex:pageBlockSection>
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" readableWaiverKeyTokens="19" mpcNum="14" viewMode="{!viewMode}" />
+          </apex:pageBlockSection>
+         <!-- <a name="mpc15"></a>
+          <apex:pageBlockSection title="{!MpcLabel15}" columns="1">
+            <!-- Water: 15. Indoor Water - Reduce Potable 20% -->
+            <!-- ><c:PBS_gBUILD_MpcInstructions mpcNum="15" projType="{!projType}" />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview15" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="15" viewMode="{!viewMode}" />
+            <apex:pageBlockSection title="Indoor Potable Water Scope ID and Narrative" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterIndoorPoth2oNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterIndoorPoth2oNarr__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Indoor Potable Water LCC Figures" columns="2" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterIndoorPoth2oLccfigsSir__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterIndoorPoth2oLccfigsPbckpd__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterIndoorPoth2oLccfigsSir__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterIndoorPoth2oLccfigsPbckpd__c}"/>
+            </apex:pageBlockSection>
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <apex:pageBlockSection title="Indoor Potable Water Calculations" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc15d3" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Indoor Potable Water Life Cycle Cost Analysis" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc15d4" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Indoor Water Reduction Plumbing / Fixture Schedule" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc15d5" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+          </apex:pageBlockSection>
+          <a name="mpc16"></a>
+          <apex:pageBlockSection title="{!MpcLabel16}" columns="1">
+            <!-- Water: 16. Outdoor Water - Reduce Potable Irrigation by 50% -->
+           <!--  <c:PBS_gBUILD_MpcInstructions mpcNum="16" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview16" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="16" viewMode="{!viewMode}" />
+            <apex:pageBlockSection title="Outdoor Potable Water Narrative" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterOutdoorPoth2oNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterOutdoorPoth2oNarr__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Outdoor Potable Water LCC Figures" columns="2" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterOutdoorPoth2oLccfigsSir__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterOutdoorPoth2oLccfigsPbckpd__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterOutdoorPoth2oLccfigsSir__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterOutdoorPoth2oLccfigsPbckpd__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Outdoor Potable Water - Irrigation Calculations" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc16d3" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Outdoor Potable Water Life Cycle Cost Analysis" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc16d4" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+          </apex:pageBlockSection>
+          <a name="mpc17"></a>
+          <apex:pageBlockSection title="{!MpcLabel17}" columns="1">
+            <!-- Water: 17. Measurement of Water Use- Capture Rainwater -->
+            <!-- <c:PBS_gBUILD_MpcInstructions mpcNum="17" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview17" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="17" viewMode="{!viewMode}" />
+            <apex:pageBlockSection title="Rainwater Capture Narrative" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterCaprainNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterCaprainNarr__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Rainwater Capture LCC Figures" columns="2" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterCaprainLccfigsSir__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterCaprainLccfigsPbckpd__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterCaprainLccfigsSir__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterCaprainLccfigsPbckpd__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Rainwater Capture Life Cycle Cost Analysis" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc17d3" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+          </apex:pageBlockSection>-->
+         <!--  <a name="mpc18"></a>
+          <apex:pageBlockSection title="{!MpcLabel18}" columns="1">
+            <!-- Water: 18. Process Water- Reduce Cooling Tower Potable Water -->
+           <!--  <c:PBS_gBUILD_MpcInstructions mpcNum="18" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview18" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="18" viewMode="{!viewMode}" />
+            <apex:pageBlockSection title="Cooling Tower Potable Water Use Narrative" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterCoolingTowerPoth20Narr__c}" />
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterCoolingTowerPoth20Narr__c}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Cooling Tower Potable Water LCC Figures" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterCoolingTowerPoth20LccfigsSir__c}" />
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterCoolingTowerPoth20LccfigsPbckpd__c}" />
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterCoolingTowerPoth20LccfigsSir__c}" />
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterCoolingTowerPoth20LccfigsPbckpd__c}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Cooling Tower Potable Water Use Calculations" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc18d2" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Cooling Tower Potable Water Use Life Cycle Cost Analysis" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc18d3" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+          </apex:pageBlockSection>
+          <a name="mpc19"></a>
+          <apex:pageBlockSection title="{!MpcLabel19}" columns="1">
+            <!-- Water: 19. Outdoor Water- Manage Rain -->
+           <!--  <c:PBS_gBUILD_MpcInstructions mpcNum="19" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview19" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="19" viewMode="{!viewMode}" />
+            <apex:pageBlockSection title="Square Footage of Ground Area Disturbed" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.SqFtOfApplication__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.SqFtOfApplication__c}"/>
+            </apex:pageBlockSection>
+          </apex:pageBlockSection>
+          <a name="mpc20"></a>
+          <apex:pageBlockSection title="{!MpcLabel20}" columns="1">
+            <!-- Water: 20. Water-Efficient Products - EPA's WaterSense -->
+          <!--   <c:PBS_gBUILD_MpcInstructions mpcNum="20" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview20" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="20" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcNoFields />
+          </apex:pageBlockSection>
+          <a name="mpc21"></a>
+          <apex:pageBlockSection title="{!MpcLabel21}" columns="1">
+            <!-- Water: 21. Water- Efficient Products - GSA guidance on efficient fixtures -->
+           <!--  <c:PBS_gBUILD_MpcInstructions mpcNum="21" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview21" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="21" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcNoFields />
+          </apex:pageBlockSection>
+          <a name="mpc22"></a>
+          <apex:pageBlockSection title="{!MpcLabel22}" columns="1">
+            <!-- Water: 22. Water - Meter Cooling Tower -->
+            <!-- <c:PBS_gBUILD_MpcInstructions mpcNum="22" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview22" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="22" viewMode="{!viewMode}" />
+            <apex:pageBlockSection title="Meter Cooling Tower Scope" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterMeterCoolingTowerScopeBleed__c}" />
+              <apex:outputField rendered="{!viewMode}" value="{!pb.WaterMeterCoolingTowerScopeMeterFeed__c}" />
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterMeterCoolingTowerScopeBleed__c}" />
+              <apex:inputField rendered="{!editMode}" value="{!pb.WaterMeterCoolingTowerScopeMeterFeed__c}" />
+            </apex:pageBlockSection>
+          </apex:pageBlockSection>-->
+          <apex:pageBlockSection title="Other Water Files" columns="1">
+            <c:PBS_gBUILD_Upload contextualTitle="Building MPC Water: Other" epmCatalog="{!uploadCatalog}"  pageController="{!this}" key="pbmwOther" viewMode="{!viewMode}" />
+          </apex:pageBlockSection>          
+        </apex:tab>
+        <apex:tab label="{!mpcCategoryIndoorEnvironmentalQuality}" id="tab4" ontabenter="location.replace('/apex/PBS_gBUILD_PBuildingMpcIEQ')" disabled="{!editMode}"
+                  title="{!IF(editMode=true,'Please click save before moving to another tab.','')}">
+          <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabMpcIeqIntro__c}" />
+          <a href="/apex/PBS_gBUILD_PBuildingMpcIEQ">{!mpcCategoryIndoorEnvironmentalQuality}</a>
+        </apex:tab>
+        <apex:tab label="{!mpcCategoryMaterials}" id="tab5" ontabenter="location.replace('/apex/PBS_gBUILD_PBuildingMpcM')" disabled="{!editMode}"
+                  title="{!IF(editMode=true,'Please click save before moving to another tab.','')}">
+          <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabMpcMaterialsIntro__c}" />
+          <a href="/apex/PBS_gBUILD_PBuildingMpcM">{!mpcCategoryMaterials}</a>
+        </apex:tab>
+      </apex:tabPanel>
+    </apex:pageBlock>
+  </apex:form>
+</apex:page>

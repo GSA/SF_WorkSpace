@@ -1,0 +1,90 @@
+<apex:page controller="PBS_gBUILD_PBuildingBasicsController" sidebar="false" tabstyle="PBS_gBUILD_PBuildingBasics__tab">
+    <c:PBS_gBUILD_InitializeScripts />
+    <apex:pageMessages />
+    <c:PBS_gBUILD_PageInstructions html="{!AppConfig.PageBuildingBasicsIntro__c}" />
+    <apex:outputPanel rendered="{!showPageContent}" >
+        <apex:form >
+            <apex:pageBlock >
+                <apex:pageBlockSection title="Identification" columns="1">  
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{!buildingNameLink.Label}"/>
+                        <apex:outputLink value="{!buildingNameLink.Url}" title="{!buildingNameLink.Help}">{!buildingNameLink.Name}</apex:outputLink>
+                    </apex:pageBlockSectionItem>                             
+                    <apex:outputField value="{!b.Location_Code_Plus__c}"/>       
+                    <apex:outputField value="{!projectBuilding.FacilityCode__c}"/>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Location" columns="1">
+                    <apex:outputField value="{!b.Street_Address__c}" rendered="{!renderAddress}"/>
+                    <apex:outputField value="{!b.Address2__c}" rendered="{!renderAddress}"/>
+                    <apex:outputField value="{!b.City__c}" rendered="{!renderAddress}"/>
+                    <apex:outputField value="{!b.State_Code__c}" rendered="{!renderAddress}"/>
+                    <apex:outputField value="{!b.Zip_Code__c}" rendered="{!renderAddress}"/>
+                    <apex:outputField value="{!b.Region_Code__c}" />                                
+                    <!--Map section updated by Ramesh Dugar as part of 2/20/17 sprint-->
+                    <apex:pageBlockSectionItem rendered="{!renderMap}">
+                        <apex:outputLabel value="Maps"/>
+                        <div style="padding-top: 10px;margin-left: 155px;">
+                            <!--<iframe 
+                                width="425" height="350" 
+                                frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
+                                src="{!mapEmbedUrl}">
+                            </iframe>
+                            <br />-->
+                            
+                            <div style="display: inline;padding-right: 94px;">
+                                <a href="{!mapLinkUrl}" target="_Blank">
+                                    <img src="{!$Resource.gBuild_GoogleMapsLogo}" style="width: 80px;height: 80px;padding-bottom: 21px;" />
+                                </a>
+                            <a href="{!mapLinkUrl}" style="color:#0000FF;text-align:left;margin-left: -129px" target="_Blank">View Building on Google Maps</a>
+                            </div>
+                            
+                            <div style="display: inline;padding-right: 94px">
+                            <a href="{!mapQuestLinkUrl}" target="_blank">
+                                <img src="{!$Resource.gBuild_MaquestLogo}" style="width: 65px;height: 65px;padding-bottom: 30px;" />
+                            </a>
+                            <a href="{!mapQuestLinkUrl}" style="color:#0000FF;margin-left: -110px" target="_Blank">View Building on MapQuest</a>
+                            </div>
+
+                            <div style="display: inline;">
+                            <a href="{!mapYahooLinkUrl}" target="_blank"><img src="{!$Resource.gBuild_YahooMapsLogo}" style="width: 130px;height: 58px;padding-bottom: 21px;" /></a>
+                            <a href="{!mapYahooLinkUrl}" style="color:#0000FF;margin-left: -142px" target="_Blank">View Building on Yahoo Maps</a>
+                            </div>
+                                                         
+                        </div>
+                    </apex:pageBlockSectionItem>                                
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Building Details" columns="2">
+                    <apex:outputField value="{!b.Building_GSF__c}"/>
+                    <apex:outputField value="{!b.Building_RSF__c}"/>
+                    <apex:outputField value="{!b.Building_RU__c}"/>
+                    <apex:outputField value="{!b.Building_USF__c}"/>
+                    <apex:outputField value="{!b.Construct_Complete_Date__c}"/>
+                    <apex:outputField value="{!b.Field_Office_Code__c}"/>              
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Basic Tracking Information" columns="2">
+                    <apex:outputField value="{!projectBuilding.LastModifiedById}"/>
+                    <apex:outputField value="{!projectBuilding.LastModifiedDate}"/>
+                </apex:pageBlockSection>                                                  
+                <apex:pageBlockSection title="Other Project Building Files" columns="1">
+                    <c:PBS_gBUILD_Upload contextualTitle="Project Building: Other" epmCatalog="{!uploadCatalog}"  pageController="{!this}" key="pbOther" viewMode="{!viewMode}" />
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="All Projects Impacting Building {!buildingId}" columns="1">
+                    <apex:pageBlockTable value="{!projectAssociations}" var="z">
+                        <apex:column headerValue="Action">
+                            <apex:commandLink action="{!openProject}" value="Open">
+                                <apex:param name="p1" value="{!z.rluProject__r.id}" assignTo="{!actionId}"/>                
+                            </apex:commandLink>
+                        </apex:column>
+                        <apex:column headerValue="State">
+                            <apex:outputText value="{!z.rluProject__r.txtCurrentState__c }" />
+                        </apex:column>
+                        <apex:column headerValue="Project Name">
+                            <apex:outputText value="{!z.rluProject__r.txtLongName__c}" />
+                        </apex:column>
+                    </apex:pageBlockTable>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        </apex:form>
+        <chatter:feedWithFollowers entityId="{!pbsbuildingId}" showHeader="true" />
+    </apex:outputPanel>
+</apex:page>

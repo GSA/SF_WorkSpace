@@ -1,0 +1,323 @@
+<apex:page controller="PBS_gBUILD_PBuildingMpcController" sidebar="false" tabstyle="PBS_gBUILD_PBuildingCompliance__tab">
+  <c:PBS_gBUILD_InitializeScripts />
+  <apex:form >
+    <apex:pageMessages />
+    <c:PBS_gBUILD_PageInstructions html="{!AppConfig.PageMpcIntro__c}" />
+    <apex:pageBlock >
+      <apex:pageBlockButtons >
+        <apex:commandButton action="{!edit}" value="Edit" rendered="{!viewMode}" disabled="{!readonlyMode}"/>
+        <apex:commandButton action="{!save}" value="Save" rendered="{!editMode}" disabled="{!readonlyMode}"/>
+        <apex:commandButton action="{!cancel}" value="Cancel" rendered="{!editMode}" immediate="true" />
+        <apex:commandButton action="{!approve}" value="Approve"  rendered="{!viewMode}" disabled="{!!isApproveEnabled}" styleClass="approve"/>
+      </apex:pageBlockButtons>
+      <!-- RITM0604555 - Added - disabledTabClass for apex:tabPanel, disabled & title for apex:tab tags -->
+      <apex:tabPanel switchType="client" id="theTabPanel" selectedTab="CURRENT" disabledTabClass="disabledTab">
+        <apex:tab label="{!mpcCategoryIntegratedDesign}" id="tab1" ontabenter="location.replace('/apex/PBS_gBUILD_PBuildingMpcID')" disabled="{!editMode}"
+                  title="{!IF(editMode=true,'Please click save before moving to another tab.','')}">
+          <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabMpcIntDsgnIntro__c}" />
+          <a href="/apex/PBS_gBUILD_PBuildingMpcID">{!mpcCategoryIntegratedDesign}</a>
+        </apex:tab>
+        <apex:tab label="{!mpcCategoryEnergyPerformance}" name="CURRENT" id="tab2">
+          <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabMpcEnergyPerfIntro__c}" />
+          <!-- <a name="mpc4"></a>
+          <apex:pageBlockSection title="{!MpcLabel4}" columns="1">
+            <!-- Energy Performance: 4. Energy Efficiency - Reduce Fossil-fuels by 55% and Energy Usage by 20% or 30% (ASHRAE) -->
+            <!-- <c:PBS_gBUILD_MpcInstructions mpcNum="4" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview4" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="4" viewMode="{!viewMode}" />
+            <apex:pageBlockSection title="Target Finder Report and Inputs/Outputs" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc4d1" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="ASHRAE 90.1 2007 Baseline Building Calculations" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc4d2" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Building As Designed - % Reduction ASHRAE 90.1 2007 Calculations" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc4d3" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Energy Model or Energy Study" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc4d4" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+          </apex:pageBlockSection>
+          <a name="mpc5"></a>
+          <apex:pageBlockSection title="{!MpcLabel5}" columns="1">-->
+            <!-- Energy Performance: 5. Measurement &amp; Verification - Advanced Meters -->
+           <!--  <c:PBS_gBUILD_MpcInstructions mpcNum="5" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview5" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="5" viewMode="{!viewMode}" />
+            <apex:pageBlockSection title="Advanced Meters Narrative (LEED EA Measurement and Verification)" columns="1">
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfMVAdvmtrsNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfMVAdvmtrsNarr__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Advanced Meters - Submetering Description" columns="1">
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfMVAdvmtrsSubMeteringNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfMVAdvmtrsSubMeteringNarr__c}"/>
+            </apex:pageBlockSection>
+          </apex:pageBlockSection>-->
+          <a name="mpc6"></a>
+          <apex:pageBlockSection title="{!MpcLabel6}" columns="1">
+            <!-- Energy Performance: 6. Energy Efficiency- ENERGY STAR &amp; FEMP -->
+            <c:PBS_gBUILD_MpcInstructions mpcNum="6" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview6" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" readableWaiverKeyTokens="6" mpcNum="6" viewMode="{!viewMode}" />
+            <!-- <c:PBS_gBUILD_MpcNoFields /> -->
+          </apex:pageBlockSection>
+          <a name="mpc7"></a>
+          <apex:pageBlockSection title="{!MpcLabel7}" columns="1">
+            <!-- Energy Performance: 7. On-Site Renewable Energy- Solar for Hot Water -->
+            <c:PBS_gBUILD_MpcInstructions mpcNum="7" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview7" viewMode="{!viewMode}" />
+            <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="7" viewMode="{!viewMode}" />
+            <apex:pageBlockSection title="Solar Hot Water Narrative" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfOnrenSlrHoth2oMeet30PctGoal__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfOnrenSlrHoth2oMeet30PctGoalExpln__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfOnrenSlrHoth2oMeet30PctGoal__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfOnrenSlrHoth2oMeet30PctGoalExpln__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Solar Hot Water Production Target" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfOnrenSlrHoth2oProdTarget__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfOnrenSlrHoth2oProdTarget__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Lifecycle Cost Figures" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfOnrenSlrHoth2oLifecSir__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfOnrenSlrHoth2oLifecPbckpd__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfOnrenSlrHoth2oLifecSir__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfOnrenSlrHoth2oLifecPbckpd__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Solar Hot Water Calculations: Please attach Solar Hot Water Calculations." columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc7d4" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Solar Hot Water Life Cycle Cost Analysis: Please attach Solar Hot Water Life Cycle Cost Analysis." columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc7d5" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>-->
+            <!-- from mpc 4 -->
+            <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="4" viewMode="{!viewMode}" /> -->
+            <!-- <apex:pageBlockSection title="Target Finder Report and Inputs/Outputs" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc4d1" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection> -->
+            <!-- <apex:pageBlockSection title="ASHRAE 90.1 2007 Baseline Building Calculations" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc4d2" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Building As Designed - % Reduction ASHRAE 90.1 2007 Calculations" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc4d3" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Energy Model or Energy Study" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc4d4" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection> -->
+            <!-- from mps10 -->
+            <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="10" viewMode="{!viewMode}" /> -->
+            <apex:pageBlockSection title="Envelope Design Narrative" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfEnvelopeDesignNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfEnvelopeDesignNarr__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Target Finder Report and Inputs/Outputs; ASHRAE 90.1 2007 Baseline Building Calculations; Building As Designed - % Reduction ASHRAE 90.1 2007 Calculations; Energy Model or Energy Study; Envelope Design (if available); and Supporting documents such as LEED Waivers, P100 Waivers, RRE Waivers, or other explanatory HPGB information" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" readableWaiverKeyPattern="Mpc[TOKEN]Waivers" readableWaiverKeyTokens="4,10" readableUploadKeys="Mpc4d1,Mpc4d2,Mpc4d3,Mpc4d4,Mpc10d2" key="Gpc7" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" /></apex:pageBlockSection>
+          </apex:pageBlockSection>
+          <a name="mpc8"></a>
+          <apex:pageBlockSection title="{!MpcLabel8}" columns="1">
+            <!-- Energy Performance: 8. Renewable Energy - Photovoltaic, Wind, Geothermal, Solar Thermal -->
+            <c:PBS_gBUILD_MpcInstructions mpcNum="8" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview8" viewMode="{!viewMode}" />
+            <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="8" viewMode="{!viewMode}" /> -->
+            <apex:pageBlockSection title="Renewable Energy Narrative (LEED EA Credit 2: On-Site Renewable Energy)" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfRenergyLeedEaCredit__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfRenergyLeedEaCreditExpln__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfRenergyLeedEaCredit__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfRenergyLeedEaCreditExpln__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Renewable Energy LCC Figures" columns="2" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfRenergyLccfigsPybkpdWind__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfRenergyLccfigsSIRWind__c}"/>                
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfRenergyLccfigsPybkpdSolarEnergy__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfRenergyLccfigsSIRSolarEnergy__c}"/>                
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfRenergyLccfigsPybkpdPv__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfRenergyLccfigsSIRPv__c}"/>                
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfRenergyLccfigsPybkpdGeothermal__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfRenergyLccfigsSIRGeothermal__c}"/>                
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfRenergyLccfigsPybkpdBiogas__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfRenergyLccfigsSIRBiogas__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfRenergyLccfigsPybkpdBiomass__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfRenergyLccfigsSIRBiomass__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfRenergyLccfigsPybkpdWind__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfRenergyLccfigsSIRWind__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfRenergyLccfigsPybkpdSolarEnergy__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfRenergyLccfigsSIRSolarEnergy__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfRenergyLccfigsPybkpdPv__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfRenergyLccfigsSIRPv__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfRenergyLccfigsPybkpdGeothermal__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfRenergyLccfigsSIRGeothermal__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfRenergyLccfigsPybkpdBiogas__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfRenergyLccfigsSIRBiogas__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfRenergyLccfigsPybkpdBiomass__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfRenergyLccfigsSIRBiomass__c}"/>
+            </apex:pageBlockSection>
+            <!-- <apex:pageBlockSection title="Renewable Energy Calculations" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc8d3" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Renewable Energy Life Cycle Cost Analysis" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc8d4" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection> -->
+            <!-- from mpc7 -->
+             <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="7" viewMode="{!viewMode}" /> -->
+            <apex:pageBlockSection title="Solar Hot Water Narrative" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfOnrenSlrHoth2oMeet30PctGoal__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfOnrenSlrHoth2oMeet30PctGoalExpln__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfOnrenSlrHoth2oMeet30PctGoal__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfOnrenSlrHoth2oMeet30PctGoalExpln__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Solar Hot Water Production Target" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfOnrenSlrHoth2oProdTarget__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfOnrenSlrHoth2oProdTarget__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Lifecycle Cost Figures" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfOnrenSlrHoth2oLifecSir__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfOnrenSlrHoth2oLifecPbckpd__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfOnrenSlrHoth2oLifecSir__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfOnrenSlrHoth2oLifecPbckpd__c}"/>
+            </apex:pageBlockSection>
+            <!-- <apex:pageBlockSection title="Solar Hot Water Calculations: Please attach Solar Hot Water Calculations." columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc7d4" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection> -->
+            <apex:pageBlockSection title="Renewable Energy Calculations; Renewable Energy Life Cycle Cost Analysis; Solar Hot Water Calculations: Please attach Solar Hot Water Calculations; Solar Hot Water Life Cycle Cost Analysis: Please attach Solar Hot Water Life Cycle Cost Analysis; and Supporting documents such as LEED Waivers, P100 Waivers, RRE Waivers, or other explanatory HPGB information" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" readableWaiverKeyPattern="Mpc[TOKEN]Waivers" readableWaiverKeyTokens="7,8" readableUploadKeys="Mpc7d4,Mpc7d5,Mpc8d3,Mpc8d4" key="Gpc8" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            
+          </apex:pageBlockSection>          
+          <a name="mpc9"></a>
+          <apex:pageBlockSection title="{!MpcLabel9}" columns="1">
+            <!-- Energy Performance: 9. Assess Solar Heat Gain or Lighting -->
+            <c:PBS_gBUILD_MpcInstructions mpcNum="9" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview9" viewMode="{!viewMode}" />
+            <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="9" viewMode="{!viewMode}" />
+            <apex:pageBlockSection title="Solar Heat Gain" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfSolarHeatGainNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfSolarHeatGainNarr__c}"/>
+            </apex:pageBlockSection>-->
+            <!--  from mpc5 -->
+            <apex:pageBlockSection title="Advanced Meters Narrative (LEED EA Measurement and Verification)" columns="1">
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfMVAdvmtrsNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfMVAdvmtrsNarr__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Advanced Meters - Submetering Description" columns="1">
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfMVAdvmtrsSubMeteringNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfMVAdvmtrsSubMeteringNarr__c}"/>
+            </apex:pageBlockSection>
+            <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="5" viewMode="{!viewMode}" /> -->
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" readableWaiverKeyTokens="5" mpcNum="9" viewMode="{!viewMode}" />
+          </apex:pageBlockSection>
+          
+          <a name="mpc10"></a>
+          <apex:pageBlockSection title="{!MpcLabel10}" columns="1">
+            <!-- Energy Performance: 10. Complete Envelope Design- Thermal, Insulation, Air Barriers, Sun Control -->
+            <c:PBS_gBUILD_MpcInstructions mpcNum="10" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview10" viewMode="{!viewMode}" />
+            <!-- <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="10" viewMode="{!viewMode}" />
+            <apex:pageBlockSection title="Envelope Design Narrative" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfEnvelopeDesignNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfEnvelopeDesignNarr__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Envelope Design (if available)" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc10d2" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>-->
+            <!-- from mps13 -->
+            <!-- <c:PBS_gBUILD_MpcNoFields /> -->
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" readableWaiverKeyTokens="13" mpcNum="10" viewMode="{!viewMode}" />
+          </apex:pageBlockSection>          
+                    
+          <!-- <a name="mpc10"></a>
+          <apex:pageBlockSection title="{!MpcLabel10}" columns="1">
+            <!-- Energy Performance: 10. Complete Envelope Design- Thermal, Insulation, Air Barriers, Sun Control -->
+           <!--  <c:PBS_gBUILD_MpcInstructions mpcNum="10" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview10" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="10" viewMode="{!viewMode}" />
+            <apex:pageBlockSection title="Envelope Design Narrative" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfEnvelopeDesignNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfEnvelopeDesignNarr__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Envelope Design (if available)" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc10d2" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+          </apex:pageBlockSection>          
+          <a name="mpc11"></a>
+          <apex:pageBlockSection title="{!MpcLabel11}" columns="1">-->
+            <!-- Energy Performance: 11. Choose Proper Glazing- Frames, Glass, Films, Gasses -->
+           <!--  <c:PBS_gBUILD_MpcInstructions mpcNum="11" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview11" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="11" viewMode="{!viewMode}" />
+            <apex:pageBlockSection title="Glazing Systems Narrative" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfProperGlazingNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfProperGlazingNarr__c}"/>
+            </apex:pageBlockSection>
+          </apex:pageBlockSection>
+          <a name="mpc12"></a>
+          <apex:pageBlockSection title="{!MpcLabel12}" columns="1">-->
+            <!-- Energy Performance: 12. Cooling &amp; Heating Plants Use LCC Methodology / Equipment -->
+            <!-- <c:PBS_gBUILD_MpcInstructions mpcNum="12" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview12" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="12" viewMode="{!viewMode}" />
+            <apex:pageBlockSection title="Cooling and Heating Plants Narrative" columns="1" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfCoolingHeatingPlantsNarr__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfCoolingHeatingPlantsNarr__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Cooling and Heating Plants LCC Figures" columns="2" >
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfCoolingHeatingPlantsLccfigsSir__c}"/>
+              <apex:outputField rendered="{!viewMode}" value="{!pb.EperfCoolingHeatingPlantsLccfigsPckPd__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfCoolingHeatingPlantsLccfigsSir__c}"/>
+              <apex:inputField rendered="{!editMode}" value="{!pb.EperfCoolingHeatingPlantsLccfigsPckPd__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Cooling &amp; Heating Plants Support Calculations" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc12d3" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Cooling &amp; Heating Plants Life Cycle Cost Analysis" columns="1" >
+              <c:PBS_gBUILD_Upload pageController="{!this}" key="Mpc12d4" epmCatalog="{!uploadCatalog}" viewMode="{!viewMode}" />
+            </apex:pageBlockSection>
+          </apex:pageBlockSection>
+          <a name="mpc13"></a>
+          <apex:pageBlockSection title="{!MpcLabel13}" columns="1">
+            <c:PBS_gBUILD_MpcInstructions mpcNum="13" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview13" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="13" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcNoFields />
+          </apex:pageBlockSection>-->
+         <!--  <a name="mpc14"></a>
+          <apex:pageBlockSection title="{!MpcLabel14}" columns="1">-->
+            <!-- Energy Performance: 14. HVAC Use - LCC Methodology, Chillers &amp; Boilers, Radiant Space Conditioning, Natural or Hybrid Ventilation, Space, Geothermal, Energy -->
+           <!--  <c:PBS_gBUILD_MpcInstructions mpcNum="14" projType="{!projType}" />
+            <c:PBS_gBUILD_ClonePageBlockButtons />
+            <c:PBS_gBUILD_MpcPreview pageController="{!this}" isDesignReviewer="{!hasPermissionGbDesignReview}" key="mpcPreview14" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcWaivers pageController="{!this}" mpcNum="14" viewMode="{!viewMode}" />
+            <c:PBS_gBUILD_MpcNoFields />
+          </apex:pageBlockSection>-->
+          <apex:pageBlockSection title="Other Energy Files" columns="1">
+            <c:PBS_gBUILD_Upload contextualTitle="Building MPC Energy Performance: Other" epmCatalog="{!uploadCatalog}"  pageController="{!this}" key="pbmepOther" viewMode="{!viewMode}" />
+          </apex:pageBlockSection>
+        </apex:tab>
+        <apex:tab label="{!mpcCategoryWater}" id="tab3" ontabenter="location.replace('/apex/PBS_gBUILD_PBuildingMpcW')" disabled="{!editMode}"
+                  title="{!IF(editMode=true,'Please click save before moving to another tab.','')}">
+          <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabMpcWaterIntro__c}" />
+          <a href="/apex/PBS_gBUILD_PBuildingMpcW">{!mpcCategoryWater}</a>
+        </apex:tab>
+        <apex:tab label="{!mpcCategoryIndoorEnvironmentalQuality}" id="tab4" ontabenter="location.replace('/apex/PBS_gBUILD_PBuildingMpcIEQ')" disabled="{!editMode}"
+                  title="{!IF(editMode=true,'Please click save before moving to another tab.','')}">
+          <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabMpcIeqIntro__c}" />
+          <a href="/apex/PBS_gBUILD_PBuildingMpcIEQ">{!mpcCategoryIndoorEnvironmentalQuality}</a>
+        </apex:tab>
+        <apex:tab label="{!mpcCategoryMaterials}" id="tab5" ontabenter="location.replace('/apex/PBS_gBUILD_PBuildingMpcM')" disabled="{!editMode}"
+                  title="{!IF(editMode=true,'Please click save before moving to another tab.','')}">
+          <c:PBS_gBUILD_SectionInstructions html="{!AppConfig.TabMpcMaterialsIntro__c}" />
+          <a href="/apex/PBS_gBUILD_PBuildingMpcM">{!mpcCategoryMaterials}</a>
+        </apex:tab>
+      </apex:tabPanel>
+    </apex:pageBlock>
+  </apex:form>
+</apex:page>

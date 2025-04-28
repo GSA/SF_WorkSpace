@@ -1,20 +1,21 @@
 @isTest(SeeAllData=false)
 private class RET_LeaseSearchControllerTest {
     @testsetup static void createData(){  
-        Account acct = new Account(Name='Real Estate Tax Bucket');
-        insert acct;  
+        Id acctOwnerId = [Select Id From User where isActive = true and UserRoleId != null and profile.name = 'GSA System Administrator' Limit 1].id;
+        Account acct = new Account(name ='Real Estate Tax Bucket', ownerid = acctOwnerId) ;
+        insert acct; 
         //Create RET and POC users
         Id retProfileId = [select Id, name from Profile where Name = :RET_LeaseShareUtility.RET_CCP_Profile limit 1].Id;
-        Account ac = new Account(name ='RET Test Bucket Account') ;
-        insert ac; 
+        //Account ac = new Account(name ='RET Test Bucket Account') ;
+        //insert ac; 
         List<Contact> conList = new List<Contact>();
-        Contact retCon = new Contact(FirstName='TestRETFName', LastName='TestRETLName', Email='retUserTestEmail420@test.org',AccountId = ac.Id); 
+        Contact retCon = new Contact(FirstName='TestRETFName', LastName='TestRETLName', Email='retUserTestEmail420@test.org',AccountId = acct.Id); 
         conList.add(retCon); 
-        Contact pocCon = new Contact(FirstName='TestPOCFName', LastName='TestPOCLName', Email='pocUserTestEmail420@test.org',AccountId = ac.Id);
+        Contact pocCon = new Contact(FirstName='TestPOCFName', LastName='TestPOCLName', Email='pocUserTestEmail420@test.org',AccountId = acct.Id);
         conList.add(pocCon);
         insert conList;  
         
-         List<User> uList = new List<User>();
+        List<User> uList = new List<User>();
         User retUser = new User(Alias = 'rlfna', Email='retUserTestEmail420@test.org',
                 emailencodingkey='UTF-8', FirstName='TestRETFName', LastName='TestRETLName', languagelocalekey='en_US',
                 localesidkey='en_US', profileid = retProfileId, country='United States',IsActive =true,
@@ -54,9 +55,9 @@ private class RET_LeaseSearchControllerTest {
                                   from PBS_Lease__c limit 1];
         system.debug('rec *** '+rec);
         // Requesting access to selected lease.
-        RET_LeaseSearchController.createLeaseAccess(rec[0].id, 'Running Test Methods');
+        //RET_LeaseSearchController.createLeaseAccess(rec[0].id, 'Running Test Methods');
         // Requesting access again for the same lease.
-        RET_LeaseSearchController.createLeaseAccess(rec[0].id, 'Running Test Methods');
+        //RET_LeaseSearchController.createLeaseAccess(rec[0].id, 'Running Test Methods');
         RET_LeaseSearchController.SearchResultsWrapper objWrapper = RET_LeaseSearchController.getLeaseResults(rec[0],1,10,'1660','International Drive','Mclean','VA','22102');
         System.assertNotEquals(objWrapper.leaseWrapperList, null);
         system.debug('objWrapper.leaseWrapperList **** '+objWrapper.leaseWrapperList);

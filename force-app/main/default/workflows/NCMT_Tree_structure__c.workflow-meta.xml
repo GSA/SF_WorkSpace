@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>NCMT_Update_Des_Total_Direct_Cost</fullName>
+        <field>DES_Total_Direct_Cost__c</field>
+        <formula>ETPC__c</formula>
+        <name>NCMT_Update Des Total Direct Cost</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+        <targetObject>Project_ID__c</targetObject>
+    </fieldUpdates>
     <rules>
         <fullName>NCMT Map Tree Total Direct Cost to Project</fullName>
         <actions>

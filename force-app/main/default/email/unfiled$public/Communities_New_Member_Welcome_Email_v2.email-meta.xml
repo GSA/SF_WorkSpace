@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Notification that user has been added to a community.</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Communities: New Member Welcome Email v2</name>
+    <style>none</style>
+    <subject>Welcome to {!Community_Name}</subject>
+    <textOnly>Public Buildings Service
+
+Hi GSA Lessor,
+
+Our records indicate you lease space to GSA in at least 1 location. Your lease may contain a clause that requires you to submit tax documents annually through GSA’s Real Estate Tax Portal. As part of an effort to expedite this process, we have created a user account for you within this Portal. Please visit the below link to finish setting up your account. Once you click the link, a code will then be emailed to you that you’ll have to enter in.
+
+Link:  {!Community_Url}
+Username:  {!Receiving_User.Username}
+
+Please allow up to 24 hours for GSA to connect your lease(s) to your account.
+
+You can visit ret.gsa.gov if you have any questions.
+
+Thanks,
+GSA’s Public Buildings Service Office of Leasing</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

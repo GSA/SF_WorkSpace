@@ -1,0 +1,19 @@
+<apex:component >
+    <apex:attribute name="html" 
+        type="string" 
+        required="false"
+        description="a set of HTML instructions to be output" />
+    <!--uncommented line 7 for the story sfws-1945 dont see any XSS Vunerability from the codescan-->
+    <apex:outputText value="{!html}" escape="false" rendered="{!(html!=null)}" />
+<!-- commented below lines 8 to 16 for story SFWS- 1945-->
+  <!--  <script type="text/javascript">
+    window.onload = function(){
+            var htmlBody = '{!JSENCODE(html)}';
+            document.getElementById("showText").innerHTML = htmlBody;
+        }
+    </script>
+    <p id="showText">
+        
+    </p>-->
+<!--<apex:outputText value="{!JSENCODE(html)}" escape="false" rendered="{!(html!=null)}" />-->    
+</apex:component>

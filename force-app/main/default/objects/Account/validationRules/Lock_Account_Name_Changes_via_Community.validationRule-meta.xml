@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lock_Account_Name_Changes_via_Community</fullName>
+    <active>true</active>
+    <description>Lock_Account_Name_Changes_via_Community - RITM0652529</description>
+    <errorConditionFormula>ISChanged(Name)
+&amp;&amp; 
+(
+  $Profile.Name == &quot;GSA RET Community User&quot; ||
+  $Profile.Name == &quot;AAAP Customer Portal&quot;
+)</errorConditionFormula>
+    <errorMessage>The Account Name cannot be updated ...</errorMessage>
+</ValidationRule>

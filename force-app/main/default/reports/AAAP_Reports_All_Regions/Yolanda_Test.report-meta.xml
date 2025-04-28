@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>PBS_AAAP_Offer__c$Name</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Offer__c$CreatedDate</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Offer__c$LastModifiedDate</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Offer__c$PBS_AAAP_RLP_Number__c</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Offer__c$PBS_AAAP_Building_Name__c</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Offer__c$CreatedBy</field>
+    </columns>
+    <columns>
+        <field>PBS_AAAP_Offer__c$PBS_AAAP_Is_Offer_Valid__c</field>
+    </columns>
+    <format>Tabular</format>
+    <name>Yolanda Test</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Offer_Space_Rates__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>PBS_AAAP_Offer__c$CreatedDate</dateColumn>
+        <endDate>2017-03-15</endDate>
+        <interval>INTERVAL_CUSTOM</interval>
+        <startDate>2012-10-01</startDate>
+    </timeFrameFilter>
+</Report>

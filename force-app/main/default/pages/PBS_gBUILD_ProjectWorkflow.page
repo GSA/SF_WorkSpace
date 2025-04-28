@@ -1,0 +1,257 @@
+<apex:page controller="PBS_gBUILD_ProjectWorkflowController" sidebar="false">
+    <c:PBS_gBUILD_InitializeScripts />      
+    <apex:includeScript value="{!URLFOR($Resource.gBUILD_Dracula, 'Dracula/raphael-min.js')}"  /> 
+    <apex:includeScript value="{!URLFOR($Resource.gBUILD_Dracula, 'Dracula/dracula_graffle.js')}"  /> 
+    <apex:includeScript value="{!URLFOR($Resource.gBUILD_Dracula, 'Dracula/dracula_graph.js')}"  />
+    <script type="text/javascript">
+
+    // Replaced line 10 with line 12 for story PBS- 1701
+        var currentStateId = "{!JSENCODE(htmlEncode(wfPhaseId))}"; 
+        var role = "";
+    	var transitions = JSON.parse("{!JSENCODE(stateTransitionsJson)}");
+   
+    </script>        
+    <apex:form >
+        <apex:pageMessages />           
+        <c:PBS_gBUILD_PageInstructions html="{!AppConfig.PageWorkflowIntro__c}" />
+        <apex:outputPanel rendered="{!showPageContent}" >        
+            <apex:tabPanel switchType="client" id="theTabPanel">
+                <apex:tab label="Project Phase Information">
+                    <apex:pageBlock >
+                        <apex:pageblockButtons >
+                            <apex:commandButton action="{!edit}" value="Edit" rendered="{!viewMode}"  disabled="{!readonlyMode}"/>
+                            <apex:commandButton action="{!save}" value="Save" rendered="{!editMode}"  disabled="{!readonlyMode}"/>
+                            <apex:commandButton action="{!cancel}" value="Cancel" rendered="{!editMode}" immediate="true" />        
+                        </apex:pageblockButtons>
+                        <apex:pageBlockSection title="General Information" columns="1">                        
+                            <apex:pageBlockSectionItem >
+                              <apex:outputLabel value="{!wfMachineLink.Label}"/>
+                              <apex:outputLink value="{!wfMachineLink.Url}" title="{!wfMachineLink.Help}">{!wfMachineLink.Name}</apex:outputLink>
+                            </apex:pageBlockSectionItem>                             
+                            <apex:pageBlockSectionItem >
+                              <apex:outputLabel value="{!wfPhaseLink.Label}"/>
+                              <apex:outputLink value="{!wfPhaseLink.Url}" title="{!wfPhaseLink.Help}">{!wfPhaseLink.Name}</apex:outputLink>
+                            </apex:pageBlockSectionItem>                             
+                            <apex:pageBlockSectionItem rendered="{!editMode}" >
+                                <apex:outputLabel value="Actions" for="stateNameNext"/>
+                                <apex:selectRadio value="{!selectedTransition}" disabled="{!viewMode}" id="stateNameNext" layout="pageDirection">     
+                                    <apex:selectOptions value="{!nextActions}" />                       
+                                </apex:selectRadio> 
+                            </apex:pageBlockSectionItem>                                    
+                            <apex:pageBlockSectionItem rendered="{!(editMode&&hasPermissionGbAppConfig)}">
+                                <apex:outputLabel value="State Name Next (forced)" for="forcedNext"/>
+                                <apex:selectList value="{!forcedStateNameNext}" disabled="{!viewMode}" id="forcedNext" size="1">     
+                                    <apex:selectOptions value="{!allStates}"/>                        
+                                </apex:selectList> 
+                            </apex:pageBlockSectionItem>                
+                            <apex:pageBlockSectionItem rendered="{!editMode}" >                
+                                <apex:outputLabel value="Transition Message" for="transitionMessage"/>
+                                <apex:inputTextArea value="{!transitionMessage}" id="transitionMessage"/>            
+                            </apex:pageBlockSectionItem>                
+                        </apex:pageBlockSection>
+                        <apex:pageBlockSection title="Graph" columns="1" rendered="{!WorkflowGraphDisplayMode !='None'}">  
+                            <div id="fsmDiv" ></div>
+                            <script type="text/javascript">
+                
+                                var redraw;
+                
+                                j$(document).ready(function () {
+
+                                    var stateNames = {};
+                                    var nextStateNames = {};
+                                    for (z in transitions)
+                                    {
+                                        var t = transitions[z];
+                                        if (t==null) continue;
+                                        stateNames [t.current] = true;
+                                        stateNames [t.next] = true;
+                                        if (t.current=="{!JSENCODE(stateName)}")
+                                        {
+                                            nextStateNames[t.next] = true;
+                                        }                            
+                                    }
+                                    var g = new Graph();
+
+                                    /* First: Write a custom node render function. */
+                                    var render = function(r, n) {
+                                        /* the Raphael set is obligatory, containing all you want to display */
+                                        var rWidth = Math.max(60, n.label.length*10+20);
+                                        var set = r.set().push(
+                                            /* custom objects go here */
+                                            r.rect(n.point[0]-rWidth/2, n.point[1]-13, rWidth , 86)
+                                                .attr({"fill": n.color, "stroke-width": 2, r : "9px"}))
+                                                .push(r.text(n.point[0], n.point[1] + 30, n.label)
+                                                    .attr({"font-size":"20px"}));
+                                        return set;
+                                    };
+
+                                    var z;
+                                    for (z in stateNames)
+                                    {
+                                        var label = ""+z;
+                                        if (label==null || label=="" || label=="undefined") continue;
+                                        var c = z=="{!JSENCODE(stateName)}" ? "green" : (nextStateNames[z]==true?"blue" : "gray");
+                                        g.addNode(z, {label: z, render: render, color : c });                        
+                                    }
+                                    var msg = "";
+                                    for (z=0;z<transitions.length;++z)
+                                    {
+                                        var tz = transitions[z];
+                                        if (tz==null) continue;
+                                        msg += z+": ["+tz.current+"]<-?->["+tz.next+"]\n";
+                                        var transitionsByDest = {};
+                                        for (x=z;x<transitions.length;++x)
+                                        {
+                                            var tx = transitions[x];
+                                            if (tx==null) continue;
+                                            var ep = null;
+                                            if (tx.current==tz.current)
+                                            {
+                                                ep = tx.next;
+                                            }
+                                            else if (tx.next==tz.current)
+                                            {
+                                                ep = tx.current;
+                                            }
+                                            else continue;
+                                            transitions[x] = null;
+                                            if (transitionsByDest[ep]==null) transitionsByDest[ep]=[];
+                                            var arr = transitionsByDest[ep];
+                                            arr[arr.length] = tx;
+                                            msg += "   Step A) "+x+": ["+tx.current+"]->["+tx.next+"]\n";
+                                        }
+                                        for (ep in transitionsByDest)
+                                        {
+                                            if (ep==null) continue;
+                                            var inbound = false;
+                                            var outbound = false;
+                                            var arr = transitionsByDest[ep];
+                                            for (var q=0;q<arr.length;++q)
+                                            {
+                                                var t = arr[q];
+                                                inbound = inbound || (t.next==ep);
+                                                outbound = outbound || (t.next!=ep);
+                                            }
+                                            var label = null;
+                                            var seen = {};
+                                            for (var q=0;q<arr.length;++q)
+                                            {
+                                                var key = t.action + ";;;" + t.next;
+                                                if (seen[key]==true) continue;
+                                                seen[key] = true;
+                                                var t = arr[q];
+                                                label = label==null ? "" : label + "\n";//", ";
+                                                label += t.action;
+                                                if (inbound && outbound)
+                                                {
+                                                    //                                        label += " -> "+t.next;
+                                                    label += " ("+t.next+")";
+                                                }
+                                            }
+                                            msg += "   Step B) "+ep+": ["+label+"]\n";
+                                            if (inbound && outbound)
+                                            {
+                                                g.addEdge(tz.current, ep, { directed : false, label: label } );                                
+                                            }
+                                            else if (inbound)
+                                            {
+                                                g.addEdge(ep, tz.current, { directed : true, label: label } );                                                                    
+                                            }
+                                            else
+                                            {
+                                                g.addEdge(tz.current, ep, { directed : true, label: label } );                                                                    
+                                            }
+                                        }
+                                    }
+                                    //alert(msg);
+ 
+                                    /* layout the graph using the Spring layout implementation */
+                                    var layouter = new Graph.Layout.Spring(g);
+                                    layouter.layout();
+ 
+                                    /* draw the graph using the RaphaelJS draw implementation */
+                                    var d = j$("#fsmDiv");
+                                    var w = d.width();
+                                    var h = 125 * transitions.length/4 + 150;
+                                    var renderer = new Graph.Renderer.Raphael('fsmDiv', g, w, h);
+                                    renderer.draw();                
+                                });                
+                            </script> 
+                        </apex:pageBlockSection>
+                    </apex:pageBlock>
+                </apex:tab>
+                <apex:tab label="Change Log">
+                    <apex:pageBlock >
+                        <apex:pageBlockTable value="{!history}" var="h" styleClass="dataTable">
+                            <apex:column headerValue="Modified At">
+                                <apex:outputText value="{!h.CreatedDate}" />
+                            </apex:column>
+                            <apex:column headerValue="Modified By">
+                                <apex:outputText value="{!h.CreatedBy.Name}" />
+                            </apex:column>
+                            <apex:column headerValue="Type">
+                                <apex:outputText value="{!h.RecordType.DeveloperName}" />
+                            </apex:column>
+                            <apex:column headerValue="Action">
+                                <apex:outputText value="{!h.Action__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Approved">
+                                <apex:outputText value="{!h.FormApprovedForReporting__c}" />
+                            </apex:column>                            
+                            <apex:column headerValue="Context">
+                                <apex:outputText value="{!h.Context__c}" />
+                            </apex:column>
+                            <!--
+                            <apex:column headerValue="Previous Phase">
+                                <apex:outputText value="{!h.StateNamePrevious__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Current Phase">
+                                <apex:outputText value="{!h.StateNameCurrent__c}" />
+                            </apex:column>
+                            -->
+                            <apex:column headerValue="Comments">
+                                <apex:outputText value="{!h.Comments__c}" />
+                            </apex:column>
+                        </apex:pageBlockTable>              
+                    </apex:pageBlock>
+                </apex:tab>
+                <apex:tab label="Form Review Summary">
+                    <apex:pageBlock >
+                        <apex:pageBlockTable value="{!approvals}" var="z" styleClass="dataTable">
+                            <apex:column headerValue="Building">
+                                <apex:outputText value="{!z.Building}" />
+                            </apex:column>
+                            <apex:column headerValue="Form">
+                                <apex:outputText value="{!z.Form}" />
+                            </apex:column>
+                            <apex:column headerValue="Approved">
+                                <apex:outputText value="{!z.Approved}"/>
+                            </apex:column>
+                            <apex:column headerValue="Action">
+                                <apex:outputText value="{!z.Action}"/>
+                            </apex:column>
+                            <apex:column headerValue="Notes">
+                                <apex:outputText value="{!z.Notes}" />
+                            </apex:column>
+                            <apex:column headerValue="Reviewed At">
+                                <apex:outputText value="{!z.ReviewedAt}" />
+                            </apex:column>
+                            <apex:column headerValue="Reviewed By">
+                                <apex:outputText value="{!z.ReviewedBy}" />
+                            </apex:column>
+                         <!--    <apex:column headerValue="Modified At">
+                                <apex:outputText value="{!z.ModifiedAt}" />
+                            </apex:column>
+                            <apex:column headerValue="Modified By">
+                                <apex:outputText value="{!z.ModifiedBy}" />
+                            </apex:column>
+                            <apex:column headerValue="Modified Reason">
+                                <apex:outputText value="{!z.ModifiedReason}" />
+                            </apex:column> --> 
+                        </apex:pageBlockTable>              
+                    </apex:pageBlock>
+                </apex:tab>
+            </apex:tabPanel>                    
+        </apex:outputPanel>
+    </apex:form>
+</apex:page>

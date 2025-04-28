@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LEEDGoal__c</fullName>
+    <description>LEED Goal</description>
+    <inlineHelpText>Select the LEED Certification level anticipated to be achieved upon project completion.</inlineHelpText>
+    <label>Anticipated LEED Certification Level</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Certified</fullName>
+                <default>false</default>
+                <label>Certified</label>
+            </value>
+            <value>
+                <fullName>Exempt</fullName>
+                <default>false</default>
+                <label>Exempt</label>
+            </value>
+            <value>
+                <fullName>Gold</fullName>
+                <default>false</default>
+                <label>Gold</label>
+            </value>
+            <value>
+                <fullName>Platinum</fullName>
+                <default>false</default>
+                <label>Platinum</label>
+            </value>
+            <value>
+                <fullName>Silver</fullName>
+                <default>false</default>
+                <label>Silver</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

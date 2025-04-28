@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>PBS_gBUILD_ProjectBuilding__c$Rahd_ProjectParentId__c</field>
+    </columns>
+    <columns>
+        <field>PBS_gBUILD_ProjectBuilding__c$BldgId__c</field>
+    </columns>
+    <columns>
+        <field>PBS_gBUILD_ProjectBuilding__c.C_PBS_gBUILD_PBuildingMPCUpdate_P_PBS_gB__r$Id</field>
+    </columns>
+    <columns>
+        <field>PBS_gBUILD_ProjectBuilding__c.C_PBS_gBUILD_PBuildingMPCUpdate_P_PBS_gB__r$RecordType</field>
+    </columns>
+    <columns>
+        <field>PBS_gBUILD_ProjectBuilding__c.C_PBS_gBUILD_PBuildingMPCUpdate_P_PBS_gB__r$Comments__c</field>
+    </columns>
+    <columns>
+        <field>PBS_gBUILD_ProjectBuilding__c.C_PBS_gBUILD_PBuildingMPCUpdate_P_PBS_gB__r$Question__c</field>
+    </columns>
+    <columns>
+        <field>PBS_gBUILD_ProjectBuilding__c.C_PBS_gBUILD_PBuildingMPCUpdate_P_PBS_gB__r$Status__c</field>
+    </columns>
+    <columns>
+        <field>PBS_gBUILD_ProjectBuilding__c.C_PBS_gBUILD_PBuildingMPCUpdate_P_PBS_gB__r$DesignReviewStatus__c</field>
+    </columns>
+    <columns>
+        <field>PBS_gBUILD_ProjectBuilding__c.C_PBS_gBUILD_PBuildingMPCUpdate_P_PBS_gB__r$Recommendations__c</field>
+    </columns>
+    <format>Tabular</format>
+    <name>Kelly Report 2 MPC</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>gBUILD_Project_Building_with_Mpc__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <sortColumn>PBS_gBUILD_ProjectBuilding__c.C_PBS_gBUILD_PBuildingMPCUpdate_P_PBS_gB__r$Status__c</sortColumn>
+    <sortOrder>Asc</sortOrder>
+    <timeFrameFilter>
+        <dateColumn>PBS_gBUILD_ProjectBuilding__c$CreatedDate</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

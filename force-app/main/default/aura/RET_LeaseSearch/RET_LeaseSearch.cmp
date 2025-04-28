@@ -1,6 +1,5 @@
 <aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="RET_LeaseSearchController">
 	<aura:attribute name="lease" type="PBS_Lease__c" default="{'sobjectType' : 'PBS_Lease__c'}" />
-<!--  	<aura:attribute name="leaseResults" type="List" /> -->
     <aura:attribute name="wrapperList" type="List" />
 	<aura:attribute name="buildingName" type="String" />
 	<aura:attribute name="buildingAddress" type="String" />
@@ -18,12 +17,25 @@
 	<aura:attribute name="resultsHavePrev" type="Boolean" default="false" />
 
 	<div id="lease-search">
-	
+    	<!-- <div style="padding-bottom: 1.5em;">
+        	<h1 class="top-textarea-heading">Manage lease</h1>
+        </div> -->
+        <div style="padding-bottom: .5em;">
+            <h2 class="mid-textarea-heading">Search for a lease</h2>
+        </div>
 		<aura:if isTrue="{!v.wrapperList.length == 0}">
            <!-- Please enter in search criteria and click the "Search" button below in order to locate your lease.<br/>-->
-            Search for your lease using the fields below. You must enter at least one criteria to perform the search. If available, it is highly recommended you search just by your 5-digit lease number along with the State code in which the lease is located.<br/>
-			<span style="font-weight:bold">Note</span>: {!$Label.c.RET_Lease_Search_Help_Note }
-            <br /><br />
+            <!-- Search for your lease using the fields below. You must enter at least one criteria to perform the search. If available, it is highly recommended you search just by your 5-digit lease number along with the State code in which the lease is located.<br/>
+			<span style="font-weight:bold">Note</span>: {!$Label.c.RET_Lease_Search_Help_Note }  -->
+            <span style="font-family: Arial; font-size: 12pt">
+                Search for your lease using the fields below. You must enter at least one criteria to perform the search. If available, it is highly recommended you search using the 5-digit lease number along with the state code in which the lease is located.
+                <br/><br/>
+                Example: A Missouri lease number ‘GS-06B-LMO12345’ would enter ‘12345’ in the Lease Number field, and ‘MO’ in the state field before pressing the Search button.
+                <br/><br/>
+                If you are unable to find your lease please contact ManageLease@gsa.gov.
+                <br/>
+            </span>
+            <br />
 			<div class="lease-search-container" id="search-col-left">
 				<ui:inputText value="{!v.lease.Short_Lease_Number__c}" label="Lease Number (Enter only the last 5 digits)" />
 				<ui:inputText value="{!v.lease.Lessor__c}" label="Lessor Name" />
@@ -59,14 +71,17 @@
 						<ui:inputSelectOption text="45" label="45" />
 						<ui:inputSelectOption text="50" label="50" />
 					</ui:inputSelect>
-				<ui:button label="Search" press="{!c.findLease}" />
+				<ui:button label="Search" press="{!c.findLease}" class="slds-button slds-button_brand" />
 			</div>
 		</aura:if>
 
 
 		<aura:if isTrue="{!v.wrapperList.length > 0}">
+            <span style="font-family: Arial; font-size: 12pt">
 			Found a total of {!v.totalResults} leases matching your search criteria.<br />
-			Once you locate your lease, click on the lease number to start submitting tax information to GSA.
+			Once you locate your lease, click on the ADD button in the ‘In My Leases’ column.
+            <br/>
+            </span>
 			<table class="lease-search-results">
 				<tr>
 					<th class="lease-number-header">Lease Number</th>
@@ -78,16 +93,18 @@
 					<th>Lease Effective</th>
 					<th>Lease Expiration</th>
 					<th>Lessor Name</th>
-                    <th>Access Status</th>
+                    <th>In My Leases</th>
 				</tr>
 				<aura:iteration items="{!v.wrapperList}" var="wrapper">
 					<tr>
-						<td class="lease-number">
+						<td class="lease-number" >
+							<!-- Removed for 2024-2025 RET Surge to eliminate access request and approval functionality
 							<a onclick="{!c.confirmStartSubmission}" data-leaseid="{!wrapper.lease.Id}">
 								<lightning:icon iconName="utility:file" size="small" />
-								<!--{!wrapper.lease.Short_Lease_Number__c }-->
-                                {!wrapper.lease.Lease_Number__c}
-							</a>
+                                {!wrapper.lease.Lease_Number__c} 
+							</a> -->
+                            <lightning:icon iconName="utility:file" size="small" /> &nbsp;
+                            {!wrapper.lease.Lease_Number__c} 
 						</td>
 						<td>{!wrapper.lease.Building_Name__c}</td>
 						<td>{!wrapper.lease.Building_Street_Address__c}</td>
@@ -97,13 +114,24 @@
 						<td>{!wrapper.lease.Lease_Effective_Date__c}</td>
 						<td>{!wrapper.lease.Lease_Expiration_Date__c}</td>
 						<td>{!wrapper.lease.Lessor__c}</td> 
-                        <aura:renderIf isTrue="{!and(wrapper.leaseAccess != null, wrapper.leaseAccess.Status__c != '')}"> 
+                        <!-- Removed for 2024-2025 RET Surge to eliminate access request and approval functionality
+						<aura:renderIf isTrue="{!and(wrapper.leaseAccess != null, wrapper.leaseAccess.Status__c != '')}"> 
                         	<td>{!wrapper.leaseAccess.Status__c}</td>
                             <aura:set attribute="else">
                         		<td>No Access</td>
                             </aura:set> 
-                        </aura:renderIf>  
-		
+                        </aura:renderIf> -->
+                        <aura:renderIf isTrue="{!and(wrapper.leaseAccess != null, or(wrapper.leaseAccess.Status__c == 'POC', wrapper.leaseAccess.Status__c == 'Approved'))}"> 
+                        	<td >Yes &nbsp; <lightning:button disabled="true" variant="brand-outline" label="ADD" title="Add this lease to your leases"  onclick="{!c.startTaxSubmission}" class="custom-small-button" value="{!wrapper.lease.Id}"/></td>
+                            <aura:set attribute="else">
+                        		<!--Removed for 2024-2025 RET Surge to eliminate access request and approval functionality
+								<td>No</td>
+								<td><ui:button label="Add" /></td> 
+								-->
+                              	 <td > No &nbsp; <lightning:button variant="brand" label="ADD" title="Add this lease to your leases"  onclick="{!c.startTaxSubmission}" class="custom-small-button" value="{!wrapper.lease.Id}"/></td> 
+                                 
+                            </aura:set> 
+                        </aura:renderIf>	
                     </tr>
 				</aura:iteration>
 			</table>
@@ -135,7 +163,7 @@
 			</div>
 
 			<div class="action-buttons-centered">
-				<ui:button label="Search for Another Lease" press="{!c.newSearch}" />
+				<ui:button label="Search for Another Lease" press="{!c.newSearch}" class="-button slds-button_brand" />
 			</div>			
 		</aura:if>
 
@@ -191,11 +219,10 @@
 					</div>
 
 				</div>
+                <!-- Replaced footer for 2024-2025 RET Surge to always show Submit and no longer use lease access functionality
 				<footer class="slds-modal__footer">
 					<div id="edit-footer-buttons">
 						<ui:button class="slds-button slds-button_neutral" press="{!c.cancelTaxSubmission}" label="Cancel" />
-<!--	                  	<ui:button class="slds-button slds-button_brand" press="{!c.startTaxSubmission}" label="Create Tax Submission" labelClass="CreateTaxSubmission"/>
-    --> 
                         <aura:renderIf isTrue="{!and(v.selectedLeaseAccessStatus != '', or(v.selectedLeaseAccessStatus == 'Approved', v.selectedLeaseAccessStatus == 'POC'))}"> 
                       	 	<ui:button class="slds-button slds-button_brand" press="{!c.startTaxSubmission}" label="Create Tax Submission" labelClass="CreateTaxSubmission"/>
                         </aura:renderIf>
@@ -206,17 +233,24 @@
                             <ui:button class="slds-button slds-button_brand" press="{!c.requestLeaseAccess}" label="Request Access" labelClass="CreateTaxSubmission"/>
                         </aura:renderIf>
                    </div>
+				</footer> -->
+				<footer class="slds-modal__footer">
+					<div id="edit-footer-buttons">
+						<ui:button class="slds-button slds-button_neutral" press="{!c.cancelTaxSubmission}" label="Cancel" />
+                   	 	<ui:button class="slds-button slds-button_brand" press="{!c.startTaxSubmission}" label="Create Tax Submission" labelClass="CreateTaxSubmission"/>
+                    </div>
 				</footer>
-			</div>
+            </div>
 		</section>
 		<div class="slds-backdrop slds-backdrop_open"></div>
 	</div>
     
+    <!-- Commented out for 2024-2025 RET Surge to not use lease access functionality
     <div id="confirm-request-access"  class="ret-modal-container">
         <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
 			<div class="slds-modal__container">
 				<header class="slds-modal__header">
-                    <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.cancelRequestAccess}">
+                    <button class="slds-button slds-modal__close slds-button-icon-inverse" title="Close" onclick="{!c.cancelRequestAccess}">
                         X<span class="slds-assistive-text">Cancel</span>
                     </button>
 					<span id="lease-confirm-request-access">Confirm Lease Request Access</span>
@@ -245,7 +279,7 @@
                 </footer>
             </div>
         </section>
-        <div class="slds-backdrop slds-backdrop--open"></div>
-    </div>
+        <div class="slds-backdrop slds-backdrop-open"></div>
+    </div> -->
 
 </aura:component>

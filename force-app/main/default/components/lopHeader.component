@@ -1,0 +1,91 @@
+<apex:component >
+<apex:attribute name="myOffer" description="This is the value for the Offer." type="PBS_AAAP_Offer__c"/>
+<apex:attribute name="myProject" description="This is the value for the GREX Project." type="PBS_AAAP_RLP__c"/>
+<apex:attribute name="offerDueDate" description="This is the value for the offer due date." type="String"/>          
+
+    <!-- J. Rogers - Changed margin-left from 65px -->
+    <table width="95%" border="1" cellspacing="0" cellpadding="0" style="font-size: 12px;align: center; margin-left: 0px; margin-top:10px; width:87%; background-color: #eeeeee;">
+  <tr>
+    <td><apex:outputLabel >&nbsp;<strong>GSA Solicitation Number:</strong></apex:outputLabel></td>
+    <td><apex:outputText value="{!myProject.PBS_RSAP_Solicitation_Number__c}" ></apex:outputText></td>
+    <td><apex:outputLabel >&nbsp;<strong>Project City:</strong></apex:outputLabel></td>
+    <td><apex:outputText value="{!myProject.PBS_RSAP_City__c}" ></apex:outputText></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <!--td><apex:outputLabel >&nbsp;<strong>GSA Contact Email:</strong></apex:outputLabel></td--><!--JK Removed this line 2.4.21-->
+      <td><apex:outputLabel >&nbsp;<strong>GSA Broker:</strong></apex:outputLabel></td>
+      <!--Julia Kantarovsky and Omar Pena changed this on 12.7.20, changes start here-->
+      <td><apex:outputText value="{!myProject.PBS_RSAP_Broker__c}" ></apex:outputText></td><!--RSAP.Manager@gsa.gov   We need to change this-->
+      <!--JK and OP changes end here-->
+    <td><apex:outputLabel >&nbsp;<strong>Project State:</strong></apex:outputLabel></td>
+    <td><apex:outputText value="{!myProject.PBS_RSAP_State__c}"></apex:outputText></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+  </tr>
+      <!--JK changes start here 2.4.21-->
+        <tr>
+    <td><apex:outputLabel >&nbsp;<strong>GSA Leasing Specialist:</strong></apex:outputLabel></td>
+    <td><apex:outputText value="{!myProject.PBS_RSAP_Leasing_Specialist__c}" ></apex:outputText></td>
+    <td><apex:outputLabel >&nbsp;<strong>GSA Lease Contracting Officer:</strong></apex:outputLabel></td>
+    <td><apex:outputText value="{!myProject.PBS_RSAP_Lease_Contracting_Officer__c}" ></apex:outputText></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+  </tr>
+        
+       <!--JK changes end here-->
+      <!--
+  <tr>
+    <td><apex:outputLabel >&nbsp;<strong>GSA Contact Email:</strong></apex:outputLabel></td>
+    <td><apex:outputText value="{!myOffer.PBS_AAAP_Offeror__r.Email}"></apex:outputText></td>
+    <td><apex:outputLabel >&nbsp;<strong>Project Lease Type:</strong></apex:outputLabel></td>
+    <td><apex:outputText value="{!myProject.Project_Lease_Model__c}"></apex:outputText></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><apex:outputLabel >&nbsp;<strong>Project Due Date / Time:</strong></apex:outputLabel></td>
+    <td><apex:outputText value="{!offerDueDate}"></apex:outputText></td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+  </tr>
+        -->
+</table>
+    
+    
+    <!--<apex:panelGrid columns="6" border="0"  frame="box" style="font-size: 12px;align: center; margin-left: 30px;margin-right: 50px;background-color: #eeeeee;">
+    <apex:outputLabel >&nbsp;<strong>Unique Offer Id:</strong></apex:outputLabel>&nbsp;<apex:outputText value="{!myProject.Project_EOI_ID__c}" ></apex:outputText>
+    <apex:outputLabel >&nbsp;<strong>City:</strong></apex:outputLabel>&nbsp;<apex:outputText value="{!myProject.Project_City__c}" ></apex:outputText>
+    <apex:outputLabel >&nbsp;<strong>GSA Project No.:</strong></apex:outputLabel>&nbsp;<apex:outputText value="{!myProject.Project_Number__c}"></apex:outputText>
+    <apex:outputLabel >&nbsp;<strong>Project State:</strong></apex:outputLabel>&nbsp;<apex:outputText value="{!myProject.Project_State__c}"></apex:outputText>
+    <apex:outputLabel >&nbsp;<strong>GSA Contact Email:</strong></apex:outputLabel>&nbsp;<apex:outputText value="{!myProject.Project_Contact_Email__c}"></apex:outputText>
+    <apex:outputLabel >&nbsp;<strong>Project Lease Type:</strong></apex:outputLabel>&nbsp;<apex:outputText value="{!myProject.Project_Lease_Model__c}"></apex:outputText>
+    <apex:outputLabel >&nbsp;<strong>Project Due Date / Time:</strong></apex:outputLabel>&nbsp;<apex:outputText value="{!myProject.Project_Offer_Due_Date__c}"></apex:outputText>
+    <apex:outputLabel >&nbsp;<strong>Revised Offer &nbsp;Due Date:</strong></apex:outputLabel>&nbsp;<apex:outputText value="{!myProject.Project_Offer_Due_Date__c}"></apex:outputText>
+    
+    
+    
+ 
+    </apex:panelGrid>-->
+    
+    
+    
+</apex:component>

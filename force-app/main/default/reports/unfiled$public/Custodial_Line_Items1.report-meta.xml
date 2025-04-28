@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>CHILD_NAME</field>
+    </columns>
+    <columns>
+        <field>NCMT_DES_Lookup_details__c.Level_4_Description__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_DES_Lookup_details__c.Description__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_DES_Lookup_details__c.O_P_Unit_Total__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_DES_Lookup_details__c.Unit__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_DES_Lookup_details__c.Daily_Output__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_DES_Lookup_details__c.Labor_Hours_txt__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_DES_Lookup_details__c.Fiscal_Year__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_DES_Lookup_details__c.Line_Item_Number__c</field>
+    </columns>
+    <filter>
+        <booleanFilter>1 OR 2</booleanFilter>
+        <criteriaItems>
+            <column>CHILD_NAME</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>U21281,U21275,U21274,U21273,U21272,U21271,U21270,U21280,U21279,U21278,U21277,U21276,U17868,U17867,U17866,U17865,U17864,U17863,U17862,U17861,U17860,U17859,U17858,U1873,U1872,U1871,U1870,U1869,U1868,U1867,U1866,U26418,U26417,U26416,U26437,U26435,U26434,U2319,U2318,U1525,U2316,U2315,U1978,U1980,U1979,U2242,U2241,U2240,U2239,U2238,U2235,U2234,U2120,U118977,U118976,U118975,U2243,U2244,U2245,U1875,U21268,U21267,U2313,U2314</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>NCMT_DES_Lookup_details__c.Level_5_Description__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>Snow Removal</value>
+        </criteriaItems>
+    </filter>
+    <format>Tabular</format>
+    <name>Custodial Line Items</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CustomEntityCustomEntity$NCMT_Cost_Category__c$NCMT_DES_Lookup_details__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>CUST_CREATED_DATE</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

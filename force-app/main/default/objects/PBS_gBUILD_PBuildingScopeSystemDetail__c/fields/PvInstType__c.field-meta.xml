@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PvInstType__c</fullName>
+    <description>Please select one of the following roofing features or types that are included in this PV installation:</description>
+    <inlineHelpText>Please select one of the following roofing features or types that are included in this PV installation:</inlineHelpText>
+    <label>PV Installation Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>BuildingIntegrated</fullName>
+                <default>false</default>
+                <label>BuildingIntegrated</label>
+            </value>
+            <value>
+                <fullName>GroundMounted</fullName>
+                <default>false</default>
+                <label>GroundMounted</label>
+            </value>
+            <value>
+                <fullName>RoofMounted</fullName>
+                <default>false</default>
+                <label>RoofMounted</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

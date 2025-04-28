@@ -1,5 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>NCMT_In_House_Total_Adj_Update</fullName>
+        <field>Total_In_House_Total_Adj_f__c</field>
+        <formula>Total_Labor_Cost_Adj__c +  Total_Equip_Cost_Adj__c + Total_Material_Cost_Adj__c</formula>
+        <name>NCMT In House Total Adj Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>NCMT_Labor_Burden_Tax_Update</fullName>
+        <field>Labor_Burden_Tax__c</field>
+        <formula>Labor_Burden_Tax_f__c</formula>
+        <name>NCMT Labor Burden Tax Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Location_Multiplier</fullName>
+        <field>Location_Multiplier_wf__c</field>
+        <formula>Location_Multiplier_f__c</formula>
+        <name>Update Location Multiplier</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
     <rules>
         <fullName>NCMT DES Item Updates</fullName>
         <actions>

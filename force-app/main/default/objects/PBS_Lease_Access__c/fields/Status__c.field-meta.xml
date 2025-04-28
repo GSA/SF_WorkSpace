@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Status__c</fullName>
-    <externalId>false</externalId>
     <label>Status</label>
     <required>false</required>
     <trackTrending>false</trackTrending>
@@ -11,29 +10,32 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Requested</fullName>
-                <default>false</default>
-                <label>Requested</label>
-            </value>
-            <value>
                 <fullName>Approved</fullName>
                 <default>false</default>
                 <label>Approved</label>
             </value>
             <value>
+                <fullName>POC</fullName>
+                <default>false</default>
+                <label>POC</label>
+            </value>
+            <value>
                 <fullName>Denied</fullName>
                 <default>false</default>
+                <isActive>false</isActive>
                 <label>Denied</label>
+            </value>
+            <value>
+                <fullName>Requested</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Requested</label>
             </value>
             <value>
                 <fullName>Revoked</fullName>
                 <default>false</default>
+                <isActive>false</isActive>
                 <label>Revoked</label>
-            </value>
-            <value>
-                <fullName>POC</fullName>
-                <default>false</default>
-                <label>POC</label>
             </value>
         </valueSetDefinition>
     </valueSet>

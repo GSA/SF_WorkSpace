@@ -1,5 +1,12 @@
 <aura:component controller="RET_LeaseAccessApprovalController">
-	<aura:attribute name="statusFilters" type="String[]" />
+    
+    <!-- for RET surge, this component is no longer in use. 
+		This component is being referenced in the RET_Dashboard
+		Component. This change is part of SFWS-3755-"Remove the functionality to Revoke access to Lease" 
+	-->
+    
+    
+    <aura:attribute name="statusFilters" type="String[]" />
 	<aura:attribute name="leaseAccessList" type="List" />
    	<aura:attribute name="selectedLsac" type="PBS_Lease_Access__c" default="{'sobjectType' : 'PBS_Lease_Access__c'}" />
 	<aura:attribute name="selectedPage" type="Integer" default="1" />

@@ -1,0 +1,314 @@
+<apex:page controller="PBS_gBUILD_ProjectsController"  sidebar="false">
+    <c:PBS_gBUILD_InitializeScripts />
+
+    <apex:form >
+        <apex:pageMessages />       
+        <c:PBS_gBUILD_PageInstructions html="{!AppConfig.PageProjectsIntro__c}" />
+    <apex:pageBlock title="Filter projects" mode="edit" id="criteria">
+      
+    <script type="text/javascript">
+      var typewatch = function(){  
+        /* timed delay function */
+        var timer = 0;
+        return function(callback, ms){
+                    clearTimeout (timer);
+                    timer = setTimeout(callback, ms);
+               }  
+      }();
+
+      function doSearch() {
+        /*searchServer(
+          document.getElementById("ProjectId__c").options[document.getElementById("ProjectId__c").selectedIndex].value,
+          document.getElementById("name").options[document.getElementById("name").selectedIndex].value,
+          document.getElementById("ProjectId__r.txtCurrentState__c").value
+          document.getElementById("WorkflowPhaseId__r.Label__c").value,
+          document.getElementById("ProjectType__c").value,
+          document.getElementById("ProjectId__r.txtRegion__c").value,
+          document.getElementById("buildingCodes").value,
+          );*/
+      }
+      
+      function doFilter() {
+        searchFilt(
+          document.getElementById("filter_projectid").value,
+          document.getElementById("filter_projectname").value,
+          document.getElementById("filter_projectmanager").value,
+          //document.getElementById("filter_projectstate").value,
+          document.getElementById("filter_projecttype").value,
+          //document.getElementById("filter_projectphase").value,
+          document.getElementById("filter_projectregion").value,
+          document.getElementById("filter_buildingcodes").value,
+          document.getElementById("filter_bacode").value,
+          document.getElementById("filter_status").value,
+          document.getElementById("filter_programfullcode").value
+          );
+      }
+      
+      function clearFilters(){
+          document.getElementById("filter_projectid").value = '';
+          document.getElementById("filter_projectname").value = '';
+          document.getElementById("filter_projectmanager").value = '';
+          document.getElementById("filter_projecttype").value = '';
+          //document.getElementById("filter_projectphase").value = '';
+          document.getElementById("filter_projectregion").value = '';
+          document.getElementById("filter_buildingcodes").value = '';
+          document.getElementById("filter_bacode").value = '';
+          document.getElementById("filter_status").value = '';
+          document.getElementById("filter_programfullcode").value = '';
+          doFilter();
+      }
+      
+      function noenter(ev)
+           {
+              if (window.event)
+              {
+                  ev=window.event;
+              }
+               
+              var keyCode;
+              if (ev.keyCode)
+              {
+                 keyCode=ev.keyCode;
+              }
+              else
+              {
+                 keyCode=ev.charCode;
+              }
+               
+              if (keyCode == 13)
+              {
+                 doFilter();
+                 return false;
+              }
+              else
+              {
+                 return true;
+              }
+           }
+      document.onkeypress = noenter;
+      
+      </script> 
+ 
+      <!--<apex:actionFunction name="searchServer" action="{!runSearch}" rerender="results,debug,errors">
+          <apex:param name="ProjectId__c" value="" />
+          <apex:param name="name" value="" />
+          <apex:param name="ProjectId__r.txtCurrentState__c" value="" />
+          <apex:param name="WorkflowPhaseId__r.Label__c" value="" />
+          <apex:param name="ProjectType__c" value="" />
+          <apex:param name="ProjectId__r.txtRegion__c" value="" />
+      </apex:actionFunction>-->
+      
+      <apex:actionFunction name="searchFilt" status="actstatus" action="{!filterProjects}" rerender="results,debug,errors, reinittable">
+          <apex:param name="projectId" value="" />
+          <apex:param name="projectName" value="" />
+          <apex:param name="projectManager" value="" />
+          <apex:param name="projectType" value="" />
+          <apex:param name="projectRegion" value="" />
+          <apex:param name="buildingCodes" value="" />
+          <apex:param name="baCode" value="" />
+          <apex:param name="status" value="" />
+          <apex:param name="programfullcode" value="" />
+      </apex:actionFunction>
+
+      <table cellpadding="1" cellspacing="6" align="right">
+          <tr align="justify">
+            <td style="font-weight:bold;width:20%;align:center;">Project Name<br/>
+                <input type="text" id="filter_projectname" onkeypress="return noenter(event);"/>
+            </td>
+            <td style="font-weight:bold;width:20%;align:center;">Project Manager<br/>
+                <input type="text" id="filter_projectmanager" onkeypress="return noenter(event);"/>
+            </td>
+            <td style="font-weight:bold;width:16%;align:center;">Region<br/>
+                <select id="filter_projectregion">
+                    <option value=""></option>
+                    <apex:repeat value="{!pregionslist}" var="pr" id="ProjectRegion">
+                        <option value="{!pr}">{!pr}</option>
+                    </apex:repeat>
+                </select>
+            </td>
+            <td style="font-weight:bold;width:16%;align:center;">Project Type<br/>
+                <select id="filter_projecttype">
+                    <option value=""></option>
+                    <apex:repeat value="{!ptypeslist}" var="pt" id="ProjectType">
+                        <option value="{!pt}">{!pt}</option>
+                    </apex:repeat>
+                </select>
+            </td>
+            <td style="font-weight:bold;width:17%;align:center;">BA Code<br/>
+                <input type="text" id="filter_bacode" onkeypress="return noenter(event);"/>
+            </td>
+            <td style="font-weight:bold;width:17%;align:center;">Building Id<br/>
+                <input type="text" id="filter_buildingcodes" onkeypress="return noenter(event);"/>
+            </td>
+            <td style="font-weight:bold;width:16%;align:center;">Status<br/>
+                <select id="filter_status">
+                    <option value=""></option>
+                    <apex:repeat value="{!pstatuslist}" var="pr">
+                        <option value="{!pr}">{!pr}</option>
+                    </apex:repeat>
+                </select>
+            </td>
+            <td style="font-weight:bold;width:16%;align:center;">Program Full Code<br/>
+                <select id="filter_programfullcode">
+                    <option value=""></option>
+                    <apex:repeat value="{!ppgmfullcodelist}" var="pg" id="ProgramFullCode">
+                        <option value="{!pg}">{!pg}</option>
+                    </apex:repeat>
+                </select>
+            </td>
+            <td style="font-weight:bold;width:17%;align:center;">Project Id<br/>
+                <input type="text" id="filter_projectid" onkeypress="return noenter(event);"/>
+            </td>
+            
+            
+            <!--<td style="font-weight:bold;width:16%;align:center;">Project Phase<br/>
+                <select id="filter_projectphase" onchange="doSearch();" style="width:340px;">
+                    <option value=""></option>
+                    <apex:repeat value="{!pphaseslist}" var="pp" id="ProjectPhase">
+                        <option value="{!pp}">{!pp}</option>
+                    </apex:repeat>
+                </select>
+            </td>-->
+            
+            
+          </tr>
+          
+          <tr align="justify">
+              <td><input type="button" value="Filter" onclick="doFilter();return false;" /><input type="button" value="Clear Filter" onclick="clearFilters();return false;"/>
+              <apex:actionStatus id="actstatus" >
+        <apex:facet name="start" >
+          <img src="/img/loading32.gif" />                    
+        </apex:facet>
+     </apex:actionStatus>
+              </td>
+              
+          </tr>
+          
+      </table>
+      </apex:pageBlock>
+       
+        <apex:pageBlock title="Look for a project" id="results" mode="edit">
+
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!linkToEpm}" value="Create gBUILD Project From ePM Project" disabled="{!(!hasPermissionGbProjectCreateEpm)}" />
+                <apex:commandButton action="{!createGbuild}" value="Create New gBUILD Project" disabled="{!(!hasPermissionGbProjectCreateGb)}" />
+                <apex:commandButton action="{!proposeEcoe}" value="Propose Energy Division Project" disabled="{!(!hasPermissionGbProjectProposeEcoe)}" />
+            </apex:pageBlockButtons>
+            <apex:pageBlockTable value="{!projects}" var="p" styleClass="dataTable" >
+                <apex:column headerValue="Action">
+                    <apex:commandLink action="{!open}" value="Open">
+                        <apex:param name="id" value="{!p.pro.id}" assignTo="{!paramProjectId}"/>                
+                        <apex:param name="pbsProjectId" value="{!p.pro.ProjectId__c}" assignTo="{!paramPbsProjectId}"/>             
+                    </apex:commandLink>
+                </apex:column>
+                <apex:column headerValue="ID">
+                    <apex:facet name="header">
+                         <apex:commandLink value="Project ID" action="{!toggleSort}" rerender="results,debug">
+                             <apex:param name="sortField" value="name" assignTo="{!sortField}"/>
+                         </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputText value="{!p.pro.Name}" />
+                </apex:column>
+                <apex:column headerValue="Project Name">
+                    <apex:facet name="header">
+                         <apex:commandLink value="Project Name" action="{!toggleSort}" rerender="results,debug">
+                             <apex:param name="sortField" value="name" assignTo="{!sortField}"/>
+                         </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputText value="{!p.projectName}" />
+                </apex:column>
+                <apex:column headerValue="Project Manager">
+                    <apex:facet name="header">
+                         <apex:commandLink value="Project Manager" action="{!toggleSort}" rerender="results,debug">
+                             <apex:param name="sortField" value="name" assignTo="{!sortField}"/>
+                         </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputText value="{!p.pro.ProjectId__r.txtProjectManager__c}" />
+                </apex:column>
+                <apex:column headerValue="BA Code">
+                    <apex:outputText value="{!p.pro.BudgetActivityCode__c}" />
+                </apex:column>
+                <apex:column headerValue="Project Type">
+                    <apex:facet name="header">
+                         <apex:commandLink value="Project Type" action="{!toggleSort}" rerender="results,debug">
+                             <apex:param name="sortField" value="name" assignTo="{!sortField}"/>
+                         </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputText value="{!p.pro.ProjectType__c}" />
+                </apex:column>
+                <apex:column headerValue="Status">
+                    <apex:facet name="header">
+                         <apex:commandLink value="Status" action="{!toggleSort}" rerender="results,debug">
+                             <apex:param name="sortField" value="name" assignTo="{!sortField}"/>
+                         </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputText value="{!p.pro.ProjectId__r.txtCurrentState__c}" />
+                </apex:column>
+                <apex:column headerValue="Phase">
+                    <apex:facet name="header">
+                         <apex:commandLink value="Phase" action="{!toggleSort}" rerender="results,debug">
+                             <apex:param name="sortField" value="name" assignTo="{!sortField}"/>
+                         </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputText value="{!p.pro.WorkflowPhaseId__r.Label__c}" />
+                </apex:column>
+                <apex:column headerValue="Region">
+                    <apex:facet name="header">
+                         <apex:commandLink value="Region" action="{!toggleSort}" rerender="results,debug">
+                             <apex:param name="sortField" value="name" assignTo="{!sortField}"/>
+                         </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputText value="{!p.pro.ProjectId__r.txtRegion__c}" />
+                </apex:column>
+                <apex:column headerValue="Buildings">
+                    <apex:facet name="header">
+                         <apex:commandLink value="Buildings" action="{!toggleSort}" rerender="results,debug">
+                             <apex:param name="sortField" value="name" assignTo="{!sortField}"/>
+                         </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputText value="{!p.buildingCodes}" />
+                </apex:column>
+                <apex:column headerValue="ePM Project #"> 
+                    <apex:facet name="header">
+                         <apex:commandLink value="ePM Project #" action="{!toggleSort}" rerender="results,debug">
+                             <apex:param name="sortField" value="name" assignTo="{!sortField}"/>
+                         </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputText value="{!p.pro.ProjectId__r.numProjectNumber__c}" />
+                </apex:column>
+                <apex:column headerValue="Program Full Code">
+                    <apex:facet name="header">
+                         <apex:commandLink value="Program Full Code" action="{!toggleSort}" rerender="results,debug">
+                             <apex:param name="sortField" value="name" assignTo="{!sortField}"/>
+                         </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputText value="{!p.pro.ProjectId__r.txtProgramArea_FullCode__c}" />
+                </apex:column>
+            </apex:pageBlockTable>            
+            <apex:outputpanel id="reinittable" rendered="{!qs != null}">
+                <script>
+                   
+					  j$(".dataTable").fnClearTable();
+					  j$(".dataTable").fnDestroy();
+					
+                    j$(".dataTable").dataTable(
+                {
+                    "iDisplayLength": 25,
+                    "aLengthMenu": [[25, 50, 100, 500, -1], [25, 50, 100, 500, "All"]]
+                }
+            );
+            j$(".delCmd").each(function () {
+                var oldAction = this.onclick;
+                this.onclick = function () {
+                    var ret = confirm("Are you sure you want to delete this item?");
+                    if (ret) {
+                        oldAction();
+                    }
+                    return ret;
+                }
+            });
+                </script>
+            </apex:outputpanel>
+        </apex:pageBlock>
+    </apex:form>
+ </apex:page>

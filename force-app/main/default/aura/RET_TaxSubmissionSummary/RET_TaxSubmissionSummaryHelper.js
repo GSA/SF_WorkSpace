@@ -70,6 +70,10 @@
                 if(taxCase.RET_Tax_County__c != null){
 	            	component.set("v.initialTaxCounty", taxCase.RET_Tax_County__c);
                 }
+                //New code for 2024-2025 RET Surge that may handle a Lease Number passed
+                //in on the URL's "Id" parameter and so need to update the caseId variable
+                //to the retrieved Case record's Id
+                component.set("v.caseId", taxCase.Id);
 	        } else {
 	            var errors = response.getError();
                 if (errors) {

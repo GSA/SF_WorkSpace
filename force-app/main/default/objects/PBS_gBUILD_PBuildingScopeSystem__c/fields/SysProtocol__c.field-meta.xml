@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SysProtocol__c</fullName>
+    <description>System protocol pick list</description>
+    <inlineHelpText>Please select system protocol.</inlineHelpText>
+    <label>System Protocol</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>BACnet</fullName>
+                <default>false</default>
+                <label>BACnet</label>
+            </value>
+            <value>
+                <fullName>Lonworks</fullName>
+                <default>false</default>
+                <label>Lonworks</label>
+            </value>
+            <value>
+                <fullName>SystemStillProprietary</fullName>
+                <default>false</default>
+                <label>SystemStillProprietary</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

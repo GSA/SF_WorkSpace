@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LOP_Email_Id_Cannot_be_Changed</fullName>
+    <active>true</active>
+    <description>LOP Email Id Cannot be Changed</description>
+    <errorConditionFormula>RecordType.DeveloperName = &apos;Lease_Offer_Platform&apos; &amp;&amp;
+ ISCHANGED( Email )</errorConditionFormula>
+    <errorDisplayField>Email</errorDisplayField>
+    <errorMessage>Email Id Cannot be Changed</errorMessage>
+</ValidationRule>

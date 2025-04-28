@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RplcType__c</fullName>
+    <description>If replacement, what type of replacement?</description>
+    <inlineHelpText>Select the appropriate type of replacement for this project.</inlineHelpText>
+    <label>Replacement Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>InstallationForNewBuilding</fullName>
+                <default>false</default>
+                <label>InstallationForNewBuilding</label>
+            </value>
+            <value>
+                <fullName>ReplacementsInKindWithSimilarSize</fullName>
+                <default>false</default>
+                <label>ReplacementsInKindWithSimilarSize</label>
+            </value>
+            <value>
+                <fullName>ReplacementsWithDifferentSize</fullName>
+                <default>false</default>
+                <label>ReplacementsWithDifferentSize</label>
+            </value>
+            <value>
+                <fullName>SupplementalAirHandler(s)</fullName>
+                <default>false</default>
+                <label>SupplementalAirHandler(s)</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

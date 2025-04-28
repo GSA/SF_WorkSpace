@@ -58,7 +58,7 @@ public with sharing class NCMT_TreeView_Items_Ctrl_LC {
         
         wrapper.lookups = getLookupData(level2desc, level3desc, level4desc, level5desc, projFiscalYear);
         
-        wrapper.lookupTotal = getLookupTotal(level2desc, level3desc, level4desc, level5desc);
+        wrapper.lookupTotal = getLookupTotal(level2desc, level3desc, level4desc, level5desc, projFiscalYear);
         return wrapper;
         
     }
@@ -93,14 +93,15 @@ public with sharing class NCMT_TreeView_Items_Ctrl_LC {
         return lookup; 
         
     }
-    public static integer getLookupTotal(string level2desc, string level3desc, string level4desc, string level5desc){
+    public static integer getLookupTotal(string level2desc, string level3desc, string level4desc, string level5desc, string projFiscalYear){
         
         integer lookupTotal = [ Select count()
                                from NCMT_DES_Lookup_details__c
                                where Level_2_Description__c = :level2desc AND
                                Level_3_Description__c = :level3desc AND
                                Level_4_Description__c = :level4desc AND
-                               Level_5_Description__c = :level5desc];
+                               Level_5_Description__c = :level5desc AND
+                               Fiscal_Year__c = :projFiscalYear];
         return lookupTotal;
     }
     
@@ -191,7 +192,7 @@ public with sharing class NCMT_TreeView_Items_Ctrl_LC {
          //item.id = null;
             //NCMT DES Item Master O&P
             Id recordId = Schema.getGlobalDescribe().get('NCMT_DES_Items__c').getDescribe().getRecordTypeInfosByName().get('NCMT DES Item Master O&P').getRecordTypeId();
-			if(item.RecordTypeId == recordId){
+            if(item.RecordTypeId == recordId){
                 //added line 196 for the story SFWS-1910
                 if(item.id!=null  && string.valueof(item.id).contains('deleteMe')){
                 item.In_house_Unit_Total__c = item.Material_Unit_Cost__c + item.Hourly_Rate__c + item.Equipment_Rental_Day__c;

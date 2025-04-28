@@ -1,0 +1,19 @@
+<apex:page sidebar="false" controller="PBS_gBUILD_HomeController" >
+    <c:PBS_gBUILD_InitializeScripts />  
+    <apex:form >
+        <div style="position:relative;z-index:1">
+            <apex:pageMessages />      
+            <table border="0">
+                <tr>
+                    <td valign="top">
+                        <c:PBS_gBUILD_OutputHTML html="{!AppConfig.PageHomeIntro__c}" />
+                    </td>
+                    <td valign="top">
+                        <c:PBS_gBUILD_LinkList linkListName="QuickReportingLinks" linkTarget="_blank" />
+                    </td>
+                </tr>
+            </table>
+        </div>            
+        <c:PBS_gBUILD_EmbedReport reportId="{!AppConfig.PageHomeDashboardId__c}" height="{!AppConfig.PageHomeDashboardHeight__c}" zIndex="0" />  
+    </apex:form>
+</apex:page>

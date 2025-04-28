@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>TCO Additional Cost</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>TCO Additional Cost</value>
+    </caseValues>
+    <layouts>
+        <layout>TCO Additional Cost Layout</layout>
+        <sections>
+            <label><!-- Annual O&amp;M Cost Changes - Total Additional Cost/Year --></label>
+            <section>Annual O&amp;M Cost Changes - Total Additional Cost/Year</section>
+        </sections>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Utility Impact - Energy Use Based --></label>
+            <section>Utility Impact - Energy Use Based</section>
+        </sections>
+        <sections>
+            <label><!-- Water Impact - Use Based --></label>
+            <section>Water Impact - Use Based</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Please enter comments. --></errorMessage>
+        <name>Check_for_AnnualCost_Changes</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please enter Comments. --></errorMessage>
+        <name>Check_for_UitilityImpact_Changes</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please enter Comments --></errorMessage>
+        <name>Check_for_WaterImpact_Changes</name>
+    </validationRules>
+</CustomObjectTranslation>

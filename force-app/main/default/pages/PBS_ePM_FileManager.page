@@ -1,0 +1,190 @@
+<apex:page controller="PBS_ePM_FileManagerController" sidebar="false">
+    <apex:includeScript value="{!URLFOR($Resource.PBS_gBUILD_JQuery, '/RahdJQuery/jquery-1.8.0.min.js')}"  />   
+    <script type="text/javascript">
+        var j$ = jQuery.noConflict();
+        j$(document).ready(function () {
+            var jdocg = null;
+            j$("input[type='hidden']").each(function () {
+                if (this.name.substring(this.name.length - 5) == ":docg") {
+                    jdocg = j$(this);
+                }
+            });
+            j$("input[type='file']").change(function () {
+                //alert("file has data");
+                j$("input[name='selectedDocument']").removeAttr("checked");
+                jdocg.val('');
+                //alert('j$("#docg").val()=' + jdocg.val());
+            });
+            j$("input[name='selectedDocument']").change(function () {
+                //alert("radio has data");
+                j$("input[type='file']").val(null);
+                jdocg.val(j$(this).val());
+                //alert('j$("#docg").val()=' + jdocg.val());
+            });
+        });
+    </script>    
+    <style type="text/css">
+        #AppBodyHeader {
+            display: none;
+        }
+    </style>
+    <apex:form >
+    <apex:sectionHeader title="ePM File Manager" subtitle="{!subtitle}" />
+    <apex:pageMessages />    
+    <apex:outputPanel rendered="{!(intro!=null)}">
+        <apex:panelBar >
+            <apex:panelBarItem label="Introduction">{!intro}</apex:panelBarItem>
+        </apex:panelBar>        
+        <br/>
+    </apex:outputPanel>
+    <script type="text/javascript">
+        j$(".rich-panelbar-header-act,.rich-panelbar-content-exterior").css("display", "");
+    </script>    
+    <apex:inputHidden value="{!documentGuid}" id="docg" />
+    <apex:pageBlock rendered="{!loginMode}" title="Login to ePM">
+        <apex:pageBlockButtons >
+            <apex:commandButton action="{!login}" value="Login" />
+        </apex:pageBlockButtons>
+        <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Organization" for="login_org"/>
+                <apex:inputText value="{!org}" id="login_org" disabled="{!orgDisabled}"/> 
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Username" for="login_username"/>
+                <apex:inputText value="{!username}" id="login_username" required="true"/> 
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Password" for="login_password"/>
+                <apex:inputSecret value="{!password}" id="login_password" required="true"/> 
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    <apex:pageBlock rendered="{!projectsMode}" title="Select an ePM project">
+        <apex:pageBlockTable value="{!epmProjects}" var="p" styleClass="dataTable">
+            <apex:column headerValue="Action">
+                <apex:commandLink action="{!selectProject}" value="Select">
+                    <apex:param name="id" value="{!p.projectAccountName}" assignTo="{!actionId}"/>                
+                </apex:commandLink>
+            </apex:column>
+            <apex:column headerValue="Account Name">
+                <apex:outputText value="{!p.projectAccountName}" />
+            </apex:column>
+            <apex:column headerValue="Title">
+                <apex:outputText value="{!p.docTitle}" />
+            </apex:column>
+        </apex:pageBlockTable>
+    </apex:pageBlock>
+    <apex:pageBlock rendered="{!treeMode}" title="Document">
+        <apex:pageBlockButtons >
+            <apex:commandButton value="Link Selected File" action="{!upload}"/>        
+        </apex:pageBlockButtons>
+        <apex:pageBlockSection title="Properties" columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Catalog" for="upload__catalog" />
+                <apex:selectList value="{!documentAreaGuid}" id="upload__catalog" required="true" disabled="{!documentAreaDisabled}" >
+                    <apex:selectOptions value="{!documentAreas}"/>
+                </apex:selectList>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Folder" for="upload__folder"/>
+                <apex:inputText value="{!folderName}" id="upload__folder" disabled="{!(!allowChangeFolder)}"/> 
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Description" for="upload__desc"/>
+                <apex:inputTextArea value="{!file.Description}" id="upload__desc"/> 
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Tags" for="upload__tags"/>
+                <apex:inputText value="{!tags}" id="upload__tags"/> 
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+     <!---   
+        <apex:pageBlockSection title="Either upload new document" columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="The file" for="upload__file"/>
+                <apex:inputFile value="{!file.body}" filename="{!file.name}" contenttype="{!file.contenttype}" filesize="{!file.BodyLength}" id="upload__file" />
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+   --->
+       
+        <apex:pageBlockSection title="select existing document in ePM to link ">
+            <apex:pageBlockTable value="{!epmDocuments}" var="z" styleClass="dataTable">
+                <apex:column headerValue="Action">
+                    <input type="radio" name="selectedDocument" value="{!z.documentGuid}"/> Select
+                    &nbsp;|&nbsp;
+                    <apex:outputLink value="{!z.url}" target="_blank">Open</apex:outputLink>
+                </apex:column>
+                <apex:column headerValue="State">
+                    <apex:outputText value="{!z.documentProcessState}" />
+                </apex:column>
+                <apex:column headerValue="Folder">
+                    <apex:outputText value="{!z.folderFullCode}" />
+                </apex:column>
+                <apex:column headerValue="Title">
+                    <apex:outputText value="{!z.documentTitle}" />
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    <apex:pageBlock rendered="{!uploadedMode}" title="Link Successful">
+        <apex:pageBlockButtons >
+            <apex:commandButton value="Link another file" action="{!uploadAgain}"/>                
+        </apex:pageBlockButtons>
+        <apex:pageBlockSection title="Link File results" columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="ePM Account" for="uploaded_epmAccount"/>
+                <apex:outputText value="{!epmAccountName}" id="uploaded_epmAccount"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="File Name" for="uploaded_fileName"/>
+                <apex:outputText value="{!file.name}" id="uploaded_fileName"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="File Size" for="uploaded_fileSize"/>
+                <apex:outputText value="{!file.BodyLength}" id="uploaded_fileSize"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Content Type" for="uploaded_contentType"/>
+                <apex:outputText value="{!file.contenttype}" id="uploaded_contentType"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="attachmentGuid" for="uploaded_attachmentGuid"/>
+                <apex:outputText value="{!attachmentGuid}" id="uploaded_attachmentGuid"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="sessionGuid" for="uploaded_sessionGuid"/>
+                <apex:outputText value="{!sessionGuid}" id="uploaded_sessionGuid"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="documentGuid" for="uploaded_documentGuid"/>
+                <apex:outputText value="{!documentGuid}" id="uploaded_documentGuid"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="seriesGuid" for="uploaded_seriesGuid"/>
+                <apex:outputText value="{!seriesGuid}" id="uploaded_seriesGuid"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="devName" for="uploaded_devname"/>
+                <apex:outputText value="{!file.developerName}" id="uploaded_devname"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="folderId" for="uploaded_folder"/>
+                <apex:outputText value="{!file.folderId}" id="uploaded_folder"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="url" for="uploaded_url"/>
+                <apex:outputLink value="{!file.url}" id="uploaded_url" target="_blank">{!file.url}</apex:outputLink>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    <apex:outputPanel rendered="{!showEpmFileManager}">
+        <hr />
+        <apex:outputPanel rendered="{!(username!=null)}">
+            <apex:commandLink action="{!logout}" value="Logout" /> {!username} and restart THIS File Manager.
+            <br/>
+        </apex:outputPanel>
+        <a href="{!epmFileManagerUrl}">Open</a> the native ePM File Manager.
+    </apex:outputPanel>
+  </apex:form>
+</apex:page>

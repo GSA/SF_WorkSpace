@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<apex:page showHeader="false" sidebar="false" controller="PBS_gBUILD_PBuildingKPMController">
+
+<apex:outputPanel rendered="{!showPageContent}" >
+<apex:pageBlock >
+<apex:pageBlockSection >
+<!--<apex:commandLink action="{!openChatterItem}" value="Open"></apex:commandLink>-->
+  <chatter:FeedWithFollowers entityId="{!pb.Id}" rendered="{!viewMode}" showHeader="false" /> 
+</apex:pageBlockSection>
+  </apex:pageBlock>
+      </apex:outputPanel>
+      
+<script>
+var links = document.links;
+for (var i = 0; i < links.length; i++) {
+     if (links[i].className == 'contentThumbnail-a')
+         links[i].parentNode.removeChild(links[i]);
+     
+     if (links[i].className == 'contentActionLink')
+         links[i].target = "_blank";
+     
+     
+     
+}
+</script>
+
+</apex:page>

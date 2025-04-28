@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Lease Request Approved</name>
+    <style>none</style>
+    <subject>Lease Request Approved</subject>
+    <textOnly>Hello,
+
+This is a follow up to your request to submit tax documentation through GSA&apos;s Real Estate Tax portal on behalf of a lessor. The request for the following Lease has been Approved.
+
+Lease : {!PBS_Lease_Access__c.PBS_Lease__c}
+Approver Comments : {!PBS_Lease_Access__c.Approver_Comments__c}
+
+Thank You</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

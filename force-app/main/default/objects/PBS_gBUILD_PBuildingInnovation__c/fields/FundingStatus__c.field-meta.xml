@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FundingStatus__c</fullName>
+    <description>Funding Status</description>
+    <inlineHelpText>Please select the funding status of this building.</inlineHelpText>
+    <label>Funding Status</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>FundedByArra</fullName>
+                <default>false</default>
+                <label>FundedByArra</label>
+            </value>
+            <value>
+                <fullName>FundedByNonArra</fullName>
+                <default>false</default>
+                <label>FundedByNonArra</label>
+            </value>
+            <value>
+                <fullName>NeedsFunding</fullName>
+                <default>false</default>
+                <label>NeedsFunding</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

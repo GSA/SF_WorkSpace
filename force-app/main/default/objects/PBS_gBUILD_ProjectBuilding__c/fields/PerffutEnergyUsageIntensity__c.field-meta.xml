@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PerffutEnergyUsageIntensity__c</fullName>
+    <externalId>false</externalId>
+    <formula>if(PerffutGsf__c=0,null,PerffutTotEnergy__c/PerffutGsf__c*1000)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Baseline EUI (kBTU/GSF/Year)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>4</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

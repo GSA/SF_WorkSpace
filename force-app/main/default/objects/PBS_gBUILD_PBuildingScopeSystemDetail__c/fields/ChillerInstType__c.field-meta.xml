@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ChillerInstType__c</fullName>
+    <description>Please select one of the following roofing features or types that are included in this chiller installation:</description>
+    <inlineHelpText>Please select one of the following roofing features or types that are included in this chiller installation:</inlineHelpText>
+    <label>Chiller Installation Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>InstallationForNewBuilding</fullName>
+                <default>false</default>
+                <label>InstallationForNewBuilding</label>
+            </value>
+            <value>
+                <fullName>ChillerReplInKindWithSimilarTonnage</fullName>
+                <default>false</default>
+                <label>ChillerReplInKindWithSimilarTonnage</label>
+            </value>
+            <value>
+                <fullName>ReplacementWithDifferentTonnage</fullName>
+                <default>false</default>
+                <label>ReplacementWithDifferentTonnage</label>
+            </value>
+            <value>
+                <fullName>ChillerSupplementalChiller</fullName>
+                <default>false</default>
+                <label>ChillerSupplementalChiller</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>WfInitialStateForProjectTypes__c</fullName>
+    <description>The type of gBUILD project</description>
+    <inlineHelpText>The type of gBUILD project</inlineHelpText>
+    <label>Initial State For Project Types</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>NewConstruction</fullName>
+                <default>false</default>
+                <label>NewConstruction</label>
+            </value>
+            <value>
+                <fullName>FullModernization</fullName>
+                <default>false</default>
+                <label>FullModernization</label>
+            </value>
+            <value>
+                <fullName>PartialModernizations</fullName>
+                <default>false</default>
+                <label>PartialModernizations</label>
+            </value>
+            <value>
+                <fullName>LimitedScope</fullName>
+                <default>false</default>
+                <label>LimitedScope</label>
+            </value>
+            <value>
+                <fullName>SmallProject</fullName>
+                <default>false</default>
+                <label>SmallProject</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>5</visibleLines>
+</CustomField>

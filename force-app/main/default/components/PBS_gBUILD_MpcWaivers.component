@@ -1,0 +1,29 @@
+<apex:component controller="PBS_gBUILD_MpcWaiversCController">
+    <apex:attribute name="pageController" 
+        type="PBS_gBUILD_PageBaseController" 
+        assignTo="{!pageController}" 
+        required="true" 
+        description="The controller for the page."
+        />
+    <apex:attribute name="viewMode" 
+        type="Boolean" 
+        assignTo="{!viewMode}" 
+        required="true" 
+        description="When true, render in view mode, else edit mode"
+        />
+    <apex:attribute name="mpcNum"
+        type="Integer"
+        assignTo="{!mpcNum}"
+        required="true"
+        description="The MPC Number this applies to."
+        />      
+    <apex:attribute name="readableWaiverKeyTokens"
+        type="String"
+        assignTo="{!readableWaiverKeyTokens}"
+        required="false"
+        description="Alternate CSV list of MPC Numbers whose files are displayed associated with waivers."
+        />      
+    <apex:pageBlockSection title="Supporting  documents such as LEED Waivers, P100 Waivers, RRE Waivers, or other explanatory HPGB information" columns="1" >
+      <c:PBS_gBUILD_Upload pageController="{!pageController}" readableWaiverKeyPattern="Mpc[TOKEN]Waivers" readableWaiverKeyTokens="{!readableWaiverKeyTokens}" key="Gpc{!mpcNum}Waivers" tags="" viewMode="{!viewMode}" epmCatalog="{!epmCatalog}" contextualTitle="{!ctitle}" intro="Please upload any supporting  documents such as LEED Waivers, P100 Waivers, RRE Waivers, or other explanatory HPGB information." />
+    </apex:pageBlockSection>
+</apex:component>

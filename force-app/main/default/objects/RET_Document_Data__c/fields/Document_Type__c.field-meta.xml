@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Document_Type__c</fullName>
-    <externalId>false</externalId>
     <label>Document Type</label>
     <required>true</required>
     <trackTrending>false</trackTrending>
     <type>Picklist</type>
     <valueSet>
+        <controllingField>Document_Category__c</controllingField>
         <restricted>true</restricted>
         <valueSetDefinition>
             <sorted>false</sorted>
@@ -55,6 +55,188 @@
                 <default>false</default>
                 <label>Proof of Ownership</label>
             </value>
+            <value>
+                <fullName>Tax bill(s)</fullName>
+                <default>false</default>
+                <label>Tax bill(s)</label>
+            </value>
+            <value>
+                <fullName>Proof of payment</fullName>
+                <default>false</default>
+                <label>Proof of payment</label>
+            </value>
+            <value>
+                <fullName>Invoice to GSA</fullName>
+                <default>false</default>
+                <label>Invoice to GSA</label>
+            </value>
+            <value>
+                <fullName>Parcel information</fullName>
+                <default>false</default>
+                <label>Parcel information</label>
+            </value>
+            <value>
+                <fullName>Tax authority valuation</fullName>
+                <default>false</default>
+                <label>Tax authority valuation</label>
+            </value>
+            <value>
+                <fullName>Tax appeal notification</fullName>
+                <default>false</default>
+                <label>Tax appeal notification</label>
+            </value>
+            <value>
+                <fullName>Tax authority appeal results</fullName>
+                <default>false</default>
+                <label>Tax authority appeal results</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>Novation agreement - signed</fullName>
+                <default>false</default>
+                <label>Novation agreement - signed</label>
+            </value>
+            <value>
+                <fullName>Evidence of signatory authority</fullName>
+                <default>false</default>
+                <label>Evidence of signatory authority</label>
+            </value>
+            <value>
+                <fullName>Change enactment documents</fullName>
+                <default>false</default>
+                <label>Change enactment documents</label>
+            </value>
+            <value>
+                <fullName>Financial capabilities for TIs</fullName>
+                <default>false</default>
+                <label>Financial capabilities for TIs</label>
+            </value>
+            <value>
+                <fullName>Evidence of active SAM registration</fullName>
+                <default>false</default>
+                <label>Evidence of active SAM registration</label>
+            </value>
+            <value>
+                <fullName>Buyer/transferee state registration</fullName>
+                <default>false</default>
+                <label>Buyer/transferee state registration</label>
+            </value>
+            <value>
+                <fullName>Surety consent</fullName>
+                <default>false</default>
+                <label>Surety consent</label>
+            </value>
+            <value>
+                <fullName>Evidence of security clearance</fullName>
+                <default>false</default>
+                <label>Evidence of security clearance</label>
+            </value>
+            <value>
+                <fullName>Foreign ownership and financing representation</fullName>
+                <default>false</default>
+                <label>Foreign ownership and financing representation</label>
+            </value>
+            <value>
+                <fullName>Lease compliance document</fullName>
+                <default>false</default>
+                <label>Lease compliance document</label>
+            </value>
+            <value>
+                <fullName>Lab test document</fullName>
+                <default>false</default>
+                <label>Lab test document</label>
+            </value>
+            <value>
+                <fullName>Small business subcontracting plan</fullName>
+                <default>false</default>
+                <label>Small business subcontracting plan</label>
+            </value>
         </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Real Estate Taxes</controllingFieldValue>
+            <valueName>Tax bill(s)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Real Estate Taxes</controllingFieldValue>
+            <valueName>Proof of payment</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Real Estate Taxes</controllingFieldValue>
+            <valueName>Invoice to GSA</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Real Estate Taxes</controllingFieldValue>
+            <valueName>Parcel information</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Real Estate Taxes</controllingFieldValue>
+            <valueName>Tax authority valuation</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Real Estate Taxes</controllingFieldValue>
+            <valueName>Tax appeal notification</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Real Estate Taxes</controllingFieldValue>
+            <valueName>Tax authority appeal results</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Real Estate Taxes</controllingFieldValue>
+            <controllingFieldValue>Change of Ownership / Novation</controllingFieldValue>
+            <controllingFieldValue>Other</controllingFieldValue>
+            <valueName>Other</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Change of Ownership / Novation</controllingFieldValue>
+            <valueName>Novation agreement - signed</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Change of Ownership / Novation</controllingFieldValue>
+            <valueName>Evidence of signatory authority</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Change of Ownership / Novation</controllingFieldValue>
+            <valueName>Change enactment documents</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Change of Ownership / Novation</controllingFieldValue>
+            <valueName>Financial capabilities for TIs</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Change of Ownership / Novation</controllingFieldValue>
+            <valueName>Evidence of active SAM registration</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Change of Ownership / Novation</controllingFieldValue>
+            <valueName>Buyer/transferee state registration</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Change of Ownership / Novation</controllingFieldValue>
+            <valueName>Surety consent</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Change of Ownership / Novation</controllingFieldValue>
+            <valueName>Evidence of security clearance</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Change of Ownership / Novation</controllingFieldValue>
+            <valueName>Foreign ownership and financing representation</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Other</controllingFieldValue>
+            <valueName>Lease compliance document</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Other</controllingFieldValue>
+            <valueName>Lab test document</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Other</controllingFieldValue>
+            <valueName>Small business subcontracting plan</valueName>
+        </valueSettings>
     </valueSet>
 </CustomField>

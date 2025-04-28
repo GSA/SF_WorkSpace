@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingGuestRules>
+        <fullName>Account_Guest_User_Update</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Account Guest User Update</label>
+        <sharedTo>
+            <guestUser>AAAP_Registration</guestUser>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>AAAP Portal</value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
+    <sharingGuestRules>
+        <fullName>Leasing_Account_Sharing</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>Sharing account info with Guest user for Registration process</description>
+        <label>Leasing Account Sharing</label>
+        <sharedTo>
+            <guestUser>Leasing</guestUser>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>AAAP Portal</value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
+</SharingRules>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ScopeDetailsMaxSeq__c</fullName>
+    <description>The highest sequence number for a child scope detail.</description>
+    <label>Scope Details Max Sequence</label>
+    <summarizedField>PBS_gBUILD_PBuildingScopeSystemDetail__c.LabelNum__c</summarizedField>
+    <summaryForeignKey>PBS_gBUILD_PBuildingScopeSystemDetail__c.Rahd_ScopeSysParentId__c</summaryForeignKey>
+    <summaryOperation>max</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

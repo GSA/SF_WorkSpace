@@ -1,0 +1,33 @@
+<apex:page controller="PBS_gBUILD_PBInnovationNew" sidebar="false" tabStyle="PBS_gBUILD_PBuildingInnovation__tab">
+    <c:PBS_gBUILD_InitializeScripts />  
+    <apex:form >
+        <apex:pageMessages />           
+        <c:PBS_gBUILD_PageInstructions html="{!AppConfig.PageInnovationItemIntro__c}" />
+        <apex:pageBlock >
+            <apex:pageblockButtons >
+                <apex:commandButton action="{!edit}" value="Edit" rendered="{!viewMode}" disabled="{!readonlyMode}"/>
+                <apex:commandButton action="{!save}" value="Save" rendered="{!editMode}" disabled="{!readonlyMode}"/>
+                <apex:commandButton action="{!saveAndNew}" value="Save & New" rendered="{!editMode}" disabled="{!readonlyMode}"/>
+                <apex:commandButton action="{!cancel}" value="Cancel" rendered="{!editMode}" immediate="true" />        
+            </apex:pageblockButtons>
+            <apex:pageBlockSection columns="1" >
+                <apex:outputField rendered="{!viewMode}" value="{!item.IsBaselineDataAvailable__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!item.WasMeasurementVerificationIncluded__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!item.FundingStatus__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!item.Category__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!item.CategoryOther__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!item.ProblemStatement__c}"/>              
+                <apex:outputField rendered="{!viewMode}" value="{!item.TechDescription__c}"/>
+                <apex:outputField rendered="{!viewMode}" value="{!item.PotentialImpact__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!item.IsBaselineDataAvailable__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!item.WasMeasurementVerificationIncluded__c}"/>
+                <apex:inputField rendered="{!editMode}" value="{!item.FundingStatus__c}" styleClass="enum"/>
+                <apex:inputField rendered="{!editMode}" value="{!item.Category__c}" styleClass="enum"/>
+                <apex:inputField rendered="{!editMode}" value="{!item.CategoryOther__c}"/>                
+                <apex:inputField rendered="{!editMode}" value="{!item.ProblemStatement__c}" required="true"/>              
+                <apex:inputField rendered="{!editMode}" value="{!item.TechDescription__c}" required="true"/>
+                <apex:inputField rendered="{!editMode}" value="{!item.PotentialImpact__c}" required="true"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

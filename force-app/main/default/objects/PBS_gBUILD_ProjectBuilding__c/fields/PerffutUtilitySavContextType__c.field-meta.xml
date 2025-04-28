@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PerffutUtilitySavContextType__c</fullName>
+    <description>The context for which savings are calculated</description>
+    <inlineHelpText>Select the utility savings context type.</inlineHelpText>
+    <label>Utility Savings Context Type</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>ImpactScopeLevel</fullName>
+                <default>false</default>
+                <label>ImpactScopeLevel</label>
+            </value>
+            <value>
+                <fullName>ImpactBuildingLevel</fullName>
+                <default>false</default>
+                <label>ImpactBuildingLevel</label>
+            </value>
+            <value>
+                <fullName>PerformanceBuildingLevel</fullName>
+                <default>false</default>
+                <label>PerformanceBuildingLevel</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

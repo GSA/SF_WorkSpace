@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status__c</fullName>
+    <description>MPC Status Dropdown</description>
+    <inlineHelpText>MPC Status Dropdown</inlineHelpText>
+    <label>Status</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Planned but not started</fullName>
+                <default>false</default>
+                <label>Planned but not started</label>
+            </value>
+            <value>
+                <fullName>Implementation in progress</fullName>
+                <default>false</default>
+                <label>Implementation in progress</label>
+            </value>
+            <value>
+                <fullName>Implementation complete</fullName>
+                <default>false</default>
+                <label>Implementation complete</label>
+            </value>
+            <value>
+                <fullName>Waiver</fullName>
+                <default>false</default>
+                <label>Waiver</label>
+            </value>
+            <value>
+                <fullName>N/A</fullName>
+                <default>false</default>
+                <label>N/A</label>
+            </value>
+            <value>
+                <fullName>Challenge/ not on track</fullName>
+                <default>false</default>
+                <label>Challenge/ not on track</label>
+            </value>
+            <value>
+                <fullName>Review Required</fullName>
+                <default>false</default>
+                <label>Review Required</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

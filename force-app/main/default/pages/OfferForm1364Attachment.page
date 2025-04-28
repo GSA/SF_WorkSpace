@@ -1,0 +1,391 @@
+<apex:page controller="PBS_AAAP_OfferForm1217" standardstylesheets="false" sidebar="false" renderAs="pdf">
+
+
+    <head>
+        <style type="text/css">
+
+.homeTab .brdPalette { height:1700px; }
+
+span.cls_006{font-family:Arial,serif;font-size:7.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_006{font-family:Arial,serif;font-size:7.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+span.cls_005{font-family:Arial,serif;font-size:12.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_005{font-family:Arial,serif;font-size:12.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+span.cls_002{font-family:Arial,serif;font-size:7.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_002{font-family:Arial,serif;font-size:7.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_008{font-family:Arial,serif;font-size:11.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_008{font-family:Arial,serif;font-size:11.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+span.cls_007{font-family:Arial,serif;font-size:10.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_007{font-family:Arial,serif;font-size:10.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+span.cls_009{font-family:Arial,serif;font-size:10.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_009{font-family:Arial,serif;font-size:10.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_010{font-family:"Webdings",serif;font-size:10.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_010{font-family:"Webdings",serif;font-size:10.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_003{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+div.cls_003{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal}
+
+span.cls_004{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+div.cls_004{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal}
+
+
+        </style>
+    </head>
+
+    <body>
+
+    <div style="position:absolute;left:50%;margin-left:-306px;top:0px;width:612px;height:792px;border-style:outset;overflow:hidden">
+
+        <div style="position:absolute;left:0px;top:0px">
+
+            <img src="{!URLFOR($Resource.form1364Attachment, 'image001.jpg')}" width="612" height="792"/></div>
+
+        <div style="position:absolute;left:249.66px;top:30.72px" class="cls_006">IN RESPONSE TO</div>
+
+        <div style="position:absolute;left:25.14px;top:31.80px" class="cls_005">ATTACHMENT TO GSA FORM 1364</div>
+
+        <div style="position:absolute;left:438.54px;top:34.86px" class="cls_006">DATED       {!sysDate}</div>
+
+        <div style="position:absolute;left:238.50px;top:39.00px" class="cls_006">RLP NUMBER       {!RLPNumber}</div>
+
+        <div style="position:absolute;left:20.88px;top:60.36px" class="cls_002">1a. BUILDING NAME
+            <br/>{!offer.PBS_AAAP_Building_Name__c}</div>
+
+        <div style="position:absolute;left:233.91px;top:60.36px" class="cls_002">1b. BUILDING ADDRESS
+            <br/>{!offer.PBS_AAAP_Street_Address__c}</div>
+
+        <div style="position:absolute;left:20.88px;top:101.22px" class="cls_002">1c. CITY <br/>{!offer.PBS_AAAP_City__c}
+        </div>
+
+        <div style="position:absolute;left:233.85px;top:101.22px" class="cls_002">1d. STATE
+            <br/>{!offer.PBS_AAAP_State__c}</div>
+
+        <div style="position:absolute;left:378.14px;top:101.22px" class="cls_002">1e.</div>
+
+        <div style="position:absolute;left:392.52px;top:101.22px" class="cls_002">9-DIGIT ZIP CODE
+            <br/>{!offer.PBS_AAAP_ZipCode__c}</div>
+
+        <div style="position:absolute;left:459.03px;top:101.22px" class="cls_002">1f. CONGRESSIONAL DISTRICT</div>
+
+        <div style="position:absolute;left:174.42px;top:133.38px" class="cls_008">SECTION I - GENERAL BUILDING
+            INFORMATION
+        </div>
+
+        <div style="position:absolute;left:26.10px;top:152.34px" class="cls_007">2</div>
+
+        <div style="position:absolute;left:56.34px;top:152.22px" class="cls_009">Identify whether the building is fully
+            sprinklered: <span class="cls_010">[{!sprinkledYes}]</span><span class="cls_009"> Yes</span></div>
+
+        <div style="position:absolute;left:290.88px;top:152.22px" class="cls_010">[{!sprinkledNo}]<span class="cls_009"> No </span><span
+                    class="cls_010">[{!sprinkledPartially}]</span><span class="cls_009"> Partially</span></div>
+
+        <div style="position:absolute;left:56.34px;top:175.08px" class="cls_009">Identify whether there are at least 2
+            physically remote stairwells existing in the building (scissor stairs only count as one
+        </div>
+
+        <div style="position:absolute;left:26.10px;top:183.78px" class="cls_007">3</div>
+
+        <div style="position:absolute;left:56.34px;top:192.36px" class="cls_009">stairwell): <span
+                    class="cls_010">[{!remotestairwelYes}]</span><span class="cls_009">  Yes     </span><span
+                    class="cls_010">[{!remotestairwelNo}]</span><span class="cls_009"> No</span></div>
+
+        <div style="position:absolute;left:26.10px;top:215.28px" class="cls_007">4</div>
+
+        <div style="position:absolute;left:56.34px;top:215.16px" class="cls_009">Identify whether the building has a
+            building wide alarm system: <span class="cls_010">[{!alarmYes}]</span><span class="cls_009"> Yes</span>
+        </div>
+
+        <div style="position:absolute;left:350.80px;top:215.16px" class="cls_010">[{!alarmNo}]<span
+                    class="cls_009">  No</span></div>
+
+        <div style="position:absolute;left:26.10px;top:238.26px" class="cls_007">5</div>
+
+        <div style="position:absolute;left:56.34px;top:238.14px" class="cls_009">a. What type of construction material
+            is used in the exterior of the walls of the building? {!exteriorwall}</div>
+
+        <div style="position:absolute;left:56.34px;top:259.62px" class="cls_009">b. If Other, specify
+            type: {!exteriorother}</div>
+
+        <div style="position:absolute;left:26.10px;top:282.72px" class="cls_007">6</div>
+
+        <div style="position:absolute;left:56.34px;top:282.60px" class="cls_009">a. What Type of roofing material was
+            used for the building? {!roofingmaterial}</div>
+
+        <div style="position:absolute;left:56.34px;top:304.08px" class="cls_009">b. If Other, specify
+            type:   {!roofingother}</div>
+
+        <div style="position:absolute;left:26.10px;top:327.18px" class="cls_007">7</div>
+
+        <div style="position:absolute;left:56.34px;top:327.06px" class="cls_009">What year did the most recent building
+            renovation occur? {!buildingRenovationYear}</div>
+
+        <div style="position:absolute;left:26.10px;top:350.16px" class="cls_007">8</div>
+
+        <div style="position:absolute;left:56.34px;top:350.04px" class="cls_009">a. Is the building within 2000 walkable
+            linear feet of a metrorail station? <span class="cls_010">[{!metrorailYes}]</span><span
+                    class="cls_009"> Yes</span></div>
+
+        <div style="position:absolute;left:400.74px;top:350.04px" class="cls_010">[{!metrorailNo}]<span class="cls_009">  No</span>
+        </div>
+
+        <div style="position:absolute;left:56.34px;top:371.52px" class="cls_009">b. If "Yes," which metrorail
+            station?   {!metrorailName}</div>
+
+        <div style="position:absolute;left:56.34px;top:394.38px" class="cls_009">a. Breakdown of Total Building Space
+            for Tax Adjustment
+        </div>
+
+        <div style="position:absolute;left:332.34px;top:394.38px" class="cls_009">b. Breakdown of Building Assessment
+            for Tax
+        </div>
+
+        <div style="position:absolute;left:26.10px;top:403.08px" class="cls_007">9</div>
+
+        <div style="position:absolute;left:56.34px;top:411.66px" class="cls_009">Purposes</div>
+
+        <div style="position:absolute;left:332.34px;top:411.66px" class="cls_009">Adjustment Purposes</div>
+
+        <div style="position:absolute;left:56.34px;top:432.96px" class="cls_009">Office Space</div>
+
+        <div style="position:absolute;left:254.43px;top:432.96px" class="cls_009">{!officeSpaceRSF}    RSF</div>
+
+        <div style="position:absolute;left:332.34px;top:432.96px" class="cls_009">Office Space</div>
+
+        <div style="position:absolute;left:500.05px;top:432.96px" class="cls_009">{!officeSpacePercent}    %</div>
+
+        <div style="position:absolute;left:56.34px;top:454.44px" class="cls_009">Warehouse Space</div>
+
+        <div style="position:absolute;left:251.76px;top:454.44px" class="cls_009">N/A</div>
+
+        <div style="position:absolute;left:332.34px;top:454.44px" class="cls_009">Warehouse Space</div>
+
+        <div style="position:absolute;left:500.17px;top:454.44px" class="cls_009">N/A</div>
+
+        <div style="position:absolute;left:56.34px;top:475.92px" class="cls_009">Retail Space</div>
+
+        <div style="position:absolute;left:251.05px;top:475.92px" class="cls_009">{!retailSpaceRSF}    RSF</div>
+
+        <div style="position:absolute;left:332.34px;top:475.92px" class="cls_009">Retail Space</div>
+
+        <div style="position:absolute;left:499.43px;top:475.92px" class="cls_009">{!retailSpacePercent}    %</div>
+
+        <div style="position:absolute;left:56.34px;top:497.40px" class="cls_009">Garage Space</div>
+
+        <div style="position:absolute;left:250.54px;top:497.40px" class="cls_009">{!garageSpaceRSF}    RSF</div>
+
+        <div style="position:absolute;left:332.34px;top:497.40px" class="cls_009">Garage Space</div>
+
+        <div style="position:absolute;left:498.93px;top:497.40px" class="cls_009">{!garageSpacePercent}    %</div>
+
+        <div style="position:absolute;left:56.34px;top:518.88px" class="cls_009">Total building square feet</div>
+
+        <div style="position:absolute;left:251.36px;top:518.88px" class="cls_009">{!totalRSF}    RSF</div>
+
+        <div style="position:absolute;left:332.34px;top:518.88px" class="cls_009">Total</div>
+
+        <div style="position:absolute;left:498.10px;top:518.88px" class="cls_009">100 %</div>
+
+        <div style="position:absolute;left:187.98px;top:542.88px" class="cls_008">SECTION II - GENERAL OFFER
+            INFORMATION
+        </div>
+
+        <div style="position:absolute;left:56.34px;top:567.90px" class="cls_009">What is the total ANSI/BOMA Office Area
+            square feet (OASF) (previously Usable square feet) available to be leased by
+        </div>
+
+        <div style="position:absolute;left:23.34px;top:579.54px" class="cls_007">10</div>
+
+        <div style="position:absolute;left:56.34px;top:585.18px" class="cls_009">the Government (not including space
+            already leased by the Government)?        {!totalANSIBOMAMax}</div>
+
+        <div style="position:absolute;left:56.34px;top:608.40px" class="cls_009">What is the maximum contiguous amount
+            of ANSI/BOMA Office Area square feet (OASF) offered to the Government
+        </div>
+
+        <div style="position:absolute;left:23.34px;top:620.04px" class="cls_007">11</div>
+
+        <div style="position:absolute;left:56.34px;top:625.68px" class="cls_009">(not including space already leased to
+            the Government)?        {!totalANSIBOMA}</div>
+
+        <div style="position:absolute;left:56.34px;top:648.36px" class="cls_009">What it the minimum amount of ANSI/BOMA
+            Office Area square feet (OASF) available to be leased by the Government
+        </div>
+
+        <div style="position:absolute;left:23.34px;top:660.00px" class="cls_007">12</div>
+
+        <div style="position:absolute;left:56.34px;top:665.64px" class="cls_009">(not including space already leased to
+            the Government)?
+        </div>
+
+        <div style="position:absolute;left:23.34px;top:696.66px" class="cls_007">13</div>
+
+        <div style="position:absolute;left:56.34px;top:699.00px" class="cls_009">What is the total amount of ANSI/BOMA
+            Office Area square feet (OASF) in the building?    {!totalANSIBOMABuilding}</div>
+
+        <div style="position:absolute;left:56.34px;top:727.02px" class="cls_009">a. Is any part of this offer subject to
+            lease options or right of first refusal by other parties? <span class="cls_010">[]</span><span
+                    class="cls_009"> Yes</span></div>
+
+        <div style="position:absolute;left:508.62px;top:727.02px" class="cls_010">[]<span class="cls_009"> No</span>
+        </div>
+
+        <div style="position:absolute;left:23.34px;top:730.02px" class="cls_007">14</div>
+
+        <div style="position:absolute;left:18.00px;top:764.22px" class="cls_002">PAGE <span
+                    class="cls_003">1</span><span class="cls_002"> OF </span><span class="cls_003">2</span></div>
+
+        <div style="position:absolute;left:89.17px;top:763.03px" class="cls_003">INITIALS:</div>
+
+        <div style="position:absolute;left:205.34px;top:763.03px" class="cls_003">&amp;</div>
+
+        <div style="position:absolute;left:414.03px;top:764.22px" class="cls_004">Attachment to<span
+                    class="cls_003"> </span><span class="cls_004">GSA</span><span class="cls_003"> </span><span
+                    class="cls_002">FORM</span><span class="cls_003"> </span><span
+                    class="cls_004">1364A (REV 6/04)</span></div>
+
+        <div style="position:absolute;left:128.78px;top:772.21px" class="cls_003">LESSOR</div>
+
+        <div style="position:absolute;left:215.15px;top:772.21px" class="cls_003">GOVERNMENT</div>
+
+    </div>
+
+    <div style="position:absolute;left:50%;margin-left:-306px;top:1102px;width:612px;height:792px;border-style:outset;overflow:hidden">
+
+        <div style="position:absolute;left:0px;top:0px">
+
+            <img src="{!URLFOR($Resource.form1364Attachment, 'image002.jpg')}" width="612" height="792"/></div>
+
+        <div style="position:absolute;left:56.34px;top:25.32px" class="cls_009">b. If "Yes," what is the total ANSI/BOMA
+            Office Area square feet (OASF) that is subject to lease options or the right
+        </div>
+
+        <div style="position:absolute;left:56.34px;top:42.60px" class="cls_009">of first refusal?</div>
+
+        <div style="position:absolute;left:56.34px;top:72.54px" class="cls_009">What is the total number of parking
+            spaces per 1,000 Rentable Square Feet (RSF) that will be available for use by
+        </div>
+
+        <div style="position:absolute;left:23.34px;top:84.24px" class="cls_007">15</div>
+
+        <div style="position:absolute;left:56.34px;top:89.82px" class="cls_009">the Government employees or for official
+            Government vehicles?    {!totalParkingSpacesOffered}</div>
+
+        <div style="position:absolute;left:56.34px;top:128.52px" class="cls_009">What is the total number of parking
+            spaces that will be available free of charge?    {!totalfreeParkingSpaces}</div>
+
+        <div style="position:absolute;left:23.34px;top:131.58px" class="cls_007">16</div>
+
+        <div style="position:absolute;left:56.34px;top:171.36px" class="cls_009">What is the monthly amount ($) to be
+            charged for each reserved parking space in a garage?    {!garageReserved}</div>
+
+        <div style="position:absolute;left:23.34px;top:174.42px" class="cls_007">17</div>
+
+        <div style="position:absolute;left:56.34px;top:216.48px" class="cls_009">What is the monthly amount ($) to be
+            charged for each reserved parking space on a surface lot?        {!surfacelotReserved}</div>
+
+        <div style="position:absolute;left:23.34px;top:219.48px" class="cls_007">18</div>
+
+        <div style="position:absolute;left:56.34px;top:260.88px" class="cls_009">What is the monthly amount ($) to be
+            charged for each non-reserved parking space in a garage?    {!garageNonReserved}</div>
+
+        <div style="position:absolute;left:23.34px;top:263.88px" class="cls_007">19</div>
+
+        <div style="position:absolute;left:56.34px;top:309.78px" class="cls_009">What is the monthly amount ($) to be
+            charged for each non-reserved parking space on a surface lot?        {!surfacelotNonReserved}</div>
+
+        <div style="position:absolute;left:23.34px;top:312.78px" class="cls_007">20</div>
+
+        <div style="position:absolute;left:56.34px;top:363.42px" class="cls_009">What is the annual escalation rate (%),
+            if any, that applies to parking? N/A
+        </div>
+
+        <div style="position:absolute;left:23.34px;top:366.42px" class="cls_007">21</div>
+
+        <div style="position:absolute;left:56.34px;top:403.56px" class="cls_009">a. Can the offeror provide an option to
+            the Government to lease the entire parking garage for security purposes?
+        </div>
+
+        <div style="position:absolute;left:23.34px;top:415.74px" class="cls_007">22</div>
+
+        <div style="position:absolute;left:92.22px;top:423.84px" class="cls_010">[{!optionParkingYes}]<span
+                    class="cls_009"> Yes        </span><span class="cls_010">[{!optionParkingNo}]</span><span
+                    class="cls_009"> No</span><span class="cls_010">[{!optionParkingPartial}]</span><span
+                    class="cls_009"> Partial</span></div>
+
+        <div style="position:absolute;left:56.34px;top:456.60px" class="cls_009">b. If "Yes," what is the annual lump
+            sum cost ($) to lease the entire parking garage for security purposes?    {!annuallumpsum}</div>
+
+        <div style="position:absolute;left:56.34px;top:490.86px" class="cls_009">c. If "Yes," what is the total number
+            of parking spaces in the garage?    {!totalgarageparkingspaces}</div>
+
+        <div style="position:absolute;left:23.34px;top:517.80px" class="cls_007">23</div>
+
+        <div style="position:absolute;left:56.34px;top:518.64px" class="cls_009">I have read and agree to the terms and
+            conditions specified in the following documents:
+        </div>
+
+        <div style="position:absolute;left:56.34px;top:539.10px" class="cls_009">a. Request for Lease Proposals</div>
+
+        <div style="position:absolute;left:319.68px;top:539.10px" class="cls_010">[{!SFOYes}]<span
+                    class="cls_009"> Yes        </span><span class="cls_010">[{!SFONo}]</span><span
+                    class="cls_009">  No</span></div>
+
+        <div style="position:absolute;left:56.34px;top:559.20px" class="cls_009">b. Solicitation Provisions (GSA Form
+            3516A)
+        </div>
+
+        <div style="position:absolute;left:319.62px;top:559.20px" class="cls_010">[{!solicitationYes}]<span
+                    class="cls_009"> Yes        </span><span class="cls_010">[{!solicitationNo}]</span><span
+                    class="cls_009">  No</span></div>
+
+        <div style="position:absolute;left:56.34px;top:580.44px" class="cls_009">c. General Clauses (GSA Form 3517B)
+        </div>
+
+        <div style="position:absolute;left:321.24px;top:580.44px" class="cls_010">[{!generalClauseYes}]<span
+                    class="cls_009"> Yes        </span><span class="cls_010">[{!generalClauseNo}]</span><span
+                    class="cls_009">  No</span></div>
+
+        <div style="position:absolute;left:56.34px;top:603.00px" class="cls_009">d. Representations And Certifications
+            (GSA Form 3518)
+        </div>
+
+        <div style="position:absolute;left:321.24px;top:603.00px" class="cls_010">[{!repsandcertsYes}]<span
+                    class="cls_009"> Yes        </span><span class="cls_010">[{!repsandcertsNo}]</span><span
+                    class="cls_009">  No</span></div>
+
+        <div style="position:absolute;left:83.17px;top:755.52px" class="cls_003">INITIALS:</div>
+
+        <div style="position:absolute;left:199.34px;top:755.52px" class="cls_003">&amp;</div>
+
+        <div style="position:absolute;left:18.00px;top:764.22px" class="cls_002">PAGE <span
+                    class="cls_003">2</span><span class="cls_002"> OF 2</span></div>
+
+        <div style="position:absolute;left:122.78px;top:764.71px" class="cls_003">LESSOR</div>
+
+        <div style="position:absolute;left:209.15px;top:764.71px" class="cls_003">GOVERNMENT</div>
+
+        <div style="position:absolute;left:413.50px;top:764.22px" class="cls_004">Attachment to<span
+                    class="cls_003"> </span><span class="cls_004">GSA</span><span class="cls_003"> </span><span
+                    class="cls_002">FORM</span><span class="cls_003"> </span><span
+                    class="cls_004">1364A (REV 6/04)</span></div>
+
+    </div>
+
+
+    </body>
+
+</apex:page>

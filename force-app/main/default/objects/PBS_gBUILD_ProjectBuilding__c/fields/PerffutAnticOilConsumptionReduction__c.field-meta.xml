@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PerffutAnticOilConsumptionReduction__c</fullName>
+    <description>If EUAS is representative, the percentage difference calculates with the EUAS oil baseline. If EUAS is not representative, the calculation uses the manually entered oil baseline information.</description>
+    <formula>if (
+   Text(PerffutIsEuasReferenceYearRep__c)=&apos;Yes&apos;,
+   if(EuasBaselinePerformanceYear__r.OilAmt__c&lt;1,0,(EuasBaselinePerformanceYear__r.OilAmt__c-PerffutAnticOil__c)/EuasBaselinePerformanceYear__r.OilAmt__c),
+   if(PerffutOil__c&lt;1,0,(PerffutOil__c-PerffutAnticOil__c)/PerffutOil__c)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>This field provides a oil consumption percentage reduction between the user selected oil consumption baseline and the anticipated oil consumption.</inlineHelpText>
+    <label>Oil Consumption Reduction (%)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>4</scale>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

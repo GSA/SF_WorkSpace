@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>NCMT_Project__c.Project_Cost_Summary__r$Cost_Category_Description__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_Project__c.Project_Cost_Summary__r.Core_Shell_Cost_Detail__r$Core_Shell_Criterion__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_Project__c.Project_Cost_Summary__r.Core_Shell_Cost_Detail__r$Total_Units__c</field>
+    </columns>
+    <columns>
+        <field>NCMT_Project__c.Project_Cost_Summary__r.Core_Shell_Cost_Detail__r$Unit_Cost__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>NCMT_Project__c.Project_Cost_Summary__r.Core_Shell_Cost_Detail__r$Total_Cost__c</field>
+    </columns>
+    <description>NCMT REPORTS</description>
+    <filter>
+        <criteriaItems>
+            <column>NCMT_Project__c$Name</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>test4</value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>NCMT_Project__c.Project_Cost_Summary__r$Cost_Category_ID__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Project Core Shell Costs</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>NCMT_Projects_with_Project_Cost_Summary_with_Core_Shell_Cost_Detail__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>false</showGrandTotal>
+    <showSubTotals>false</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>NCMT_Project__c$CreatedDate</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

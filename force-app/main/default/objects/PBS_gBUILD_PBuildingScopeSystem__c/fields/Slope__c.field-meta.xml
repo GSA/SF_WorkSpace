@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Slope__c</fullName>
+    <description>Slope: Please indicate if roof is low slope or steep slope. (Low slope=less than or equal to 2:12,, Steep slope=a slope of more than 2:12)</description>
+    <inlineHelpText>Slope: Please indicate if roof is low slope or steep slope (Low slope = less than or equal to 2:12, Steep slope = a slope of more than 2:12).</inlineHelpText>
+    <label>Slope</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>LowSlope</fullName>
+                <default>false</default>
+                <label>LowSlope</label>
+            </value>
+            <value>
+                <fullName>SteepSlope</fullName>
+                <default>false</default>
+                <label>SteepSlope</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

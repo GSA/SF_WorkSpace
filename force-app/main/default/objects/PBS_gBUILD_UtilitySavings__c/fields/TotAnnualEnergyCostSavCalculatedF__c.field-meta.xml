@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TotAnnualEnergyCostSavCalculatedF__c</fullName>
+    <description>Calculated Total Annual Energy Cost Savings</description>
+    <formula>if(TotEnergySavCalculated__c=0,
+(TotEnergySavUserReported__c),
+(TotEnergySavCalculated__c*1000000)
+)*AverageBtuCost__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Total Calculated Cost Savings ($/yr)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>NCMT CEW Work Description</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>NCMT Work Descriptions</value>
+    </caseValues>
+    <layouts>
+        <layout>Work Description Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Number cannot be changed to 6 or 7 or 8. Delete Work Items to change. --></errorMessage>
+        <name>Check_for_Number_Updates</name>
+    </validationRules>
+</CustomObjectTranslation>

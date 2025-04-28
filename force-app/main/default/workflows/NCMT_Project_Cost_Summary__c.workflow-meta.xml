@@ -1,5 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>NCMT_Calculate_Cost_Category</fullName>
+        <field>Cost_Category__c</field>
+        <formula>Cost_Category_ID__r.Name</formula>
+        <name>NCMT Calculate Cost Category</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>NCMT_Calculate_ECC_by_Category</fullName>
+        <field>ECC_By_Cost_Category__c</field>
+        <formula>ECC__c</formula>
+        <name>NCMT Calculate ECC by Category</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>NCMT_SetExternalKeyOnCostSummary</fullName>
+        <field>External_Key__c</field>
+        <formula>Project_Name__r.Id + &apos;||&apos; +  Cost_Category_ID__c</formula>
+        <name>NCMT_SetExternalKeyOnCostSummary</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>RA_Security</fullName>
+        <field>RA_Security__c</field>
+        <formula>IF( TEXT(Project_Name__r.RA_Security__c)== &apos;Minimum upgrade to existing&apos;,if(Cost_Category_Description__c == &apos;Interior Construction&apos;, 0.4 ,if(Cost_Category_Description__c == &apos;HVAC&apos;,0.2,if(Cost_Category_Description__c == &apos;Electrical Systems&apos;,0.3,if(Cost_Category_Description__c == &apos;Sitework - Building Related&apos;,0.1,0)))),
+IF( TEXT(Project_Name__r.RA_Security__c)== &apos;Upgrade: no blast&apos;,if(Cost_Category_Description__c == &apos;Superstructure&apos;,0.05,if(Cost_Category_Description__c == &apos;Exterior Closure&apos;,0.15,if(Cost_Category_Description__c == &apos;Interior Construction&apos;,0.25,if(Cost_Category_Description__c == &apos;HVAC&apos;,0.20,if(Cost_Category_Description__c == &apos;Electrical Systems&apos;,0.30,if(Cost_Category_Description__c == &apos;Sitework - Building Related&apos;,0.05,0)))))),IF( TEXT(Project_Name__r.RA_Security__c)== &apos;Upgrade: w/ blast&apos;,if(Cost_Category_Description__c == &apos;Exterior Closure&apos;,1,0),0)))</formula>
+        <name>RA Security %</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>RA_Security_Costs</fullName>
+        <field>RA_Security_Costs__c</field>
+        <formula>RA_Security_Cost__c</formula>
+        <name>RA Security Costs</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
     <rules>
         <fullName>NCMT Calculate ECC by Category</fullName>
         <actions>

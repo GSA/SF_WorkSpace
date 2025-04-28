@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>GSA_CM_Construction_Fee__c</fullName>
-    <externalId>false</externalId>
     <formula>if (  text(Delivery_Method__c) == &apos;Design Build - Owned&apos;, 
 ( Design_CM_as_Agent_and_CM_as_Constructor__c +  Construction__c )*  GSA_CM_Construction_Slope__c  +  GSA_CM_Construction_Constant__c
 ,0)</formula>

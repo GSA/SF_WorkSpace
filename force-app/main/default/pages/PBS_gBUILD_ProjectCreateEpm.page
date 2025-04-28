@@ -1,0 +1,91 @@
+<apex:page controller="PBS_gBUILD_ProjectCreateEpmController" sidebar="false" tabStyle="PBS_gBUILD_Projects__tab">
+    <c:PBS_gBUILD_InitializeScripts />
+    <apex:form >
+        <apex:pageMessages />                 
+        <c:PBS_gBUILD_PageInstructions html="{!AppConfig.PageCreateEpmIntro__c}" />
+        <apex:pageBlock title="Create gBUILD Project From ePM Project">     
+            <apex:pageBlockSection title="1. Select underlying ePM Project" columns="1">
+                <apex:outputPanel >
+                    <apex:commandButton value="Previous" action="{!prevPage}" disabled="{!(!allowPrev)}" />
+                    Page #<apex:outputLabel value="{!(1+PageNum)}"/>
+                    <apex:commandButton value="Next" action="{!nextPage}" disabled="{!(!allowNext)}" />
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <apex:inputText value="{!filterExpr}" />
+                    <apex:commandButton value="Filter" action="{!filter}" />
+                    Filtering will display records that match text in any column below
+                </apex:outputPanel>
+                <apex:inputHidden value="{!selectedPbsProjectId}" id="theHiddenInput"/>
+                <script type="text/javascript">
+                    j$(document).ready(function () {
+                        j$("input[type='radio']").click(function () {
+                            var pbsProjectId = j$(this).val();
+                            //alert("setting " + pbsProjectId);
+                            j$(document.getElementById("{!$Component.theHiddenInput}")).val(pbsProjectId);
+                            //alert("after " + j$(document.getElementById("{!$Component.theHiddenInput}")).val());
+                        });
+                    });
+                </script>
+                <apex:pageBlockTable value="{!epmProjects}" var="p" > 
+                    <apex:column headerValue="Action">
+                        <input type="radio" name="createFromEpmId" value="{!p.rec.id}" />
+                        &nbsp;|&nbsp;
+                        <apex:commandLink action="{!view}" value="View">
+                            <apex:param name="id" value="{!p.rec.id}" assignTo="{!createFromEpmId}"/>               
+                        </apex:commandLink>
+                    </apex:column>
+                    
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!resort}" value="ePM Project Number">
+                                <apex:param value="numProjectNumber__c" assignTo="{!resortVal}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputText value="{!p.rec.numProjectNumber__c}" />
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!resort}" value="Project Name{!IF(sortExpr=='txtLongName__c',' '+IF(sortDir='ASC','▼','▲'),'')}">
+                                <apex:param value="txtLongName__c" assignTo="{!resortVal}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputText value="{!p.ProjectName}" />
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!resort}" value="Project Manager{!IF(sortExpr=='txtProjectManager__c',' '+IF(sortDir='ASC','▼','▲'),'')}">
+                                <apex:param value="txtProjectManager__c" assignTo="{!resortVal}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputText value="{!p.rec.txtProjectManager__c}" />
+                    </apex:column>
+                    
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!resort}" value=" Status{!IF(sortExpr=='txtCurrentState__c',' '+IF(sortDir='ASC','▼','▲'),'')}">
+                                <apex:param value="txtCurrentState__c" assignTo="{!resortVal}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputText value="{!p.rec.txtCurrentState__c}" />
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!resort}" value="Region{!IF(sortExpr=='txtRegion__c',' '+IF(sortDir='ASC','▼','▲'),'')}">
+                                <apex:param value="txtRegion__c" assignTo="{!resortVal}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputText value="{!p.rec.txtRegion__c}" />
+                    </apex:column>
+                    <apex:column headerValue="Existing gBUILD records">
+                        <apex:outputText value="{!p.gbProjectCount}" />
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="2. Enter gBUILD specific fields" columns="1">
+                <apex:inputField value="{!proj.ProjectType__c}" styleClass="enum" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="3. Finish" columns="1">
+                <apex:commandButton action="{!create}" value="Create" onClick="alert('After the record is saved successfully, you will be redirected to the Projects list. Please click Open on the Projects list page to continue.');"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>    
+</apex:page>

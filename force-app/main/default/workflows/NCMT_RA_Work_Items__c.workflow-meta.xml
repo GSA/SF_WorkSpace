@@ -1,5 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>ECCA_Shell_Parameter</fullName>
+        <field>ECCA_Shell_Parameter__c</field>
+        <formula>ECC_Shell_Parameter_Formula__c</formula>
+        <name>ECCA Shell Parameter</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>NCMT_RA_ECCA</fullName>
+        <field>ECCA__c</field>
+        <formula>ECCA_Formula__c</formula>
+        <name>NCMT RA ECCA</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>NCMT_Tenant_Amortized_Costs</fullName>
+        <description>NCMT Tenant Amortized Costs</description>
+        <field>Tenant_Amortized_Costs__c</field>
+        <formula>Tenant_Amortized_Cost__c</formula>
+        <name>NCMT Tenant Amortized Costs</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>NCMT_Tenant_RWA_costs</fullName>
+        <field>Tenant_RWA_Costs__c</field>
+        <formula>Tenant_RWA_Cost__c</formula>
+        <name>NCMT Tenant RWA costs</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>NCMT_WI_GSAPkg_Costs</fullName>
+        <field>GSAPkg_Costs__c</field>
+        <formula>GSAPkg_Cost__c</formula>
+        <name>NCMT WI GSAPkg Costs</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>NCMT_WI_GSA_Costs</fullName>
+        <description>NCMT WI GSA Costs</description>
+        <field>GSA_Costs__c</field>
+        <formula>GSA_Cost__c</formula>
+        <name>NCMT WI GSA Costs</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Total_Cost_Including_Phasing</fullName>
+        <description>Total Cost Including Phasing</description>
+        <field>Total_Costs_Including_Phasing__c</field>
+        <formula>Total_Cost_Including_Phasing__c</formula>
+        <name>Total Cost Including Phasing</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
     <rules>
         <fullName>NCMT Work Items Cost Update</fullName>
         <actions>

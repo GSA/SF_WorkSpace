@@ -18,8 +18,9 @@
 		helper.cancelTaxSubmission();
 	},
 	startTaxSubmission: function(component, event, helper) {
-		helper.startTaxSubmission(component);
-	},
+		helper.startTaxSubmission(component, event);
+	}
+    /* Commented out for 2024-2025 RET Surge to no longer use lease access functionality
     requestLeaseAccess: function(component, event, helper) {
     	helper.requestLeaseAccess(component, event);
 	},
@@ -28,5 +29,5 @@
     },
     confirmRequestLeaseAccess: function(component, event, helper) {
         helper.confirmRequestLeaseAccess(component);
-    }
+    } */
 })

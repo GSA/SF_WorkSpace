@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Notification that user has been added to a community.</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Communities: New Member Welcome Email After</name>
+    <style>none</style>
+    <subject>Welcome to GSA&apos;s Real Estate Tax Portal</subject>
+    <textOnly>Public Buildings Service
+
+Hi,
+
+Welcome to GSA’s Tax Portal. If you are an official Lessor Point of Contact, an account has been automatically created for you as your lease may contain a clause that requires you to submit tax documents annually through GSA’s Real Estate Tax Portal.
+
+If you are not an official Lessor Point of Contact, and signed up on your own, you probably want to submit taxes on behalf of a lessor, Once in the Portal,you can search for a lease and “request access”, that lessor will be notified you want to submit taxes on his/her behalf. You will have to wait until they grant you access for you to submit tax documents.
+
+Please visit the below link to finish setting up your account. Once you click the link, a code will then be emailed to you that you’ll have to enter in.
+
+For Lessors, please allow up to 24 hours for GSA to connect your lease(s) to your account.
+
+Link:  {!Community_Url}
+Username:  {!Receiving_User.Username}
+
+Please allow up to 24 hours for GSA to connect your lease(s) to your account.
+
+You can visit ret.gsa.gov if you have any questions.
+
+Thanks,
+GSA’s Public Buildings Service Office of Leasing</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>
