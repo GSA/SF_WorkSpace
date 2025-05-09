@@ -3,7 +3,8 @@
     <apex:includeLightning />
     <div id="lightningPage"></div>
     <script>
-    var recordId ="{!$CurrentPage.parameters.id}";
+    //var recordId ="{!$CurrentPage.parameters.id}";
+    var recordId = "{!JSENCODE(HTMLENCODE($CurrentPage.parameters.id))}";
     //alert('recordId ==='+recordId);
     $Lightning.use("c:NCMT_Markups_App", function(){
         $Lightning.createComponent("c:NCMT_Markups", {
