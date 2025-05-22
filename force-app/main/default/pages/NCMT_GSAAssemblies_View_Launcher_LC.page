@@ -56,7 +56,10 @@
         $Lightning.createComponent('c:NCMT_GSAAssemblies_View_LC', 
                                    {
                                        //"recordId" : "a2A35000000A40iEAC"},
-                                       "recordId" : "{!$CurrentPage.parameters.id}"},
+                                      //"recordId" : "{!$CurrentPage.parameters.id}"
+                                      "recordId" : "{!JSENCODE(HTMLENCODE($CurrentPage.parameters.id))}",
+                                      },
+                                      
         'treeStructure',
             function(cmp){
                 //nothing to see here

@@ -5,8 +5,9 @@
      <script>
     $Lightning.use("c:NCMT_DESItemList_App", function(){
             $Lightning.createComponent("c:NCMT_DESItemList", {
-                "recordId" : "{!$CurrentPage.parameters.id}",
+                //"recordId" : "{!$CurrentPage.parameters.id}",
                 //"recordId" : "a2F35000000gKFkEAM",
+                "recordId" : "{!JSENCODE(HTMLENCODE($CurrentPage.parameters.id))}",
 
             },
             'lightningPage',
