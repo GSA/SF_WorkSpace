@@ -15,7 +15,8 @@
     $Lightning.use('c:NCMT_CEW_WorkItems_App', function(){
         $Lightning.createComponent('c:NCMT_CEW_WorkItems', 
                                    {
-                                        "pcsId" :"{!$CurrentPage.parameters.id}"
+                                       // "pcsId" :"{!JSENCODE($CurrentPage.parameters.id)}"
+                                        "pcsId" :"{!JSENCODE(HTMLENCODE($CurrentPage.parameters.id))}"
                                     },                       
         'cewItems',
         function(cmp){
