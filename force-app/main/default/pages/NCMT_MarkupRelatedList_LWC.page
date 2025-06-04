@@ -5,7 +5,8 @@
      <script>
         $Lightning.use("c:NCMT_MarkupRelatedList_App", function(){
             $Lightning.createComponent("c:NCMT_MarkupRelatedList", {
-                "recordId" : "{!$CurrentPage.parameters.id}",
+                "recordId" : "{!JSENCODE(HTMLENCODE($CurrentPage.parameters.id))}",
+                // "recordId" : "{!$CurrentPage.parameters.id}",
                 //"recordId" : "a1I35000002JS0L",
 
             },

@@ -5,7 +5,8 @@
      <script>
         $Lightning.use("c:NCMT_RAWI_TreeView_App", function(){
             $Lightning.createComponent("c:NCMT_RAWI_TreeView", {
-                "pcsId" : "{!$CurrentPage.parameters.id}",
+                "pcsId" : "{!JSENCODE(HTMLENCODE($CurrentPage.parameters.id))}",
+                // "pcsId" : "{!$CurrentPage.parameters.id}",
 
             },
             'lightningPage',

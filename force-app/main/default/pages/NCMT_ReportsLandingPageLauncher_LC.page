@@ -7,7 +7,8 @@
         $Lightning.createComponent('c:NCMT_ReportsLandingPage_LC', 
                                    {
                                        // "projectId" : "a1I350000024sBp"
-                                      "projectId" : "{!$CurrentPage.parameters.id}"
+                                       //"projectId" : "{!$CurrentPage.parameters.id}"
+                                      "projectId" : "{!JSENCODE(HTMLENCODE($CurrentPage.parameters.id))}",
                                    },
         'project',
             function(cmp){
