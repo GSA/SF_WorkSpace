@@ -11,7 +11,8 @@
         $Lightning.createComponent('c:NCMT_TCOClone_LC', 
                                    {
                                        //"recordId" : "a1I35000002GC8P"},
-                                       "recordId" : "{!$CurrentPage.parameters.id}"},
+                                       "recordId" : "{!HTMLENCODE($CurrentPage.parameters.id)}"
+                                   },
         'tcoClone',
             function(cmp){
                 //nothing to see here
