@@ -1,0 +1,62 @@
+<template>
+    
+    <template if:true={pbsAAApOfferRecords}>
+        <div class="table-container">
+            <table class="tablecss">
+                <tbody>
+                    <tr>
+                        <td class="tdcss"><label>Property name:</label>&nbsp;{pbsAAApOfferRecords.PBS_AAAP_Building_Name__c}</td>
+                        
+                        <td class="tdcss"><label>RLP number:</label>&nbsp;{pbsAAApOfferRecords.PBS_AAAP_RLP_Number__r.PBS_AAAP_RLP_Number__c}</td>
+                        
+                        <td class="tdcss"><label>Offer status:</label>&nbsp;{pbsAAApOfferRecords.PBS_AAAP_Offer_Status__c}</td>
+                        
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </template>
+    <br />
+    <h3>View offer</h3>
+    <br />
+    <lightning-record-edit-form
+        object-api-name="PBS_AAAP_Offer__c"
+        record-id={offerId}
+    >
+    <table class="content">
+        <tbody>
+            <tr>
+                <td><label>Building Name</label></td>
+                <td><lightning-output-field field-name="PBS_AAAP_Building_Name__c" variant="label-hidden" class="content"></lightning-output-field><br /></td>
+            </tr>
+            <tr>
+                <td><label>Street Address</label></td>
+                <td><lightning-output-field field-name="PBS_AAAP_Street_Address__c" variant="label-hidden"></lightning-output-field><br /></td>
+            </tr>
+            <tr>
+                <td><label>City</label></td>
+                <td><lightning-output-field field-name="PBS_AAAP_City__c" variant="label-hidden"></lightning-output-field><br /></td>
+            </tr>
+            <tr>
+                <td><label>State</label></td>
+                <td><lightning-output-field field-name="PBS_AAAP_State__c" variant="label-hidden"></lightning-output-field><br /></td>
+            </tr>
+            <tr>
+                <td><label>Country</label></td>
+                <td><lightning-output-field field-name="PBS_AAAP_Country__c" variant="label-hidden"></lightning-output-field><br /></td>
+            </tr>
+            <tr>
+                <td><label>Zip Code</label></td>
+                <td><lightning-output-field field-name="PBS_AAAP_ZipCode__c" variant="label-hidden"></lightning-output-field><br /></td>
+            </tr>
+        </tbody>
+    </table><br/><br/>
+    </lightning-record-edit-form>
+
+    <c-p-b-s_-leasing_-show_-attachments table-name="Auto_Generated_Forms" offer-id={offerId}> </c-p-b-s_-leasing_-show_-attachments><br/><br/>
+    <c-p-b-s_-leasing_-show_-attachments table-name="Attachments_List" data-id="Attachments_List"  offer-id={offerId}></c-p-b-s_-leasing_-show_-attachments><br/><br/>
+    <c-p-b-s_-leasing_-show_-attachments table-name="Attachments_Already_Submitted"  offer-id={offerId}></c-p-b-s_-leasing_-show_-attachments><br/><br/>
+
+    <c-p-b-s_-leasing_-download-all-files offer-id={offerId}></c-p-b-s_-leasing_-download-all-files><br/><br/><br/><br/>
+				
+</template>

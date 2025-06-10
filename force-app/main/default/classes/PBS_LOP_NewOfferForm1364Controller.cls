@@ -169,7 +169,7 @@ public class PBS_LOP_NewOfferForm1364Controller extends PBS_AAAP_PageBaseControl
         offerWrapper.PBS_RSAP_Accessibility_Standards_Met  = Offer.PBS_RSAP_Accessibility_Standards_Met__c;
         offerWrapper.PBS_AAAP_Asbestos  = Offer.PBS_AAAP_Asbestos__c;
         offerWrapper.PBS_RSAP_Flood_Plain_Declaration  = Offer.PBS_RSAP_Flood_Plain_Declaration__c;
-        offerWrapper.PBS_RSAP_Offeror_Seismic_Declaration  = Offer.PBS_RSAP_Offeror_Seismic_Declaration__c;
+        offerWrapper.PBS_RSAP_Offeror_Seismic_Declaration  = Offer.PBS_AAAP_Seismic_Statement__c;
         offerWrapper.PBS_RSAP_Offeror_Seismic_Declaration_YES_NO  = Offer.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c;
         offerWrapper.PBS_AAAP_Energy_Star  = Offer.PBS_AAAP_Energy_Star__c; 
         offerWrapper.PBS_AAAP_CERTIFICATION_DATE  = Offer.PBS_AAAP_CERTIFICATION_DATE__c == null ? null : Offer.PBS_AAAP_CERTIFICATION_DATE__c.format();
@@ -191,6 +191,11 @@ public class PBS_LOP_NewOfferForm1364Controller extends PBS_AAAP_PageBaseControl
         offerWrapper.PBS_AAAP_Offer_Status  = Offer.PBS_AAAP_Offer_Status__c;
         offerWrapper.PBS_AAAP_Offered_Space_Mul_Tax_Bills  = Offer.PBS_AAAP_Offered_Space_Mul_Tax_Bills__c;
         offerWrapper.PBS_AAAP_Offer_Additional_Remarks  = Offer.PBS_AAAP_Offer_Additional_Remarks__c;
+        offerWrapper.PBS_AAAP_BUILDING_TYPE  = Offer.PBS_AAAP_BUILDING_TYPE__c;
+        offerWrapper.PBS_AAAP_BUILDING_CODE  = Offer.PBS_AAAP_BUILDING_CODE__c;
+        offerWrapper.PBS_AAAP_BUILDING_CODE_YEAR  = Offer.PBS_AAAP_BUILDING_CODE_YEAR__c;
+        offerWrapper.PBS_AAAP_TOTAL_BOMA_USF_OFFERED  = Offer.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c;
+        offerWrapper.PBS_AAAP_Building_Common_Area_Factor  = Offer.PBS_AAAP_Building_Common_Area_Factor__c;
         offerWrapper.sysDate = (offer.PBS_AAAP_Offer_Submission_Date__c != null) ? (offer.PBS_AAAP_Offer_Submission_Date__c.month() + '-' + offer.PBS_AAAP_Offer_Submission_Date__c.day() + '-' + offer.PBS_AAAP_Offer_Submission_Date__c.year()) : '';
 
         // build wrappers for other tables

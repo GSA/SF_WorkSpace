@@ -3,31 +3,7 @@
     <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
     <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
     
-<!-- J. Rogers  Eliminate Headers
-<div id="login">
-        <ul>
-            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
-                <apex:outputLink value="/AAAP/home/home.jsp">
-                    <li>{!$Label.site.login_button}</li>
-                </apex:outputLink>
-                <li> |</li>
-                <apex:outputLink value="/AAAP/ForgotPassword">
-                    <li>{!$Label.site.forgot_your_password_q}</li>
-                </apex:outputLink>
-                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
-                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
-                    <li>{!$Label.site.new_user_q}</li>
-                </apex:outputLink>
-            </apex:panelGroup>
-            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
-                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
-                <li>{!$Label.site.logout}</li>
-            </apex:outputLink>
-            <li>|</li>
-            <li><a href="http://www.gsa.gov/">About GSA</a></li>
-        </ul>
 
-    </div><!--/login-->
     <div id="wrapper">
         <c:inside_header />
         <div id="content" class="building"><!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
@@ -45,22 +21,11 @@
 
                             <apex:panelGroup >
                                 <br/>
-                                <!--p>Please verify the username and PIN to de-register with AAAP</p-->
+                                
                                 <p style="font-size:18px;color:red; ">
                                     If you wish to de-register from AAAP, please contact <a href="mailto:aaap.manager@gsa.gov" target="_blank">aaap.manager@gsa.gov</a></p>
                                 <br/>
-                                <!--apex:form id="theForm">
-                    <apex:pageMessages id="error"/>
-                    <apex:panelGrid columns="2" style="margin-top:1em;" styleClass="regTable">
-                      <apex:outputLabel style="font-size:12px;color:#333; height:50px;" value="{!$Label.site.username}" for="username"/>
-                      <apex:inputText required="true" id="userid" value="{!userid}"/>
-                      <apex:outputLabel style="font-size:12px;color:#333; " value="PIN" for="pin"/>
-                      <apex:inputText required="true" id="pin" value="{!pin}"/>
-                      
-                    </apex:panelGrid> 
-                    <br/><br/>
-                      <apex:commandButton id="submit" value="De-Register" action="{!actionDeRegistration}"/>
-                    </apex:form-->
+                                
                                 <br/>
                             </apex:panelGroup>
                         </apex:panelGrid>

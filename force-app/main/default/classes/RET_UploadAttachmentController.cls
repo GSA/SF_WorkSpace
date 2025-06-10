@@ -59,15 +59,25 @@ public without sharing class RET_UploadAttachmentController {
     @AuraEnabled
     public static String getCaseId(String leaseNumber){
         System.debug('getCaseId() leaseNumber: ' + leaseNumber);
-        String leaseId = [SELECT Id FROM PBS_Lease__c WHERE Lease_Number__c =: leaseNumber LIMIT 1].Id;
+        List<PBS_Lease__c> leaseList = [SELECT Id, Region_Code__c FROM PBS_Lease__c WHERE Lease_Number__c =: leaseNumber LIMIT 1];
+        String leaseId = leaseList[0].Id;
         System.debug('leaseId: ' + leaseId);
         String myUserId = UserInfo.getUserId();
         List<Case> caseList = [SELECT Id FROM Case WHERE Status = 'Draft' AND PBS_Lease__c =: leaseId and OwnerId =: myUserId ORDER BY CreatedDate DESC Limit 1];
         //If no case is found then create a new Case for this Lease and signed-on-user
         if (caseList.size() == 0) {
+            Map<String,String> regionEmailmap = new Map<String,String>();
+            for(RET_RegionalEmail__mdt  regCst : [select RegionalEmail__c,RegionCode__c  from RET_RegionalEmail__mdt]){
+                regionEmailmap.put(regCst.RegionCode__c,regCst.RegionalEmail__c);
+            }
             Case newCase = new Case();
+            newCase.Origin = 'Web';
+            newCase.OwnerId = myUserId;
             newCase.Status = 'Draft';
             newCase.PBS_Lease__c = leaseId;
+            newCase.Subject = 'Real Estate Tax Submission';
+            newCase.Region_Code__c = leaseList[0].Region_Code__c;
+            if(String.isNotBlank(leaseList[0].Region_Code__c) && !regionEmailmap.isEmpty() && regionEmailmap.containsKey(leaseList[0].Region_Code__c)) newCase.GSA_Inbox__c  = regionEmailmap.get(leaseList[0].Region_Code__c);
             insert newCase;
             return newCase.Id;
         } else {

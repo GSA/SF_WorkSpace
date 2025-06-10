@@ -23,12 +23,8 @@
   },
   generateDataMapped: function(authType) {
     console.log('in generateDataMapped() function with authtype: ' + authType);
-    //var aaapUrl = (authType == "Guest" ? "/AAAP-LoginPage?startURL=/AAAP-PortalHome" : "/AAAP-PortalHome");
-    //var rsapUrl = (authType == "Guest" ? "/RSAP-LoginPage?startURL=/RSAP-PortalHome" : "/RSAP-PortalHome");
-/*	var aaapUrl = "/AAAP-LoginPage";
-    var rsapUrl = "/RSAP-LoginPage";*/
-    var aaapUrl = "/AAAP-PortalHome";
-    var rsapUrl = "/RSAP-PortalHome";  
+    var aaapUrl = "/Offer-Home";
+    var rsapUrl = "/Offer-Home"; 
     var urlString = window.location.href;
     console.log('urlString = ' + urlString);
     var retUrl;
@@ -41,33 +37,22 @@
     }
     return [
       {
-        cardType: "Card with Media",
-        cardsPerRow: "3",
-        header: "Automated Advanced Acquisition Platform (AAAP)",
-        body: "AAAP allows offerors to submit office space to the government in response to a generic request for lease proposals, before or after the government publicizes a requirement.",
-        buttonLinkUrl: aaapUrl,
-        buttonLinkText: "AAAP Login",
-        mediaUrl: $A.get("$ContentAsset.LeasingAAAPImagejpg"),
-        mediaAltText: "A placeholder image"
-      },
-      {
-        cardType: "Card with Media",
-        cardsPerRow: "3",
-        header: "Requirement Specific Acquisition Platform (RSAP)",
-        body: "RSAP allows offerors to submit space to the government in response to a specific request for lease proposals, after the government publicizes a requirement.",
+        cardType: "Flag Left",
+        cardsPerRow: "2",
+        header: "Offer space",
+        body: "Enter property and rate details to submit an offer to lease space to the government.",
         buttonLinkUrl: rsapUrl,
-        buttonLinkText: "RSAP Login",
+        buttonLinkText: "Offer",
         mediaUrl: $A.get("$ContentAsset.LeasingRSAPImagejpg"),
         mediaAltText: "A placeholder image"
       },
       {
-        cardType: "Card with Media",
-        cardsPerRow: "3",
-        header: "Taxes",
-        body: "Allows lessors to submit and manage tax adjustment requests, and submit tax appeal requests.",
-        //buttonLinkUrl: "../../realestatetaxes/s/login/?startURL=/realestatetaxes/s",  
+        cardType: "Flag Left",
+        cardsPerRow: "2",
+        header: "Manage lease",
+        body:"Upload documents, such as tax bills or drawings, to manage existing leases with the government.",
         buttonLinkUrl: retUrl,  
-        buttonLinkText: "Tax Login",
+        buttonLinkText: "Manage",
         mediaUrl: $A.get("$ContentAsset.LeasingTaxesImagejpg"),
         mediaAltText: "A placeholder image"
       }

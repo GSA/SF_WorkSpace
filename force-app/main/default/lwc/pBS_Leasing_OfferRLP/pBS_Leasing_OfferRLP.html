@@ -1,0 +1,120 @@
+<template>
+    <c-p-b-s_-leasing_-progress-bar progress-bar-name="Property_Workflow" onnavigatetopage={handleNavigateToPage}>
+	</c-p-b-s_-leasing_-progress-bar>
+    <ul class='error'>
+        <template for:each={errors} for:item="error">
+            <li key={error}>{error}</li>
+        </template>
+    </ul>
+    
+    <lightning-record-edit-form record-id={propertyId} object-api-name="PBS_AAAP_RLP__c" onsubmit={handleAutoSubmit}>
+    <div class="slds-grid">
+        <div class="slds-col slds-order_1 custom-border">
+            <span style="padding-left: 1px;">Property name: {propertyName}</span>
+        </div>
+        <div class="slds-col slds-order_2 custom-border">
+            <span style="padding-left: 5px;">RLP number: {rlpNumber}</span>
+        </div>
+        <div class="slds-col slds-order_3 custom-border">
+            <span style="padding-left: 5px;">Offer status: {offerStatus}</span>
+        </div>
+    </div>
+        <h1 style="font-weight: bold;font-size: 20px;padding: 0 0 8px;padding-top: 10px;color: #000000;font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;">4. Request for lease proposals number</h1>
+        <template if:false={editMode}><span style="color:red;font-size: 16px;font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;">Offer opened in view mode. Any changes made will not be saved.</span></template><br></br>
+        
+        <div id="newOffer" class="slds-grid slds-gutters slds-wrap">
+            
+            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-3 form-row label-input-container" >
+                <p class="required-field" id="propertynamelabel1">
+                  Enter request for lease proposals (RLP) number:
+                    
+                    <span class ="slds-text-color_error">*</span>
+                </p>
+            </div>
+            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-3">
+                <div class="suggestive-search1">
+                <lightning-input
+                data-id="propertynamevalue"
+                variant="label-hidden"
+                type = "text"
+                value={rlpNumber}
+                name = "propertyName"
+                onchange ={handleInputChange}
+                onkeypress ={handleKeyPress}
+                max-length="50"
+                class="input text input-short"
+                disabled={isReadonly}
+                ></lightning-input>
+                </div>
+            </div>
+            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-3 btn-container" if:false={isReadonly}>
+                <input class="btn" type="button" variant="search" value="Search" onclick={handleSearch} />
+            </div>
+        </div>
+        <br></br>
+        <div>
+            <p>Multiple lease requests for lease proposal (RLP) numbers: Can be found on the <a href ="/leasing/s/Offer-Resources" target="_blank">resources page</a> using the mapping feature.<br></br>
+               Single lease requests for lease proposal (RLP) number: Can be obtained from your GSA point of contact.<br></br>
+            </p> 
+        </div>
+        
+        <div class="header" if:true={showRSAPRLPFound}>
+            <p> <br></br>
+                &nbsp;&nbsp;You have entered a single lease request for lease proposals (RLP) number in {city}, {state}. Refer to the RLP to determine if negotiations are permitted.<br></br>
+
+                &nbsp;&nbsp;Do you want to proceed?
+
+            </p> <br></br>
+        </div>
+
+        <div class="header" if:true={showAAAPRLPFound}>
+            <p> <br></br>
+                &nbsp;&nbsp;You have entered a multiple lease request for lease proposals (RLP) number. Your offer must be your best and final terms from a cost and technical standpoint.<br></br>
+
+                &nbsp;&nbsp;Do you want to proceed? 
+
+            </p> <br></br>
+        </div>
+        <div if:true={showRLPNotFound} class="error-container">
+        <div class="error-header">
+            <lightning-icon icon-name="utility:info" size="x-small" style="color:black" class="icon-black slds-icon-text-default"></lightning-icon>
+            
+        </div>
+         <div class="error-message">
+            <h2>Invalid request for lease proposals (RLP) number</h2>
+            <p>The request for lease proposals (RLP) number is incorrect or the government is not currently accepting proposals.</p>
+            <p>
+                The RLP number can be obtained from your GSA point of contact or SAM notice. 
+                For further technical assistance, email leasing@gsa.gov&nbsp; 
+                or call 1-866-450-6588 and select option 7.
+            </p>
+        </div>
+        </div>
+
+        <div if:true={showAddressNotFound} class="error-container">
+            <div class="error-header1">
+                <lightning-icon icon-name="utility:info" size="x-small" style="color:black" class="icon-black slds-icon-text-default"></lightning-icon>
+            </div>
+            <div class="error-message">
+                <h2>Property is not within RLP boundaries</h2>
+                <p>Your property is not within the boundaries of the RLP. Please confirm the RLP number or offer a property that falls within the <br />RLP boundaries.
+                <br /><br />For more information, refer to the RLP or your government point of contact. For technical assistance, email leasing@gsa.gov <br />or call 1-866-450-6588 and select option 7.</p>
+            </div>
+        </div>
+    <div class="btn-container1" if:true={showRLPFound}>
+        <input class="btn1" type="button" variant="Yes" value="Yes" onclick={handleCreate} />
+        <input class="btn1" type="button" variant="No" value="No" onclick={handleNo} />
+    </div>
+
+    <div class="btn-container1" if:true={showButton}>
+        <input class="btn2" type="button" variant="submit" value="Back" onclick={handleBack} />
+        <input class="btn2" type="button" variant="submit" value="Exit Offer" onclick={handleExit} />
+    </div>
+       <div class="btn-container" if:true={isReadonly}>        
+        <input class="btn2" type="button" variant="submit" value="Back" onclick={handleBack} />
+        <input class="btn2" type="button" variant="submit" value="Next" onclick={handleNext} />
+        <input class="btn2" type="button" variant="submit" value="Exit Offer" onclick={handleExit} />
+       </div>
+    <br></br>      
+    </lightning-record-edit-form>
+</template>

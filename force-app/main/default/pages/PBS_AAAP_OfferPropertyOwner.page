@@ -81,16 +81,16 @@
     <script type="text/javascript"
             src="{!$Label.AAAP_JQUERYUI_URL}"></script>
     <script type="text/javascript">
-    //alert('test');
+    
         // j.rogers 12/21/2022  SFWS-2100
-        console.log('{!pageURLForRedirection}');
+        
         if('{!JSENCODE(pageURLForRedirection)}' != ''){
             window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
             window.parent.document.body = document.createElement('body');
         }
-    	else{
-        	window.parent.document.body.scrollTop = 0;
-  			window.parent.document.documentElement.scrollTop = 0;
+        else{
+            window.parent.document.body.scrollTop = 0;
+            window.parent.document.documentElement.scrollTop = 0;
         }
         // end SFWS-2100
         JQ  =  jQuery.noConflict();
@@ -119,7 +119,7 @@
         var el = document.getElementById('{!$Component.offerPropOwner.state}');
         console.log('****'+checkBoxVal);
         if (checkBoxVal == 'checked') {
-            //  JQ('input[id=' + "'{!$Component.offerPropOwner.propownername}'" + ']').prop('disabled', true);
+            
             JY('input[id=' + "'{!$Component.offerPropOwner.firstname}'" + ']').prop('disabled', true);
             JY('input[id=' + "'{!$Component.offerPropOwner.lastname}'" + ']').prop('disabled', true);
             JY('input[id=' + "'{!$Component.offerPropOwner.address}'" + ']').prop('disabled', true);
@@ -159,7 +159,7 @@
             JQ('[id*=OtherRelationshipPanel]').hide();
             JQ("[id*=country]").wrap('<div class="selector"><span id="selectedCon">'+existingVal1+'</span></div>');
         }
-        //alert(val);
+        
     }
 
     function copyVals() {
@@ -182,7 +182,7 @@
 
     </script>
     <div id="wrapper">
-        <c:inside_header offerId="{!offerPropOwner.Id}"/>
+        
         <div id="content" class="property-owner">
             <!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
             <apex:panelGrid rendered="{!!isValidUser}">
@@ -245,7 +245,7 @@
                     <apex:inputField value="{!offerPropOwner.PBS_AAAP_Owner_State__c}" id="state" styleclass="text"/>
 
                     <apex:outputPanel >
-                        <!-- SGanti changed 7/14/2021 <apex:outputtext value="6. Zip Code:"/> -->
+                        
                         <apex:outputtext value="6. 9-Digit Zip Code:"/>
                         <span class="required">*</span></apex:outputPanel>
                     <apex:inputField value="{!offerPropOwner.PBS_AAAP_Owner_Zip__c}" id="zip" styleclass="text"/>
@@ -253,13 +253,7 @@
                 </apex:panelGrid>
 
                 <apex:panelGrid columns="1" id="theGridsection2">
-                    <!-- SGanti changed 7/14/2021 <apex:outputPanel >
-                        <apex:outputtext value="{!$Label.PBS_AAAP_Prop_Owner_Phone}"/>
-                        <span class="required">*</span><br/>
-                        <apex:inputField value="{!offerPropOwner.PBS_AAAP_Owner_Main_Phone__c}" id="phone" styleclass="text"/> &nbsp;&nbsp;<apex:outputtext value="Ext: "/>
-                        <apex:inputField value="{!offerPropOwner.PBS_AAAP_Property_Phone_Extn__c}" styleclass="text"/>
-
-                    </apex:outputPanel> -->
+                   
 
 
                     <apex:outputPanel >
@@ -321,19 +315,13 @@
 
                 <br/>
                 <apex:outputPanel >
-                    <!--  J.Rogers  12/22/2022   SFWS-2100
-                        <apex:commandButton value="Back" action="{!backToOfrParking}"/>
-                        <apex:commandButton value="Save Page" styleClass="btnJQSubmit" action="{!actionSavePropertyOwner}"/>
-                        <apex:commandButton value="Next" action="{!actionSavePropertyOwnerAndContinue}"/>
-                        <apex:commandButton value="Exit Offer" action="{!actionCancel}"
-                                            onclick="if(confirm('Please make sure that, you have saved changes to the offer, before leaving from this page.')){return true;} else return false;"/>
-                        -->
+                    
                         
                         <apex:commandButton value="Back" action="{!backToOfrParking}"/>
                         <apex:commandButton value="Save Page" styleClass="btnJQSubmit" action="{!actionSavePropertyOwner}"/>
                         <apex:commandButton value="Next" action="{!actionSavePropertyOwnerAndContinue}"/>
                         <apex:commandButton value="Exit Offer"
-                                    onclick="if(confirm('Are you sure you want to cancel editing this record without saving changes?')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}AAAP-PortalHome';return false;} else {return false;}"/>
+                                    onclick="if(confirm('Are you sure you want to cancel editing this record without saving changes?')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}Offer-Home';return false;} else {return false;}"/>
                     <!--  END SFWS-2100 -->
 
                 </apex:outputPanel>

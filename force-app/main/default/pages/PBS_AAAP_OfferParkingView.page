@@ -18,30 +18,7 @@
     </style>
 
     
-<!-- J. Rogers  Eliminate Headers
-<div id="login">
-        <ul>
-            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
-                <apex:outputLink value="/AAAP/home/home.jsp">
-                    <li>{!$Label.site.login_button}</li>
-                </apex:outputLink>
-                <li> |</li>
-                <apex:outputLink value="/AAAP/ForgotPassword">
-                    <li>{!$Label.site.forgot_your_password_q}</li>
-                </apex:outputLink>
-                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
-                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
-                    <li>{!$Label.site.new_user_q}</li>
-                </apex:outputLink>
-            </apex:panelGroup>
-            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
-                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
-                <li>{!$Label.site.logout}</li>
-            </apex:outputLink>
-            <li>|</li>
-            <li><a href="http://www.gsa.gov/">About GSA</a></li>
-        </ul>
-    </div><!--/login-->
+
 
     <div id="wrapper">
         <c:inside_header />
@@ -90,13 +67,7 @@
                             <apex:outputText style="width:75px"
                                              value="{!offerParking.PBS_AAAP_Total_Surface_Parking_Spaces__c}"
                                              id="surfacespace1" styleClass="outputfield"/>
-                            <!--  steve cutting out total parking OOLOP-99
-                 <apex:outputtext value="Total"/><span class="required">*</span>
-
-                 <apex:outputField style="width:75px" 
-                       value="{!offerParking.PBS_AAAP_Total_Parking_Spaces__c}"  id="parkingspace1"/>
-
--->
+                            
                         </td>
                     </tr>
                     <tr>
@@ -116,19 +87,11 @@
                             <apex:outputText style="width:75px"
                                              value="{!offerParking.PBS_AAAP_Total_Surf_Park_Space_Offered__c}"
                                              id="surfacespace2" styleClass="outputfield"/>
-                            <!--  steve cutting out total parking OOLOP-99
-                  <apex:outputtext value="Total"/><span class="required">*</span>
-                   <apex:outputField style="width:75px" value="{!offerParking.PBS_AAAP_Total_Park_Spaces_Offered__c}"
-                                    id="parkingspace2"/>
--->
+                            
                         </td>
                     </tr>
                     <tr>
-                        <!--                    <td><apex:outputtext value="{!$Label.PBS_AAAP_Free_Parking_Spaces_Offered} "/><br/>
-                    <apex:outputField value="{!offerParking.PBS_AAAP_Free_Parking_Spaces_Offered__c}"
-                                     id="parkingspace3"/>
-                    
-                    </td>  -->
+                        
                     </tr>
                     <tr>
                         <td>
@@ -176,35 +139,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <!--<apex:outputtext value="{!$Label.PBS_AAAP_Option_Parking}"/><span class="required">*</span><br/>
-                        <apex:selectRadio styleClass="radioCell" value="{!offerParking.PBS_AAAP_Option_Parking__c}" id="parkingspace5">
-                        <apex:actionSupport event="onchange" action="{!showParkingOptions}" rerender="options" />
-                            <apex:selectOptions value="{!partialItems}"/>
-                        </apex:selectRadio>
-                        
-                    </td>               
-                </tr>           
-                <tr>
-                    <td>
-                    <apex:outputPanel id="options">
-                        <apex:outputPanel rendered="{!options5a}">
-                            <apex:outputtext value="{!$Label.PBS_AAAP_Annual_cost_entire_garage_parking}"/><span class="required">*</span><br/>
-                            $&nbsp;<apex:outputField value="{!offerParking.PBS_AAAP_Annual_cost_entire_garage_park__c}" id="parkingspace5i"/>
                             
-                            </apex:outputPanel>
-                        <apex:outputPanel rendered="{!options5b}">
-                            <br/>
-                            <apex:outputtext value="{!$Label.PBS_AAAP_Number_of_garage_parking_spaces}"/><span class="required">*</span><br/>
-                            &nbsp;&nbsp;&nbsp;<apex:outputField value="{!offerParking.PBS_AAAP_Number_of_gar_parking_spaces__c}" id="parkingspace5ii"/>
-                            
-                            </apex:outputPanel>                 
-                        <apex:outputPanel rendered="{!options5c}">
-                            <br/>
-                            <apex:outputtext value="{!$Label.PBS_AAAP_Partial_secured_garage_parking_space}"/><span class="required">*</span><br/>
-                            &nbsp;&nbsp;&nbsp;<apex:outputField value="{!offerParking.PBS_AAAP_Partial_Secured_GAR_PARK_SPACE__c}" id="parkingspace5iii"/>
-                            
-                        </apex:outputPanel>
-                    </apex:outputPanel> -->
                         </td>
                     </tr>
                     <tr>

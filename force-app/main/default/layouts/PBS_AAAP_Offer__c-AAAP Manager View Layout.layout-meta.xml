@@ -5,51 +5,9 @@
     <excludeButtons>Clone</excludeButtons>
     <excludeButtons>Delete</excludeButtons>
     <excludeButtons>Edit</excludeButtons>
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>Share</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
-    <layoutSections>
-        <customLabel>true</customLabel>
-        <detailHeading>true</detailHeading>
-        <editHeading>true</editHeading>
-        <label>Building Address</label>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_RLP_Number__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Building_Name__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Street_Address__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_County__c</field>
-            </layoutItems>
-        </layoutColumns>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_City__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Congressional_District__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_State__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_ZipCode__c</field>
-            </layoutItems>
-        </layoutColumns>
-        <style>TwoColumnsLeftToRight</style>
-    </layoutSections>
     <layoutSections>
         <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
@@ -57,20 +15,20 @@
         <label>Offer Information</label>
         <layoutColumns>
             <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Name</field>
+            </layoutItems>
+            <layoutItems>
                 <behavior>Edit</behavior>
                 <field>PBS_AAAP_Offer_Submission_Date__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_X_CO_ORD__c</field>
+                <field>PBS_AAAP_RLP_Number__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_Y_CO_ORD__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Name</field>
+                <field>Property__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -79,18 +37,6 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>PBS_AAAP_Total_Space_Selected__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>PBS_AAAP_Total_ABOA_Space_Available__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>PBS_AAAP_Total_SF_Offered__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_RLP_Region__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
@@ -103,10 +49,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Cloned_Date__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>No_of_times_cloned__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -123,7 +65,24 @@
                 <field>OwnerId</field>
             </layoutItems>
             <layoutItems>
-                <emptySpace>true</emptySpace>
+                <behavior>Edit</behavior>
+                <field>PBS_AAAP_RLP_Region__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>RecordTypeId</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>PBS_AAAP_Session_Key__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>PBS_AAAP_Total_SF_Offered__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>PBS_AAAP_Total_ABOA_Space_Available__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -131,7 +90,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_Session_Key__c</field>
+                <field>PBS_AAAP_Offeror_Email__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>No_of_times_cloned__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -140,55 +103,89 @@
         <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
-        <label>Building Information</label>
+        <label>Property Location</label>
         <layoutColumns>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Energy_Star__c</field>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Building_Name__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_City__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_CERTIFICATION_DATE__c</field>
+                <field>PBS_AAAP_County__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Owner_Country__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_Energy_Star_Reason__c</field>
+                <field>PBS_AAAP_X_CO_ORD__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Street_Address__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_State__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_ZipCode__c</field>
+            </layoutItems>
+            <layoutItems>
+                <emptySpace>true</emptySpace>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_BLDG_Physical_Remote_Stairwell__c</field>
+                <field>PBS_AAAP_Y_CO_ORD__c</field>
             </layoutItems>
+        </layoutColumns>
+        <style>TwoColumnsLeftToRight</style>
+    </layoutSections>
+    <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>true</detailHeading>
+        <editHeading>true</editHeading>
+        <label>Property Overview</label>
+        <layoutColumns>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Required</behavior>
                 <field>PBS_AAAP_Number_of_floors__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_GEN_PURPOSE_RENTABLE__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_OFFICE_SPACE_RSF__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Required</behavior>
                 <field>PBS_AAAP_RETAIL_SPACE_RSF__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_GARAGE_SPACE_RSF__c</field>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_GEN_PURPOSE_RENTABLE__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Close_To_Metro__c</field>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Building_Common_Area_Factor__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Total_Surface_Parking_Spaces__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Parking_Onsite__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Year_Built__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
                 <field>PBS_AAAP_HVAC_HRS_MON_TO_FRI_START__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_HVAC_HRS_MON_TO_FRI_END__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -196,110 +193,49 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_HVAC_HRS_ON_SAT_END__c</field>
+                <field>PBS_AAAP_HVAC_HRS_ON_SUN_START__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_OFFICE_SPACE_RSF__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_GARAGE_SPACE_RSF__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c</field>
+            </layoutItems>
+            <layoutItems>
+                <emptySpace>true</emptySpace>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Total_Structured_Parking_Spaces__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Total_Park_Spaces_Offered__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Renovation_Year__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_HVAC_HRS_MON_TO_FRI_END__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_HVAC_HRS_ON_SUN_START__c</field>
+                <field>PBS_AAAP_HVAC_HRS_ON_SAT_END__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>PBS_AAAP_HVAC_HRS_ON_SUN_END__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_HubZone_SBC__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_HubZone_SBC_Preference__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Accessibility__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Asbestos__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Building_Common_Area_Factor__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Fire_Life_Meets__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Flood_Plains__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Seismic_Statement__c</field>
-            </layoutItems>
-        </layoutColumns>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Building_Sprinklered__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_BLDG_Wide_Alarm_System__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_SITE_SIZE_SQFT__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_LIVE_FLOOR_LOAD__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Year_Built__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Renovation_Year__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_HIST_PROP_IN_HIST_DIST__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_NON_HIST_PROP_IN_HIST_DIST__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_BUILDING_TYPE__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_BUILDING_CODE__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_BUILDING_CODE_YEAR__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Reconstruction__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Reconstruction_Acknowledgement__c</field>
-            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
@@ -307,81 +243,22 @@
         <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
-        <label>Parking Section</label>
+        <label>Property Owner</label>
         <layoutColumns>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Total_Parking_Spaces__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Total_Structured_Parking_Spaces__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Total_Surface_Parking_Spaces__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Monthly_cost_res_gar_park__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Monthly_cost_res_sur_park__c</field>
-            </layoutItems>
-        </layoutColumns>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Parking_Onsite__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Total_Park_Spaces_Offered__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Total_Struct_Park_Space_Offered__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Total_Surf_Park_Space_Offered__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Monthly_cost_nonres_gar_park__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Monthly_cost_nonres_sur_park__c</field>
-            </layoutItems>
-        </layoutColumns>
-        <style>TwoColumnsLeftToRight</style>
-    </layoutSections>
-    <layoutSections>
-        <customLabel>true</customLabel>
-        <detailHeading>true</detailHeading>
-        <editHeading>true</editHeading>
-        <label>Property Owner Section</label>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Required</behavior>
                 <field>PBS_AAAP_Owner_Name__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Required</behavior>
                 <field>PBS_AAAP_Owner_Address__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Owner_City__c</field>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Owner_State__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Owner_Zip__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Required</behavior>
                 <field>PBS_AAAP_OFFEROR_INTEREST__c</field>
             </layoutItems>
             <layoutItems>
@@ -392,19 +269,15 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_Owner_Country__c</field>
+                <field>PBS_RSAP_Property_Owner_Same_as_Offeror__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Owner_State__c</field>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Owner_City__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Owner_Main_Phone__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Property_Phone_Extn__c</field>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Owner_Zip__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -417,36 +290,81 @@
         <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
-        <label>Reps and Certs Section</label>
+        <label>Eligibility</label>
         <layoutColumns>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Representation__c</field>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Fire_Life_Meets__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Asbestos__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Seismic_Statement__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_BUILDING_CODE__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_HUBZONE_IDENTIFIER__c</field>
+                <field>PBS_AAAP_Energy_Star__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_Sam_Registered__c</field>
+                <field>PBS_AAAP_Energy_Star_Reason__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>PBS_AAAP_HubZone_SBC__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>PBS_AAAP_HubZone_SBC_Preference__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>PBS_AAAP_Reconstruction__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Corporation_not_tax_felon__c</field>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Accessibility__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Flood_Plains__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_BUILDING_TYPE__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_BUILDING_CODE_YEAR__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_Corp_Not_Convicted_Felon__c</field>
+                <field>PBS_AAAP_CERTIFICATION_DATE__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_HIST_PROP_IN_HIST_DIST__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_NON_HIST_PROP_IN_HIST_DIST__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_HUBZone_SBC_Offeror__c</field>
+                <field>PBS_AAAP_SHELL_Build_out_Costs__c</field>
             </layoutItems>
             <layoutItems>
-                <emptySpace>true</emptySpace>
+                <behavior>Edit</behavior>
+                <field>PBS_AAAP_Reconstruction_Acknowledgement__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -455,7 +373,34 @@
         <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
-        <label>Operating Costs</label>
+        <label>Parking</label>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Monthly_cost_res_sur_park__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Monthly_cost_res_gar_park__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Monthly_cost_nonres_sur_park__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Monthly_cost_nonres_gar_park__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <style>TwoColumnsLeftToRight</style>
+    </layoutSections>
+    <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>true</detailHeading>
+        <editHeading>true</editHeading>
+        <label>Costs</label>
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -463,15 +408,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_CLEANING_SUPPLIES__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>PBS_AAAP_CLEANING_CONTRACT_SERVICES__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_HEATING_SALARIES__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -483,15 +420,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_ELECTRICAL_POWER__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>PBS_AAAP_ELECTRICAL_REPLACEMENT__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_ELECTRICAL_SPECIALEQUIP__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -499,15 +428,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_PLUMBING_WATER__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>PBS_AAAP_PLUMBING_SUPPLIES__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_PLUMBING_MAINTENANCE__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -515,15 +436,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_AC_MAINTENANCE__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>PBS_AAAP_ELEVATOR_SALARIES__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_ELEVATOR_MAINTENANCE__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -531,45 +444,69 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_SECURITY__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>PBS_AAAP_SSTAX_WORKCOMP__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_LANDSCAPING_MAINTENANCE__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>PBS_AAAP_TOTAL_OTHER_COSTS__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_SRVC_UTIL_TOTAL__c</field>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_COST_PER_ABOA__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_COST_PER_ABOA__c</field>
+                <field>PBS_AAAP_CLEANING_SUPPLIES__c</field>
             </layoutItems>
             <layoutItems>
-                <emptySpace>true</emptySpace>
-            </layoutItems>
-            <layoutItems>
-                <emptySpace>true</emptySpace>
-            </layoutItems>
-            <layoutItems>
-                <emptySpace>true</emptySpace>
-            </layoutItems>
-            <layoutItems>
-                <emptySpace>true</emptySpace>
+                <behavior>Edit</behavior>
+                <field>PBS_AAAP_HEATING_SALARIES__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>PBS_AAAP_HEATING_FUEL_COST__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>PBS_AAAP_ELECTRICAL_POWER__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>PBS_AAAP_ELECTRICAL_SPECIALEQUIP__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>PBS_AAAP_PLUMBING_WATER__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>PBS_AAAP_PLUMBING_MAINTENANCE__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>PBS_AAAP_AC_MAINTENANCE__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>PBS_AAAP_ELEVATOR_MAINTENANCE__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>PBS_AAAP_SECURITY__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>PBS_AAAP_LANDSCAPING_MAINTENANCE__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_SRVC_UTIL_TOTAL__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>PBS_AAAP_Vacant_Premise_Rate__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -586,11 +523,17 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_INSURANCE__c</field>
+                <field>PBS_AAAP_BUILDING_MAINTENANCE__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_BUILDING_MAINTENANCE__c</field>
+                <field>PBS_AAAP_MANAGEMENT__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>PBS_AAAP_INSURANCE__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -598,35 +541,16 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PBS_AAAP_MANAGEMENT__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>PBS_AAAP_SECT2_TOTAL__c</field>
             </layoutItems>
         </layoutColumns>
-        <layoutColumns/>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
     <layoutSections>
         <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
-        <label>Space and Rates Summary</label>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_OFFICE_SF_OFFERED_MIN__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>PBS_AAAP_Max_Contiguous_ABOA_Rollup__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PBS_AAAP_Vacant_Premise_Rate__c</field>
-            </layoutItems>
-        </layoutColumns>
+        <label>Space and Rates</label>
         <layoutColumns>
             <layoutItems>
                 <behavior>Readonly</behavior>
@@ -634,15 +558,25 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
+                <field>PBS_AAAP_RLP_TI_New_Space__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>PBS_AAAP_OFFICE_SF_OFFERED_MIN__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Readonly</behavior>
                 <field>PBS_AAAP_RLP_MAX_TIA__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>PBS_AAAP_RLP_TI_New_Space__c</field>
+                <field>PBS_AAAP_RLP_TI_Additional_Space__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>PBS_AAAP_RLP_TI_Additional_Space__c</field>
+                <field>PBS_AAAP_Max_Contiguous_ABOA_Rollup__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -677,12 +611,6 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
-        <relatedList>RelatedContentNoteList</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <relatedList>RelatedFileList</relatedList>
-    </relatedLists>
-    <relatedLists>
         <fields>NAME</fields>
         <relatedList>PBS_AAAP_Other_Costs__c.PBS_AAAP_OFFER_NUMBER__c</relatedList>
     </relatedLists>
@@ -699,6 +627,12 @@
         <fields>NAME</fields>
         <fields>PBS_AAAP_Attachment_Type__c</fields>
         <relatedList>PBS_AAAP_Offer_Attachments__c.PBS_AAAP_Offer__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <relatedList>RelatedFileList</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <relatedList>RelatedContentNoteList</relatedList>
     </relatedLists>
     <relatedLists>
         <relatedList>RelatedEntityHistoryList</relatedList>

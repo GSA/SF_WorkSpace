@@ -698,6 +698,7 @@ public with sharing class PBS_AAAP_OfferBuildingController extends PBS_AAAP_Page
             else
             {
 
+                pageUrl = pageUrl.replace('null',offerId);
                 Integer len = pageUrl.length();
                 if( pageUrl.mid(len-1, 1) == '=' )
                 {
@@ -715,7 +716,7 @@ public with sharing class PBS_AAAP_OfferBuildingController extends PBS_AAAP_Page
                 p.getParameters().put('draftMsgFlag', 'true');
             }
 			pageURLForRedirection = p.getUrl();
-            pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferBuildingDetails', Label.LOP_Community_Base_URL+'AAAP-OfferBuildingDetails');
+            pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferBuildingDetails', Label.LOP_Community_Base_URL+'Offer-M-Eligibility');
             
         } catch (Exception ex) {
         pushDebugInformation('SB_generic error');
@@ -755,8 +756,8 @@ public with sharing class PBS_AAAP_OfferBuildingController extends PBS_AAAP_Page
             if (offerBuilding.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT || offerBuilding.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_PENDINGMODIFICATION) {
                 delete offerBuilding;   // Cascade delete - Deletes all Spaces and Othercosts associated with it.
                 //pref = Page.PBS_AAAP_PortalHome;
-                pref = new PageReference('/AAAP-portalHome');
-                pageURLForRedirection = Label.LOP_Community_Base_URL+'AAAP-PortalHome';
+                pref = new PageReference('/Offer-Home');
+                pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-Home';
                 System.debug('pageURLForRedirection '+pageURLForRedirection);
                 //pref.setRedirect(true);
             } else {

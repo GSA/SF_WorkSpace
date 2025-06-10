@@ -32,9 +32,6 @@ public class Test_PBS_AAAP_PortalHomeController {
         PBS_AAAP_OfferHelper.triggerupdate(false);
         phc.actionOfferEdit();
         System.assert(offer.PBS_AAAP_Offer_Status__c != null);
-        
-        
-        
         offer.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_AWARDED_SUBMITTED;
         offer.PBS_AAAP_Offer_Submission_Date__c = Date.today();
         PBS_AAAP_OfferHelper.triggerupdate(true);
@@ -66,7 +63,6 @@ public class Test_PBS_AAAP_PortalHomeController {
         PBS_AAAP_OfferHelper.triggerupdate(false);
         space.PBS_AAAP_Total_ABOA_Edited__c = 0;
         update space;
-        // add attachments
         PBS_AAAP_Offer_Attachments__c newAttach = new PBS_AAAP_Offer_Attachments__c();
         newAttach.PBS_AAAP_Offer__c = offer.id;
         newAttach.PBS_AAAP_Attachment_Type__c = 'Floor Plan';
@@ -100,27 +96,16 @@ public class Test_PBS_AAAP_PortalHomeController {
         insert att;
         phc.actionOfferEdit();
         System.assert(offer.PBS_AAAP_Offer_Status__c != null);
-
-
         phc.offerClone(offer.id, 'copy');
         phc.offerClone(offer.id, 'modify');
-
-
         phc.selectRLP = rlp.Id;
         phc.showRLPOffers();
         System.assert(phc.selectRLP != null);
-
         phc.selectRLP = 'All';
         phc.showRLPOffers();
-
         ApexPages.currentPage().getParameters().put('copyofferIdParam', offer.id);
         phc.actionOfferCopy();
-
-        //ApexPages.currentPage().getParameters().put('modifyofferIdParam', offer.id);
-        //phc.actionOfferModify();
-
         phc.createNewOffer();
-
         ApexPages.currentPage().getParameters().put('viewofferIdParam', offer.id);
         phc.actionViewOnly();
 
@@ -146,9 +131,7 @@ public class Test_PBS_AAAP_PortalHomeController {
         update space;
         phc.updateToWithdrawnStatus();
         System.assert(offer.PBS_AAAP_Offer_Status__c != null);
-
         phc.changePassword();
-
     }
 
     static testMethod void submitOfferEdit() {
@@ -159,24 +142,18 @@ public class Test_PBS_AAAP_PortalHomeController {
         offer.PBS_AAAP_RLP_Number__c = rlp.Id;
         PBS_AAAP_OfferHelper.triggerupdate(true);       
         insert offer;
-        PBS_AAAP_OfferHelper.triggerupdate(false);
-        
-        
+        PBS_AAAP_OfferHelper.triggerupdate(false);       
         offer.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_AWARDED_SUBMITTED;
         update offer;
         PBS_AAAP_PortalHomeController phc = new PBS_AAAP_PortalHomeController();
         ApexPages.currentPage().getParameters().put('editofferIdParam', offer.id);      
-        phc.actionOfferEdit();
-        
-        
-        
+        phc.actionOfferEdit();        
         offer.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT;
         update offer;
         rlp.PBS_RSAP_Solicitation_Status__c = true;
         update rlp;
         ApexPages.currentPage().getParameters().put('editofferIdParam', offer.id); 
         phc.actionLopOfferEdit();
-        
         System.assertEquals(true, rlp.PBS_RSAP_Solicitation_Status__c, 'This should be updated.');
     }
 
@@ -223,18 +200,12 @@ public class Test_PBS_AAAP_PortalHomeController {
         ApexPages.currentPage().getParameters().put('editofferIdParam', offer.id);      
         phc1.actionOfferEdit();
         System.assert(offer.PBS_AAAP_Offer_Status__c != null);
-        
-        
-        
         offer.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT;
         update offer;
         rlp.PBS_RSAP_Solicitation_Status__c = false;
         update rlp;
         ApexPages.currentPage().getParameters().put('editofferIdParam', offer.id); 
         phc1.actionLopOfferEdit();
-        
-        
-       
     }
 
     static testMethod void submitOfferEdit2() {
@@ -245,26 +216,20 @@ public class Test_PBS_AAAP_PortalHomeController {
         offer.PBS_AAAP_RLP_Number__c = rlp.Id;
         PBS_AAAP_OfferHelper.triggerupdate(true);       
         insert offer;
-        PBS_AAAP_OfferHelper.triggerupdate(false);
-        
+        PBS_AAAP_OfferHelper.triggerupdate(false);        
         PBS_AAAP_PortalHomeController phc = new PBS_AAAP_PortalHomeController();
-        
-        
-        
         offer.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED;
         update offer;
         rlp.PBS_RSAP_Solicitation_Status__c = true;
         update rlp;
         ApexPages.currentPage().getParameters().put('editofferIdParam', offer.id); 
-        phc.actionLopOfferEdit();
-        
+        phc.actionLopOfferEdit();        
         System.assertEquals(true, rlp.PBS_RSAP_Solicitation_Status__c, 'This should be updated.');
     }
     static testMethod void myportalHomeTest1() {
         User u = PBS_AAAP_UtilityTest.createPortalUser();
         Blob bodyBlob = Blob.valueOf('Unit Test Attachment Body');
         PBS_AAAP_PortalHomeController.ContentDocumentWrapper cdw = new PBS_AAAP_PortalHomeController.ContentDocumentWrapper('Hi',bodyBlob);
-        //insert u; Vaishali 06/10/2015
         System.runAs(u) {
             PBS_AAAP_PortalHomeController phc = new PBS_AAAP_PortalHomeController();
             phc.getRLPs();
@@ -277,16 +242,10 @@ public class Test_PBS_AAAP_PortalHomeController {
 
         User u = PBS_AAAP_UtilityTest.createPortalUser();
         String userId = UserInfo.getUserId();
-        // PBS_LOP_Offer__c oOther = [select o.Id From PBS_LOP_Offer__c o where o.ownerId != :userId limit 1];
-
         System.debug('u.id is ' + u.id);
-
         System.runAs(u) {
             Test.startTest();
-
-
             PBS_LOP_Offer__c offer = PBS_AAAP_UNIT_TEST_DATA_GENERATOR.genTestLopOffer();
-
             insert offer;
             System.assert(offer.Id != null);
             ApexPages.currentPage().getParameters().put('editofferIdParam', offer.id);
@@ -317,8 +276,6 @@ public class Test_PBS_AAAP_PortalHomeController {
             obc.actionAdditionalRSAPDocs();
             PBS_AAAP_PortalHomeController.QueryStr('PBS_LOP_Offer__c', 'id', offer.id, new List<Id>());
             PBS_AAAP_PortalHomeController.QueryStr('PBS_LOP_Offer__c', 'id', '', new List<Id>{offer.id});
-            
-            
         }
     }
 }

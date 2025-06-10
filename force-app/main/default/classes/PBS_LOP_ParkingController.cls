@@ -6,6 +6,7 @@ public with sharing class PBS_LOP_ParkingController {
 
     public boolean isValidUser { get; set; }
     public String offerId { get; set; }
+    public String propId { get; set; }
     public String isNew { get; set; }
     public String action { get; set; }
     public string isEditable { get; set; }
@@ -15,6 +16,7 @@ public with sharing class PBS_LOP_ParkingController {
     public string viewMsg { get; set; }
     public PBS_AAAP_Offer__c lopOffer { get; set; }
     public PBS_AAAP_RLP__c rlp {get; set;}
+    public String rlpType { get; set; }
     public Boolean isTerminated { get; set; }
     public String pageURL {get; set;}
     public PBS_AAAP_QuestionLabels qLabels { get; set; }
@@ -25,6 +27,7 @@ public with sharing class PBS_LOP_ParkingController {
         userDetail = [SELECT u.Username, u.ProfileId,u.CompanyName, u.Name, u.Id, u.ContactId, u.LastName, u.FirstName, u.Street, u.City, u.State, u.PostalCode FROM User u WHERE u.Id = :UserInfo.getUserId()];
         action = ApexPages.currentPage().getParameters().get('action');
         offerId = ApexPages.currentPage().getParameters().get('offerId');
+        propId = ApexPages.currentPage().getParameters().get('propertyId');
         isNew = ApexPages.currentPage().getParameters().get('isNew');
         isEditable = ApexPages.currentPage().getParameters().get('edit');
         draftMsgFlag = ApexPages.currentPage().getParameters().get('draftMsgFlag');
@@ -33,14 +36,14 @@ public with sharing class PBS_LOP_ParkingController {
 
         if (isEditable == 'false') {
             viewOnly = true;
-            viewMsg = 'Offer opened in a View mode';
+            viewMsg = 'Offer opened in view mode. Any changes made will not be saved.';
         } else {
             viewOnly = false;
         }
 
         if (ApexPages.currentPage().getParameters().get('offerId') != null) {
             lopOffer = PBS_AAAP_GlobalConstants.getOfferDetail(offerId);
-
+            
             // jrogers testing
             system.debug('PBS_AAAP_Parking_Onsite__c ===> '+ lopOffer.PBS_AAAP_Parking_Onsite__c);
             
@@ -62,11 +65,13 @@ public with sharing class PBS_LOP_ParkingController {
                 }
                 if (isTerminated) {
                     viewOnly = true;
-                    viewMsg = 'Project is terminated. Offer opened in a view mode';
+                    viewMsg = 'Project is terminated. Offer opened in view mode. Any changes made will not be saved.';
                     System.debug('*** isEditable ***' + isEditable);
-                } else if (lopOffer.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED) {
+                } 
+                    else if (lopOffer.PBS_AAAP_Offer_Status__c == 'Closed') {
                     viewOnly = true;
-                    viewMsg = 'Project due date has elapsed. Offer opened in a view mode';
+                    viewMsg = 'Project due date has elapsed. Offer opened in view mode. Any changes made will not be saved.';
+                  
                 }
             } else {
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, PBS_AAAP_GlobalConstants.ERROR_INAVLID_ACCESS_OWNERSHIP);
@@ -85,7 +90,7 @@ public with sharing class PBS_LOP_ParkingController {
 
         system.debug('***** started backToOfrBlding ******');
         PageReference p = new PageReference('/RSAP/Building');
-        //PageReference p = Page.PBS_LOP_Building;
+        
         p.getParameters().put('offerId', offerId);
         if (isEditable == 'true') {
             p.getParameters().put('edit', 'true');
@@ -94,15 +99,14 @@ public with sharing class PBS_LOP_ParkingController {
         }
 
         /* SFWS-2107  01/18/2023 j.rogers */
-          //  p.setRedirect(true);
-          // return p;
+          
        
 
         p.setRedirect(false);
         
         pageURLForRedirection = p.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/Building', Label.LOP_Community_Base_URL+'RSAP-Building');
 
+         pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-S-Eligibility?edit='+(viewOnly ? 'false' : 'true')+'&offerId='+offerId+'&propertyId='+propId;
         
         system.debug('***** finished backToOfrBlding ******');
         return null;
@@ -115,76 +119,36 @@ public with sharing class PBS_LOP_ParkingController {
         PageReference p = null;
 
         Boolean flag = false;
-        if (lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c == null || lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c == 0) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_ANSI_BOMA_SF));
-            flag = true;
-        }
-        if (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c == null || lopOffer.PBS_AAAP_Office_RSF_OFFERED__c == 0) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_RSF));
-            flag = true;
-        }
+        PBS_AAAP_Utility.OfferValidationResponse response  = PBS_AAAP_Utility.validateOffer(lopOffer,new List<String>{'Offer-S-SpaceParking'});
+        	 system.debug('response>>>>>>>>>>' + response);
+            if (response.errorMessages.size() > 0 ) {
+                for(String error : response.errorMessages){
+                    system.debug('error>>>>>>>>>>' + error);
+                    ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, error));
+                }
+                return null;
+            }
+        
         if (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c == null) {
             lopOffer.PBS_AAAP_Office_RSF_OFFERED__c = 0;
         }
         if (lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c == null) {
             lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c = 0;
         }
-
-        /*if (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c <= lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c) {
+ 	
+        if (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c <= lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_RSF_GT_ABOA));
             flag = true;
-        }*/
+        }
 
-        /* Todd Brown 10/08/2021 commented out edits for removed parking fields and added edits for new fields for SFWS-1400
-        if (lopOffer.PBS_AAAP_Total_Surface_Parking_Spaces__c < lopOffer.PBS_RSAP_Emp_Visitor_Surface_Spaces__c) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '3. Employee/Visitor Parking cannot exceed total building parking.'));
-            flag = true;
-        }
-        if (lopOffer.PBS_RSAP_GOV_Surface_Spaces__c > lopOffer.PBS_AAAP_Total_Surface_Parking_Spaces__c) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '4. Official Government Vehicles Parking cannot exceed total building parking.'));
-            flag = true;
-        }
-        if (lopOffer.PBS_RSAP_Emp_Visitor_Structured_Spaces__c > lopOffer.PBS_AAAP_Total_Structured_Parking_Spaces__c) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '3. Employee/Visitor Parking cannot exceed total building parking.'));
-            flag = true;
-        }
-        if (lopOffer.PBS_RSAP_GOV_Structured_Spaces__c > lopOffer.PBS_AAAP_Total_Structured_Parking_Spaces__c) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '4. Official Government Vehicles Parking cannot exceed total building parking.'));
-            flag = true;
-        }
-        if (lopOffer.PBS_RSAP_SURFACE_PARKING_ANNUAL_COST__c == null || lopOffer.PBS_RSAP_STRUCT_PARKING_ANNUAL_COST__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '5.  Annual Cost Per Space Surface / Structured are required fields.  Please put 0.00 if there is no separate charge for parking.'));
-            flag = true;
-        }
-        */
-        if (lopOffer.PBS_AAAP_Parking_Onsite__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '2. Onsite parking response is required.'));
-            flag = true;
-        } 
-        if (lopOffer.PBS_AAAP_Monthly_cost_res_gar_park__c == null ||
-            lopOffer.PBS_AAAP_Monthly_cost_nonres_gar_park__c == null ||
-            lopOffer.PBS_AAAP_Monthly_cost_res_sur_park__c == null ||
-            lopOffer.PBS_AAAP_Monthly_cost_nonres_sur_park__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR,
-                    '4. Please enter rates for all types of parking. Please put $0.00 if you are either not charging for, or not offering, that type of parking space. You may not leave any fields blank.'));
-            flag = true;
-         }
-         //added by Ramya 07/2022
-          if (lopOffer.PBS_RSAP_Surf_Resv_Parking__c  == null ||
-            lopOffer.PBS_RSAP_Surf_NonResv_Parking__c == null ||
-            lopOffer.PBS_RSAP_Struct_Resv_Parking__c == null ||
-            lopOffer.PBS_RSAP_Struct_NonResv_Parking__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR,
-                    '5. Please enter number of parking spaces offered to satisfy the parking requirements of the RLP. You may not leave any fields blank.'));
-            flag = true;  
-        }
+        
         if (flag == true) {
             return null;
         }
         try {
             lopOffer.PBS_AAAP_Common_Area_Factor__c = (lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c > 0) ? (100 * (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c - lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c) / lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c).setScale(2) : 0.00;
             draftMsgFlag = '';
-            //updateAreaType(lopOffer);
+            
             if (lopOffer.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED) {
                 PBS_AAAP_GlobalConstants.updateOfferToDraft(lopOffer);
                 draftMsgFlag = 'true';
@@ -193,7 +157,11 @@ public with sharing class PBS_LOP_ParkingController {
             lopOffer.PBS_AAAP_OP_COST_COST_PER_ABOA__c = (lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c > 0) ? (lopOffer.PBS_AAAP_SRVC_UTIL_TOTAL_GOV__c / lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c) : 0;
             lopOffer.PBS_AAAP_OP_COST_COST_PER_RSF__c = (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c > 0) ? (lopOffer.PBS_AAAP_SRVC_UTIL_TOTAL_GOV__c / lopOffer.PBS_AAAP_Office_RSF_OFFERED__c) : 0;
             //SFWS-847
+          
+            if(isEditable == 'true')
+            {
             update lopOffer;
+            }
         } catch (Exception ex) {
             Apexpages.addMessages(ex);
         }
@@ -203,74 +171,41 @@ public with sharing class PBS_LOP_ParkingController {
         p.getParameters().put('draftMsg', draftMsgFlag);
 
         // SFWS 2107 - j. rogers 1/18/2023
-            //p.setRedirect(true);
-            //return p;      
+                  
         pageURLForRedirection = p.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/SpacesAndParking', Label.LOP_Community_Base_URL+'RSAP-SpacesAndParking');
-        
+       
+        pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-S-SpaceParking?edit=true&offerId='+offerId+'&propertyId='+propId;
         return null;
     }
 
     public PageReference saveParkingAndContinue() {
 
-        //system.debug('***************offer Parking ID :'+offerParking);
+        
         PageReference p = null;
 
         Boolean flag = false;
-        
+        PBS_AAAP_Utility.OfferValidationResponse response  = PBS_AAAP_Utility.validateOffer(lopOffer,new List<String>{'Offer-S-SpaceParking'});
+            if (response.errorMessages.size() > 0 ) {
+                for(String error : response.errorMessages){
+                    system.debug('PBS_AAAP_Utility.OfferValidationResponse response  = PBS_AAAP_Utility.validateOffer' + error);
+                    ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, error));
+                }
+                return null;
+            }
+        if (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c <= lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_RSF_GT_ABOA));
+            flag = true;
+        }
         //Parking
       
-        /*Todd Brown 10/08/2021 commented out edits for removed parking fields and added edits for new fields for SFWS-1400
-        if (lopOffer.PBS_AAAP_Total_Surface_Parking_Spaces__c < lopOffer.PBS_RSAP_Emp_Visitor_Surface_Spaces__c) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '3. Employee/Visitor Parking cannot exceed total building parking.'));
-            flag = true;
-        }
-        if (lopOffer.PBS_RSAP_GOV_Surface_Spaces__c > lopOffer.PBS_AAAP_Total_Surface_Parking_Spaces__c) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '4. Official Government Vehicles Parking cannot exceed total building parking.'));
-            flag = true;
-        }
-        if (lopOffer.PBS_RSAP_Emp_Visitor_Structured_Spaces__c > lopOffer.PBS_AAAP_Total_Structured_Parking_Spaces__c) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '3. Employee/Visitor Parking cannot exceed total building parking.'));
-            flag = true;
-        }
-        if (lopOffer.PBS_RSAP_GOV_Structured_Spaces__c > lopOffer.PBS_AAAP_Total_Structured_Parking_Spaces__c) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '4. Official Government Vehicles Parking cannot exceed total building parking.'));
-            flag = true;
-        }
-        if (lopOffer.PBS_RSAP_SURFACE_PARKING_ANNUAL_COST__c == null || lopOffer.PBS_RSAP_STRUCT_PARKING_ANNUAL_COST__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '5.  Annual Cost Per Space Surface / Structured are required fields.  Please put 0.00 if there is no separate charge for parking.'));
-            flag = true;
-        }*/
-                    
-            
-        if (lopOffer.PBS_AAAP_Parking_Onsite__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '2. Onsite parking response is required.'));
-            flag = true;
-        } 
-        //added by Ramya 07/2022
-         if (lopOffer.PBS_AAAP_Monthly_cost_res_gar_park__c == null ||
-            lopOffer.PBS_AAAP_Monthly_cost_nonres_gar_park__c == null ||
-            lopOffer.PBS_AAAP_Monthly_cost_res_sur_park__c == null ||
-            lopOffer.PBS_AAAP_Monthly_cost_nonres_sur_park__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR,
-                    '4. Please enter rates for all types of parking. Please put $0.00 if you are either not charging for, or not offering, that type of parking space. You may not leave any fields blank.'));
-            flag = true;
-         }
-          if (lopOffer.PBS_RSAP_Surf_Resv_Parking__c  == null ||
-            lopOffer.PBS_RSAP_Surf_NonResv_Parking__c == null ||
-            lopOffer.PBS_RSAP_Struct_Resv_Parking__c == null ||
-            lopOffer.PBS_RSAP_Struct_NonResv_Parking__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR,
-                    '5. Please enter number of parking spaces offered to satisfy the parking requirements of the RLP. You may not leave any fields blank.'));
-            flag = true;  
-        }
+        
               
         if (flag == true) {
             return null;
         }
 
         try {
-        
+              lopOffer.PBS_AAAP_Common_Area_Factor__c = (lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c > 0) ? (100 * (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c - lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c) / lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c).setScale(2) : 0.00;
               lopOffer.PBS_RSAP_Total_Parking_Annual_Amount__c = (((lopOffer.PBS_AAAP_Monthly_cost_res_gar_park__c*lopOffer.PBS_RSAP_Struct_Resv_Parking__c)
                                                                  +(lopOffer.PBS_AAAP_Monthly_cost_res_sur_park__c*lopOffer.PBS_RSAP_Surf_Resv_Parking__c)
                                                                  +(lopOffer.PBS_AAAP_Monthly_cost_nonres_gar_park__c*lopOffer.PBS_RSAP_Struct_NonResv_Parking__c)
@@ -280,12 +215,16 @@ public with sharing class PBS_LOP_ParkingController {
                 PBS_AAAP_GlobalConstants.updateOfferToDraft(lopOffer);
                 draftMsgFlag = 'true';
             }
-            //updateAreaType(lopOffer);
+            
             //SFWS-847
             lopOffer.PBS_AAAP_OP_COST_COST_PER_ABOA__c = (lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c > 0) ? (lopOffer.PBS_AAAP_SRVC_UTIL_TOTAL_GOV__c / lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c) : 0;
             lopOffer.PBS_AAAP_OP_COST_COST_PER_RSF__c = (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c > 0) ? (lopOffer.PBS_AAAP_SRVC_UTIL_TOTAL_GOV__c / lopOffer.PBS_AAAP_Office_RSF_OFFERED__c) : 0;
             //SFWS-847
+         
+            if(isEditable == 'true')
+            {
             update lopOffer;
+            }
             String offerId = lopOffer.Id;
             lopOffer = null; // clears ViewState for visual force page
 
@@ -300,17 +239,17 @@ public with sharing class PBS_LOP_ParkingController {
                 isEditable = 'false';
             }
             // j.rogers 12/22/2022 SFWS-2107
-                // p.setRedirect(true);
-            // 
+                
             if(pageURL == NULL || pageURL == ''){
             pageURLForRedirection = p.getUrl();
-            pageURLForRedirection = pageURLForRedirection.replace('/RSAP/OperatingCost', Label.LOP_Community_Base_URL+'RSAP-OperatingCost');
+            //pageURLForRedirection = pageURLForRedirection.replace('/RSAP/OperatingCost', Label.LOP_Community_Base_URL+'Offer-S-Costs');
+            pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-S-Costs?edit=true&offerId='+offerId+'&propertyId='+propId;
             p.setRedirect(false);
                 } else {
                  p = new PageReference(pageURL);
                 pageURLForRedirection = Label.LOP_Community_Base_URL+PBS_AAAP_Utility.getCommunityURL(pageURL);
                  p.setRedirect(false);   
-                //return pr;
+                
             }
         
             return null;
@@ -333,13 +272,16 @@ public with sharing class PBS_LOP_ParkingController {
 
     public PageReference actionCancel() {
         PageReference pref = new PageReference('/RSAP/PortalHome');
-        //PageReference pref = Page.PBS_LOP_PortalHome;
+        
         pref.setRedirect(true);
         return pref;
     }
     
-    public void saveData() {        
+    public void saveData() { 
+        if (isEditable == 'true')
+        {
         update lopOffer;
+        }
     }
 
     @TestVisible private void updateAreaType(PBS_AAAP_OFFER__C lopOffer) {
@@ -347,7 +289,7 @@ public with sharing class PBS_LOP_ParkingController {
         String areaType = lopOffer.PBS_AAAP_SITE_AREA_TYPE__c;
         System.debug('*** areaType is ' + areaType);
         Decimal siteSize = lopOffer.PBS_AAAP_SITE_SIZE_SQFT__c;
-        //siteSize.setScale(2, RoundingMode.HALF_UP);
+        
         System.debug('*** siteSize is ' + siteSize);
         if (lopOffer.PBS_AAAP_SITE_SIZE_SQFT__c != null && areaType == 'Acres') {
             siteSize = siteSize * 43560;

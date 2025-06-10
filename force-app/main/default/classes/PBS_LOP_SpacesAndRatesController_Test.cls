@@ -5,7 +5,7 @@ private class PBS_LOP_SpacesAndRatesController_Test {
         
         PBS_AAAP_RLP__c rlp = PBS_AAAP_UtilityTest.createFY17RLP();
         insert rlp;
-        String rsapRecordTypeID = Schema.SObjectType.PBS_AAAP_Offer__c.getRecordTypeInfosByName().get('RSAP').getRecordTypeId();
+		String rsapRecordTypeID = Schema.SObjectType.PBS_AAAP_Offer__c.getRecordTypeInfosByName().get('RSAP').getRecordTypeId();
         
         PBS_AAAP_Offer__c testOffer0 = new PBS_AAAP_Offer__c(
             RecordTypeId = rsapRecordTypeID,
@@ -54,7 +54,7 @@ private class PBS_LOP_SpacesAndRatesController_Test {
                 PBS_AAAP_Office_RSF_OFFERED__c = 7,
                 PBS_AAAP_TI_Amorization_in_Years__c = 3,
                 PBS_AAAP_BSAC_Total_Build_out_Costs__c = 6,
-                PBS_RSAP_BSAC_Calc_from_Rate__c = 60,
+            	PBS_RSAP_BSAC_Calc_from_Rate__c = 60,
                 PBS_AAAP_BSAC_Amorti_Interest_Rate__c = 7,
                 PBS_AAAP_BSAC_Amorization_in_Years__c = 2,
                 PBS_AAAP_Anual_BSAC_Rent__c = 7,
@@ -87,6 +87,12 @@ private class PBS_LOP_SpacesAndRatesController_Test {
         System.currentPageReference().getParameters().put('edit', 'false');
         PBS_LOP_SpacesAndRatesController obj = new PBS_LOP_SpacesAndRatesController();
         obj.saveSpaceRates();
+        
+        testOffer0.PBS_RSAP_BSAC_Rate_ABOA_or_Total__c = 'Total BSAC buildout cost itemized on the Security Unit Price List';
+        testOffer0.PBS_AAAP_BSAC_Amorti_Interest_Rate__c = 0.00;
+        update testOffer0;
+        obj.saveSpaceRates();
+                
         obj.updateStepRents();
         
         testOffer0.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED;
@@ -96,7 +102,6 @@ private class PBS_LOP_SpacesAndRatesController_Test {
         update testOffer0;
         obj = new PBS_LOP_SpacesAndRatesController(); 
         obj.freeRentIndexNumber = '1' ;
-        //obj.integerBuildingIndexNumber='1';
         obj.deleteTheRow();
         PBS_RSAP_Renewal_Options__c renewalRecord = new PBS_RSAP_Renewal_Options__c();
         renewalRecord.PBS_AAAP_Offer__c=testOffer0.Id;
@@ -128,26 +133,38 @@ private class PBS_LOP_SpacesAndRatesController_Test {
         obj.lopOffer.PBS_RSAP_TIA_Or_Turnkey__c = 'Turnkey';
         obj.saveSpaceRates();
         
+        obj.lopOffer.PBS_AAAP_TI_Amorization_in_Years__c = 0;
+        obj.saveSpaceRates();
+        
+        obj.lopOffer.PBS_AAAP_TI_Amorti_Interest_Rate__c = 10.00;
+        obj.saveSpaceRates();
+        
+        obj.lopOffer.PBS_RSAP_BSAC_Rate_ABOA_or_Total__c = 'Rate per ABOA SF specified in RLP';
+        obj.lopOffer.PBS_AAAP_BSAC_Amorti_Interest_Rate__c = 0.00;
+        obj.saveSpaceRates();
+        
         obj.lopOffer.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED;
         obj.actionSaveSpaceRatesAndContinue();
         
         // creating exception
         obj.lopOffer = null;
         obj.saveSpaceRates();
-        obj.actionSaveSpaceRatesAndContinue();
-        
-        
-        
+ 
+        obj.addRow();
+        obj.addRow();
+        obj.deleteTheRow();
+        obj.addRow();
+
         List<PBS_AAAP_Offer__c> offers = [Select Id From PBS_AAAP_Offer__c];
         System.assertEquals(1, offers.size());
     }
 
-    static testMethod void validate_SpacesAndRatesEdit() {  
-                
+    static testMethod void validate_SpacesAndRatesEdit() {      
+        
         PBS_AAAP_RLP__c rlp = PBS_AAAP_UtilityTest.createFY17RLP();
         insert rlp;
         
-        PBS_AAAP_Offer__c testOffer0 = new PBS_AAAP_Offer__c(  
+        PBS_AAAP_Offer__c testOffer0 = new PBS_AAAP_Offer__c(
                 PBS_AAAP_Building_Name__c = 'Unit Test Bldg',
                 PBS_AAAP_OFFICE_SF_OFFERED_MIN__c = null,
                 PBS_AAAP_OFFICE_SF_OFFERED_MAX__c = null,
@@ -202,19 +219,19 @@ private class PBS_LOP_SpacesAndRatesController_Test {
                 PBS_AAAP_Is_Shell_Rent_Stepped__c = 'No',
                 PBS_AAAP_SITE_AREA_TYPE__c = 'Acres',
                 PBS_AAAP_SITE_SIZE_SQFT__c = 3,
-                PBS_RSAP_TIA_Or_Turnkey__c = 'Turnkey',
-                PBS_AAAP_TI_Amorti_Interest_Rate__c = 0.00,
-                PBS_AAAP_TI_Amorization_in_Years__c = 60,
-                PBS_RSAP_BSAC_Rate_ABOA_or_Total__c = 'Total BSAC buildout cost itemized on the Security Unit Price List',
-                PBS_AAAP_BSAC_Amorti_Interest_Rate__c = 0.00,
-                PBS_AAAP_BSAC_Amorization_in_Years__c = 60,
-                PBS_AAAP_Monthly_cost_nonres_gar_park__c = 1,
-                PBS_RSAP_Surf_Resv_Parking__c = 1,
-                PBS_AAAP_Monthly_cost_res_sur_park__c = 1,
-                PBS_RSAP_Struct_NonResv_Parking__c = 1,
+            	PBS_RSAP_TIA_Or_Turnkey__c = 'Turnkey',
+            	PBS_AAAP_TI_Amorti_Interest_Rate__c = 0.00,
+            	PBS_AAAP_TI_Amorization_in_Years__c = 60,
+            	PBS_RSAP_BSAC_Rate_ABOA_or_Total__c = 'Total BSAC buildout cost itemized on the Security Unit Price List',
+            	PBS_AAAP_BSAC_Amorti_Interest_Rate__c = 0.00,
+            	PBS_AAAP_BSAC_Amorization_in_Years__c = 60,
+            	PBS_AAAP_Monthly_cost_nonres_gar_park__c = 1,
+            	PBS_RSAP_Surf_Resv_Parking__c = 1,
+            	PBS_AAAP_Monthly_cost_res_sur_park__c = 1,
+            	PBS_RSAP_Struct_NonResv_Parking__c = 1,
                 PBS_AAAP_Monthly_cost_nonres_sur_park__c = 1,
                 PBS_RSAP_Surf_NonResv_Parking__c = 1,
-                PBS_AAAP_Monthly_cost_res_gar_park__c = 1
+            	PBS_AAAP_Monthly_cost_res_gar_park__c = 1
         );
         insert testOffer0;      
         System.currentPageReference().getParameters().put('offerId', testOffer0.Id);
@@ -242,10 +259,7 @@ private class PBS_LOP_SpacesAndRatesController_Test {
         obj.setRentalConcession('Yes');
         obj.rentalConcessionsRerender();
         obj.freeRentIndexNumber = '1';
-        //obj.addRow();
-        //Rental Concessions to here
         obj.deleteTheRow();
-        //obj.addRenewalRow();
         obj.resetRenewalOrder();
         obj.deleteTheRenewalRow();
         obj.getMinimum(1,2,3);
@@ -253,34 +267,14 @@ private class PBS_LOP_SpacesAndRatesController_Test {
         List<PBS_AAAP_Offer__c> offers = [Select Id From PBS_AAAP_Offer__c];
         System.assertEquals(1, offers.size());
     }  
-    
-    
-    static testMethod void validate_SpacesAndRatesEdit1() {  
-        Id profileId = [SELECT Name FROM Profile WHERE Profile.UserLicense.Name = 'Salesforce' limit 1].Id; 
-            
-        User user1 = new User();
-        user1.Username='wsdv33dvn@email.com';
-        user1.Alias='WS33';
-        user1.CommunityNickname='DS33';
-        user1.TimeZoneSidKey='GMT';
-        user1.LocaleSidKey='en_US';
-        user1.EmailEncodingKey = 'ISO-8859-1';
-        user1.ProfileId = profileId;
-        user1.LastName='Smith';
-        user1.FirstName='wsdv33dvn';
-        user1.Email='wsdv33dvn@email.com';
-        user1.LanguageLocaleKey = 'en_US';
-        user1.FederationIdentifier = '482a7bc9-82d0-472e-8334-9d40d8cgabcd';
-        user1.Major_Org__c = null;
-        user1.isActive=true;
-        
-        insert user1;
-                
+    static testMethod void validate_SpacesAndRates2() {      
         PBS_AAAP_RLP__c rlp = PBS_AAAP_UtilityTest.createFY17RLP();
+        rlp.PBS_RSAP_Solicitation_Status__c = true;
         insert rlp;
+		String rsapRecordTypeID = Schema.SObjectType.PBS_AAAP_Offer__c.getRecordTypeInfosByName().get('RSAP').getRecordTypeId();
         
         PBS_AAAP_Offer__c testOffer0 = new PBS_AAAP_Offer__c(
-                OwnerId = user1.Id,
+            RecordTypeId = rsapRecordTypeID,
                 PBS_AAAP_Building_Name__c = 'Unit Test Bldg',
                 PBS_AAAP_OFFICE_SF_OFFERED_MIN__c = null,
                 PBS_AAAP_OFFICE_SF_OFFERED_MAX__c = null,
@@ -323,9 +317,12 @@ private class PBS_LOP_SpacesAndRatesController_Test {
                 PBS_AAAP_Offer_Status__c = 'Draft',
                 PBS_AAAP_RLP_Number__c = rlp.id,
                 PBS_AAAP_Annual_TI_Rent__c = 9,
-                PBS_AAAP_Office_RSF_OFFERED__c = 1,
+                PBS_AAAP_Office_RSF_OFFERED__c = 7,
+                PBS_AAAP_TI_Amorization_in_Years__c = 3,
                 PBS_AAAP_BSAC_Total_Build_out_Costs__c = 6,
-                PBS_RSAP_BSAC_Calc_from_Rate__c = 60,
+            	PBS_RSAP_BSAC_Calc_from_Rate__c = 60,
+                PBS_AAAP_BSAC_Amorti_Interest_Rate__c = 7,
+                PBS_AAAP_BSAC_Amorization_in_Years__c = 2,
                 PBS_AAAP_Anual_BSAC_Rent__c = 7,
                 PBS_AAAP_Total_Ofc_ABOA_offered__c = 6,
                 PBS_AAAP_Step_1_Rent_Per_RSF__c = 1,
@@ -335,34 +332,34 @@ private class PBS_LOP_SpacesAndRatesController_Test {
                 PBS_AAAP_Is_Shell_Rent_Stepped__c = 'No',
                 PBS_AAAP_SITE_AREA_TYPE__c = 'Acres',
                 PBS_AAAP_SITE_SIZE_SQFT__c = 3,
-                PBS_RSAP_TIA_Or_Turnkey__c = 'Turnkey',
-                PBS_AAAP_TI_Amorti_Interest_Rate__c = 0.00,
-                PBS_AAAP_TI_Amorization_in_Years__c = 60,
-                PBS_RSAP_BSAC_Rate_ABOA_or_Total__c = 'Total BSAC buildout cost itemized on the Security Unit Price List',
-                PBS_AAAP_BSAC_Amorti_Interest_Rate__c = 0.00,
-                PBS_AAAP_BSAC_Amorization_in_Years__c = 60,
-                PBS_AAAP_Monthly_cost_nonres_gar_park__c = 1,
-                PBS_RSAP_Surf_Resv_Parking__c = 1,
+                PBS_AAAP_Shell_Rent_Per_RSF__c  = 1,
+                PBS_AAAP_Shell_Rate_Years_Effective__c  = 3,
+                PBS_AAAP_RLP_Parking_Cost_Incl__c = 'yes',
+                PBS_AAAP_Monthly_cost_res_gar_park__c = 1,
+                PBS_RSAP_Struct_Resv_Parking__c = 1,
                 PBS_AAAP_Monthly_cost_res_sur_park__c = 1,
+                PBS_RSAP_Surf_Resv_Parking__c = 1,
+                PBS_AAAP_Monthly_cost_nonres_gar_park__c = 1,
                 PBS_RSAP_Struct_NonResv_Parking__c = 1,
                 PBS_AAAP_Monthly_cost_nonres_sur_park__c = 1,
                 PBS_RSAP_Surf_NonResv_Parking__c = 1,
-                PBS_AAAP_Monthly_cost_res_gar_park__c = 1
+                PBS_RSAP_Total_Parking_Annual_Amount__c = 1,
+                PBS_RSAP_Shell_Initial_Annual__c = 1,
+                PBS_AAAP_SRVC_UTIL_TOTAL_GOV__c = 1,
+                PBS_RSAP_Lease_Annual_Rent__c = 1
         );
-        insert testOffer0;      
-        System.currentPageReference().getParameters().put('offerId', testOffer0.Id);
-        System.currentPageReference().getParameters().put('edit', 'true');
-        PBS_LOP_SpacesAndRatesController obj = new PBS_LOP_SpacesAndRatesController();
-        obj.offerId = testOffer0.Id;
-        obj.saveSpaceRates();
-        obj.updateStepRents();
+        insert testOffer0;   
         
-        testOffer0.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED;
-        testOffer0.PBS_AAAP_Renewal_Shell_Rate__c = 0;
-        testOffer0.PBS_AAAP_Is_Shell_Rent_Stepped__c = 'Yes'; 
-        update testOffer0;
-        System.assert(testOffer0.PBS_AAAP_Renewal_Shell_Rate__c == 0);
-        obj = new PBS_LOP_SpacesAndRatesController(); 
-    }  
+        PBS_RSAP_Renewal_Options__c renewalRecord = new PBS_RSAP_Renewal_Options__c();
+        renewalRecord.PBS_AAAP_Offer__c=testOffer0.Id;
+        insert renewalRecord;
+        System.currentPageReference().getParameters().put('offerId', testOffer0.Id);
+        System.currentPageReference().getParameters().put('edit', 'false');
+        PBS_LOP_SpacesAndRatesController obj2 = new PBS_LOP_SpacesAndRatesController();
+        obj2.stepFreeRentRecords[0].PBS_RSAP_Step_Rent_Type__c = 'Shell';
+        obj2.stepFreeRentRecords[0].PBS_RSAP_Step_Annual_Rent__c = 1; 
+        obj2.saveSpaceRates();
+        System.assertEquals(true, obj2.isValidUser);
+    }
     
 }

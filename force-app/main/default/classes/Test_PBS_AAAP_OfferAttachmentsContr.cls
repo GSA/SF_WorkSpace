@@ -27,17 +27,13 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             insert offeratt3;
             Blob b = Blob.valueOf('Test Data');
             Attachment attachment2 = new Attachment();
-            //attachment.ParentId = parentId;
             attachment2.Name = 'Test Attachment for Parent2';
             attachment2.Body = b;
             attachment2.ParentId = offeratt2.Id;
             Attachment attachment = new Attachment();
-            //attachment.ParentId = parentId;
             attachment.Name = 'Test Attachment for Parent';
             attachment.Body = b;
             attachment.ParentId = offeratt.Id;
-
-
             ApexPages.currentPage().getParameters().put('offerId', offer.id);
             PBS_AAAP_OfferAttachmentsController opc;
             PageReference pref = null;
@@ -71,7 +67,6 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             opc.DownloadAllFiles();
             PBS_AAAP_OfferAttachmentsController.ContentDocumentWrapper cdw = new PBS_AAAP_OfferAttachmentsController.ContentDocumentWrapper('Hi','Hi',Date.today(),'Hi');
             PBS_AAAP_OfferAttachmentsController.sequenceNumber sqn = new PBS_AAAP_OfferAttachmentsController.sequenceNumber(1,offeratt,cdw);
-            //PBS_AAAP_OfferAttachmentsController.sequenceNumber3 sqn3 = new PBS_AAAP_OfferAttachmentsController.sequenceNumber3(offeratt,cdw);
             PBS_AAAP_OfferAttachmentsController.FORMWrapper fw = new PBS_AAAP_OfferAttachmentsController.FORMWrapper(offeratt,'Hi');
             Test.stopTest();
         }
@@ -101,14 +96,11 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             Blob b = Blob.valueOf('Test Data');
             Blob attBody = Blob.valueOf('Test Data');
             Attachment attachment2 = new Attachment();
-            //attachment.ParentId = parentId;
             attachment2.Name = 'Test Attachment for Parent2';
             attachment2.Body = b;
             attachment2.ParentId = offeratt2.Id;
 
-
             Attachment attachment = new Attachment();
-            //attachment.ParentId = parentId;
             attachment.Name = 'Test Attachment for Parent';
             attachment.Body = b;
             attachment.ParentId = offeratt.Id;
@@ -124,10 +116,7 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             opc.redirectToHome();
             opc.actionBackToRatesAndSpaces();
             pref = opc.actionCancel();
-            //System.assert(pref != null);
             Test.stopTest();
-
-
         }
     }
     static testMethod void myOfferAttachmentsConstructorTest2() {
@@ -154,13 +143,11 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             Blob b = Blob.valueOf('Test Data');
             Blob attBody = Blob.valueOf('Test Data');
             Attachment attachment2 = new Attachment();
-            //attachment.ParentId = parentId;
             attachment2.Name = 'Test Attachment for Parent2';
             attachment2.Body = b;
             attachment2.ParentId = offeratt2.Id;
 
             Attachment attachment = new Attachment();
-            //attachment.ParentId = parentId;
             attachment.Name = 'Test Attachment for Parent';
             attachment.Body = b;
             attachment.ParentId = offeratt.Id;
@@ -177,9 +164,7 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             opc.redirectToHome();
             opc.actionBackToRatesAndSpaces();
             pref = opc.actionCancel();
-            //System.assert(pref != null);
             Test.stopTest();
-
         }
     }
 
@@ -212,15 +197,12 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             PBS_AAAP_Offer_Attachments__c offeratt3 = new PBS_AAAP_Offer_Attachments__c(PBS_AAAP_Attachment_Type__c = 'Other', PBS_AAAP_Offer__c = offer.id);
             insert offeratt3;
             Blob b = Blob.valueOf('Test Data');
-            //Blob attBody = Blob.valueOf('Test Data');
             Attachment attachment2 = new Attachment();
-            //attachment.ParentId = parentId;
             attachment2.Name = 'Test Attachment for Parent2';
             attachment2.Body = b;
             attachment2.ParentId = offeratt.Id;
 
             Attachment attachment = new Attachment();
-            //attachment.ParentId = parentId;
             attachment.Name = 'Test Attachment for Parent';
             attachment.Body = b;
             attachment.ParentId = offeratt.Id;
@@ -236,54 +218,23 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             PBS_AAAP_Offer_Attachments__c ofratt = new PBS_AAAP_Offer_Attachments__c(PBS_AAAP_Offer__c = offer.id);
             opc.offerattachment = offeratt;
             Blob b1 = Blob.valueOf('Test Data');
-            //Blob attBody1 = Blob.valueOf('Test Data');
             Attachment att = new Attachment();
-            //attachment.ParentId = parentId;
             att.Name = 'Test Attachment for Parent';
-            //att.Body = b1;
             opc.offerattachment = ofratt;
             opc.attBody = b1;
             opc.attName = 'Test Attachment for Parent';
-            //opc.att = att;
-            //opc.ofrID = offer.id;
             opc.upload();
 
             ofratt.PBS_AAAP_Attachment_Type__c = 'Floor Plan';
             opc.offerattachment = ofratt;
-            //opc.att = att;
-            //opc.ofrID = offer.id;
             opc.attBody = b1;
             opc.attName = 'Test Attachment for Parent1';
-            opc.upload();
-            
+            opc.upload();            
             
             att.Body = b1;
-            //opc.att = att;
-            //opc.upload();
-            
-   
-            
-            /* att = new Attachment();
-
-             att.Name = 'Test Attachment for Parent';
-             //att.Body = b1;
-             opc.offerattachment = ofratt;
-             opc.att = att;
-
-             opc.upload();*/
-            
-            
-           
-            
-            
-   
-            
-            
-            
             opc.actionSubmitOffer();
 
             pref = opc.actionDeleteOffer();
-            //System.assertNotEquals(pref, null);
             opc.redirectToHome();
             opc.actionBackToRatesAndSpaces();
             Test.stopTest();
@@ -337,10 +288,7 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             opc.submitOffer = offer;
 
             opc.actionSubmitOffer();
-            //added by syam on 09/08/2016
             opc.actionSavePage();
-             
-            // added on 03-Jan-2019
             opc.pageUrl = '1====';
             opc.actionSavePage();
 
@@ -370,7 +318,6 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             
             PageReference currentPage = new PageReference('/apex/PBS_AAAP_OfferAttachments?offerId='+offer.id);
             Test.setCurrentPage(currentPage);
-            //ApexPages.currentPage().getParameters().put('offerId', offer.id);
             PBS_AAAP_OfferAttachmentsController opc = new PBS_AAAP_OfferAttachmentsController();
             opc.termsandconditons = 'Yes';
             opc.submitOffer = offer;
@@ -416,95 +363,6 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             opc.actionSubmitOffer();
             offer.PBS_AAAP_Option_Parking__c = 'Yes';
             update offer;
-            /* ApexPages.currentPage().getParameters().put('offerId', offer.id);
-            opc = new PBS_AAAP_OfferAttachmentsController();
-            opc.termsandconditons = 'Yes';
-            opc.submitOffer = offer;
-
-            pref = opc.actionSubmitOffer();
-            System.assertEquals(pref, null);
-
-            offer.PBS_AAAP_Owner_Name__c = 'Test User';
-            offer.PBS_AAAP_Owner_Address__c ='1660 International Drive';
-            offer.PBS_AAAP_Owner_Country__c ='USA';
-            offer.PBS_AAAP_Owner_City__c ='McLean';
-            offer.PBS_AAAP_Owner_State__c = null;
-            offer.PBS_AAAP_Owner_Zip__c = null;
-            offer.PBS_AAAP_Owner_Main_Phone__c = '232-232-2332';
-            offer.PBS_AAAP_OFFEROR_INTEREST__c = 'Agent';
-            offer.PBS_AAAP_TYPE_OF_ORG__c ='Sole Proprietorship';
-            offer.PBS_AAAP_PROPERTY_OWNER_TYPE__c ='Fee Simple';
-            offer.PBS_AAAP_CONTROLLED_BY_PARENT__c ='Yes';
-            offer.PBS_AAAP_PARENT_NAME__c =null;
-            offer.PBS_AAAP_Common_Parent_TIN__c =null;
-            offer.PBS_AAAP_DUNS_Number__c ='999999999';
-            offer.PBS_AAAP_Owner_TIN_Status__c = 'Known';
-            offer.PBS_AAAP_Owner_TIN_Assigned__c = null;
-            update offer;
-            ApexPages.currentPage().getParameters().put('offerId', offer.id);
-            opc = new PBS_AAAP_OfferAttachmentsController();
-            opc.termsandconditons = 'Yes';
-            opc.submitOffer = offer;
-
-            pref = opc.actionSubmitOffer();
-            System.assertEquals(pref, null);
-
-            offer.PBS_AAAP_Owner_Name__c = 'Test User';
-            offer.PBS_AAAP_Owner_Address__c ='1660 International Drive';
-            offer.PBS_AAAP_Owner_Country__c ='USA';
-            offer.PBS_AAAP_Owner_City__c ='McLean';
-            offer.PBS_AAAP_Owner_State__c ='VA';
-            offer.PBS_AAAP_Owner_Zip__c = '22102';
-            offer.PBS_AAAP_Owner_Main_Phone__c = '232-232-2332';
-            offer.PBS_AAAP_OFFEROR_INTEREST__c = 'Agent';
-            offer.PBS_AAAP_TYPE_OF_ORG__c ='Sole Proprietorship';
-            offer.PBS_AAAP_PROPERTY_OWNER_TYPE__c ='Fee Simple';
-            offer.PBS_AAAP_CONTROLLED_BY_PARENT__c ='Yes';
-            offer.PBS_AAAP_PARENT_NAME__c ='Test';
-            offer.PBS_AAAP_Common_Parent_TIN__c ='999999999';
-            offer.PBS_AAAP_DUNS_Number__c ='999999999';
-            offer.PBS_AAAP_Owner_TIN_Status__c = 'Known';
-            offer.PBS_AAAP_Owner_TIN_Assigned__c = '999999999';
-            update offer;
-            ApexPages.currentPage().getParameters().put('offerId', offer.id);
-            opc = new PBS_AAAP_OfferAttachmentsController();
-            opc.termsandconditons = 'Yes';
-            opc.submitOffer = offer;
-
-            pref = opc.actionSubmitOffer();
-            System.assertEquals(pref, null);
-
-            offer.PBS_AAAP_Owner_TIN_Status__c = 'Applied for';
-            offer.PBS_AAAP_Owner_TIN_Assigned__c = null;
-            update offer;
-            ApexPages.currentPage().getParameters().put('offerId', offer.id);
-            opc = new PBS_AAAP_OfferAttachmentsController();
-            opc.termsandconditons = 'Yes';
-            opc.submitOffer = offer;
-
-            pref = opc.actionSubmitOffer();
-            System.assertEquals(pref, null);
-
-
-            offer.PBS_AAAP_Representation__c ='Yes';
-            offer.PBS_AAAP_Women_Owned_Identifier__c ='Yes';
-            offer.PBS_AAAP_EEO_CLAUSE__c ='Yes';
-            offer.PBS_AAAP_AFFIRMATIVE_ACTION_PROGRAMS__c ='Yes';
-            offer.PBS_AAAP_CERTIFICATE_OF_SIGNATORY__c ='Yes';
-            offer.PBS_AAAP_Confirm_Owner_Status__c ='Yes';
-            offer.PBS_AAAP_OWNER_CONVICTION__c ='Yes';
-            offer.PBS_AAAP_OWNER_INDICTMENT__c ='Yes';
-            offer.PBS_AAAP_OWNER_CONTRACT_DEFAULT__c ='Yes';
-            offer.PBS_AAAP_CCR_REGISTRATION_ACTIVE_STATUS__c ='Yes';
-            update offer;
-            ApexPages.currentPage().getParameters().put('offerId', offer.id);
-            opc = new PBS_AAAP_OfferAttachmentsController();
-            opc.termsandconditons = 'Yes';
-            opc.submitOffer = offer;
-
-            pref = opc.actionSubmitOffer();
-            System.assertEquals(pref, null); */
-            
             test.startTest();
             PBS_AAAP_Offer_Attachments__c offeratt = new PBS_AAAP_Offer_Attachments__c(PBS_AAAP_Attachment_Type__c = 'Floor Plan', PBS_AAAP_Offer__c = offer.id);
             insert offeratt;
@@ -535,8 +393,6 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             opc.submitOffer = offer;
             opc.showMultiOwners();
             opc.actionSubmitOffer();
-            //System.assertNotEquals(pref, null);
-
             offer.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT;
             offer.PBS_AAAP_RLP_Number__c = rlp.Id;
             offer.PBS_AAAP_SIGNATURE_PIN__c = '121212';
@@ -557,16 +413,11 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             opc.submitOffer = offer;
             opc.actionSubmitOffer();
 
-            /*Vaishali RLP FY15 90% coverage
-            Make sure we catch pin not matching exception
-            */
+            //Vaishali RLP FY15 90% coverage
             System.debug('***** message component: ' + ApexPages.getMessages().get(ApexPages.getMessages().size() - 1).getComponentLabel());
             System.debug('***** message detail: ' + ApexPages.getMessages().get(ApexPages.getMessages().size() - 1).getDetail());
             System.debug('***** message summary: ' + ApexPages.getMessages().get(ApexPages.getMessages().size() - 1).getSummary());
             System.debug('***** message: ' + ApexPages.getMessages().get(ApexPages.getMessages().size() - 1));
-            // System.assert(ApexPages.getMessages().get(ApexPages.getMessages().size() - 1).getSummary().equalsIgnoreCase('Signature - PIN value is incorrect.'));
-
-            //  System.assertEquals(pref, null);
             //Vaishali RLP FY15 Multi Owner Check
             offer.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT;
             offer.PBS_AAAP_RLP_Number__c = rlp.Id;
@@ -592,8 +443,6 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             System.debug('***** message detail: ' + ApexPages.getMessages().get(ApexPages.getMessages().size() - 1).getDetail());
             System.debug('***** message summary: ' + ApexPages.getMessages().get(ApexPages.getMessages().size() - 1).getSummary());
             System.debug('***** message: ' + ApexPages.getMessages().get(ApexPages.getMessages().size() - 1));
-            //System.assert(ApexPages.getMessages().get(ApexPages.getMessages().size() - 1).getSummary().equalsIgnoreCase('Cannot submit the offer if you are not authorized by the owner to represent other owners.'));
-            //System.assertEquals(pref, null);
 
             PBS_AAAP_Offer__c offerParent = PBS_AAAP_UtilityTest.createOfferInfo();
             offerParent.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED;
@@ -615,7 +464,7 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             System.debug('***** message summary: ' + ApexPages.getMessages().get(ApexPages.getMessages().size() - 1).getSummary());
             System.debug('***** HELLO VAISHALI: ' + ApexPages.getMessages().get(ApexPages.getMessages().size() - 1));
 
-//Vaishali Offer delete attachment check            
+			//Vaishali Offer delete attachment check            
             PBS_AAAP_Offer_Attachments__c offeratt1 = new PBS_AAAP_Offer_Attachments__c(PBS_AAAP_Attachment_Type__c = 'Floor Plan', PBS_AAAP_Offer__c = offer.id);
             insert offeratt1;
             ApexPages.currentPage().getParameters().put('offerId', offer.id);
@@ -729,7 +578,6 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             
             PageReference currentPage = new PageReference('/apex/PBS_AAAP_OfferAttachments?offerId='+offer.id);
             Test.setCurrentPage(currentPage);
-            //ApexPages.currentPage().getParameters().put('offerId', offer.id);
             PBS_AAAP_OfferAttachmentsController opc = new PBS_AAAP_OfferAttachmentsController();
             
             opc.termsandconditons = 'Yes';
@@ -749,19 +597,8 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             PageReference pref = null;
             pref = opc.actionCheckErrors();
             opc.actionSubmitOffer();
-            System.assertEquals(pref, null);
-            /*Vaishali
-        PBS_AAAP_RLP__c rlp1 = new PBS_AAAP_RLP__c(  PBS_AAAP_Category__c = 'Office', PBS_AAAP_DEFAULT_MONTH_END__c = '30',
-                                                    PBS_AAAP_DEFAULT_MONTH_BEGIN__c = '1', PBS_AAAP_DISCOUNT_RATE__c = 12.00, 
-                                                    PBS_AAAP_ESCALATION_RATE_PERCENT__c = 12.00, PBS_AAAP_MOVE_DEFAULT__c = 2.00,
-                                                    PBS_AAAP_TELCOMM_DEFAULT__c = 2.00, PBS_AAAP_MAX_TIUSED__c = 52.00,
-                                                    PBS_AAAP_PV_OTHER_UPFRONT_COSTS__c = 2.00, PBS_AAAP_Year__c = '2013',
-                                                    PBS_AAAP_Region__c = 'National Capital Region', PBS_AAAP_STATUS__c = 'Posted/Active',
-                                                    PBS_AAAP_TIUSED_FOR_FIRM_TERM_NEW__c = 20.00, PBS_AAAP_TIUSED_FOR_FIRM_TERM_SUCC__c = 4.00,
-                                                    PBS_AAAP_Title__c = 'Washington DC', PBS_AAAP_RLP_Number__c = '13-NCR', PBS_AAAP_ALLOW_TIER2_AMMORT__c = true, PBS_AAAP_BSAC_per_ABOA__c=6);
-            insert RLP1;*/
+            System.assertEquals(pref, null);          
             offer.PBS_AAAP_ACK_REPRESENT_MULT_OWNERS__c = 'Yes';
-            //offer.PBS_AAAP_RLP_Number__c = rlp1.Id;
             update offer;
             r0.PBS_AAAP_BSAC_RATE__c = null;
             r0.PBS_AAAP_BSAC__c = null;
@@ -779,18 +616,11 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             System.debug('***** HELLO VAISHALI1: ');
             System.debug('***** HELLO VAISHALI2: ');
             System.assertEquals(pref, null);
-
-            //added by syam
-            /*Datetime d = Datetime.now();
-           r0.LastModifiedDate = d;
-           d = d.addMonths(2);
-           offer.LastModifiedDate = d;*/
             r0.PBS_AAAP_LEASE_TERM__c = '5+5 Years';
             r0.PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c = 0;
             r0.PBS_AAAP_BSAC__c = 5;
             offer.PBS_AAAP_COST_PER_ABOA__c = 0;
             offer.PBS_AAAP_Option_Parking__c = null;
-            // offer.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_AWARDED_SUBMITTED;
             update r0;
             update offer;
             opc.addrFlag = 'true';
@@ -902,7 +732,6 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             
             PageReference currentPage = new PageReference('/apex/PBS_AAAP_OfferAttachments?offerId='+offer.id);
             Test.setCurrentPage(currentPage);
-            //ApexPages.currentPage().getParameters().put('offerId', offer.id);
             PBS_AAAP_OfferAttachmentsController opc = new PBS_AAAP_OfferAttachmentsController();
             
             opc.termsandconditons = 'Yes';
@@ -924,7 +753,6 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             opc.actionSubmitOffer();
             
             offer.PBS_AAAP_ACK_REPRESENT_MULT_OWNERS__c = 'Yes';
-            //offer.PBS_AAAP_RLP_Number__c = rlp1.Id;
             update offer;
             r0.PBS_AAAP_BSAC_RATE__c = null;
             r0.PBS_AAAP_BSAC__c = 0;
@@ -962,8 +790,6 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
     }
 
     static testMethod void myOfferSubmission2() {
-
-        //User u = PBS_AAAP_UtilityTest.createPortalUser();
         string suffix = '';
         integer AliasNum = 1;
         Profile p = [
@@ -996,11 +822,9 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
                 languagelocalekey = 'en_US', localesidkey = 'en_US', profileid = p.id, timezonesidkey = 'America/Los_Angeles', //userroleid=ur.id,
                 username = 'test'+suffix+'@testorgani.com', street = '123 street', city = 'Vienna', state = 'Virginia', country = 'USA', postalcode = '22102', PBS_AAAP_PIN__c = '123456',
                 phone = '202-202-2202', PBS_AAAP_StatesOfInterest__c = 'NCR', PBS_AAAP_Regions__c = 'National Capital Region;');
-        insert u;  //Vaishali added 02/17/2016
+        insert u;
         u.ManagerId = currentUser.Id;
-        system.debug('*** testing PBS_AAAP_UtilityTest New User***' + u.Id); //Vaishali added 02/17/2016
-
-        
+        system.debug('*** testing PBS_AAAP_UtilityTest New User***' + u.Id);       
 
         System.runAs(u) {
 
@@ -1095,7 +919,6 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             
             PageReference currentPage = new PageReference('/apex/PBS_AAAP_OfferAttachments?offerId='+offer.id);
             Test.setCurrentPage(currentPage);
-            //ApexPages.currentPage().getParameters().put('offerId', offer.id);
             PBS_AAAP_OfferAttachmentsController opc = new PBS_AAAP_OfferAttachmentsController();
             
             opc.termsandconditons = 'Yes';
@@ -1117,7 +940,6 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             opc.actionSubmitOffer();
             
             offer.PBS_AAAP_ACK_REPRESENT_MULT_OWNERS__c = 'Yes';
-            //offer.PBS_AAAP_RLP_Number__c = rlp1.Id;
             update offer;
             r0.PBS_AAAP_BSAC_RATE__c = null;
             r0.PBS_AAAP_BSAC__c = 0;
@@ -1163,7 +985,6 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             PBS_AAAP_RLP__c rlp = PBS_AAAP_UtilityTest.createRLP();
             rlp.PBS_AAAP_DEFAULT_MONTH_END__c = '30';
             insert RLP;
-            //PBS_AAAP_Offer__c offer = PBS_AAAP_UtilityTest.createOfferInfo();
             PBS_AAAP_Offer__c offer = new PBS_AAAP_Offer__c();
 
             offer.PBS_AAAP_RLP_Number__c = rlp.Id;
@@ -1179,17 +1000,15 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             offer.PBS_AAAP_Energy_Star_Reason__c = '';
             offer.PBS_AAAP_Close_To_Metro__c = 'Yes';
             offer.PBS_AAAP_MetroRail_Station__c = null;
-            //offer.PBS_AAAP_Owner_Country__c = 'United States';
             offer.PBS_AAAP_CONTROLLED_BY_PARENT__c = null;
             offer.PBS_AAAP_Owner_TIN_Status__c = null;
             offer.PBS_AAAP_Close_To_Metro__c = null;
             offer.PBS_AAAP_HVAC_HRS_MON_TO_FRI_START__c = '9:00 AM';
-        	offer.PBS_AAAP_HVAC_HRS_MON_TO_FRI_END__c = '11:00 PM';
+            offer.PBS_AAAP_HVAC_HRS_MON_TO_FRI_END__c = '11:00 PM';
             insert offer;
             System.debug('******** PBS_AAAP_SUBMITOFFER_ID ::: ' + offer.Id);
             PageReference currentPage = new PageReference('/apex/PBS_AAAP_OfferAttachments?offerId='+offer.id);
             Test.setCurrentPage(currentPage);
-            //ApexPages.currentPage().getParameters().put('offerId', offer.id);
             PBS_AAAP_OfferAttachmentsController opc = new PBS_AAAP_OfferAttachmentsController();
             opc.termsandconditons = 'Yes';
             opc.submitOffer = offer;
@@ -1207,9 +1026,7 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             opc.submitOffer = offer;
             pref = opc.actionCheckErrors();
             System.assertEquals(pref, null);
-            
             opc.DownloadAllFiles_00();
-            //opc.DownloadAllFiles();
         }
     }
  
@@ -1234,8 +1051,7 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
         List<PBS_AAAP_Offer__c> offerRecords = [Select Id From PBS_AAAP_Offer__c];
         System.assert(true);      
         
-    }
-    
+    }    
     
     static testMethod void validate_sequenceNumber2() {
         PBS_AAAP_Offer__c offer = PBS_AAAP_UtilityTest.createOfferInfo();
@@ -1283,10 +1099,7 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             
             System.assertEquals(0, attMap.size());
             }
-            catch(exception ex){}
-        
-        
-        
+            catch(exception ex){}        
     }
     
     static testMethod void validate_sequenceNumber3() {
@@ -1323,23 +1136,15 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             insert attachment2; 
             
             offeratt = [select id,PBS_AAAP_Attachment_Type__c ,CreatedDate,(select id,name from Attachments) from PBS_AAAP_Offer_Attachments__c  where id = :offeratt.Id];          
-            /*    
-            PBS_AAAP_OfferAttachmentsController.sequenceNumber3 obj = new PBS_AAAP_OfferAttachmentsController.sequenceNumber3(offeratt,new List<Attachment>{attachment});
-                
-            obj = new PBS_AAAP_OfferAttachmentsController.sequenceNumber3(1,offeratt); 
-            obj = new PBS_AAAP_OfferAttachmentsController.sequenceNumber3(1,'Floor Plan',new List<Attachment>{attachment});
-            System.assertEquals(obj.i, 1);
-            */
-             PBS_AAAP_OfferAttachmentsController.sequenceNumber3 obj = new PBS_AAAP_OfferAttachmentsController.sequenceNumber3(1,offeratt);
-             obj = new PBS_AAAP_OfferAttachmentsController.sequenceNumber3(1,'Floor Plan',new List<Attachment>{attachment2});
-             PBS_AAAP_OfferAttachmentsController.ContentDocumentWrapper cdw = new PBS_AAAP_OfferAttachmentsController.ContentDocumentWrapper('Hi','Hi',Date.today(),'Hi');
-             obj = new PBS_AAAP_OfferAttachmentsController.sequenceNumber3(offeratt,cdw);
-            //System.assert(true); 
+            PBS_AAAP_OfferAttachmentsController.sequenceNumber3 obj = new PBS_AAAP_OfferAttachmentsController.sequenceNumber3(1,offeratt);
+            obj = new PBS_AAAP_OfferAttachmentsController.sequenceNumber3(1,'Floor Plan',new List<Attachment>{attachment2});
+            PBS_AAAP_OfferAttachmentsController.ContentDocumentWrapper cdw = new PBS_AAAP_OfferAttachmentsController.ContentDocumentWrapper('Hi','Hi',Date.today(),'Hi');
+            obj = new PBS_AAAP_OfferAttachmentsController.sequenceNumber3(offeratt,cdw);
             PBS_AAAP_RLP__c rlp1 = PBS_AAAP_UtilityTest.createRLP();
             insert rlp1;
-        	PBS_AAAP_RLP__c rlp2 = PBS_AAAP_UtilityTest.createFY17RLP();
+            PBS_AAAP_RLP__c rlp2 = PBS_AAAP_UtilityTest.createFY17RLP();
             insert rlp2;
-        	PBS_AAAP_RLP__c rlp3 = PBS_AAAP_UtilityTest.createFY19RLP();
+            PBS_AAAP_RLP__c rlp3 = PBS_AAAP_UtilityTest.createFY19RLP();
             insert rlp3;
             
             PBS_AAAP_Offer__c offer1 = PBS_AAAP_UtilityTest.createOfferInfo1();
@@ -1411,7 +1216,7 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             insert offer2;
             obj1.ofrID = offer1.Id;
             obj1.uploadAttachment();
-        	
+            
         ContentVersion contentVersion = new ContentVersion(
         Title          = 'a picture',
         PathOnClient   = 'Pic.jpg',
@@ -1433,14 +1238,13 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
          PBS_AAAP_OfferAttachmentsController.ContentDocumentWrapper cd = new PBS_AAAP_OfferAttachmentsController.ContentDocumentWrapper(cdl.id,'Test',datetime.now(),'test');
          
         
-        	obj1.existingAttachmentRecords.add(new PBS_AAAP_OfferAttachmentsController.sequenceNumber(1, offeratt1, cd));
-             //obj1.existingAttachmentRecords.add(new PBS_AAAP_OfferAttachmentsController.sequenceNumber(2, offerattachment1, cd));
-             obj1.getPreviousSubmissionAttachmentsMap();
+            obj1.existingAttachmentRecords.add(new PBS_AAAP_OfferAttachmentsController.sequenceNumber(1, offeratt1, cd));
+            obj1.getPreviousSubmissionAttachmentsMap();
         
             System.assert(true); 
     }
 
-//SGanti added 08/2021
+	//SGanti added 08/2021
 
     static testMethod void OfferAttachmentsConstructorTest_1364_2022() {
 
@@ -1464,12 +1268,10 @@ private class Test_PBS_AAAP_OfferAttachmentsContr {
             insert offeratt2;
             Blob b = Blob.valueOf('Test Data');
             Attachment attachment2 = new Attachment();
-            //attachment.ParentId = parentId;
             attachment2.Name = 'Test Attachment for Parent2';
             attachment2.Body = b;
             attachment2.ParentId = offeratt2.Id;
             Attachment attachment = new Attachment();
-            //attachment.ParentId = parentId;
             attachment.Name = 'Test Attachment for Parent';
             attachment.Body = b;
             attachment.ParentId = offeratt.Id;

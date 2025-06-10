@@ -2,25 +2,16 @@
 private class Test_PBS_AAAP_PDFs {
 
     static testMethod void testNullOfferId() {
-
         ApexPages.currentPage().getParameters().put('offerId', null);
         PBS_AAAP_NewOfferForm1364Controller nofc = new PBS_AAAP_NewOfferForm1364Controller();
-        System.assertEquals(false, nofc.isValidOfferId);
-        
+        System.assertEquals(false, nofc.isValidOfferId);        
      }   
-
-
     static testMethod void testInvalidOfferId() {
-
         ApexPages.currentPage().getParameters().put('offerId', 'a03350000050rCcZZ9');
         PBS_AAAP_NewOfferForm1364Controller nofc = new PBS_AAAP_NewOfferForm1364Controller();
         System.assertEquals(false, nofc.isValidOfferId);
-        
-     }  
-     
+     }     
      static testMethod void offerPreviewController() {
-
-        //PBS_AAAP_Offer__c offer = new PBS_AAAP_Offer__c(PBS_AAAP_Building_Name__c = 'XYZ Building');
         PBS_AAAP_RLP__c rlp = PBS_AAAP_UtilityTest.createRLP();
         insert rlp;
         PBS_AAAP_Offer__c offer = PBS_AAAP_UtilityTest.createOfferInfo();
@@ -39,17 +30,12 @@ private class Test_PBS_AAAP_PDFs {
 
         update offer;
         oppc = new PBS_AAAP_OfferPreviewPageController();
-
-
         PBS_AAAP_OfferPreviewPageController pref = new PBS_AAAP_OfferPreviewPageController();
         oppc.offerId = offer.Id;
         ApexPages.currentPage().getParameters().put('offerId', offer.id);
-        ApexPages.currentPage().getParameters().put('formtype', 'offerform1217');
-     
-        
+        ApexPages.currentPage().getParameters().put('formtype', 'offerform1217');        
         pref.redirectToExpectedPage();
         System.assertEquals(true, true);
-
         pref.actionDeleteAttachment();
     }
 
@@ -145,14 +131,11 @@ private class Test_PBS_AAAP_PDFs {
         PBS_AAAP_OfferPreviewPageController pref = new PBS_AAAP_OfferPreviewPageController();
         oppc.offerId = offer.Id;
         ApexPages.currentPage().getParameters().put('offerId', offer.id);
-        ApexPages.currentPage().getParameters().put('formtype', 'OfferForm3518');
-        
+        ApexPages.currentPage().getParameters().put('formtype', 'OfferForm3518');       
                 
         pref.redirectToExpectedPage();
         PBS_AAAP_OfferPreviewPageController.DownloadAllFiles(offer.Id);
-        System.assertEquals(true, true);
-
-        
+        System.assertEquals(true, true);        
     }
 
     static testMethod void offerPreviewController_Census() {
@@ -374,8 +357,7 @@ private class Test_PBS_AAAP_PDFs {
         wrapperObj.formName = 'offerform1217';
         wrapperObj.pgRefObj = null;
         wrapperObj.clicked = false;
-        
-        // adding to list
+
         oppc.lstPageWrapper.add(wrapperObj);
         
         wrapperObj = new PBS_AAAP_OfferPreviewPageController.PageWrapper();
@@ -384,7 +366,6 @@ private class Test_PBS_AAAP_PDFs {
         wrapperObj.pgRefObj = null;
         wrapperObj.clicked = false;
         
-        // adding to list
         oppc.lstPageWrapper.add(wrapperObj);
         
         
@@ -393,43 +374,33 @@ private class Test_PBS_AAAP_PDFs {
         wrapperObj.formName = 'Offerform1364_2019';
         wrapperObj.pgRefObj = null;
         wrapperObj.clicked = false;
-        
-        // adding to list
+
         oppc.lstPageWrapper.add(wrapperObj);
-        
-        
+
         wrapperObj = new PBS_AAAP_OfferPreviewPageController.PageWrapper();
         wrapperObj.linkName = 'OfferForm1364';
         wrapperObj.formName = 'OfferForm1364';
         wrapperObj.pgRefObj = null;
         wrapperObj.clicked = false;
-        
-        // adding to list
         oppc.lstPageWrapper.add(wrapperObj);
-        
-        
+
         wrapperObj = new PBS_AAAP_OfferPreviewPageController.PageWrapper();
         wrapperObj.linkName = 'OfferForm3518';
         wrapperObj.formName = 'OfferForm3518';
         wrapperObj.pgRefObj = null;
         wrapperObj.clicked = false;
-        
-        // adding to list
+
         oppc.lstPageWrapper.add(wrapperObj);
-        
-        
+
         wrapperObj = new PBS_AAAP_OfferPreviewPageController.PageWrapper();
         wrapperObj.linkName = 'OfferForm1364RateStructure';
         wrapperObj.formName = 'OfferForm1364RateStructure';
         wrapperObj.pgRefObj = null;
         wrapperObj.clicked = false;
         
-        // adding to list
         oppc.lstPageWrapper.add(wrapperObj);       
-        // adding to list
         oppc.lstPageWrapper.add(wrapperObj);        
-        
-        
+
         oppc.formName = 'offerform1217';
         oppc.redirectToExpectedPage();
         
@@ -447,7 +418,6 @@ private class Test_PBS_AAAP_PDFs {
         
         System.assertEquals(true, true);
 
-        
     }
 
     static testMethod void offerForm1217() {
@@ -556,10 +526,6 @@ private class Test_PBS_AAAP_PDFs {
         form1217.isValidUserAction();
         form1217.strImageBlob = 'abd';
         form1217.captureImage();
-        
-        //form1217.strImagename = 'test';
-        //form1217.strImageBlob = 'abd';
-        //form1217.captureImage();
     }
 
     static testMethod void offerForm1217Attachment() {
@@ -687,8 +653,7 @@ private class Test_PBS_AAAP_PDFs {
         form1217 = new PBS_AAAP_OfferForm1217();
         form1217.isValidUser();
         System.assert(offer.Id != null);
-        
-        
+
         form1217.rlp = null; 
         form1217.otherCostList = null;
         form1217.officeSpacePercent = null;
@@ -744,7 +709,6 @@ private class Test_PBS_AAAP_PDFs {
         insert space;
 
         PBS_AAAP_Rate__c rate = PBS_AAAP_UtilityTest.createRate();
-        //rate.PBS_AAAP_OT_RATE_COOLING_HEAT__c = 0;
         rate.PBS_AAAP_SPACE__c = space.Id;
         rate.PBS_AAAP_OFFER_NUMBER__c = offer.Id;
         insert rate;
@@ -766,10 +730,6 @@ private class Test_PBS_AAAP_PDFs {
         form1364 = new PBS_AAAP_OfferForm1364RateStructure();
         System.assert(space.Id != null);
         System.assert(rate.Id != null);
-        //System.assert(rate.PBS_AAAP_BSAC_RATE__c != null);
-        //System.assert(rate.PBS_AAAP_BSAC__c != null);
-        //
-        
         form1364.strImagename = 'test';
         form1364.strImageBlob = 'abd';
         form1364.captureImage();
@@ -825,7 +785,6 @@ private class Test_PBS_AAAP_PDFs {
         offer.PBS_AAAP_HUBZone_SBC_Offeror__c = true;
         offer.PBS_AAAP_Energy_Star__c = 'No';
         offer.PBS_AAAP_Energy_Star_Reason__c = ' Testing for 500 character limit for the offeror energy star reason comments, Testing for 500 character limit for the offeror energy star reason comments,Testing for 500 character limit for the offeror energy star reason comments,Testing for 500 character limit for the offeror energy star reason comments,Testing for 500 character limit for the offeror';
-        //offer.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c = 0.0;
         update offer;
         form1364 = new PBS_AAAP_OfferForm1364Controller();
         System.debug(form1364.legalAgentType);
@@ -844,7 +803,7 @@ private class Test_PBS_AAAP_PDFs {
         offer.PBS_RSAP_SURFACE_PARKING_ANNUAL_COST__c = 40;
         offer.PBS_RSAP_STRUCT_PARKING_ANNUAL_COST__c = 40;
         offer.PBS_RSAP_Historical_Property_Description__c = 'Historic property within a historic district';
-        offer.PBS_RSAP_HubZone_Waiver__c = 'I am a HUBZone SBC Offeror and I elect to waive the price evaluation preference';
+        offer.PBS_RSAP_HubZone_Waiver__c = 'I am a HUBZone small business concern offeror, and I elect to waive the price evaluation preference.';
         offer.PBS_RSAP_Flood_Plain_Declaration__c = 'in a 500-year flood plain';
         offer.PBS_RSAP_Asbestos_Declaration__c = 'Contains ACM not in a stable, solid matrix';
         offer.PBS_RSAP_Offeror_Seismic_Declaration__c = 'Fully meets seismic requirements or meets an exemption under the RLP';
@@ -911,7 +870,6 @@ private class Test_PBS_AAAP_PDFs {
         offer.PBS_AAAP_HUBZone_SBC_Offeror__c = true;
         offer.PBS_AAAP_Energy_Star__c = 'No';
         offer.PBS_AAAP_Energy_Star_Reason__c = ' Testing for 500 character limit for the offeror energy star reason comments, Testing for 500 character limit for the offeror energy star reason comments,Testing for 500 character limit for the offeror energy star reason comments,Testing for 500 character limit for the offeror energy star reason comments,Testing for 500 character limit for the offeror';
-        //offer.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c = 0.0;
         update offer;
         form1364 = new PBS_LOP_OfferForm1364Controller();
         System.debug(form1364.legalAgentType);
@@ -930,7 +888,7 @@ private class Test_PBS_AAAP_PDFs {
         offer.PBS_RSAP_SURFACE_PARKING_ANNUAL_COST__c = 40;
         offer.PBS_RSAP_STRUCT_PARKING_ANNUAL_COST__c = 40;
         offer.PBS_RSAP_Historical_Property_Description__c = 'Historic property within a historic district';
-        offer.PBS_RSAP_HubZone_Waiver__c = 'I am a HUBZone SBC Offeror and I elect to waive the price evaluation preference';
+        offer.PBS_RSAP_HubZone_Waiver__c = 'I am a HUBZone small business concern offeror, and I elect to waive the price evaluation preference.';
         offer.PBS_RSAP_Flood_Plain_Declaration__c = 'in a 500-year flood plain';
         offer.PBS_RSAP_Asbestos_Declaration__c = 'Contains ACM not in a stable, solid matrix';
         offer.PBS_RSAP_Offeror_Seismic_Declaration__c = 'Fully meets seismic requirements or meets an exemption under the RLP';
@@ -951,8 +909,6 @@ private class Test_PBS_AAAP_PDFs {
         rate.PBS_AAAP_OFFER_NUMBER__c = offer.Id;
         insert rate;
         System.assert(offer.Id != null);
-
-
         ApexPages.currentPage().getParameters().put('offerId', offer.id);
         ApexPages.currentPage().getParameters().put('formtype', 'offerForm1364RateStructure');
 
@@ -972,7 +928,6 @@ private class Test_PBS_AAAP_PDFs {
         offer.PBS_AAAP_Offered_Space_Mul_Tax_Bills__c = 'No';
         offer.PBS_AAAP_ARCHITECTURAL_ENG_FEES_UOM__c = '1. Per ABOA Square Feet ($)';
         offer.PBS_AAAP_FIRE_SAFETY_CERT__c = 'Yes';
-        //offer.PBS_AAAP_Energy_Star_Evaluation__c = 'Yes';
         update offer;
         form1364 = new PBS_LOP_OfferForm1364Controller();
 
@@ -1000,7 +955,6 @@ private class Test_PBS_AAAP_PDFs {
         offer.PBS_AAAP_HUBZone_SBC_Offeror__c = true;
         offer.PBS_AAAP_Energy_Star__c = 'No';
         offer.PBS_AAAP_Energy_Star_Reason__c = ' Testing for 500 character limit for the offeror energy star reason comments, Testing for 500 character limit for the offeror energy star reason comments,Testing for 500 character limit for the offeror energy star reason comments,Testing for 500 character limit for the offeror energy star reason comments,Testing for 500 character limit for the offeror';
-        //offer.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c = 0.0;
         update offer;
         form1364 = new PBS_LOP_OfferForm1364Controller();
         form1364.isValidUserAction();
@@ -1010,7 +964,6 @@ private class Test_PBS_AAAP_PDFs {
         System.debug(form1364.monthlyCostNonResSurf);
         System.debug(form1364.monthlyCostNonResGar);
         System.assert(offer.Id != null);
-        //System.assert(form1364.isValidUser);
         
         PBS_LOP_OfferForm1364Controller obj1 = new PBS_LOP_OfferForm1364Controller();
         obj1.offer = null;
@@ -1086,31 +1039,16 @@ private class Test_PBS_AAAP_PDFs {
         offer.PBS_AAAP_HUBZone_SBC_Offeror__c = true;
         offer.PBS_AAAP_Energy_Star__c = 'No';
         offer.PBS_AAAP_Energy_Star_Reason__c = ' Testing for 500 character limit for the offeror energy star reason comments, Testing for 500 character limit for the offeror energy star reason comments,Testing for 500 character limit for the offeror energy star reason comments,Testing for 500 character limit for the offeror energy star reason comments,Testing for 500 character limit for the offeror';
-        //offer.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c = 0.0;
-         //jk adding from here:
-            offer.PBS_AAAP_OFFICE_SF_OFFERED_MAX__c = 0;
-            offer.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c = 0;
+        offer.PBS_AAAP_OFFICE_SF_OFFERED_MAX__c = 0;
+        offer.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c = 0;
         update offer;
         form1364 = new PBS_AAAP_OfferForm1364Controller_2019();
-        
-        //System.debug(form1364.legalAgentType);
-        //System.debug(form1364.xownerType);
-        //System.debug(form1364.monthlyCostResSurf);
-        //System.debug(form1364.monthlyCostNonResSurf);
-        //System.debug(form1364.monthlyCostNonResGar);
         System.assert(offer.Id != null);
-        //User u = PBS_AAAP_UtilityTest.createPortalUser();
-        
         System.runAs(u) {
             form1364 = new PBS_AAAP_OfferForm1364Controller_2019();
             offer.PBS_AAAP_Energy_Star__c = 'N/A';
             offer.PBS_AAAP_SITE_AREA_TYPE__c = 'Square Feet/Acres';
-            //offer.PBS_AAAP_SITE_SIZE_SQFT__c = 1/0;
-            //update offer;
         }
-        
-
-        //ApexPages.currentPage().getParameters().put('offerId', 'a0Br0000000ZqXk');
         ApexPages.currentPage().getParameters().put('offerId', offer.id);
         ApexPages.currentPage().getParameters().put('formtype', 'offerForm1364');
         PBS_AAAP_OfferForm1364Controller_2019 form1364_2019 = new PBS_AAAP_OfferForm1364Controller_2019();
@@ -1132,8 +1070,7 @@ private class Test_PBS_AAAP_PDFs {
         ApexPages.currentPage().getParameters().put('sesid', '11111');      
         form1364_2019.isValidUserAction();
 
-    }
-    
+    }   
     
     static testMethod void offerLOPForm1364() {
         PBS_LOP_Offer__c offer = PBS_AAAP_UNIT_TEST_DATA_GENERATOR.genTestLopOffer();
@@ -1156,7 +1093,6 @@ private class Test_PBS_AAAP_PDFs {
         form1364.field20e2 = 'test';
         form1364.field20f1 = 'test';
         form1364.field20f2 = 'test';
-
         form1364.field22a = 'test';
         form1364.field22b = 'test';
         form1364.field22c = 'test';
@@ -1271,13 +1207,21 @@ private class Test_PBS_AAAP_PDFs {
         string paramName = 'Test';
         string url = '/AAAP/LoginPage?';
         Decimal defaultValue = 2;
-        //Object XYZ;
+        ApexPages.currentPage().getParameters().put('testParam', 'testValue');
+        String result = PBS_AAAP_Utility.getQueryParamAsString('testParam');
         PBS_AAAP_Utility.getQueryParamAsDecimal(paramName,defaultValue);
         PBS_AAAP_Utility.getQueryParamAsDecimal(paramName);
         PBS_AAAP_Utility.setQueryParam(paramName,paramName);
+        
         PBS_AAAP_Utility.getCommunityURL(url);
-        //PBS_AAAP_Utility.logMethodEnd(paramName,XYZ);
-      
+        
+        PBS_AAAP_Utility.getCommunityURL('Offer-M');
+        
+        String communityURL = 'fromLWC'+Label.LOP_Community_Base_URL;
+        PBS_AAAP_Utility.getCommunityURL(communityURL);
+        
+        string url1 = '/AAAP/LoginPage';
+        PBS_AAAP_Utility.getCommunityURL(url1);
         system.assert(true);
 
     }  
@@ -1302,13 +1246,9 @@ static testMethod void offerForm1364_2022() {
             insert rate;
             System.assert(offer.Id != null);
                         }
-    
-
         ApexPages.currentPage().getParameters().put('offerId', offer.id);
         ApexPages.currentPage().getParameters().put('formtype', 'OfferForm1364_2022');
-
-       // PBS_AAAP_OfferForm1364Controller_2019 form1364 = new PBS_AAAP_OfferForm1364Controller_2019();
-         PBS_AAAP_NewOfferForm1364Controller newform1364 = new PBS_AAAP_NewOfferForm1364Controller();
+        PBS_AAAP_NewOfferForm1364Controller newform1364 = new PBS_AAAP_NewOfferForm1364Controller();
         offer.PBS_AAAP_OFFEROR_INTEREST__c = 'Agent';
         
         update offer;
@@ -1343,7 +1283,6 @@ static testMethod void offerForm1364_2022() {
         offer.PBS_AAAP_HUBZone_SBC_Offeror__c = true;
         offer.PBS_AAAP_Energy_Star__c = 'No';
         offer.PBS_AAAP_Energy_Star_Reason__c = ' Testing for 500 character limit for the offeror energy star reason comments, Testing for 500 character limit for the offeror energy star reason comments,Testing for 500 character limit for the offeror energy star reason comments,Testing for 500 character limit for the offeror energy star reason comments,Testing for 500 character limit for the offeror';
-        //offer.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c = 0.0;
          //jk adding from here:
             offer.PBS_AAAP_OFFICE_SF_OFFERED_MAX__c = 0;
             offer.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c = 0;
@@ -1352,16 +1291,11 @@ static testMethod void offerForm1364_2022() {
         newform1364 = new PBS_AAAP_NewOfferForm1364Controller();
 
         System.assert(offer.Id != null);
-        //User u = PBS_AAAP_UtilityTest.createPortalUser();
         System.runAs(u) {
             newform1364 = new PBS_AAAP_NewOfferForm1364Controller();
             offer.PBS_AAAP_Energy_Star__c = 'N/A';
             offer.PBS_AAAP_SITE_AREA_TYPE__c = 'Square Feet/Acres';
-            //offer.PBS_AAAP_SITE_SIZE_SQFT__c = 1/0;
-            //update offer;
         }
-
-        //ApexPages.currentPage().getParameters().put('offerId', 'a0Br0000000ZqXk');
         ApexPages.currentPage().getParameters().put('offerId', offer.id);
         ApexPages.currentPage().getParameters().put('formtype', 'OfferForm1364_2022');
         PBS_AAAP_NewOfferForm1364Controller newform1364_2022 = new PBS_AAAP_NewOfferForm1364Controller();
@@ -1404,9 +1338,7 @@ static testMethod void offerForm1364_2022() {
 
         ApexPages.currentPage().getParameters().put('offerId', offer.id);
         ApexPages.currentPage().getParameters().put('formtype', 'OfferForm1364_2022');
-
-       // PBS_AAAP_OfferForm1364Controller_2019 form1364 = new PBS_AAAP_OfferForm1364Controller_2019();
-         PBS_AAAP_NewOfferForm1364Controller newform1364 = new PBS_AAAP_NewOfferForm1364Controller();
+        PBS_AAAP_NewOfferForm1364Controller newform1364 = new PBS_AAAP_NewOfferForm1364Controller();
         offer.PBS_AAAP_OFFEROR_INTEREST__c = 'Agent';
         
         update offer;
@@ -1440,7 +1372,6 @@ static testMethod void offerForm1364_2022() {
         offer.PBS_AAAP_HUBZone_SBC_Offeror__c = true;
         offer.PBS_AAAP_Energy_Star__c = 'No';
         offer.PBS_AAAP_Energy_Star_Reason__c = ' Testing for 500 character limit for the offeror energy star reason comments, Testing for 500 character limit for the offeror energy star reason comments,Testing for 500 character limit for the offeror energy star reason comments,Testing for 500 character limit for the offeror energy star reason comments,Testing for 500 character limit for the offeror';
-        //offer.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c = 0.0;
          //jk adding from here:
             offer.PBS_AAAP_OFFICE_SF_OFFERED_MAX__c = 0;
             offer.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c = 0;
@@ -1449,16 +1380,11 @@ static testMethod void offerForm1364_2022() {
         newform1364 = new PBS_AAAP_NewOfferForm1364Controller();
 
         System.assert(offer.Id != null);
-        //User u = PBS_AAAP_UtilityTest.createPortalUser();
         System.runAs(u) {
             newform1364 = new PBS_AAAP_NewOfferForm1364Controller();
             offer.PBS_AAAP_Energy_Star__c = 'N/A';
             offer.PBS_AAAP_SITE_AREA_TYPE__c = 'Square Feet/Acres';
-            //offer.PBS_AAAP_SITE_SIZE_SQFT__c = 1/0;
-            //update offer;
         }
-
-        //ApexPages.currentPage().getParameters().put('offerId', 'a0Br0000000ZqXk');
         ApexPages.currentPage().getParameters().put('offerId', offer.id);
         ApexPages.currentPage().getParameters().put('formtype', 'OfferForm1364_2022');
         PBS_AAAP_NewOfferForm1364Controller newform1364_2022 = new PBS_AAAP_NewOfferForm1364Controller();
@@ -1508,7 +1434,6 @@ static testMethod void offerPreviewController_2022_0() {
         PBS_AAAP_OfferPreviewPageController oppc = new PBS_AAAP_OfferPreviewPageController();
 
         offer.PBS_AAAP_Close_To_Metro__c = 'No';
-        //offer.PBS_AAAP_Fire_Life_Meets__c = 'Meets';
         update offer;
 
         PBS_AAAP_OfferPreviewPageController.CurrentCheckDate = '2017-01-01';
@@ -1536,8 +1461,6 @@ static testMethod void offerPreviewController_2022_0() {
         wrapperObj.formName = 'offerform1217';
         wrapperObj.pgRefObj = null;
         wrapperObj.clicked = false;
-        
-        // adding to list
         oppc.lstPageWrapper.add(wrapperObj);
         
         wrapperObj = new PBS_AAAP_OfferPreviewPageController.PageWrapper();
@@ -1545,59 +1468,32 @@ static testMethod void offerPreviewController_2022_0() {
         wrapperObj.formName = 'offerform1217Attachment';
         wrapperObj.pgRefObj = null;
         wrapperObj.clicked = false;
-        
-        // adding to list
+
         oppc.lstPageWrapper.add(wrapperObj);
-        
-        
-       // wrapperObj = new PBS_AAAP_OfferPreviewPageController.PageWrapper();
-        //wrapperObj.linkName = 'Offerform1364_2019';
-       // wrapperObj.formName = 'Offerform1364_2019';
-       // wrapperObj.pgRefObj = null;
-       // wrapperObj.clicked = false;
-        
-        // adding to list
-       // oppc.lstPageWrapper.add(wrapperObj);
-        
-        
         wrapperObj = new PBS_AAAP_OfferPreviewPageController.PageWrapper();
         wrapperObj.linkName = 'OfferForm1364';
         wrapperObj.formName = 'OfferForm1364';
         wrapperObj.pgRefObj = null;
         wrapperObj.clicked = false;
-        
-        // adding to list
         oppc.lstPageWrapper.add(wrapperObj);
-        
-        
         wrapperObj = new PBS_AAAP_OfferPreviewPageController.PageWrapper();
         wrapperObj.linkName = 'OfferForm3518';
         wrapperObj.formName = 'OfferForm3518';
         wrapperObj.pgRefObj = null;
         wrapperObj.clicked = false;
-        
-        // adding to list
         oppc.lstPageWrapper.add(wrapperObj);
-        
-        
         wrapperObj = new PBS_AAAP_OfferPreviewPageController.PageWrapper();
         wrapperObj.linkName = 'OfferForm1364RateStructure';
         wrapperObj.formName = 'OfferForm1364RateStructure';
         wrapperObj.pgRefObj = null;
         wrapperObj.clicked = false;
-        
-        // adding to list
         oppc.lstPageWrapper.add(wrapperObj);
-//SGanti added 08/2021
         wrapperObj = new PBS_AAAP_OfferPreviewPageController.PageWrapper();
         wrapperObj.linkName = 'Form 1364 AAAP';
         wrapperObj.formName = 'OfferForm1364_2022';
         wrapperObj.pgRefObj = null;
         wrapperObj.clicked = false;
-        
-        // adding to list
-        oppc.lstPageWrapper.add(wrapperObj);        
-        
+        oppc.lstPageWrapper.add(wrapperObj);       
         
         oppc.formName = 'offerform1217';
         oppc.redirectToExpectedPage();
@@ -1656,7 +1552,6 @@ static testMethod void offerPreviewController_2022_1() {
         PBS_AAAP_OfferPreviewPageController oppc = new PBS_AAAP_OfferPreviewPageController();
 
         offer.PBS_AAAP_Close_To_Metro__c = 'No';
-        //offer.PBS_AAAP_Fire_Life_Meets__c = 'Meets';
         update offer;
 
         PBS_AAAP_OfferPreviewPageController.CurrentCheckDate = '2017-01-01';
@@ -1696,34 +1591,18 @@ static testMethod void offerPreviewController_2022_1() {
         
         // adding to list
         oppc.lstPageWrapper.add(wrapperObj);
-        
-        // wrapperObj = new PBS_AAAP_OfferPreviewPageController.PageWrapper();
-        //wrapperObj.linkName = 'Offerform1364_2019';
-       // wrapperObj.formName = 'Offerform1364_2019';
-       // wrapperObj.pgRefObj = null;
-       // wrapperObj.clicked = false;
-        
-        // adding to list
-       // oppc.lstPageWrapper.add(wrapperObj);
-        
-        
         wrapperObj = new PBS_AAAP_OfferPreviewPageController.PageWrapper();
         wrapperObj.linkName = 'OfferForm1364';
         wrapperObj.formName = 'OfferForm1364';
         wrapperObj.pgRefObj = null;
         wrapperObj.clicked = false;
-        
-        // adding to list
-        oppc.lstPageWrapper.add(wrapperObj);
-        
+        oppc.lstPageWrapper.add(wrapperObj);      
         
         wrapperObj = new PBS_AAAP_OfferPreviewPageController.PageWrapper();
         wrapperObj.linkName = 'OfferForm3518';
         wrapperObj.formName = 'OfferForm3518';
         wrapperObj.pgRefObj = null;
         wrapperObj.clicked = false;
-        
-        // adding to list
         oppc.lstPageWrapper.add(wrapperObj);
         
         
@@ -1732,20 +1611,15 @@ static testMethod void offerPreviewController_2022_1() {
         wrapperObj.formName = 'OfferForm1364RateStructure';
         wrapperObj.pgRefObj = null;
         wrapperObj.clicked = false;
-        
-        // adding to list
         oppc.lstPageWrapper.add(wrapperObj);
-//SGanti added 08/2021
+		//SGanti added 08/2021
         wrapperObj = new PBS_AAAP_OfferPreviewPageController.PageWrapper();
         wrapperObj.linkName = 'Form 1364 AAAP';
         wrapperObj.formName = 'OfferForm1364_2022';
         wrapperObj.pgRefObj = null;
         wrapperObj.clicked = false;
-        
-        // adding to list
         oppc.lstPageWrapper.add(wrapperObj);        
-        
-        
+
         oppc.formName = 'offerform1217';
         oppc.redirectToExpectedPage();
         
@@ -1766,9 +1640,28 @@ static testMethod void offerPreviewController_2022_1() {
         oppc.redirectToExpectedPage();                
         
         System.assertEquals(true, true);
-
+    } 
+    
+	@isTest
+    static void testOfferValidationResponse() {
         
-    }   
-
+        PBS_AAAP_RLP__c rlp = PBS_AAAP_UtilityTest.createFY22RLP();
+        rlp.PBS_AAAP_Region__c = 'Census';
+        insert rlp;
+        
+        PBS_AAAP_Offer__c testOffer = PBS_AAAP_UtilityTest.createOfferInfo();
+        testOffer.PBS_AAAP_RLP_Number__c = rlp.Id;
+        insert testOffer;
+        
+        Test.startTest();
+        List<String> pages = new List<String>{'Offer-M-Eligibility', 'Offer-M-Costs', 'Offer-M-Parking', 'Offer-M-SpaceRates', 'Offer-M-Attachments', 'Offer-S-Eligibility', 'Offer-S-SpaceParking', 'Offer-S-TermsFinancials', 'Offer-S-Rent', 'Offer-S-Attachments'};
+        PBS_AAAP_Utility.OfferValidationResponse response = PBS_AAAP_Utility.validateOffer(testOffer, pages);
+        System.assertNotEquals(null, response);
+        System.assertNotEquals(null, response.errorMessages);
+        List<String> pages1 = new List<String>();
+        PBS_AAAP_Utility.OfferValidationResponse response1 = PBS_AAAP_Utility.validateOffer(testOffer, pages1);
+        
+        Test.stopTest();
+    }
               
 }

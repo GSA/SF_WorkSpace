@@ -1,0 +1,197 @@
+<template>
+    <div class="slds-p-around_medium">
+        <div style="background-color: white !important; background: none; border: none">
+            <span class="header">Offer space</span>
+        </div>
+        <br/><br/><br/>
+        <div>
+        <h2 class="slds-text-heading_medium"><b>New offer</b></h2>
+        <p class="slds-m-bottom_small">Click the Start button below to begin a new offer.</p>
+        </div>
+        <!-- Add Button -->
+        <input class="btn" type="button" variant="submit" value="Start"  onclick={handleAddProperty}/>
+        <!-- Add New Property Subheading -->
+         <br/><br/>
+        <h2 class="slds-text-heading_medium"><b>Existing offers</b></h2>
+        <p class="slds-m-bottom_large">Click the relevant Manage button in the table below to update an existing offer.<br/>
+        <a id="showRLPTypes" href="javascript:void(0);" onclick={handleSave}>
+            Request for lease proposals (RLP) types&nbsp; 
+        </a>
+           and&nbsp; 
+        <a id="showOfferStatusDef" href="javascript:void(0);" onclick={handleClick}>
+             offer status
+        </a>  definitions.</p>
+
+        <!-- Modal -->
+<template if:true={isModalOpen}>
+	<section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+		<div class="slds-modal__container">
+			
+				<header class="slds-modal__header">
+					<lightning-button-icon icon-name="utility:close" alternative-text="Close" class="slds-modal__close custom-close" onclick={closeModal}></lightning-button-icon>
+					<h2 class="slds-text-heading_medium">Offer status definitions</h2> 
+				</header>
+				
+                  <div class="slds-modal__content slds-p-around_medium">
+					 <p><strong>Draft:</strong> The offeror started or edited their proposal, but has not submitted or resubmitted it, to the government.</p><br></br>
+					 <p><strong>Submitted:</strong> The offeror submitted their offer to the government.</p><br></br>
+					 <p><strong>Pending modification:</strong> The offeror is in the process of editing a submitted proposal. The submitted offer remains eligible for review until the offeror submits the revised offer.</p><br></br>
+					 <p><strong>Pending review:</strong> The offer is undergoing a due diligence review by the government and cannot be edited this time. Additional documentation can be uploaded to the attachments page.</p><br></br>
+					 <p><strong>Awarded / Submitted:</strong> Some or all of the square footage offered has been awarded. The remaining square footage from the offer is in submitted status.</p><br></br>
+                     <p><strong>Awarded / Pending review:</strong> A portion of the square footage offered has been awarded. The remaining square footage from the offer is undergoing a due diligence review by GSA and cannot be edited at this time. Additional documentation can be uploaded to the attachments page.</p><br></br>
+                  </div>
+				
+			</div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+ </template>
+ <!-- End of Modal-->
+
+ <!-- Modal -->
+<template if:true={isRLPModalOpen}>
+	<section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+		<div class="slds-modal__container">
+			
+				<header class="slds-modal__header">
+					<lightning-button-icon icon-name="utility:close" alternative-text="Close" class="slds-modal__close custom-close" onclick={closeModal}></lightning-button-icon>
+					<h2 class="slds-text-heading_medium">Request for lease proposals (RLP) types</h2> 
+				</header>
+				
+                  <div class="slds-modal__content slds-p-around_medium">
+					 <p><strong>Single lease request for lease proposals (RLPs):</strong> Uses a single RLP for a specific space requirement. Migrates GSA's traditional lease procurement approach to an online offer collection workflow. Negotiation may or may not be permitted. Refer to the RLP for each specific project for more information.</p><br></br>
+					 <p><strong>Multiple lease request for lease proposals (RLPs):</strong>The Government reserves the right to make multiple lease awards under these RLPs. The market can compete for multiple federal leases by submitting a single offer. Negotiation is not permitted. Refer to the regional RLPs for more information.</p><br></br>
+					 
+                  </div>
+				
+			</div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+ </template>
+ <!-- End of Modal-->
+        <template if:true={hasPropData}>
+            <div class="custom-table">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="slds-text-align_left">
+                            </th>
+                            <th scope="col" class="slds-text-align_left" onclick={handleSort} data-field-name="PBS_AAAP_Building_Name__c">
+                                Property name
+                                <span class="arrow">
+                                    <template if:true={isSortedByPropName}>
+                                        <template if:true={isAscending}>
+                                            &#9650; <!-- Up arrow -->
+                                        </template>
+                                        <template if:false={isAscending}>
+                                            &#9660; <!-- Down arrow -->
+                                        </template>
+                                    </template>
+                                </span>
+                            </th>
+                            <th scope="col" class="slds-text-align_left" onclick={handleSort} data-field-name="PBS_AAAP_Street_Address__c">
+                                Street address
+                                <span class="arrow">
+                                    <template if:true={isSortedByStreet}>
+                                        <template if:true={isAscending}>
+                                            &#9650; <!-- Up arrow -->
+                                        </template>
+                                        <template if:false={isAscending}>
+                                            &#9660; <!-- Down arrow -->
+                                        </template>
+                                    </template>
+                                </span>
+                            </th>
+                            <th scope="col" class="slds-text-align_left" onclick={handleSort} data-field-name="PBS_AAAP_City__c">
+                                City
+                                <span class="arrow">
+                                    <template if:true={isSortedByCity}>
+                                        <template if:true={isAscending}>
+                                            &#9650; <!-- Up arrow -->
+                                        </template>
+                                        <template if:false={isAscending}>
+                                            &#9660; <!-- Down arrow -->
+                                        </template>
+                                    </template>
+                                </span>
+                            </th>
+                            <th scope="col" class="slds-text-align_left" onclick={handleSort} data-field-name="PBS_AAAP_State__c">
+                                State
+                                <span class="arrow">
+                                    <template if:true={isSortedByState}>
+                                        <template if:true={isAscending}>
+                                            &#9650; <!-- Up arrow -->
+                                        </template>
+                                        <template if:false={isAscending}>
+                                            &#9660; <!-- Down arrow -->
+                                        </template>
+                                    </template>
+                                </span>
+                            </th>
+                           <th scope="col" class="slds-text-align_left" onclick={handleSort} data-field-name="Formula_RLP_Num__c">
+                                RLP number
+                                <span class="arrow">
+                                    <template if:true={isSortedByRLPNum}>
+                                        <template if:true={isAscending}>
+                                            &#9650; 
+                                        </template>
+                                        <template if:false={isAscending}>
+                                            &#9660; 
+                                        </template>
+                                    </template>
+                                </span>
+                            </th>
+                            <th scope="col" class="slds-text-align_left" onclick={handleSort} data-field-name="RecordType.Name">
+                                RLP type
+                                <span class="arrow">
+                                    <template if:true={isSortedByRLPType}>
+                                        <template if:true={isAscending}>
+                                            &#9650; 
+                                        </template>
+                                        <template if:false={isAscending}>
+                                            &#9660; 
+                                        </template>
+                                    </template>
+                                </span>
+                            </th>
+                            <th scope="col" class="slds-text-align_left" onclick={handleSort} data-field-name="PBS_AAAP_Offer_Status__c">
+                                Offer status
+                                <span class="arrow">
+                                    <template if:true={isSortedByOfferStatus}>
+                                        <template if:true={isAscending}>
+                                            &#9650; 
+                                        </template>
+                                        <template if:false={isAscending}>
+                                            &#9660; 
+                                        </template>
+                                    </template>
+                                </span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={propList} for:item="property">
+                            <tr key={property.Id}>
+                                <td>
+                                    <button class="slds-button slds-button_brand" onclick={handleButtonClick} data-id={property.Id}>
+                                        Manage
+                                    </button>
+                                </td>
+                                <td>{property.PBS_AAAP_Building_Name__c}</td>
+                                <td>{property.PBS_AAAP_Street_Address__c}</td>
+                                <td>{property.PBS_AAAP_City__c}</td>
+                                <td>{property.PBS_AAAP_State__c}</td>
+                                <td>{property.rlpType}</td>
+                                <td>{property.awardType}</td>
+                                <td>{property.PBS_AAAP_Offer_Status__c}</td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+
+        <template if:false={hasPropData}>
+            There are no Leasing Properties to display. 
+        </template>
+    </div>
+</template>

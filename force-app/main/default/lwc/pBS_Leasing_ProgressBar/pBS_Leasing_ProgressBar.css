@@ -1,0 +1,68 @@
+.slds-path__title{
+    font-size: 9px !important;
+    text-transform: uppercase;
+    font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+    text-wrap: pretty;
+    font-weight: bold;
+}
+.slds-is-active .slds-path__title, .slds-is-current .slds-path__title{
+    color:white;
+    
+}
+.slds-is-incomplete .slds-path__title{
+    color:black;
+}
+.slds-is-incomplete .slds-path__nav .slds-path__item{
+    background-color: white;
+}
+.slds-path__nav .slds-is-incomplete {
+    background: #ccc;
+}
+.slds-path__nav .slds-is-incomplete:before, .slds-path__nav .slds-is-incomplete:after {
+    background: #ccc;
+}
+
+.slds-path__nav .slds-is-active {
+    background: #003662;
+}
+.slds-path__nav .slds-is-active:before, .slds-path__nav .slds-is-active:after {
+    background: #003662;
+}
+.slds-path__nav .slds-is-current {
+    background: #00558f;
+}
+.slds-path__nav .slds-is-current:before, .slds-path__nav .slds-is-current:after {
+    background: #00558f;
+}
+
+.slds-path__item:hover .slds-path__title{
+    color: white;
+}
+.slds-path__nav:hover .slds-path__item:hover::after, .slds-path__nav:hover .slds-path__item:hover::before, 
+.slds-path__nav .slds-is-active:hover, .slds-path__nav .slds-is-incomplete:hover {
+    background: #00558f;
+}
+.header{
+    top:20px;
+    position: relative;
+    font-family:Segoe UI, Trebuchet, Arial, Sans-Serif;
+    font-size: 18pt;
+    font-weight: 650;
+    color: #0e0f0f; /*#00558f;*/ /*#002bac;*/
+}
+.table{
+    border : 0px;
+    font-size: 12px;
+    align: center;
+    margin-left: 0px; 
+    margin-top:35px;
+    background-color: #eeeeee;
+    font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+}
+.usa-step-indicator__segment-label{
+    cursor: pointer;
+    font-size: 14px;
+}
+.usa-step-indicator__segment--disabled::after {
+    background-color: #727272;
+}

@@ -37,22 +37,48 @@
          .errorMsg {
             color: red !important;
         }
+        .readonlyField{
+    pointer-events: none;
+    
+    }
         .bb {
-            border-bottom: 1px solid #cccccc;
-            border-top: 1px solid #cccccc;
-            border-left: 1px solid #cccccc;
-            border-right: 1px solid #cccccc;
-            margin-right: 60px;
+        // border-bottom: 1px solid #cccccc;
+        //  border-top: 1px solid #cccccc;
+        //  border-left: 1px solid #cccccc;
+        //  border-right: 1px solid #cccccc;
+        //  margin-right: 60px;
+      
             padding: 10px;
         }
-       .hr {
-            font-weight: bold;
-            font-size: 28px;
-            border-bottom: 1px solid #cccccc;
-            padding: 0 0 8px;
-            color: #002BAD;
-            padding-top: 15px;
+      .hr {
+                font-weight: bold;
+                font-size: 20px;
+                //border-bottom: 1px solid #cccccc;
+                padding: 0 0 8px;
+                color: #000000;
+                //color: #002BAD;
+                padding-top: 15px;
             }
+        .custRadio tr td{
+            padding-top:0px;
+            }
+       .custom-border {
+        border: 1px solid  #999;
+        padding-top: 30px;
+        //padding: 3px 5px;
+        //position: relative;
+        // line-height: 20px;
+            color: #333333;
+            font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+            font-size:13px;
+            background-color: #eeeeee;
+        }
+        .parent-container {
+        padding: 0px;
+        }
+        .tab-section{
+        margin-bottom: 0px; !important
+        }
         .infopopup {
               position:fixed !important;
               display:inline-block;
@@ -147,34 +173,9 @@
         }
     </script>
     
-<!-- J. Rogers  Eliminate Headers
-<div id="login">
-        <ul>
-            <li><a href="/RSAP/portalHome">RSAP Home</a> </li>
-            <li>|</li>
-            <li><a href="/AAAP/portalHome">AAAP</a></li>
-            <li>|</li>
-            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
-                <apex:outputLink value="/AAAP/home/home.jsp">
-                    <li>{!$Label.site.login_button}</li>
-                </apex:outputLink>
-                <li> |</li>
-                <apex:outputLink value="/AAAP/ForgotPassword">
-                    <li>{!$Label.site.forgot_your_password_q}</li>
-                </apex:outputLink>
-                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
-                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
-                    <li>{!$Label.site.new_user_q}</li>
-                </apex:outputLink>
-            </apex:panelGroup>
-            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
-                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
-                <li>{!$Label.site.logout}</li>
-            </apex:outputLink>
-        </ul>
-    </div   -->
+
     <div id="wrapper">
-        <c:lop_inside_header />
+      
         <div id="content" class="parking"><!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
             <apex:panelGrid rendered="{!!isValidUser}">
                 <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
@@ -188,11 +189,41 @@
                 <c:lopHeader myOffer="{!lopOffer}" myProject="{!rlp}" offerDueDate=""/>
                 <c:PBS_LOP_ProgressBar myValue="{!lopOffer.Id}" step="1" linksToViewModePage="{!isEditable}"/>
             </apex:panelGroup>
+            
+            
+            
             <apex:form id="newOffer" rendered="{!isValidUser}">
                 <apex:actionFunction action="{!saveData}" name="saveTheForm" reRender="simpleOutputPanel"  />
                 <apex:outputPanel id="thePanelform1" layout="block" styleClass="formwrap">
-                    <!--<h3 class="blue">Space and Parking</h3>-->
-                    <div class="hr">Space and Parking</div>
+                    
+                    
+                     <!-- Grid to display three columns -->
+                  
+            <div style="display: flex; flex-direction: row; justify-content: space-between; padding: 5px; margin-top: -29px;">
+                <!-- Column 1: Property Name -->
+                <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999;padding-bottom: 10px;padding-left: 10px; padding-top: 10px;">
+                    <span>Property name:</span> 
+                    <span>
+                        <apex:outputText value="{!lopOffer.PBS_AAAP_Building_Name__c}" />
+                    </span>
+                </div>
+                <!-- Column 2: RLP Number -->
+                <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999;padding-bottom: 10px;padding-left: 10px; padding-top: 10px;">
+                    <span>RLP number:</span> 
+                     <span>
+                        <apex:outputText value="{!rlp.PBS_RSAP_Solicitation_Number__c}" />
+                    </span>
+                </div>
+                <!-- Column 3: Offer Status -->
+                <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999;padding-bottom: 10px;padding-left: 10px; padding-top: 10px;">
+                    <span>Offer status:</span>
+                    <span>
+                        <apex:outputText value="{!lopOffer.PBS_AAAP_Offer_Status__c}" />
+                    </span>
+                </div>
+            </div>
+        
+                    <div class="hr">6. Space and parking</div>
                     <apex:messages styleClass="errMessage"/>
 
                     <apex:inputHidden id="draftMsgFlag" value="{!draftMsgFlag}"/>
@@ -203,7 +234,7 @@
                     <br/>
                     
                     <div border="2" class="bb">
-                        <h4 class="grey" style="padding-top: 0px;">SPACE OFFERED</h4>
+                        <h4 class="grey" style="padding-top: 0px;">Space offered</h4>
                         <apex:panelGrid id="pangrid_header" columns="1">
                             <apex:outputPanel >
                                 <apex:outputText value="1. What is the amount of ANSI/BOMA Occupant Area Square Feet (ABOA SF) offered?"></apex:outputText>
@@ -230,9 +261,7 @@
                         <!-- <h5>Hit "Save Page" button at the bottom of the screen to calculate the 3. Common Area
                             Factor value below.</h5> -->
                         <apex:panelGrid id="pangrid_space" columns="1">
-                        <!--<apex:outputText id="q2a" value="{!QLabels.lopSpaceQ2a}"></apex:outputText>
-                        <apex:inputText id="commonAreaFactor" value="{!lopOffer.PBS_AAAP_Common_Area_Factor__c}"></apex:inputText>
-                        <br/><br/>-->
+                       
                             <apex:outputPanel >
                                 <apex:outputText id="q3" value="{!QLabels.lopSpaceQ3}"></apex:outputText>
                                 <a class="popup"  href="#CAF"><img src="{!$Resource.Info_Icon}"/></a>
@@ -246,13 +275,7 @@
                                 <br/>
                                 <apex:inputText id="q4_cont_aboa" value="{!lopOffer.PBS_AAAP_floors_and_suites_offered__c}" onkeyup="valueChangeFun(this);" style="margin-left: 15px;"></apex:inputText>
                             </apex:outputPanel>
-                            <!-- Todd Brown 10/05/2021 commented out Government Occupancy field for user story SFWS-1384 (it moved to Terms & Conditions VF page)
-                            <apex:outputText id="q4" value="{!QLabels.lopSpaceQ4}"></apex:outputText>
-                            <apex:outputPanel>
-                                <apex:inputText id="govtOccupancy"
-                                                value="{!lopOffer.PBS_AAAP_Government_Occupancy_Percentage__c}"></apex:inputText>
-                                <apex:outputText value="%"></apex:outputText>
-                            </apex:outputPanel> -->
+                        
                             <apex:outputPanel >
                                 <apex:outputText id="q5" value="5. How much free space, in addition to the space offered in #1 above, are you offering?  (If not offering free space, leave blank.)"></apex:outputText>
                                 <apex:inputText id="freeSpace" style="margin-left : 16px;" value="{!lopOffer.PBS_AAAP_Free_Space_Offered__c}" onkeyup="validate(this)"></apex:inputText>
@@ -263,138 +286,11 @@
                     </div>
                     
                     <br/>
-    <!-- Todd Brown 10/08/2021 Replaced entire Parking Offered section for user story SFWS-1400  
-    <div border="2" class="bb">
-       <h4  style= "color:red;padding-top: 0px;">PARKING OFFERED</h4>
-       <Table id="form1">
    
-           <tr>
-               <td>
-                   <apex:outputtext value="{!$Label.PBS_AAAP_Total_Parking_Spaes}"/>
-               </td>
-           </tr>
-           <tr>
-               <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <apex:outputtext value="Surface"/>
-                   <apex:inputField style="width:75px"
-                                    value="{!lopOffer.PBS_AAAP_Total_Surface_Parking_Spaces__c}"
-                                    id="surfacespace1"/>
-                   <apex:outputtext value="Structured"/>
-                   <apex:inputField style="width:75px"
-                                    value="{!lopOffer.PBS_AAAP_Total_Structured_Parking_Spaces__c}"
-                                    id="structspace1"/>
-               </td>
-   
-           </tr>
-           <tr>
-               <td>
-                   <apex:outputtext value="{!$Label.PBS_AAAP_Total_Parking_Spaces_Offered}"/>
-               </td>
-           </tr>
-           <tr>
-               <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <apex:outputtext value="Surface"/>
-                   <apex:inputField style="width:75px"
-                                    value="{!lopOffer.PBS_AAAP_Total_Surf_Park_Space_Offered__c}"
-                                    id="surfacespace2"/>
-                   <apex:outputtext value="Structured"/>
-                   <apex:inputField style="width:75px"
-                                    value="{!lopOffer.PBS_AAAP_Total_Struct_Park_Space_Offered__c}"
-                                    id="structspace2"/>
-               </td>
-           </tr>
-           <tr>
-               <td>
-                   <apex:outputtext value="{!$Label.LOP_Parking_Spaces_For_Employee_or_Visitor}"/>
-               </td>
-           </tr>
-           <tr>
-               <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <apex:outputtext value="Surface"/>
-                   <apex:inputField style="width:75px"
-                                    value="{!lopOffer.PBS_RSAP_Emp_Visitor_Surface_Spaces__c}"
-                                    id="surfacevisitor"/>
-                   <apex:outputtext value="Structured"/>
-                   <apex:inputField style="width:75px"
-                                    value="{!lopOffer.PBS_RSAP_Emp_Visitor_Structured_Spaces__c}"
-                                    id="structvisitor"/>
-               </td>
-           </tr>
-           <tr>
-               <td>
-                   <apex:outputtext value="{!$Label.LOP_Parking_Spaces_For_Govt_Vehicles}"/>
-               </td>
-           </tr>
-           <tr>
-               <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <apex:outputtext value="Surface"/>
-                   <apex:inputField style="width:75px" value="{!lopOffer.PBS_RSAP_GOV_Surface_Spaces__c}"
-                                    id="surfacegovt"/>
-                   <apex:outputtext value="Structured"/>
-                   <apex:inputField style="width:75px"
-                                    value="{!lopOffer.PBS_RSAP_GOV_Structured_Spaces__c}" id="structgovt"/>
-   
-               </td>
-           </tr>
-           <tr>
-               <td>
-                   <apex:outputtext value="5. What is the annual amount ($) per SPACE?"/>
-                   <span class="required"></span><br/>
-                   <br/>
-                   <apex:outputText ><font color="#002BAD"> Note: You will be asked to confirm if parking is a separate charge from other rental components later in the Rates section; if  there is no separate charge for parking, please put $0.00 in both fields.</font></apex:outputText>
-               </td>
-           </tr>
-           <tr>
-               <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<apex:outputtext value="{!$Label.LOP_Annual_Cost_Per_Space_Surface}"/><span class="required">*</span>
-<apex:inputField style="width:75px;    margin-left: 25px;"
-   value="{!lopOffer.PBS_RSAP_SURFACE_PARKING_ANNUAL_COST__c}"
-   id="surfaceAnnualCost"/>
-</td>
-</tr>
-<tr>
-   <td>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <apex:outputtext value="{!$Label.LOP_Annual_Cost_Per_Space_Structured}"/>
-      <span class="required">*</span>
-      <apex:inputField style="width:75px"
-         value="{!lopOffer.PBS_RSAP_STRUCT_PARKING_ANNUAL_COST__c}"
-         id="structAnnualCost"/>
-   </td>
-</tr>
-</Table>
-</div> -->    
-                
                     <div border="2" class="bb">
-                        <h4 class="grey" style="padding-top: 0px;">PARKING OFFERED</h4>
+                        <h4 class="grey" style="padding-top: 0px;">Parking offered</h4>
                         <apex:panelGrid id="form1" columns="1">
-                            <apex:outputPanel >
-                                <apex:outputtext value="{!$Label.PBS_AAAP_Total_Parking_Spaes}"/><br/>
-                                <apex:outputtext value="Total Surface" style="margin-left : 16px;" />
-                                <span class="required">*&nbsp;&nbsp;</span>
-                                <apex:inputField style="width:120px"
-                                                 value="{!lopOffer.PBS_AAAP_Total_Surface_Parking_Spaces__c}"
-                                                 id="surfacespace1"/>
-                                <apex:outputtext value="Total Structured" style="margin-left : 20px;" />
-                                <span class="required">*&nbsp;&nbsp;</span>
-                                <apex:inputField style="width:120px"
-                                                 value="{!lopOffer.PBS_AAAP_Total_Structured_Parking_Spaces__c}"
-                                                 id="structspace1"/>
-                            </apex:outputPanel>
-                            <apex:outputPanel >
-                                <apex:outputText value="2. Is all of the parking onsite?"></apex:outputText>
-                                <span class="required">*</span><br/>
-                                <apex:selectRadio styleClass="radioCell" style="margin-left : 8px;" 
-                                                  value="{!lopOffer.PBS_AAAP_Parking_Onsite__c}"
-                                                  id="onsiteparking">
-                                    <apex:selectOptions value="{!onsiteParkingItems}"/>
-                                </apex:selectRadio>
-                            </apex:outputPanel>
-                            <apex:outputPanel >
-                                <apex:outputtext value="{!$Label.PBS_AAAP_Total_Parking_Spaces_Offered}"/><br/>
-                                <apex:inputField style="margin-left : 16px; width:120px"
-                                                 value="{!lopOffer.PBS_AAAP_Total_Park_Spaces_Offered__c}" onkeyup="validate(this)"
-                                                 id="parkingPerCode" />
-                            </apex:outputPanel>
+                            
                             <apex:outputPanel >
                                 <apex:outputtext value="{!$Label.PBS_AAAP_Monthly_Amt_Reserved_Parking} "/><span class="required">*</span><br/>
                                 <table>
@@ -434,7 +330,7 @@
                                 </table>
                             </apex:outputPanel>
                             <apex:outputPanel >
-                                <apex:outputtext value="5. Number of parking spaces offered to satisfy the parking requirements of the RLP:"/><span class="required">*</span><br/>
+                                <apex:outputtext value="2. Number of parking spaces offered to satisfy the parking requirements of the RLP:"/><span class="required">*</span><br/>
                                 <table>
                                     <tr>
                                         <td/>
@@ -478,26 +374,25 @@
                             </apex:outputPanel>
                         </apex:panelGrid>
                     </div>
-                    
                     <table>
                         <tr>
                             <td>
-
-                                <!--{!!viewOnly}-->
-                                <apex:outputPanel rendered="{!!viewOnly}">
-                                    <apex:commandButton value="Back" action="{!backToOfrBlding}" styleClass="buttonred"
+                                <apex:outputPanel >
+                             
+                                    <apex:commandButton value="Back" styleClass="buttonred" onclick="window.parent.location = '{!$Label.LOP_Community_Base_URL}Offer-S-Eligibility'+window.parent.location.search;"
                                                         rendered="true"/>
+                                    <apex:outputPanel rendered="{!!viewOnly}">
                                     <apex:commandButton value="Save Page" styleClass="btnSave"
                                                         action="{!saveParkingInfo}"
                                                         rendered="true"/>
                                     <apex:commandButton value="Next" action="{!saveParkingAndContinue}"
                                                         rendered="true" styleClass="btnJQSubmit"/>
-                                    <!-- J.Rogers 1/18/2023  SFWS-2107
-                                    <apex:commandButton value="Exit Offer" action="{!actionCancel}" rendered="true"
-                                                        onclick="if(confirm('Please make sure to hit save page before exiting your offer.  Changes will not be saved unless you hit Save Page.')){return true;} else return false;"/>
-                                    -->
+                                    </apex:outputPanel>
+                                     <apex:outputPanel rendered="{!viewOnly}"> 
+                                            <apex:commandButton value="Next" onclick="window.parent.location = '{!$Label.LOP_Community_Base_URL}Offer-S-Costs'+window.parent.location.search;"></apex:commandButton>
+                                     </apex:outputPanel> 
                                     <apex:commandButton value="Exit Offer"
-                                    onclick="if(confirm('Are you sure you want to cancel editing this record without saving changes?')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}RSAP-PortalHome';return false;} else {return false;}"/>
+                                    onclick="if(confirm('Are you sure you want to cancel editing this record without saving changes?')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}Offer-Home';return false;} else {return false;}"/>
         
                                 </apex:outputPanel>
                             </td>

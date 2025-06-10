@@ -54,18 +54,18 @@
         src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
     <script src="{!URLFOR($Resource.modaljquery)}"></script>
     <script type="text/javascript">
-            console.log('{!pageURLForRedirection}');
+            
             if('{!JSENCODE(pageURLForRedirection)}' != ''){
                 window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
                 window.parent.document.body = document.createElement('body');
             }
-    		else{
-        	window.parent.document.body.scrollTop = 0;
-  			window.parent.document.documentElement.scrollTop = 0;
-       		}
+            else{
+            window.parent.document.body.scrollTop = 0;
+            window.parent.document.documentElement.scrollTop = 0;
+            }
     </script>
     <script type="text/javascript">
-        //alert('test');
+        
         JY = jQuery.noConflict();
         JY(document).ready(function () {
             //added by syam display msg when submitted offer is saved.
@@ -93,7 +93,7 @@
             var el = document.getElementById('{!$Component.newOffer.state}');
             console.log('****'+checkBoxVal);
             if (checkBoxVal == 'checked') {
-                //  JQ('input[id=' + "'{!$Component.newOffer.propownername}'" + ']').prop('disabled', true);
+                
                 JY('input[id=' + "'{!$Component.newOffer.firstname}'" + ']').prop('disabled', true);
                 JY('input[id=' + "'{!$Component.newOffer.lastname}'" + ']').prop('disabled', true);
                 JY('input[id=' + "'{!$Component.newOffer.address}'" + ']').prop('disabled', true);
@@ -122,7 +122,7 @@
             if (zipCd != '') {
                 flag = postalCodeRegex.test(zipCd);
                 if (!flag) {
-                    //alert('Please enter valid ZIP code in either 5-digit or 9-digit format, for example 12345 or 12345-6789.');
+                    
                     var confirm1 = JY('<div></div>').html("Please enter valid ZIP code in either 5-digit or 9-digit format, for example 12345 or 12345-6789.").dialog({
                         autoOpen: false,
                         title: '',
@@ -167,39 +167,14 @@
         }
     function blockSpecialChar(e){
         console.log(e);
-        return e.key != '.'; //(e.charCode >= 48 && e.charCode <=57) || (e.charCode >= 97 && e.charCode <=122) || (e.charCode >= 65 && e.charCode <=90); 
+        return e.key != '.';  
     }
     </script>
-    <body onload="init()"> <!--onload="disableFields();"-->
+    <body onload="init()"> 
         
-<!-- J. Rogers  Eliminate Headers
-<div id="login">
-            <ul>
-                <li><a href="/RSAP/portalHome">RSAP Home</a> </li>
-                <li>|</li>
-                <li><a href="/AAAP/portalHome">AAAP</a></li>
-                <li>|</li>
-                <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
-                    <apex:outputLink value="/AAAP/home/home.jsp">
-                        <li>{!$Label.site.login_button}</li>
-                    </apex:outputLink>
-                    <li> |</li>
-                    <apex:outputLink value="/AAAP/ForgotPassword">
-                        <li>{!$Label.site.forgot_your_password_q}</li>
-                    </apex:outputLink>
-                    <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
-                    <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
-                        <li>{!$Label.site.new_user_q}</li>
-                    </apex:outputLink>
-                </apex:panelGroup>
-                <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
-                                 rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
-                    <li>{!$Label.site.logout}</li>
-                </apex:outputLink>
-            </ul>
-        </div  -->
+
         <div id="wrapper">
-            <c:lop_inside_header />
+            
             <div id="content" class="property-owner">
                 <!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
                 <apex:panelGrid rendered="{!!isValidUser}">
@@ -333,12 +308,9 @@
                         <apex:commandButton value="Back" action="{!backToOfrParking}"/>
                         <apex:commandButton value="Save Page" styleClass="btnSave" action="{!actionSavePropertyOwner2}" onclick="return validateZipcode();"/>
                         <apex:commandButton value="Next" action="{!actionSavePropertyOwnerAndContinue}" styleClass="btnJQSubmit" onclick="return validateZipcode();"/>
-                        <!-- J. Rogers - Communities Upgrade
-                        <apex:commandButton value="Exit Offer" action="{!actionCancel}"
-                            onclick="if(confirm('Please make sure to hit save page before exiting your offer.  Changes will not be saved unless you hit Save Page.')){return true;} else return false;"/>
-                        -->
+                       
                         <apex:commandButton value="Exit Offer"
-                            onclick="if(confirm('Are you sure you want to cancel editing this record without saving changes?')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}RSAP-PortalHome';return false;} else {return false;}"/>
+                            onclick="if(confirm('Are you sure you want to cancel editing this record without saving changes?')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}Offer-Home';return false;} else {return false;}"/>
                    </apex:outputPanel>
                 </apex:form>
             </div>

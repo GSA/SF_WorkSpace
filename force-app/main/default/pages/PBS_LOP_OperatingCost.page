@@ -76,7 +76,7 @@
             color: red !important;
             }
             
-            .hr {
+            /*  .hr {
             font-weight: bold;
             font-size: 28px;
             border-bottom: 1px solid #cccccc;
@@ -85,7 +85,7 @@
             padding-top: 15px;
             <!-- J. Rogers changed margin-left from 45px for alignment -->
             margin: 0px;
-            }
+            }*/
             /*Julia change from here*/
             .testButton {
             border: solid black 1px;
@@ -102,6 +102,17 @@
             font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
             -webkit-font-smoothing: antialiased;
             color:#000000;
+            }
+        		
+            
+            .hr {
+                font-weight: bold;
+                font-size: 20px;
+                //border-bottom: 1px solid #cccccc;
+                padding: 0 0 8px;
+                color: #000000;
+                //color: #002BAD;
+                padding-top: 15px;
             }
             
             .continueButton{
@@ -145,7 +156,17 @@
               margin-top:-350px !important;
             //transform: translate(-50%, -50%); !important;
             }
-             .infopopup2 {
+            
+             .custom-border {
+            border: 1px solid  #999;
+            padding-top: 30px;
+            color: #333333;
+            font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+            font-size:13px;
+            background-color: #eeeeee;
+        }
+            
+            .infopopup2 {
               position:fixed !important;
               display:inline-block;
               top:94% !important;
@@ -179,48 +200,14 @@
             //transform: translate(-50%, -50%); !important;	
             }
         </style>
-        <!--apex:outputText id="javaScriptBlock">
-            function funOncomplete(){
-                console.log('fononcomplete');
-                if({!!isShowError}){
-                    centerPopup();
-                    loadPopup();
-                }
-            }
-        </apex:outputText-->
+        
     </head>
-    <!--body onload="centerPopup();loadPopup();"-->
+    
         
     
-<!-- J. Rogers  Eliminate Headers
-<div id="login">
-        <ul>
-            <li><a href="/RSAP/portalHome">RSAP Home</a> </li>
-            <li>|</li>
-            <li><a href="/AAAP/portalHome">AAAP</a></li>
-            <li>|</li>
-            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
-                <apex:outputLink value="/AAAP/home/home.jsp">
-                    <li>{!$Label.site.login_button}</li>
-                </apex:outputLink>
-                <li> |</li>
-                <apex:outputLink value="/AAAP/ForgotPassword">
-                    <li>{!$Label.site.forgot_your_password_q}</li>
-                </apex:outputLink>
-                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
-                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
-                    <li>{!$Label.site.new_user_q}</li>
-                </apex:outputLink>
-            </apex:panelGroup>
-            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
-                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
-                <li>{!$Label.site.logout}</li>
-            </apex:outputLink>
-        </ul>
-    </div>
-    <!--/login-->
+
     <div id="wrapper">
-        <c:lop_inside_header />
+        
         <div id="content" class="operating-cost">
             <apex:panelGrid rendered="{!!isValidUser}">
                 <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
@@ -237,8 +224,35 @@
             </apex:panelGroup>
             
             <apex:form id="opForm" rendered="{!isValidUser}">
+                <apex:outputPanel rendered="{!!viewOnly}">
                 <apex:actionFunction action="{!saveData}" name="saveTheForm" reRender="totalCal,q27,q33,q33Gov"  />
-                <div class="hr" style="width: 92%;">{!QLabels.opCostsPgHdr}</div>
+                </apex:outputPanel>
+                  <!-- Grid to display three columns -->
+            <div style="display: flex; flex-direction: row; justify-content: space-between; padding: 1px; margin-top: -25px;margin-right: 50px;">
+                <!-- Column 1: Property Name -->
+                <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999;padding-bottom: 10px;padding-left: 10px; padding-top: 10px;">
+                    <span>Property name:</span> 
+                    <span>
+                        <apex:outputText value="{!lopOffer.PBS_AAAP_Building_Name__c}" />
+                    </span>
+                </div>
+                <!-- Column 2: RLP Number -->
+                <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999;padding-bottom: 10px;padding-left: 10px; padding-top: 10px;">
+                    <span>RLP number:</span> 
+                     <span>
+                        <apex:outputText value="{!rlp.PBS_RSAP_Solicitation_Number__c}" />
+                    </span>
+                </div>
+                <!-- Column 3: Offer Status -->
+                <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999;padding-bottom: 10px;padding-left: 10px; padding-top: 10px;">
+                    <span>Offer status:</span>
+                    <span>
+                        <apex:outputText value="{!lopOffer.PBS_AAAP_Offer_Status__c}" />
+                    </span>
+                </div>
+            </div>
+            
+                 <div class="hr">7. Costs</div>
                 <!-- J. Rogers changed margin-left from 45px for alignment -->
                 <div style="margin-left:0px;font-size: 14px;line-height: 145%;padding-top: 20px;letter-spacing: .01em;width:92%;">
 
@@ -276,7 +290,7 @@
                         <apex:outputLabel id="msgview" styleClass="errMessage" value="{!viewMsg}"/>
                     </apex:outputPanel>
                     <div class="tabbed-table">
-                        <!--h3 class="blue">Operating Costs</h3>-->
+                        
                         <div id="example_wrapper_op" class="dataTables_wrapper" role="grid" style="background-color: #f6f6f6">
                             <table id="offersTable" styleClass="tablesorter" style="border:0px; background-color:#fff;">
                                 <h2>&nbsp;</h2>
@@ -295,13 +309,12 @@
                                         </div>
                                 </div>
                                 <div style="padding: 0px 19px;padding-bottom:10px;text-align: right;padding-right: 70px;">
-                                    <!--from Santhosh: oncomplete="showModal(); return false;" I added oncomplete methods-->
-                                    <apex:commandButton action="{!checkValidations}" value="Prorate" reRender="pgBlockMessages" oncomplete="centerPopup();loadPopup();" styleClass="btnSave" />
-                                    <!--apex:commandButton action="{!checkValidations}" value="Prorate" reRender="pgBlockMessages,javaScriptBlock" oncomplete="funOncomplete();" styleClass="btnSave" /-->
+                                    
+                                    <apex:commandButton action="{!checkValidations}" value="Prorate" reRender="pgBlockMessages" oncomplete="centerPopup();loadPopup();" styleClass="btnSave" disabled="{!viewOnly}"/>
+                                    
                                 </div>
                             <!-- Prorate changes end-->
-                                <!--<br/>-->
-                                <!--<span style="padding-left: 40px;">Lessor’s Annual Cost for Entire Building / Lessors Annual Cost for Government-Leased Area</span>-->
+                    
                                 <apex:panelGrid id="pangrid_sect1" columnClasses="col1, col2,col3" columns="3"
                                     width="600px" frame="border" rules="all">
                                     <apex:outputText id="txt_col_zero">&nbsp;</apex:outputText>
@@ -838,17 +851,19 @@
                         </div>
                         <!-- /#example_wrapper -->
                     </div>
-                    <!-- /tabbed-table -->
-                    <apex:outputPanel rendered="{!!viewOnly}"><!--{!!viewOnly}-->
-                        <apex:commandButton id="btn_back" action="{!back}" value="Back"/>
+                    <br/><br/>
+                    <apex:outputPanel >
+                       
+                        <apex:commandButton id="btn_back" value="Back" onclick="window.parent.location = '{!$Label.LOP_Community_Base_URL}Offer-S-SpaceParking'+window.parent.location.search;" />
+                        <apex:outputPanel rendered="{!!viewOnly}">
                         <apex:commandButton id="btn_save_form" action="{!saveForm}" value="Save Page" styleClass="btnSave"/>
-                        <apex:commandButton id="btn_continue" action="{!continueSave}" value="Next" styleClass="btnJQSubmit"/>
-                        <!--  J. Rogers 2/15/2023 - Communities Upgrade
-                        <apex:commandButton value="Exit Offer" action="{!actionCancel}"
-                            onclick="if(confirm('Please make sure to hit save page before exiting your offer.  Changes will not be saved unless you hit Save Page.')){return true;} else return false;"/>
-                        -->
+                        <apex:commandButton id="btn_continue" action="{!continueSave}" value="Next" styleClass="btnJQSubmit"/>  
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!viewOnly}"> 
+                       	 <apex:commandButton value="Next" onclick="window.parent.location = '{!$Label.LOP_Community_Base_URL}Offer-S-TermsFinancials'+window.parent.location.search;"></apex:commandButton>
+                        </apex:outputPanel>                  
                         <apex:commandButton value="Exit Offer"
-                            onclick="if(confirm('Are you sure you want to cancel editing this record without saving changes?')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}RSAP-PortalHome';return false;} else {return false;}"/>
+                            onclick="if(confirm('Are you sure you want to cancel editing this record without saving changes?')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}Offer-Home';return false;} else {return false;}"/>
 
                         </apex:outputPanel>      
                 </apex:pageBlock>
@@ -932,11 +947,11 @@
           var popupStatus = 0;
 
 function loadPopup(){
-    //console.log('loadpopup, errorexists: ' + errorExists);
+    
       if(!errorExists){
-    //alert(getCookie("apex__counter"));
+    
     //loads popup only if it is disabled   
-    if (popupStatus==0){// && (getCookie("apex__counter") == '1')) {
+    if (popupStatus==0){
         console.log('popup status is 0');
         jQuery("#backgroundPopup").css({
             "opacity": "0.7"
@@ -965,7 +980,7 @@ function disablePopup(){
 
 //centering popup
 function centerPopup(){
-    //console.log('centerpopup, error exists: ' + errorExists);
+    
     if(!errorExists){
     //request data for centering
     var windowWidth = document.documentElement.clientWidth;
@@ -1002,8 +1017,7 @@ function centerPopup(){
 
     
     //from modaljquery STATIC RESOURCE DON'T NEED THIS?
-    /*(function(jQuery){jQuery.fn.extend({leanModal:function(options){var defaults={top:100,overlay:0.5,closeButton:null};var overlay=$("<div id='lean_overlay'></div>");jQuery("body").append(overlay);options=$.extend(defaults,options);return this.each(function(){var o=options;jQuery(this).click(function(e){var modal_id=$(this).attr("href");jQuery("#lean_overlay").click(function(){close_modal(modal_id)});jQuery(o.closeButton).click(function(){close_modal(modal_id)});var modal_height=$(modal_id).outerHeight();var modal_width=$(modal_id).outerWidth();
-jQuery("#lean_overlay").css({"display":"block",opacity:0.2});jQuery("#lean_overlay").fadeTo(200,o.overlay);jQuery(modal_id).css({"display":"block","position":"fixed","opacity":0.2,"z-index":11000,"left":50+"%","margin-left":-(modal_width/2)+"px","top":o.top+"px"});jQuery(modal_id).fadeTo(200,1);e.preventDefault()})});function close_modal(modal_id){jQuery("#lean_overlay").fadeOut(200);$(modal_id).css({"display":"none"})}}})})(jQuery);*/
+
     </script>
     <!--Julia to here-->
     <c:SiteFooterUX />

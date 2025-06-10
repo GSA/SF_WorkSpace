@@ -12,6 +12,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
     private Map<String, List<PBS_AAAP_Rate__c>> ratesToSpace = new Map<String, List<PBS_AAAP_Rate__c>>();      // a map that relates a list of rates to a space ID
 
     public String offerId {get; set;}  // offer id
+    public String propId {get; set;} 
     public Boolean rendOuterSpace { get; set; }     // render flag for the "outer space" panel
     public Boolean rendAddSpace { get; set; }     // render flag for the new space panel
     public Boolean rendSuccSpace { get; set; }     // render flag for the succeeding space panel
@@ -24,6 +25,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
     public Boolean isSucceeding {get;set;}
     public Boolean leaseTerm10_5 { get; set; }     // True=10,5 lease term. False=Option Term
     public Boolean rlpGT2016 { get; set; }     // True=15,10 lease term. False=5
+    public String rlpType { get; set; }
     public String leaseTerm10_5Header { get; set; }     // leaseTerm10_5=true then 10,5; else 5+5
     public String leaseTerm15_10Header { get; set; }     // rlpGT2016=true then 15,10; else 5
     public PBS_AAAP_Offer__c offer { get; set; }     // offer
@@ -53,6 +55,8 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
     public Decimal userInputBSAC {get; set;}
 
     public Boolean initialised {get; set;}
+     public Boolean viewOnly { get; set; }
+    public String viewMsg { get; set; }
 
     public List<String> panelIds {
         get {
@@ -79,18 +83,18 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
     *   space" page.
     **************************************************************************************/
     public class SpaceAndRatesDetails {
-        public Boolean selected { get; set; }
-        public String spaceNo { get; set; }
-        public String leaseType { get; set; }
-        public String GSALeaseNo { get; set; }
-        public String sqFtOffered { get; set; }
-        public Double fiveYrFS { get; set; }
-        public Double fiveYrPV { get; set; }
-        public Double fiveFiveYrFS { get; set; }
-        public Double fiveFiveYrPV { get; set; }
-        public Double tenYrFS { get; set; }
-        public Double tenYrPV { get; set; }
-        public String spaceID { get; set; }
+        @AuraEnabled public Boolean selected { get; set; }
+        @AuraEnabled public String spaceNo { get; set; }
+        @AuraEnabled public String leaseType { get; set; }
+        @AuraEnabled public String GSALeaseNo { get; set; }
+        @AuraEnabled public String sqFtOffered { get; set; }
+        @AuraEnabled public Double fiveYrFS { get; set; }
+        @AuraEnabled public Double fiveYrPV { get; set; }
+        @AuraEnabled public Double fiveFiveYrFS { get; set; }
+        @AuraEnabled public Double fiveFiveYrPV { get; set; }
+        @AuraEnabled public Double tenYrFS { get; set; }
+        @AuraEnabled public Double tenYrPV { get; set; }
+        @AuraEnabled public String spaceID { get; set; }
 
         /*  Construtor  */
         public SpaceAndRatesDetails() {
@@ -252,7 +256,14 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         try {
             // prepare the render flag defaults
             offerId = ApexPages.currentPage().getParameters().get('offerId');
- 
+            propId = ApexPages.currentPage().getParameters().get('propertyId');
+            String isEditable = ApexPages.currentPage().getParameters().get('edit');
+        	if (isEditable == 'false') {
+            viewOnly = true;
+            viewMsg = 'Offer opened in view mode. Any changes made will not be saved.';
+        	} else {
+            viewOnly = false;
+        	}
             initialised = FALSE;
             newOrCont = '';
             rendOuterSpace = true;
@@ -273,8 +284,16 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
             draftMsgFlag = ApexPages.currentPage().getParameters().get('draftMsgFlag');
             //added by syam for offerId validation
             System.debug('*** offerId in PBS_AAAP_ControllerSpacesAndRates is ***' + offerId);
-            
+           
             spaceAndRates = PBS_AAAP_GlobalConstants.getOfferDetail(offerId);
+            if(spaceAndRates.RecordType.Name == 'AAAP')
+                    {
+                        rlpType = spaceAndRates.PBS_AAAP_RLP_Number__r.PBS_AAAP_RLP_Number__c;
+                    }
+                    else if(spaceAndRates.RecordType.Name == 'RSAP')
+                    {
+                        rlpType = spaceAndRates.PBS_AAAP_RLP_Number__r.PBS_RSAP_Solicitation_Number__c;
+                    }
             validate = FALSE;
             if (spaceAndRates.OwnerId == UserInfo.getUserId()) {
                 isValidUser = true;
@@ -293,15 +312,14 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
             // obtain data about the RLP used for the Offer
             rlp = dao.getRLP(offer.PBS_AAAP_RLP_Number__c);
             regionCode = rlp.PBS_AAAP_Region__c;
-            //regionCode = '10/5 Term - All Regions';
+            
             System.debug('rlp regionCode is *****' + regionCode);
             System.debug('&&&&& rlp.PBS_AAAP_DISCOUNT_RATE__c: ' + rlp.PBS_AAAP_DISCOUNT_RATE__c + ' rlp.PBS_AAAP_ESCALATION_RATE_PERCENT__c' + rlp.PBS_AAAP_ESCALATION_RATE_PERCENT__c);
-            // rlp.PBS_AAAP_DISCOUNT_RATE__c = 5.0;
-            // rlp.PBS_AAAP_ESCALATION_RATE_PERCENT__c = 2.50;
+            
 
             System.debug('#### rlp: ' + rlp);
             System.debug('#### offer: ' + offer);
-            //System.debug('&&&&& rlp.PBS_AAAP_DISCOUNT_RATE__c: ' + rlp.PBS_AAAP_DISCOUNT_RATE__c+' rlp.PBS_AAAP_ESCALATION_RATE_PERCENT__c'+rlp.PBS_AAAP_ESCALATION_RATE_PERCENT__c);
+            
 
             //-------RITM0021675, RITM002167, RITM0021677-----------------------------------------------------------------------
             rendBSAC = false;     // render flag for the BSAC panel
@@ -351,7 +369,11 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         }
 
     }   // end constructor
-
+	// Arg constructor
+    public PBS_AAAP_ControllerSpacesAndRates(String offerId) {
+        this.offerId = offerId;
+    }
+    
     /****************************************************************************************************************
     *   End Constructors 
     *****************************************************************************************************************/
@@ -452,7 +474,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
             space = defaultSpace(offerId);
             space.PBS_AAAP_IDENTIFIER_TYPE__c = sfOfferedType;
             space.PBS_AAAP_IDENTIFIER_ID__c = String.valueOf(++lrgSpaceOrdinal);
-            //space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = !Boolean.valueOf(newOrCont);
+            
             space.PBS_AAAP_TOTAL_MARKUP__c = 0.00;
             System.debug('***** space identifier: ' + space.PBS_AAAP_IDENTIFIER_ID__c);
             System.debug('***** (addSpace) space: ' + space);
@@ -530,12 +552,11 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         PageReference pref = new PageReference('/AAAP/spacesAndRates?OfferId='+offerId);
         pref.getParameters().put('offerId', offerId);
         pageURLForRedirection = pref.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/spacesAndRates', Label.LOP_Community_Base_URL+'AAAP-SpacesAndRates');
+        
+        pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-M-SpaceRates?edit=true&propertyId='+propId+'&offerId='+offerId;
+       
         pref.setRedirect(false);
-        //return null;
-
-        //pageURLForRedirection = Label.LOP_Community_Base_URL+PBS_AAAP_Utility.getCommunityURL(pref.getUrl());
-        //return pref;	
+        	
     }
 
     // action to add a rate, or to "edit" a rate from the inner space "view"
@@ -761,8 +782,8 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         pgSpaceAndRates.setRedirect(true);
         pgSpaceAndRates.getParameters().put('offerId', offerId);
         pageURLForRedirection = pgSpaceAndRates.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/SpacesAndRates', Label.LOP_Community_Base_URL+'AAAP-SpacesAndRates');
-            
+        //pageURLForRedirection = pageURLForRedirection.replace('/AAAP/SpacesAndRates', Label.LOP_Community_Base_URL+'Offer-M-SpaceRates');
+          pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-M-SpaceRates?edit=true&propertyId='+propId+'&offerId='+offerId;  
         System.debug('##### End deleteSpaces: ');
         return Null;
     }   // end deleteSpace
@@ -779,7 +800,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
             return null;
         }
         
-        //PageReference pgOfferAttachments = Page.PBS_AAAP_OfferAttachments;
+        
         PageReference pgOfferAttachments = new PageReference('/AAAP/OfferAttachments');
 
         try {
@@ -789,9 +810,26 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
             if (draftMsgFlag == 'true') {
                 pgOfferAttachments.getParameters().put('draftMsgFlag', 'true');
             }
-            pageURLForRedirection = pgOfferAttachments.getUrl();
-            pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferAttachments', Label.LOP_Community_Base_URL+'AAAP-OfferAttachments');
-            pgOfferAttachments.setRedirect(false);
+            if( !(( pageUrl == null ) || ( pageUrl == '' )) )
+            {
+                Integer len = pageUrl.length();
+                if( pageUrl.mid(len-1, 1) == '=' )
+                {
+                    pageUrl = pageUrl + offerId;
+                }
+
+                system.debug( 'Take away ' + pageUrl );
+
+                PageReference p = new PageReference(pageUrl);
+                //p.setRedirect(true);
+                pageURLForRedirection = Label.LOP_Community_Base_URL+PBS_AAAP_Utility.getCommunityURL(p.getUrl());
+                return null;
+            } else {
+                pageURLForRedirection = pgOfferAttachments.getUrl();
+               
+                pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-M-Attachments?edit=true&propertyId='+propId+'&offerId='+offerId;
+                pgOfferAttachments.setRedirect(false);
+            }
             return null;
 
         } catch (Exception e) {
@@ -818,7 +856,10 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         back.getParameters().put('offerId', offerId);
 		back.setRedirect(false);
         pageURLForRedirection = back.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OperatingCosts', Label.LOP_Community_Base_URL+'AAAP-OperatingCosts');
+    
+       
+
+        pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-M-Costs?edit='+(viewOnly ? 'false' : 'true')+'&offerId='+offerId+'&propertyId='+propId;
         return null;
     }   // end back
 
@@ -875,7 +916,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         validate = TRUE;
         this.saveRates();       // save the rates
         validate = FALSE;
-        //PageReference pgSpaceRates = Page.PBS_AAAP_SpacesAndRates;
+        
         PageReference pgSpaceRates = new PageReference('/AAAP/SpacesAndRates');
         pgSpaceRates.getParameters().put('offerId', offerId);
         pgSpaceRates.setRedirect(true);
@@ -891,7 +932,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         Boolean spRtFlag = FALSE;
         if(newOrCont == '' || newOrCont == NULL){
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    '1. Please indicate if the space is currently leased to a Government tenant.');
+                    'Space and rates Page: 1. Please indicate if the space is currently leased to a Government tenant.');
             Apexpages.addMessage(myMsg);
             //return null;
             spRtFlag = TRUE;
@@ -900,7 +941,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
 
         if(newOrCont == 'TRUE' && (space.PBS_AAAP_GSA_EXPIRE_LEASE_NUMBER__c == null || space.PBS_AAAP_GSA_EXPIRE_LEASE_NUMBER__c == '')){
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    '1a. An expiring lease number is required if the space you are offering is currently being leased to a Government tenant.');
+                    'Space and rates Page: 1a. An expiring lease number is required if the space you are offering is currently being leased to a Government tenant.');
             Apexpages.addMessage(myMsg);
             //return null;
             spRtFlag = TRUE;
@@ -908,7 +949,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
 
         if(space.PBS_AAAP_SF_OFFERED__c == null || space.PBS_AAAP_SF_OFFERED__c == 0){
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    '2. You must provide the total ABOA SF available for lease to the Government.');
+                    'Space and rates Page: 2. You must provide the total ABOA SF available for lease to the Government.');
             Apexpages.addMessage(myMsg);
             //return null;
             spRtFlag = TRUE;
@@ -916,7 +957,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
 
         if(space.PBS_AAAP_Max_Contiguous_Space__c == NULL || space.PBS_AAAP_Max_Contiguous_Space__c == 0){
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    '3. Please indicate the maximum contiguous ABOA SF of the space outlined in question #2.');
+                    'Space and rates Page: 3. Please indicate the maximum contiguous ABOA SF of the space outlined in question #2.');
             Apexpages.addMessage(myMsg);
             //return null;
             spRtFlag = TRUE;
@@ -924,7 +965,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
 
         if(space.PBS_AAAP_MIN_OFFERABLE_SPACE__c == NULL || space.PBS_AAAP_MIN_OFFERABLE_SPACE__c == 0){
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    '4. Please indicate the minimum demisable ABOA SF of the space outlined in question #2.');
+                    'Space and rates Page: 4. Please indicate the minimum demisable ABOA SF of the space outlined in question #2.');
             Apexpages.addMessage(myMsg);
             //return null;
             spRtFlag = TRUE;
@@ -932,7 +973,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
 
         if(space.PBS_AAAP_DATE_SPACE_AVAILABILITY__c == NULL){
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    '5. Please state the earliest date in which the space could be ready for the commencement of tenant improvement construction.');
+                    'Space and rates Page: 5. Please state the earliest date in which the space could be ready for the commencement of tenant improvement construction.');
             Apexpages.addMessage(myMsg);
             //return null;
             spRtFlag = TRUE;
@@ -940,14 +981,14 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
 
         if(userIputTIA == NULL || userInputBSAC == NULL){
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    '6.  You must input a value for \'Tenant Improvement Allowance\' and \'Building Specific Amortization\'.  You may put $0.00 as a value if you do not wish to see how the amortization or fees related to these rental components would factor into the overall lease rate.');
+                    'Space and rates Page: 6.  You must input a value for \'Tenant Improvement Allowance\' and \'Building Specific Amortization\'.  You may put $0.00 as a value if you do not wish to see how the amortization or fees related to these rental components would factor into the overall lease rate.');
             Apexpages.addMessage(myMsg);
             //return null;
             spRtFlag = TRUE;
         }
 
         if (rateE.fiveYrFS == 0.0 && rateE.fiveFiveYrFS == 0.0 && rateE.tenYrFS == 0.0) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '7. Rates for at least one term must be submitted.');
+            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 7. Rates for at least one term must be submitted.');
             Apexpages.addMessage(myMsg);
             //return null;
             spRtFlag = TRUE;
@@ -958,7 +999,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
             if (rateE.fiveYrFS > 0.0) {
                 if (rateE.tenFiveYrOptTerm == null || rateE.tenFiveYrOptTerm <= 0.0) {
                     if (regionCode != 'Census') {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-17. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #7 above.');
+                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-17. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #7 above.');
                         Apexpages.addMessage(myMsg);
                     }
                 }
@@ -966,7 +1007,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
             if (rateE.fiveFiveYrFS > 0.0) {
                 if (rateE.fiveFiveYrOptTerm == null || rateE.fiveFiveYrOptTerm <= 0.0) {
                     if (regionCode != 'Census') {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-15. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #7 above.');
+                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-15. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #7 above.');
                         Apexpages.addMessage(myMsg);
                     }
                 }
@@ -974,7 +1015,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
             if (rateE.tenYrFS > 0.0) {
                 if (rateE.tenEightYrOptTerm == null || rateE.tenEightYrOptTerm <= 0.0) {
                     if (regionCode != 'Census') {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-10. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #7 above.');
+                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-10. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #7 above.');
                         Apexpages.addMessage(myMsg);
                     }
                 }
@@ -984,18 +1025,20 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         }
 
         //SFWS-1126 03/30/2021 Todd Brown added the validation as stated in requirements for this story
-        //SGanti commented out 8/2/2021
-       /* if (space.PBS_AAAP_Enhanced_Clean_Disinfect_Rate__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '14. You must indicate the rental charge per ABOA SF to meet the "Routine Cleaning and Disinfecting Requirements for the Premises," as described in the "Janitorial Services" paragraph of the lease, sub-paragraph N.  Input must be a number.');
-            Apexpages.addMessage(myMsg);
-            spRtFlag = TRUE;
-        }
-		*/
+        
        //SGanti renumbered question number on error message 8/2/2021
-
+		if (space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c == 0.00 || space.PBS_AAAP_ARCH_ENG_FEES__c == 0.00 || space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c == Null || space.PBS_AAAP_ARCH_ENG_FEES__c == Null) {
+            if (readOnlyScreen != 'true' && regionCode != 'Census') {
+                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
+                        //'Warning Space Page : Data saved with "Lessor PM Fees" and / or "A&E Fees" with a ZERO value. Please make sure you intended a ZERO value. If not, return to space page and update #4 and #5. If so, proceed to Add/Edit Rates for Space.');
+                        'Space and rates Page: 14/15. Data was saved with "Lessor PM Fees" and/or "A&E Fees" with a ZERO value. Please make sure you intended a ZERO value.');
+                Apexpages.addMessage(myMsg);
+                spRtFlag = TRUE;
+            }
+        }
         if (space.PBS_AAAP_ARCH_ENG_FEES__c > 0.00) {
             if (feePrcntgOrDollar == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '15. You must select how Architectural and Engineering Fees will be structured by selecting one of the two options presented after the question.');
+                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 15. You must select how Architectural and Engineering Fees will be structured by selecting one of the two options presented after the question.');
                 Apexpages.addMessage(myMsg);
                 spRtFlag = TRUE;
             }
@@ -1015,7 +1058,8 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         PageReference pgSpaceRates = new PageReference('/AAAP/SpacesAndRates');
         pgSpaceRates.getParameters().put('offerId', offerId);
         pageURLForRedirection = pgSpaceRates.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/SpacesAndRates', Label.LOP_Community_Base_URL+'AAAP-SpacesAndRates');
+        
+        pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-M-SpaceRates?edit=true&propertyId='+propId+'&offerId='+offerId;
         pgSpaceRates.setRedirect(false);
         return null;
 
@@ -1031,7 +1075,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         Boolean spRtFlag = FALSE;
         if(newOrCont == '' || newOrCont == NULL){
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    '1. Please indicate if the space is currently leased to a Government tenant.');
+                    'Space and rates Page: 1. Please indicate if the space is currently leased to a Government tenant.');
             Apexpages.addMessage(myMsg);
             spRtFlag = TRUE;
         }
@@ -1039,48 +1083,48 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
 
         if(newOrCont == 'TRUE' && (space.PBS_AAAP_GSA_EXPIRE_LEASE_NUMBER__c == null || space.PBS_AAAP_GSA_EXPIRE_LEASE_NUMBER__c == '')){
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    '1a. An expiring lease number is required if the space you are offering is currently being leased to a Government tenant.');
+                    'Space and rates Page: 1a. An expiring lease number is required if the space you are offering is currently being leased to a Government tenant.');
             Apexpages.addMessage(myMsg);
             spRtFlag = TRUE;
         }
 
         if(space.PBS_AAAP_SF_OFFERED__c == null || space.PBS_AAAP_SF_OFFERED__c == 0){
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    '2. You must provide the total ABOA SF available for lease to the Government.');
+                    'Space and rates Page: 2. You must provide the total ABOA SF available for lease to the Government.');
             Apexpages.addMessage(myMsg);
             spRtFlag = TRUE;
         }
 
         if(space.PBS_AAAP_Max_Contiguous_Space__c == NULL || space.PBS_AAAP_Max_Contiguous_Space__c == 0){
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    '3. Please indicate the maximum contiguous ABOA SF of the space outlined in question #2.');
+                    'Space and rates Page: 3. Please indicate the maximum contiguous ABOA SF of the space outlined in question #2.');
             Apexpages.addMessage(myMsg);
             spRtFlag = TRUE;
         }
 
         if(space.PBS_AAAP_MIN_OFFERABLE_SPACE__c == NULL || space.PBS_AAAP_MIN_OFFERABLE_SPACE__c == 0){
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    '4. Please indicate the minimum demisable ABOA SF of the space outlined in question #2.');
+                    'Space and rates Page: 4. Please indicate the minimum demisable ABOA SF of the space outlined in question #2.');
             Apexpages.addMessage(myMsg);
             spRtFlag = TRUE;
         }
 
         if(space.PBS_AAAP_DATE_SPACE_AVAILABILITY__c == NULL){
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    '5. Please state the earliest date in which the space could be ready for the commencement of tenant improvement construction.');
+                    'Space and rates Page: 5. Please state the earliest date in which the space could be ready for the commencement of tenant improvement construction.');
             Apexpages.addMessage(myMsg);
             spRtFlag = TRUE;
         }
 
         if(userIputTIA == NULL || userInputBSAC == NULL){
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    '6.  You must input a value for \'Tenant Improvement Allowance\' and \'Building Specific Amortization\'.  You may put $0.00 as a value if you do not wish to see how the amortization or fees related to these rental components would factor into the overall lease rate.');
+                    'Space and rates Page: 6.  You must input a value for \'Tenant Improvement Allowance\' and \'Building Specific Amortization\'.  You may put $0.00 as a value if you do not wish to see how the amortization or fees related to these rental components would factor into the overall lease rate.');
             Apexpages.addMessage(myMsg);
             spRtFlag = TRUE;
         }
 
         if (rateE.fiveYrFS == 0.0 && rateE.fiveFiveYrFS == 0.0 && rateE.tenYrFS == 0.0) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '7. Rates for at least one term must be submitted.');
+            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 7. Rates for at least one term must be submitted.');
             Apexpages.addMessage(myMsg);
             spRtFlag = TRUE;
         }
@@ -1090,11 +1134,11 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
             if (rateE.fiveYrFS > 0.0) {
                 if (rateE.tenFiveYrOptTerm == null || rateE.tenFiveYrOptTerm <= 0.0) {
                     if (regionCode == '10/5 Term - All Regions') {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA).');
+                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA).');
                         Apexpages.addMessage(myMsg);
                         spRtFlag = TRUE;
                     }else if (regionCode != 'Census') {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-17. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #7 above.');
+                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-17. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #7 above.');
                         Apexpages.addMessage(myMsg);
                         spRtFlag = TRUE;
                     }
@@ -1103,7 +1147,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
             if (rateE.fiveFiveYrFS > 0.0) {
                 if (rateE.fiveFiveYrOptTerm == null || rateE.fiveFiveYrOptTerm <= 0.0) {
                     if (regionCode != 'Census') {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-15. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #7 above.');
+                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-15. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #7 above.');
                         Apexpages.addMessage(myMsg);
                         spRtFlag = TRUE;
                     }
@@ -1112,7 +1156,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
             if (rateE.tenYrFS > 0.0) {
                 if (rateE.tenEightYrOptTerm == null || rateE.tenEightYrOptTerm <= 0.0) {
                     if (regionCode != 'Census') {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-10. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #7 above.');
+                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-10. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #7 above.');
                         Apexpages.addMessage(myMsg);
                         spRtFlag = TRUE;
                     }
@@ -1121,29 +1165,25 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         }
 
         //SFWS-1126 03/30/2021 Todd Brown added the validation as stated in requirements for this story
-        //SGanti commented out on 8/2/2021
-     //   if (space.PBS_AAAP_Enhanced_Clean_Disinfect_Rate__c == null) {
-       //     ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '14. You must indicate the rental charge per ABOA SF to meet the "Routine Cleaning and Disinfecting Requirements for the Premises," as described in the "Janitorial Services" paragraph of the lease, sub-paragraph N.  Input must be a number.');
-      //      Apexpages.addMessage(myMsg);
-      //      spRtFlag = TRUE;
-      //  }
+        
     
         //SGanti renumbered on 8/2/2021
 
         if (space.PBS_AAAP_ARCH_ENG_FEES__c > 0.00) {
             if (feePrcntgOrDollar == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '15. You must select how Architectural and Engineering Fees will be structured by selecting one of the two options presented after the question.');
+                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 15. You must select how Architectural and Engineering Fees will be structured by selecting one of the two options presented after the question.');
                 Apexpages.addMessage(myMsg);
                 spRtFlag = TRUE;
             }
         }
         //SGanti renumbered on 8/2/2021
 
-        if (space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c == 0.00 || space.PBS_AAAP_ARCH_ENG_FEES__c == 0.00) {
+        if (space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c == 0.00 || space.PBS_AAAP_ARCH_ENG_FEES__c == 0.00 || space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c == Null || space.PBS_AAAP_ARCH_ENG_FEES__c == Null) {
+            
             if (readOnlyScreen != 'true' && regionCode != 'Census') {
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                        //'Warning Space Page : Data saved with "Lessor PM Fees" and / or "A&E Fees" with a ZERO value. Please make sure you intended a ZERO value. If not, return to space page and update #4 and #5. If so, proceed to Add/Edit Rates for Space.');
-                        '14/15. Data was saved with "Lessor PM Fees" and/or "A&E Fees" with a ZERO value. Please make sure you intended a ZERO value.');
+                       
+                        'Space and rates Page: 14/15. Data was saved with "Lessor PM Fees" and/or "A&E Fees" with a ZERO value. Please make sure you intended a ZERO value.');
                 Apexpages.addMessage(myMsg);
                 spRtFlag = TRUE;
             }
@@ -1192,8 +1232,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         this.rendRates = false;
         this.rendSuccSpace = false;
 
-        //this.saveRates();     // save the rates
-        //PageReference pgSpaceRates = Page.PBS_AAAP_SpacesAndRatesView;
+        
         PageReference pgSpaceRates = new PageReference('/AAAP/SpacesAndRatesView');
         pgSpaceRates.getParameters().put('offerId', offerId);
         pgSpaceRates.setRedirect(true);
@@ -1236,11 +1275,11 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
 
                 if (space.PBS_AAAP_SF_OFFERED__c <= 0) {
                     if (!isSucceeding) {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '2. Amount of offered space must be greater than 0.');
+                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 2. Amount of offered space must be greater than 0.');
                         Apexpages.addMessage(myMsg);
                         flag = true;
                     } else {
-                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '2. Amount of offered space must be greater than 0.');
+                        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 2. Amount of offered space must be greater than 0.');
                         Apexpages.addMessage(myMsg);
                         flag = true;
                     }
@@ -1250,12 +1289,12 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
 
             if (space.PBS_AAAP_SF_OFFERED__c <= 0 && !isSucceeding) {
 
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '2. Amount of offered space must be greater than 0.');
+                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 2. Amount of offered space must be greater than 0.');
                 Apexpages.addMessage(myMsg);
                 flag = true;
             }
             if (space.PBS_AAAP_SF_OFFERED__c <= 0 && isSucceeding) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '2. Amount of offered space must be greater than 0.');
+                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 2. Amount of offered space must be greater than 0.');
                 Apexpages.addMessage(myMsg);
                 flag = true;
             }
@@ -1267,14 +1306,14 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
     public PageReference saveRates() {
         if(newOrCont == 'TRUE' && (space.PBS_AAAP_GSA_EXPIRE_LEASE_NUMBER__c == null || space.PBS_AAAP_GSA_EXPIRE_LEASE_NUMBER__c == '')){
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    '1a. An expiring lease number is required if the space you are offering is currently being leased to a Government tenant.');
+                    'Space and rates Page: 1a. An expiring lease number is required if the space you are offering is currently being leased to a Government tenant.');
             Apexpages.addMessage(myMsg);
             return null;
         }
 
         if(space.PBS_AAAP_SF_OFFERED__c == null){
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    '2. You must provide the total ABOA SF available for lease to the Government.');
+                    'Space and rates Page: 2. You must provide the total ABOA SF available for lease to the Government.');
             Apexpages.addMessage(myMsg);
             return null;
         }
@@ -1286,7 +1325,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
             system.debug('$$$$---validation Starts---$$$$');
 
             if (rateE.fiveYrFS == 0.0 && rateE.fiveFiveYrFS == 0.0 && rateE.tenYrFS == 0.0) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Rates for at least one term must be submitted.');
+                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: Rates for at least one term must be submitted.');
                 Apexpages.addMessage(myMsg);
                 return null;
             }
@@ -1294,7 +1333,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
                 if (rateE.fiveYrFS > 0.0) {
                     if (rateE.tenFiveYrOptTerm == null || rateE.tenFiveYrOptTerm <= 0.0) {
                         if (regionCode != 'Census') {
-                            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-17. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #7 above.');
+                            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-17. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #7 above.');
                             Apexpages.addMessage(myMsg);
                         }
                     }
@@ -1302,7 +1341,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
                 if (rateE.fiveFiveYrFS > 0.0) {
                     if (rateE.fiveFiveYrOptTerm == null || rateE.fiveFiveYrOptTerm <= 0.0) {
                         if (regionCode != 'Census') {
-                            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-15. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #7 above.');
+                            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-15. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #7 above.');
                             Apexpages.addMessage(myMsg);
                         }
                     }
@@ -1310,7 +1349,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
                 if (rateE.tenYrFS > 0.0) {
                     if (rateE.tenEightYrOptTerm == null || rateE.tenEightYrOptTerm <= 0.0) {
                         if (regionCode != 'Census') {
-                            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-10. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #7 above.');
+                            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-10. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #7 above.');
                             Apexpages.addMessage(myMsg);
                         }
                     }
@@ -1334,16 +1373,16 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
                     //if (rlpGT2016) {
                     if (regionCode == 'Census') {
                         leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.CENSUS_25);
-                        //rateE.fiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveYrAPR/100,leaseFirmTermMonths,offer.PBS_AAAP_RLP_TI_New_Space__c.doubleValue());
+                        
                         rateE.fiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveYrAPR/100,leaseFirmTermMonths,userIputTIA.doubleValue());
                     } else if(regionCode == '10/5 Term - All Regions'){
                         leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.FIVEFIVEYRNEW);
-                        //rateE.fiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveYrAPR/100,leaseFirmTermMonths,offer.PBS_AAAP_RLP_TI_New_Space__c.doubleValue());
+                        
                         rateE.fiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveYrAPR/100,leaseFirmTermMonths,userIputTIA.doubleValue());
                     } else {
                         system.debug('rateE.fiveYrFS 1-- '+rateE.fiveYrFS);
                         leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.SEVENTEENYR);
-                        //rateE.fiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveYrAPR/100,leaseFirmTermMonths,offer.PBS_AAAP_RLP_TI_New_Space__c.doubleValue());
+                       
                         rateE.fiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveYrAPR/100,leaseFirmTermMonths,userIputTIA.doubleValue());
 
                     }
@@ -1354,11 +1393,11 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
                 if (rateE.fiveFiveYrFS > 0) {
                     if (regionCode == 'Census') {
                         leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.CENSUS_19);
-                        //rateE.fiveFiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveFiveYrAPR/100,leaseFirmTermMonths,offer.PBS_AAAP_RLP_TI_New_Space__c.doubleValue());
+                        
                         rateE.fiveFiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveFiveYrAPR/100,leaseFirmTermMonths,userIputTIA.doubleValue());
                     } else {
                         leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.FIFTEENTENYRNEW);
-                        //rateE.fiveFiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveFiveYrAPR/100,leaseFirmTermMonths,offer.PBS_AAAP_RLP_TI_New_Space__c.doubleValue());
+                        
                         rateE.fiveFiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveFiveYrAPR/100,leaseFirmTermMonths,userIputTIA.doubleValue());
 
                     }
@@ -1369,7 +1408,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
 
                 if (rateE.tenYrFS > 0) {
                     leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.TENYREIGHTFIRM);
-                    //rateE.tenYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.tenYrAPR/100,leaseFirmTermMonths,offer.PBS_AAAP_RLP_TI_New_Space__c.doubleValue());
+                   
                     rateE.tenYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.tenYrAPR/100,leaseFirmTermMonths,userIputTIA.doubleValue());
                 } else {
                     rateE.tenYrTIAmorCosts = 0.00;   // no rate so no calculation
@@ -1379,7 +1418,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
                 rateE.fiveFiveYrBSACRate = rateE.fiveFiveYrAPR;
                 rateE.tenYrBSACRate = rateE.tenYrAPR;
                 System.debug('*****rlp.PBS_AAAP_BSAC_per_ABOA__c:  ' + rlp.PBS_AAAP_BSAC_per_ABOA__c);
-                //Double BSACperABOA = (rlp.PBS_AAAP_BSAC_per_ABOA__c == null) ? 0 : rlp.PBS_AAAP_BSAC_per_ABOA__c.doubleValue();
+                
                 Double BSACperABOA = (userInputBSAC == null) ? 0 : userInputBSAC.doubleValue();
                 System.debug('*****BSACperABOA :  ' + BSACperABOA);
                 System.debug('*****rateE.fiveYrBSACRate:  ' + rateE.fiveYrBSACRate);
@@ -1469,7 +1508,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
                     	rateE.fiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveYrAPR/100,leaseFirmTermMonths,userIputTIA.doubleValue());
                     } else{
                     	leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.SEVENTEENYR);
-                    	//rateE.fiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveYrAPR/100,leaseFirmTermMonths,offer.PBS_AAAP_RLP_TI_Additional_Space__c.doubleValue());
+                    	
                     	rateE.fiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveYrAPR/100,leaseFirmTermMonths,userIputTIA.doubleValue());
                     }
                 } else {
@@ -1478,7 +1517,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
 
                 if (rateE.fiveFiveYrFS > 0) {
                     leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.FIFTEENTENYRNEW);
-                    //rateE.fiveFiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveFiveYrAPR/100,leaseFirmTermMonths,offer.PBS_AAAP_RLP_TI_Additional_Space__c.doubleValue());
+                   
                     rateE.fiveFiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveFiveYrAPR/100,leaseFirmTermMonths,userIputTIA.doubleValue());
                 } else {
                     rateE.fiveFiveYrTIAmorCosts = 0.00;   // no rate so no calculation
@@ -1486,7 +1525,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
 
                 if (rateE.tenYrFS > 0) {
                     leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.TENYREIGHTFIRM);
-                    //rateE.tenYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.tenYrAPR/100,leaseFirmTermMonths,offer.PBS_AAAP_RLP_TI_Additional_Space__c.doubleValue());
+                   
                     rateE.tenYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.tenYrAPR/100,leaseFirmTermMonths,userIputTIA.doubleValue());
                 } else {
                     rateE.tenYrTIAmorCosts = 0.00;
@@ -1496,7 +1535,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
             }
 
             if (rateE.fiveYrFS > 0) {
-                //    if(regionCode == 'Census') {rateE.fiveYrTIAmorCosts = 0;}
+                
                 rateE.fiveYrFirmTerm = math.abs(rateE.fiveYrFS) + math.abs(rateE.fiveYrOpCosts) + math.abs(rateE.fiveYrTIAmorCosts);
                 rateE.fiveYrFirmTerm = rateE.fiveYrFirmTerm + math.abs(rateE.fiveYrBSAC);
 
@@ -1589,13 +1628,13 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
 
         if(newOrCont == 'TRUE' && (space.PBS_AAAP_GSA_EXPIRE_LEASE_NUMBER__c == null || space.PBS_AAAP_GSA_EXPIRE_LEASE_NUMBER__c == '')){
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    '1a. An expiring lease number is required if the space you are offering is currently being leased to a Government tenant.');
+                    'Space and rates Page: 1a. An expiring lease number is required if the space you are offering is currently being leased to a Government tenant.');
             Apexpages.addMessage(myMsg);
         }
 
         if(space.PBS_AAAP_SF_OFFERED__c == null){
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    '2. You must provide the total ABOA SF available for lease to the Government.');
+                    'Space and rates Page: 2. You must provide the total ABOA SF available for lease to the Government.');
             Apexpages.addMessage(myMsg);
         }
 
@@ -1603,12 +1642,9 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
             space.PBS_AAAP_Max_Contiguous_Space__c = space.PBS_AAAP_SF_OFFERED__c ;//used to be null couldn't figure out why
         }
         if (sfOfferedType == 'All Available ABOA') {
-            //space.PBS_AAAP_Max_Contiguous_Space__c = 0;
-            //space.PBS_AAAP_MIN_OFFERABLE_SPACE__c = 0;
+            
         }
-        /*else if(sfOfferedType == 'Range of ABOA'){
-       space.PBS_AAAP_Max_Contiguous_Space__c=     space.PBS_AAAP_SF_OFFERED__c ; //this was backwards weston so i reversed it??
-        }*/ else if (sfOfferedType == 'Range of ABOA') {
+         else if (sfOfferedType == 'Range of ABOA') {
             if (space.PBS_AAAP_Max_Contiguous_Space__c <= 0) { //weston
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
                         '2. Amount of offered space must be greater than 0.');
@@ -1618,11 +1654,11 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         }
         if (space.PBS_AAAP_SF_OFFERED__c <= 0) { //weston
             if (!isSucceeding) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '2. Amount of offered space must be greater than 0.');
+                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 2. Amount of offered space must be greater than 0.');
                 Apexpages.addMessage(myMsg);
                 //return null;
             } else {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '2. Amount of offered space must be greater than 0.');
+                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 2. Amount of offered space must be greater than 0.');
                 Apexpages.addMessage(myMsg);
                 //return null;
             }
@@ -1632,7 +1668,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         // added validation rule for New Space Type (max value in Q4 cannot be greater than Q3)
         if (space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c == true) {
             if (space.PBS_AAAP_Max_Contiguous_Space__c > space.PBS_AAAP_SF_OFFERED__c) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '3. Max contiguous ABOA SF cannot be greater than the total ABOA SF being offered (Question #2).');
+                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 3. Max contiguous ABOA SF cannot be greater than the total ABOA SF being offered (Question #2).');
                 Apexpages.addMessage(myMsg);
             }
         }
@@ -1646,7 +1682,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         }
         if (space.PBS_AAAP_ARCH_ENG_FEES__c > 0.00) {
             if (feePrcntgOrDollar == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '16. You must select how Architectural and Engineering Fees will be structured by selecting one of the two options presented after the question.');
+                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 16. You must select how Architectural and Engineering Fees will be structured by selecting one of the two options presented after the question.');
                 Apexpages.addMessage(myMsg);
                 //return null;
             }
@@ -1657,7 +1693,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         if (space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c == 0.00 || space.PBS_AAAP_ARCH_ENG_FEES__c == 0.00) {
             if (readOnlyScreen != 'true' && regionCode != 'Census') {
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                        '15/16. Data was saved with "Lessor PM Fees" and/or "A&E Fees" with a ZERO value. Please make sure you intended a ZERO value.');
+                        'Space and rates Page: 15/16. Data was saved with "Lessor PM Fees" and/or "A&E Fees" with a ZERO value. Please make sure you intended a ZERO value.');
                 Apexpages.addMessage(myMsg);
             }
         }
@@ -1731,7 +1767,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         }
         if (space.PBS_AAAP_ARCH_ENG_FEES__c > 0.00) {
             if (feePrcntgOrDollar == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '16. You must select how Architectural and Engineering Fees will be structured by selecting one of the two options presented after the question.');
+                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Space and rates Page: 16. You must select how Architectural and Engineering Fees will be structured by selecting one of the two options presented after the question.');
                 Apexpages.addMessage(myMsg);
                 return null;
             }
@@ -2230,10 +2266,10 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
 
     /** added by syam 03/22 as part of the cancel operation addition */
     public void actionCancel() {
-        //PageReference pref = Page.PBS_AAAP_PortalHome;
+        
         PageReference pref = new PageReference('/AAAP/PortalHome');
         pref.setRedirect(true);
-        //return pref;
+        
     }
 
     public void refreshNumbers(){
@@ -2267,15 +2303,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         }
         initialised = TRUE;
 
-        /**
-        if(isChanged){
-            PageReference pref = new PageReference(ApexPages.currentPage().getUrl());
-            pref.setRedirect(true);
-            return pref;
-        } else {
-            return null;
-        }
-        **/
+        
 
     }
 

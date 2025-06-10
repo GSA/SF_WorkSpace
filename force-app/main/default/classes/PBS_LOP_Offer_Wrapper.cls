@@ -1,6 +1,5 @@
 public class PBS_LOP_Offer_Wrapper {
 
-
     public String SystemModstamp {get; set;}
     public String sysDate {get; set;}
     public String LastModifiedById {get; set;}
@@ -227,24 +226,21 @@ public class PBS_LOP_Offer_Wrapper {
     public String PBS_RSAP_Free_TI_Is_Offered {get; set;}
     public String PBS_RSAP_Free_BSAC_Is_Offered {get; set;}
     public String PBS_RSAP_Free_Parking_Is_Offered {get; set;}
-    public String RecordTypeId {get; set;}
-    
+    public String RecordTypeId {get; set;}    
     public double PBS_AAAP_Architectural_Fees_Percent  {get; set;}
     public double PBS_AAAP_Architectural_Fees_Flat  {get; set;}
-    public double PBS_AAAP_SHELL_Build_out_Costs  {get; set;}
-
-    
-    public String  PBS_RSAP_Free_Non_Standard_is_Offered  {get; set;}
-    public String  PBS_AAAP_HVAC_HRS_ON_SAT_START  {get; set;}
-    public String  PBS_AAAP_HVAC_HRS_ON_SAT_END  {get; set;}
-    public String  PBS_AAAP_Is_Shell_Rent_Stepped  {get; set;}
-    public String  PBS_AAAP_HVAC_HRS_ON_SUN_END  {get; set;}
-    public String  PBS_RSAP_Asbestos_Declaration {get; set;}
+    public double PBS_AAAP_SHELL_Build_out_Costs  {get; set;}    
+    public String PBS_RSAP_Free_Non_Standard_is_Offered  {get; set;}
+    public String PBS_AAAP_HVAC_HRS_ON_SAT_START  {get; set;}
+    public String PBS_AAAP_HVAC_HRS_ON_SAT_END  {get; set;}
+    public String PBS_AAAP_Is_Shell_Rent_Stepped  {get; set;}
+    public String PBS_AAAP_HVAC_HRS_ON_SUN_END  {get; set;}
+    public String PBS_RSAP_Asbestos_Declaration {get; set;}
     public String PBS_RSAP_Offeror_Seismic_Declaration {get; set;}
     public string PBS_RSAP_Offeror_Seismic_Declaration_YES_NO {get; set;}
     public String PBS_AAAP_CERTIFICATION_DATE {get; set;}
     public String PBS_AAAP_HVAC_HRS_ON_SUN_START {get; set;}
-
-    
+	public double PBS_AAAP_TOTAL_BOMA_USF_OFFERED  {get; set;}
+    public double PBS_AAAP_Building_Common_Area_Factor  {get; set;}
     
 }

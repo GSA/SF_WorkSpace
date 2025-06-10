@@ -100,7 +100,7 @@
 
             <div id="nav">
                 <ul>
-                    <li><a id="link1" href="{!$Label.LOP_Community_Base_URL}AAAP-Help" style="">
+                    <li><a id="link1" href="{!$Label.LOP_Community_Base_URL}Offer-Resources" style="">
                         <font class="grey">AAAP Help</font>
                     </a></li>
                     
@@ -229,21 +229,13 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-            /* jrogers - Communities rewrite 1/29/2013 
-            var path = window.location.pathname;
-            console.log("path===> " + path);
             
-            if(path == '/RSAP/userprofile'){
-                $('#link1').text('RSAP Help');
-                $('#link1').attr('href','/RSAP/Help');
-            }
-            */
          
            if ({!isLOP}){
                
                 $('#link1').text('RSAP Help');
-               // j.rogers communities upgrade $('#link1').attr('href','/RSAP/Help');
-                 $('#link1').attr('href','{!$Label.LOP_Community_Base_URL}RSAP-Help');
+               
+                 $('#link1').attr('href','{!$Label.LOP_Community_Base_URL}Offer-Resources');
            }
            /*  end Communities rewrite */
         });

@@ -7,8 +7,6 @@ private class Test_PBS_LOP_AttachmentsController {
 
         User u = PBS_AAAP_UtilityTest.createPortalUser();
         String userId = UserInfo.getUserId();
-        // PBS_LOP_Offer__c oOther = [select o.Id From PBS_LOP_Offer__c o where o.ownerId != :userId limit 1];
-
         System.debug('u.id is ' + u.id);
         PBS_AAAP_Offer__c invalidOffer = new PBS_AAAP_Offer__c();
         System.runAs(u) {
@@ -72,7 +70,6 @@ private class Test_PBS_LOP_AttachmentsController {
             obc.getItems();
             obc.actionCancel();
 
-
             PBS_LOP_Offer__c lopOffer = PBS_AAAP_UNIT_TEST_DATA_GENERATOR.genTestLopOffer();
             lopOffer.LOP_ACK_READ_RLP_REQ_NO_CHANGE__c = 'Yes';
             lopOffer.LOP_ACCEPTED_PROV_FORM_3516__c = 'Yes';
@@ -108,11 +105,9 @@ private class Test_PBS_LOP_AttachmentsController {
             ApexPages.currentPage().getParameters().put('offerId', offernew.id);
             ApexPages.currentPage().getParameters().put('edit', 'true');
             obc = new PBS_LOP_AttachmentsController();
-            //PBS_AAAP_GlobalConstants.checkFinalOfferBuildingValidations(lopOffer);
             obc.renderRLPSection();
             obc.actionSubmitOffer2();
-            obc.uploadFormsOnFinalSubmit();
-            
+            obc.uploadFormsOnFinalSubmit();            
             
             invalidOffer = new PBS_AAAP_Offer__c();
             invalidOffer.PBS_AAAP_RLP_Number__c = RLP.id;
@@ -130,15 +125,10 @@ private class Test_PBS_LOP_AttachmentsController {
             invalidOffer.PBS_AAAP_Energy_Star_Reason__c = 'Test Reason';
             invalidOffer.PBS_AAAP_floors_Suites_in_Offered_Space__c = 2;
             invalidOffer.PBS_AAAP_GEN_PURPOSE_RENTABLE__c = 3;          
-            insert invalidOffer;
-            
-            
+            insert invalidOffer;           
         }       
         ApexPages.currentPage().getParameters().put('offerId', invalidOffer.id);
         ApexPages.currentPage().getParameters().put('edit', 'true');
-        PBS_LOP_AttachmentsController exceptionObj = new PBS_LOP_AttachmentsController();
-        
-        
     }
 
     static testMethod void validate_actionSavePage() {
@@ -161,8 +151,7 @@ private class Test_PBS_LOP_AttachmentsController {
         
         obj.actionDeleteFormsAttachment();
         obj.actionDeleteFormsAttachment();
-        System.assert(true);
-        
+        System.assert(true);        
     }
     
     static testMethod void myOfferAttachmentsConstructorTestUpload() { 
@@ -173,7 +162,6 @@ private class Test_PBS_LOP_AttachmentsController {
             PageReference currentPage = new PageReference('/apex/PBS_LOP_Attachments');
             Test.setCurrentPage(currentPage);
             PBS_LOP_Offer__c offer = PBS_AAAP_UNIT_TEST_DATA_GENERATOR.genTestLopOffer();
-
             insert offer;
             
             PBS_AAAP_RLP__c rlp = PBS_AAAP_UtilityTest.createFY19RLP();
@@ -202,7 +190,6 @@ private class Test_PBS_LOP_AttachmentsController {
             Blob b = Blob.valueOf('Test Data');
 
             Attachment attachment = new Attachment();
-            //attachment.ParentId = parentId;
             attachment.Name = 'Test Attachment for Parent';
             attachment.Body = b;
             attachment.ParentId = offeratt.Id;
@@ -219,25 +206,16 @@ private class Test_PBS_LOP_AttachmentsController {
             Blob b1 = Blob.valueOf('Test Data');
 
             Attachment att = new Attachment();
-            //attachment.ParentId = parentId;
             att.Name = 'Test Attachment for Parent';
-            //att.Body = b1;
             opc.offerattachment = offatt;
-            //opc.att = att;
-            //opc.ofrID = offer.id;
             opc.upload();
 
             ofratt.PBS_LOP_Attachment_Type__c = 'Floor Plan';
             opc.offerattachment = offatt;
-            //opc.att = att;
-            //opc.ofrID = offer.id;
             opc.upload();
             att.Body = b1;
-            //opc.att = att;
             opc.upload();
             opc.attachmentId = att.Id;
-            //pref = opc.actionDeleteAttachment();
-
             opc.actionSubmitOffer2();
             opc.redirectToHome();
             opc.actionBackToRatesAndSpaces();
@@ -277,17 +255,19 @@ private class Test_PBS_LOP_AttachmentsController {
         offernew.PBS_AAAP_GEN_PURPOSE_RENTABLE__c = 3;
         insert offernew;
        
-        ApexPages.currentPage().getParameters().put('offerId', offernew.id);
-       
+        ApexPages.currentPage().getParameters().put('offerId', offernew.id);      
         
-         PBS_LOP_AttachmentsController opc = new PBS_LOP_AttachmentsController();
+        PBS_LOP_AttachmentsController opc = new PBS_LOP_AttachmentsController();
          
-         opc.offerattachment = new PBS_AAAP_Offer_Attachments__c(PBS_AAAP_Offer__c = offernew.id,PBS_AAAP_Attachment_Type__c='SAM Registration',PBS_AAAP_Sent_to_GREX__c = True);
-         opc.attBody = Blob.valueOf('UNIT.TEST');
-         opc.attName = 'Unit';
-         opc.uploadAttachment();
-         opc.uploadForms();
-
+        opc.offerattachment = new PBS_AAAP_Offer_Attachments__c(PBS_AAAP_Offer__c = offernew.id,PBS_AAAP_Attachment_Type__c='SAM Registration',PBS_AAAP_Sent_to_GREX__c = True);
+        opc.getAttachmentTypeList();
+        opc.attBody = Blob.valueOf('UNIT.TEST');
+        opc.attName = 'Unit';
+        opc.uploadAttachment();
+        opc.uploadForms();
+		opc.offerattachment.PBS_AAAP_Attachment_Type__c = 'Other';
+        opc.offerattachment.Document_Description__c = null;
+        opc.uploadAttachment();
         System.assert(true);
     }
     
@@ -412,10 +392,7 @@ private class Test_PBS_LOP_AttachmentsController {
          otList.add(offerattachment1);
          
          opc.attachmentsList = otList;
-         //opc.getAttachmentMapByType();
-         
-        
-        System.assert(true);
+         System.assert(true);
     }
 
     static testMethod void testNegative() {
@@ -459,11 +436,9 @@ private class Test_PBS_LOP_AttachmentsController {
         
         
         opc.upload();
-        //opc.uploadForms();
         opc.actionDeleteAttachment();
         opc.actionDeleteFormsAttachment();
         opc.formAttachment = null;
-        //opc.attList = null;
         opc.submissionDate = null;
         opc.DateSubmitted = null;
         opc.addrFlag = null;
@@ -503,13 +478,13 @@ private class Test_PBS_LOP_AttachmentsController {
         offernew.PBS_AAAP_GEN_PURPOSE_RENTABLE__c = 3;
         insert offernew;
     
-    ApexPages.currentPage().getParameters().put('offerId', offernew.id);
+    	ApexPages.currentPage().getParameters().put('offerId', offernew.id);
         
         PBS_AAAP_Offer_Attachments__c offatt = new PBS_AAAP_Offer_Attachments__c(PBS_AAAP_Offer__c = offernew.id,PBS_AAAP_Attachment_Type__c='Floor Plan'); 
         
         insert offatt;
     
-    PBS_AAAP_Offer_Attachments__c offatt1 = new PBS_AAAP_Offer_Attachments__c(PBS_AAAP_Offer__c = offernew.id,PBS_AAAP_Attachment_Type__c='SAM Registration',PBS_AAAP_Sent_to_GREX__c = True);
+    	PBS_AAAP_Offer_Attachments__c offatt1 = new PBS_AAAP_Offer_Attachments__c(PBS_AAAP_Offer__c = offernew.id,PBS_AAAP_Attachment_Type__c='SAM Registration',PBS_AAAP_Sent_to_GREX__c = True);
         insert offatt1;
         
         ContentVersion contentVersion = new ContentVersion(
@@ -521,16 +496,14 @@ private class Test_PBS_LOP_AttachmentsController {
 
         List<ContentDocument> documents = [SELECT Id, Title, LatestPublishedVersionId FROM ContentDocument];
 
-//create ContentDocumentLink  record
+		//create ContentDocumentLink  record
         ContentDocumentLink cdl = new ContentDocumentLink();
         cdl.LinkedEntityId = offatt1.Id;
         cdl.ContentDocumentId = documents[0].Id;
         cdl.ShareType = 'V';
         cdl.Visibility = 'AllUsers';
-        insert cdl;
-            
-            
-        
+        insert cdl;     
+
         Attachment attachment = new Attachment();       
         attachment.Name = 'Form1364.pdf';
         attachment.Body = blob.valueOf('dddd');
@@ -561,8 +534,6 @@ private class Test_PBS_LOP_AttachmentsController {
             opc.refreshForms2();
         }
         catch(exception ex){}
-        
-                
         opc.ofrID = null;
         delete [select id from PBS_AAAP_Offer_Attachments__c];
         opc.actionDeleteFormsAttachment();
@@ -575,6 +546,5 @@ private class Test_PBS_LOP_AttachmentsController {
         opc.termsAndConditions = 'No';  
         opc.renderRLPSection();
         System.assert(true);
-        
     }
 }

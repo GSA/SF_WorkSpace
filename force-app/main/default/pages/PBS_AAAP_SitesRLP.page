@@ -22,8 +22,7 @@
         height: 100%;
         line-height: 30px;
         }   
-        
-
+         
         </style>
 
         <style type="text/css">
@@ -66,6 +65,19 @@
             text-align: center;
             color: #fff;
         }
+           
+                   
+      .hr {
+                font-weight: bold;
+                font-size: 20px;
+                //border-bottom: 1px solid #cccccc;
+                padding: 0 0 8px;
+                color: #000000;
+                //color: #002BAD;
+                padding-top: 15px;
+            }
+
+                   
              #nav ul li a:hover, #nav ul li a.selected {
                background-color: #EEEEEE;
                border-radius: 5px;
@@ -80,10 +92,82 @@
 		.RLP_Search{
         	margin-left: 12px;
         }
+        .btn{
+            top:-2px;
+            width: 155px;
+            height: 21px;
+            text-align: center;
+            border:1px solid #a1a1a1;
+            border-radius: 3px !important;
+            font-size:12px;
+            font-family:arial, helvetica, sans-serif;
+            padding: 11px 10px;
+            text-decoration:none;
+            display:inline-block;
+            color: #333333;
+            padding-bottom: 24px; 
+            background-image: linear-gradient(#fcfcfc, #d8d8d8);    
+        }
+        .grey-dropdown{
+            background-color: lightgrey !important;
+            border: 3px solid ##cac6c6 !important;
+            color: grey !important;
+            height: 25px !important;
+            width: 200px !important;
+            background-image: url(../images/sprite.png);
+            background-repeat: no-repeat;
+            -webkit-font-smoothing: antialiased;                                  
+                                                          
+                                              
+          }
+         
+        select.grey-dropdown option {
+             background-color: white !important;
+             color: black !important;                                 
+         }
+        .custom-input {
+            background-color: #eeeeee; 
+            border-radius: 5px; 
+            border-width: 1px; 
+            border-color: #999; 
+            border-style: solid; 
+            padding: 8px; 
+            font-size: 14px; 
+        }
+         .custom-dropdown {
+            background-color: #f9f9f9; 
+            border: 1px solid #999; 
+            border-radius: 4px; 
+            padding: 8px 12px; 
+            font-size: 14px; 
+            color: #333; 
+            width: 200px; 
+            appearance: none; 
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            cursor: pointer;
+        }
+        
+                                  
         </style>
         <script>
             var j$ = jQuery.noConflict();  
              j$(document).ready(function() {
+                 console.log('check {!JSINHTMLENCODE(rlpID)}');
+                 if('{!JSINHTMLENCODE(rlpID)}' == ''){
+                     var parentLocation = new URL(window.parent.location);
+                     var rlpID = parentLocation.searchParams.get('rlpID'); 
+                     var rlpRegion = parentLocation.searchParams.get('rlpRegion');
+                     console.log('rlpID ', rlpID);
+                     console.log('rlpRegion ', rlpRegion);
+                     
+                     if(rlpID != null){
+                         updateTherlpID(rlpID);
+                     }
+                     else{
+                         searchRLPSite(rlpRegion);
+                     }
+                 }
              j$(".tablesorter").dataTable( {
                     "sScrollY": "400px",
                     "bAutoWidth": true,
@@ -97,6 +181,8 @@
                   j$('.myAppTab').find('.dataTables_filter').css("display", "none");
                 j$(".tablesorter tr:odd").css("background-color", "#CFEEF8");
                 j$(".tablesorter tr:even").css("background-color", "#F3F3EC");
+                 
+                 
             });
             
             var zipFile = new JSZip();
@@ -125,9 +211,16 @@
                 var attachmentData = zipFile.generate({type:"blob"});
                 var fileName = 'RLP And Attachments Package.zip';
                 saveAs(attachmentData,fileName);
-            }     
+            }  
+    		function searchRLP(){
+            	var selectedRegion = document.getElementById('j_id0:myform:Region').value;
+                window.parent.location = '/leasing/s/Offer-M-ViewRLP?rlpRegion='+selectedRegion;
+            }
+            
 
         </script>
+    
+        
         <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
         <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
         <meta name="google-site-verification" content="DP9wUZj5bsrKfUDPgFVudlP2YTlL-s5D3dItygqv_74" /> 
@@ -169,21 +262,28 @@
 
         <div id="content"><!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
             <apex:form id="myform" styleClass="formwrap">
-                <h3 class="blue">Search RLP</h3>
+                <apex:actionFunction name="updateTherlpID" action="{!actionShowRLPDetail}" rerender="myform">
+                     <apex:param name="rlpID" value="" assignTo="{!rlpID}" />
+                </apex:actionFunction>
+                 <apex:actionFunction name="searchRLPSite" action="{!actionSearchRLPSite}" rerender="myform">
+                     <apex:param name="selectedRegion" value="" assignTo="{!selectedRegion}" />
+                </apex:actionFunction> 
+                    
+                <div class="hr">Search RLP</div>
                 <apex:outputPanel id="searchform" rendered="{!showSearchForm}">
                     <apex:pageMessages />
                     <apex:outputPanel id="searchRLP">
 
                         <apex:panelGrid columns="1" id="searchgrid">
-
+                            
                             <apex:outputText value="Select a Region : "/>
-                            <apex:selectList value="{!selectedRegion}" size="1">
+                            <apex:selectList id="Region" styleClass="grey-dropdown" value="{!selectedRegion}" size="1">
                                 <apex:selectOptions value="{!regions}"/>
                             </apex:selectList>
-
+                            
                             <apex:outputPanel >
-                                <apex:commandButton value="Search" action="{!actionSearchRLPSite}"/>
-                                <!-- rerender="message,myRLFblock,searchRLP" -->
+                                <apex:commandButton styleClass="btn" value="Search" onclick="searchRLP();"/>
+                                <!-- rerender="message,myRLFblock,searchRLP"  action="{!actionSearchRLPSite}" -->
 
                             </apex:outputPanel>
                         </apex:panelGrid>
@@ -196,7 +296,7 @@
 
                     <apex:pageBlock title="List of RLPs" id="myRLFblock" rendered="{!showRLPTable}">
                         <div class="tabbed-table">
-                            <h3 class="blue">Search Results</h3>
+                            <div class="hr">Search results</div>
                             <div class="clearfix" style="margin-bottom:-40px;">&nbsp;</div>
                             <div id="example_wrapper" class="dataTables_wrapper" role="grid">
                                 <apex:pageBlockTable id="RLPTable" value="{!rlpList}" var="rlp"
@@ -221,7 +321,7 @@
                 <apex:outputPanel id="detailform" rendered="{!!showSearchForm}">
                     <apex:PageBlock title="View & Print RLP" id="viewandprint">
                         <div id="searchTable" class="tabbed-table">
-                            <apex:PageBlockSection title="RLP General Information" id="generalinfo" columns="2"
+                            <apex:PageBlockSection title="RLP general information" id="generalinfo" columns="2"
                                                    collapsible="false">
 
 
@@ -242,35 +342,35 @@
                                     <apex:outputText value="{!rlpdetail.PBS_AAAP_Region__c}"/>
                                 </apex:pageBlockSectionItem>
                                 <apex:pageBlockSectionItem >
-                                    <apex:outputLabel value="RLP Replaced"/>
+                                    <apex:outputLabel value="RLP replaced"/>
                                     <apex:outputText value="{!rlpdetail.Replaced_RLP__r.PBS_AAAP_RLP_Number__c}"/>
                                 </apex:pageBlockSectionItem>
                                 <apex:pageBlockSectionItem >
-                                    <apex:outputLabel value="RLP Replaced By"/>
+                                    <apex:outputLabel value="RLP replaced by"/>
                                     <apex:outputField value="{!rlpdetail.RLP_Replaced_By__c}"/>
                                 </apex:pageBlockSectionItem>
                                 <apex:pageBlockSectionItem >
-                                    <apex:outputLabel value="RLP Status"/>
+                                    <apex:outputLabel value="RLP status"/>
                                     <apex:outputText value="{!rlpdetail.PBS_AAAP_STATUS__c}"/>
                                 </apex:pageBlockSectionItem>
                                 <apex:pageBlockSectionItem >
-                                    <apex:outputLabel value="Status Change Date"/>
+                                    <apex:outputLabel value="Status change date"/>
                                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
                                         <apex:param value="{!rlpdetail.PBS_AAAP_Status_Change_Date__c}"/>
                                     </apex:outputText>
                                 </apex:pageBlockSectionItem>
                                 <apex:pageBlockSectionItem >
-                                    <apex:outputLabel value="Cancel Date"/>
+                                    <apex:outputLabel value="Cancel date"/>
                                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
                                         <apex:param value="{!rlpdetail.PBS_AAAP_Canceled_Date__c}"/>
                                     </apex:outputText>
                                 </apex:pageBlockSectionItem>
                                 <apex:pageBlockSectionItem >
-                                    <apex:outputLabel value="Cancel Reason"/>
+                                    <apex:outputLabel value="Cancel reason"/>
                                     <apex:outputText value="{!rlpdetail.PBS_AAAP_Canceled_Reason__c}"/>
                                 </apex:pageBlockSectionItem>
                                 <apex:pageBlockSectionItem >
-                                    <apex:outputLabel value="Last Amended Date"/>
+                                    <apex:outputLabel value="Last amended date"/>
                                     <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
                                         <apex:param value="{!rlpdetail.LastModifiedDate}"/>
                                     </apex:outputText>
@@ -279,10 +379,10 @@
                             </apex:PageBlockSection>
                         </div>
                         <div id="searchTable" class="tabbed-table">
-                            <apex:PageBlockSection title="Open Period Information" id="openperiodinfo" columns="2"
+                            <apex:PageBlockSection title="Open period information" id="openperiodinfo" columns="2"
                                                    collapsible="false">
                                 <apex:pageBlockSectionItem >
-                                    <apex:outputLabel value="This Month's open period Begin"/>
+                                    <apex:outputLabel value="This Month's open period begin"/>
                                     <apex:outputText value="{!rlpdetail.PBS_AAAP_DEFAULT_MONTH_BEGIN__c}"/>
                                 </apex:pageBlockSectionItem>
                                 <apex:pageBlockSectionItem >
@@ -290,7 +390,7 @@
                                     <apex:outputText value="{!rlpdetail.PBS_AAAP_DEFAULT_MONTH_END__c}"/>
                                 </apex:pageBlockSectionItem>
                                 <apex:pageBlockSectionItem >
-                                    <apex:outputLabel value="Next Month's open period Begin"/>
+                                    <apex:outputLabel value="Next Month's open period begin"/>
                                     <apex:outputText value="{!rlpdetail.PBS_AAAP_EXCEPTION_MONTH_BEGIN__c}"/>
                                 </apex:pageBlockSectionItem>
                                 <apex:pageBlockSectionItem >
@@ -305,7 +405,7 @@
                         <!-- <apex:PageBlockSection title="Attachments List" id="attachmentsinfo" columns="1" collapsible="false"> -->
 
                         <div id="searchTable" class="tabbed-table">
-                            <h3>Attachments List</h3>
+                            <h3>Attachments list</h3>
                             <apex:pageBlockTable value="{!seqNumList}" var="rlpatt" id="attachmentsTable"
                                                  rowClasses="odd,even">
                                 <apex:column value="{!rlpatt.i}">
@@ -324,7 +424,7 @@
                                     </apex:repeat>
                                 </apex:column>
                                 <apex:column >
-                                    <apex:facet name="header">Date Submitted</apex:facet>
+                                    <apex:facet name="header">Date submitted</apex:facet>
                                     <apex:repeat value="{!rlpatt.rlpratts.ContentDocumentLinks}" var="a">
                                         <apex:outputText value="{0,date,MM/dd/yyyy}">
                                             <apex:param value="{!a.ContentDocument.Createddate}"/>
@@ -332,7 +432,7 @@
                                     </apex:repeat>
                                 </apex:column>
                                 <apex:column >
-                                    <apex:facet name="header">View File</apex:facet>
+                                    <apex:facet name="header">View file</apex:facet>
                                     <apex:repeat value="{!rlpatt.rlpratts.ContentDocumentLinks}" var="a">
                                         <apex:outputLink onclick="window.open('{!JSENCODE(a.ContentDocument.LatestPublishedVersion.Public_Link__c)}','RLP Attachment','width=800, height=600,scrollbars=yes,resizable=yes,location=no');return false;">
                                             <apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
@@ -347,7 +447,7 @@
 
                         <div id="searchTable" class="tabbed-table" rendered="{!showAmendmentsTable}">
                             <!--<apex:PageBlockSection title="Amendments List" id="amendmentsinfo" columns="2" collapsible="false" rendered="{!showAmendmentsTable}">-->
-                            <h3>Amendments List</h3>
+                            <h3>Amendments list</h3>
                             <apex:pageBlockTable value="{!seqNumListAmendments}" var="rlpatt" id="amendmentsTable"
                                                  rowClasses="odd,even">
                                 <apex:column value="{!rlpatt.i}">
@@ -388,8 +488,11 @@
                         </div>
                     </apex:pageBlock>
                     <br/>
-                                                        <span class="RLP_Search">
-                    <apex:commandButton action="{!backToSearch}"  value="Back to RLP Search"/>
+                                                        <!--<span class="RLP_Search">
+                    <apex:commandButton styleClass="btnSave" action="{!backToSearch}"  value="Back to RLP Search"/>
+                        </span>-->
+                    <span class="RLP_Search">
+                    <apex:commandButton styleClass="btn" action="{!backToSearch}"  value="Back to RLP Search"/>
                         </span>
                         <div id="LoadingImage" style="display:none;float:right;position:absolute;left:630px;"><img src="/img/loading.gif" style="float: left; margin: -15px;" /></div>
                     <a href="#" class="downloadAll" id="download"

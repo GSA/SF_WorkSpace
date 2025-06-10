@@ -3,11 +3,11 @@ public class PBS_AAAP_GlobalConstants {
     /*** Offer Statuses ***/
     public static final String OFFERSTATUS_DRAFT = 'Draft';
     public static final String OFFERSTATUS_SUBMITTED = 'Submitted';
-    //added by syam on 02/25 changed from 'Selected' to 'Pending Review'
-    // public static final String OFFERSTATUS_SELECTED = 'Selected';
+   
+    
     public static final String OFFERSTATUS_SELECTED = 'Pending Review';
     public static final String OFFERSTATUS_AWARDED = 'Awarded';
-    //added by syam on 02/26 changed from 'Awarded/Selected' to 'Awarded/Pending Review'
+    
     public static final String OFFERSTATUS_AWARDED_SELECTED = 'Awarded/Pending Review';
     public static final String OFFERSTATUS_AWARDED_SUBMITTED = 'Awarded/Submitted';
     public static final String OFFERSTATUS_WITHDRAWN = 'Withdrawn';
@@ -66,7 +66,7 @@ public class PBS_AAAP_GlobalConstants {
 
 
     // Error message shown when user tries to register with an email which is already being registered.
-    public static String ERROR_DUPLICATE_USER = 'A registered account has already been created using this email address.  Use the links at the top of the page to navigate to the AAAP or RSAP home page, where you can log-in or use the \'Forgot Your Password?\' feature.';
+    public static String ERROR_DUPLICATE_USER = 'A registered account has already been created using this email address. Click the Login/Reset Password link at the top of the page where you can sign in or use the \'Forgot Your Password?\' feature.';
 
     // Error message for restricting user to see the other user offers
     public static String ERROR_INAVLID_ACCESS_OWNERSHIP = 'You are not authorised to view this offer. Please contact AAAP Manager if any questions.';
@@ -80,12 +80,6 @@ public class PBS_AAAP_GlobalConstants {
     public static String BUILDING_CITY_REQUIRED = '4. City field is required.';
     public static String BUILDING_STATE_REQUIRED = '5. State field is required.';
     public static String BUILDING_ZIP_REQUIRED = '6. Zip Code is required.';
-    //public static String BUILDING_SPRINKLED_REQUIRED = '1. Identify whether the building is fully sprinklered field is required.';
-    //public static String BUILDING_STAIRWELL_REQUIRED = '2. At least 2 physically remote stairwells are required in the building.';
-    //public static String BUILDING_ALARM_REQUIRED = '3. Identify whether the building has building wide alarm system field is required.';
-    public static String BUILDING_ENERGY_STAR_REQUIRED = '6. Identify whether the building has earned ENERGY STAR Label field is required. ';
-    public static String BUILDING_ENERGY_STAR_NO_REQUIRED = '6.  Input "TBD" if you have no energy efficiency information at this time.';
-    public static String BUILDING_ENERGY_STAR_DATE_OF_CERTIFICATION_REQUIRED = '6. Date of Certification for Energy Star label is missing.';
     public static String BUILDING_NUM_OF_FLOORS = '7. Number of floors is required and cannot be a negative number.';//JK changed 7/2021
     public static String BUILDING_TOTAL_RSF = '4. Total amount of rentable square feet (RSF) in the building is required.';//JK changed 7/2021
     public static String BUILDING_ANSI_BOMA_SF = '5. Total ANSI/BOMA Office Area Square Feet (ABOA) in the building is required.';//JK changed 7/2021
@@ -94,23 +88,18 @@ public class PBS_AAAP_GlobalConstants {
     public static String BUILDING_ROOFING_MATERIAL = '17. Type of construction - roofing material field is missing.';
     public static String BUILDING_YEAR_CONSTRUCTED = '8. Year building constructed is required information.';//JK changed 7/2021
     public static String BUILDING_METRO = '5. Proximity to public transportation field is required.';
-    //public static String BUILDING_METRO_STATION = '18 a. Identify type and/or location of nearest public transportation.';
     public static String BUILDING_HVAC_M_F_START = '10. HVAC Hours of operation start (M-F) field is missing.';//JK changed 7/2021
     public static String BUILDING_HVAC_M_F_END = '10. HVAC Hours of operation end (M-F) field is missing.';//JK changed 7/2021
     public static String BUILDING_HVAC_SAT = '19. HVAC available on Saturday field is missing.';
     public static String BUILDING_HVAC_SUN = '19. HVAC available on Sunday field is missing. ';
     public static String BUILDING_HPHD = '7. Identify whether the property offered is a historic property is required.';
     public static String BUILDING_NHP_WITHIN_HD = '8. Identify whether the property offered is within a historic district is required.';
-    //public static String BUILDING_HP_OUTSIDE_HD = '22. Identify whether the property offered is a historic property outside of a historic district.';
-    public static String BUILDING_SEISMIC_ZONE = '11. Building location in relation to seismic zones must be indicated before you can proceed.';
     public static String SEISMIC_SAFETY_REQUIRED = '11a. Please select an option for the Seismic Safety question.';
     public static String SEISMIC_ZONE_BUILDING_TYPE = '11b. Selecting "None" is not allowed for the Seismic Zone responses. Please select "Unknown/Not Listed" if you are not yet able to identify with the other options listed.';
     public static string BUILDING_COUNTY_REQUIRED = '6a. County is required';
     public static String SITE_AREA_TYPE_REQ = '9. Site Size radio button required.';
-    //public static string BUILDING_LIVE_FLOOR_LOAD_REQUIRED = '11. Live floor load is required.  Enter TBD if information is not readily available.';
     public static string BUILDING_SITE_SIZE_REQUIRED = '9. Site Size is missing.  "Square Feet" or "Acres" must be selected.';
     public static string BUILDING_RENNOVATION_REQUIRED = '9. Year of most recent building renovation is required information.';
-    public static string BUILDING_HUBZONE_SBC_STATUS = '9. Hubzone SBC status is required.';
     public static string BUILDING_HUBZONE_SBC_PREFERENCE = '9a. Select price evaluation waiver preference.';
     public static string BUILDING_REHABILITATION = '10. Indicate if a complete rehabilitation or extensive renovation is proposed.';
 //SGanti renumbered 8/2021    
@@ -121,10 +110,7 @@ public class PBS_AAAP_GlobalConstants {
     public static string BUILDING_LEASE_COMMISSION_REQ = '14. Lease commision is required.';//JK changed 7/2021
     public static string BUILDING_MANAGEMENT = '15. Annual management cost is required';//JK changed 7/2021
 //SGanti added 8/2021
-    public static String BUILDING_FIRE_LIFE_MEETS = '1. Fire Protection & Life Safety field is required. ';
-    public static String BUILDING_ACCESSIBILITY = '2. Accessibility field is required. ';
-    public static String BUILDING_ASBESTOS = '3. Asbestos Containing Material (ACM) field is required. ';
-    public static String BUILDING_FLOOD_PLAINS = '4. Flood Plains field is required.';
+    
 
     public static String LOP_BUILDING_NAME_REQUIRED = '1. Building Name field is required.';
     public static String LOP_BUILDING_STREET_REQUIRED = '2. Street Address field is required.';
@@ -135,27 +121,22 @@ public class PBS_AAAP_GlobalConstants {
     public static String LOP_BUILDING_SPRINKLED_REQUIRED = '8. Identify whether the building is fully sprinklered field is required.';
     public static String LOP_BUILDING_STAIRWELL_REQUIRED = '9. At least 2 physically remote stairwells are required in the building.';
     public static String LOP_BUILDING_ALARM_REQUIRED = '10. Identify whether the building has building wide alarm system field is required.';
-    public static String LOP_BUILDING_YEAR_CONSTRUCTED = '10. Year constructed field is missing. ';
-    public static String LOP_BUILDING_ENERGY_STAR_REQUIRED = 'Building Information Page: 17. Energy Star response is required.';//SGanti renumbered 11/2021
-    public static String LOP_BUILDING_ENERGY_STAR_NO_REQUIRED = 'Building Information Page: 17a. Energy Star certification date is required.';//SGanti renumbered 11/2021
-    public static String LOP_BUILDING_ENERGY_STAR_DATE_OF_CERTIFICATION_REQUIRED = 'Building Information Page: 17a. Energy Star declaration is required.';//SGanti renumbered 11/2021
+    public static String LOP_BUILDING_YEAR_CONSTRUCTED = '7. Provide the year and a brief description of the last major building renovation, if applicable is required.';
+    
     public static String LOP_BUILDING_TOTAL_RSF = '4. Total amount of rentable square feet (RSF) in the building is required';
-    public static String LOP_BUILDING_HVAC_M_F_START = '11. HVAC Hours of operation start (M-F) field is missing.';//SGanti renumbered 11/2021
-    public static String LOP_BUILDING_HVAC_M_F_END = '11. HVAC Hours of operation end (M-F) field is missing.';//SGanti renumbered 11/2021
+    public static String LOP_BUILDING_HVAC_M_F_START = '8. Monday - Friday Hours Start is required.';//SGanti renumbered 11/2021
+    public static String LOP_BUILDING_HVAC_M_F_END = '8. Monday - Friday Hours End is required.';//SGanti renumbered 11/2021
     public static String LOP_BUILDING_HISTORIC_QUALIFICATION = '15. Select Historic qualification of the building.';
-    public static String LOP_BUILDING_ACCESSIBILITY_STANDARDS = 'Building Information Page: 13. Accessibility standards information is required.';//SGanti renumbered 11/2021
+
     public static String LOP_BUILDING_ACM_STANDARDS = '14. Select Asbestos-Containing Materials (ACM) standards of the building.';//SGanti renumbered 11/2021
     public static String LOP_BUILDING_SEISMIC_SAFETY_REQ = '16. Select RLP seismic  safety requirement for the lease.';//SGanti renumbered 11/2021
     public static String LOP_BUILDING_SEISMIC_SAFETY_QUAL = '16a. Select seismic  safety qualification of the building.';//SGanti renumbered 11/2021
     public static String LOP_BUILDING_FLOOD_PLAINS = '15. Select Flood Plains qualification of the building.';//SGanti renumbered 11/2021
-    public static String LOP_BUILDING_FIRE_PROTECTION = '12. Select  Fire Protection and Life Safety qualification of the building.';//SGanti renumbered 11/2021
-    public static String LOP_GEN_PURPOSE_RENTABLE_SUM_MSG = '7. Total amount of rentable square feet (RSF) in the building should equal to Total of 7a. General Purpose, 7b. Warehouse and 7c. Other SQFT.';
-    //SGanti added 11/2021
-    public static String LOP_BUILDING_HISTORIC_PROPERTY = '18. Identify whether the building is a historic property.';
-    public static String LOP_BUILDING_HISTORIC_DISTRICT = '19. Identify whether the building is in a historic district.';
     
-    public static String LOP_BUILDING_ENERGY_STAR_NO_CATEGORY_REQUIRED = '17a. Energy Star category is required.';
-    public static String LOP_BUILDING_ENERGY_STAR_NO_STATUTORY_EXCEPTION_REQUIRED = '17a. Energy Star statutory exception information is required.';
+    
+    public static String LOP_BUILDING_ENERGY_STAR_NO_CATEGORY_REQUIRED = 'Eligibility Page: 6. Energy Star category is required.';
+    public static String LOP_BUILDING_ENERGY_STAR_NO_STATUTORY_EXCEPTION_REQUIRED = 'Eligibility Page: 6. Energy Star meets one of the following exemptions below information is required.';
+    public static String LOP_BUILDING_ENERGY_STAR_NO_STATUTORY_EXCEPTION_REQUIRED1 = 'Eligibility Page: 6. Energy Star the offeror has evaluated energy efficiency and conservation improvements and has determined information is required.';
     //added by syam 03/14
     public static String PBS_AAAP_X_CO_ORD_REQ = 'Latitude is required, Please validate the address again.';
     public static String PBS_AAAP_Y_CO_ORD_REQ = 'Longitude is required, Please validate the address again.';
@@ -186,11 +167,7 @@ public class PBS_AAAP_GlobalConstants {
     public static String PROP_OWNER_TIN_STATUS = '15. Property owner TIN Status field is required.';
     public static String PROP_OWNER_TIN_NUM = '15a. Property owner TIN # field is required.';
     public static String PROP_OWNER_COMPANY_REQUIRED = '1. Name of the property recorded owner is required.';
-    //Lease Terms Error Messages
-    //public static String CONFIRM_NO_OF_YEARS_OFFERED_REQUIRED = 'Lease Terms and Conditions Page: Number of years offered  field is missing (#1 Initial Lease Term section).';
-    //public static String CONFIRM_YEARS_FIRM_REQUIRED = 'Lease Terms and Conditions Page: Number of years firm field is missing (#2 Initial Lease Term section).';
-
-    // Reps and Certs Error Messages
+    
 
     public static String REPSCERTS_REPRESENTATION_REQUIRED = '1. Representation (Small business/Not a small business) (REPS & CERTS Page) field is missing.';
     public static String REPSCERTS_WOMEN_OWNED = '1b. Woman owned identifier (Property Owner Page) field is missing.';
@@ -216,12 +193,12 @@ public class PBS_AAAP_GlobalConstants {
     public static String OFFER_SPACE_MAX_SPACE_VS_BOMA = '2. The amount of contiguous ABOA SF available entered in question #2 cannot exceed the amount of total ABOA SF available for lease entered in question #1.';
     public static String LOP_SPACE_RATES_ANSI_BOMA_SF = 'Space and Parking Page: Space Offered: 1. Please provide a value for ANSI/BOMA Office Area Square Feet (ABOA SF) offered.';
     public static String LOP_SPACE_RATES_RSF = 'Space and Parking Page: Space Offered: 2. Please provide a value for Rentable Square Feet (RSF) offered.';
-    public static String LOP_SPACE_RATES_ONSITE = 'Space and Parking Page: Parking Offered: 2. Please enter Yes or No for whether all parking is onsite.';
+   
     public static String LOP_SPACE_RATES_ALLPARKING = 'Space and Parking Page: Parking Offered: 4. Please provide a value or 0 for all monthly parking rates.';
-    //public static String LOP_SPACE_RATES_RSF_GT_ABOA = 'Space and Parking Page: #2. Rentable Square Feet (RSF) offered should be greater than #1. ANSI/BOMA Office Area Square Feet (ABOA SF) Offered.';
+    public static String LOP_SPACE_RATES_RSF_GT_ABOA = 'Space and parking Page: #2. Rentable Square Feet (RSF) offered should be greater than #1. ANSI/BOMA Office Area Square Feet (ABOA SF) Offered.';
     public static String LOP_SPACE_RATES_SHELL_RENT_PER_RSF = 'Space and Rates Page : Please enter the value for Shell Rate (Annual Rent per RSF).';
     public static String LOP_SPACE_RATES_SHELL_RATE_YRS_EFFECTIVE = 'Space and Rates Page : Please enter the value for Shell Rate (#Yrs Effective).';
-    //public static String LOP_SPACE_RATES_ANNUAL_RENT_PARKING = 'Space and Rates Page: Please select value for \'Does annual Rent include Parking?\'';
+    
     // Constants
     public static String TIN_KNOWN = 'KNOWN';
 
@@ -231,17 +208,11 @@ public class PBS_AAAP_GlobalConstants {
     public static String DESELECT_REASON_REQUIRED = 'Reason is required.';
     public static String DESELECT_COMMENTS_REQUIRED = 'Comments are required.';
 
-    // modified 5-10-2012 by CRH, to include selection of County and Congressional Districts    
-    //*** Vaishali added p.PBS_AAAP_WOSB_Joint_Venture__c,P.PBS_AAAP_WOSB_Docs_Complete__c,P.PBS_AAAP_EDWOSB_Joint_Venture__c,P.PBS_AAAP_EDWOSB_Docs_Complete__c,p.PBS_AAAP_FederalTax_Delinquent__c,
-    //***Vaishali added p.PBS_AAAP_RLP_Number__r.PBS_AAAP_Posted_Date__c so that whenever there is a new RLP, user is forced to review rates and save
-    ///Syam added 2 fields as part of FY16 PBS_AAAP_Certification_Date__c,PBS_AAAP_SITE_SIZE_SQFT__c, PBS_AAAP_SITE_AREA_TYPE__c,PBS_AAAP_Sam_Registered__c
-    //7.26.2020 Julia added 1 field PBS_AAAP_Rental_Concessions__c
-    //SGanti added fields to the query 08/2021 for AAAP
-    //SGanti added fields to the query 09/2021 for RSAP
+    
     public static PBS_AAAP_Offer__c getOfferDetail(string ofrid) {
 
         PBS_AAAP_Offer__c offer = [
-                SELECT p.SystemModstamp,p.LastModifiedById, p.PBS_AAAP_can_withdraw__c,p.PBS_AAAP_Solicitation_Number__c,p.PBS_AAAP_ZipCode__c, p.PBS_AAAP_Year_Built__c, p.PBS_AAAP_Y_CO_ORD__c,
+                SELECT p.SystemModstamp,p.Recordtype.name,p.LastModifiedById, p.PBS_AAAP_can_withdraw__c,p.PBS_AAAP_Solicitation_Number__c,p.PBS_AAAP_ZipCode__c, p.PBS_AAAP_Year_Built__c, p.PBS_AAAP_Y_CO_ORD__c,
                         p.PBS_AAAP_X_CO_ORD__c, p.PBS_AAAP_Women_Owned_Identifier__c, p.PBS_AAAP_Veteran_Owned_Identifier__c,p.PBS_AAAP_Approximate_Construction_Level__c,p.PBS_AAAP_RLP_Number__r.PBS_AAAP_RLP_Number__c,
                         p.PBS_AAAP_Total_Withdraw_Space_Available__c, p.PBS_AAAP_Total_Parking_Spaces__c, p.PBS_AAAP_Total_Park_Spaces_Offered__c,
                         p.PBS_AAAP_Temp_Offer_ID__c, p.PBS_AAAP_TYPE_OF_ROOFING_MATERIAL__c, p.PBS_AAAP_TYPE_OF_ORG__c, p.PBS_AAAP_TYPE_OF_ORG_OTHER__c,
@@ -476,152 +447,13 @@ public class PBS_AAAP_GlobalConstants {
         system.debug('*************offerBuilding.PBS_AAAP_County__c************** ::: ' + offerBuilding);
         boolean flag;
 
-        if (offerBuilding.PBS_AAAP_GEN_PURPOSE_RENTABLE__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Fundamentals Page : 7. Total amount of rentable square feet (RSF) in the building is required.'));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Fundamentals Page : 8. Total ANSI/BOMA Office Area Square Feet (ABOA) in the building is required.'));
-            flag = true;
-        }
-         //SGanti commented out on 8/2/2021 
-    
-     //   if (offerBuilding.PBS_AAAP_SITE_SIZE_SQFT__c != null) {   
-        //    if (offerBuilding.PBS_AAAP_SITE_AREA_TYPE__c == null) {   
-        //        ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Fundamentals Page : 9. Site Size radio button required.'));    
-        //        flag = true;  
-       //     } 
-     //   } 
-   //SGanti commented out on 8/2/2021   
-      //  if (offerBuilding.PBS_AAAP_SITE_SIZE_SQFT__c == null) {   
-            //if (offerBuilding.PBS_AAAP_SITE_AREA_TYPE__c == null) {   
-       //     ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Fundamentals Page : 9. Site Size is missing.  "Square Feet" or "Acres" must be selected.'));   
-       //     flag = true;  
-            //} 
-      //}
+        
         if (offerBuilding.PBS_AAAP_Number_of_floors__c == null || offerBuilding.PBS_AAAP_Number_of_floors__c <= 0) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Fundamentals Page : 10. Number of floors is required and cannot be a negative number.'));
             flag = true;
         }
 
-        /*if (offerBuilding.PBS_AAAP_LIVE_FLOOR_LOAD__c == null) {
-//SGanti changed 7/16/2021
-       offerBuilding.PBS_AAAP_LIVE_FLOOR_LOAD__c = '';
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Fundamentals Page : 11. Live floor load is required.  Enter TBD if information is not readily available.'));
-            flag = true;
-        }*/
-
-        if (offerBuilding.PBS_AAAP_Year_Built__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Fundamentals Page : 12. Year building constructed is required information.'));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_Renovation_Year__c == null || offerBuilding.PBS_AAAP_Renovation_Year__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Fundamentals Page : 13. Year of most recent building renovation is required information.'));
-            flag = true;
-        }
-
-        if (offerBuilding.PBS_AAAP_HVAC_HRS_MON_TO_FRI_START__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Fundamentals Page : 10. HVAC Hours of operation start (M-F) field is missing.'));//JK changed 7/2021
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_HVAC_HRS_MON_TO_FRI_END__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Fundamentals Page : 14. HVAC Hours of operation end (M-F) field is missing.'));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_REAL_ESTATE_TAXES__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Fundamentals Page : 15. Annual Real Estate Taxes is required.'));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_INSURANCE__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Fundamentals Page : 16. Annual Insurance amount is required.'));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_BUILDING_MAINTENANCE__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Fundamentals Page : 17. Annual building maintenance is required.'));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_LEASE_COMMISSION__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Fundamentals Page : 18. Lease commision is required.'));
-            flag = true;
-        }
-   //SGanti commented out on 8/2/2021
-
-    /*    if (offerBuilding.PBS_AAAP_Building_Sprinklered__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Details Page : 1. Identify whether the building is fully sprinklered field is required.'));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_BLDG_Physical_Remote_Stairwell__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Details Page : 2. At least 2 physically remote stairwells are required in the building.'));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_BLDG_Wide_Alarm_System__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Details Page : 3. Identify whether the building has building wide alarm system field is required.'));
-            flag = true;
-        }
-    */
-         //SGanti renumbered error messages on 8/2/2021
-//SGanti added 8/2021
-        if (offerBuilding.PBS_AAAP_Fire_Life_Meets__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Details Page : 1. Fire Protection & Safety information is required.'));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_Accessibility__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Details Page : 2. Accessibility information is required.'));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_Asbestos__c == '' || offerBuilding.PBS_AAAP_Asbestos__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Details Page : 3. Asbestos information is required.'));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_Flood_Plains__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Details Page : 4. Flood Plains information is required.'));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_Close_To_Metro__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Details Page : 5. Proximity to metro indicator field is missing.'));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_Energy_Star__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Details Page : 6. Identify whether the building has earned ENERGY STAR Label field is required.'));
-            flag = true;
-        }
-      //SGanti left error message numbering as "6a" until further clarification is received
-        if (offerBuilding.PBS_AAAP_Energy_Star__c == 'No') {
-            if (offerBuilding.PBS_AAAP_Energy_Star_Reason__c == null) {
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Details Page : 6a. Indicate why no energy efficiency and conservation improvements are cost effective.'));
-                flag = true;
-            }
-        }
-
-
-        if (offerBuilding.PBS_AAAP_HIST_PROP_IN_HIST_DIST__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Details Page : 7. Identify whether the property offered is a historic property within a historic district'));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_NON_HIST_PROP_IN_HIST_DIST__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Details Page : 8. Identify whether the property offered is a non-historic developed or undeveloped site within a historic district.'));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_HubZone_SBC__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Details Page : 9. Indicate Hubzone SBC status.'));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_HubZone_SBC__c == 'Yes') {
-            if (offerBuilding.PBS_AAAP_HubZone_SBC_Preference__c == null) {
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Details Page : 9a. Select price evaluation waiver preference.'));
-                flag = true;
-            }
-        }
-        if (offerBuilding.PBS_AAAP_Reconstruction__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Details Page : 10a. If you select "Yes" to question #10, you must check the acknowledgement box to proceed.'));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_Reconstruction__c == 'Yes') {
-            if (offerBuilding.PBS_AAAP_Reconstruction_Acknowledgement__c == false) {
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Details Page : 10a. If you select "Yes" to question #10, you must check the acknowledgement box to proceed.'));
-                flag = true;
-            }
-        }
+        
 
         if (offerBuilding.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c == null) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Details Page : 11. Seismic Zone field is required.'));
@@ -631,48 +463,7 @@ public class PBS_AAAP_GlobalConstants {
         return flag;
     }
 
-    public static boolean checkOfferParkingValidations(PBS_AAAP_Offer__c offerParking) {
-        /*
-           boolean flag;
-           if(offerParking.PBS_AAAP_Option_Parking__c == null){
-               ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Parking Page : 5. Option for parking (Parking Page) field is missing.'));
-               flag=true;
-           }
-           if(offerParking.PBS_AAAP_Total_Parking_Spaces__c == null){
-               ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Parking Page : 1. Number of parking spaces for the entire building under control of the offeror: Total is a required field.'));
-               flag=true;
-           }
-           if(offerParking.PBS_AAAP_Total_Park_Spaces_Offered__c == null){
-               ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Parking Page : 2. Number of parking spaces required by local code: Total is a required field.'));
-               flag=true;
-           } */
-        //return false; //weston: steve cut all this out
-        boolean flag;
-        if (offerParking.PBS_AAAP_Total_Structured_Parking_Spaces__c == null ||
-                offerParking.PBS_AAAP_Total_Surface_Parking_Spaces__c == null ||
-                offerParking.PBS_AAAP_Total_Struct_Park_Space_Offered__c == null ||
-                offerParking.PBS_AAAP_Total_Surf_Park_Space_Offered__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR,
-                    'Parking Page: Number of parking spaces is a required field.'));
-            flag = true;
-
-        }
-
-        if (offerParking.PBS_AAAP_Monthly_cost_res_gar_park__c == null ||
-                offerParking.PBS_AAAP_Monthly_cost_nonres_gar_park__c == null ||
-                offerParking.PBS_AAAP_Monthly_cost_res_sur_park__c == null ||
-                offerParking.PBS_AAAP_Monthly_cost_nonres_sur_park__c == null) {
-                    //JK changed this question to number 4, 7/2021
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR,
-                    'Parking Page: 4. Please enter rates for all types of parking. Please put $0.00 if you are either not charging for, or not offering, that type of parking space. You may not leave any fields blank.'));
-            flag = true;
-
-        }
-
-
-        return flag;
-    }
-
+    
     public static boolean checkOfferPropOwnerValidations(PBS_AAAP_Offer__c offerPropOwner) {
 
         boolean flag;
@@ -702,10 +493,7 @@ public class PBS_AAAP_GlobalConstants {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Property Page: 6. Property owner 9-Digit Zip Code field is required.'));
             flag = true;
         }
-       /*SGanti commented out on 7/14/2021 if (offerPropOwner.PBS_AAAP_Owner_Main_Phone__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Property Page: 7. Property owner main phone number field is required.'));
-            flag = true;
-        }*/
+       
         /* SGanti renumbered error message on 7/14/2021 */
         if (offerPropOwner.PBS_AAAP_OFFEROR_INTEREST__c == null) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Property Page: 7. Property owner type field is required.'));
@@ -731,80 +519,11 @@ public class PBS_AAAP_GlobalConstants {
 
         boolean flag;
         flag = false;
-        /* if(offerRepsAndCerts.PBS_AAAP_Representation__c == null){
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Reps&Certs Page : 1. Representation (Small business/Not a small business) (Property Owner Page) field is missing.'));
-             flag=true;
-         } */
-        /*if(offerRepsAndCerts.PBS_AAAP_Women_Owned_Identifier__c == null){
-            ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Reps&Certs Page : 1b. Woman owned identifier (Property Owner Page) field is missing.'));
-            flag=true;
-        }
-        if(offerRepsAndCerts.PBS_AAAP_EEO_CLAUSE__c == null){
-            ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Reps&Certs Page : 2. EEO Clause indicator field is required.'));
-            flag=true;
-        }
-        if(offerRepsAndCerts.PBS_AAAP_AFFIRMATIVE_ACTION_PROGRAMS__c == null){
-            ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Reps&Certs Page : 3. Affirmative action program indicator field is required.'));
-            flag=true;
-        }
-        if(offerRepsAndCerts.PBS_AAAP_CERTIFICATE_OF_SIGNATORY__c == null){
-            ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Reps&Certs Page : 4. Certification of signatory indicator field is missing.'));
-            flag=true;
-        }
-        if(offerRepsAndCerts.PBS_AAAP_Confirm_Owner_Status__c == null){
-            ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Reps&Certs Page : 5. Confirm on property owner status indicator field is required.'));
-            flag=true;
-        }
-        if(offerRepsAndCerts.PBS_AAAP_OWNER_CONVICTION__c == null){
-            ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Reps&Certs Page : 6. Property owner conviction indicator field is required.'));
-            flag=true;
-        }
-        if(offerRepsAndCerts.PBS_AAAP_OWNER_INDICTMENT__c == null){
-            ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Reps&Certs Page : 7. Property owner indictment indicator field is required.'));
-            flag=true;
-        }
-        if(offerRepsAndCerts.PBS_AAAP_FederalTax_Delinquent__c == null){
-            ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,REPSCERTS_OWNER_FEDTAX_DEFAULT));
-            flag=true;
-        }
-        if(offerRepsAndCerts.PBS_AAAP_OWNER_CONTRACT_DEFAULT__c == null){
-            ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Reps&Certs Page : 9. Property owner contract default indicator field is required.'));
-            flag=true;
-        }
-        if(offerRepsAndCerts.PBS_AAAP_CCR_REGISTRATION_ACTIVE_STATUS__c == null){
-            ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Reps&Certs Page : 10. CCR registration active status field is required.'));
-            flag=true;
-        }*/
-        //added by Syam for FY16
-        /*if(offerRepsAndCerts.PBS_AAAP_Corporation_not_tax_felon__c == null){
-           ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, 'Reps&Certs Page : '+PBS_AAAP_GlobalConstants.REPSCERTS_CORP_FELONY_CONVICTION));
-           flag=true;
-       }
-       if(offerRepsAndCerts.PBS_AAAP_Corp_Not_Convicted_Felon__c == null){
-           ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, 'Reps&Certs Page : '+PBS_AAAP_GlobalConstants.REPSCERTS_CORP_FEDTAX_DEFAULT));
-           flag=true;
-       } */
+       
         return flag;
     }
 
-    //added by syam  
-    public static boolean checkOperatingCostsValidations(PBS_AAAP_Offer__c operatingCosts) {
-
-        boolean flag;
-        flag = false;
-
-        if (operatingCosts.PBS_AAAP_COST_PER_ABOA__c <= 0.005) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Operating Costs Page : 4. Cost per ABOA SF must be > 0.00');
-            Apexpages.addMessage(myMsg);
-            flag = true;
-        }
-        if (operatingCosts.PBS_AAAP_Vacant_Premise_Rate__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Adjustment for Vacant premises must be entered.');
-            Apexpages.addMessage(myMsg);
-            flag = true;
-        }
-        return flag;
-    }
+    
 
     //added by syam on 10/12/2016 to get the GREX project details
     public static PBS_GREX_Project_EOI__c getProjectDetails(string projectEoiId) {
@@ -819,287 +538,18 @@ public class PBS_AAAP_GlobalConstants {
 
         return project;
     }
-    /*
-    public static boolean checkOfferBuildingValidations(PBS_LOP_Offer__c lopOffer) {
-
-        boolean flag;
-
-        if (lopOffer.LOP_Building_Name__c == null || lopOffer.LOP_Building_Name__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_NAME_REQUIRED));
-            flag = true;
-        }
-        if (lopOffer.LOP_Street_Address__c == null || lopOffer.LOP_Street_Address__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_STREET_REQUIRED));
-            flag = true;
-        }
-        if (lopOffer.LOP_City__c == null || lopOffer.LOP_City__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_CITY_REQUIRED));
-            flag = true;
-        }
-        if (lopOffer.LOP_State__c == null || lopOffer.LOP_State__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_STATE_REQUIRED));
-            flag = true;
-        }
-        if (lopOffer.LOP_Zip__c == null || lopOffer.LOP_Zip__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_ZIP_REQUIRED));
-            flag = true;
-        }
-
-        if (lopOffer.LOP_Energy_Star__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_ENERGY_STAR_REQUIRED));
-            flag = true;
-        }
-        if (lopOffer.LOP_Energy_Star__c == 'No') {
-            String reason = lopOffer.LOP_Energy_Star_Reason__c;
-            if (reason == null || reason.length() <= 0) {
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_ENERGY_STAR_NO_REQUIRED));
-                flag = true;
-            }
-        }
-
-        if (lopOffer.LOP_Energy_Star__c == 'Yes') {
-            Date certificationDate = lopOffer.LOP_CERTIFICATION_DATE__c;
-            if (certificationDate == null) {
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_ENERGY_STAR_DATE_OF_CERTIFICATION_REQUIRED));
-                flag = true;
-            }
-        }
-
-
-        if (lopOffer.LOP_Number_of_floors__c == null || lopOffer.LOP_Number_of_floors__c <= 0) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_NUM_OF_FLOORS));
-            flag = true;
-        }
-        if (lopOffer.LOP_GEN_PURPOSE_RENTABLE__c == null || lopOffer.LOP_GEN_PURPOSE_RENTABLE__c <= 0) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_TOTAL_RSF));
-            flag = true;
-        }
-
-        lopOffer.LOP_OFFICE_SPACE_RSF__c = lopOffer.LOP_OFFICE_SPACE_RSF__c == null ? 0.00 : lopOffer.LOP_OFFICE_SPACE_RSF__c;
-        lopOffer.LOP_RETAIL_SPACE_RSF__c = lopOffer.LOP_RETAIL_SPACE_RSF__c == null ? 0.00 : lopOffer.LOP_RETAIL_SPACE_RSF__c;
-        lopOffer.LOP_OTHER_SPACE_RSF__c = lopOffer.LOP_OTHER_SPACE_RSF__c == null ? 0.00 : lopOffer.LOP_OTHER_SPACE_RSF__c;
-
-        Decimal total = lopOffer.LOP_OFFICE_SPACE_RSF__c + lopOffer.LOP_RETAIL_SPACE_RSF__c + lopOffer.LOP_OTHER_SPACE_RSF__c;
-
-        if (total != lopOffer.LOP_GEN_PURPOSE_RENTABLE__c) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_GEN_PURPOSE_RENTABLE_SUM_MSG));
-            flag = true;
-        }*/
-
-/*          if(lopOffer.LOP_OFFICE_SPACE_RSF__c == null || lopOffer.LOP_OFFICE_SPACE_RSF__c <= 0){
-            ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, '8a. Please Enter the value for the General Purpose (Office).'));
-            flag=true;
-        }
-        
-          if(lopOffer.LOP_RETAIL_SPACE_RSF__c == null){
-            ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, '8b. Please Enter the value for the Warehouse.'));
-            flag=true;
-        }
-         
-          if(lopOffer.LOP_OTHER_SPACE_RSF__c == null){
-            ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, '8c. Please Enter the value for Other.'));
-            flag=true;
-        } 
-       
-  */
-       /* if (lopOffer.LOP_Year_Built__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_YEAR_CONSTRUCTED));
-            flag = true;
-        }
-
-        if (lopOffer.LOP_HVAC_HRS_MON_TO_FRI_START__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_HVAC_M_F_START));
-            flag = true;
-        }
-        if (lopOffer.LOP_HVAC_HRS_MON_TO_FRI_END__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_HVAC_M_F_END));
-            flag = true;
-        }*/
-        /*  if(lopOffer.LOP_HIST_PROP_IN_HIST_DIST__c == null){
-              ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_HPHD));
-              flag=true;
-          }
-           if(lopOffer.LOP_NON_HIST_PROP_IN_HIST_DIST__c == null){
-              ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_NHP_WITHIN_HD));
-              flag=true;
-          }
-          if(lopOffer.LOP_HIST_PROP_IN_NON_HIST_DIST__c == null){
-              ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_HP_OUTSIDE_HD));
-              flag=true;
-          } */
-
-        /*if (lopOffer.LOP_SITE_SIZE_SQFT__c != null) {
-            if (lopOffer.LOP_SITE_AREA_TYPE__c == null) {
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.SITE_AREA_TYPE_REQ));
-                flag = true;
-            }
-        }
-
-        if (lopOffer.LOP_Historic_Property_Tier__c == null || lopOffer.LOP_Historic_Property_Tier__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_HISTORIC_QUALIFICATION));
-            flag = true;
-        }
-
-        if (lopOffer.LOP_Accessibility_Standards_Met__c == null || lopOffer.LOP_Accessibility_Standards_Met__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_ACCESSIBILITY_STANDARDS));
-            flag = true;
-        }
-
-        if (lopOffer.LOP_Asbestos_Declaration__c == null || lopOffer.LOP_Asbestos_Declaration__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_ACM_STANDARDS));
-            flag = true;
-        }
-
-        if (lopOffer.LOP_RLP_Contains_Seismic_Requirement__c == null || lopOffer.LOP_RLP_Contains_Seismic_Requirement__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_SEISMIC_SAFETY_REQ));
-            flag = true;
-        }
-        if (lopOffer.LOP_RLP_Contains_Seismic_Requirement__c == 'The RLP contains seismic requirements.') {
-            if (lopOffer.LOP_Offeror_Seismic_Declaration__c == null || lopOffer.LOP_Offeror_Seismic_Declaration__c == '') {
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_SEISMIC_SAFETY_QUAL));
-                flag = true;
-            }
-        }
-        if (lopOffer.LOP_Flood_Plain_Declaration__c == null || lopOffer.LOP_Flood_Plain_Declaration__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_FLOOD_PLAINS));
-            flag = true;
-        }
-
-        if (lopOffer.LOP_Fire_Safety_Declaration__c == null || lopOffer.LOP_Fire_Safety_Declaration__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_BUILDING_FIRE_PROTECTION));
-            flag = true;
-        }
-
-
-        System.debug('***** message size checkOfferBuildingValidations: ' + String.valueOf(ApexPages.getMessages().size()) + ' -- ' + ApexPages.getMessages());
-
-        return flag;
-    }*/
-
-    /* public static boolean checkOfferParkingValidations(PBS_LOP_Offer__c lopOffer){
-        
-        boolean flag;
-        if(lopOffer.LOP_Option_Parking__c == null){
-            ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.PARKING_OPTION_REQUIRED));
-            flag=true;
-        }
-        return flag;
-    }*/
-
-    /*
-    public static boolean checkOfferPropOwnerValidations(PBS_LOP_Offer__c lopOffer) {
-
-        boolean flag;
-
-        if (lopOffer.LOP_Property_Owner_Company__c == null || lopOffer.LOP_Property_Owner_Company__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.PROP_OWNER_COMPANY_REQUIRED));
-            flag = true;
-        }
-        if (lopOffer.LOP_Owner_Address__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.PROP_OWNER_ADDRESS));
-            flag = true;
-        }
-
-        if (lopOffer.LOP_Owner_City__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.PROP_OWNER_CITY));
-            flag = true;
-        }
-
-
-        if (lopOffer.LOP_OFFEROR_INTEREST__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.PROP_OWNER_TYPE));
-            flag = true;
-        }
-
-
-        return flag;
-    }
-    */
-    /*
-    public static boolean checkLOPOfferLeaseTerms(PBS_AAAP_Offer__c lopOffer) {
-
-        boolean flag;
-        if (lopOffer.PBS_AAAP_INITIAL_NO_OF_YEARS__c == null || lopOffer.PBS_AAAP_INITIAL_NO_OF_YEARS__c == 0) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.CONFIRM_NO_OF_YEARS_OFFERED_REQUIRED));
-            flag = true;
-        }
-        if (lopOffer.PBS_AAAP_Initial_YEARS_FIRM__c == null || lopOffer.PBS_AAAP_Initial_YEARS_FIRM__c == 0) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.CONFIRM_YEARS_FIRM_REQUIRED));
-            flag = true;
-        }
-
-
-        return flag;
-    } */
-    /*
-    public static boolean checkLOPOfferRepsAndCertsValidations(PBS_LOP_Offer__c lopOffer) {
-
-        boolean flag;
-        /* if(lopOffer.LOP_Representation_Business__c == null){
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.REPSCERTS_REPRESENTATION_REQUIRED));
-             flag=true;
-         }
-
-         if(lopOffer.LOP_Corporation_not_tax_felon__c == null){
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.REPSCERTS_CORP_FELONY_CONVICTION));
-             flag=true;
-         }
-         if(lopOffer.LOP_Corp_Not_Convicted_Felon__c == null){
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.REPSCERTS_CORP_FEDTAX_DEFAULT));
-             flag=true;
-         } 
-        return flag;
-    }*/
 
     //set the LOP offer status to draft from submitted
     public static void updateOfferToDraft(PBS_AAAP_Offer__c lopOffer) {
         lopOffer.PBS_AAAP_Offer_Status__c = 'Draft';
         lopOffer.PBS_AAAP_Offer_Submission_Date__c = null;
-        //lopOffer.LOP_ACK_READ_RLP_REQ_NO_CHANGE__c = '';
-        //lopOffer.LOP_ACCEPTED_PROV_FORM_3516__c = '';
-        //lopOffer.LOP_ACCEPTED_REP_CERT_FORM_3518__c = '';
-        //lopOffer.LOP_ACCEPTED_LEASE_FORM_1364__c = '';
-        //lopOffer.LOP_ACCEPTED_TERMS_AND_COND__c = '';
+        
     }
 
     public static boolean checkLOPOfferSpaceRates(PBS_AAAP_Offer__c lopOffer) {
 
         Boolean flag = false;
-        /**
-        if (lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c == null || lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c == 0) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_ANSI_BOMA_SF));
-            flag = true;
-        }
-        if (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c == null || lopOffer.PBS_AAAP_Office_RSF_OFFERED__c == 0) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_RSF));
-            flag = true;
-        }
-        if (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c == null) {
-            lopOffer.PBS_AAAP_Office_RSF_OFFERED__c = 0;
-        }
-        if (lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c == null) {
-            lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c = 0;
-        }
-
-        if (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c <= lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_RSF_GT_ABOA));
-            flag = true;
-        }**/
-
-        /*if (lopOffer.PBS_AAAP_Shell_Rent_Per_RSF__c == null || lopOffer.PBS_AAAP_Shell_Rent_Per_RSF__c == 0.00) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_SHELL_RENT_PER_RSF));
-            flag = true;
-        }*/
-        /*if (lopOffer.PBS_AAAP_Shell_Rate_Years_Effective__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_SHELL_RATE_YRS_EFFECTIVE));
-            flag = true;
-        }
-
-        if (lopOffer.PBS_AAAP_RLP_Parking_Cost_Incl__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_ANNUAL_RENT_PARKING));
-            flag = true;
-        }*/
-
+        
         return flag;
     }
     /** 
@@ -1111,7 +561,7 @@ public class PBS_AAAP_GlobalConstants {
         System.debug('inside validateOfferSubmission ******');
         boolean buildingflag = PBS_AAAP_GlobalConstants.checkFinalOfferBuildingValidations(lopOffer);
         System.debug('buildingflag is ' + buildingflag);
-        //boolean repsflag = PBS_AAAP_GlobalConstants.checkFinalLOPOfferRepsAndCertsValidations(lopOffer);
+        
         boolean repsflag = FALSE;
         System.debug('repsflag is ' + repsflag);
         boolean propOwnerflag = PBS_AAAP_GlobalConstants.checkFinalOfferPropOwnerValidations(lopOffer);
@@ -1142,16 +592,14 @@ public class PBS_AAAP_GlobalConstants {
         System.debug('inside validateOfferSubmissionBefore ******');
         boolean buildingflag = PBS_AAAP_GlobalConstants.checkFinalOfferBuildingValidations(lopOffer);
         System.debug('buildingflag is ' + buildingflag);
-        //boolean repsflag = PBS_AAAP_GlobalConstants.checkFinalLOPOfferRepsAndCertsValidations(lopOffer);
-        //boolean repsflag = FALSE;
-        //System.debug('repsflag is ' + repsflag);
+        
         boolean spaceAndParkingFlag = PBS_AAAP_GlobalConstants.checkFinalLOPOfferSpaceAndParking(lopOffer);
         System.debug('spaceAndParkingFlag is ' + spaceAndParkingFlag);
         boolean leaseTermflag = PBS_AAAP_GlobalConstants.checkFinalLOPOfferLeaseTerms(lopOffer);
         System.debug('leaseTermflag is ' + leaseTermflag);
         boolean propOwnerflag = PBS_AAAP_GlobalConstants.checkFinalLOPOfferPropOwnerValidations(lopOffer);
         System.debug('propOwnerflag is ' + propOwnerflag);
-        //boolean spaceRatesFlag = PBS_AAAP_GlobalConstants.checkFinalLOPOfferSpaceRates(lopOffer);
+        
 
         if (buildingflag == true || spaceAndParkingFlag || propOwnerflag == true || leaseTermflag == true) {
             flag = true;
@@ -1168,218 +616,35 @@ public class PBS_AAAP_GlobalConstants {
 
         boolean flag = false;
 
-        if (lopOffer.PBS_AAAP_Building_Name__c == null || lopOffer.PBS_AAAP_Building_Name__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_NAME_REQUIRED));
-            flag = true;
-        }
-        if (lopOffer.PBS_AAAP_Street_Address__c == null || lopOffer.PBS_AAAP_Street_Address__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_STREET_REQUIRED));
-            flag = true;
-        }
-        if (lopOffer.PBS_AAAP_City__c == null || lopOffer.PBS_AAAP_City__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_CITY_REQUIRED));
-            flag = true;
-        }
-        if (lopOffer.PBS_AAAP_State__c == null || lopOffer.PBS_AAAP_State__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_STATE_REQUIRED));
-            flag = true;
-        }
-        if (lopOffer.PBS_AAAP_ZipCode__c == null || lopOffer.PBS_AAAP_ZipCode__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_ZIP_REQUIRED));
-            flag = true;
-        }
-
-        if (lopOffer.PBS_AAAP_Energy_Star__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_ENERGY_STAR_REQUIRED));
-            flag = true;
-        }
-        if (lopOffer.PBS_AAAP_Energy_Star__c == 'No') {
-//SGanti 11/2021 
-            //String reason = lopOffer.PBS_AAAP_Energy_Star_Evaluation__c; 
-            //if (reason == null || reason.length() <= 0) {
-              //  ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_ENERGY_STAR_NO_REQUIRED));
-                //flag = true;
-            //}
-//SGanti 11/2021
-            if (lopOffer.PBS_RSAP_Energy_Star_Response_No__c == null) {
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_ENERGY_STAR_NO_CATEGORY_REQUIRED));
-                flag = true;
-            } 
-            if (lopOffer.PBS_RSAP_Energy_Star_Response_No__c == 'Statutory Exception' && lopOffer.PBS_RSAP_Energy_Star_Meets_Exceptions__c == null) {
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_ENERGY_STAR_NO_STATUTORY_EXCEPTION_REQUIRED));
-                flag = true;
-            } 
-        }
-//SGanti 11/2021        
-        if (lopOffer.PBS_RSAP_Building_is_a_historic_property__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_HISTORIC_PROPERTY));
-            flag = true;
-        }
-//SGanti 11/2021        
         
-        if (lopOffer.PBS_RSAP_Bldg_within_a_historic_district__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_HISTORIC_DISTRICT));
-            flag = true;
-        }
-        
-        if (lopOffer.PBS_AAAP_Energy_Star__c == 'Yes') {
-            Date certificationDate = lopOffer.PBS_AAAP_CERTIFICATION_DATE__c;
-            if (certificationDate == null) {
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_ENERGY_STAR_DATE_OF_CERTIFICATION_REQUIRED));
-                flag = true;
-            }
-        }
-
-
-        if (lopOffer.PBS_AAAP_floors_Suites_in_Offered_Space__c == null || lopOffer.PBS_AAAP_floors_Suites_in_Offered_Space__c <= 0) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_NUM_OF_FLOORS));
-            flag = true;
-        }
-        if (lopOffer.PBS_AAAP_GEN_PURPOSE_RENTABLE__c == null || lopOffer.PBS_AAAP_GEN_PURPOSE_RENTABLE__c <= 0) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_TOTAL_RSF));
-            flag = true;
-        }
-
         lopOffer.PBS_AAAP_OFFICE_SPACE_RSF__c = lopOffer.PBS_AAAP_OFFICE_SPACE_RSF__c == null ? 0.00 : lopOffer.PBS_AAAP_OFFICE_SPACE_RSF__c;
         lopOffer.PBS_AAAP_RETAIL_SPACE_RSF__c = lopOffer.PBS_AAAP_RETAIL_SPACE_RSF__c == null ? 0.00 : lopOffer.PBS_AAAP_RETAIL_SPACE_RSF__c;
         lopOffer.PBS_AAAP_GARAGE_SPACE_RSF__c = lopOffer.PBS_AAAP_GARAGE_SPACE_RSF__c == null ? 0.00 : lopOffer.PBS_AAAP_GARAGE_SPACE_RSF__c;
 
         Decimal total = lopOffer.PBS_AAAP_OFFICE_SPACE_RSF__c + lopOffer.PBS_AAAP_RETAIL_SPACE_RSF__c + lopOffer.PBS_AAAP_GARAGE_SPACE_RSF__c;
 
-        if (total != lopOffer.PBS_AAAP_GEN_PURPOSE_RENTABLE__c) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_GEN_PURPOSE_RENTABLE_SUM_MSG));
-            flag = true;
-        }
+        
 
-        /*  if(lopOffer.PBS_AAAP_OFFICE_SPACE_RSF__c == null || lopOffer.PBS_AAAP_OFFICE_SPACE_RSF__c <= 0){
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, 'Building Page : 8a. Please Enter the value for the General Purpose (Office)'));
-             flag=true;
-         }
-
-           if(lopOffer.PBS_AAAP_RETAIL_SPACE_RSF__c == null){
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, 'Building Page : 8b. Please Enter the value for the Warehouse'));
-             flag=true;
-         }
-
-           if(lopOffer.PBS_AAAP_OTHER_SPACE_RSF__c == null){
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, 'Building Page : 8c. Please Enter the value for Other'));
-             flag=true;
-         } */
-
-        if (lopOffer.PBS_RSAP_Year_Built__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_YEAR_CONSTRUCTED));
+        if (lopOffer.PBS_AAAP_Renovation_Year__c == null) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Overview Page: ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_YEAR_CONSTRUCTED));
             flag = true;
         }
 
         if (lopOffer.PBS_AAAP_HVAC_HRS_MON_TO_FRI_START__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_HVAC_M_F_START));
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Overview Page: ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_HVAC_M_F_START));
             flag = true;
         }
         if (lopOffer.PBS_AAAP_HVAC_HRS_MON_TO_FRI_END__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_HVAC_M_F_END));
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Overview Page: ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_HVAC_M_F_END));
             flag = true;
         }
-        /*  if(lopOffer.PBS_AAAP_HIST_PROP_IN_HIST_DIST__c == null){
-              ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_HPHD));
-              flag=true;
-          }
-           if(lopOffer.PBS_AAAP_NON_HIST_PROP_IN_HIST_DIST__c == null){
-              ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_NHP_WITHIN_HD));
-              flag=true;
-          }
-          if(lopOffer.PBS_AAAP_HIST_PROP_IN_NON_HIST_DIST__c == null){
-              ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_HP_OUTSIDE_HD));
-              flag=true;
-          } */
-//SGanti 10/2021
-        //if (lopOffer.PBS_AAAP_SITE_SIZE_SQFT__c != null) {
-          //  if (lopOffer.PBS_AAAP_SITE_AREA_TYPE__c == null) {
-            //    ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.SITE_AREA_TYPE_REQ));
-              //  flag = true;
-            //}
-        //}
-
-        /*if (lopOffer.PBS_RSAP_Historical_Property_Description__c == null || lopOffer.PBS_RSAP_Historical_Property_Description__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_HISTORIC_QUALIFICATION));
-            flag = true;
-        }*/
-
-        if (lopOffer.PBS_RSAP_Accessibility_Standards_Met__c == null || lopOffer.PBS_RSAP_Accessibility_Standards_Met__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_ACCESSIBILITY_STANDARDS));
-            flag = true;
-        }
-//SGanti 11/2021
-
-        //if (lopOffer.PBS_RSAP_Asbestos_Declaration__c == null || lopOffer.PBS_RSAP_Asbestos_Declaration__c == '') {
-          //  ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_ACM_STANDARDS));
-            //flag = true;
-        //}
-        if (lopOffer.PBS_AAAP_Asbestos__c == null || lopOffer.PBS_AAAP_Asbestos__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_ACM_STANDARDS));
-            flag = true;
-        }
-
-        /**
-        if (lopOffer.PBS_RSAP_Offeror_Seismic_Declaration__c == null || lopOffer.PBS_RSAP_Offeror_Seismic_Declaration__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_SEISMIC_SAFETY_REQ));
-            flag = true;
-        }
-        **/
-
-        if (lopOffer.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c == NULL || lopOffer.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Information Page : 17. Seismic information is required'));
-            flag = TRUE;
-        }
-        if (lopOffer.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c == 'Yes' && (lopOffer.PBS_RSAP_Offeror_Seismic_Declaration__c == '' || lopOffer.PBS_RSAP_Offeror_Seismic_Declaration__c == NULL)) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Information Page : 17a. Seismic declaration is required'));
-            flag = TRUE;
-        }
-
-        /**
-        if (lopOffer.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c == 'Yes') {
-            if (lopOffer.PBS_RSAP_Offeror_Seismic_Declaration__c == null || lopOffer.PBS_RSAP_Offeror_Seismic_Declaration__c == '') {
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_SEISMIC_SAFETY_QUAL));
-                flag = true;
-            }
-        }
-        **/
-        if (lopOffer.PBS_RSAP_Flood_Plain_Declaration__c == null || lopOffer.PBS_RSAP_Flood_Plain_Declaration__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_FLOOD_PLAINS));
-            flag = true;
-        }
-
-        if (lopOffer.PBS_AAAP_FIRE_SAFETY_CERT__c == null || lopOffer.PBS_AAAP_FIRE_SAFETY_CERT__c == '') {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Building Page : ' + PBS_AAAP_GlobalConstants.LOP_BUILDING_FIRE_PROTECTION));
-            flag = true;
-        }
-
+        
 
         System.debug('***** message size checkOfferBuildingValidations: ' + String.valueOf(ApexPages.getMessages().size()) + ' -- ' + ApexPages.getMessages());
 
         return flag;
     }
     
-    /*
-    public static boolean checkFinalLOPOfferRepsAndCertsValidations(PBS_LOP_Offer__c lopOffer) {
-
-        boolean flag;
-        flag = false;
-        /* if(lopOffer.LOP_Representation_Business__c == null){
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Reps&Certs Page : '+PBS_AAAP_GlobalConstants.REPSCERTS_REPRESENTATION_REQUIRED));
-             flag=true;
-         }
-
-         if(lopOffer.LOP_Corporation_not_tax_felon__c == null){
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, 'Reps&Certs Page : '+PBS_AAAP_GlobalConstants.REPSCERTS_CORP_FELONY_CONVICTION));
-             flag=true;
-         }
-         if(lopOffer.LOP_Corp_Not_Convicted_Felon__c == null){
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, 'Reps&Certs Page : '+PBS_AAAP_GlobalConstants.REPSCERTS_CORP_FEDTAX_DEFAULT));
-             flag=true;
-         } 
-        return flag;
-    }*/
-
     public static boolean checkFinalOfferPropOwnerValidations(PBS_AAAP_Offer__c lopOffer) {
 
         boolean flag = false;
@@ -1453,34 +718,7 @@ public class PBS_AAAP_GlobalConstants {
     public static boolean checkFinalLOPOfferLeaseTerms(PBS_AAAP_Offer__c lopOffer) {
         
         boolean flag = false;
-        if (lopOffer.Confirm_Full_Term_Lease_Months__c == null || lopOffer.Confirm_Full_Term_Lease_Months__c == 0) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Lease Terms Page: Initial Lease Term section: 1. Confirm the full term of the lease, in months.'));
-            flag = true;
-        }
-        if (lopOffer.Confirm_Firm_Term_Lease_Months__c == null || lopOffer.Confirm_Firm_Term_Lease_Months__c == 0) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Lease Terms Page: Initial Lease Term section: 2. Confirm the firm term of the lease, in months.'));
-            flag = true;
-        }
-        if(lopOffer.PBS_AAAP_ARCHITECTURAL_ENG_FEES_UOM__c == NULL){
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Lease Terms Page: Offeror\'s Fee Schedule section: 1. Make sure an Architectural/Engineering Unit of Measure is selected.'));
-            flag = true;
-        } else {
-            if (lopOffer.PBS_AAAP_ARCHITECTURAL_ENG_FEES_UOM__c == 'Per ABOA Square Feet ($)' && lopOffer.PBS_AAAP_ARCH_ENG_FEES_PER_USF__c == null) {
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Lease Terms Page: Offeror\'s Fee Schedule section: 1. Make sure an Architectural/Engineering square footage amount or 0 is entered.'));
-                flag = true;
-            } else if (lopOffer.PBS_AAAP_ARCHITECTURAL_ENG_FEES_UOM__c == 'Percent of Total Construction Costs (%)' && lopOffer.PBS_AAAP_Architectural_Fees_Percent__c == null) {
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Lease Terms Page: Offeror\'s Fee Schedule section: 1. Make sure an Architectural/Engineering percentage amount or 0 is entered.'));
-                flag = true;
-            } else if (lopOffer.PBS_AAAP_ARCHITECTURAL_ENG_FEES_UOM__c == 'Flat Fee ($)' && lopOffer.PBS_AAAP_Architectural_Fees_Flat__c == null) {
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Lease Terms Page: Offeror\'s Fee Schedule section: 1. Make sure an Architectural/Engineering flat fee amount or 0 is entered.'));
-                flag = true;
-            }
         
-        }
-        if (lopOffer.PBS_AAAP_Lessor_Prj_Fees__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Lease Terms Page: Offeror\'s Fee Schedule section: 2. Lessor\'s Project Management Fee is required.'));
-            flag = true;
-        }        
 
         return flag;
         
@@ -1488,119 +726,22 @@ public class PBS_AAAP_GlobalConstants {
 
     public static boolean checkFinalLOPOfferSpaceAndParking(PBS_AAAP_Offer__c lopOffer) {
         Boolean flag = false;
-        if (lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c == null || lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c == 0) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_ANSI_BOMA_SF));
-            flag = true;
-        }
-        if (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c == null || lopOffer.PBS_AAAP_Office_RSF_OFFERED__c == 0) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_RSF));
-            flag = true;
-        }
-        if (lopOffer.PBS_AAAP_Parking_Onsite__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_ONSITE));
-            flag = true;
-        }
-        if (lopOffer.PBS_AAAP_Monthly_cost_res_sur_park__c == null || lopOffer.PBS_AAAP_Monthly_cost_nonres_sur_park__c == null || 
-            lopOffer.PBS_AAAP_Monthly_cost_res_gar_park__c == null || lopOffer.PBS_AAAP_Monthly_cost_nonres_gar_park__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_ALLPARKING));
-            flag = true;
-        }
+       
         return flag;
     }
 
     public static boolean checkFinalLOPOfferSpaceRates(PBS_AAAP_Offer__c lopOffer) {
         Boolean flag = false;
-        //if (lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c == null || lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c == 0) {
-        //    ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_ANSI_BOMA_SF));
-        //    flag = true;
-        //}
-        //if (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c == null || lopOffer.PBS_AAAP_Office_RSF_OFFERED__c == 0) {
-        //    ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_RSF));
-        //    flag = true;
-        //}
-        //if (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c == null) {
-        //    lopOffer.PBS_AAAP_Office_RSF_OFFERED__c = 0;
-        //}
-        //if (lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c == null) {
-        //    lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c = 0;
-        //}
-
-        /*if (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c <= lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_RSF_GT_ABOA));
-            flag = true;
-        }*/
-
-        /*if (lopOffer.PBS_AAAP_Shell_Rent_Per_RSF__c == null || lopOffer.PBS_AAAP_Shell_Rent_Per_RSF__c == 0.00) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_SHELL_RENT_PER_RSF));
-            flag = true;
-        }*/
-        /*if (lopOffer.PBS_AAAP_Shell_Rate_Years_Effective__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_SHELL_RATE_YRS_EFFECTIVE));
-            flag = true;
-        }
-        if (lopOffer.PBS_AAAP_RLP_Parking_Cost_Incl__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.LOP_SPACE_RATES_ANNUAL_RENT_PARKING));
-            flag = true;
-        }*/
-
+        
         return flag;
     }
-    /**
-    public static String convertToTimeZone(PBS_GREX_Project_EOI__c project) {
-
-        String offerDueDtStr = null;
-        DateTime offerDueDt = project.Project_Offer_Due_Date__c;
-        String timeZone = project.Project_Due_Timezone__c;
-        System.debug('offerDueDt is ***' + offerDueDt);
-        if (timeZone == null || timeZone == '') {
-            timeZone = 'Eastern Time';
-        }
-        if (timeZone.contains('Atlantic Time')) {
-            offerDueDtStr = offerDueDt.format('MM/dd/yyyy h:mm a', 'America/Puerto_Rico');
-            offerDueDtStr = offerDueDtStr + ' Atlantic Time (Canada)';
-
-        } else if (timeZone.contains('Eastern Time')) {
-            offerDueDtStr = offerDueDt.format('MM/dd/yyyy h:mm a', 'America/New_York');
-            offerDueDtStr = offerDueDtStr + ' Eastern Time (US & Canada)';
-
-        } else if (timeZone.contains('Central Time')) {
-            offerDueDtStr = offerDueDt.format('MM/dd/yyyy h:mm a', 'America/Chicago');
-            offerDueDtStr = offerDueDtStr + ' Central Time (US & Canada)';
-
-
-        } else if (timeZone.contains('Mountain Time')) {
-            offerDueDtStr = offerDueDt.format('MM/dd/yyyy h:mm a', 'America/Denver');
-            offerDueDtStr = offerDueDtStr + ' Mountain Time (US & Canada)';
-
-        } else if (timeZone.contains('Pacific Time')) {
-            offerDueDtStr = offerDueDt.format('MM/dd/yyyy h:mm a', 'America/Los_Angeles');
-            offerDueDtStr = offerDueDtStr + ' Pacific Time (US & Canada)';
-
-        } else if (timeZone.contains('Guam')) {
-            offerDueDtStr = offerDueDt.format('MM/dd/yyyy h:mm a', 'Australia/Brisbane');
-            offerDueDtStr = offerDueDtStr + ' Guam, Port Moresby';
-        } else {
-
-            System.debug('inside Hawaii ***' + offerDueDt);
-            offerDueDtStr = offerDueDt.format('MM/dd/yyyy h:mm a', 'Pacific/Honolulu');
-            offerDueDtStr = offerDueDtStr + ' Hawaii';
-
-            System.debug('inside Hawaii ***' + offerDueDtStr);
-        }
-
-        return offerDueDtStr;
-    }
-    **/
+    
 
     //Syed Start
     public static Boolean checkOfferIsValidOrNot(PBS_AAAP_Offer__c offerBuilding)
     {
         Boolean isOfferValid = true;
-        /*Date dt = Date.today();
-        integer day = dt.day();
-        if ((day > endRLPDay) || (day < startRLPDay)) {
-            showSubmitMesg = true;
-        }*/
+        
         
         DateTime dtimeToday = System.now();
         DateTime beginDateTime = null;   DateTime endDateTime = null;
@@ -1657,4 +798,5 @@ public class PBS_AAAP_GlobalConstants {
         return tm;
     }
     //Syed End
+    
 }

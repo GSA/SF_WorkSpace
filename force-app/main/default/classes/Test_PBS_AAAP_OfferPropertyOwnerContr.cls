@@ -22,8 +22,6 @@ private class Test_PBS_AAAP_OfferPropertyOwnerContr {
             Test.startTest();
             opc = new PBS_AAAP_OfferPropertyOwner();
 
-            //System.debug(':::::::::::::::::: opc.offerParking :::::::::::: ' + opc.offerParking );
-
             List<SelectOption> items = opc.getItems();
             System.assert(items.size() > 0);
 
@@ -61,7 +59,6 @@ private class Test_PBS_AAAP_OfferPropertyOwnerContr {
 
         }
     }
-    // j.rogers 1/18/2023   increase coverage
     static testMethod void myOfferPropertyOwnerConstructorTestErrors() {
 
         User u = PBS_AAAP_UtilityTest.createPortalUser();
@@ -76,8 +73,6 @@ private class Test_PBS_AAAP_OfferPropertyOwnerContr {
             offer.PBS_AAAP_TYPE_OF_ORG__c = 'Other';
             offer.PBS_AAAP_Owner_TIN_Status__c = 'KNOWN';
             offer.PBS_AAAP_CONTROLLED_BY_PARENT__c = 'Yes';
-
-            // j.rogers 1/18/2023
             offer.PBS_AAAP_Owner_Name__c  = null;
             offer.PBS_AAAP_Owner_Address__c  = null;
             offer.PBS_AAAP_Owner_Country__c  = null;
@@ -93,8 +88,6 @@ private class Test_PBS_AAAP_OfferPropertyOwnerContr {
             Test.startTest();
             opc = new PBS_AAAP_OfferPropertyOwner();
 
-            //System.debug(':::::::::::::::::: opc.offerParking :::::::::::: ' + opc.offerParking );
-
             List<SelectOption> items = opc.getItems();
             System.assert(items.size() > 0);
 
@@ -105,8 +98,6 @@ private class Test_PBS_AAAP_OfferPropertyOwnerContr {
             opc.sameOwner = TRUE;
             opc.copyUserDetails();
             Test.stopTest();
-
-
         }
     }
 
@@ -155,13 +146,10 @@ private class Test_PBS_AAAP_OfferPropertyOwnerContr {
             page = opc.actionDeleteOffer();
             System.assert(page != null);
 
-
             page = opc.backToOfrParking();
             System.assert(page == null);
 
             page = opc.actionSavePropertyOwner();
-            //System.assert(page == null);
-
             Test.stopTest();
         }
     }
@@ -228,11 +216,7 @@ private class Test_PBS_AAAP_OfferPropertyOwnerContr {
 
             PageReference page = opc.actionSavePropertyOwnerAndContinue(); // throws exception as we are not passing id to update the offer.
             System.assert(page == null);
-
-
             Test.stopTest();
-
-
         }
     }
 
@@ -275,8 +259,6 @@ private class Test_PBS_AAAP_OfferPropertyOwnerContr {
             System.assert(page == null);
 
             Test.stopTest();
-
-
         }
     }
     
@@ -290,26 +272,20 @@ private class Test_PBS_AAAP_OfferPropertyOwnerContr {
             Test.setCurrentPage(currentPage);
             PBS_AAAP_Offer__c offer = PBS_AAAP_UtilityTest.createOfferInfo();
             offer.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED;
-            //offer.PBS_AAAP_Building_Name__c = null;
-
             insert offer;
             ApexPages.currentPage().getParameters().put('offerId', offer.id);
             PBS_AAAP_OfferPropertyOwner opc;
 
             Test.startTest();
             opc = new PBS_AAAP_OfferPropertyOwner();
-            opc.sameOwner = TRUE;//JKantarovsky added this line for code coverage 7/2021
+            opc.sameOwner = TRUE;
 
-            PageReference page = opc.actionSavePropertyOwnerAndContinue(); // throws exception as we are not passing id to update the offer.
+            PageReference page = opc.actionSavePropertyOwnerAndContinue();
             System.assert(page == null);
 
             page = opc.actionCancel();
             System.assert(page != null);
-
-
             Test.stopTest();
-
-
         }
     }
 }

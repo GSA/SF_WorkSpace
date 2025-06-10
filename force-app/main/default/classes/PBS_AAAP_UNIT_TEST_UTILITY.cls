@@ -8,21 +8,12 @@ private class PBS_AAAP_UNIT_TEST_UTILITY {
         PBS_AAAP_CALCULATIONS calcu1 = new PBS_AAAP_CALCULATIONS();
 
         PBS_AAAP_UNIT_TEST_DATA_GENERATOR dataGen1 = new PBS_AAAP_UNIT_TEST_DATA_GENERATOR();
-        //Map<String, PBS_AAAP_RLP__c> rlp = dataGen1.getRLP();
-        //Map<String, PBS_AAAP_Offer__c> offer = dataGen1.getOffer();
-        //Map<String, PBS_AAAP_Space__c> space = dataGen1.getSpace();
-        //Map<String, PBS_AAAP_Agency_Requirement__c> agency = dataGen1.getAgency();
         PBS_AAAP_RLP__c rlp = dataGen1.insertRLP();
         PBS_AAAP_Rate__c rate1 = dataGen1.insertRate1();
         PBS_AAAP_Offer__c offer = dataGen1.insertOffer();
         PBS_AAAP_Space__c space = dataGen1.insertSpace();
         PBS_AAAP_Agency_Requirement__c agency = dataGen1.insertAgency();
         Map<String, Id> mapinst = dataGen1.getAllCensusData();
-        // public Decimal censusPV(String offerId,String spaceId, String leaseTerm ,String agencyId, Boolean newLeaseIncludeAE,
-        //double AEfromPage, double PBS_AAAP_MOVE_DEFAULT_OVERRIDE, double PBS_AAAP_TELCOMM_DEFAULT_OVERRIDE, double PBS_AAAP_PV_OTHER_UPFRONT_COSTS_OVERRIDE){
-
-
-        //Double testBcaf1=calcu1.censusPV(mapinst.get('Offer'),mapinst.get('Space'),'19 months,11 firm',mapinst.get('Agency'),true,(Double)130,(Double)50,(Double)20,(Double)70);
         Double testBcaf1 = calcu1.censusPV(offer, space, rlp, '19 months, 11 firm', rate1, agency, true, (Double) 130, (Double) 50, (Double) 20, (Double) 70);
         Decimal val = calcu1.getTotalFeeCost(33, 20, 11);
         Decimal val2 = calcu1.getTotalLessorOverheadAndFees(50, 60);
@@ -42,29 +33,12 @@ private class PBS_AAAP_UNIT_TEST_UTILITY {
         system.assertEquals(true, true);
 
     }
-
-
     // test the calculation class
     private static testMethod void testCalculationClass() {
 
         PBS_AAAP_CALCULATIONS calcu = new PBS_AAAP_CALCULATIONS();
 
         PBS_AAAP_UNIT_TEST_DATA_GENERATOR dataGen = new PBS_AAAP_UNIT_TEST_DATA_GENERATOR();
-
-        /*
-         */
-
-        // Decimal dis=calcu.getNewAvgCpiAndDiscount(10, 44,6,76 );
-        // Decimal dis1=calcu.getNewAvgDiscount(68,89,88);
-        //  Decimal dis2=calcu.getAmortizationCost(83, 939, 73);
-        //  Decimal dis3=calcu.getNewAvgDiscount(773,73,73);
-
-
-// 
-
-
-        // create the test data defaults
-
         PBS_AAAP_DAO_Utilities dao = new PBS_AAAP_DAO_Utilities();
         PBS_AAAP_Offer__c testOffer = dao.getOffer(dataGen.testOffer.Id);
         List<PBS_AAAP_Space__c> testSpaces = dao.getSpaces(dataGen.testOffer.Id);
@@ -76,10 +50,10 @@ private class PBS_AAAP_UNIT_TEST_UTILITY {
         dao.validatePVRates(testOffer.Id);
 
 
-        System.assertEquals(testOffer.Id, dataGen.testOffer.Id);                        // validate that the dao methods obtain the correct offer
+        System.assertEquals(testOffer.Id, dataGen.testOffer.Id);                // validate that the dao methods obtain the correct offer
         System.assertEquals(testSpaces.get(0).Id, dataGen.testSpace.Id);        // validate that the dao methods obtain the correct spaces
-        System.assertEquals(testRates.size(), dataGen.testRates.size());            // validate that the system generates the three rate records and that the dao methods return them
-        System.assertEquals(testRlp.Id, dataGen.testRlp.Id);                                // validate that the dao methods obtain the correct RLP
+        System.assertEquals(testRates.size(), dataGen.testRates.size());        // validate that the system generates the three rate records and that the dao methods return them
+        System.assertEquals(testRlp.Id, dataGen.testRlp.Id);                    // validate that the dao methods obtain the correct RLP
 
         // validate that the dao methods "catch" executes for the offer SOQL
         PBS_AAAP_Offer__c testOfferExcpt = dao.getOffer(null);
@@ -205,32 +179,8 @@ private class PBS_AAAP_UNIT_TEST_UTILITY {
                                         testOffer.PBS_AAAP_RLP_TI_New_Space__c.doubleValue(),
                                         maxFund).doubleValue(),
                                 PBS_AAAP_CALCULATIONS.FIVEFIVEYR).doubleValue())).setScale(2);
-
-        //added by syam
         System.debug('double value is **** ' + d);
         //value corrected by Vaishali 43.15 to 44.15
-
-        /*System.assertEquals(44.15, calc.getFullySrvcLeaseRateFiveYr(testRates, 
-testOffer, 
-testSpaces.get(0), 
-calc.getFreeRentNewSpace(calc.get1rstNewFreeRentForFiveYear(testRates, 
-calc.getNewFirstTierTI(testOffer.PBS_AAAP_RLP_TI_New_Space__c.doubleValue(), 
-calc.getNewConstrMarkupsPrctg(testSpaces.get(0), 
-testOffer).doubleValue()
-).doubleValue(),
-PBS_AAAP_CALCULATIONS.FIVEFIVEYR
-).doubleValue(), 
-calc.get2ndNewFreeRentForFiveYear(testRates, 
-calc.getNewSecondTierTI(testOffer.PBS_AAAP_RLP_TI_New_Space__c.doubleValue(), 
-calc.getNewConstrMarkupsPrctg(testSpaces.get(0), testOffer).doubleValue(), 
-calc.get2ndNewConstrMarkupsPrctg(testSpaces.get(0), 
-testOffer, 
-maxFund).doubleValue(), 
-testOffer.PBS_AAAP_RLP_TI_New_Space__c.doubleValue(), 
-maxFund).doubleValue(),
-PBS_AAAP_CALCULATIONS.FIVEFIVEYR                                                                                                                   
-).doubleValue())).setScale(2));
-*/
         System.assertEquals(85.21, calc.getFullySrvcLeaseRateFiveYr(testRates,
                 testOffer,
                 testSpaces.get(0),
@@ -451,14 +401,6 @@ PBS_AAAP_CALCULATIONS.FIVEFIVEYR
                         ).doubleValue()
                 ).setScale(2).doubleValue()
                 );
-
-                //System.assertEquals(-3.98, calc.getSucc1rstFreeRentForTenYear(testRates,
-                        //calc.getSuccFirstTierTI(testOffer.PBS_AAAP_RLP_TI_Additional_Space__c.doubleValue(),
-                                //calc.getSuccConstrMarkups(testSpaces.get(0), testOffer).doubleValue(),
-                               // testOffer.PBS_AAAP_RLP_TI_New_Space__c.doubleValue()
-                       // ).doubleValue()
-               // ).setScale(2).doubleValue()
-               // );     // end SystemAssertEquals
 
                 System.assertEquals(-3.53, calc.getSucc1rstFreeRentForTenYear(testRates,
                         calc.getSuccFirstTierTI(testOffer.PBS_AAAP_RLP_TI_Additional_Space__c.doubleValue(),
@@ -918,33 +860,6 @@ PBS_AAAP_CALCULATIONS.FIVEFIVEYR
                         ).doubleValue()
                 ).setScale(2)
                 );
-
-                // Test the Base Rent + TI calculation
-                // Vaishali RLP FY15System.assertEquals(51.30, calc.getBaseRentAndTI(r.PBS_AAAP_BASE_RATE__c.doubleValue(),
-                /* System.assertEquals(50.49, calc.getBaseRentAndTI(r.PBS_AAAP_BASE_RATE__c.doubleValue(),
-calc.getFreeRentNewSpace(calc.get1rstNewFreeRentForFiveYear(testRates, 
-calc.getNewFirstTierTI(testOffer.PBS_AAAP_RLP_TI_New_Space__c.doubleValue(), 
-calc.getNewConstrMarkups(testSpaces.get(0), testOffer).doubleValue()
-).doubleValue(),
-PBS_AAAP_CALCULATIONS.FIVEYR
-).doubleValue(), 
-calc.get2ndNewFreeRentForFiveYear(testRates, 
-calc.getNewSecondTierTI(testOffer.PBS_AAAP_RLP_TI_New_Space__c.doubleValue(), 
-calc.getNewConstrMarkups(testSpaces.get(0), testOffer).doubleValue(), 
-calc.get2ndNewConstrMarkups(testSpaces.get(0), 
-testOffer, 
-maxFund
-).doubleValue(), 
-testOffer.PBS_AAAP_RLP_TI_New_Space__c.doubleValue(), 
-maxFund).doubleValue(),
-PBS_AAAP_CALCULATIONS.FIVEYR
-).doubleValue()
-).doubleValue(), 
-testRlp.PBS_AAAP_DISCOUNT_RATE__c.doubleValue(),
-5).setScale(2));                               
-
-*/
-                //added by syam
                 //value changed by Vaishali to 11.95. Old value 11.04
                 System.assertEquals(48.83, calc.getBaseRentAndTI(r.PBS_AAAP_BASE_RATE__c.doubleValue(),
                         calc.getFreeRentNewSpace(calc.get1rstNewFreeRentForFiveYear(testRates,

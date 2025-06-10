@@ -1,0 +1,71 @@
+<template>
+    <div style="background-color: white !important; background: none; border: none">
+       <span class="header">Offer space</span>
+    </div>
+    <br/><br/>
+    <form id="offerOptions">
+        <ul class='error'>
+            <template for:each={errors} for:item="error">
+                <li key={error}>{error}</li>
+            </template>
+        </ul>
+            <div class="slds-grid">
+				<div class="slds-col slds-order_1 custom-border">
+				    <table width="100%">
+					    <tr>
+					        <td><span style="padding-left: 1px;">Property name:&nbsp;&nbsp;{offerPropertyName}</span></td>
+						</tr>
+					</table>
+				</div>
+				<div class="slds-col slds-order_2 custom-border">
+				    <table width="100%">
+					    <tr>
+							<td><span style="padding-left: 5px;">{rlpOrSolicitationLabel}:&nbsp;&nbsp;{rlpOrSolicitationValue}</span></td>
+						</tr>
+					</table>
+				</div>
+				<div class="slds-col slds-order_3 custom-border">
+				    <table width="100%">
+					    <tr>
+							<td><span style="padding-left: 5px;">Offer status:&nbsp;&nbsp;{offerStatus}</span></td>
+						</tr>
+					</table>
+				</div>
+            </div>
+			<div class="slds-m-top_medium slds-m-bottom_x-large">
+				<h1>Manage existing offer</h1>
+			</div>
+            <div class={editOfferDivClass}>
+                <div class="slds-col custom-border2">
+					<div class="slds-form-element__control">
+						<input type="radio" onchange={handleOptionOne} name="default" value={optionOneValue} data-name="optionOne" />&nbsp;<b>Edit this offer:</b> I want to update GSA Forms 1364 and 1217 and/or I want to add or view offer documents.
+					</div>
+                </div>
+			</div>
+            <div class={addViewDocDivClass}>
+                <div class="slds-col custom-border2">
+					<div class="slds-form-element__control">
+						<input type="radio" onchange={handleOptionTwo} name="default" value={optionTwoValue} data-name="optionTwo" />&nbsp;<b>Add/view documentation:</b> I want to add supplemental documents or view existing offer documents. Choose this option if you do not want to update GSA Forms 1364 and 1217.
+					</div>
+               </div>
+			</div>
+            <div class={viewOfferDivClass}>
+                <div class="slds-col custom-border2">
+					<div class="slds-form-element__control">
+						<input type="radio" onchange={handleOptionThree} name="default" value={optionThreeValue} data-name="optionThree" />&nbsp;<b>View this offer:</b> I want to review this offer, and its forms, in a view-only state.
+					</div>
+                </div>
+			</div>
+            <div class={deleteOfferDivClass}>
+                <div class="slds-col custom-border2">
+					<div class="slds-form-element__control">
+						<input type="radio" onchange={handleOptionFour} name="default" value={optionFourValue} data-name="optionFour" />&nbsp;<b>Delete my offer:</b> I want to delete this offer from the system.
+					</div>
+                </div>
+			</div>
+            <div class="btn-container">
+                <input class="btn" type="button" variant="submit" value="Back"  onclick={handleBack}/>
+                <input class="btn" type="button" variant="submit" value="Select" onclick={handleSelect} />
+            </div>
+    </form>
+</template>

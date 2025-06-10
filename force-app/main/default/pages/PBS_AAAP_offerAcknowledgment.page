@@ -19,6 +19,14 @@
                 color: #002BAD;
                 font-weight: bold;
             }
+    .custom-border {
+            border: 1px solid  #999;
+            padding-top: 30px;
+            color: #333333;
+            font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+            font-size:13px;
+            background-color: #eeeeee;
+            }
 
     </style>
     <head>
@@ -180,31 +188,7 @@ var j$ = jQuery.noConflict();
 
         </script>
     </head>
-    <!--  J. Rogers - Remover headers
-    <div id="login">
-        <ul>
-            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
-                <apex:outputLink value="/AAAP/home/home.jsp">
-                    <li>{!$Label.site.login_button}</li>
-                </apex:outputLink>
-                <li> |</li>
-                <apex:outputLink value="/AAAP/ForgotPassword">
-                    <li>{!$Label.site.forgot_your_password_q}</li>
-                </apex:outputLink>
-                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
-                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
-                    <li>{!$Label.site.new_user_q}</li>
-                </apex:outputLink>
-            </apex:panelGroup>
-            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
-                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
-                <li>{!$Label.site.logout}</li>
-            </apex:outputLink>
-            <li>|</li>
-            <li><a href="http://www.gsa.gov/">About GSA</a></li>
-        </ul>
-
-    </div><!--/login-->
+    
     <div id="wrapper">
         <c:inside_header />
         <div id="content" class="attachments"><!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
@@ -215,19 +199,16 @@ var j$ = jQuery.noConflict();
                 <apex:messages styleClass="errMessage" id="message"/>
 
             </apex:panelGrid>
+             
             <apex:panelGroup rendered="{!isValidUser}">
-                <apex:panelGrid columns="2" style="float:right; margin-right: 3px;"><a href="#" onclick="window.print();">Click Here To
-                        Print This Page</a>
-                    <apex:outputLabel style="padding-right:47px"></apex:outputLabel>
-                </apex:panelGrid>
-                <!-- <c:PBS_AAAP_ProgressBar myValue="{!submitOffer.Id}"/> -->
+                
+              
                 <c:PBS_AAAP_ProgressBar myValue="{!submitOffer.Id}" step="6" />
             </apex:panelGroup>
 
             <apex:form id="offerattachmentsform" styleClass="formwrap" rendered="{!isValidUser}"
                        style="margin-right: 50px;">
-                <!--<apex:actionFunction name="upload" action="{!upload}">
-        </apex:actionFunction>  -->
+                
                 <apex:actionFunction name="submitOffer" action="{!actionSaveAndSubmitOffer}">
                 </apex:actionFunction>
                 <apex:actionFunction name="checkErrors" action="{!actionCheckErrors}">
@@ -240,24 +221,43 @@ var j$ = jQuery.noConflict();
                 
                 <apex:outputPanel >
                 <div>
-                
+                	<!-- Grid to display three columns -->
+                        <div style="display: flex; flex-direction: row; justify-content: space-between; padding: 1px;">
+                            <!-- Column 1: Property Name -->
+                            <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999;padding-bottom: 10px;padding-left: 10px; padding-top: 10px;">
+                                <span>Property name:</span>
+                                <span>
+                                    <apex:outputText value="{!submitOffer.PBS_AAAP_Building_Name__c}" />
+                                </span>
+                            </div>
+                            <!-- Column 2: RLP Number -->
+                            <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999;padding-bottom: 10px;padding-left: 10px; padding-top: 10px;">
+                                <span>RLP number:</span>
+                                <span>                                 
+                                    <apex:outputText value="{!submitOffer.PBS_AAAP_RLP_Number__r.PBS_AAAP_RLP_Number__c}" /> 
+                                </span>
+                            </div>
+                            <!-- Column 3: Offer Status -->
+                            <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999;padding-bottom: 10px;padding-left: 10px; padding-top: 10px;">
+                                <span>Offer status:</span>
+                                <span>
+                                    <apex:outputText value="{!submitOffer.PBS_AAAP_Offer_Status__c}" />
+                                </span>
+                            </div>
+                       </div><br />
+                    
                     <div style="float:left;">
-                    <h3 class="blue" style="border:none;">Offer Review</h3>
+                    <h3 style="border:none;">Offer review</h3>
                     </div>
                     <div style="float:right;">
-                        <!-- J. Rogers - Communities Upgrade
+                        
                         <a href="#" style="padding: 7px 12px;" class="buttongreen" id="submitoffer" 
-                            onclick="window.open('/AAAP/PreviewOfferPage?offerId={!JSENCODE(submitOffer.id)}','View Offer Screen','width=900, height=700,resizable=yes,location=no');return false;">View Offer Documents</a>
-                        -->
-                        <a href="#" style="padding: 7px 12px;" class="buttongreen" id="submitoffer" 
-                            onclick="window.open('{!$Label.LOP_Community_Base_URL}AAAP-PreviewOfferPage?offerId={!JSENCODE(submitOffer.id)}','View Offer Screen','width=900, height=700,resizable=yes,location=no');return false;">View Offer Documents</a>
+                            onclick="window.open('{!$Label.LOP_Community_Base_URL}Offer-M-PreviewOfferPage?offerId={!JSENCODE(submitOffer.id)}','View Offer Screen','width=900, height=700,resizable=yes,location=no');return false;">View Offer Documents</a>
                         </div>
                 
                 </div>
                 
                 </apex:outputPanel><br/>
-                <hr width="99.5%" align="left">
-                </hr>
                 <div style="clear:left;">
                 <apex:messages styleClass="errMessage"/>
                 </div>
@@ -267,10 +267,9 @@ var j$ = jQuery.noConflict();
 
                 <apex:outputPanel id="submitForm1" layout="block">
 
-
                     <apex:pageBlock id="pblck_detail">
                         <div class="tabbed-table" style="width: 890px !important;"><br/>
-                            <div class="offerTitle">Offered Spaces</div>
+                            <div  style="font-weight: bold;">Offered spaces</div>
                             <div id="example_wrapper" style="margin-top:5px;" class="dataTables_wrapper" role="grid">
                                 <apex:pageBlockTable style="width: 890px !important;" id="space_rates_table" var="detail" value="{!Details}">
                                     

@@ -31,7 +31,7 @@ public with sharing class PBS_LOP_PropertyOwnerController {
 
         if (isEditable == 'false') {
             viewOnly = true;
-            viewMsg = 'Offer opened in a View mode';
+            viewMsg = 'Offer opened in view mode. Any changes made will not be saved.';
         } else {
             viewOnly = false;
         }
@@ -57,11 +57,11 @@ public with sharing class PBS_LOP_PropertyOwnerController {
                 }
                 if (isTerminated) {
                     viewOnly = true;
-                    viewMsg = 'Project is terminated. Offer opened in a view mode';
+                    viewMsg = 'Project is terminated. Offer opened in view mode. Any changes made will not be saved.';
                     System.debug('*** isEditable ***' + isEditable);
-                } else if (lopOffer.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED) {
+                } else if (lopOffer.PBS_AAAP_Offer_Status__c == 'Closed') {
                     viewOnly = true;
-                    viewMsg = 'Project due date has elapsed. Offer opened in a view mode';
+                    viewMsg = 'Project due date has elapsed. Offer opened in view mode. Any changes made will not be saved.';
                 }
             } else {
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, PBS_AAAP_GlobalConstants.ERROR_INAVLID_ACCESS_OWNERSHIP);
@@ -78,7 +78,7 @@ public with sharing class PBS_LOP_PropertyOwnerController {
         System.debug('inside copy User Details !!!');
         if(sameOwner) {
             ownerFullName = userDetail.FirstName + ' ' + userDetail.LastName;
-            //lopOffer.PBS_AAAP_Owner_Name__c = userDetail.CompanyName;
+            
             lopOffer.PBS_AAAP_Owner_Name__c = userDetail.FirstName + ' ' + userDetail.LastName;
             lopOffer.PBS_AAAP_SIGNATURE_LAST_NAME__c = userDetail.LastName;
             lopOffer.PBS_AAAP_Signature_First_Name__c = userDetail.FirstName;
@@ -123,9 +123,7 @@ public with sharing class PBS_LOP_PropertyOwnerController {
         } else {
             isEditable = 'false';
         }
-        // J. Rogers - Communities Upgrade
-        //p.setRedirect(true);
-        //return p;
+       
         p.setRedirect(false);
         pageURLForRedirection = p.getUrl();
         pageURLForRedirection = pageURLForRedirection.replace('/RSAP/Rates', Label.LOP_Community_Base_URL+'RSAP-Rates');
@@ -135,18 +133,7 @@ public with sharing class PBS_LOP_PropertyOwnerController {
     public void actionSavePropertyOwner() {
         try {
 
-            /*  System.debug('ownerFullName is ****'+ownerFullName);
-              if(ownerFullName != null || ownerFullName != '') {
-              String[] names = ownerFullName.split('\\s');
-              System.debug(names.size());
-                 firstName = names[0];
-              if(names.size() > 1)  {
-               lastName = names[1];
-                   }
-              lopOffer.LOP_Owner_FirstName__c = firstName;
-                 lopOffer.LOP_Owner_LastName__c  = lastName;
-
-              }  */
+            
             draftMsgFlag = '';
             if (lopOffer.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED) {
                 PBS_AAAP_GlobalConstants.updateOfferToDraft(lopOffer);
@@ -154,7 +141,7 @@ public with sharing class PBS_LOP_PropertyOwnerController {
             }
             lopOffer.PBS_AAAP_SIGNATURE_LAST_NAME__c = userDetail.LastName;
             lopOffer.PBS_AAAP_Signature_First_Name__c = userDetail.FirstName;
-            //updateAreaType(lopOffer);
+            
             update lopOffer;
         } catch (Exception ex) {
             Apexpages.addMessages(ex);
@@ -165,18 +152,7 @@ public with sharing class PBS_LOP_PropertyOwnerController {
     public pageReference actionSavePropertyOwner2() {
         try {
 
-            /*  System.debug('ownerFullName is ****'+ownerFullName);
-              if(ownerFullName != null || ownerFullName != '') {
-              String[] names = ownerFullName.split('\\s');
-              System.debug(names.size());
-                 firstName = names[0];
-              if(names.size() > 1)  {
-               lastName = names[1];
-                   }
-              lopOffer.LOP_Owner_FirstName__c = firstName;
-                 lopOffer.LOP_Owner_LastName__c  = lastName;
-
-              }  */
+            
             PageReference p = null;
             p = new PageReference('/RSAP/PropertyOwner');
             draftMsgFlag = '';
@@ -186,7 +162,7 @@ public with sharing class PBS_LOP_PropertyOwnerController {
             }
             lopOffer.PBS_AAAP_SIGNATURE_LAST_NAME__c = userDetail.LastName;
             lopOffer.PBS_AAAP_Signature_First_Name__c = userDetail.FirstName;
-            //updateAreaType(lopOffer);
+            
             update lopOffer;
             p.getParameters().put('offerId', lopOffer.Id);
             if (draftMsgFlag == 'true') {
@@ -197,9 +173,7 @@ public with sharing class PBS_LOP_PropertyOwnerController {
             } else {
                 isEditable = 'false';
             }
-            /* J. Rogers - Communities Upgrade */
-           // p.setRedirect(true);
-           // return p;
+            
             p.setRedirect(false);
             pageURLForRedirection = p.getUrl();
             pageURLForRedirection = pageURLForRedirection.replace('/RSAP/PropertyOwner', Label.LOP_Community_Base_URL+'RSAP-PropertyOwner');
@@ -274,48 +248,24 @@ public with sharing class PBS_LOP_PropertyOwnerController {
         }
           if(pageURL == NULL || pageURL == ''){
                 pageURLForRedirection = p.getUrl();
-                pageURLForRedirection = pageURLForRedirection.replace('/RSAP/Attachments', Label.LOP_Community_Base_URL+'RSAP-Attachments');
+                pageURLForRedirection = pageURLForRedirection.replace('/RSAP/Attachments', Label.LOP_Community_Base_URL+'Offer-S-Attachments');
                 p.setRedirect(false);
             } else {
                  p = new PageReference(pageURL);
                 pageURLForRedirection = Label.LOP_Community_Base_URL+PBS_AAAP_Utility.getCommunityURL(p.getUrl());
                 p.setRedirect(false);
               }  
-      /*  if(pageURL == NULL || pageURL == ''){
-            /* J. Rogers - Communities Upgrade 
-            //return p;
-            p.setRedirect(false);
-            pageURLForRedirection = p.getUrl();
-            pageURLForRedirection = pageURLForRedirection.replace('/RSAP/Attachments', Label.LOP_Community_Base_URL+'RSAP-Attachments');
-            return null;
-        } else {
-            PageReference pr = new PageReference(pageURL);
-            return pr;
-        } */
+      
         return null;
     }
 
 
     public PageReference actionCancel() {
         PageReference pref = new PageReference('/RSAP/PortalHome');
-        //PageReference pref = Page.PBS_LOP_PortalHome;
+        
         pref.setRedirect(true);
         return pref;
     } 
 
 
-   /* private void updateAreaType(PBS_AAAP_OFFER__C lopOffer) {
-        //added by syam for FY16 changes
-        String areaType = lopOffer.PBS_AAAP_SITE_AREA_TYPE__c;
-        System.debug('*** areaType is ' + areaType);
-        Decimal siteSize = lopOffer.PBS_AAAP_SITE_SIZE_SQFT__c;
-        //siteSize.setScale(2, RoundingMode.HALF_UP);
-        System.debug('*** siteSize is ' + siteSize);
-        if (lopOffer.PBS_AAAP_SITE_SIZE_SQFT__c != null && areaType == 'Acres') {
-            siteSize = siteSize * 43560;
-            System.debug('*** siteSize inside is ' + siteSize);
-            lopOffer.PBS_AAAP_SITE_SIZE_SQFT__c = siteSize;
-        }
-
-    }*/
 }

@@ -1,4 +1,4 @@
-<apex:component >
+<apex:component > 
     <script>
     String.prototype.replaceLast = function (what, replacement) {
         var pcs = this.split(what);
@@ -8,47 +8,42 @@
         
         function saveThenGotoPage(url)
         { 
-            // alert(url);
-            //alert(step);
+            if('{!JSENCODE($CurrentPage.parameters.edit)}' == 'false'){
+                window.parent.location.href = url;
+            }else{
             $('[id*="pgUrl"]').val(url);
 
             if ($("input[type='submit'].btnJQSubmit").val()  == undefined)  
             {
-                //alert($("input[type='submit'].btnJQSubmit").val() );
-                    //$( "input[name*='btn_newspace_save_spc']" ).click(); 
+                
             }   
             else 
             {
-                
                 $("input[type='submit'].btnJQSubmit:first").click();
-                
-         
-                //if(window.parent.location.href.toLowerCase().indexOf('spacesandrates?offerid=') > -1)
                 if((window.parent.location.href.toLowerCase().indexOf('spacesandrates?offerid=') > -1) || ('{!step}' == 6))
                 {
-                    //alert(url1);
-                    window.parent.location = '{!$Label.LOP_Community_Base_URL}'.replaceLast('/','')+url.replaceLast('/','-');
                     
                 } 
-                
-                /*else {
-                    $("input[type='submit'].btnJQSubmit:first").click();
-                }*/
-                
-             }
-
-            //$('[id*="pgUrl"]').val(url);
+              }
+            }
         }
-
+    </script>
+    <script>
+        window.addEventListener('message', function(event) {
+            // Ensure the message is coming from the correct origin
+            if (event.origin !== window.location.origin) {
+                return;
+            }
+            saveThenGotoPage(event.data.message);
+            // Process the message
+            var message = event.data.message;
+        }, false);
     </script>
 
     <apex:attribute name="myValue" description="This is the value for the component." type="String" />
     <apex:attribute name="linksToViewModePage" description="When true, links will direct to viewonly pages.  Otherwise, the destination pages may be editable." type="Boolean" required="false" />
     <apex:attribute name="step" description="0 based index to state which step is the current" type="Integer" required="false" default="-1" />
     <apex:attribute name="saveActionToInvoke" type="apexpages.action" description="Action to be invoked in the controller" required="false" />
-    <!-- <apex:attribute name="act" description="the action" type="apexpages.action"/>
-    <apex:attribute name="PageUrl" type="String" required="false" description="value to set"/> -->
-
     <apex:outputPanel rendered="{!myValue == null || true}">
 
                <style>
@@ -177,57 +172,13 @@
         
          
         <apex:form >
-
-        
-       <!-- J. Rogers - Commented out center tab
-        <center -->
-            <ul class="steps steps-7">
-                <li id="building-fundamentals-nav" class="{!if(step==0,'current', '')}">
-
-        			<span onclick="saveThenGotoPage('{!if(linksToViewModePage==true,'/AAAP/OfferBuildingView?allowStatusChange=n&offerId='+myValue,'/AAAP/OfferBuilding?offerId='+myValue)}');"><div>
-                    
-                    <p>Building Fundamentals</p></div></span>
-                        
-                </li>               
-                <li id="building-details-nav" class="{!if(step==1,'current', '')}">
-
-                    <span onclick="saveThenGotoPage('{!if(linksToViewModePage==true,'/AAAP/OfferBuildingDetailsView?allowStatusChange=n&offerId='+myValue,'/AAAP/OfferBuildingDetails?offerId='+myValue)}');"><div><p>Building Details</p></div></span>
-                	                    
-				</li>
-                <li id="parking-nav" class="{!if(step==2,'current','')}">
-
-                    <span onclick="saveThenGotoPage('{!if(linksToViewModePage==true,'/AAAP/OfferParkingView?allowStatusChange=n&offerId='+myValue,'/AAAP/OfferParking?offerId='+myValue)}');"><div><p>Parking</p></div></span>
-
-                </li>
-                <li id="property-owner-nav" class="{!if(step==3,'current', '')}">
-                    <span onclick="saveThenGotoPage('{!if(linksToViewModePage==true,'/AAAP/OfferPropertyOwnerView?allowStatusChange=n&offerId='+myValue,'/AAAP/OfferPropertyOwner?offerId='+myValue)}');"><div><p>Property Owner</p></div></span>
-
-                </li>
-                <li id="operating-cost-nav" class="{!if(step==4,'current', '')}">
-                    <span onclick="saveThenGotoPage('{!if(linksToViewModePage==true,'/AAAP/OperatingCostsView?allowStatusChange=n&offerId='+myValue,'/AAAP/OperatingCosts?offerId='+myValue)}');"><div><p>Operating Cost</p></div></span>
-
-                </li>
-                <li id="space-rates-nav" class="{!if(step==5,'current', '')}">
-                    <span onclick="saveThenGotoPage('{!if(linksToViewModePage==true,'/AAAP/SpacesAndRatesView?allowStatusChange=n&offerId='+myValue,'/AAAP/SpacesAndRates?offerId='+myValue)}');"><div><p>Space &amp; Rates</p></div></span>
-
-                </li>
-                <li id="attachments-nav" class="{!if(step==6,'current', '')}">
-                    <span onclick="saveThenGotoPage('{!if(linksToViewModePage==true,'/AAAP/OfferAttachmentsView?allowStatusChange=n&offerId='+myValue,'/AAAP/OfferAttachments?offerId='+myValue)}');"><div><p>Attachments</p></div></span>
-
-                </li>
-            </ul>
-            <!-- J. Rogers - Commented out center tab
-        </center -->
-        
         </apex:form>
 
     </apex:outputPanel>
     <apex:outputPanel rendered="{false}">
         BBBBBBBBBBBBBBBBBBBB
-        <!--  https://css-tricks.com/triangle-breadcrumbs/ -->
         
         In chrome on zoom, there is a 1 pixel bar 1 can't kill.  So we will use this code to create the background image...
-        
         <style>
 
             .steps-7 {
@@ -406,297 +357,5 @@
                     </a>
                 </li>
             </ul>
-            <!-- J. Rogers - Commented out center tab
-        </center  -->
-        
-        
-        
-        <!--
-        
-<div style="position:relative; height:800px">
-    
-         <div style="position:absolute; top: 0px">
-            <ul class="steps steps-7">
-                <li id="building-fundamentals-nav" class="current">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerbuildingview?offerId='+myValue,'/AAAP/pbs_aaap_offerbuilding?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="building-details-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerbuildingdetailsview?offerId='+myValue,'/AAAP/pbs_aaap_offerbuildingdetails?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="parking-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerParkingview?offerId='+myValue,'/AAAP/pbs_aaap_offerParking?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="property-owner-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerPropertyOwnerview?offerId='+myValue,'/AAAP/pbs_aaap_offerPropertyOwner?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="operating-cost-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_operatingcostsview?offerId='+myValue,'/AAAP/pbs_aaap_operatingcosts?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="space-rates-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_SpacesAndRatesview?offerId='+myValue,'/AAAP/pbs_aaap_SpacesAndRates?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="attachments-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerAttachmentsview?offerId='+myValue,'/AAAP/pbs_aaap_offerAttachments?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-            </ul>
-        </div>    
-    
-         <div style="position:absolute; top: 100px">
-            <ul class="steps steps-7">
-                <li id="building-fundamentals-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerbuildingview?offerId='+myValue,'/AAAP/pbs_aaap_offerbuilding?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="building-details-nav" class="current">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerbuildingdetailsview?offerId='+myValue,'/AAAP/pbs_aaap_offerbuildingdetails?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="parking-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerParkingview?offerId='+myValue,'/AAAP/pbs_aaap_offerParking?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="property-owner-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerPropertyOwnerview?offerId='+myValue,'/AAAP/pbs_aaap_offerPropertyOwner?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="operating-cost-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_operatingcostsview?offerId='+myValue,'/AAAP/pbs_aaap_operatingcosts?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="space-rates-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_SpacesAndRatesview?offerId='+myValue,'/AAAP/pbs_aaap_SpacesAndRates?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="attachments-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerAttachmentsview?offerId='+myValue,'/AAAP/pbs_aaap_offerAttachments?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-            </ul>
-        </div>    
-         <div style="position:absolute; top: 200px">
-            <ul class="steps steps-7">
-                <li id="building-fundamentals-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerbuildingview?offerId='+myValue,'/AAAP/pbs_aaap_offerbuilding?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="building-details-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerbuildingdetailsview?offerId='+myValue,'/AAAP/pbs_aaap_offerbuildingdetails?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="parking-nav" class="current">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerParkingview?offerId='+myValue,'/AAAP/pbs_aaap_offerParking?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="property-owner-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerPropertyOwnerview?offerId='+myValue,'/AAAP/pbs_aaap_offerPropertyOwner?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="operating-cost-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_operatingcostsview?offerId='+myValue,'/AAAP/pbs_aaap_operatingcosts?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="space-rates-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_SpacesAndRatesview?offerId='+myValue,'/AAAP/pbs_aaap_SpacesAndRates?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="attachments-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerAttachmentsview?offerId='+myValue,'/AAAP/pbs_aaap_offerAttachments?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-            </ul>
-        </div>    
-         <div style="position:absolute; top: 300px">
-            <ul class="steps steps-7">
-                <li id="building-fundamentals-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerbuildingview?offerId='+myValue,'/AAAP/pbs_aaap_offerbuilding?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="building-details-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerbuildingdetailsview?offerId='+myValue,'/AAAP/pbs_aaap_offerbuildingdetails?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="parking-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerParkingview?offerId='+myValue,'/AAAP/pbs_aaap_offerParking?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="property-owner-nav" class="current">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerPropertyOwnerview?offerId='+myValue,'/AAAP/pbs_aaap_offerPropertyOwner?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="operating-cost-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_operatingcostsview?offerId='+myValue,'/AAAP/pbs_aaap_operatingcosts?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="space-rates-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_SpacesAndRatesview?offerId='+myValue,'/AAAP/pbs_aaap_SpacesAndRates?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="attachments-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerAttachmentsview?offerId='+myValue,'/AAAP/pbs_aaap_offerAttachments?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-            </ul>
-        </div>    
-         <div style="position:absolute; top: 400px">
-            <ul class="steps steps-7">
-                <li id="building-fundamentals-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerbuildingview?offerId='+myValue,'/AAAP/pbs_aaap_offerbuilding?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="building-details-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerbuildingdetailsview?offerId='+myValue,'/AAAP/pbs_aaap_offerbuildingdetails?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="parking-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerParkingview?offerId='+myValue,'/AAAP/pbs_aaap_offerParking?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="property-owner-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerPropertyOwnerview?offerId='+myValue,'/AAAP/pbs_aaap_offerPropertyOwner?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="operating-cost-nav" class="current">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_operatingcostsview?offerId='+myValue,'/AAAP/pbs_aaap_operatingcosts?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="space-rates-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_SpacesAndRatesview?offerId='+myValue,'/AAAP/pbs_aaap_SpacesAndRates?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="attachments-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerAttachmentsview?offerId='+myValue,'/AAAP/pbs_aaap_offerAttachments?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-            </ul>
-        </div>    
-         <div style="position:absolute; top: 500px">
-            <ul class="steps steps-7">
-                <li id="building-fundamentals-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerbuildingview?offerId='+myValue,'/AAAP/pbs_aaap_offerbuilding?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="building-details-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerbuildingdetailsview?offerId='+myValue,'/AAAP/pbs_aaap_offerbuildingdetails?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="parking-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerParkingview?offerId='+myValue,'/AAAP/pbs_aaap_offerParking?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="property-owner-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerPropertyOwnerview?offerId='+myValue,'/AAAP/pbs_aaap_offerPropertyOwner?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="operating-cost-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_operatingcostsview?offerId='+myValue,'/AAAP/pbs_aaap_operatingcosts?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="space-rates-nav" class="current">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_SpacesAndRatesview?offerId='+myValue,'/AAAP/pbs_aaap_SpacesAndRates?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="attachments-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerAttachmentsview?offerId='+myValue,'/AAAP/pbs_aaap_offerAttachments?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-            </ul>
-        </div>    
-         <div style="position:absolute; top: 600px">
-            <ul class="steps steps-7">
-                <li id="building-fundamentals-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerbuildingview?offerId='+myValue,'/AAAP/pbs_aaap_offerbuilding?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="building-details-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerbuildingdetailsview?offerId='+myValue,'/AAAP/pbs_aaap_offerbuildingdetails?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="parking-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerParkingview?offerId='+myValue,'/AAAP/pbs_aaap_offerParking?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="property-owner-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerPropertyOwnerview?offerId='+myValue,'/AAAP/pbs_aaap_offerPropertyOwner?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="operating-cost-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_operatingcostsview?offerId='+myValue,'/AAAP/pbs_aaap_operatingcosts?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="space-rates-nav" class="">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_SpacesAndRatesview?offerId='+myValue,'/AAAP/pbs_aaap_SpacesAndRates?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-                <li id="attachments-nav" class="current">
-                    <a href="{!if(myValue==null,'#',if(linksToViewModePage==true,'/AAAP/pbs_aaap_offerAttachmentsview?offerId='+myValue,'/AAAP/pbs_aaap_offerAttachments?offerId='+myValue))}">
-                        <div><p></p></div>
-                    </a>
-                </li>
-            </ul>
-        </div>    
-    
-    
-        </div>        
-        
-        
-        -->
-        
-        
-        
     </apex:outputPanel>
 </apex:component>

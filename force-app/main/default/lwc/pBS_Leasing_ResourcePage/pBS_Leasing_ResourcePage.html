@@ -1,0 +1,50 @@
+<template>
+    
+        <div class="slds-p-around_medium greybox">
+            <div class="input-label">
+            <!--<h5>elect a Region:</h5>
+
+            
+            <template if:true={showError}>
+                <p class="error-message">Please select a region</p>
+            </template>-->
+
+            
+            <lightning-combobox 
+                name="region"
+                value={selectedRegion}
+                options={regionOptions}
+                style="width: 200px;"
+                onchange={handleRegionChange}>
+            </lightning-combobox>
+
+            
+                <!--<label class="slds-form-element__label" for="region">Select a Region</label>-->
+            <!-- <div class="custom-dropdown">-->
+                  <!--  <select class="custom-select" id="region" onchange={handleRegionChange}>-->
+                        <!--<option value="">Select a Region</option>-->
+                      <!--  <template for:each={regionOptions} for:item="region">
+                            <option key={region.value} value={region.value}>{region.label}</option>
+                        </template>
+                    </select>
+                    <span class="custom-arrow"></span>
+                    
+                </div>-->
+            
+
+            <!--<lightning-input-field class="custom-input" variant="label-hidden" 
+                            field-name="PBS_AAAP_OFFEROR_INTEREST__c" value={offer.PBS_AAAP_OFFEROR_INTEREST} onchange={handleInputChange}>
+                        </lightning-input-field>-->
+            <!--<lightning-button label="View RLP Package" onclick={handleViewRLP} class="btn2"></lightning-button>-->
+            <input class="btn2" type="button" variant="submit" value="View RLP Package" onclick={handleViewRLP} />
+        </div>
+            <div class="slds-m-top_medium">
+                <img src={mapImageUrl} alt="Map showing different regions" class="map-image"/>
+            </div>
+
+            
+            
+        </div>
+    
+   
+</template>

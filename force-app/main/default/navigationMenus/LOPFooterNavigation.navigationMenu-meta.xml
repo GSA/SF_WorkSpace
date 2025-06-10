@@ -4,96 +4,95 @@
     <containerType>Network</containerType>
     <label>LOPFooterNavigation</label>
     <navigationMenuItem>
-        <label>AAAP Links</label>
+        <label>Offer space links</label>
         <position>1</position>
         <publiclyAvailable>true</publiclyAvailable>
         <subMenu>
             <navigationMenuItem>
-                <label>Home</label>
+                <label>Offer space</label>
                 <position>0</position>
                 <publiclyAvailable>true</publiclyAvailable>
-                <target>/AAAP-PortalHome</target>
+                <target>/Offer-Home</target>
                 <type>InternalLink</type>
             </navigationMenuItem>
             <navigationMenuItem>
-                <label>Help</label>
+                <label>Registration</label>
                 <position>1</position>
                 <publiclyAvailable>true</publiclyAvailable>
-                <target>/AAAP-Help</target>
+                <target>/Registration</target>
+                <type>InternalLink</type>
+            </navigationMenuItem>
+            <navigationMenuItem>
+                <label>Requests for Lease Proposals (RLP)</label>
+                <position>2</position>
+                <publiclyAvailable>true</publiclyAvailable>
+                <target>/Offer-Resources</target>
+                <type>InternalLink</type>
+            </navigationMenuItem>
+            <navigationMenuItem>
+                <label>Resources</label>
+                <position>3</position>
+                <publiclyAvailable>true</publiclyAvailable>
+                <target>/Offer-Resources</target>
                 <type>InternalLink</type>
             </navigationMenuItem>
         </subMenu>
         <type>MenuLabel</type>
     </navigationMenuItem>
     <navigationMenuItem>
-        <label>RSAP Links</label>
+        <label>Manage lease links</label>
         <position>2</position>
         <publiclyAvailable>true</publiclyAvailable>
         <subMenu>
             <navigationMenuItem>
-                <label>Home</label>
+                <label>Manage lease</label>
                 <position>0</position>
                 <publiclyAvailable>true</publiclyAvailable>
-                <target>/RSAP-PortalHome</target>
-                <type>InternalLink</type>
+                <target>https://ret.gsa.gov/realestatetaxes/s/</target>
+                <type>ExternalLink</type>
             </navigationMenuItem>
             <navigationMenuItem>
-                <label>Help</label>
+                <label>Registration</label>
                 <position>1</position>
                 <publiclyAvailable>true</publiclyAvailable>
-                <target>/RSAP-Help</target>
-                <type>InternalLink</type>
+                <target>https://ret.gsa.gov/realestatetaxes/s/login/SelfRegister</target>
+                <type>ExternalLink</type>
+            </navigationMenuItem>
+            <navigationMenuItem>
+                <label>Resources</label>
+                <position>2</position>
+                <publiclyAvailable>true</publiclyAvailable>
+                <target>https://ret.gsa.gov/realestatetaxes/s/resources</target>
+                <type>ExternalLink</type>
             </navigationMenuItem>
         </subMenu>
         <type>MenuLabel</type>
     </navigationMenuItem>
     <navigationMenuItem>
-        <label>Tax Links</label>
+        <label>Other links</label>
         <position>3</position>
         <publiclyAvailable>true</publiclyAvailable>
         <subMenu>
             <navigationMenuItem>
-                <label>Home</label>
-                <position>0</position>
-                <publiclyAvailable>true</publiclyAvailable>
-                <target>https://ret.gsa.gov/realestatetaxes/s</target>
-                <type>ExternalLink</type>
-            </navigationMenuItem>
-            <navigationMenuItem>
-                <label>Help</label>
-                <position>1</position>
-                <publiclyAvailable>true</publiclyAvailable>
-                <target>https://ret.gsa.gov/realestatetaxes/s/frequently-asked-questions</target>
-                <type>ExternalLink</type>
-            </navigationMenuItem>
-        </subMenu>
-        <type>MenuLabel</type>
-    </navigationMenuItem>
-    <navigationMenuItem>
-        <label>Other Resources</label>
-        <position>4</position>
-        <publiclyAvailable>true</publiclyAvailable>
-        <subMenu>
-            <navigationMenuItem>
-                <label>Sign Up for Our Newsletter</label>
-                <position>0</position>
-                <publiclyAvailable>true</publiclyAvailable>
-                <target>https://public.govdelivery.com/accounts/USGSA/signup/35365</target>
-                <type>ExternalLink</type>
-            </navigationMenuItem>
-            <navigationMenuItem>
-                <label>GSA Leasing</label>
-                <position>1</position>
-                <publiclyAvailable>true</publiclyAvailable>
-                <target>https://www.gsa.gov/real-estate/real-estate-services/leasing-overview?topnav=</target>
-                <type>ExternalLink</type>
-            </navigationMenuItem>
-            <navigationMenuItem>
                 <label>Lease Contract Opportunities Map</label>
-                <position>2</position>
+                <position>0</position>
                 <publiclyAvailable>true</publiclyAvailable>
                 <target>/lease-contract-opportunities-map</target>
                 <type>InternalLink</type>
+            </navigationMenuItem>
+            <navigationMenuItem>
+                <label>Leasing overview on GSA.gov</label>
+                <position>1</position>
+                <publiclyAvailable>true</publiclyAvailable>
+                <target>https://www.gsa.gov/real-estate/real-estate-services/leasing?topnav=real-estate</target>
+                <type>ExternalLink</type>
+            </navigationMenuItem>
+            <navigationMenuItem>
+                <label>Newsletter sign up</label>
+                <position>2</position>
+                <publiclyAvailable>true</publiclyAvailable>
+                <target>https://public.govdelivery.com/accounts/USGSA/signup/35365</target>
+                <type>ExternalLink</type>
             </navigationMenuItem>
         </subMenu>
         <type>MenuLabel</type>

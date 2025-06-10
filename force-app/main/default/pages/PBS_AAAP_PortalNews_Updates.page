@@ -45,18 +45,10 @@ menu.table-options a {border:1px solid#666666; border-radius:3px;padding:6px;bac
     </style>
 
     
-<!-- J. Rogers  Eliminate Headers
-<div id="login">
-        <ul>
-            <!--li><a href="/AAAP/PBS_AAAP_PortalHome">Home</a></li>
-            <li>|</li-->
+
             <li><a href="{!$Site.Prefix}/secur/logout.jsp">LOGOUT</a></li>
             <li>|</li>
-            <li><a href="http://www.gsa.gov/">About GSA</a></li>        <!--
-        <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp" rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}"><li>| {!$Label.site.logout}</li></apex:outputLink>
-         ->
-        </ul>
-    </div><!--/login-->
+            <li><a href="http://www.gsa.gov/">About GSA</a></li>        
 
 
     <div id="wrapper" class="portalhome">
@@ -83,15 +75,7 @@ menu.table-options a {border:1px solid#666666; border-radius:3px;padding:6px;bac
                     <a href="{!URLFOR($Resource.TwoFactorLogin)}" target="_blank">Two-Factor Login Process For AAAP
                         Users</a></p>
 
-                <!--<p class="MsoNormal" style='margin-left:.5in;text-indent:-.5in'>
-
-                 Below line no longer needed 05/17/2014 -->
-                <!--span style='font-family:"Arial","sans-serif"'></span>1.
-                <span style='mso-tab-count:1'>   </span>
-                <span style='mso-spacerun:yes'>  </span-->
-
-                <!--a href="{!URLFOR($Resource.GOVT_SHUTDOWN_NOTICE_All)}" target="_blank">Government Shutdown Guidance</a
-Coming Soon </p>-->
+                
 
 
             </apex:form>

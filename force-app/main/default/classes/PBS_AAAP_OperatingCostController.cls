@@ -4,7 +4,8 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
     *   Data Declaration 
     *****************************************************************************************************************/
     public String offerId = ApexPages.currentPage().getParameters().get('offerId');    // offer id
-    //public String offerId = 'a03r0000000vvr6AAA';    //remove me
+    public String propId = ApexPages.currentPage().getParameters().get('propertyId'); 
+    
     public PBS_AAAP_Offer__c offer = new PBS_AAAP_Offer__c();                                                        // offer
     public PBS_AAAP_Offer__c operatingCost = new PBS_AAAP_Offer__c();
     public PBS_AAAP_QuestionLabels qLabels { get; set; }                                                                                            // question labels
@@ -14,15 +15,18 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
     public Double totOtherCosts = 0.00;                                                                                                // total of other costs
     public List<OtherCostsDetails> ocdetails = new List<OtherCostsDetails>();                                                // list of other costs for Other Costs page interaction
     public Boolean isValidUser { get; set; }
-    //public Boolean isValidUser = true; //remove me
+    
     private PBS_AAAP_DAO_Utilities dao = new PBS_AAAP_DAO_Utilities();                                                // generate an instance of the DAO class
     private PBS_AAAP_CALCULATIONS calc = new PBS_AAAP_CALCULATIONS();                                                // generate an instance of the Calculations class
     public String draftMsgFlag { get; set; }
     public String RegionName { get; set; } //region of RLP for census
     public Boolean RLPisCensus { get; set; }
+    public String rlpType {get; set;}
     public String pageUrl{get;set;}  
     public String OthercostAmt{get;set;}    
     public string pageURLForRedirection {get;set;}
+    public Boolean viewOnly { get; set; }
+    public String viewMsg { get; set; }
     /*  OtherCostsDetails   ***********************************************************
     *   
     *   This class is used to render the space and rates data "matrix" table on the "outer
@@ -53,22 +57,34 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
     public PBS_AAAP_OperatingCostController() {
         logConstructorStart('PBS_AAAP_OperatingCostController');
         try {
+            String isEditable = ApexPages.currentPage().getParameters().get('edit');
+        if (isEditable == 'false') {
+            viewOnly = true;
+            viewMsg = 'Offer opened in view mode. Any changes made will not be saved.';
+        } else {
+            viewOnly = false;
+        }
             draftMsgFlag = ApexPages.currentPage().getParameters().get('draftMsgFlag');
-            //otherCost = new PBS_AAAP_Other_Costs__c();
+            
             this.offer = dao.getOffer(this.offerId);
-            //  this.offer = dao.getOffer('a03r0000000vvr6AAA'); //remove me
+            
             PBS_AAAP_RLP__c rlp = [SELECT id,PBS_AAAP_Region__c FROM PBS_AAAP_RLP__c WHERE Id = :offer.PBS_AAAP_RLP_Number__c];
             this.RegionName = rlp.PBS_AAAP_Region__c;   //weston: here we are extracting the rlp's region.  should save it to the offer bu
-            //didn't
-            //if(this.RegionName == 'Census')
+            
             RLPisCensus = (this.RegionName == 'Census') ? true : false;
 
-            //    offer.PBS_AAAP_RLP_Region__c = rlp.PBS_AAAP_Region__c;
-            //weston
             System.debug('offer.PBS_AAAP_COST_PER_ABOA__c in constructor is ****' + offer.PBS_AAAP_COST_PER_ABOA__c);
             //added by syam for offerId validation
             operatingCost = PBS_AAAP_GlobalConstants.getOfferDetail(this.offerId);
-
+                 if(operatingCost.RecordType.Name == 'AAAP')
+                    {
+                        rlpType = operatingCost.PBS_AAAP_RLP_Number__r.PBS_AAAP_RLP_Number__c;
+                    }
+                    else if(operatingCost.RecordType.Name == 'RSAP')
+                    {
+                        rlpType = operatingCost.PBS_AAAP_RLP_Number__r.PBS_RSAP_Solicitation_Number__c;
+                    }
+            
             if (this.operatingCost.OwnerId == UserInfo.getUserId()) {
                 isValidUser = true;
             } else {
@@ -88,7 +104,8 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
             }    //  end if
 
             offer.PBS_AAAP_COST_PER_ABOA__c = (offer.PBS_AAAP_COST_PER_ABOA__c != null) ?  offer.PBS_AAAP_COST_PER_ABOA__c : 0.00;
-            //offer.PBS_AAAP_COST_PER_ABOA__c = (offer.PBS_AAAP_COST_PER_ABOA__c == null) ? 0.00 : offer.PBS_AAAP_COST_PER_ABOA__c;
+            System.debug('offer.PBS_AAAP_COST_PER_ABOA__c' + offer.PBS_AAAP_COST_PER_ABOA__c);
+           
             offer.PBS_AAAP_CLEANING_SALARIES__c = (offer.PBS_AAAP_CLEANING_SALARIES__c == null) ? 0.00 : offer.PBS_AAAP_CLEANING_SALARIES__c;
             offer.PBS_AAAP_CLEANING_SUPPLIES__c = (offer.PBS_AAAP_CLEANING_SUPPLIES__c == null) ? 0.00 : offer.PBS_AAAP_CLEANING_SUPPLIES__c;
             offer.PBS_AAAP_CLEANING_CONTRACT_SERVICES__c = (offer.PBS_AAAP_CLEANING_CONTRACT_SERVICES__c == null) ? 0.00 : offer.PBS_AAAP_CLEANING_CONTRACT_SERVICES__c;
@@ -118,9 +135,9 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
             offer.PBS_AAAP_LEASE_COMMISSION__c = (offer.PBS_AAAP_LEASE_COMMISSION__c == null) ? 0.00 : offer.PBS_AAAP_LEASE_COMMISSION__c;
             offer.PBS_AAAP_MANAGEMENT__c = (offer.PBS_AAAP_MANAGEMENT__c == null) ? 0.00 : offer.PBS_AAAP_MANAGEMENT__c;
             offer.PBS_AAAP_SECT2_TOTAL__c = (offer.PBS_AAAP_SECT2_TOTAL__c == null) ? 0.00 : offer.PBS_AAAP_SECT2_TOTAL__c;
-            //offer.PBS_AAAP_Vacant_Premise_Rate__c = (offer.PBS_AAAP_Vacant_Premise_Rate__c == null) ? 0.00 : offer.PBS_AAAP_Vacant_Premise_Rate__c;
             
-            // other costs
+            
+            
             this.costs = this.soqlGetOtherCosts(this.offerId);
 
             // total other costs
@@ -132,7 +149,7 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
             System.debug('##### offer.Id ' + offer.Id);
             System.debug('##### offer.PBS_AAAP_RLP_Number__c: ' + offer.PBS_AAAP_RLP_Number__c);
             this.qLabels = new PBS_AAAP_QuestionLabels(offer.PBS_AAAP_RLP_Number__c);
-            //System.debug('offer.PBS_AAAP_COST_PER_ABOA__c in end of constructor is ****' + offer.PBS_AAAP_COST_PER_ABOA__c);
+            
             // set the fueltype
             this.fuelType = offer.PBS_AAAP_HEATING_FUEL__c;
             
@@ -228,7 +245,7 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
     }    // end setOtherCost
 
 
-    /*  Actions */
+    
 
     // Invoke add other costs page 
     public PageReference addOtherCosts() {
@@ -243,16 +260,16 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
             
 
     if(String.isBlank(this.otherCost.PBS_AAAP_SHORT_DESC__c) || String.isBlank(OthercostAmt) || (String.isNotBlank(OthercostAmt) && Decimal.valueOf(OthercostAmt) <= 0) ){
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Both fields must be filled out in order for the cost to save. Please fill in both of the requested fields.');
+                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Costs Page: Both fields must be filled out in order for the cost to save. Please fill in both of the requested fields.');
                     Apexpages.addMessage(myMsg);
-                    //System.debug('Error to be captured' +myMsg);
+                    
                 }
     else{
     
             this.otherCost.PBS_AAAP_COST__c = Decimal.valueof(OthercostAmt);
             
             if(this.ocdetails.size()>=3){
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Only three \'Other\' Operating Costs are permitted.');
+                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Costs Page: Only three \'Other\' Operating Costs are permitted.');
                 Apexpages.addMessage(myMsg);
             }
             else{
@@ -300,17 +317,14 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
 
     // Invoke the other costs page from operating costs page
     public PageReference oCosts() {
-        //PageReference pgOtherCosts = Page.PBS_AAAP_OtherCosts;
-        /*PageReference pgOtherCosts = new PageReference('/AAAP/OtherCosts?offerId='+offerId);
-        this.saveData();
-        return pgOtherCosts;*/
-        //Newly added 12/15/2022
+        
         PageReference p = new PageReference('/AAAP/OtherCosts?offerId='+offerId);
         p.getParameters().put('offerId', offerId);
         p.setRedirect(false);
         
         pageURLForRedirection = p.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OtherCosts', Label.LOP_Community_Base_URL+'AAAP-OtherCosts');
+       
+        pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-M-OtherCosts?edit=true&propertyId='+propId+'&offerId='+offerId;
         return null;
         
     }    // end oCosts
@@ -321,7 +335,8 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
         PageReference p = new PageReference('/AAAP/OperatingCosts?offerId='+offerId);
         p.getParameters().put('offerId', offerId);              
         pageURLForRedirection = p.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OperatingCosts', Label.LOP_Community_Base_URL+'AAAP-OperatingCosts');
+        
+        pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-M-Costs?edit=true&propertyId='+propId+'&offerId='+offerId;
         p.setRedirect(false);
         return null;
         
@@ -331,16 +346,15 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
     // "Continue" action
     public PageReference continueSave() {
         logMethodStart('continueSave');
-        /**
-        if(offer.PBS_AAAP_Vacant_Premise_Rate__c == null){
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Adjustment for Vacant premises must be entered. It is the last question on this page. If you are not offering an adjustment, put $0.00.');  //updated by Nik as part of OOLOP-596
-            Apexpages.addMessage(myMsg);
+        
+        PBS_AAAP_Utility.OfferValidationResponse response  = PBS_AAAP_Utility.validateOffer(offer,new List<String>{'Offer-M-Costs'});
+        if (response.errorMessages.size() > 0 ) {
+            for(String error : response.errorMessages){
+                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, error));
+                }
             return null;
         }
-        **/
         // TODO logic for updating operating costs
-        //this.saveData();
-        /***********/
         offer.PBS_AAAP_COST_PER_ABOA__c = (offer.PBS_AAAP_COST_PER_ABOA__c == null) ? 0.00 : offer.PBS_AAAP_COST_PER_ABOA__c;
         offer.PBS_AAAP_CLEANING_SALARIES__c = (offer.PBS_AAAP_CLEANING_SALARIES__c == null) ? 0.00 : offer.PBS_AAAP_CLEANING_SALARIES__c;
         offer.PBS_AAAP_CLEANING_SUPPLIES__c = (offer.PBS_AAAP_CLEANING_SUPPLIES__c == null) ? 0.00 : offer.PBS_AAAP_CLEANING_SUPPLIES__c;
@@ -371,7 +385,7 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
         offer.PBS_AAAP_LEASE_COMMISSION__c = (offer.PBS_AAAP_LEASE_COMMISSION__c == null) ? 0.00 : offer.PBS_AAAP_LEASE_COMMISSION__c;
         offer.PBS_AAAP_MANAGEMENT__c = (offer.PBS_AAAP_MANAGEMENT__c == null) ? 0.00 : offer.PBS_AAAP_MANAGEMENT__c;
         offer.PBS_AAAP_SECT2_TOTAL__c = (offer.PBS_AAAP_SECT2_TOTAL__c == null) ? 0.00 : offer.PBS_AAAP_SECT2_TOTAL__c;
-        //offer.PBS_AAAP_Vacant_Premise_Rate__c = (offer.PBS_AAAP_Vacant_Premise_Rate__c == null) ? 0.00 : offer.PBS_AAAP_Vacant_Premise_Rate__c;        
+              
                
 
         Map<String, Schema.SObjectField> offerFields = Schema.SObjectType.PBS_AAAP_Offer__c.fields.getMap();
@@ -429,18 +443,19 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
                 tmpOffer.PBS_AAAP_COST_PER_ABOA__c = tmpOffer.PBS_AAAP_SRVC_UTIL_TOTAL__c / tmpOffer.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c;
             }
             System.debug('*** 2PBS_AAAP_COST_PER_ABOA__c is ***** ' + tmpOffer.PBS_AAAP_COST_PER_ABOA__c);
+            System.debug('*** PBS_AAAP_COST_PER_ABOA__c is ***** ' + tmpOffer.PBS_AAAP_Vacant_Premise_Rate__c);
             if(tmpOffer.PBS_AAAP_COST_PER_ABOA__c < tmpOffer.PBS_AAAP_Vacant_Premise_Rate__c){
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '28. The Adjustment for Vacant Premises rate is a portion of the total Operating Cost rate, and therefore cannot exceed the total Operating Cost rate. Please input an amount less than the total Operating Cost rate calculated on #4.');  //updated by Nik as part of OOLOP-596
+                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Costs Page: 28. The Adjustment for Vacant Premises rate is a portion of the total Operating Cost rate, and therefore cannot exceed the total Operating Cost rate. Please input an amount less than the total Operating Cost rate calculated on #4.');
                 Apexpages.addMessage(myMsg);
                 return null;
             }
             if (RLPisCensus != true){
-                if (tmpOffer.PBS_AAAP_COST_PER_ABOA__c < 1.0) {
-                    //ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '4. Cost per ABOA SF must be > 0.00'); - update by Snehith
-                    ApexPages.Message myMsg1 = new ApexPages.Message(ApexPages.Severity.ERROR, '4. Your proposed Operating Costs are calculated to be under $1.00 per ABOA SF. Please ensure you enter total annual values in the fields below, not per square foot rates. If you would like to propose an Operating Cost rate under $1.00 per ABOA SF, please email AAAP.Manager@gsa.gov for further instructions.');
+                
+                if (tmpOffer.PBS_AAAP_COST_PER_ABOA__c < 1.0) {                    
+                    ApexPages.Message myMsg1 = new ApexPages.Message(ApexPages.Severity.ERROR, 'Costs Page: 4. Your proposed Operating Costs are calculated to be under $1.00 per ABOA SF. Please ensure you enter total annual values in the fields below, not per square foot rates. If you would like to propose an Operating Cost rate under $1.00 per ABOA SF, please email AAAP.Manager@gsa.gov for further instructions.');
                     Apexpages.addMessage(myMsg1);
                     if(offer.PBS_AAAP_Vacant_Premise_Rate__c == null){
-                        ApexPages.Message myMsg2 = new ApexPages.Message(ApexPages.Severity.ERROR, '28. Adjustment for Vacant premises must be entered. It is the last question on this page. If you are not offering an adjustment, put $0.00.');  //updated by Nik as part of OOLOP-596
+                        ApexPages.Message myMsg2 = new ApexPages.Message(ApexPages.Severity.ERROR, 'Costs Page: 28. Adjustment for Vacant premises must be entered. It is the last question on this page. If you are not offering an adjustment, put $0.00.');
                         Apexpages.addMessage(myMsg2);
                         return null;
                     }
@@ -449,51 +464,46 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
                 }
             
                 if(offer.PBS_AAAP_Vacant_Premise_Rate__c == null){
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '28. Adjustment for Vacant premises must be entered. It is the last question on this page. If you are not offering an adjustment, put $0.00.');  //updated by Nik as part of OOLOP-596
+                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Costs Page: 28. Adjustment for Vacant premises must be entered. It is the last question on this page. If you are not offering an adjustment, put $0.00.');
                     Apexpages.addMessage(myMsg);
                     return null;
                 }
+                
            }
 
-           if (RLPisCensus = true){
+           if (RLPisCensus == true){
+               
                 if (tmpOffer.PBS_AAAP_COST_PER_ABOA__c < 1.0) {
-                    //ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '4. Cost per ABOA SF must be > 0.00'); - update by Snehith
-                    ApexPages.Message myMsg1 = new ApexPages.Message(ApexPages.Severity.ERROR, '4. Your proposed Operating Costs are calculated to be under $1.00 per ABOA SF. Please ensure you enter total annual values in the fields below, not per square foot rates. If you would like to propose an Operating Cost rate under $1.00 per ABOA SF, please email AAAP.Manager@gsa.gov for further instructions.');
+                    
+                    ApexPages.Message myMsg1 = new ApexPages.Message(ApexPages.Severity.ERROR, 'Costs Page: 4. Your proposed Operating Costs are calculated to be under $1.00 per ABOA SF. Please ensure you enter total annual values in the fields below, not per square foot rates. If you would like to propose an Operating Cost rate under $1.00 per ABOA SF, please email AAAP.Manager@gsa.gov for further instructions.');
                     Apexpages.addMessage(myMsg1);
                     if(offer.PBS_AAAP_Vacant_Premise_Rate__c == null){
-                        ApexPages.Message myMsg2 = new ApexPages.Message(ApexPages.Severity.ERROR, 'Adjustment for Vacant premises must be entered. It is the last question on this page. If you are not offering an adjustment, put $0.00.');  //updated by Nik as part of OOLOP-596
+                        ApexPages.Message myMsg2 = new ApexPages.Message(ApexPages.Severity.ERROR, 'Costs Page: 28. Adjustment for Vacant premises must be entered. It is the last question on this page. If you are not offering an adjustment, put $0.00.');  //updated by Nik as part of OOLOP-596
                         Apexpages.addMessage(myMsg2);
                         return null;
-                    }
-                    System.debug('***** str: I AM HERE');
+                    }                    
                     return null;
                 }
             
                 if(offer.PBS_AAAP_Vacant_Premise_Rate__c == null){
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Adjustment for Vacant premises must be entered. It is the last question on this page. If you are not offering an adjustment, put $0.00.');  //updated by Nik as part of OOLOP-596
+                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Costs Page: 28. Adjustment for Vacant premises must be entered. It is the last question on this page. If you are not offering an adjustment, put $0.00.');  //updated by Nik as part of OOLOP-596
                     Apexpages.addMessage(myMsg);
                     return null;
                 }
+			
            }
-
+         
+        
+		
             
         } catch (DMLException e) {
             Apexpages.addMessages(e);
         }
         
-        /************/
         
         
-        /*PageReference pgSpaceAndRates = Page.PBS_AAAP_SpacesAndRates;
-        PageReference pgSpaceAndRates = new PageReference('/AAAP/SpacesAndRates');
-        this.saveData();    // save the page data
-        pgSpaceAndRates.getParameters().put('offerId', offerId);
-        if (draftMsgFlag == 'true') {
-            pgSpaceAndRates.getParameters().put('draftMsgFlag', 'true');
-        }
-        pgSpaceAndRates.setRedirect(true);
-        logMethodEnd('continueSave', pgSpaceAndRates);
-        return pgSpaceAndRates;*/
+        
+        
         //added on 12/15/2022
             PageReference p = new PageReference('/AAAP/SpacesAndRates');
             this.saveData();
@@ -502,48 +512,104 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
                 p.getParameters().put('draftMsgFlag', 'true');
             }
             pageURLForRedirection = p.getUrl();
-            pageURLForRedirection = pageURLForRedirection.replace('/AAAP/SpacesAndRates', Label.LOP_Community_Base_URL+'AAAP-SpacesAndRates');
+      
+            pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-M-SpaceRates?edit=true&propertyId='+propId+'&offerId='+offerId;
             p.setRedirect(false);
             return null;
-        //till here
+        
         
     }    // end continueSave
 
 
     // "Back" button
     public PageReference back() {
-       /* logMethodStart('back');
-        //PageReference back = Page.PBS_AAAP_OfferPropertyOwner;
-        PageReference back = new PageReference('/AAAP/OfferPropertyOwner');
-        back.getParameters().put('offerId', offerId);
-        back.setRedirect(true);
-        
-        this.saveData();    // save the page data
-        logMethodEnd('back', back);
-        return back;*/
+       
         //added by S
-        PageReference back = new PageReference('/AAAP/OfferPropertyOwner');
+        PageReference back = new PageReference('/AAAP/OfferParking');
         back.getParameters().put('offerId', offerId);
         back.setRedirect(false);
         
         pageURLForRedirection = back.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferPropertyOwner', Label.LOP_Community_Base_URL+'AAAP-OfferPropertyOwner');
+       
+       pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-M-Parking?edit='+(viewOnly ? 'false' : 'true')+'&offerId='+offerId+'&propertyId='+propId;
         return null;
-        //till here
+        
     }    // end back
 	
     public void performCalc() {
-    	saveForm();
+    	//saveForm();
+    	saveData();
     }
 
     // "Save Form" button
     public PageReference saveForm() {
         logMethodStart('saveForm');
         PageReference saveForm = Apexpages.currentPage();
-        //PageReference saveForm = new PageReference('/AAAP/OperatingCosts?offerId='+offerId);
+     
+        Boolean errorFlag = false;
         this.saveData();
+        
+         
+            PBS_AAAP_Utility.OfferValidationResponse response  = PBS_AAAP_Utility.validateOffer(offer,new List<String>{'Offer-M-Costs'});
+            if (response.errorMessages.size() > 0 ) {
+                for(String error : response.errorMessages){
+                    errorFlag = TRUE;
+                    ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, error));
+                }
+            }
+            
+            if(offer.PBS_AAAP_COST_PER_ABOA__c < offer.PBS_AAAP_Vacant_Premise_Rate__c){
+                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Costs Page: 28. The Adjustment for Vacant Premises rate is a portion of the total Operating Cost rate, and therefore cannot exceed the total Operating Cost rate. Please input an amount less than the total Operating Cost rate calculated on #4.');
+                Apexpages.addMessage(myMsg);
+                errorFlag = TRUE;
+            }
+            if (RLPisCensus != true){
+                
+                if (offer.PBS_AAAP_COST_PER_ABOA__c < 1.0) {                    
+                    ApexPages.Message myMsg1 = new ApexPages.Message(ApexPages.Severity.ERROR, 'Costs Page: 4. Your proposed Operating Costs are calculated to be under $1.00 per ABOA SF. Please ensure you enter total annual values in the fields below, not per square foot rates. If you would like to propose an Operating Cost rate under $1.00 per ABOA SF, please email AAAP.Manager@gsa.gov for further instructions.');
+                    Apexpages.addMessage(myMsg1);
+                    if(offer.PBS_AAAP_Vacant_Premise_Rate__c == null){
+                        ApexPages.Message myMsg2 = new ApexPages.Message(ApexPages.Severity.ERROR, 'Costs Page: 28. Adjustment for Vacant premises must be entered. It is the last question on this page. If you are not offering an adjustment, put $0.00.');
+                        Apexpages.addMessage(myMsg2);
+                        errorFlag = TRUE;
+                    }
+                    System.debug('***** str: I AM HERE');
+                    errorFlag = TRUE;
+                }
+            
+                if(offer.PBS_AAAP_Vacant_Premise_Rate__c == null){
+                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Costs Page: 28. Adjustment for Vacant premises must be entered. It is the last question on this page. If you are not offering an adjustment, put $0.00.');
+                    Apexpages.addMessage(myMsg);
+                    errorFlag = TRUE;
+                }
+                
+           }
 
-        //saveForm.setRedirect(true);
+           if (RLPisCensus == true){
+               
+                if (offer.PBS_AAAP_COST_PER_ABOA__c < 1.0) {
+                    
+                    ApexPages.Message myMsg1 = new ApexPages.Message(ApexPages.Severity.ERROR, 'Costs Page: 4. Your proposed Operating Costs are calculated to be under $1.00 per ABOA SF. Please ensure you enter total annual values in the fields below, not per square foot rates. If you would like to propose an Operating Cost rate under $1.00 per ABOA SF, please email AAAP.Manager@gsa.gov for further instructions.');
+                    Apexpages.addMessage(myMsg1);
+                    if(offer.PBS_AAAP_Vacant_Premise_Rate__c == null){
+                        ApexPages.Message myMsg2 = new ApexPages.Message(ApexPages.Severity.ERROR, 'Costs Page: 28. Adjustment for Vacant premises must be entered. It is the last question on this page. If you are not offering an adjustment, put $0.00.');  //updated by Nik as part of OOLOP-596
+                        Apexpages.addMessage(myMsg2);
+                        errorFlag = TRUE;
+                    }                    
+                    errorFlag = TRUE;
+                }
+            
+                if(offer.PBS_AAAP_Vacant_Premise_Rate__c == null){
+                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Costs Page: 28. Adjustment for Vacant premises must be entered. It is the last question on this page. If you are not offering an adjustment, put $0.00.');  //updated by Nik as part of OOLOP-596
+                    Apexpages.addMessage(myMsg);
+                    errorFlag = TRUE;
+                }
+			
+		}	
+        if(errorFlag){
+            return null;
+        }
+        
         logMethodEnd('saveForm', saveForm);
 
         if( !( ( pageUrl == null ) || ( pageUrl == '' ) ) )
@@ -557,23 +623,10 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
             PageReference  p = new PageReference(pageUrl);
             pageURLForRedirection = Label.LOP_Community_Base_URL+PBS_AAAP_Utility.getCommunityURL(p.getUrl());
                 	return null;
-           //return p;           
+                    
             
         }
-        //return saveForm;
-        // added by s
         
-            /*PageReference pref = new PageReference('/AAAP/OperatingCosts?offerId='+offerId);
-        
-        pref.getParameters().put('offerId', offerId);
-        pref.getParameters().put('draftMsg', draftMsgFlag);
-            
-        pageURLForRedirection = pref.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OperatingCosts', Label.LOP_Community_Base_URL+'AAAP-OperatingCosts');*/
-        
-        //this.saveData();
-        //return null;
-            //till here
                     
         return saveForm;
     }    // end saveForm
@@ -584,7 +637,7 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
         logMethodStart('remSelOperCosts');
        
         try {
-         //   otherCost.PBS_AAAP_COST__c = (otherCost.PBS_AAAP_COST__c == null) ? 0.00 : otherCost.PBS_AAAP_COST__c;
+      
             // generate the list of costs to delete
             List<PBS_AAAP_Other_Costs__c> del = new List<PBS_AAAP_Other_Costs__c>();
             List<Double> newTotalCost = new List<Double>();
@@ -691,7 +744,7 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
         offer.PBS_AAAP_LEASE_COMMISSION__c = (offer.PBS_AAAP_LEASE_COMMISSION__c == null) ? 0.00 : offer.PBS_AAAP_LEASE_COMMISSION__c;
         offer.PBS_AAAP_MANAGEMENT__c = (offer.PBS_AAAP_MANAGEMENT__c == null) ? 0.00 : offer.PBS_AAAP_MANAGEMENT__c;
         offer.PBS_AAAP_SECT2_TOTAL__c = (offer.PBS_AAAP_SECT2_TOTAL__c == null) ? 0.00 : offer.PBS_AAAP_SECT2_TOTAL__c;
-        //offer.PBS_AAAP_Vacant_Premise_Rate__c = (offer.PBS_AAAP_Vacant_Premise_Rate__c == null) ? 0.00 : offer.PBS_AAAP_Vacant_Premise_Rate__c;        
+              
                
 
         Map<String, Schema.SObjectField> offerFields = Schema.SObjectType.PBS_AAAP_Offer__c.fields.getMap();
@@ -757,12 +810,11 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
                 tmpOffer.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT;
                 draftMsgFlag = 'true';
             }
-            if(tmpOffer.PBS_AAAP_COST_PER_ABOA__c < tmpOffer.PBS_AAAP_Vacant_Premise_Rate__c){
-                errorFlag = TRUE;
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '28. The Adjustment for Vacant Premises rate is a portion of the total Operating Cost rate, and therefore cannot exceed the total Operating Cost rate. Please input an amount less than the total Operating Cost rate calculated on #4.');
-                Apexpages.addMessage(myMsg);
-            }
-
+            
+            
+            
+            
+            
             if(!errorFlag){
                 upsert tmpOffer;
                 dao.updatePVRates(offerId);
@@ -784,7 +836,6 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
         System.debug('************* offer.PBS_AAAP_Offer_Status__c ::: ' + PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT);
         if (offer.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT || offer.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_PENDINGMODIFICATION) {
             delete offer;    // Cascade delete - Deletes all Spaces and Othercosts associated with it.
-            //pref = Page.PBS_AAAP_PortalHome;
             pref = new PageReference('/AAAP/PortalHome');
             pref.setRedirect(true);
         } else {
@@ -800,7 +851,6 @@ public with sharing class PBS_AAAP_OperatingCostController extends PBS_AAAP_Page
     /** added by syam 03/22 as part of the cancel operation addition */
     public PageReference actionCancel() {
         logMethodStart('actionCancel');
-        //PageReference pref = Page.PBS_AAAP_PortalHome;
         PageReference pref = new PageReference('/AAAP/PortalHome');
         pref.setRedirect(true);
         logMethodEnd('actionCancel', pref);

@@ -43,7 +43,7 @@ public with sharing class SiteRegisterController {
         isDisabled=false;     
         System.debug('inside constructor'); 
         isNewUserFound=false;  
-        //clickedButton = false;  
+          
 
         captcha = new reCAPTCHA();
         publicKey = captcha.publicKey;    
@@ -51,10 +51,7 @@ public with sharing class SiteRegisterController {
      
      public PageReference actionChkTermsAndConds(){         
         chkTerms = c.PBS_AAAP_Terms_and_Conditions__c;
-        /*if(!chkTerms){
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Please accept the terms and conditions');
-            ApexPages.addMessage(myMsg);            
-        }  */   
+        
         //added by syam ganna on 07/25/2016 to validate email fields
         actionChkConfirmEmail();
         return null;
@@ -95,7 +92,7 @@ public with sharing class SiteRegisterController {
         String soqlQuery = 'Select PBS_AAAP_Region_Name__c from PBS_AAAP_RLP_Regions_Map__c where PBS_AAAP_RLP_State__c in '+states;
         system.debug('::::::::::soqlQuery:::::: '+soqlQuery);
          
-        //regionsList = database.Query(soqlQuery);
+        
         
         regionsList = [Select PBS_AAAP_Region_Name__c from PBS_AAAP_RLP_Regions_Map__c where PBS_AAAP_RLP_State__c in :states];    
         System.debug ('*****Regions List ::::::::' + regionsList);
@@ -170,7 +167,7 @@ public with sharing class SiteRegisterController {
         if(isNewUserFound != true){
             try{  
                 //  Setting up the account Id to AAAP Customer Portal Account.  
-                String accountId = null;//PBS_AAAP_GlobalConstants.PORTAL_ACCOUNT_ID;
+                String accountId = null;
                 accountId = [Select Id from Account 
                                 Where recordType.Name =: PBS_AAAP_GlobalConstants.CUSTOMER_PORTAL_ACCOUNT 
                                 and Name = :PBS_AAAP_GlobalConstants.CUSTOMER_PORTAL_ACCOUNT_NAME limit 1].Id;
@@ -207,126 +204,7 @@ public with sharing class SiteRegisterController {
         return null; 
     }
     
-    /* New method with Salesforce Identity Embedded Login functionality for Communities conversion 
-    public PageReference createPortaluser(){             
-       
-        boolean strVerifyRecaptcha; 
-        strVerifyRecaptcha = captcha.verify();
-             
-        if(!strVerifyRecaptcha) {
-            ApexPages.Message msg = new ApexPages.Message(ApexPages.Severity.ERROR, System.Label.AAAP_Captcha_Validation_Failed);
-            ApexPages.addMessage(msg);            
-        }
- 
-        if(ApexPages.getMessages().size() > 0) {
-            return null;
-        }
-         
-        boolean isRegisteringUserAlreadyInSystem = false;                            
-        try{  
-            System.debug('checking if the registering user is already in the system with username: ' + u.username);  
-             
-            User usr = [select id, name, username, profileId, contactId from User where username= :c.Email LIMIT 1]; 
-
-            if(usr!=null && usr.username == c.Email){  
-                newUser = usr;  
-                isRegisteringUserAlreadyInSystem = true;  
-                System.debug('User with email '+ c.Email +' already exists in the system so checking to see if it is an RET user and if so update contact and user record with data entered on register page and assign AAAP Permission set. Otherwise display error.');  
-                Profile[] profiles = [Select name, id From Profile where Name like '%GSA RET Community Plus Login User%' limit 1];
-                system.debug('****'+usr.profileId);
-                if(usr.profileId == profiles[0].Id){
-                    Boolean flag;
-                    String accId = null;
-                    accId = [Select Id from Account 
-                                    Where recordType.Name =: PBS_AAAP_GlobalConstants.CUSTOMER_PORTAL_ACCOUNT 
-                                    and Name = :PBS_AAAP_GlobalConstants.CUSTOMER_PORTAL_ACCOUNT_NAME limit 1].Id;
-                    Id cId = usr.contactId;  
-                    updateContact(cId, c.PBS_AAAP_StatesOfInterest__c, c.Phone, c.PBS_AAAP_Alternate_Phone__c, c.MailingStreet, c.MailingState, c.MailingCity, 
-                                                    c.MailingCountry, c.MailingPostalCode, c.PBS_AAAP_Company__c, c.Title, c.PBS_AAAP_Website__c);
-        
-                    SiteRegisterController.updateUser(usr.Id, c.Email, c.Phone, 
-                                                    c.MailingStreet, c.MailingState, c.PBS_AAAP_PIN__c, c.MailingCity, 
-                                                    c.MailingCountry, c.MailingPostalCode, c.PBS_AAAP_Company__c, c.PBS_AAAP_StatesOfInterest__c, 
-                                                    c.PBS_AAAP_Regions__c, c.PBS_AAAP_Alternate_Phone__c, c.Title);
-                    flag = assignPermissionSet(usr.Id);                    
-                    if(flag){
-                        conf1 = false; conf2 = true; showRegistrationForm = false;
-                    } 
-                } else {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, PBS_AAAP_GlobalConstants.ERROR_DUPLICATE_USER);
-                    ApexPages.addMessage(myMsg); 
-                }
-                return null;  
-            }               
-
-        }catch(Exception ex){  
-            System.debug('...did not find user pre-existing in system so proceeding to set up new user and log them in...');
-        }  
-            
-        Savepoint sp0 = Database.setSavepoint();
-        
-        if (isRegisteringUserAlreadyInSystem == false){
-            try{  
-                // Setting up the account Id to AAAP Customer Portal Account.  
-                String accountId = null;
-                accountId = [Select Id from Account 
-                                Where recordType.Name =: PBS_AAAP_GlobalConstants.CUSTOMER_PORTAL_ACCOUNT 
-                                and Name = :PBS_AAAP_GlobalConstants.CUSTOMER_PORTAL_ACCOUNT_NAME limit 1].Id;
-                System.debug('Account Id: '+accountId);
-                Id contactId = null;
-                 
-                //Create the Contact associated to the Portal Account.  
-                contactId = createContact(accountId); 
-              
-                Profile profile = [Select p.name, p.id From Profile p where p.Name like '%AAAP Customer Portal%' limit 1];  
-                selectedProfileId = profile.Id;
     
-                String aliasStr;  
-                if(c.LastName.length()>6){
-                    aliasStr = c.FirstName.substring(0, 1)+c.LastName.substring(0, 5);
-                }
-                else{
-                    aliasStr = c.FirstName.substring(0, 1)+c.LastName;
-                }
-                User u = new User(alias = aliasStr, email=c.Email, emailencodingkey='UTF-8', firstname=c.FirstName, lastname=c.LastName, PBS_AAAP_PIN__c = c.PBS_AAAP_PIN__c,
-                        languagelocalekey='en_US', localesidkey='en_US', profileid = selectedProfileId, contactId=c.Id, timezonesidkey='America/New_York',
-                        username=c.Email, street=c.MailingStreet, city=c.MailingCity, state=c.MailingState, country=c.MailingCountry, postalcode=c.MailingPostalCode, CompanyName=c.PBS_AAAP_COMPANY__c,
-                        phone=c.Phone, PBS_AAAP_Alternate_Phone__c = c.PBS_AAAP_Alternate_Phone__c, PBS_AAAP_StatesOfInterest__c=c.PBS_AAAP_StatesOfInterest__c, PBS_AAAP_Regions__c=c.PBS_AAAP_Regions__c, Title = c.Title);
-
-                String userId;
-                String password; //null - Salesforce login process will prompt user for password reset since password is not provided by our registration form currently like is done on RealEstateTaxes registration
-                try {
-                    userId = Site.createExternalUser(u, accountId, password);
-                } catch(Site.ExternalUserCreateException ex) {
-                    List<String> errors = ex.getDisplayMessages();
-                    for (String error : errors)  {
-                        ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, error));
-                    }
-                    System.debug(ex.getMessage());
-                }
-        
-                if (userId != null) { 
-                    if (password != null && password.length() > 1) {
-                        return Site.login(c.Email, password, ApexPages.currentPage().getParameters().get('startURL'));
-                    }
-                    else {
-                        PageReference page = System.Page.CommunitiesSelfRegConfirm;
-                        page.setRedirect(true);
-                        return page;
-                    }
-                }
-                             
-                //showRegistrationForm = false; conf1 = true; conf2 = false; 
-    
-             }catch(Exception ex){  
-                 //Display error message to VF page  
-                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, ex.getMessage());  
-                 ApexPages.addMessage(myMsg);          
-                 Database.rollback(sp0);
-             } 
-        } 
-        return null; 
-    } */
     
     public static boolean assignPermissionSet(Id usrId){   
         Boolean success = FALSE;     
@@ -338,7 +216,7 @@ public with sharing class SiteRegisterController {
             success = TRUE;
         } else {
             //Julia Kantarovsky changed typo here 9.15.20   
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'A registered account has already been created using this email address.  Use the links at the top of the page to navigate to the AAAP or RSAP home page, where you can log-in or use the \'Forgot Your Password?\' feature.');   
+            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'A registered account has already been created using this email address. Click the Login/Reset Password link at the top of the page where you can sign in or use the \'Forgot Your Password?\' feature.');   
             //Typo changes to here
             ApexPages.addMessage(myMsg);
         }

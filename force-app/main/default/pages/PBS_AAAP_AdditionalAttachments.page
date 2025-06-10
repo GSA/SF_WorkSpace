@@ -273,7 +273,7 @@
                 width: 500px;
             }
             .apexp{
-            	margin: 0px;
+                margin: 0px;
             }
                                                       
 
@@ -303,7 +303,7 @@
             height: 20px;
         }
                                                       .tabbed-table table th{
-            	padding-left: 5px;
+                padding-left: 5px;
             }
         .hiddenHeaderTable thead{    height: 0px !important;}
         </style>
@@ -414,44 +414,21 @@
 
 
         </script>
-    	<script type="text/javascript">
-        console.log('{!pageURLForRedirection}');
+        <script type="text/javascript">
+        //console.log('{!pageURLForRedirection}');
         if('{!JSENCODE(pageURLForRedirection)}' != ''){
             window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
             window.parent.document.body = document.createElement('body');
         }
-    	else{
-        	window.parent.document.body.scrollTop = 0;
-  			window.parent.document.documentElement.scrollTop = 0;
+        else{
+            window.parent.document.body.scrollTop = 0;
+            window.parent.document.documentElement.scrollTop = 0;
         }
-    	</script>
+        </script>
     </head>
-    <!--<div id="login">
-        <ul>
-            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
-                <apex:outputLink value="/AAAP/home/home.jsp">
-                    <li>{!$Label.site.login_button}</li>
-                </apex:outputLink>
-                <li> |</li>
-                <apex:outputLink value="/AAAP/ForgotPassword">
-                    <li>{!$Label.site.forgot_your_password_q}</li>
-                </apex:outputLink>
-                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
-                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
-                    <li>{!$Label.site.new_user_q}</li>
-                </apex:outputLink>
-            </apex:panelGroup>
-            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
-                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
-                <li>{!$Label.site.logout}</li>
-            </apex:outputLink>
-            <li>|</li>
-            <li><a href="http://www.gsa.gov/">About GSA</a></li>
-        </ul>
-
-    </div>--><!--/login-->
+    
     <div id="wrapper">
-        <c:inside_header />
+       <c:inside_header />
         <div id="content" class="attachments"><!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
 
             <apex:panelGrid rendered="{!!isValidUser}">
@@ -465,6 +442,7 @@
 
             <apex:form id="offerattachmentsform" styleClass="formwrap" rendered="{!isValidUser}"
                        style="margin-right: 50px;">
+                <h3 id="page-image" class="blue" style="border-bottom:none;font-size:25px;">Offer space</h3>
 
                 <apex:actionFunction name="submitOffer" action="{!actionSendtoGREX}">
                 </apex:actionFunction>
@@ -480,21 +458,17 @@
                 </apex:outputPanel>
                 <apex:outputPanel rendered="{!!showAttachmentsPage}"><h3 class="blue">Submit Offer</h3>
                 </apex:outputPanel>
-                <!--<apex:outputPanel rendered="{!!showSubmitOfferButton && showAttachmentsPage}">
-                    <apex:outputLabel styleClass="blueMessage"
-                                      value="**The open period is closed - You may create and save draft offers at this time; however you may not submit your offers until the next open period. The Submit Offer button will reappear during the next open period."/>
-                    <br/>
-                </apex:outputPanel> -->
+                
                 <apex:messages styleClass="errMessage"/>
                 <apex:inputHidden value="{!addrFlag}" id="addrFlag"/>
 
                 <!-- NEW TABLE-->
                 <div style=";">
                     <apex:pageBlock >
-                        <!--<apex:pageBlockSection  columns="1">-->
+                        
 
                         <div class="tabbed-table">
-                            <!--<apex:outputPanel rendered="{!seqNumList2.size>0}">-->
+                            
                             <apex:outputPanel rendered="{!showAttachmentsPage}">
                                 <h3>Attachments Already Submitted</h3>
                                 <apex:variable var="rowNum" value="{!0}"/>
@@ -552,39 +526,7 @@
                                             <apex:column value="{!a.offratts.PBS_AAAP_Date_sent_to_GREX__c}" style="border: none!important;" />
                                         </apex:pageBlockTable>
                                     </apex:column>
-								<!--<apex:variable var="rowNum" value="{!0}"/>
-                                <apex:pageBlockTable value="{!existingAttachmentRecords}" width="100%  !important" var="ofratt" rowClasses="odd,even" >
-                                    <apex:column style="width: 9% !important;">
-                                        <apex:facet name="header">No #</apex:facet>
-                                        <apex:variable var="rowNum" value="{!rowNum + 1}"/>
-                                            {!rowNum}
-                                    </apex:column>
-                                    <apex:column style="width: 19% !important;" value="{!ofratt.offratts.PBS_AAAP_Attachment_Type__c}">
-                                        <apex:facet name="header">Attachment Type</apex:facet>
-                                    </apex:column>
-                                    <apex:column style="width: 20% !important;" styleClass="attach">
-                                        <apex:facet name="header">Attachment Name</apex:facet>
-                                        <apex:outputPanel >{!ofratt.file.Name}</apex:outputPanel>
-                                        
-                                    </apex:column>
-                                    <apex:column style="width: 12% !important;">
-                                        <apex:facet name="header">View File</apex:facet>
-                                        <apex:outputLink target="_blank"
-                                                             value="{!ofratt.file.link}">
-                                                <apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
-                                                        style="align: right;" alt="Salesforce" title="Salesforce"/>
-                                            </apex:outputLink>
-                                        
-                                    </apex:column>
-                                    <apex:column style="width: 17% !important;">
-                                        <apex:facet name="header">Date Uploaded</apex:facet>
-                                        <apex:outputText value="{0,date,MM/dd/yyyy}">
-                                                    <apex:param value="{!ofratt.file.createddate}"/>
-                                                </apex:outputText>
-                                    </apex:column>
-                                        <apex:column style="width: 21% !important;" value="{!ofratt.offratts.PBS_AAAP_Date_sent_to_GREX__c}">
-                                        <apex:facet name="header">Date/Time Submitted</apex:facet>
-                                    </apex:column>-->
+                                
                                 </apex:pageBlockTable>
                                 
                                 <br/>
@@ -602,8 +544,7 @@
                                 <h3>Auto Generated Forms</h3>
                             </div>
                             <div>
-                                <!--<apex:commandButton value="{!if(formSeqNumList.size > 0,'Refresh Forms','Generate Forms')}"
-                                                                             action="{!refreshForms}"/>--></div>
+                                </div>
                             <table class="list" id="j_id0:offerattachmentsform:j_id105:theTable" border="0" cellpadding="0" cellspacing="0" style="width:100% !important; margin-left:0px !important;">
                                 <colgroup span="6"></colgroup>
                                 <thead class="">
@@ -660,70 +601,12 @@
 
                                 </apex:repeat>
                                 
-                                <!--
-                                <tr class="dataRow even odd first  last" onmouseover="if (window.hiOn){hiOn(this);} "
-                                    onmouseout="if (window.hiOff){hiOff(this);} "
-                                    onblur="if (window.hiOff){hiOff(this);}" onfocus="if (window.hiOn){hiOn(this);}">
-                                    <td class="dataCell" colspan="1">
-                                        1
-                                    </td>
-                                    <td class="dataCell " colspan="1">
-                                        Form 1364 AAAP
-                                    </td>
-                                    <td class="dataCell" colspan="1">
-                                        {!submitOffer.PBS_AAAP_Offer_Submission_Date__c}
-                                    </td>
-                                    <td class="dataCell" colspan="1">
-                                        <a href="/apex/offerform1364_2019?formtype=OfferForm1364&offerId={!submitOffer.Id}" target="_blank">
-                                            <apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
-                                                        style="align: right;" alt="Salesforce" title="Salesforce"/>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr class="dataRow even odd first  last" onmouseover="if (window.hiOn){hiOn(this);} "
-                                    onmouseout="if (window.hiOff){hiOff(this);} "
-                                    onblur="if (window.hiOff){hiOff(this);}" onfocus="if (window.hiOn){hiOn(this);}">
-                                    <td class="dataCell" colspan="1">
-                                        2
-                                    </td>
-                                    <td class="dataCell " colspan="1">
-                                        Lessor's Annual Cost Statement (Form 1217)
-                                    </td>
-                                    <td class="dataCell" colspan="1">
-                                        {!submitOffer.PBS_AAAP_Offer_Submission_Date__c}
-                                    </td>
-                                    <td class="dataCell" colspan="1">
-                                        <a href="/apex/offerform1217?formtype=offerform1217&offerId={!submitOffer.Id}" target="_blank">
-                                            <apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
-                                                        style="align: right;" alt="Salesforce" title="Salesforce"/>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr class="dataRow even odd first  last" onmouseover="if (window.hiOn){hiOn(this);} "
-                                    onmouseout="if (window.hiOff){hiOff(this);} "
-                                    onblur="if (window.hiOff){hiOff(this);}" onfocus="if (window.hiOn){hiOn(this);}">
-                                    <td class="dataCell" colspan="1">
-                                        3
-                                    </td>
-                                    <td class="dataCell " colspan="1">
-                                        Lessor's Annual Cost Statement (Form 1217 Attachment)
-                                    </td>
-                                    <td class="dataCell" colspan="1">
-                                        {!submitOffer.PBS_AAAP_Offer_Submission_Date__c}
-                                    </td>
-                                    <td class="dataCell" colspan="1">
-                                        <a href="/apex/offerform1217attachment?formtype=offerform1217Attachment&offerId={!submitOffer.Id}" target="_blank">
-                                            <apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
-                                                        style="align: right;" alt="Salesforce" title="Salesforce"/>
-                                        </a>
-                                    </td>
-                                </tr>
-                                -->
+                                
                                 </tbody>
                             </table>
 
                         </div>
-                        <!--</apex:pageBlockSection>-->
+                        
                     </apex:pageBlock>
                 </div>
                 <br/>
@@ -750,9 +633,7 @@
                             <td style="padding-left: 0px;">
                                 <apex:outputLabel style="font-size:16px;font-weight:bold;"
                                                   value="Step 1: Select the attachment type:" for="fileName"/>
-                                <span class="required">*</span>&nbsp;&nbsp;<!--<a class="popup"
-                                                                              href="#Modal_Prop_Ques15"><img
-                                    src="{!$Resource.Info_Icon}"/></a> -->
+                                <span class="required">*</span>&nbsp;&nbsp;
                                 <br/><br/>
                                 <apex:inputField value="{!offerattachment.PBS_AAAP_Attachment_Type__c}"
                                                  id="fileName" styleClass="fileName1" onchange="showOtherDescription('{! $Component.fileName }')"></apex:inputField>
@@ -850,11 +731,11 @@
                     <apex:commandButton value="Back" action="{!exitOffer}"/>
                     <apex:commandButton value="Save Page" action="{!actionSavePage}" styleClass="btnJQSubmit" />
                     <apex:commandButton value="Exit Offer" action="{!actionCancel}"
-                                        onclick="if(confirm('Please make sure that, you have saved changes to the offer, before leaving from this page.')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}AAAP-PortalHome';return false;} else return false;"/>
+                                        onclick="if(confirm('Please make sure that, you have saved changes to the offer, before leaving from this page.')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}Offer-Home';return false;} else return false;"/>
 
                     <span style="padding-right:98px;">&nbsp;</span>
 
-                    <apex:outputPanel rendered="true"> <!--rendered="{!showSubmitOfferButton}"-->
+                    <apex:outputPanel rendered="true"> 
 
                         <a href="#" class="buttongreen" id="submitoffer" onclick="$('#submitoffer').hide();$('#status').show();submitOffer()" style="float: right; margin-right: 10%;">Submit Documents</a>
                         <p id="status" style="text-align:right;display:none;padding-right:90px;margin-top: -44px;padding-bottom: 44px;">Submitting...</p>

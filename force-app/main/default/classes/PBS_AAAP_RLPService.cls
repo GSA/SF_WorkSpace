@@ -7,8 +7,8 @@ global with sharing class PBS_AAAP_RLPService {
     global static Id doPost(){  //string reqJSON
         
         string leasingSpecialist = '';
-    	string leaseContractingOfficer = '';
-    	string brokerContractor = '';
+        string leaseContractingOfficer = '';
+        string brokerContractor = '';
         
         RestRequest req = RestContext.request;
         Blob body = req.requestBody;
@@ -17,7 +17,7 @@ global with sharing class PBS_AAAP_RLPService {
         //System.debug('JK requestString ' + requestString);
         PBS_AAAP_RLP__c rlp = new PBS_AAAP_RLP__c();
         RequestWrapper reqWrapper = (RequestWrapper)JSON.deserialize(requestString, RequestWrapper.class);
-        //System.debug('JK reqWrapper: ' + reqWrapper);
+        System.debug('reqWrapper: ' + reqWrapper);
         if(reqWrapper.PBS_RSAP_Project_Contact != null){
             for(String projectContact : reqWrapper.PBS_RSAP_Project_Contact){
                 //System.debug('JK projectContact ' + projectContact);
@@ -35,22 +35,21 @@ global with sharing class PBS_AAAP_RLPService {
         }
         
         // checing if data exist
-        List<PBS_AAAP_RLP__c> lstExistingRecs = [SELECT ID
+        List<PBS_AAAP_RLP__c> lstExistingRecs = [SELECT ID, PBS_RSAP_Solicitation_Status__c
                                                         FROM PBS_AAAP_RLP__c
                                                         WHERE PBS_RSAP_Solicitation_G_REX_ID__c =: reqWrapper.PBS_RSAP_Solicitation_G_REX_ID];
-        //System.debug('JK lstExistingRecs: ' + lstExistingRecs);
+        System.debug('lstExistingRecs: ' + lstExistingRecs);
         if(!lstExistingRecs.isEmpty()){
             rlp.Id = lstExistingRecs[0].Id;
-            //System.debug('JK lstExistingRecs not empty, Id is: ' + rlp.Id);
+            //System.debug('lstExistingRecs not empty, Id is: ' + rlp.Id);
         }
-        
         
         // mapping data
         rlp.PBS_RSAP_Solicitation_G_REX_ID__c  = reqWrapper.PBS_RSAP_Solicitation_G_REX_ID;
         rlp.PBS_RSAP_Solicitation_Number__c  = reqWrapper.PBS_RSAP_Solicitation_Number;
         rlp.PBS_RSAP_Project_Number__c = reqWrapper.PBS_RSAP_Project_Number;
         rlp.PBS_RSAP_City__c = reqWrapper.PBS_RSAP_City;
-        rlp.PBS_RSAP_State__c  = reqWrapper.PBS_RSAP_State;
+        rlp.PBS_RSAP_State__c = reqWrapper.PBS_RSAP_State;
         rlp.PBS_RSAP_Solicitation_Status__c = reqWrapper.PBS_RSAP_Solicitation_Status; 
         rlp.PBS_AAAP_Year__c = string.ValueOf(System.Today().year());  
         //JK changes from here
@@ -66,7 +65,10 @@ global with sharing class PBS_AAAP_RLPService {
         
         rlp.PBS_AAAP_STATUS__c = '';
         update rlp;        
-        if(rlp.PBS_RSAP_Solicitation_Status__c != reqWrapper.PBS_RSAP_Solicitation_Status){
+        // Todd Brown 5/7/2025 as a fix for issue found during 2025 Merge Surge UAT testing replaced the following line of code
+        // to properly determine if RLP Solicitation Status changed and needs to be propogated to related Offers' Status.
+        //if(rlp.PBS_RSAP_Solicitation_Status__c != reqWrapper.PBS_RSAP_Solicitation_Status){
+        if(!lstExistingRecs.isEmpty() && (lstExistingRecs[0].PBS_RSAP_Solicitation_Status__c != reqWrapper.PBS_RSAP_Solicitation_Status)){
             if(reqWrapper.PBS_RSAP_Solicitation_Status){
                 changeOffersStatus(rlp.Id, 'Draft');
             } else {
@@ -91,7 +93,7 @@ global with sharing class PBS_AAAP_RLPService {
 
     @future
     public static void changeOffersStatus(Id rlpId, String status){
-        //System.debug('JK changeOffersStatus start, rlpId: ' + rlpId + ' status: ' + status);
+        System.debug('changeOffersStatus start, rlpId: ' + rlpId + ' status: ' + status);
         List<PBS_AAAP_Offer__c> offrLst = new List<PBS_AAAP_Offer__c>();
         List<PBS_AAAP_Offer__c> lstUpdOffer = new List<PBS_AAAP_Offer__c>();
         offrLst = [

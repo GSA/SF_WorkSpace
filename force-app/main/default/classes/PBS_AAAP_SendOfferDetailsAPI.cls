@@ -35,11 +35,7 @@ public without sharing class PBS_AAAP_SendOfferDetailsAPI {
                 PBS_AAAP_Legacy_Offer_Att_ID__c,
                 Offer_Attachments_Name__c,
                 PBS_AAAP_Sent_to_GREX__c,
-                Document_Description__c/*,
-        (SELECT id,
-                NAME
-        FROM Attachments)
-                  */
+                Document_Description__c
         FROM PBS_AAAP_Offer_Attachments__c
         WHERE PBS_AAAP_Offer__c =: offerRec.Id
         AND PBS_AAAP_Sent_to_GREX__c = FALSE
@@ -185,7 +181,7 @@ public without sharing class PBS_AAAP_SendOfferDetailsAPI {
         }
 
 
-        // update Offer
+        
         update offerRec;
 
         if(code == '200'){
@@ -281,9 +277,7 @@ public without sharing class PBS_AAAP_SendOfferDetailsAPI {
         public documents(ContentDocumentWrapper contentDocumentWrapperObj ,PBS_AAAP_Offer_Attachments__c attCus){
             this.contentVersionId = contentDocumentWrapperObj.id;
             this.fileName = contentDocumentWrapperObj.Name;
-            if(attCus.PBS_AAAP_Attachment_Type__c == 'Other'){
-                this.documentDescription = attCus.Document_Description__c;
-            }
+            this.documentDescription = attCus.Document_Description__c;            
             String doc1364 = '1364 - Proposal to Lease Space';
             String doc1217 = '1217 - Lessor’s Annual Cost Statement';
             if(attCus.PBS_AAAP_Attachment_Type__c == 'Offeror GSA Form 1364'){
@@ -340,11 +334,7 @@ public without sharing class PBS_AAAP_SendOfferDetailsAPI {
                             PBS_AAAP_Legacy_Offer_Att_ID__c,
                             Offer_Attachments_Name__c,
                             Document_Description__c,
-                            PBS_AAAP_Sent_to_GREX__c/*,
-                            (SELECT Id,
-                                    NAME
-                            FROM Attachments)
-                */
+                            PBS_AAAP_Sent_to_GREX__c
                     FROM PBS_AAAP_Offer_Attachments__c
                     WHERE PBS_AAAP_Offer__c =: offerRec.Id
             ];        
@@ -357,10 +347,7 @@ public without sharing class PBS_AAAP_SendOfferDetailsAPI {
                             PBS_AAAP_Legacy_Offer_Att_ID__c,
                             Offer_Attachments_Name__c,
                             Document_Description__c,
-                            PBS_AAAP_Sent_to_GREX__c/*,
-                            (SELECT Id,
-                                    NAME
-                            FROM Attachments)*/
+                            PBS_AAAP_Sent_to_GREX__c
                     FROM PBS_AAAP_Offer_Attachments__c
                     WHERE PBS_AAAP_Offer__c =: offerRec.Id
                     AND PBS_AAAP_Sent_to_GREX__c = FALSE
@@ -387,13 +374,7 @@ public without sharing class PBS_AAAP_SendOfferDetailsAPI {
                 lstDoc.add(new documentsAAAP(contentDocumentMap.get(attCus.Id),attCus));
             }
         }
-        /*
-        for(PBS_AAAP_Offer_Attachments__c attCus : lstAtt){
-            for(attachment att : attCus.Attachments){
-                lstDoc.add(new documentsAAAP(att,attCus));
-            }
-        }
-		*/
+        
         system.debug('\n--lstDoc--'+lstDoc);
 
         requestWrapperAAAP obj = new requestWrapperAAAP(offerRec, agencyRec, lstDoc);
@@ -511,7 +492,7 @@ public without sharing class PBS_AAAP_SendOfferDetailsAPI {
         }
 
 
-        // update Offer
+        
         update osaiRec;
 
         if(code == '200') {
@@ -642,9 +623,7 @@ public without sharing class PBS_AAAP_SendOfferDetailsAPI {
             String doc1364 = 'Form 1364 AAAP';
             String doc1217 = 'Lessor\'s Annual Cost Statement (Form 1217)';
             String doc1217A = 'Lessor\'s Annual Cost Statement (Form 1217 Attachment)';
-             if(attCus.PBS_AAAP_Attachment_Type__c == 'Other'){
-                this.documentDescription = attCus.Document_Description__c;
-            }
+            this.documentDescription = attCus.Document_Description__c;            
             if(attCus.PBS_AAAP_Attachment_Type__c == 'Form 1364 AAAP'){
                 this.documentType = doc1364;
             } else if (attCus.PBS_AAAP_Attachment_Type__c == 'Lessors Annual Cost Statement (Form 1217)'){

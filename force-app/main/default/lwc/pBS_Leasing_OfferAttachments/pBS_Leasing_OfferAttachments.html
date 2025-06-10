@@ -1,0 +1,241 @@
+<template>
+	<template if:true={isLoading}>
+		<lightning-spinner alternative-text="Loading" variant="brand" size="large"></lightning-spinner>
+	</template>
+	<template if:true={isAAAPOfferAttachmentPage}>
+		<div>
+			<c-p-b-s_-leasing_-progress-bar progress-bar-name="AAAP_Workflow" onnavigatetopage={handleNavigateToPage}>
+			</c-p-b-s_-leasing_-progress-bar>
+		</div>
+		<template if:true={pbsAAApOfferRecords}>
+			<div class="table-container">
+				<table class="tablecss">
+					<tbody>
+						<tr>
+							<td class="tdcss">
+								<label>Property name:</label>&nbsp;{pbsAAApOfferRecords.PBS_AAAP_Building_Name__c}
+							</td>
+
+							<td class="tdcss">
+								<label>RLP number:</label>&nbsp;{pbsAAApOfferRecords.PBS_AAAP_RLP_Number__r.PBS_AAAP_RLP_Number__c}
+							</td>
+
+							<td class="tdcss">
+								<label>Offer status:</label>&nbsp;{pbsAAApOfferRecords.PBS_AAAP_Offer_Status__c}
+							</td>
+
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</template><br/>
+		<template if:false={editMode}>
+			<label class="viewMode">Offer opened in view mode. Any changes made will not be saved.</label>
+		</template>
+		<template if:false={isValidOffer}><br/><br/>
+			<label style="font-weight: bold;font-size: 18px;">The open period for this month has ended. You can create and save draft offers; but, you cannot submit your offer until the next open period.</label>
+		</template>
+
+		<br/>
+		<template if:false={isReadyToSubmit}>
+			<ul class='error'>
+				<template for:each={errors} for:item="error">
+					<li key={error}>{error}</li>
+				</template>
+			</ul>
+			<c-p-b-s_-leasing_-show_-attachments table-name="Auto_Generated_Forms">
+			</c-p-b-s_-leasing_-show_-attachments><br/><br/>
+			<template if:true={editMode}>
+				<c-p-b-s_-leasing_-upload-attachment onfileupload={handleFileUpload}>
+				</c-p-b-s_-leasing_-upload-attachment><br/><br/>
+			</template>
+			<c-p-b-s_-leasing_-show_-attachments table-name="Attachments_List" data-id="Attachments_List" is-disabled-delete={isDisabledDelete}>
+			</c-p-b-s_-leasing_-show_-attachments><br/><br/>
+			<c-p-b-s_-leasing_-show_-attachments table-name="Attachments_Already_Submitted">
+			</c-p-b-s_-leasing_-show_-attachments><br/><br/>
+			
+				<div class="btn-container">
+					<input class="btn aaap_btn" type="button" varient="submit" value="Back"  onclick={handleBackToRatesAndSpaces}/>
+					<!-- <input class="btn" type="button" varient="submit" value="Save Page" onclick={handleActionSavePage} /> -->
+					<input class="btn aaap_btn" type="button" varient="submit" value="Exit Offer" onclick ={handleExitOffer} />
+					<div class="space"></div>
+					<c-p-b-s_-leasing_-download-all-files offer-id={offerId}></c-p-b-s_-leasing_-download-all-files>
+					<template if:true={editMode}>					
+					<div if:true={isValidOffer}>
+						<input class="finalOff" type="button" varient="submit" value="Review Final Offer" onclick={handleReviewFinalOffer} />
+					</div>
+					<template if:false={isValidOffer}>
+						<input class="finalOff submitofferbgcolor" type="button" varient="submit" value="Check Errors" onclick={handleCheckErrors} />
+					</template></template>
+				</div>
+			
+		</template>
+		<template if:true={isReadyToSubmit}>
+			<c-p-b-s_-leasing_-submit-offer-attachments offer-id={offerId} oncancel={handleCancel}>
+			</c-p-b-s_-leasing_-submit-offer-attachments>
+		</template>
+
+	</template>
+
+	<template if:true={isAAAPOfferAdditionaAttachmentPage}>
+		<div style="background-color: white !important; background: none; border:none">
+			<span class="header">Offer space</span>
+		</div>
+		<br /><br />
+		<template if:true={pbsAAApOfferRecords}>
+			<div class="table-container">
+				<table>
+					<tbody>
+						<tr>
+							<td class="tdcss">
+								<label>Property name:</label>&nbsp;{pbsAAApOfferRecords.PBS_AAAP_Building_Name__c}
+							</td>
+
+							<td class="tdcss">
+								<label>RLP number:</label>&nbsp;{pbsAAApOfferRecords.PBS_AAAP_RLP_Number__r.PBS_AAAP_RLP_Number__c}
+							</td>
+
+							<td class="tdcss">
+								<label>Offer status:</label>&nbsp;{pbsAAApOfferRecords.PBS_AAAP_Offer_Status__c}
+							</td>
+
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</template><br />
+		<c-p-b-s_-leasing_-show_-attachments table-name="Auto_Generated_Forms"> </c-p-b-s_-leasing_-show_-attachments>
+		<br/><br/>
+
+		<c-p-b-s_-leasing_-upload-attachment onfileupload={handleFileUpload}></c-p-b-s_-leasing_-upload-attachment>
+		<br/><br/>
+
+		<c-p-b-s_-leasing_-show_-attachments table-name="Attachments_List" data-id="Attachments_List">
+		</c-p-b-s_-leasing_-show_-attachments><br/><br/>
+		<c-p-b-s_-leasing_-show_-attachments table-name="Attachments_Already_Submitted">
+		</c-p-b-s_-leasing_-show_-attachments><br/><br/>
+		<div class="btn-container">
+			<!-- <input class="btn" type="button" varient="submit" value="Back"  onclick={handleExitOffer}/> -->
+			<!-- <input class="btn" type="button" varient="submit" value="Save Page" onclick={handleActionSavePage} /> -->
+			<input class="btn" type="button" varient="submit" value="Exit Offer" onclick ={handleExitOffer} />
+			<div class="space"></div>
+			<c-p-b-s_-leasing_-download-all-files offer-id={offerId}></c-p-b-s_-leasing_-download-all-files>
+			<input class="submitofferbgcolor" type="button" varient="Submit" value="Submit" onclick={handleSubmitDocuments}/>
+		</div>
+	</template>
+
+	<template if:true={isRSAPAttachmentsPage}>
+		<div>
+			<c-p-b-s_-leasing_-progress-bar progress-bar-name="RSAP_Workflow" onnavigatetopage={handleNavigateToPage}>
+			</c-p-b-s_-leasing_-progress-bar>
+		</div>
+		<template if:true={pbsAAApOfferRecords}>
+			<div class="table-container">
+				<table>
+					<tbody>
+						<tr>
+							<td class="tdcss">
+								<label>Property name:</label>&nbsp;{pbsAAApOfferRecords.PBS_AAAP_Building_Name__c}
+							</td>
+
+							<td class="tdcss">
+								<label>RLP number:</label>&nbsp;{pbsAAApOfferRecords.PBS_AAAP_RLP_Number__r.PBS_RSAP_Solicitation_Number__c}
+							</td>
+
+							<td class="tdcss">
+								<label>Offer status:</label>&nbsp;{pbsAAApOfferRecords.PBS_AAAP_Offer_Status__c}
+							</td>
+
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</template>
+		<br />
+		<template if:false={editMode}>
+			<template lwc:if={isTerminated}>
+				<label class="viewMode">Project is terminated. Offer opened in view mode. Any changes made will not be saved.</label>
+			</template>
+			<template lwc:elseif={isSubmited}>
+				<label class="viewMode">Project due date has elapsed. Offer opened in view mode. Any changes made will not be saved.</label>
+			</template>
+			<template lwc:else>
+				<label class="viewMode">Offer opened in view mode. Any changes made will not be saved.</label>
+			</template>
+		</template>
+		<ul class='error'>
+			<template for:each={errors} for:item="error">
+				<li key={error}>{error}</li>
+			</template>
+		</ul>
+
+		<c-p-b-s_-leasing_-show_-attachments table-name="RSAP_Auto_Generated_Forms">
+		</c-p-b-s_-leasing_-show_-attachments><br/><br/>
+		<template if:true={editMode}>
+			<c-p-b-s_-leasing_-upload-attachment onfileupload={handleFileUpload}></c-p-b-s_-leasing_-upload-attachment>
+			<br/><br/>
+		</template>
+		<c-p-b-s_-leasing_-show_-attachments table-name="RSAP_Attachments_Ready_for_Submission"
+			data-id="Attachments_List" is-disabled-delete={isDisabledDelete}></c-p-b-s_-leasing_-show_-attachments>
+		<br/><br/>
+		<c-p-b-s_-leasing_-show_-attachments table-name="RSAP_Attachments_Already_Sent">
+		</c-p-b-s_-leasing_-show_-attachments><br/><br/>
+		    <div class="btn-container">
+				<input class="btn" type="button" varient="submit" value="Back"  onclick={handleRSAPBackToPropertyOwnerAndRemarks}/>
+				<!-- <input class="btn" type="button" varient="submit" value="Save Page" onclick={handleRSAPActionSavePage} /> -->
+				<input class="btn" type="button" varient="submit" value="Exit Offer" onclick ={handleRSAPExitOffer} />
+				<div class="space"></div>
+				<template if:true={editMode}>
+				<input class="submitofferbgcolor" type="button" varient="Submit" value="Certify Offer" onclick={handleRSAPCertifyOffer}/>
+			    </template>
+		    </div>
+		
+	</template>
+
+	<template if:true={isRSAPAdditionalAttachmentsPage}>
+		<div style="background-color: white !important; background: none; border:none">
+			<span class="header">Offer space</span>
+		</div><br /><br />
+		<template if:true={pbsAAApOfferRecords}>
+			<div class="table-container">
+				<table>
+					<tbody>
+						<tr>
+							<td class="tdcss">
+								<label>Property name:</label>&nbsp;{pbsAAApOfferRecords.PBS_AAAP_Building_Name__c}
+							</td>
+
+							<td class="tdcss">
+								<label>RLP number:</label>&nbsp;{pbsAAApOfferRecords.PBS_AAAP_RLP_Number__r.PBS_RSAP_Solicitation_Number__c}
+							</td>
+
+							<td class="tdcss">
+								<label>Offer status:</label>&nbsp;{pbsAAApOfferRecords.PBS_AAAP_Offer_Status__c}
+							</td>
+
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</template>
+		<c-p-b-s_-leasing_-show_-attachments table-name="RSAP_Auto_Generated_Forms">
+		</c-p-b-s_-leasing_-show_-attachments><br/><br/>
+		<c-p-b-s_-leasing_-upload-attachment onfileupload={handleFileUpload}></c-p-b-s_-leasing_-upload-attachment>
+		<br/><br/>
+		<c-p-b-s_-leasing_-show_-attachments table-name="RSAP_Attachments_Ready_for_Submission"
+			data-id="Attachments_List"></c-p-b-s_-leasing_-show_-attachments><br/><br/>
+		<c-p-b-s_-leasing_-show_-attachments table-name="RSAP_Attachments_Already_Sent">
+		</c-p-b-s_-leasing_-show_-attachments><br/><br/>
+		<table width="100%">
+			<tr>
+				<td style="text-align:left;">
+					<input class="btn" type="button" varient="submit" value="Exit Offer" onclick ={handleRSAPExitOffer} />
+				</td>
+				<td style="text-align:right;">
+					<input class="submitofferbgcolor" type="button" varient="Submit" value="Submit" onclick={handleRSAPSubmitDocuments}/>
+				</td>
+			</tr>
+		</table>
+	</template>
+	<br /><br /><br /><br /><br />
+</template>

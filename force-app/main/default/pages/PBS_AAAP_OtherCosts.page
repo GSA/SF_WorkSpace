@@ -3,9 +3,9 @@
         <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
         <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/demo_page.css')}"/>
         <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
-		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.2/js/materialize.min.js"></script>
-		<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+        <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
         <style type="text/css">
             .col1   {text-align: left;
                      width: 400px;}
@@ -13,7 +13,26 @@
                      width: 230px;}
             .tabbed-table table td {
                     background:#fff;}
-            h2        {color:#fff; font-size:80%; font-weight:bold; padding-left:40px; width:80%;}                 
+            .hr {
+                font-weight: bold;
+                font-size: 20px;
+                //border-bottom: 1px solid #cccccc;
+                padding: 0 0 8px;
+                color: #000000;
+                //color: #002BAD;
+                padding-top: 15px;
+            }
+            .custom-border {
+            border: 1px solid  #999;
+            padding-top: 10px;
+            color: #333333;
+            font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+            font-size:13px;
+            background-color: #eeeeee;
+        }
+            h2        {color:#fff; font-size:80%; font-weight:bold; padding-left:40px; width:80%;} 
+            
+            
 
         </style>
 
@@ -49,23 +68,7 @@
             j$(".tablesorter tr:even").css("background-color", "#F3F3EC");
         });
 
-  /*      function inputLimiter(e,allow) {
-            var AllowableCharacters = '';
-        
-           if (allow == 'Number'){AllowableCharacters='1234567890.,';}
-
-            var k = document.all?parseInt(e.keyCode): parseInt(e.which);
-            if (k!=13 && k!=8 && k!=0){
-                if ((e.ctrlKey==false) && (e.altKey==false)) {
-                return (AllowableCharacters.indexOf(String.fromCharCode(k))!=-1);
-                } else {
-                return true;
-                }
-            } else {
-                return true;
-            }
-        } 
-     */
+  
         </script>
 
         <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
@@ -105,12 +108,36 @@
         <c:inside_header />
         <div id="content" class="building"><!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
             <!-- <c:PBS_AAAP_ProgressBar myValue="{!offer.Id}"/> -->
+            <!-- Grid to display three columns -->
+            <div style="display: flex; flex-direction: row; justify-content: space-between; padding: 1px;margin-top: -1px;">
+                <!-- Column 1: Property Name -->
+                <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999;padding-bottom: 10px;padding-left: 10px; padding-top: 10px;">
+                    <span>Property name: </span>
+                    <span>
+                        <apex:outputText value="{!offer.PBS_AAAP_Building_Name__c}" />
+                    </span>
+                </div>
+                <!-- Column 2: RLP Number -->
+                <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999;padding-bottom: 10px;padding-left: 10px; padding-top: 10px;">
+                    <span>RLP number:</span>
+                     <span>
+                        <apex:outputText value="{!rlpType}" />
+                    </span>
+                </div>
+                <!-- Column 3: Offer Status -->
+                <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999;padding-bottom: 10px;padding-left: 10px; padding-top: 10px;">
+                    <span>Offer status:</span> 
+                    <span>
+                        <apex:outputText value="{!offer.PBS_AAAP_Offer_Status__c}" />
+                    </span>
+                </div>
+            </div>
             <apex:form id="theform" styleClass="formwrap">
                 <apex:messages styleClass="errMessage" id="message"/>
                 <!--apex:pageMessages /> -->
                 <!--h1>{!QLabels.opCostsPgHdr}</h1-->
-                <h3 class="blue">{!QLabels.opCostsPgHdr}</h3>
-
+                <!--<h3 class="blue">{!QLabels.opCostsPgHdr}</h3>-->
+                <div class="hr" style="margin-left:0px" >{!QLabels.opCostsPgHdr}</div>
                 <apex:panelGrid id="pangrid_other_costs" columns="1">
                     <apex:outputPanel >
                         <apex:outputText id="txt_q1" value="{!QLabels.otherCostsQ1}"></apex:outputText>
@@ -175,14 +202,14 @@
     </div><!-- /Wrapper -->
     <c:SiteFooterUX />
         <script type="text/javascript">
-		console.log('{!pageURLForRedirection}');
-		if('{!JSENCODE(pageURLForRedirection)}' != ''){
+        
+        if('{!JSENCODE(pageURLForRedirection)}' != ''){
             window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
             window.parent.document.body = document.createElement('body');
         }
         else{
-        	window.parent.document.body.scrollTop = 0;
-  			window.parent.document.documentElement.scrollTop = 0;
+            window.parent.document.body.scrollTop = 0;
+            window.parent.document.documentElement.scrollTop = 0;
         }
         </script>
     </body>

@@ -17,6 +17,7 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         PageReference attach = Page.PBS_AAAP_OfferAttachments;
 
         spacesAndRates.getParameters().put('offerId', testOffer.Id);
+        spacesAndRates.getParameters().put('edit', 'false');
         Test.setCurrentPageReference(spacesAndRates);                       // set the current page reference to spaces and rates
         PBS_AAAP_ControllerSpacesAndRates contSpaceRates = new PBS_AAAP_ControllerSpacesAndRates();
         System.assertEquals(contSpaceRates.offer.Id, testOffer.Id);         // validate that the controller obtains the correct offer
@@ -130,12 +131,9 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         // test that the action for the "BACK" button returns the user to the operating costs page
         PageReference pgBack = Page.PBS_AAAP_OperatingCosts;
         pgBack.getParameters().put('offerId', testOffer.Id);
-        //System.assertEquals(contSpaceRates.back().getUrl(), pgBack.getUrl());
-
         // test that the action for the rates summary button renders the correct views
         PageReference pgRateSumm = Page.pbs_aaap_spacesandrates;
         pgRateSumm.getParameters().put('offerId', testOffer.Id);
-        //System.assertEquals(contSpaceRates.rateSummary().getUrl(), pgRateSumm.getUrl());
         contSpaceRates.rateSummary();
 
         List<PBS_AAAP_ControllerSpacesAndRates.SpaceAndRatesDetails> dets = contSpaceRates.spaceSort(testSpaces, testRates);
@@ -241,9 +239,7 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         // test that the validateOfferFormFields
         Decimal backup = contSpaceRates.maxOfferedSpace;
         contSpaceRates.maxOfferedSpace = 0.00;
-        //System.assertEquals(true, contSpaceRates.validateOfferFormFields());
         contSpaceRates.maxOfferedSpace = 20000.00;
-        //System.assertEquals(true, contSpaceRates.validateOfferFormFields());
         contSpaceRates.maxOfferedSpace = backup;
 
         // test that the returnToSpaces method correctly sets the appropriate indicator
@@ -276,7 +272,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         };
         PageReference pgSpaceAndRates = Page.PBS_AAAP_SpacesAndRates;
         pgSpaceAndRates.getParameters().put('offerId', testOffer.Id);
-        //System.assertEquals(contSpaceRates.deleteSpace().getUrl(), pgSpaceAndRates.getUrl());       // validate that the delete space method returns the correct page back to the controller
         try {
             List<PBS_AAAP_Space__c> sp2 = [SELECT o.Id FROM PBS_AAAP_Space__c o WHERE o.Id = :contSpaceRates.details[0].spaceID];
         } catch (Exception e) {
@@ -297,8 +292,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         contSpaceRates.space.PBS_AAAP_MAX_OFFERABLE_SPACE__c = null;
         contSpaceRates.space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c = null;
         contSpaceRates.space.PBS_AAAP_ARCH_ENG_FEES__c = null;
-        //contSpaceRates.space.PBS_AAAP_ARCH_ENG_FEES__c=1;
-        //contSpaceRates.feePrcntgOrDollar = null;
         contSpaceRates.sfOfferedType =  'All Available ABOA';
         String str = contSpaceRates.leaseDefault;
         contSpaceRates.saveOnlySpace();
@@ -446,12 +439,8 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         PBS_AAAP_DAO_Utilities dao = new PBS_AAAP_DAO_Utilities();
         PBS_AAAP_Offer__c testOffer = dao.getOffer(dataGen.testOffer.Id);
         testOffer.PBS_AAAP_COST_PER_ABOA__c = 10;
-        //testOffer.PBS_AAAP_OFFICE_SF_OFFERED_MAX__c = null;
-        //testOffer.PBS_AAAP_MAX_CONT_ABOA_AVAIL__c = null;
         update testOffer;
         List<PBS_AAAP_Space__c> testSpaces = dao.getSpaces(dataGen.testOffer.Id);
-        //testSpaces[0].PBS_AAAP_SF_OFFERED__c = 2000;
-        //update testSpaces[0];
         List<PBS_AAAP_Rate__c> testRates = dao.getRates(dataGen.testOffer.Id);
         PBS_AAAP_Other_Costs__c testOtherCost = new PBS_AAAP_Other_Costs__c();
         PBS_AAAP_RLP__c testRlp = dao.getRLP(dataGen.testOffer.PBS_AAAP_RLP_NUMBER__c);
@@ -530,7 +519,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         csr.userInputBSAC = 2;
         csr.newOrCont = 'FALSE';
         csr.getSpaceOpts();
-        //csr.spaceAndRatesDetails();
         csr.getFeeOpts();
         csr.addNewSpace();
         csr.addSucceedingSpace();
@@ -541,8 +529,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         csr.back();
         csr.addRate();
         csr.editRate();
-        //csr.convertRateEntry();
-
         csr.saveRates();
         csr.rateSummary();
         csr.returnToSpace();
@@ -583,9 +569,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
                 PBS_AAAP_Year__c = '2016',
                 PBS_AAAP_BSAC_per_ABOA__c = 25
         );
-        //Vaishali 11/21 added above PBS_AAAP_ALLOW_TIER2_AMMORT__c = false, PBS_AAAP_BSAC_per_ABOA__c = 0
-        //Vaishali 11/21 changed PBS_AAAP_BSAC_per_ABOA__c = 6
-
         system.assert(testRLP1.PBS_AAAP_RLP_Number__c != null);
         upsert testRLP1;
         system.assert(testRLP1.id != null);
@@ -645,7 +628,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
                 PBS_AAAP_GC_OVERHEAD_AND_PROF__c = 8.00,
                 PBS_AAAP_MANAGEMENT_COORD_FEES__c = 0.00,
                 PBS_AAAP_GC_CONDITIONS__c = 0.00,
-                //PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c = '%',
                 PBS_AAAP_ARCH_ENG_FEES__c = 3.50,
                 PBS_AAAP_GSA_EXPIRE_LEASE_NUMBER__c = 'Unit Test GSA Lease',
                 PBS_AAAP_IDENTIFIER_TYPE__c = 'DEFAULT',
@@ -732,7 +714,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         testOtherCost1.PBS_AAAP_OFFER_NUMBER__c = testOffer1.Id;
         upsert testOtherCost1;
 
-        //PBS_AAAP_UNIT_TEST_DATA_GENERATOR dataGen = new PBS_AAAP_UNIT_TEST_DATA_GENERATOR();
         PBS_AAAP_DAO_Utilities dao = new PBS_AAAP_DAO_Utilities();
         PBS_AAAP_Offer__c testOffer = dao.getOffer(testOffer1.Id);
         List<PBS_AAAP_Space__c> testSpaces = dao.getSpaces(testOffer1.Id);
@@ -779,31 +760,13 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         System.assertEquals(sp.PBS_AAAP_OFFER_NUMBER__c, testOffer.Id);
         System.assertEquals(contSpaceRates.sfOfferedType, null);                // defaultSpace() method should also set the square footage offered type to null
         System.assertEquals(contSpaceRates.feePrcntgOrDollar, null);        // defaultSpace() method should also set the UOM variable for the architectural engineering fee type to null
-        //as per FY16 as it is mandatory as we are forcing the related values to '0.00'
         contSpaceRates.feePrcntgOrDollar = '%';
-        // test that the getLrgOrdinal() method returns the largest ordinal for the number of spaces passed as a list to the function
-        //System.assertEquals(contSpaceRates.getLrgOrdinal(testSpaces), 1);   // there is only one test space so the function should return a 1
-
-        // test that the saveSpace method correctly saves the space to the DB
         contSpaceRates.space = sp;
         System.debug('weston');
         System.debug('*****myUnitTest contSpaceRates.space before saveSpace(): ' + contSpaceRates.space);
         contSpaceRates.saveSpace();
         System.debug('*****myUnitTest contSpaceRates.space after saveSpace(): ' + contSpaceRates.spaces.size());
-        //System.assertEquals(1, contSpaceRates.spaces.size());   // save spaces adds the new space to the internal list of spaces, for our purposes there are 2, the initial (found by constructor) and then the one added by saveSpace
-
-
-        // test that the addSpace method renders the inner space page view
         contSpaceRates.addNewSpace();
-        //System.assertEquals(contSpaceRates.rendAddSpace, true);
-        //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-        //System.assertEquals(contSpaceRates.rendRates, false);
-        //System.assertEquals(contSpaceRates.rendSuccSpace, false);
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_OFFER_NUMBER__c, sp.PBS_AAAP_OFFER_NUMBER__c);    // addNewSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addNewSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addNewSpace() method should also set the space variable to the "default" settings with the offer number ID included
-
-        // test that the genMapRatesToSpace accurately generates an Apex "Map" of rates to spaces
         Map<String, List<PBS_AAAP_Rate__c>> testMapSpaceToRates = contSpaceRates.genMapRatesToSpace(testRates, testSpaces);
         for (PBS_AAAP_Space__c spc : testSpaces) {
             System.assertEquals(testMapSpaceToRates.containsKey(spc.Id), true);
@@ -812,15 +775,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
 
         // test that the addSucceedingSpace method renders the inner space page view
         contSpaceRates.addSucceedingSpace();
-        //System.assertEquals(contSpaceRates.rendAddSpace, false);
-        //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-        //System.assertEquals(contSpaceRates.rendRates, false);
-        //System.assertEquals(contSpaceRates.rendSuccSpace, true);
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_OFFER_NUMBER__c, sp.PBS_AAAP_OFFER_NUMBER__c);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-
-        // test that the convertPbsAaapRate method converts the rate data from the PBS_AAAP_Rate__c structure into the local class RateEntry format
         PBS_AAAP_ControllerSpacesAndRates.RateEntry re = contSpaceRates.convertPbsAaapRate(testRates);
         for (PBS_AAAP_Rate__c rate : testRates) {
             if (rate.PBS_AAAP_LEASE_TERM__c == PBS_AAAP_CALCULATIONS.SEVENTEENYR) {
@@ -876,19 +830,10 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         // test that the action for the "BACK" button returns the user to the operating costs page
         PageReference pgBack = Page.PBS_AAAP_OperatingCosts;
         pgBack.getParameters().put('offerId', testOffer.Id);
-        //System.assertEquals(contSpaceRates.back().getUrl(), pgBack.getUrl());
-
         // test that the action for the rates summary button renders the correct views
         PageReference pgRateSumm = Page.pbs_aaap_spacesandrates;
         pgRateSumm.getParameters().put('offerId', testOffer.Id);
-        //System.assertEquals(contSpaceRates.rateSummary().getUrl(), pgRateSumm.getUrl());
         contSpaceRates.rateSummary();
-        //System.assertEquals(contSpaceRates.rendAddSpace, false);
-        //System.assertEquals(contSpaceRates.rendOuterSpace, true);
-        //System.assertEquals(contSpaceRates.rendRates, false);
-        //System.assertEquals(contSpaceRates.rendSuccSpace, false);
-
-        // test that the action to populate and sort the screen fields for the outer space summary table from the rates data returned from the SOQL
         List<PBS_AAAP_ControllerSpacesAndRates.SpaceAndRatesDetails> dets = contSpaceRates.spaceSort(testSpaces, testRates);
         System.assertEquals(contSpaceRates.details.size(), dets.size());           // verify that the summary screen field list is of the same size as the number of spaces.
         for (PBS_AAAP_Space__c space : testSpaces) {
@@ -916,33 +861,22 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
             }   // end for
         }   // end for
 
-
-        // test that the edit rate method such that it appropriately modifys the correct spaces rates
         contSpaceRates.details[0].selected = true;      // set the first element of the screen detail list to selected for purposes of the test
         System.debug('***** dets[0]: ' + dets[0]);
         contSpaceRates.editRate();
         System.assertEquals(contSpaceRates.space.Id, contSpaceRates.details[0].spaceID);
 
         System.debug('***** contSpaceRates.spaces: ' + contSpaceRates.spaces);
-        // test that the edit space method such
         contSpaceRates.editSpace();
         System.assertEquals(contSpaceRates.space.Id, contSpaceRates.details[0].spaceID);       // insure that editSpace is editing the correct space
         if (contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c) {
-            //System.assertEquals(contSpaceRates.rendAddSpace, true);
-            //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-            //System.assertEquals(contSpaceRates.rendRates, false);
-            //System.assertEquals(contSpaceRates.rendSuccSpace, false);
-        }   // end if
+        }
 
         contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = false;  // rig the space so that it is considered a succeeding space
 
         contSpaceRates.editSpace();
         if (contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c) {
-            //System.assertEquals(contSpaceRates.rendAddSpace, false);
-            //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-            //System.assertEquals(contSpaceRates.rendRates, false);
-            //System.assertEquals(contSpaceRates.rendSuccSpace, true);
-        }   // end if
+        }
 
         contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = true;   // reset the space so that it is considered a new space
 
@@ -952,24 +886,10 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         // strip the IDs to facilitate upload
         for (Integer i = 0; i < testRates.size(); i++) {
             PBS_AAAP_Rate__c rup = new PBS_AAAP_Rate__c(
-                    //PBS_AAAP_TWO_YEAR_EXTENSION__c                                    =   testRates[i].PBS_AAAP_TWO_YEAR_EXTENSION__c,
                     PBS_AAAP_SPACE__c = testRates[i].PBS_AAAP_SPACE__c,
-                    //PBS_AAAP_OT_RATE_COOLING_HEAT__c                              =   testRates[i].PBS_AAAP_OT_RATE_COOLING_HEAT__c + i,
-                    //PBS_AAAP_ONE_YEAR_EXTENSION__c                                    =   testRates[i].PBS_AAAP_ONE_YEAR_EXTENSION__c,
                     PBS_AAAP_OFFER_NUMBER__c = testRates[i].PBS_AAAP_OFFER_NUMBER__c,
-                    //PBS_AAAP_NO_OF_MONTHS_FREE_OPTION_TERM__c     =   testRates[i].PBS_AAAP_NO_OF_MONTHS_FREE_OPTION_TERM__c,
-                    //PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c           =   testRates[i].PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c,
                     PBS_AAAP_LEASE_TERM__c = testRates[i].PBS_AAAP_LEASE_TERM__c,
-                    //PBS_AAAP_IDENTIFIER_ID__c                                                 =   testRates[i].PBS_AAAP_IDENTIFIER_ID__c,
-                    //PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c                =   testRates[i].PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c,
-                    //PBS_AAAP_COST_FOR_TI__c                                                   =   testRates[i].PBS_AAAP_COST_FOR_TI__c,
-                    //PBS_AAAP_COOP_COMM_TOGSA_FIRM_TERM__c         =   testRates[i].PBS_AAAP_COOP_COMM_TOGSA_FIRM_TERM__c,
                     PBS_AAAP_BASE_RATE__c = testRates[i].PBS_AAAP_BASE_RATE__c,
-                    //PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c              =   testRates[i].PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c,
-                    //PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c                       =   testRates[i].PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c,
-                    //PBS_AAAP_AMORTIZ_RATE_T1_ABOVE_20__c                  =   testRates[i].PBS_AAAP_AMORTIZ_RATE_T1_ABOVE_20__c,
-                    //PBS_AAAP_ADDTL_AMT_FOR_GOVT_OWNED_EQUIP__c    =   testRates[i].PBS_AAAP_ADDTL_AMT_FOR_GOVT_OWNED_EQUIP__c,
-                    //PBS_AAAP_ADDTL_AMT_DAY_CLEANING__c                            =   testRates[i].PBS_AAAP_ADDTL_AMT_DAY_CLEANING__c,
                     PBS_AAAP_FULLY_SRVC_FIRM_TERM__c = testRates[i].PBS_AAAP_FULLY_SRVC_FIRM_TERM__c,
                     PBS_AAAP_ANNUAL_AMORT_TI_COSTS__c = testRates[i].PBS_AAAP_ANNUAL_AMORT_TI_COSTS__c
 
@@ -1020,18 +940,8 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         Boolean boolBackup = contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c;
         contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = true;
         contSpaceRates.returnToSpace();
-        //System.assertEquals(true, contSpaceRates.rendAddSpace);
-        //System.assertEquals(false, contSpaceRates.rendOuterSpace);
-        //System.assertEquals(false, contSpaceRates.rendRates);
-        //System.assertEquals(false, contSpaceRates.rendSuccSpace);
-
         contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = false;
         contSpaceRates.returnToSpace();
-        //System.assertEquals(false, contSpaceRates.rendAddSpace);
-        //System.assertEquals(false, contSpaceRates.rendOuterSpace);
-        //System.assertEquals(false, contSpaceRates.rendRates);
-        //System.assertEquals(true, contSpaceRates.rendSuccSpace);
-
         contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = boolBackup;
 
 
@@ -1045,25 +955,13 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
             System.assertEquals(true, spMap.containsKey(sp1.PBS_AAAP_IDENTIFIER_ID__c));
         } // end for
 
-
-        // test that the addRate method renders the inner space page view
         contSpaceRates.addRate();
-        //System.assertEquals(contSpaceRates.rendAddSpace, false);
-        //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-        //System.assertEquals(contSpaceRates.rendRates, true);
-        //System.assertEquals(contSpaceRates.rendSuccSpace, false);
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_OFFER_NUMBER__c, sp.PBS_AAAP_OFFER_NUMBER__c);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-
-
         // test that the deleteSpace method deletes the selected space from the DB
         Set<String> rateIDs = new Set<String>{
                 testRates[0].Id, testRates[1].Id, testRates[2].Id
         };
         PageReference pgSpaceAndRates = Page.PBS_AAAP_SpacesAndRates;
         pgSpaceAndRates.getParameters().put('offerId', testOffer.Id);
-        //System.assertEquals(contSpaceRates.deleteSpace().getUrl(), pgSpaceAndRates.getUrl());       // validate that the delete space method returns the correct page back to the controller
         try {
             List<PBS_AAAP_Space__c> sp2 = [SELECT o.Id FROM PBS_AAAP_Space__c o WHERE o.Id = :contSpaceRates.details[0].spaceID];
         } catch (Exception e) {
@@ -1080,12 +978,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
 
         // test that the actionBackSpace method will return the user to the spaces and rates summary page
         contSpaceRates.actionBackSpace();
-        //System.assertEquals(contSpaceRates.rendAddSpace, false);
-        //System.assertEquals(contSpaceRates.rendOuterSpace, true);
-        //System.assertEquals(contSpaceRates.rendRates, false);
-        //System.assertEquals(contSpaceRates.rendSuccSpace, false);
-        //System.assertEquals(spacesAndRates.getParameters().get('offerId'), testOffer.Id);
-
         // test that the Space method will generate a default space
         contSpaceRates.clearSpace();
         System.assertEquals(contSpaceRates.space.PBS_AAAP_OFFER_NUMBER__c, testOffer.Id);
@@ -1199,31 +1091,13 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
 
         // test that the addSpace method renders the inner space page view
         contSpaceRates.addNewSpace();
-        //System.assertEquals(contSpaceRates.rendAddSpace, true);
-        //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-        //System.assertEquals(contSpaceRates.rendRates, false);
-        //System.assertEquals(contSpaceRates.rendSuccSpace, false);
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_OFFER_NUMBER__c, sp.PBS_AAAP_OFFER_NUMBER__c);    // addNewSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addNewSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addNewSpace() method should also set the space variable to the "default" settings with the offer number ID included
-
         // test that the genMapRatesToSpace accurately generates an Apex "Map" of rates to spaces
         Map<String, List<PBS_AAAP_Rate__c>> testMapSpaceToRates = contSpaceRates.genMapRatesToSpace(testRates, testSpaces);
         for (PBS_AAAP_Space__c spc : testSpaces) {
             System.assertEquals(testMapSpaceToRates.containsKey(spc.Id), true);
         }   // end for
-
-
         // test that the addSucceedingSpace method renders the inner space page view
         contSpaceRates.addSucceedingSpace();
-        //System.assertEquals(contSpaceRates.rendAddSpace, false);
-        //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-        //System.assertEquals(contSpaceRates.rendRates, false);
-        //System.assertEquals(contSpaceRates.rendSuccSpace, true);
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_OFFER_NUMBER__c, sp.PBS_AAAP_OFFER_NUMBER__c);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-
         // test that the convertPbsAaapRate method converts the rate data from the PBS_AAAP_Rate__c structure into the local class RateEntry format
         PBS_AAAP_ControllerSpacesAndRates.RateEntry re = contSpaceRates.convertPbsAaapRate(testRates);
         for (PBS_AAAP_Rate__c rate : testRates) {
@@ -1279,13 +1153,7 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         // test that the action for the rates summary button renders the correct views
         PageReference pgRateSumm = Page.pbs_aaap_spacesandrates;
         pgRateSumm.getParameters().put('offerId', testOffer.Id);
-        //System.assertEquals(contSpaceRates.rateSummary().getUrl(), pgRateSumm.getUrl());
         contSpaceRates.rateSummary();
-        //System.assertEquals(contSpaceRates.rendAddSpace, false);
-        //System.assertEquals(contSpaceRates.rendOuterSpace, true);
-        //System.assertEquals(contSpaceRates.rendRates, false);
-        //System.assertEquals(contSpaceRates.rendSuccSpace, false);
-
         // test that the action to populate and sort the screen fields for the outer space summary table from the rates data returned from the SOQL
         List<PBS_AAAP_ControllerSpacesAndRates.SpaceAndRatesDetails> dets = contSpaceRates.spaceSort(testSpaces, testRates);
         System.assertEquals(contSpaceRates.details.size(), dets.size());           // verify that the summary screen field list is of the same size as the number of spaces.
@@ -1326,22 +1194,13 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         contSpaceRates.editSpace();
         System.assertEquals(contSpaceRates.space.Id, contSpaceRates.details[0].spaceID);       // insure that editSpace is editing the correct space
         if (contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c) {
-            //System.assertEquals(contSpaceRates.rendAddSpace, true);
-            //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-            //System.assertEquals(contSpaceRates.rendRates, false);
-            //System.assertEquals(contSpaceRates.rendSuccSpace, false);
-        }   // end if
+        }
 
         contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = false;  // rig the space so that it is considered a succeeding space
 
         contSpaceRates.editSpace();
         if (contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c) {
-            //System.assertEquals(contSpaceRates.rendAddSpace, false);
-            //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-            //System.assertEquals(contSpaceRates.rendRates, false);
-            //System.assertEquals(contSpaceRates.rendSuccSpace, true);
-        }   // end if
-
+        }
         contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = true;   // reset the space so that it is considered a new space
 
         // test that the databaseConCheck method insures that only 3 rate records for any space can exist
@@ -1350,24 +1209,10 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         // strip the IDs to facilitate upload
         for (Integer i = 0; i < testRates.size(); i++) {
             PBS_AAAP_Rate__c rup = new PBS_AAAP_Rate__c(
-                    //PBS_AAAP_TWO_YEAR_EXTENSION__c                                    =   testRates[i].PBS_AAAP_TWO_YEAR_EXTENSION__c,
                     PBS_AAAP_SPACE__c = testRates[i].PBS_AAAP_SPACE__c,
-                    //PBS_AAAP_OT_RATE_COOLING_HEAT__c                              =   testRates[i].PBS_AAAP_OT_RATE_COOLING_HEAT__c + i,
-                    //PBS_AAAP_ONE_YEAR_EXTENSION__c                                    =   testRates[i].PBS_AAAP_ONE_YEAR_EXTENSION__c,
                     PBS_AAAP_OFFER_NUMBER__c = testRates[i].PBS_AAAP_OFFER_NUMBER__c,
-                    //PBS_AAAP_NO_OF_MONTHS_FREE_OPTION_TERM__c     =   testRates[i].PBS_AAAP_NO_OF_MONTHS_FREE_OPTION_TERM__c,
-                    //PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c           =   testRates[i].PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c,
                     PBS_AAAP_LEASE_TERM__c = testRates[i].PBS_AAAP_LEASE_TERM__c,
-                    //PBS_AAAP_IDENTIFIER_ID__c                                                 =   testRates[i].PBS_AAAP_IDENTIFIER_ID__c,
-                    //PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c                =   testRates[i].PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c,
-                    //PBS_AAAP_COST_FOR_TI__c                                                   =   testRates[i].PBS_AAAP_COST_FOR_TI__c,
-                    //PBS_AAAP_COOP_COMM_TOGSA_FIRM_TERM__c         =   testRates[i].PBS_AAAP_COOP_COMM_TOGSA_FIRM_TERM__c,
                     PBS_AAAP_BASE_RATE__c = testRates[i].PBS_AAAP_BASE_RATE__c,
-                    //PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c              =   testRates[i].PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c,
-                    //PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c                       =   testRates[i].PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c,
-                    //PBS_AAAP_AMORTIZ_RATE_T1_ABOVE_20__c                  =   testRates[i].PBS_AAAP_AMORTIZ_RATE_T1_ABOVE_20__c,
-                    //PBS_AAAP_ADDTL_AMT_FOR_GOVT_OWNED_EQUIP__c    =   testRates[i].PBS_AAAP_ADDTL_AMT_FOR_GOVT_OWNED_EQUIP__c,
-                    //PBS_AAAP_ADDTL_AMT_DAY_CLEANING__c                            =   testRates[i].PBS_AAAP_ADDTL_AMT_DAY_CLEANING__c,
                     PBS_AAAP_FULLY_SRVC_FIRM_TERM__c = testRates[i].PBS_AAAP_FULLY_SRVC_FIRM_TERM__c,
                     PBS_AAAP_ANNUAL_AMORT_TI_COSTS__c = testRates[i].PBS_AAAP_ANNUAL_AMORT_TI_COSTS__c
 
@@ -1420,18 +1265,9 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         Boolean boolBackup = contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c;
         contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = true;
         contSpaceRates.returnToSpace();
-        //System.assertEquals(true, contSpaceRates.rendAddSpace);
-        //System.assertEquals(false, contSpaceRates.rendOuterSpace);
-        //System.assertEquals(false, contSpaceRates.rendRates);
-        //System.assertEquals(false, contSpaceRates.rendSuccSpace);
 
         contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = false;
         contSpaceRates.returnToSpace();
-        //System.assertEquals(false, contSpaceRates.rendAddSpace);
-        //System.assertEquals(false, contSpaceRates.rendOuterSpace);
-        //System.assertEquals(false, contSpaceRates.rendRates);
-        //System.assertEquals(true, contSpaceRates.rendSuccSpace);
-
         contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = boolBackup;
 
 
@@ -1445,25 +1281,14 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
             System.assertEquals(true, spMap.containsKey(sp1.PBS_AAAP_IDENTIFIER_ID__c));
         } // end for
 
-
         // test that the addRate method renders the inner space page view
         contSpaceRates.addRate();
-        //System.assertEquals(contSpaceRates.rendAddSpace, false);
-        //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-        //System.assertEquals(contSpaceRates.rendRates, true);
-        //System.assertEquals(contSpaceRates.rendSuccSpace, false);
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_OFFER_NUMBER__c, sp.PBS_AAAP_OFFER_NUMBER__c);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-
-
         // test that the deleteSpace method deletes the selected space from the DB
         Set<String> rateIDs = new Set<String>{
                 testRates[0].Id, testRates[1].Id, testRates[2].Id
         };
         PageReference pgSpaceAndRates = Page.PBS_AAAP_SpacesAndRates;
         pgSpaceAndRates.getParameters().put('offerId', testOffer.Id);
-        //System.assertEquals(contSpaceRates.deleteSpace().getUrl(), pgSpaceAndRates.getUrl());       // validate that the delete space method returns the correct page back to the controller
         try {
             List<PBS_AAAP_Space__c> sp2 = [SELECT o.Id FROM PBS_AAAP_Space__c o WHERE o.Id = :contSpaceRates.details[0].spaceID];
         } catch (Exception e) {
@@ -1480,12 +1305,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
 
         // test that the actionBackSpace method will return the user to the spaces and rates summary page
         contSpaceRates.actionBackSpace();
-        //System.assertEquals(contSpaceRates.rendAddSpace, false);
-        //System.assertEquals(contSpaceRates.rendOuterSpace, true);
-        //System.assertEquals(contSpaceRates.rendRates, false);
-        //System.assertEquals(contSpaceRates.rendSuccSpace, false);
-        //System.assertEquals(spacesAndRates.getParameters().get('offerId'), testOffer.Id);
-
         //added by syam for space % check
         contSpaceRates.space.PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c = '$ Per ABOA SF';
         contSpaceRates.saveRates();
@@ -1565,42 +1384,10 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
             Test.setCurrentPageReference(spacesAndRates);                       // set the current page reference to spaces and rates
             PBS_AAAP_ControllerSpacesAndRates contSpaceRates = new PBS_AAAP_ControllerSpacesAndRates();
             contSpaceRates.maxOfferedSpace = 0.00;
-            //contSpaceRates.addNewSpace();
-            //added to test spaces with no rates condition in the addRate() method
-            //contSpaceRates.space.PBS_AAAP_SF_OFFERED__c = 1;
-            //contSpaceRates.addRate();
-
             Test.stopTest();
         }
     }
-/*    //added by Todd Brown SFWS-1126 03/02/2021 to test the invaliduser check
-    static testMethod void controlSpaceAndRatesInvalidUserTest() {
-        system.debug('*** testing controlSpaceAndRatesInvalidUserTest ***');
-        //Create test user to own the rlp and offer
-        User u = PBS_AAAP_UtilityTest.createPortalUser('1');
-        System.assert(u.Id != null);
-        system.debug('*** testing controlSpaceAndRatesValidUserTest: valid userID ***' + u.Id);
-        PBS_AAAP_RLP__c rlp = PBS_AAAP_UtilityTest.createRLP();
-        insert rlp;
-        PBS_AAAP_Offer__c offer = PBS_AAAP_UtilityTest.createOfferInfo();
-        offer.PBS_AAAP_RLP_Number__c = rlp.id;
-        insert offer;
-        system.debug('*** testing controlSpaceAndRatesInvalidUserTest: offerID ***' + offer.Id);
-        //Create test user that will NOT be owner of the rlp/offer
-        User u2 = PBS_AAAP_UtilityTest.createPortalUser('2');
-        System.assert(u2.Id != null);
-        system.debug('*** testing controlSpaceAndRatesInvalidUserTest: invalid userID ***' + u2.Id);
-        System.runAs(u2) {
-            Test.startTest();
-            // create page contexts for testing purposes
-            PageReference spacesAndRates = Page.PBS_AAAP_SpacesAndRates;
-            spacesAndRates.getParameters().put('offerId', offer.Id);
-            Test.setCurrentPageReference(spacesAndRates);                       // set the current page reference to spaces and rates
-            PBS_AAAP_ControllerSpacesAndRates contSpaceRates = new PBS_AAAP_ControllerSpacesAndRates();
-            contSpaceRates.maxOfferedSpace = 0.00;
-            Test.stopTest();
-        }
-    } */
+
     //added by syam to test the submitted offer check
     static testMethod void submittedOfferCheck() {
         //Added By Nik
@@ -1652,32 +1439,18 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         PBS_AAAP_UNIT_TEST_DATA_GENERATOR dataGen = new PBS_AAAP_UNIT_TEST_DATA_GENERATOR();
         PBS_AAAP_DAO_Utilities dao = new PBS_AAAP_DAO_Utilities();
         system.debug('%%%%%%%%'+dataGen.testOffer1.Id);
-        //PBS_AAAP_Offer__c testOffer1 = dao.getOffer(dataGen.testOffer1.Id); commented by Nik
         PBS_AAAP_Offer__c testOffer1 = dao.getOffer(testOffer0.Id); //added by Nik
-        //testOffer1.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c = 1000000;
-        //update testOffer1;
         System.debug('testOffer1 Id is in test class ****' + testOffer1.id);
         PageReference spacesAndRates = Page.PBS_AAAP_SpacesAndRates;
         spacesAndRates.getParameters().put('offerId', testOffer1.Id);
         Test.setCurrentPageReference(spacesAndRates);                       // set the current page reference to spaces and rates
         PBS_AAAP_ControllerSpacesAndRates contSpaceRates = new PBS_AAAP_ControllerSpacesAndRates();
         contSpaceRates.maxOfferedSpace = 0.00;
-        //System.assertEquals(contSpaceRates.offer.Id, testOffer1.Id);
-
-        // contSpaceRates.addNewSpace();
-        //negative testing
         System.debug('before add rate in controlSpaceAndRatesNegativeTest()');
         contSpaceRates.draftMsgFlag = 'true';
-        // contSpaceRates.addRate();
-        // testOffer1.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED;
-        //  contSpaceRates.actionDeleteOffer();
         PageReference pg = contSpaceRates.continueSave();
-        //System.assert(pg != null);  commented by Nik
-
-        //contSpaceRates.redirectToSpaceandRates();
         contSpaceRates.actionCancel();
         system.assert(true);
-        //contSpaceRates.saveForm();
     }
     //added by syam on 08/11/2016
 
@@ -1704,9 +1477,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
     static testMethod void coverSaveRatesTests() {
         system.debug('*** testing coverSaveRatesTests ***');
         PBS_AAAP_DAO_Utilities dao = new PBS_AAAP_DAO_Utilities();
-        //PBS_AAAP_RLP__c rlp1 =  dao.getRLP('a08r0000000UMFVAA4');
-        //     System.debug('rlp in testing is ****'+rlp1);
-
         User u = PBS_AAAP_UtilityTest.createPortalUser();
         System.assert(u.Id != null);
         system.debug('*** testing controlSpaceAndRatesValidUserTest: userID ***' + u.Id);
@@ -1724,7 +1494,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         insert offer;
 
         system.debug('*** testing controlSpaceAndRatesValidUserTest: Count ***' + [SELECT COUNT() FROM PBS_AAAP_Offer__c o WHERE o.LastModifiedById != :u.Id]);
-        //PBS_AAAP_Offer__c oOther = [select o.Id From PBS_AAAP_Offer__c o where o.LastModifiedById != :u.Id limit 1];
         system.debug('*** testing controlSpaceAndRatesValidUserTest: offerID ***' + offer.Id);
         System.runAs(u) {
             Test.startTest();
@@ -1738,8 +1507,7 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
             PBS_AAAP_ControllerSpacesAndRates contSpaceRates = new PBS_AAAP_ControllerSpacesAndRates();
 
 
-            try {  //weston
-                //  contSpaceRates.spaceAndRates = offer;
+            try { 
                 contSpaceRates.rateE.fiveFiveYrFS = 10;
                 contSpaceRates.rateE.fiveFiveYrOptTerm = 0;
                 contSpaceRates.regionCode = 'test';
@@ -1747,24 +1515,18 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
                 contSpaceRates.saveRates();
             } catch (Exception e) {
                 system.assert(e.getMessage()!= null);
-                //System.assert(e.getMessage().contains('5. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 14-15. If Shell rate is unchanged from years 1-13, enter Shell Rate amount from #1 above.'));        // Rate  shouldnt exist, so an exception should occur
             }
 
             offer.PBS_AAAP_Offer_Status__c = 'Submitted';
-            //
-            //
-            try {  //weston
-                //  contSpaceRates.spaceAndRates = offer;
+            try {  
                 contSpaceRates.spaceAndRates.PBS_AAAP_COST_PER_ABOA__c = 0;
                 contSpaceRates.saveRates();
             } catch (Exception e) {
                 system.assert(e.getMessage()!= null);
-                //System.debug('PBS_AAAP_COST_PER_ABOA__c ' + e);
-                // System.assert(e.getMessage().contains('Operating Costs Page : 4. Cost per ABOA SF must be > 0.00'));           // Rate  shouldnt exist, so an exception should occur
+                
             }
 
-            try {  //weston
-                //  contSpaceRates.spaceAndRates = offer;
+            try {  
                 contSpaceRates.rateE.fiveYrFS = 10;
                 contSpaceRates.rateE.tenFiveYrOptTerm = null;
                 contSpaceRates.regionCode = 'test';
@@ -1772,7 +1534,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
                 contSpaceRates.saveRates();
             } catch (Exception e) {
                 system.assert(e.getMessage()!= null);
-                //System.assert(e.getMessage().contains('5. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 16-17. If Shell rate is unchanged from years 1-15, enter Shell Rate amount from #1 above.'));           // Rate  shouldnt exist, so an exception should occur
             }
 //SGanti added 8/2/2021     
 			try {
@@ -1782,34 +1543,23 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
 
                 contSpaceRates.saveRates();
             } catch (Exception e) {
-                system.assert(e.getMessage()!= null);
-                //System.assert(e.getMessage().contains('11. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA).'));           
+                system.assert(e.getMessage()!= null);                
             }
             
             
             
-            try {  //weston
-                //  contSpaceRates.spaceAndRates = offer;
+            try {  
                 contSpaceRates.rateE.tenYrFS = 10;
                 contSpaceRates.rateE.tenEightYrOptTerm = null;
                 contSpaceRates.regionCode = 'test';
 
                 contSpaceRates.saveRates();
             } catch (Exception e) {
-                system.assert(e.getMessage()!= null);
-                //System.assert(e.getMessage().contains('5. Enter Shell Rate per ANSI/BOMA Office Area square foot (ABOA) for years 9-10. If Shell rate is unchanged from years 1-8, enter Shell Rate amount from #1 above.'));           // Rate  shouldnt exist, so an exception should occur
+                system.assert(e.getMessage()!= null);                
             }
 
-
-            //contSpaceRates.addNewSpace();
-            //added to test spaces with no rates condition in the addRate() method
-            //contSpaceRates.addRate();
-            //contSpaceRates.saveRates();
-            //added by syam on  09/30/2016
             PBS_AAAP_Space__c sp = contSpaceRates.defaultSpace(offer.Id);
-            // test that the saveSpace method correctly saves the space to the DB
             contSpaceRates.space = sp;
-            // contSpaceRates.saveRates();
             contSpaceRates.redirectToSpaceandRatesOnly();
             contSpaceRates.redirectToSpaceandRates();
             contSpaceRates.rateE.fiveYrFS = 10;
@@ -1886,13 +1636,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
 
         // test that the addSpace method renders the inner space page view
         contSpaceRates.addNewSpace();
-        //System.assertEquals(contSpaceRates.rendAddSpace, true);
-        //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-        //System.assertEquals(contSpaceRates.rendRates, false);
-        //System.assertEquals(contSpaceRates.rendSuccSpace, false);
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_OFFER_NUMBER__c, sp.PBS_AAAP_OFFER_NUMBER__c);    // addNewSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addNewSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addNewSpace() method should also set the space variable to the "default" settings with the offer number ID included
 
         // test that the genMapRatesToSpace accurately generates an Apex "Map" of rates to spaces
         Map<String, List<PBS_AAAP_Rate__c>> testMapSpaceToRates = contSpaceRates.genMapRatesToSpace(testRates, testSpaces);
@@ -1900,17 +1643,8 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
             System.assertEquals(testMapSpaceToRates.containsKey(spc.Id), true);
         }   // end for
 
-
         // test that the addSucceedingSpace method renders the inner space page view
         contSpaceRates.addSucceedingSpace();
-        //System.assertEquals(contSpaceRates.rendAddSpace, false);
-        //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-        //System.assertEquals(contSpaceRates.rendRates, false);
-        //System.assertEquals(contSpaceRates.rendSuccSpace, true);
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_OFFER_NUMBER__c, sp.PBS_AAAP_OFFER_NUMBER__c);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-
         // test that the convertPbsAaapRate method converts the rate data from the PBS_AAAP_Rate__c structure into the local class RateEntry format
         PBS_AAAP_ControllerSpacesAndRates.RateEntry re = contSpaceRates.convertPbsAaapRate(testRates);
         for (PBS_AAAP_Rate__c rate : testRates) {
@@ -1967,18 +1701,10 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         // test that the action for the "BACK" button returns the user to the operating costs page
         PageReference pgBack = Page.PBS_AAAP_OperatingCosts;
         pgBack.getParameters().put('offerId', testOffer.Id);
-        //System.assertEquals(contSpaceRates.back().getUrl(), pgBack.getUrl());
-
         // test that the action for the rates summary button renders the correct views
         PageReference pgRateSumm = Page.pbs_aaap_spacesandrates;
         pgRateSumm.getParameters().put('offerId', testOffer.Id);
-        //System.assertEquals(contSpaceRates.rateSummary().getUrl(), pgRateSumm.getUrl());
         contSpaceRates.rateSummary();
-        //System.assertEquals(contSpaceRates.rendAddSpace, false);
-        //System.assertEquals(contSpaceRates.rendOuterSpace, true);
-        //System.assertEquals(contSpaceRates.rendRates, false);
-        //System.assertEquals(contSpaceRates.rendSuccSpace, false);
-
         // test that the action to populate and sort the screen fields for the outer space summary table from the rates data returned from the SOQL
         List<PBS_AAAP_ControllerSpacesAndRates.SpaceAndRatesDetails> dets = contSpaceRates.spaceSort(testSpaces, testRates);
         System.assertEquals(contSpaceRates.details.size(), dets.size());           // verify that the summary screen field list is of the same size as the number of spaces.
@@ -2019,11 +1745,7 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         contSpaceRates.editSpace();
         System.assertEquals(contSpaceRates.space.Id, contSpaceRates.details[0].spaceID);       // insure that editSpace is editing the correct space
         if (contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c) {
-            //System.assertEquals(contSpaceRates.rendAddSpace, true);
-            //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-            //System.assertEquals(contSpaceRates.rendRates, false);
-            //System.assertEquals(contSpaceRates.rendSuccSpace, false);
-        }   // end if
+        }
         try {
             contSpaceRates.sfOfferedType = 'Range of ABOA';
             contSpaceRates.space.PBS_AAAP_MAX_OFFERABLE_SPACE__c = 0;
@@ -2061,15 +1783,11 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
             contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = true;
             contSpaceRates.space.PBS_AAAP_MAX_OFFERABLE_SPACE__c = null;
             contSpaceRates.space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c = null;
-            // contSpaceRates.space.PBS_AAAP_ARCH_ENG_FEES__c = null;
-            contSpaceRates.space.PBS_AAAP_ARCH_ENG_FEES__c = 1.00;
-           
+            contSpaceRates.space.PBS_AAAP_ARCH_ENG_FEES__c = 1.00;           
             contSpaceRates.saveSpace();
-
         }
 
         catch (Exception e) {
-            // System.debug('***** e: ' + e);
             System.assert(e.getMessage().contains('You must select a unit of measure for the Architectural and Engineering fees value if you specify a value for the fees'));           // Rate  shouldn't exist, so an exception should occur
         }
 
@@ -2079,7 +1797,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
             contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = true;
             contSpaceRates.space.PBS_AAAP_MAX_OFFERABLE_SPACE__c = null;
             contSpaceRates.space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c = null;
-            // contSpaceRates.space.PBS_AAAP_ARCH_ENG_FEES__c = null;
             contSpaceRates.space.PBS_AAAP_ARCH_ENG_FEES__c = 1.00;
            	contSpaceRates.feePrcntgOrDollar = null;
             contSpaceRates.saveSpace();
@@ -2087,14 +1804,11 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         }
 
         catch (Exception e) {
-            // System.debug('***** e: ' + e);
             System.assert(e.getMessage().contains('You must select a unit of measure for the Architectural and Engineering fees value if you specify a value for the fees'));           // Rate  shouldn't exist, so an exception should occur
         }
         
-  //SGanti end
+  		//SGanti end
         try {
-
-            //contSpaceRates.space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c =0;
             contSpaceRates.space.PBS_AAAP_ARCH_ENG_FEES__c = 0.00;
             contSpaceRates.readOnlyScreen = 'false';
             contSpaceRates.regionCode = 'test';
@@ -2111,11 +1825,7 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
 
         contSpaceRates.editSpace();
         if (contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c) {
-            //System.assertEquals(contSpaceRates.rendAddSpace, false);
-            //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-            //System.assertEquals(contSpaceRates.rendRates, false);
-            //System.assertEquals(contSpaceRates.rendSuccSpace, true);
-        }   // end if
+        }
 
         contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = true;   // reset the space so that it is considered a new space
 
@@ -2125,24 +1835,10 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         // strip the IDs to facilitate upload
         for (Integer i = 0; i < testRates.size(); i++) {
             PBS_AAAP_Rate__c rup = new PBS_AAAP_Rate__c(
-                    //PBS_AAAP_TWO_YEAR_EXTENSION__c                                    =   testRates[i].PBS_AAAP_TWO_YEAR_EXTENSION__c,
                     PBS_AAAP_SPACE__c = testRates[i].PBS_AAAP_SPACE__c,
-                    //PBS_AAAP_OT_RATE_COOLING_HEAT__c                              =   testRates[i].PBS_AAAP_OT_RATE_COOLING_HEAT__c + i,
-                    //PBS_AAAP_ONE_YEAR_EXTENSION__c                                    =   testRates[i].PBS_AAAP_ONE_YEAR_EXTENSION__c,
                     PBS_AAAP_OFFER_NUMBER__c = testRates[i].PBS_AAAP_OFFER_NUMBER__c,
-                    //PBS_AAAP_NO_OF_MONTHS_FREE_OPTION_TERM__c     =   testRates[i].PBS_AAAP_NO_OF_MONTHS_FREE_OPTION_TERM__c,
-                    //PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c           =   testRates[i].PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c,
                     PBS_AAAP_LEASE_TERM__c = testRates[i].PBS_AAAP_LEASE_TERM__c,
-                    //PBS_AAAP_IDENTIFIER_ID__c                                                 =   testRates[i].PBS_AAAP_IDENTIFIER_ID__c,
-                    //PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c                =   testRates[i].PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c,
-                    //PBS_AAAP_COST_FOR_TI__c                                                   =   testRates[i].PBS_AAAP_COST_FOR_TI__c,
-                    //PBS_AAAP_COOP_COMM_TOGSA_FIRM_TERM__c         =   testRates[i].PBS_AAAP_COOP_COMM_TOGSA_FIRM_TERM__c,
                     PBS_AAAP_BASE_RATE__c = testRates[i].PBS_AAAP_BASE_RATE__c,
-                    //PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c              =   testRates[i].PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c,
-                    //PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c                       =   testRates[i].PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c,
-                    //PBS_AAAP_AMORTIZ_RATE_T1_ABOVE_20__c                  =   testRates[i].PBS_AAAP_AMORTIZ_RATE_T1_ABOVE_20__c,
-                    //PBS_AAAP_ADDTL_AMT_FOR_GOVT_OWNED_EQUIP__c    =   testRates[i].PBS_AAAP_ADDTL_AMT_FOR_GOVT_OWNED_EQUIP__c,
-                    //PBS_AAAP_ADDTL_AMT_DAY_CLEANING__c                            =   testRates[i].PBS_AAAP_ADDTL_AMT_DAY_CLEANING__c,
                     PBS_AAAP_FULLY_SRVC_FIRM_TERM__c = testRates[i].PBS_AAAP_FULLY_SRVC_FIRM_TERM__c,
                     PBS_AAAP_ANNUAL_AMORT_TI_COSTS__c = testRates[i].PBS_AAAP_ANNUAL_AMORT_TI_COSTS__c
 
@@ -2251,7 +1947,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         String ratesCol3 = qlContr.ratesCol3;
         Integer rlpFY = qlContr.rlpFY;
         String notation = qlContr.notation;
-        //String notationSucc = qlContr.notationSucc;
         String opCostsQ1 = qlContr.opCostsQ1;
         String opCostsQ2 = qlContr.opCostsQ2;
         String opCostsQ3 = qlContr.opCostsQ3;
@@ -2386,8 +2081,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
 
         contSpaceRates.isSucceeding = true;
         contSpaceRates.validateOfferFormFields();
-        //contSpaceRates.editRate();
-
         space.PBS_AAAP_SF_OFFERED__c = 4;
         space.PBS_AAAP_MAX_OFFERABLE_SPACE__c = 3;
         update space;
@@ -2437,7 +2130,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
 
         contSpaceRates.isSucceeding = true;
         contSpaceRates.validateOfferFormFields();
-        //contSpaceRates.editRate();
 
         space.PBS_AAAP_SF_OFFERED__c = NULL;
         space.PBS_AAAP_MAX_OFFERABLE_SPACE__c = 3;
@@ -2488,8 +2180,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
 
         contSpaceRates.isSucceeding = true;
         contSpaceRates.validateOfferFormFields();
-        //contSpaceRates.editRate();
-
         space.PBS_AAAP_SF_OFFERED__c = 4;
         space.PBS_AAAP_MAX_OFFERABLE_SPACE__c = NULL;
         update space;
@@ -2521,8 +2211,9 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
 
         contSpaceRates.newOrCont = 'TRUE';
         contSpaceRates.space = space;
-
+		
         contSpaceRates.redirectToSpaceandRatesOnly();
+        contSpaceRates.feePrcntgOrDollar = null;
         contSpaceRates.redirectToSpaceandRates();
         contSpaceRates.saveRates();
         system.assert(true);
@@ -2576,8 +2267,7 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
                 PBS_AAAP_Year__c = '2016',
                 PBS_AAAP_BSAC_per_ABOA__c = 25
         );
-        //Vaishali 11/21 added above PBS_AAAP_ALLOW_TIER2_AMMORT__c = false, PBS_AAAP_BSAC_per_ABOA__c = 0
-        //Vaishali 11/21 changed PBS_AAAP_BSAC_per_ABOA__c = 6
+
 
         system.assert(testRLP1.PBS_AAAP_RLP_Number__c != null);
         upsert testRLP1;
@@ -2638,7 +2328,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
                 PBS_AAAP_GC_OVERHEAD_AND_PROF__c = 8.00,
                 PBS_AAAP_MANAGEMENT_COORD_FEES__c = 0.00,
                 PBS_AAAP_GC_CONDITIONS__c = 0.00,
-                //PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c = '%',
                 PBS_AAAP_ARCH_ENG_FEES__c = 3.50,
                 PBS_AAAP_GSA_EXPIRE_LEASE_NUMBER__c = 'Unit Test GSA Lease',
                 PBS_AAAP_IDENTIFIER_TYPE__c = 'DEFAULT',
@@ -2725,7 +2414,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         testOtherCost1.PBS_AAAP_OFFER_NUMBER__c = testOffer1.Id;
         upsert testOtherCost1;
 
-        //PBS_AAAP_UNIT_TEST_DATA_GENERATOR dataGen = new PBS_AAAP_UNIT_TEST_DATA_GENERATOR();
         PBS_AAAP_DAO_Utilities dao = new PBS_AAAP_DAO_Utilities();
         PBS_AAAP_Offer__c testOffer = dao.getOffer(testOffer1.Id);
         List<PBS_AAAP_Space__c> testSpaces = dao.getSpaces(testOffer1.Id);
@@ -2773,28 +2461,13 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         System.assertEquals(contSpaceRates.feePrcntgOrDollar, null);        // defaultSpace() method should also set the UOM variable for the architectural engineering fee type to null
         //as per FY16 as it is mandatory as we are forcing the related values to '0.00'
         contSpaceRates.feePrcntgOrDollar = '%';
-        // test that the getLrgOrdinal() method returns the largest ordinal for the number of spaces passed as a list to the function
-        //System.assertEquals(contSpaceRates.getLrgOrdinal(testSpaces), 1);   // there is only one test space so the function should return a 1
-
         // test that the saveSpace method correctly saves the space to the DB
         contSpaceRates.space = sp;
         System.debug('weston');
         System.debug('*****myUnitTest contSpaceRates.space before saveSpace(): ' + contSpaceRates.space);
         contSpaceRates.saveSpace();
         System.debug('*****myUnitTest contSpaceRates.space after saveSpace(): ' + contSpaceRates.spaces.size());
-        //System.assertEquals(1, contSpaceRates.spaces.size());   // save spaces adds the new space to the internal list of spaces, for our purposes there are 2, the initial (found by constructor) and then the one added by saveSpace
-
-
-        // test that the addSpace method renders the inner space page view
         contSpaceRates.addNewSpace();
-        //System.assertEquals(contSpaceRates.rendAddSpace, true);
-        //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-        //System.assertEquals(contSpaceRates.rendRates, false);
-        //System.assertEquals(contSpaceRates.rendSuccSpace, false);
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_OFFER_NUMBER__c, sp.PBS_AAAP_OFFER_NUMBER__c);    // addNewSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addNewSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addNewSpace() method should also set the space variable to the "default" settings with the offer number ID included
-
         // test that the genMapRatesToSpace accurately generates an Apex "Map" of rates to spaces
         Map<String, List<PBS_AAAP_Rate__c>> testMapSpaceToRates = contSpaceRates.genMapRatesToSpace(testRates, testSpaces);
         for (PBS_AAAP_Space__c spc : testSpaces) {
@@ -2804,14 +2477,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
 
         // test that the addSucceedingSpace method renders the inner space page view
         contSpaceRates.addSucceedingSpace();
-        //System.assertEquals(contSpaceRates.rendAddSpace, false);
-        //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-        //System.assertEquals(contSpaceRates.rendRates, false);
-        //System.assertEquals(contSpaceRates.rendSuccSpace, true);
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_OFFER_NUMBER__c, sp.PBS_AAAP_OFFER_NUMBER__c);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-
         // test that the convertPbsAaapRate method converts the rate data from the PBS_AAAP_Rate__c structure into the local class RateEntry format
         PBS_AAAP_ControllerSpacesAndRates.RateEntry re = contSpaceRates.convertPbsAaapRate(testRates);
         for (PBS_AAAP_Rate__c rate : testRates) {
@@ -2868,18 +2533,10 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         // test that the action for the "BACK" button returns the user to the operating costs page
         PageReference pgBack = Page.PBS_AAAP_OperatingCosts;
         pgBack.getParameters().put('offerId', testOffer.Id);
-        //System.assertEquals(contSpaceRates.back().getUrl(), pgBack.getUrl());
-
         // test that the action for the rates summary button renders the correct views
         PageReference pgRateSumm = Page.pbs_aaap_spacesandrates;
         pgRateSumm.getParameters().put('offerId', testOffer.Id);
-        //System.assertEquals(contSpaceRates.rateSummary().getUrl(), pgRateSumm.getUrl());
         contSpaceRates.rateSummary();
-        //System.assertEquals(contSpaceRates.rendAddSpace, false);
-        //System.assertEquals(contSpaceRates.rendOuterSpace, true);
-        //System.assertEquals(contSpaceRates.rendRates, false);
-        //System.assertEquals(contSpaceRates.rendSuccSpace, false);
-
         // test that the action to populate and sort the screen fields for the outer space summary table from the rates data returned from the SOQL
         List<PBS_AAAP_ControllerSpacesAndRates.SpaceAndRatesDetails> dets = contSpaceRates.spaceSort(testSpaces, testRates);
         System.assertEquals(contSpaceRates.details.size(), dets.size());           // verify that the summary screen field list is of the same size as the number of spaces.
@@ -2920,21 +2577,13 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         contSpaceRates.editSpace();
         System.assertEquals(contSpaceRates.space.Id, contSpaceRates.details[0].spaceID);       // insure that editSpace is editing the correct space
         if (contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c) {
-            //System.assertEquals(contSpaceRates.rendAddSpace, true);
-            //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-            //System.assertEquals(contSpaceRates.rendRates, false);
-            //System.assertEquals(contSpaceRates.rendSuccSpace, false);
-        }   // end if
+        }
 
         contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = false;  // rig the space so that it is considered a succeeding space
 
         contSpaceRates.editSpace();
         if (contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c) {
-            //System.assertEquals(contSpaceRates.rendAddSpace, false);
-            //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-            //System.assertEquals(contSpaceRates.rendRates, false);
-            //System.assertEquals(contSpaceRates.rendSuccSpace, true);
-        }   // end if
+        }
 
         contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = true;   // reset the space so that it is considered a new space
 
@@ -2944,24 +2593,10 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         // strip the IDs to facilitate upload
         for (Integer i = 0; i < testRates.size(); i++) {
             PBS_AAAP_Rate__c rup = new PBS_AAAP_Rate__c(
-                    //PBS_AAAP_TWO_YEAR_EXTENSION__c                                    =   testRates[i].PBS_AAAP_TWO_YEAR_EXTENSION__c,
                     PBS_AAAP_SPACE__c = testRates[i].PBS_AAAP_SPACE__c,
-                    //PBS_AAAP_OT_RATE_COOLING_HEAT__c                              =   testRates[i].PBS_AAAP_OT_RATE_COOLING_HEAT__c + i,
-                    //PBS_AAAP_ONE_YEAR_EXTENSION__c                                    =   testRates[i].PBS_AAAP_ONE_YEAR_EXTENSION__c,
                     PBS_AAAP_OFFER_NUMBER__c = testRates[i].PBS_AAAP_OFFER_NUMBER__c,
-                    //PBS_AAAP_NO_OF_MONTHS_FREE_OPTION_TERM__c     =   testRates[i].PBS_AAAP_NO_OF_MONTHS_FREE_OPTION_TERM__c,
-                    //PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c           =   testRates[i].PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c,
                     PBS_AAAP_LEASE_TERM__c = testRates[i].PBS_AAAP_LEASE_TERM__c,
-                    //PBS_AAAP_IDENTIFIER_ID__c                                                 =   testRates[i].PBS_AAAP_IDENTIFIER_ID__c,
-                    //PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c                =   testRates[i].PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c,
-                    //PBS_AAAP_COST_FOR_TI__c                                                   =   testRates[i].PBS_AAAP_COST_FOR_TI__c,
-                    //PBS_AAAP_COOP_COMM_TOGSA_FIRM_TERM__c         =   testRates[i].PBS_AAAP_COOP_COMM_TOGSA_FIRM_TERM__c,
                     PBS_AAAP_BASE_RATE__c = testRates[i].PBS_AAAP_BASE_RATE__c,
-                    //PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c              =   testRates[i].PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c,
-                    //PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c                       =   testRates[i].PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c,
-                    //PBS_AAAP_AMORTIZ_RATE_T1_ABOVE_20__c                  =   testRates[i].PBS_AAAP_AMORTIZ_RATE_T1_ABOVE_20__c,
-                    //PBS_AAAP_ADDTL_AMT_FOR_GOVT_OWNED_EQUIP__c    =   testRates[i].PBS_AAAP_ADDTL_AMT_FOR_GOVT_OWNED_EQUIP__c,
-                    //PBS_AAAP_ADDTL_AMT_DAY_CLEANING__c                            =   testRates[i].PBS_AAAP_ADDTL_AMT_DAY_CLEANING__c,
                     PBS_AAAP_FULLY_SRVC_FIRM_TERM__c = testRates[i].PBS_AAAP_FULLY_SRVC_FIRM_TERM__c,
                     PBS_AAAP_ANNUAL_AMORT_TI_COSTS__c = testRates[i].PBS_AAAP_ANNUAL_AMORT_TI_COSTS__c
 
@@ -3012,18 +2647,8 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         Boolean boolBackup = contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c;
         contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = true;
         contSpaceRates.returnToSpace();
-        //System.assertEquals(true, contSpaceRates.rendAddSpace);
-        //System.assertEquals(false, contSpaceRates.rendOuterSpace);
-        //System.assertEquals(false, contSpaceRates.rendRates);
-        //System.assertEquals(false, contSpaceRates.rendSuccSpace);
-
         contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = false;
         contSpaceRates.returnToSpace();
-        //System.assertEquals(false, contSpaceRates.rendAddSpace);
-        //System.assertEquals(false, contSpaceRates.rendOuterSpace);
-        //System.assertEquals(false, contSpaceRates.rendRates);
-        //System.assertEquals(true, contSpaceRates.rendSuccSpace);
-
         contSpaceRates.space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = boolBackup;
 
 
@@ -3037,25 +2662,14 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
             System.assertEquals(true, spMap.containsKey(sp1.PBS_AAAP_IDENTIFIER_ID__c));
         } // end for
 
-
         // test that the addRate method renders the inner space page view
         contSpaceRates.addRate();
-        //System.assertEquals(contSpaceRates.rendAddSpace, false);
-        //System.assertEquals(contSpaceRates.rendOuterSpace, false);
-        //System.assertEquals(contSpaceRates.rendRates, true);
-        //System.assertEquals(contSpaceRates.rendSuccSpace, false);
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_OFFER_NUMBER__c, sp.PBS_AAAP_OFFER_NUMBER__c);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-        //System.assertEquals(contSpaceRates.space.PBS_AAAP_IDENTIFIER_TYPE__c, contSpaceRates.sfOfferedType);    // addSucceedingSpace() method should also set the space variable to the "default" settings with the offer number ID included
-
-
         // test that the deleteSpace method deletes the selected space from the DB
         Set<String> rateIDs = new Set<String>{
                 testRates[0].Id, testRates[1].Id, testRates[2].Id
         };
         PageReference pgSpaceAndRates = Page.PBS_AAAP_SpacesAndRates;
         pgSpaceAndRates.getParameters().put('offerId', testOffer.Id);
-        //System.assertEquals(contSpaceRates.deleteSpace().getUrl(), pgSpaceAndRates.getUrl());       // validate that the delete space method returns the correct page back to the controller
         try {
             List<PBS_AAAP_Space__c> sp2 = [SELECT o.Id FROM PBS_AAAP_Space__c o WHERE o.Id = :contSpaceRates.details[0].spaceID];
         } catch (Exception e) {
@@ -3072,12 +2686,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
 
         // test that the actionBackSpace method will return the user to the spaces and rates summary page
         contSpaceRates.actionBackSpace();
-        //System.assertEquals(contSpaceRates.rendAddSpace, false);
-        //System.assertEquals(contSpaceRates.rendOuterSpace, true);
-        //System.assertEquals(contSpaceRates.rendRates, false);
-        //System.assertEquals(contSpaceRates.rendSuccSpace, false);
-        //System.assertEquals(spacesAndRates.getParameters().get('offerId'), testOffer.Id);
-
         // test that the Space method will generate a default space
         contSpaceRates.clearSpace();
         System.assertEquals(contSpaceRates.space.PBS_AAAP_OFFER_NUMBER__c, testOffer.Id);
@@ -3116,9 +2724,6 @@ private class PBS_AAAP_UNIT_TEST_ContSpaceAndRates {
         for (PBS_AAAP_Space__c sp1 : testSpaces) {
             sp1.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c = false;
         }
-
-        // contSpaceRates.actionDeleteOffer();
-
 
     }
 

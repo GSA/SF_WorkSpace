@@ -106,6 +106,11 @@
         <visible>true</visible>
     </applicationVisibilities>
     <applicationVisibilities>
+        <application>standard__LightningInstrumentation</application>
+        <default>false</default>
+        <visible>true</visible>
+    </applicationVisibilities>
+    <applicationVisibilities>
         <application>standard__LightningSales</application>
         <default>false</default>
         <visible>true</visible>
@@ -1017,6 +1022,10 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>PBS_AAAP_OfferPreviewPageControllerTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>PBS_AAAP_OfferPropertyOwner</apexClass>
         <enabled>false</enabled>
     </classAccesses>
@@ -1261,7 +1270,63 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>PBS_Leasing_AttachmentController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_AttachmentControllerTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>PBS_Leasing_GIS_MapController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_OfferOptionsController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_OfferOptionsController_Test</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_OfferPropertyWrapper</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_OfferPropertyWrapper_Test</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_OfferRLPController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_OfferRLPControllerTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_OfferSpaceController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_OfferSpaceController_Test</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_ProgressBarController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_ProgressBarControllerTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_PropertyController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_PropertyController_Test</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
@@ -2782,6 +2847,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Attachment_Type_Mapping__mdt.Attachment_Type__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Audit__c.Action__c</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -3553,36 +3623,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>ContactPointTypeConsent.EngagementChannelTypeId</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ContentVersion.LEXMAGICMOVER__LegacyNoteConvertedDate__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ContentVersion.LEXMAGICMOVER__LegacyNoteConvertedId__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ContentVersion.LEXMAGICMOVER__LegacyNoteConvertedLastModifiedDateTime__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ContentVersion.LEXMAGICMOVER__LegacyNoteConvertedLastModifiedDate__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ContentVersion.LEXMAGICMOVER__LegacyNoteConvertedOwnerId__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ContentVersion.LEXMAGICMOVER__LegacyNoteConvertedParentId__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -20157,7 +20197,17 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Building_Name__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>PBS_AAAP_Property__c.PBS_AAAP_City__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Common_Area_Factor__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -20168,6 +20218,51 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>PBS_AAAP_Property__c.PBS_AAAP_County__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_DUNS_Number__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_GARAGE_SPACE_RSF__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_GEN_PURPOSE_RENTABLE__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_HVAC_HRS_MON_TO_FRI_END__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_HVAC_HRS_MON_TO_FRI_START__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_HVAC_HRS_ON_SAT_END__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_HVAC_HRS_ON_SAT_START__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_HVAC_HRS_ON_SUN_END__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_HVAC_HRS_ON_SUN_START__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -20192,12 +20287,112 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Monthly_cost_nonres_gar_park__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Monthly_cost_nonres_sur_park__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Monthly_cost_res_gar_park__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Monthly_cost_res_sur_park__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_OFFEROR_INTEREST_OTHER__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_OFFEROR_INTEREST__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_OFFICE_SPACE_RSF__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Owner_Address__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Owner_City__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Owner_Name__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Owner_State__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Owner_Zip__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Parking_Onsite__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_RETAIL_SPACE_RSF__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Renovation_Year__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>PBS_AAAP_Property__c.PBS_AAAP_State__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>PBS_AAAP_Property__c.PBS_AAAP_Street_Address__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Total_Park_Spaces_Offered__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Total_Structured_Parking_Spaces__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Total_Surface_Parking_Spaces__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_User_Defined_Address__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -20212,12 +20407,27 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Year_Built__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>PBS_AAAP_Property__c.PBS_AAAP_ZipCode__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_floors_Suites_in_Offered_Space__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>PBS_AAAP_Property__c.PBS_AAAP_isBuildingProblem__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_AAAP_Property__c.PBS_RSAP_Property_Owner_Same_as_Offeror__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -23008,6 +23218,61 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>PBS_Lease__c.Short_Lease_Number__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_Leasing_Dynamic_Datatable_Column__mdt.Initial_Width__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_Leasing_Dynamic_Datatable_Column__mdt.PBS_Leasing_Dynamic_Datatable__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_Leasing_Dynamic_Datatable_Column__mdt.PBS_Leasing_Field_API_Name__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_Leasing_Dynamic_Datatable_Column__mdt.PBS_Leasing_Type__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_Leasing_Dynamic_Datatable__mdt.Filter__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_Leasing_Dynamic_Datatable__mdt.PBS_Leasing_Object_API_Name__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_Leasing_Dynamic_Datatable__mdt.PBS_Leasing_Related_Field_API_Name__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_Leasing_Required_Offer_Fields__mdt.Error_Message__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_Leasing_Required_Offer_Fields__mdt.Filter__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_Leasing_Required_Offer_Fields__mdt.Order_Number__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>PBS_Leasing_Required_Offer_Fields__mdt.Page_name__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -28097,6 +28362,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Progress_Bar_Step__mdt.Page_URL__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Project_Level_Parameter__c.Above_Ground__c</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -31885,6 +32155,9 @@
         <layout>AssociatedLocation-Associated Location Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
+        <layout>Attachment_Type_Mapping__mdt-Attachment Type Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
         <layout>Audit__c-Audit Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
@@ -31968,6 +32241,9 @@
         <layout>EmpUserProvisioningProcess-Employee User Provisioning Process Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
+        <layout>Employee-Employee Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
         <layout>Event-Event Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
@@ -31990,6 +32266,9 @@
     </layoutAssignments>
     <layoutAssignments>
         <layout>Individual-Individual Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>InternalOrganizationUnit-Internal Organization Unit Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>LMT_CRM_Permission_Sets__mdt-LMT Permission Set Layout</layout>
@@ -32685,6 +32964,15 @@
         <layout>PBS_Lease__c-PBS Lease Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
+        <layout>PBS_Leasing_Dynamic_Datatable_Column__mdt-Dynamic Datatable%09Column Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>PBS_Leasing_Dynamic_Datatable__mdt-Dynamic Datatable Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>PBS_Leasing_Required_Offer_Fields__mdt-Required Offer Field Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
         <layout>PBS_Project__c-PBS Project Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
@@ -33099,6 +33387,12 @@
     <layoutAssignments>
         <layout>Professional_Service_Estimate__c-Professional Service Estimate Default Layout</layout>
         <recordType>Professional_Service_Estimate__c.User_Defined_R_A</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Progress_Bar_Step__mdt-Progress Bar Step Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Progress_Bar__mdt-Progress Bar Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Project_Level_Parameter__c-Project Level Parameter Layout</layout>

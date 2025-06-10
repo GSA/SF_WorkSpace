@@ -129,12 +129,24 @@
                     <td width="25%">6. Total ANSI/BOMA Occupant
                         <div class="margin_left_13">Area (ABOA) Square Feet</div>
                         <div class="margin_left_13">(SF) in Building</div><br/>
-                        <div class="data_cell margin_left_13 ">N/A</div>
+                        <div class="data_cell margin_left_13 ">
+                            <!--N/A-->                            
+                            <apex:outputText value="{0, number, #,###,###,##0.00}">
+                                <apex:param value="{!OfferWrapper.PBS_AAAP_TOTAL_BOMA_USF_OFFERED}"/>
+                            </apex:outputText>
+                            
+                        </div>
                     </td>
                     <td width="20%" class="border_right_none">7. Building
                         <div class="margin_left_13">Common Area</div>
                         <div class="margin_left_13">Factor (CAF)</div><br/>
-                        <div class="data_cell margin_left_13 ">N/A</div>
+                        <div class="data_cell margin_left_13 ">
+                             <!--N/A-->
+                            <apex:outputText value="{0, number, #,###,###,##0.00}">
+                                <apex:param value="{!OfferWrapper.PBS_AAAP_Building_Common_Area_Factor}"/>
+                            </apex:outputText>%
+                           
+                        </div>
                     </td>
 
 
@@ -369,13 +381,7 @@
                                 </td>
                             </tr>
                         </table>
-                    <!-- 
-                        <div class="margin_top_8   text_small padding_bottom_2">c. Amortization Interest Rate:
-                            <span class="data_cell_inline"> {!OfferWrapper.PBS_AAAP_TI_Amorti_Interest_Rate}%</span> &nbsp;&nbsp;&nbsp;|
-                                                &nbsp;&nbsp;&nbsp;  d. Amortization Period in Months:
-                            <span class="data_cell_inline"> {!OfferWrapper.PBS_AAAP_TI_Amorization_in_Years}</span>
-                        </div>
-                    -->
+                    
 
                     </td>
                     <td class="data_cell vertical_align_middle text_right padding_bottom_0">
@@ -431,13 +437,7 @@
                                 </td>
                             </tr>
                         </table>
-                    <!--
-                        <div class="margin_top_8 text_small padding_bottom_2">c. Amortization Interest Rate:
-                            <span class="data_cell_inline"> {!OfferWrapper.PBS_AAAP_BSAC_Amorti_Interest_Rate}</span> %&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                            d. Amortization Period in Months:
-                            <span class="data_cell_inline"> {!OfferWrapper.PBS_AAAP_BSAC_Amorization_in_Years}</span>
-                        </div>
-                    -->
+                    
                     </td>
                     <td class="data_cell vertical_align_middle text_right">
                         <apex:outputText value="{0, number,currency}">
@@ -1046,20 +1046,19 @@
                 <tr>
                     <td class="border_none">
                         <div class="margin_bottom_5 margin_left_20">
-                            <img src="{!IF(OfferWrapper.PBS_RSAP_Offeror_Seismic_Declaration_YES_NO == 'No',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Offeror_Seismic_Declaration == 'The RLP does not contain seismic requirements.',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
                             />&nbsp;a. The RLP does NOT contain seismic requirements.</div>
                         <div class="margin_bottom_5 margin_left_20">
-                            <img src="{!IF(OfferWrapper.PBS_RSAP_Offeror_Seismic_Declaration == 'Fully meets seismic requirements or meets an exemption under the RLP',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Offeror_Seismic_Declaration == 'Meets',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
                             />&nbsp;b. The Building either fully meets RLP seismic requirements or meets an exemption.</div>
                         <div class="margin_bottom_5 margin_left_20">
-                            <img src="{!IF(OfferWrapper.PBS_RSAP_Offeror_Seismic_Declaration == 'Does not meet seismic requirements, but will be retrofitted to meet seismic requirements',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
-                            />&nbsp;c. The Building will be retrofitted to meet RLP seismic requirements it does not currently
-                            meet.</div>
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Offeror_Seismic_Declaration == 'Will meet',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;c. The Building will be retrofitted to meet RLP seismic requirements it does not currently meet.</div>
                         <div class="margin_bottom_5 margin_left_20">
-                            <img src="{!IF(OfferWrapper.PBS_RSAP_Offeror_Seismic_Declaration == 'Will be constructed to meet seismic requirements',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Offeror_Seismic_Declaration == 'The building will be constructed to meet RLP seismic requirements.',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
                             />&nbsp;d. The Building will be constructed to meet RLP seismic requirements.</div>
                         <div class="margin_bottom_5 margin_left_20">
-                            <img src="{!IF(OfferWrapper.PBS_RSAP_Offeror_Seismic_Declaration == 'Will not meet seismic requirements',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_Offeror_Seismic_Declaration == 'Will not meet',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
                             />&nbsp;e. The Building will NOT meet RLP seismic requirements.</div>
                     </td>
                 </tr>
@@ -1098,7 +1097,7 @@
                         <div class=" margin_left_80">
                             <img src="{!IF(OfferWrapper.PBS_RSAP_Energy_Star_Meets_Exceptions == 'Special Category',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
                             />&nbsp;(2) The Lease would be in a building of historical, architectural, or cultural significance
-                            listed or eligible to be listed
+                            listed or eligible to be listed                            
                             <br/>
                             <div class="margin_left_40">on the National Register of Historic Places.</div>
                         </div>
@@ -1110,7 +1109,7 @@
                             energy efficiency and<br/> conservation improvements and has determined:</div>
                         <div class=" margin_left_80">
                             <img src="{!IF(OfferWrapper.PBS_AAAP_Energy_Star_Evaluation == 'Improvements declared',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
-                            />&nbsp;(i) Cost effective improvements have been identified and are attached to this offerwrapper.</div>
+                            />&nbsp;(i) Cost effective improvements have been identified and are attached to this offer.</div>
                         <div class=" margin_left_80 margin_bottom_4">
                             <img src="{!IF(OfferWrapper.PBS_AAAP_Energy_Star_Evaluation == 'no effective improvements',  $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
                             />&nbsp;(ii) There are no cost effective improvements. Supporting documentation is attached to
@@ -1148,15 +1147,18 @@
                 <tr>
                     <td class="border_none">
                         <div class=" margin_left_20">
-                            <img src="{!IF(OfferWrapper.PBS_RSAP_HubZone_Waiver  == 'I am a HUBZone SBC Offeror and I elect to waive the price evaluation preference',   $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
-                            />&nbsp;a. I am a HUBZone Small Business Concern (SBC) Offeror and I elect to waive the price evaluation
-                            preference.</div>
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_HubZone_Waiver  == 'I am a HUBZone small business concern offeror, and I elect to waive the price evaluation preference.',   $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;b. I am a HUBZone Small Business Concern (SBC) Offeror and I elect to waive the price evaluation
+                            preference.
+                        </div>
                         <div class=" margin_left_20">
-                            <img src="{!IF(OfferWrapper.PBS_RSAP_HubZone_Waiver  == 'I am a HUBZone SBC Offeror and do not waive the price evaluation preference',   $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
-                            />&nbsp;b. I am a HUBZone SBC Offeror and I do NOT waive the price evaluation preference.</div>
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_HubZone_Waiver  == 'I am a HUBZone small business concern offeror, and do not waive the price evaluation preference.',   $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;c. I am a HUBZone SBC Offeror and I do NOT waive the price evaluation preference.
+                        </div>
                         <div class="margin_bottom_5 margin_left_20">
-                            <img src="{!IF(OfferWrapper.PBS_RSAP_HubZone_Waiver  == 'I am not a HUBZone SBC Offeror. This question does not apply to me',   $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
-                            />&nbsp;c. I am NOT a HUBZone SBC Offeror. The question does not apply.</div>
+                            <img src="{!IF(OfferWrapper.PBS_RSAP_HubZone_Waiver  == 'I am not a HUBZone small business concern offeror.',   $Resource.checkbox_checked, $Resource.checkbox_unchecked)}"
+                            />&nbsp;a. I am NOT a HUBZone SBC Offeror. The question does not apply.
+                        </div>
                     </td>
                 </tr>
             </table>
@@ -1376,10 +1378,7 @@
                     <td class="border_none">
                         <apex:outputPanel rendered="{!stepFreeRentRecords.size > 0}">
                             <br/>
-                            <!--
-                            <button type="button" class="button" >Add a Step Rent</button>
-                            <button type="button" class="button">Remove a Step Rent</button>
-                            -->
+                            
                             <img src="{!$Resource.Form1364StepRentButtons}"/>
                             <br/>
                             <br/>
@@ -1440,8 +1439,7 @@
                     <td class="border_none">
                         <apex:outputPanel rendered="{!renewalOptionsRecords.size > 0}">
                             <br/>
-                            <!-- button type="button" class="button">Add an Option</>
-                            <button type="button" class="button">Remove an Option</button -->
+                            
                             <img src="{!$Resource.Form1364RenewalOptionsButtons}"/>
                             <br/>
                             <br/>
@@ -1536,8 +1534,7 @@
                     <td class="border_none">
                         <apex:outputPanel rendered="{!renewalOptionsRecords.size > 0}" style="width:100%">
                             <br/>
-                            <!-- button type="button" class="button">Add a Building/Tax Parcel/>
-                            <button type="button" class="button">Remove a Building/Tax Parcel</button  -->
+                            
                             <img src="{!$Resource.Form1364AdditionalTaxParcelButtons}"/>
                             <br/>
                             <br/>
@@ -1567,6 +1564,8 @@
                 <tr>
                     <td  class="data_cell border_none">{!OfferWrapper.PBS_AAAP_Offer_Additional_Remarks} </td>
                 </tr>
+                <br /><b>Additional Seismic Information:</b>  
+                <br />Building Type:<span class="border_none" style="border-top:0px;padding-left:5px;font-size:13px;color:red;">{!offerWrapper.PBS_AAAP_BUILDING_TYPE}</span>&#160;Building Code:<span class="border_none" style="border-top:0px;padding-left:5px;font-size:13px;color:red;">{!offerWrapper.PBS_AAAP_BUILDING_CODE}</span>&#160;Building Code Year:<span class="border_none" style="border-top:0px;padding-left:5px;font-size:13px;color:red;">{!offerWrapper.PBS_AAAP_BUILDING_CODE_YEAR}</span><br /><br />
             </table>
         </div>
     </body>

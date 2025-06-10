@@ -1,5 +1,5 @@
+@isTest
 public with sharing class PBS_AAAP_UtilityTest {
-
 
     public static User createPortalUser() {
         return createPortalUser('');
@@ -210,7 +210,6 @@ public with sharing class PBS_AAAP_UtilityTest {
 
         return othercosts;
     }
-//Vaishali added     PBS_AAAP_BSAC_RATE__c=0,PBS_AAAP_BSAC__c=0,PBS_AAAP_AMORTIZ_RATE_T1_ABOVE_20__c=0
     public static PBS_AAAP_Rate__c createRate() {
         PBS_AAAP_Rate__c rate = new PBS_AAAP_Rate__c(PBS_AAAP_BASE_RATE__c = 10.00, PBS_AAAP_COST_FOR_TI__c = 10.00, PBS_AAAP_Vacant_Premise_Rate__c = 10.00,
                 PBS_AAAP_LEASE_TERM__c = 'FiveYear', PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c = 10.00, PBS_AAAP_FULLY_SRVC_FIRM_TERM__c = 10.00,
@@ -258,6 +257,46 @@ public with sharing class PBS_AAAP_UtilityTest {
 
         return agency;
     }
-
+	@isTest
+    static void testOfferValidationResponse() {
+        string paramName = 'Test';
+        string url = '/AAAP/LoginPage?';
+        Decimal defaultValue = 2;
+        ApexPages.currentPage().getParameters().put('testParam', 'testValue');
+        String result = PBS_AAAP_Utility.getQueryParamAsString('testParam');
+        PBS_AAAP_Utility.getQueryParamAsDecimal(paramName,defaultValue);
+        PBS_AAAP_Utility.getQueryParamAsDecimal(paramName);
+        PBS_AAAP_Utility.setQueryParam(paramName,paramName);
+        
+        PBS_AAAP_Utility.getCommunityURL(url);
+        
+        PBS_AAAP_Utility.getCommunityURL('Offer-M');
+        
+        String communityURL = 'fromLWC'+Label.LOP_Community_Base_URL;
+        PBS_AAAP_Utility.getCommunityURL(communityURL);
+        
+        string url1 = '/AAAP/LoginPage';
+        PBS_AAAP_Utility.getCommunityURL(url1);
+    
+        system.assert(true);
+        
+        PBS_AAAP_RLP__c rlp = PBS_AAAP_UtilityTest.createFY22RLP();
+        rlp.PBS_AAAP_Region__c = 'Census';
+        insert rlp;
+        
+        PBS_AAAP_Offer__c testOffer = PBS_AAAP_UtilityTest.createOfferInfo();
+        testOffer.PBS_AAAP_RLP_Number__c = rlp.Id;
+        insert testOffer;
+        
+        Test.startTest();
+        List<String> pages = new List<String>{'Offer-M-Eligibility', 'Offer-M-Costs', 'Offer-M-Parking', 'Offer-M-SpaceRates', 'Offer-M-Attachments', 'Offer-S-Eligibility', 'Offer-S-SpaceParking', 'Offer-S-TermsFinancials', 'Offer-S-Rent', 'Offer-S-Attachments'};
+        PBS_AAAP_Utility.OfferValidationResponse response = PBS_AAAP_Utility.validateOffer(testOffer, pages);
+        System.assertNotEquals(null, response);
+        System.assertNotEquals(null, response.errorMessages);
+        List<String> pages1 = new List<String>();
+        PBS_AAAP_Utility.OfferValidationResponse response1 = PBS_AAAP_Utility.validateOffer(testOffer, pages1);
+        response1.addInfoMessage('message');
+        Test.stopTest();
+    }
 
 }

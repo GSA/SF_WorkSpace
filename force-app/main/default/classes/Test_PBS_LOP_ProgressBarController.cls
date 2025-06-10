@@ -1,6 +1,5 @@
 @IsTest
-private class Test_PBS_LOP_ProgressBarController  {
-    
+private class Test_PBS_LOP_ProgressBarController  {    
     static testMethod void testProgressBar() {
         test.starttest();
         PBS_LOP_ProgressBarController pbs = new PBS_LOP_ProgressBarController();
@@ -8,7 +7,5 @@ private class Test_PBS_LOP_ProgressBarController  {
         pbs.redirectPage();
         system.assert(pbs!=null);
         test.stoptest();
-    
-    }
-    
-  }
+    }    
+}

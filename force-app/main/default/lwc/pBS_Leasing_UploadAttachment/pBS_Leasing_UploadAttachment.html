@@ -1,0 +1,79 @@
+<template>
+  <div>
+    <h3 style="padding-top: 10px;text-decoration:none;border-bottom:none; padding-bottom: 0px;font-size: 20px;font-weight: bold;font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;">Add Attachments</h3> 
+    <lightning-file-upload class="fileClass" label="" name="fileUploader" record-id={offerId} onuploadfinished={handleUploadFinished} multiple>
+    </lightning-file-upload> 
+    <h4 style="padding-top: 10px;text-decoration:none;border-bottom:none; padding-bottom: 0px;font-size: 16px;font-weight: bold;font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;">Steps:</h4> 
+    <ol style="list-style: auto;padding-top: 10px;padding-left: 20px;font-size: 16px;">
+      <li>Click on the Upload Files button or drag and drop files from your device to the drop zone.</li>
+      <li>Wait for the file upload status counter to complete, then click the Done button.</li>
+      <li>Select an Attachment Type and enter a Description for each file, then click the Save button. Descriptions are generally optional, but required for an Attachment Type of Other.</li>
+    </ol>
+    <div style="color: #002bad; padding-top: 10px; font-size: 15px;">Successfully uploaded attachments will appear in the table below. Follow the above 3 steps to add additional attachments.
+    </div>
+    <!-- modal start -->
+    <template if:true={isShowModal}>
+      <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+        aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+        <div class="slds-modal__container">
+          <!-- modal header start -->
+          <header class="slds-modal__header">
+            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">File Upload</h2>
+          </header>
+          <!-- modal body start -->
+          <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+              <thead>
+                <tr class="slds-line-height_reset">
+                  <th class="" scope="col">
+                    <div class="slds-truncate" title="Name">Name</div>
+                  </th>
+                  <th class="" scope="col">
+                    <div class="slds-truncate" title="Attchement Type">Attachment Type
+                      <template if:true={showHelpText}>
+                      <lightning-helptext content="A floor plan of the offered space(s) is required in order to submit. If you have selected 'Agent' or 'Other' under #8 of the Property Ownership page, an Authorization to Represent the Ownership document type is required. The SAM Registration, Seismic Certification (if applicable) and the Fire Life Safety Evaluation are not required to submit your offer, but are required prior to lease award."></lightning-helptext>
+                      </template>
+                      </div>
+                  </th>
+                  <th class="" scope="col">
+                    <div class="slds-truncate" title="Attchement Description">Attachment Description</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <template for:each={data} for:item="datas">
+                  <tr key={datas.Id} class="slds-hint-parent">
+                    <td>{datas.name}</td>
+                    <td>
+                      <lightning-select
+                        name={datas.offerAttachmentId}
+                        label=""
+                        options={options}
+                        onchange={handleChange}
+                        variant="label-hidden">
+                      </lightning-select>
+                    </td>
+                    <td style="width: 35%;"> 
+                      <lightning-input  name={datas.offerAttachmentId} variant="label-hidden" type="text" onchange={otherHandleChange}></lightning-input>
+                    
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- modal footer start-->
+          <footer class="slds-modal__footer" style="text-align: center;">
+            <!--<button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button> -->
+            <button class="btn" onclick={saveModalBox}>Save</button>
+            <button style="margin-left:10px;" class="btn" onclick={hideModalBox}>Cancel</button>
+          </footer>
+
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- modal end -->
+  </div>
+</template>

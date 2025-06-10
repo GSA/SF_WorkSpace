@@ -193,7 +193,35 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>PBS_Leasing_AttachmentController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>PBS_Leasing_GIS_MapController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_OfferOptionsController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_OfferPropertyWrapper</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_OfferRLPController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_OfferSpaceController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_ProgressBarController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PBS_Leasing_PropertyController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
@@ -543,7 +571,7 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
+        <editable>true</editable>
         <field>PBS_AAAP_Offer__c.PBS_AAAP_Building_Common_Area_Factor__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -2269,7 +2297,17 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Building_Name__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>PBS_AAAP_Property__c.PBS_AAAP_City__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Common_Area_Factor__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -2280,6 +2318,51 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>PBS_AAAP_Property__c.PBS_AAAP_County__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_DUNS_Number__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_GARAGE_SPACE_RSF__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_GEN_PURPOSE_RENTABLE__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_HVAC_HRS_MON_TO_FRI_END__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_HVAC_HRS_MON_TO_FRI_START__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_HVAC_HRS_ON_SAT_END__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_HVAC_HRS_ON_SAT_START__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_HVAC_HRS_ON_SUN_END__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_HVAC_HRS_ON_SUN_START__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -2304,12 +2387,112 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Monthly_cost_nonres_gar_park__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Monthly_cost_nonres_sur_park__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Monthly_cost_res_gar_park__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Monthly_cost_res_sur_park__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_OFFEROR_INTEREST_OTHER__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_OFFEROR_INTEREST__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_OFFICE_SPACE_RSF__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Owner_Address__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Owner_City__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Owner_Name__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Owner_State__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Owner_Zip__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Parking_Onsite__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_RETAIL_SPACE_RSF__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Renovation_Year__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>PBS_AAAP_Property__c.PBS_AAAP_State__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>PBS_AAAP_Property__c.PBS_AAAP_Street_Address__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Total_Park_Spaces_Offered__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Total_Structured_Parking_Spaces__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Total_Surface_Parking_Spaces__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_User_Defined_Address__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -2324,12 +2507,27 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_Year_Built__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>PBS_AAAP_Property__c.PBS_AAAP_ZipCode__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_AAAP_floors_Suites_in_Offered_Space__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>PBS_AAAP_Property__c.PBS_AAAP_isBuildingProblem__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>PBS_AAAP_Property__c.PBS_RSAP_Property_Owner_Same_as_Offeror__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -3158,7 +3356,7 @@
     </objectPermissions>
     <objectPermissions>
         <allowCreate>true</allowCreate>
-        <allowDelete>false</allowDelete>
+        <allowDelete>true</allowDelete>
         <allowEdit>true</allowEdit>
         <allowRead>true</allowRead>
         <modifyAllRecords>false</modifyAllRecords>

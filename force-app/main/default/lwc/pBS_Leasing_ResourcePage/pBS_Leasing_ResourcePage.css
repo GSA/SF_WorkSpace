@@ -1,0 +1,90 @@
+.input-label{
+   display: flex;
+   align-items: center;
+   gap: 180px;
+}
+.greybox {
+    background-color: #f3f3f3;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.map-image {
+    width: 200%;
+    max-width: 900px;
+    
+}
+.btn2{
+	top:-5px;
+    width: 170px;
+    height: 21px;
+    text-align: center;
+    border:1px solid #a1a1a1;
+	border-radius: 3px !important;
+    font-size:12px;
+    font-family:arial, helvetica, sans-serif;
+    padding: 11px 10px;
+    text-decoration:none;
+    display:inline-block;
+    color: #333333;
+    padding-bottom: 24px; 
+    margin-top: 2px;
+    
+	background-image: linear-gradient(#fcfcfc, #d8d8d8);    
+}
+.btn2:hover{
+    
+    
+    background-position: 0 -37px !important;
+}
+
+.slds-card {
+    border-style: none;
+}
+
+
+  .custom-dropdown {
+    position: relative;
+    display: inline-block;
+    width: 200px; 
+    
+    border: 1px solid #ccc;
+    
+}
+
+.custom-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    appearance: none; 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #eeeeee;
+    
+    font-size: 16px;
+}
+
+/* Custom dropdown arrow */
+.custom-arrow {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    pointer-events: none;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M7 10l5 5 5-5z" fill="%23000"/></svg>') no-repeat center;
+    background-size: contain;
+}
+select.custom-select option {
+    background-color: white !important;
+    color: black !important;                                 
+}

@@ -4,8 +4,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
 
     public PBS_AAAP_Offer_Attachments__c offerattachment { get; set; }
     public List<PBS_AAAP_Offer_Attachments__c> attachmentsList { get; set; }
-    //public List<Attachment> attList { get; set; }
-    //public Attachment att { get; set; }
+    
     public String attName{ get; set; }
     public Blob attBody{ get; set; }
     public ID ofrID { get; set; }
@@ -14,7 +13,6 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
     public PBS_AAAP_Offer__c submitedOffer { get; set; } // Vaishali 01/11/2016
     public List<sequenceNumber> seqNumList { get; set; }
     public boolean showSubmitOfferButton { get; set; }
-    //   public    boolean showStep2                                                                 {get;set;}
     public PBS_AAAP_RLP__c rlpInfo { get; set; }
     public PBS_AAAP_RLP__c rlpRegion2 { get; set; }
     public string termsandconditons { get; set; }
@@ -23,7 +21,6 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
     public date rlpPostDate { get; set; }
     public String attachmentId { get; set; }
     public Boolean isValidUser { get; set; }
-    // public String buildingPageAddrFlag                        {get;set;}
     public String addrFlag { get; set; }
     public String draftMsgFlag { get; set; }
     public Boolean offerSubmitFlag { get; set; }
@@ -57,9 +54,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
     public PBS_AAAP_OfferAttachmentsController() {
 
         submitOffererror = false;
-        //attList = new List<Attachment>();
         rlpRegion2 = new PBS_AAAP_RLP__c();
-        //leaseDefault ='';
         leaseTerm10_5Header = '15, 13 YEAR FS';
         leaseTerm15_10Header = '17, 15 YEAR FS';
         showAttachmentsPage = true;
@@ -69,7 +64,6 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
             ofrID = ApexPages.currentPage().getParameters().get('offerId');
             Cookie offerIdCookie = new Cookie('offerId',ofrID,null,-1,true);
             ApexPages.currentPage().setCookies(new Cookie[]{offerIdCookie});
-            // buildingPageAddrFlag = ApexPages.currentPage().getParameters().get('addrFlag');
             submitOffer = PBS_AAAP_GlobalConstants.getOfferDetail(ofrID);
             submitedOffer = PBS_AAAP_GlobalConstants.getOfferDetail(ofrID); //Vaishali 01/11/2016   
             DateTime dtLM = submitedOffer.LastModifiedDate;
@@ -80,8 +74,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
             lastName = submitedOffer.PBS_AAAP_SIGNATURE_LAST_NAME__c;
             system.debug('First Name ' + firstName);
             system.debug('Last Name ' + lastName);
-            //added by syam for offerId validation
-     // }
+           
             // Arvind changes 
             spaces = dao.getSpaces(ofrID);
             rates = dao.getRates(ofrID);
@@ -108,8 +101,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
             } else {
                 isValidUser = true;
             }
-            //submitOffer.PBS_AAAP_Signature_First_Name__c = UserInfo.getFirstName();            
-            //submitOffer.PBS_AAAP_SIGNATURE_LAST_NAME__c = UserInfo.getLastName();
+           
             offerSubmitFlag = true;
             if (submitOffer.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT || submitOffer.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_PENDINGMODIFICATION) {
                 offerSubmitFlag = false;
@@ -153,13 +145,13 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
 
             system.debug('***************offer ID in Constructor:' + ofrID);
             offerattachment = new PBS_AAAP_Offer_Attachments__c();
-            //att = new Attachment();
+            
 
             // logic for displaying the attachments on the vf page.
             attachmentsList = [
                     SELECT Id, Name, PBS_AAAP_Attachment_Type__c, /*, (SELECT Id, Name, Description, ParentId, createdDate FROM Attachments)*/
                     PBS_AAAP_Date_sent_to_GREX__c, PBS_AAAP_Sent_to_GREX__c
-                FROM PBS_AAAP_Offer_Attachments__c p	
+                FROM PBS_AAAP_Offer_Attachments__c p    
                     WHERE p.PBS_AAAP_Offer__c = :ofrID
                     AND p.PBS_AAAP_Attachment_Type__c != 'Offeror Form 1217- Lessors Annual Cost Statement'
                     AND p.PBS_AAAP_Attachment_Type__c != 'Offeror Form 1217- Lessor\'s Annual Cost Statement'
@@ -181,7 +173,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
                     contentDocumentMap.put(contentDocumentLinkRecord.LinkedEntityId,new ContentDocumentWrapper(contentDocumentLinkRecord.ContentDocumentId, contentDocumentLinkRecord.ContentDocument.Title, contentDocumentLinkRecord.ContentDocument.CreatedDate, contentDocumentLinkRecord.ContentDocument.Description));
                 }
             }
-			seqNumList = new List<sequenceNumber>();
+            seqNumList = new List<sequenceNumber>();
             existingAttachmentRecords= new List<sequenceNumber>();
             integer jIndex = 1;
             for (integer i = 0; i < attachmentsList.size(); i++) {
@@ -246,19 +238,12 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
 
             Map<String, List<Attachment>> attMap2 = getAttachmentMapByType2();
             Integer j = 0;
-            /**
-            // @Added by Nik
-            for (PBS_AAAP_Offer_Attachments__c attachment : attachmentsList2) {
-                List<Attachment> atts = (List<Attachment>) attMap2.get(attachment.PBS_AAAP_Attachment_Type__c);
-                seqNumList2.add(new sequenceNumber2(j+1,attachment.PBS_AAAP_Date_sent_to_GREX__c, attachment.PBS_AAAP_Attachment_Type__c, (List<Attachment>) attMap2.get(attachment.PBS_AAAP_Attachment_Type__c)));
-                j++;
-            }
-            **/
+            
 
             // this will be used the save the type and the its attachment
             mapType_attachment = new map<string, List<sequenceNumber3>>();
             mapType_attachmentDate = new map<string, List<string>>();
-			attOfferIds = new List<Id>();
+            attOfferIds = new List<Id>();
             contentDocumentMap = new Map<Id, ContentDocumentWrapper>();
             for(PBS_AAAP_Offer_Attachments__c attachmentRecord : attachmentsList2){
                 attOfferIds.add(attachmentRecord.Id);
@@ -281,7 +266,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
 
                     // adding current record
                     if(contentDocumentMap.containsKey(attachment.Id)){
-                    	lstTemp.add(new sequenceNumber3(attachment, contentDocumentMap.get(attachment.Id)));
+                        lstTemp.add(new sequenceNumber3(attachment, contentDocumentMap.get(attachment.Id)));
                     }
 
                     // updating map
@@ -353,8 +338,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
         // this will save the list of ofer attachments to be insert
         List<PBS_AAAP_Offer_Attachments__c> lstOfferAtt = new List<PBS_AAAP_Offer_Attachments__c>();
 
-        // this will save the list if attachment to be inserted
-        //List<attachment> lstInsertAtt = new List<attachment>();
+        
 
         // getting all child offer ids
         for(PBS_AAAP_Offer__c childoffer : [SELECT ID FROM PBS_AAAP_Offer__c WHERE Master_Offer__c =: ofrID]){
@@ -365,7 +349,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
         offerattachment.PBS_AAAP_Offer__c = ofrID;
 
         System.debug('Attachment Type:::::::::::::: ' + offerattachment.PBS_AAAP_Attachment_Type__c);
-        //system.debug('Attachment Attached :::::::::::: ' + attBody);
+        
         if (offerattachment.PBS_AAAP_Attachment_Type__c == null) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Attachment Type is required.'));
             attBody = null;
@@ -394,17 +378,13 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
             if(!lstOfferAtt.isEmpty()) insert lstOfferAtt; // child offer
             //System.debug('After Attachment Type:::::::::::::: '+offerattachment.id);
 
-            //att.ParentId = offerattachment.id;
-            // creating new instance of attachments	
-            /*for(PBS_AAAP_Offer_Attachments__c offAtt : lstOfferAtt){	
-                lstInsertAtt.add(new attachment(parentId = offAtt.Id, body = att.Body, name = att.Name));	
-            }*/
             
-			ContentVersion ContVerFile = new ContentVersion();
+            
+            ContentVersion ContVerFile = new ContentVersion();
             ContVerFile.VersionData = attBody;//Blob.valueOf('string');
             ContVerFile.Title = attName; 
             ContVerFile.PathOnClient= attName;
-      		insert ContVerFile;
+            insert ContVerFile;
             
             Id conDoc = [SELECT ContentDocumentId FROM ContentVersion WHERE Id =:ContVerFile.Id].ContentDocumentId;
             ContentDocumentLink cDe = new ContentDocumentLink();
@@ -446,15 +426,12 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
             contentDocumentObj.Id = conDoc;
             contentDocumentObj.Description  = cd.DistributionPublicUrl;
             update contentDocumentObj;
-            //insert att; // parent	
-            /*if(!lstInsertAtt.isEmpty())	
-                insert lstInsertAtt;*/ // child
+            
 
             attBody = null;// clears the viewstate
             offerattachment = new PBS_AAAP_Offer_Attachments__c();
             attName = '';
-            //att = new Attachment();
-            // logic for displaying the attachments on the vf page.
+            
             attachmentsList = [
                     SELECT Name, PBS_AAAP_Attachment_Type__c
                     FROM PBS_AAAP_Offer_Attachments__c p
@@ -478,20 +455,12 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
             for(ContentDocumentLink contentDocumentLinkRecord : ContentDocumentLinks){
                 contentDocumentMap.put(contentDocumentLinkRecord.LinkedEntityId,new ContentDocumentWrapper(contentDocumentLinkRecord.ContentDocumentId, contentDocumentLinkRecord.ContentDocument.Title, contentDocumentLinkRecord.ContentDocument.CreatedDate, contentDocumentLinkRecord.ContentDocument.Description));
             }
-            /*
-            for(PBS_AAAP_Offer_Attachments__c attachmentRecord : attachmentsList){
-                for(ContentDocumentLink contentDocumentLinkRecord : ContentDocumentLinks){
-                    if(contentDocumentLinkRecord.LinkedEntityId == attachmentRecord.Id){
-                		attachmentRecord.Attachments.add(new Attachment(Id=contentDocumentLinkRecord.ContentDocumentId, Name=contentDocumentLinkRecord.ContentDocument.Title));
-                    }
-                }
-            }
-            */
+            
             integer jIndex = 1;
             seqNumList = new List<sequenceNumber>();
             for (integer i = 0; i < attachmentsList.size(); i++) {
                 if(contentDocumentMap.containsKey(attachmentsList[i].Id)){
-                	seqNumList.add(new sequenceNumber(jIndex, attachmentsList[i], contentDocumentMap.get(attachmentsList[i].Id)));
+                    seqNumList.add(new sequenceNumber(jIndex, attachmentsList[i], contentDocumentMap.get(attachmentsList[i].Id)));
                     jIndex++;
                 }
             }
@@ -505,7 +474,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
 
             attBody = null;// clears the viewstate
             attName = '';
-            //att = new Attachment();
+            
 
         }
         
@@ -542,17 +511,13 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
             System.debug(seqNumList);
         } catch (Exception ex) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, ex.getMessage()));
-            //return null;
+           
         }
 
-        //PageReference pref = Page.PBS_AAAP_OfferAttachments;
+        
         PageReference pref = new PageReference('/AAAP/OfferAttachments');
         pref.getParameters().put('offerId', submitOffer.Id);
-                //pageURLForRedirection = pref.getUrl();
-        //pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferAttachments', Label.LOP_Community_Base_URL+'AAAP-OfferAttachments');
-        
-        //pref.setRedirect(true);
-       // return pref;
+                
     }
 
     public void actionDeleteAttachmentAdditional() {
@@ -577,17 +542,13 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
             
         } catch (Exception ex) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, ex.getMessage()));
-            //return null;
+            
         }
 
-        //PageReference pref = Page.PBS_AAAP_OfferAttachments;
+        
         PageReference pref = new PageReference('/AAAP/AdditionalAttachments');
         pref.getParameters().put('offerId', submitOffer.Id);
-        //pref.setRedirect(true);
-        //pageURLForRedirection = pref.getUrl();
-        //pageURLForRedirection = pageURLForRedirection.replace('/AAAP/AdditionalAttachments', Label.LOP_Community_Base_URL+'AAAP-OfferAttachments');
-        
-        //return pref;
+       
     }
 
     public void actionCancelSubmitOffer() {
@@ -595,11 +556,11 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
     }
 
     public PageReference actionCancel() {
-        //PageReference pref = Page.PBS_AAAP_PortalHome;
+        
         PageReference pref = new PageReference('/AAAP/PortalHome');
         pref.setRedirect(false);
         pageURLForRedirection = pref.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/PortalHome', Label.LOP_Community_Base_URL+'AAAP-PortalHome');
+        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/PortalHome', Label.LOP_Community_Base_URL+'Offer-Home');
         return null;
     }
 
@@ -611,51 +572,22 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '1. You must acknowledge that you have read the RLP, lease and all the attachments in their entirety and are requesting no deviations.'));
             flag = true;
         }
-        /* if(submitOffer.PBS_AAAP_ACCEPTED_PROV_FORM_3516__c != 'Yes'){
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Have to accept solicitation provisions.'));
-             flag=true;
-         }
-         if(submitOffer.PBS_AAAP_ACCEPTED_GEN_FORM_3517__c != 'Yes'){
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Have to accept general clauses.'));
-             flag=true;
-         }
-         if(submitOffer.PBS_AAAP_ACCEPTED_REP_CERT_FORM_3518__c != 'Yes'){
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Have to accept Representations and Certifications.'));
-             flag=true;
-         } */
-
+        
         if (submitOffer.PBS_AAAP_ACK_LTR_COMPLETED__c != 'Yes') {
 
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '2. You must acknowledge that you may be required to provide further due diligence submittals in order for your offer to be considered eligible for award.'));
-            /* ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Have to accept that you are authorized by the owner to submit this offer and negotiate on their behalf.'));
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Have to certify that the Fire Safety Certificate attached is genuine and complete.'));
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Have to accept that you are aware of the Fire & Safety inspection needs to be certified by a fire engineer for floors 6 and above.'));
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Cannot submit the offer if you are not authorized by the owner to represent other owners.'));*/
+          
             flag = true;
         }
 
         if (submitOffer.PBS_AAAP_ACK_REPRESENT_OTHERS__c != 'Yes') {
 
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '3. You must acknowledge that you are aware that, in addition to generic specifications and requirements outlined in the RLP and attachments, there may be unique agency requirements, as identified in a project specific advertisement posted on SAM.gov, that shall be used in evaluating and determining the eligibility of offers for award.'));
-            /* ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Have to accept solicitation provisions.'));
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Have to accept general clauses.'));
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Have to accept eligibility of offers for award as posted on fbo.gov'));*/
+           
             flag = true;
         }
 
-        /* if(submitOffer.PBS_AAAP_ACK_REPRESENT_OTHERS__c == 'Yes' && submitOffer.PBS_AAAP_ACK_REPRESENT_MULT_OWNERS__c != 'Yes'){
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Cannot submit the offer if you are not authorized by the owner to represent other owners.'));
-             flag=true;
-         } */
-        /* if(submitOffer.PBS_AAAP_FIRE_SAFETY_CERT__c != 'Yes'){
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Have to certify that the Fire Safety Certificate attached is genuine and complete.'));
-             flag=true;
-         }
-
-         if(submitOffer.PBS_AAAP_FIRE_SAFETY_REQ_FLOORS1TO6__c != 'Yes'){
-             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Have to accept that you are aware of the Fire & Safety inspection needs to be certified by a fire engineer for floors 6 and above.'));
-             flag=true;
-         } */
+       
         //added by syamganna on 06/24/2016 for latitude and langitude validations
         if (submitOffer.PBS_AAAP_X_CO_ORD__c == null) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.PBS_AAAP_X_CO_ORD_REQ));
@@ -666,10 +598,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
             flag = true;
         }
 
-        /*if(submitOffer.PBS_AAAP_SIGNATURE_PIN__c == null){
-            ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Signature - PIN field is missing'));
-            flag=true;
-        }*/
+        
         Boolean floorPlanFlag = false;
         //Nik - 1/29
         attachmentsList = [
@@ -701,13 +630,13 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
     public PageReference actionCheckErrors() {
         boolean buildingFlag = PBS_AAAP_GlobalConstants.checkOfferBuildingValidations(submitOffer);
 
-        boolean parkingFlag = PBS_AAAP_GlobalConstants.checkOfferParkingValidations(submitOffer);
+        
 
         boolean propertyOwnerFlag = PBS_AAAP_GlobalConstants.checkOfferPropOwnerValidations(submitOffer);
 
         boolean RepsAndCertsFlag = PBS_AAAP_GlobalConstants.checkOfferRepsAndCertsValidations(submitOffer);
 
-        boolean operatingCostsFlag = PBS_AAAP_GlobalConstants.checkOperatingCostsValidations(submitOffer);
+        
         boolean noSpaceOrRatesFlag = false;
         //added by syam on 07/19/2016 to check pv
         boolean pvFlag = dao.validatePVRates(submitOffer.Id);
@@ -743,18 +672,13 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
                 noSpaceOrRatesFlag = true;
             } else {
                 for (PBS_AAAP_Space__c s : spaces) {
-                    //added next line by Vaishali to fix BSAC issue
-                    /**rates = [Select id, PBS_AAAP_SPACE__c, PBS_AAAP_BSAC__c from PBS_AAAP_Rate__c
-                                              where PBS_AAAP_SPACE__c = :s.Id and PBS_AAAP_FULLY_SRVC_FIRM_TERM__c >0]; **/
-                    //added next line by Vaishali to manage RLP FY15 calculations for past draft offers
+                    
                     rates = [
                             SELECT id, PBS_AAAP_SPACE__c, PBS_AAAP_BSAC__c, PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c, LASTMODIFIEDDATE,PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c,PBS_AAAP_LEASE_TERM__c
                             FROM PBS_AAAP_Rate__c
                             WHERE PBS_AAAP_SPACE__c = :s.Id AND PBS_AAAP_FULLY_SRVC_FIRM_TERM__c > 0
                     ];
-                    //if(rates.size() <= 0){
-                    //    noSpaceOrRatesFlag=true;
-                    // }
+                    
                     if (!ratesMap.containsKey(s.id)) { noSpaceOrRatesFlag = true; break; }
                     //Added by lekha to fix the checkmark security issues ends
                     //Added by Vaishali to fix BSAc issue 04/02/2014
@@ -777,10 +701,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
                             system.debug('***rates  PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c ' + ratesABOA);
                             system.debug('***offer  PBS_AAAP_COST_PER_ABOA__c ' + offerABOA);
                             //removed following condition by syam on 07/14  || (r.LASTMODIFIEDDATE < s.LastModifiedDate)
-                            /* commented by syam on 07/19/2016 no need of FY15RateSaveFlag, pvFlag covers it
-                            if (ratesABOA != offerABOA){
-                                 FY15RateSaveFlag = true;
-                                 break;}*/
+                            
                             if (r.LASTMODIFIEDDATE <= submitOffer.PBS_AAAP_RLP_Number__r.PBS_AAAP_Posted_Date__c) {
                                 spaceAndRatesFlag = true;
                                 break;
@@ -798,25 +719,17 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
                 }
             }
         }
-        //        boolean spaceAndRatesFlag =flag;
-        //        if (BSACflag  == true || optionTermFlag == true || FY15RateSaveFlag  == true) {spaceAndRatesFlag = true;}
-        //        if (optionTermFlag  == true) {spaceAndRatesFlag = BSACflag;}
-        //        if (FY15RateSaveFlag  == true) {spaceAndRatesFlag = FY15RateSaveFlag;}
+        
         if (flag) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'You must submit at least one space. For each submitted space, you must submit rate for at least one lease term.'));// Vaishali 07/19/16 added new message
         }
         if (spaceAndRatesFlag == true) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Required data is missing in the \'Space & Rates\' section.  Please select and \'Edit\' each of the individual Space breakouts and look for required fields that are blank or have values that are not logical.  Pressing the \'Save\' button at the bottom of each page will identify possible mistakes on the page.'
             ));// Vaishali 07/19/16 removed present value from message
-            //return null;
+            
         }
         //added by syam
-        if (operatingCostsFlag == true) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Operating Costs Page : 4. Cost per ABOA SF must be > 0.00'); //Vaishali 07/19/16 0.005 changed to 0.00
-            Apexpages.addMessage(myMsg);
-        }
-
-        //boolean attachmentsFlag = PBS_AAAP_GlobalConstants.checkOfferAttachmentValidations(submitOffer);
+        
 
 
         rlpInfo = dao.getRLP(submitOffer.PBS_AAAP_RLP_Number__c);
@@ -824,27 +737,23 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
 
         if (regionCode == 'Census') { BSACflag = false; }
         if (BSACflag == true) {
-            //ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Space and Rates page is not complete.'));
+            
             ////add " for Space # S.PBS_AAAP_IDENTIFIER_ID__C"  after "BSAC option (#4 /4a on rates page) is not complete" Vaishali ***
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'BSAC option (#3 /3b on rates page) is not complete for Space # ' + spaceIdToReport + '. Review and hit "Save Rates" button before submitting.'));
-            //return null;
+            
         }
         if (optionTermFlag == true) {
-            //ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Space and Rates page is not complete.'));
+            
             //////add "For Space # S.PBS_AAAP_IDENTIFIER_ID__C"  before "Enter" Vaishali ***
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'For Space # ' + spaceIdToReport + ' Enter Base Rate per ANSI/BOMA Office Area square foot (ABOA) for years 6-10. If Base rate is unchanged from years 1-5, enter base rate amount from #1 above'));
-            //return null;
+            
         }
         if ((pvFlag) && (!(spaceAndRatesFlag))) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Before submitting, go back to Operating Cost page and review and save; review Full Service Rent on Space and Rates page.'));
-            //return null;
+            
         }
         //added by syam on 07/19/2016
-        /*if(pvFlag == true){
-           ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Your Operating Cost changed. Please go back to Operating Cost page, hit save & continue, review Full Service Rate on Space and Rates page before submitting.'));
-               //return null;
-            }
-*/
+        
         List<PBS_AAAP_Offer_Attachments__c> ofratts = new List<PBS_AAAP_Offer_Attachments__c>();
         boolean flag2;
         if (submitOffer.id != null) {
@@ -854,8 +763,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
         boolean attachmentsFlag = flag2;
 
         if (attachmentsFlag == true) {
-            //ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Offer Attachments are missing.'));
-            //return null;
+            
         }
         Boolean floorPlanFlag = false;
         Boolean authorizationOfOwner = false;
@@ -898,8 +806,8 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
             flag = true;
         }
 
-        if (buildingFlag == true || parkingFlag == true || propertyOwnerFlag == true || BSACflag == true || flag == true ||
-                RepsAndCertsFlag == true || spaceAndRatesFlag == true || attachmentsFlag == true || operatingCostsFlag == true || optionTermFlag == true || pvFlag == true) {
+        if (buildingFlag == true || propertyOwnerFlag == true || BSACflag == true || flag == true ||
+                RepsAndCertsFlag == true || spaceAndRatesFlag == true || attachmentsFlag == true || optionTermFlag == true || pvFlag == true) {
             return null;
         } else {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.INFO, ' There are no errors or omissions detected that will prevent you from submitting your offer during an \'Open Period\'. This automated \'check\' does not certify compliance with the AAAP RLP Package. Please return to this page during the next \'Open Period\' (generally the first 7 days of every month) and a yellow \'Review Final Offer\' button will appear allowing you to complete the submission process.'));
@@ -912,14 +820,13 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
         // validations for all other page fields
         boolean buildingFlag = PBS_AAAP_GlobalConstants.checkOfferBuildingValidations(submitOffer);
 
-        boolean parkingFlag = PBS_AAAP_GlobalConstants.checkOfferParkingValidations(submitOffer);
-
+        
         boolean propertyOwnerFlag = PBS_AAAP_GlobalConstants.checkOfferPropOwnerValidations(submitOffer);
 
         boolean RepsAndCertsFlag = PBS_AAAP_GlobalConstants.checkOfferRepsAndCertsValidations(submitOffer);
 
         //added by syam
-        boolean operatingCostsFlag = PBS_AAAP_GlobalConstants.checkOperatingCostsValidations(submitOffer);
+        
 
         //added on 07/14/2016 to update the PVRates
         boolean pvFlag = dao.validatePVRates(submitOffer.Id);
@@ -1021,8 +928,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
         if (spaceAndRatesFlag == true) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Required data is missing in the \'Space & Rates\' section.  Please select and \'Edit\' each of the individual Space breakouts and look for required fields that are blank or have values that are not logical.  Pressing the \'Save\' button at the bottom of each page will identify possible mistakes on the page.'
             ));
-            //ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Space and/or Rates page is not complete. Review and save rates before submitting.'));
-            //return null;
+            
         }
         //added by syam on 01/12/2017 for Census validation
 
@@ -1032,24 +938,22 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
             BSACflag = false;
         }
         //added by syam
-        if (operatingCostsFlag == true) {
-            Apexpages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Operating Costs Page : 4. Cost per ABOA SF must be > 0.00')); //Vaishali 07/19/16 0.005 changed to 0.00);
-        }
+      
         if (BSACflag == true) {
-            //ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Space and Rates page is not complete.'));
+            
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'BSAC option (#4/4a on rates page) is not complete for Space # ' + spaceIdToReport + '. Review and hit "Save Rates" button before submitting.'));
-            //return null;
+            
         }
         if (optionTermFlag == true) {
-            //ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Space and Rates page is not complete.'));
+            
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'For Space # ' + spaceIdToReport + ' Enter Base Rate per ANSI/BOMA Office Area square foot (ABOA) for years 6-10. If Base rate is unchanged from years 1-5, enter base rate amount from #1 above'));
-            //return null;
+            
         }
         if ((pvFlag) && (!(spaceAndRatesFlag))) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Before submitting, go back to Operating Cost page and review and save. Review Full Service Rent on Space and Rates.'));
-            //return null;
+            
         }
-        //boolean attachmentsFlag = PBS_AAAP_GlobalConstants.checkOfferAttachmentValidations(submitOffer);
+        
 
         List<PBS_AAAP_Offer_Attachments__c> ofratts = new List<PBS_AAAP_Offer_Attachments__c>();
         boolean flag3;
@@ -1062,8 +966,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
         boolean attachmentsFlag = flag3;
         //commented as part of FY16
         if (attachmentsFlag == true) {
-            // ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Offer Attachments are missing.'));
-            //return null;
+            
         }
         
         attachmentsList = [
@@ -1106,8 +1009,8 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
             flag = true;
         }
 
-        if (buildingFlag == true || parkingFlag == true || propertyOwnerFlag == true || BSACflag == true || flag == true ||
-                RepsAndCertsFlag == true || spaceAndRatesFlag == true || attachmentsFlag == true || operatingCostsFlag == true || optionTermFlag == true || pvFlag == true) {
+        if (buildingFlag == true || propertyOwnerFlag == true || BSACflag == true || flag == true ||
+                RepsAndCertsFlag == true || spaceAndRatesFlag == true || attachmentsFlag == true || optionTermFlag == true || pvFlag == true) {
             return null;
         }
 
@@ -1135,18 +1038,16 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
         String[] ccAddresses = new String[]{
                 'aaap.manager@gsa.gov'
         };
-        // String[] ccAddresses = new String[] {'sguniganti@gmail.com'};
+        
         mail.setToAddresses(toAddresses);
-        //mail.setCcAddresses(ccAddresses);
+        
         mail.setReplyTo('aaap.manager@gsa.gov');
-        //mail.setReplyTo('sguni@acumensolutions.com');
+        
         mail.setSenderDisplayName('Salesforce Support');
         mail.setSubject('AAAP PIN Request ' + usr.FirstName);
         mail.setHtmlBody('Please find the PIN below to submit an offer <br/> PIN : ' + usr.PBS_AAAP_PIN__c);
         System.debug(':::::::: User PIN:::::::::::::: ' + usr.PBS_AAAP_PIN__c);
-        // Send the email you have created.
-        //commented by syam ganna on 07/19 we no longer need to send email.
-        //Messaging.sendEmail(new Messaging.SingleEmailMessage[] { mail });
+        
         showPINMesg = true;
         return null;
     }
@@ -1154,12 +1055,10 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
     // logic for delete button
     public PageReference actionDeleteOffer() {
         PageReference pref = null;
-        //System.debug('************* submitOffer ::: '+submitOffer);
-        //System.debug('************* submitOffer.PBS_AAAP_Offer_Status__c ::: '+submitOffer.PBS_AAAP_Offer_Status__c);
-        //System.debug('************* submitOffer.PBS_AAAP_Offer_Status__c ::: '+PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT);
+   
         if (submitOffer.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT || submitOffer.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_PENDINGMODIFICATION) {
             delete submitOffer; // Cascade delete - Deletes all Spaces, Othercosts and Offer attachments associated with it.
-            //pref = Page.PBS_AAAP_PortalHome;
+            
             pref = new PageReference('/AAAP/PortalHome');
             pref.setRedirect(true);
         } else {
@@ -1172,20 +1071,20 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
     }
 
     public PageReference redirectToHome() {
-        //PageReference pref = Page.PBS_AAAP_PortalHome;
+        
         PageReference pref = new PageReference('/AAAP/PortalHome');
         pref.setRedirect(true);
         return pref;
     }
 
     public void actionBackToRatesAndSpaces() {
-        //PageReference pref = Page.PBS_AAAP_SpacesAndRates;
+        
         PageReference pref = new PageReference('/AAAP/SpacesAndRates');
         pref.getParameters().put('offerId', submitOffer.Id);
         pref.setRedirect(false);
         pageURLForRedirection = pref.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/SpacesAndRates', Label.LOP_Community_Base_URL+'AAAP-SpacesAndRates');
-        //return null;
+        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/SpacesAndRates', Label.LOP_Community_Base_URL+'Offer-M-SpaceRates');
+        
     }
 
     // Re-rendering the Question 3a, Only visible if user selects "YES" on Question 3.
@@ -1227,30 +1126,20 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
 
         update submitOffer;
 
-        /*if( !(( pageUrl == null ) || ( pageUrl == '' )) )
-        {
-            Integer len = pageUrl.length();
-            if( pageUrl.mid(len-1, 1) == '=' )
-            {
-                pageUrl = pageUrl + submitOffer.Id;
-            }
-                p = new PageReference(pageUrl);
-                pageURLForRedirection = Label.LOP_Community_Base_URL+PBS_AAAP_Utility.getCommunityURL(p.getUrl());
-                //return null;
-        }*/
-		String pageName = ApexPages.currentPage().getUrl().substringBetween('apex/', '?');
+
+        String pageName = ApexPages.currentPage().getUrl().substringBetween('apex/', '?');
         if(pageName.contains('OfferAttachments')){
             PageReference pref = new PageReference('/AAAP/OfferAttachments');
             pref.getParameters().put('offerId', submitOffer.Id);
             pref.setRedirect(false);
             pageURLForRedirection = pref.getUrl();
-            pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferAttachments', Label.LOP_Community_Base_URL+'AAAP-OfferAttachments');
+            pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferAttachments', Label.LOP_Community_Base_URL+'Offer-M-Attachments');
         }else{
             PageReference pref = new PageReference('/AAAP/AdditionalAttachments');
             pref.getParameters().put('offerId', submitOffer.Id);
             pref.setRedirect(false);
             pageURLForRedirection = pref.getUrl();
-            pageURLForRedirection = pageURLForRedirection.replace('/AAAP/AdditionalAttachments', Label.LOP_Community_Base_URL+'AAAP-AdditionalAttachments');
+            pageURLForRedirection = pageURLForRedirection.replace('/AAAP/AdditionalAttachments', Label.LOP_Community_Base_URL+'Offer-M-AdditionalAttachments');
         }
         //return null;
 
@@ -1279,7 +1168,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
         PageReference p = new PageReference('/AAAP/PortalHome');
         p.setRedirect(false);
         pageURLForRedirection = p.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/PortalHome', Label.LOP_Community_Base_URL+'AAAP-PortalHome');
+        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/PortalHome', Label.LOP_Community_Base_URL+'Offer-Home');
     }
 
     public void actionSendtoGREX(){
@@ -1334,7 +1223,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
         PageReference pref = new PageReference('/AAAP/PortalHome');
         pref.setRedirect(false);
         pageURLForRedirection = pref.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/PortalHome', Label.LOP_Community_Base_URL+'AAAP-PortalHome');
+        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/PortalHome', Label.LOP_Community_Base_URL+'Offer-Home');
 
     }
 
@@ -1383,13 +1272,11 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
                     if (map1.containsKey(attachment.PBS_AAAP_Attachment_Type__c)) {
                         System.debug('inside contains key');
                         List<Attachment> tempAtts = map1.get(attachment.PBS_AAAP_Attachment_Type__c);
-                        //tempAtts.add(attachment.Attachments);
+                        
                         System.debug('tempAtts size is' + tempAtts.size());
                         System.debug('tempAtts is' + tempAtts);
                         map1.put(attachment.PBS_AAAP_Attachment_Type__c, tempAtts);
-                    } /*else {
-                        map1.put(attachment.PBS_AAAP_Attachment_Type__c, attachment.Attachments);
-                    }*/
+                    } 
                 }
             }
         }
@@ -1496,14 +1383,12 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
                 LIMIT 1
         ];
 
-        // logic for "DRAFT" status.
-        //Add || PBS_AAAP_GlobalConstants.OFFERSTATUS_WITHDRAWN as well.. for now.
+        
         rlpInfo = dao.getRLP(submitOffer.PBS_AAAP_RLP_Number__c);
         submitOffer.PBS_AAAP_RLP_Region__c = rlpInfo.PBS_AAAP_Region__c;
         if (submitOffer.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT) {
 
-            if (offeralreadyexists.size() > 0 /*&& offeralreadyexists[0].Id != null && offeralreadyexists[0].PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED
-                && submitOffer.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT       */) {
+            if (offeralreadyexists.size() > 0 ) {
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'AAAP user already has an existing offer in the system in ' + offeralreadyexists[0].PBS_AAAP_Offer_Status__c + ' status. ' +
                         'In order to submit the current offer the user should either modify the current offer or ' +
                         'withdraw the originally submitted offer from the system.');
@@ -1520,12 +1405,12 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
                 System.debug('******************** submitOffer.PBS_AAAP_Offer_Status__c ::::::::: : ' + submitOffer.PBS_AAAP_Offer_Status__c);
 
                 // TODO might need to redirect them to PDF pages.
-                //pref = Page.PBS_AAAP_OfferSubmitConfirmation;
+                
                 pref = new PageReference('/AAAP/OfferSubmitConfirmation');
                 pref.getParameters().put('offerId', submitOffer.Id);
-                //pref.setRedirect(false);
+                
                 pageURLForRedirection = pref.getUrl();
-               pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferSubmitConfirmation', Label.LOP_Community_Base_URL+'AAAP-OfferSubmitConfirmation');
+               pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferSubmitConfirmation', Label.LOP_Community_Base_URL+'OfferSubmitConfirmation');
             }
 
         }
@@ -1580,7 +1465,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
             pref = new PageReference('/AAAP/OfferSubmitConfirmation');
             pref.setRedirect(false);
             pageURLForRedirection = pref.getUrl();
-            pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferSubmitConfirmation', Label.LOP_Community_Base_URL+'AAAP-OfferSubmitConfirmation');
+            pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferSubmitConfirmation', Label.LOP_Community_Base_URL+'OfferSubmitConfirmation');
 
         }
 
@@ -1596,7 +1481,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
 
         PageReference pref = new PageReference('/AAAP/OfferSubmitConfirmation');
         pageURLForRedirection = pref.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferSubmitConfirmation', Label.LOP_Community_Base_URL+'AAAP-OfferSubmitConfirmation');
+        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferSubmitConfirmation', Label.LOP_Community_Base_URL+'OfferSubmitConfirmation');
         system.debug('&&&&'+pageURLForRedirection);
         pref.setRedirect(false);
         return null;
@@ -1613,7 +1498,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
         if(oAtt.size() > 0){
             delete oAtt;
         }
-        //lstDelAtt = [select id from attachment where parentId IN :idSet];
+        
 
         // if we ahve data then delete
         if(!lstDelAtt.isEmpty()){
@@ -1640,11 +1525,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
         }
         Boolean displayform1364_2019link = false;
 //SGanti modified 8/2021 - conditions for displayform1364_2019link         
-        //if(Integer.valueOf(offerpdf.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c) > 2018){
-            //displayform1364_2019link = true;
-        //}else{
-            //displayform1364_2019link = false;
-        //}
+        
        if(Integer.valueOf(offerpdf.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c) > 2018 && Integer.valueOf(offerpdf.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c) <= 2021){
                 displayform1364_2019link = true;
             }else{
@@ -1669,64 +1550,18 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
         }
 
         System.debug('---------------OfferId is: ' + ofrID + '--------------------------------');
-        //List<Attachment> lstAttachments = new List<Attachment>();
-        // Add Attachment
+       
         if (displayform1217link == true) {
             system.debug('#######1');
             addAttachementToOffer(ofrID, 'Form1217', 'Form1217.pdf');
             addAttachementToOffer(ofrID, 'Form1217Attachment', 'Form1217Attachment.pdf');
             system.debug('#######2');
         }
-//SGanti commented out 8/2021 -  to include logic for displayform1364_2022link        
-      /*  if(displayform1364_2019link == true){
-            system.debug('#######3');
-//SGanti commented out Offerform1364_2019 on 8/2021     
-          //  addAttachementToOffer(ofrID, 'Offerform1364_2019', 'OfferForm1364.pdf');
-            //addAttachementToOffer(ofrID, 'OfferForm1364RateStructure', 'OfferForm1364RateStructure.pdf');
-//SGanti added 8/2021
-            System.debug('---------------ABOUT TO ADD New Offer Form 1364-------------');  
-            addAttachementToOffer(ofrID, 'NewOfferForm1364', 'NewOfferForm1364.pdf');         
-            
-            if (displayLink == true && displayform1217link == true) {
-                system.debug('#######4');
-                addAttachementToOffer(ofrID, 'OfferForm3518', 'OfferForm3518.pdf');
-                system.debug('#######5');
-            } else if (displayLink == true && displayform1217link != true) {
-                system.debug('#######6');
-                addAttachementToOffer(ofrID, 'OfferForm3518', 'OfferForm3518.pdf');
-                system.debug('#######7');
-            } else if (displayLink != true && displayform1217link == true) {
-                system.debug('#######8');
-                system.debug('#######9');
-            } else if (displayLink != true && displayform1217link != true) {
-                system.debug('#######10');
-                system.debug('#######11');
-            }
-        }else{
-            system.debug('#######12');
-//SGanti commented out 8/2021           
-           // addAttachementToOffer(ofrID, 'OfferForm1364', 'OfferForm1364.pdf');
-//SGanti added 8/2021
-            addAttachementToOffer(ofrID, 'NewOfferForm1364', 'NewOfferForm1364.pdf');
-
-            //addAttachementToOffer(ofrID,'OfferForm1364Attachment','OfferForm1364Attachment.pdf');
-            addAttachementToOffer(ofrID, 'OfferForm1364RateStructure', 'OfferForm1364RateStructure.pdf');
-            if (displayLink == true && displayform1217link == true) { addAttachementToOffer(ofrID, 'OfferForm3518', 'OfferForm3518.pdf');
-                system.debug('#######14');
-            } else if (displayLink == true && displayform1217link != true) {  addAttachementToOffer(ofrID, 'OfferForm3518', 'OfferForm3518.pdf');
-                system.debug('#######15');
-            } else if (displayLink != true && displayform1217link == true) {
-                system.debug('#######16');
-            } //else if (displayLink != true && displayform1217link != true) {
-                //system.debug('#######17');
-                //system.debug('#######18');
-            //}
-    }
-   */     
+     
         if(displayform1364_2022link == true){
                   system.debug('#######3');
             addAttachementToOffer(ofrID, 'OfferForm1364_2022', 'OfferForm1364.pdf');
-            //addAttachementToOffer(ofrID, 'OfferForm1364RateStructure', 'OfferForm1364RateStructure.pdf');       
+                  
             
             if (displayLink == true && displayform1217link == true) {
                 system.debug('#######4');
@@ -1749,7 +1584,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
             if(displayform1364_2019link == true){
                 system.debug('#######12');
             addAttachementToOffer(ofrID, 'Offerform1364_2019', 'OfferForm1364.pdf');
-            //addAttachementToOffer(ofrID, 'OfferForm1364RateStructure', 'OfferForm1364RateStructure.pdf');       
+                  
             
             if (displayLink == true && displayform1217link == true) {
                 system.debug('#######13');
@@ -1770,7 +1605,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
             else{
                 system.debug('#######21');
            addAttachementToOffer(ofrID, 'OfferForm1364', 'OfferForm1364.pdf');
-            //addAttachementToOffer(ofrID,'OfferForm1364Attachment','OfferForm1364Attachment.pdf');
+           
             addAttachementToOffer(ofrID, 'OfferForm1364RateStructure', 'OfferForm1364RateStructure.pdf');
             if (displayLink == true && displayform1217link == true) { addAttachementToOffer(ofrID, 'OfferForm3518', 'OfferForm3518.pdf');
                 system.debug('#######22');
@@ -1778,10 +1613,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
                 system.debug('#######23');
             } else if (displayLink != true && displayform1217link == true) {
                 system.debug('#######24');
-            } //else if (displayLink != true && displayform1217link != true) {
-                //system.debug('#######25');
-                //system.debug('#######26');
-            //}
+            } 
             }
         }     
 
@@ -1814,14 +1646,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
         }
         system.debug('&&&&&&2'+displayform1217link);
         Boolean displayform1364_2019link = false;
-//SGanti commented out 8/2021 - to update conditions for displayform1364_2019link        
-       
-       // if(Integer.valueOf(offerpdf.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c) > 2018){
-         //   displayform1364_2019link = true;
-        //}else{
-          //  displayform1364_2019link = false;
-        //}
-//SGanti added 8/2021. Updated conditions for displayform1364_2019link.
+
         
          if(Integer.valueOf(offerpdf.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c) > 2018 && Integer.valueOf(offerpdf.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c) <= 2021){
                 displayform1364_2019link = true;
@@ -1844,10 +1669,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
             system.debug('&&&&&&3');
             pageRef = Page.OfferForm1217;
             pageRef.getParameters().put('formtype', 'offerform1217');
-          //  pageRef.getParameters().put('offerId', offerId);
-            //pageURLForRedirection = pageRef.getUrl();
-           	//pageURLForRedirection = pageURLForRedirection.replace('/apex/offerform1217', Label.LOP_Community_Base_URL+'offerform1217');
-           //  System.debug('Chandralekha'+pageURLForRedirection);
+
             system.debug('&&&&&&4');
         }
         if (formType == 'Form1217Attachment' && displayform1217link == true) {
@@ -1928,12 +1750,12 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
         }
         offAtt.PBS_AAAP_Offer__c = offerId;
         insert offAtt;
- //String base64 = EncodingUtil.base64Encode(pdfPageBlob);	
-        	ContentVersion ContVerFile = new ContentVersion();	
-            ContVerFile.VersionData = pdfPageBlob; //EncodingUtil.base64Decode(base64);//Blob.valueOf('string');	
-            ContVerFile.Title = fileName; 	
-            ContVerFile.PathOnClient= fileName;	
-      		insert ContVerFile;
+ //String base64 = EncodingUtil.base64Encode(pdfPageBlob);  
+            ContentVersion ContVerFile = new ContentVersion();  
+            ContVerFile.VersionData = pdfPageBlob; //EncodingUtil.base64Decode(base64);//Blob.valueOf('string');    
+            ContVerFile.Title = fileName;   
+            ContVerFile.PathOnClient= fileName; 
+            insert ContVerFile;
             Id conDoc = [SELECT ContentDocumentId FROM ContentVersion WHERE Id =:ContVerFile.Id].ContentDocumentId;
             ContentDocumentLink cDe = new ContentDocumentLink();
             cDe.ContentDocumentId = conDoc;
@@ -1959,14 +1781,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
             contentDocumentObj.Description  = cd.DistributionPublicUrl;
             update contentDocumentObj;
 //-- create a corresponding record on Attachment std object.
-		/*
-        Attachment a = new Attachment();
-        a.Body = pdfPageBlob;
-        a.ParentID = offAtt.Id;
-        a.Name = fileName;
-        insert a;
-        system.debug('\n-a--'+a.Id);
-        */
+        
         PBS_AAAP_Utility.logMethodEnd('addAttachementToOffer');
 
 
@@ -2046,7 +1861,7 @@ public without sharing class PBS_AAAP_OfferAttachmentsController {
         p.setRedirect(false);
         
         pageURLForRedirection = p.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/PreviewOfferPage', Label.LOP_Community_Base_URL+'AAAP-PreviewOfferPage');
+        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/PreviewOfferPage', Label.LOP_Community_Base_URL+'Offer-M-PreviewOfferPage');
         return null;
     }
     //changes finish
