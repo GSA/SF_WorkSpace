@@ -434,11 +434,11 @@
             window.history.replaceState('','',window.location.href);
         }
 
-         let recId = '{!$CurrentPage.parameters.Id}';
+         let recId = '{!HTMLENCODE(JSENCODE($CurrentPage.parameters.Id))}';
           console.log('Page params ',recId);
     
-        $Lightning.use("c:PBS_AAAP_EnhancedNotesApp", function() {
-            $Lightning.createComponent("c:PBS_AAAP_EnhancedNotes", {recordId: "{!$CurrentPage.parameters.Id}"}, "lightningContentNotes", function(cmp) {});
+    $Lightning.use("c:PBS_AAAP_EnhancedNotesApp", function() {
+            $Lightning.createComponent("c:PBS_AAAP_EnhancedNotes", {recordId: "{!HTMLENCODE(JSENCODE($CurrentPage.parameters.Id))}"}, "lightningContentNotes", function(cmp) {});
         });
     </script>
 </apex:page>
