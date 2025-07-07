@@ -1232,9 +1232,13 @@ global with sharing class PBS_AAAP_IdentifyWinnerController extends PBS_AAAP_Pag
 
     public PageReference callCloningClass() {
 
-        String para = Apexpages.currentPage().getParameters().get('node');
+        String para = String.escapeSingleQuotes(Apexpages.currentPage().getParameters().get('node'));
         String offId = Apexpages.currentPage().getParameters().get('list');
-
+		List<PBS_AAAP_Agency_Requirement__c> agencyRecords = [SELECT Id FROM PBS_AAAP_Agency_Requirement__c where Id=:para];
+        String agencyId = '';
+        if(agencyRecords.size() > 0){
+            agencyId = agencyRecords[0].Id;
+        }
         List<String> offerIdsStr = New List<String>();
 
         if(!String.isBlank(offId)){
@@ -1255,7 +1259,7 @@ global with sharing class PBS_AAAP_IdentifyWinnerController extends PBS_AAAP_Pag
             PBS_AAAP_saveVersionClass.cloneOffers2(offerIds, para);
         }
         //return null;
-        PageReference pageRef = new PageReference('/apex/pbs_aaap_identifywinnersearch?agencyId='+para);
+        PageReference pageRef = new PageReference('/apex/pbs_aaap_identifywinnersearch?agencyId='+agencyId);
         pageRef.setRedirect(true);
         return pageRef;
     }

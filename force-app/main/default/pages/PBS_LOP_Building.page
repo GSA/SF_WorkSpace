@@ -250,7 +250,7 @@
         <script type="text/javascript">
         $j = jQuery.noConflict();
         $j(document).ready(function(){
-            updateOffer(); 
+            //updateOffer(); 
             
             switch("{!JSENCODE(selectedASL)}"){
                 case "Improvements Needed":
@@ -348,7 +348,7 @@
                 <apex:form id="newOffer" style="height: auto !important;overflow:hidden">
                     <apex:actionRegion rendered="{!isValidUser}">
                         <!--<apex:actionFunction name="deleteOffer" action="{!actionDeleteOffer}"></apex:actionFunction>  -->                      
-                        <apex:actionFunction name="updateOffer" action="{!updateOfferDetails}" oncomplete=""/>
+                        <!--<apex:actionFunction name="updateOffer" action="{!updateOfferDetails}" oncomplete=""/>-->
                         <apex:actionFunction name="aslToggleMethod" rerender="aslVal1" action="{!aslToggleAction}">
                             <apex:param name="sRadio" assignTo="{!selectedASL}" value="" />
                         </apex:actionFunction>
@@ -602,7 +602,7 @@
                                     <apex:outputPanel id="historic1" >
                                         <apex:outputtext value="7. Is the building a historic property?"/>
                                         <span class="required">*</span>
-                                        <a class="popup" href="#Modal_Bldg_Ques7"><img src="{!$Resource.Info_Icon}"/></a>
+                                        <!--<a class="popup" href="#Modal_Bldg_Ques7"><img src="{!$Resource.Info_Icon}"/></a>
                                         
                                         <div id="Modal_Bldg_Ques7"
                                              class = "infopopup" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
@@ -610,7 +610,7 @@
                                                 <br/><br/>                                               
                                                 Refer to section 3 National Historic Preservation Act Requirements - Lease of the lease.
                                             </p>
-                                        </div>
+                                        </div>-->
                                         <br/>
                                         <apex:selectRadio styleClass="custRadio"
                                                           value="{!lopOffer.PBS_RSAP_Building_is_a_historic_property__c}"
@@ -625,7 +625,7 @@
                                     <apex:outputPanel id="historic2" >
                                         <apex:outputtext value="8. Is the building within a historic district?"/>
                                         <span class="required">*</span>
-                                        <a class="popup" href="#Modal_Bldg_Ques8"><img src="{!$Resource.Info_Icon}"/></a>
+                                        <!--<a class="popup" href="#Modal_Bldg_Ques8"><img src="{!$Resource.Info_Icon}"/></a>
                                         
                                         <div id="Modal_Bldg_Ques8"
                                              class = "infopopup" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
@@ -633,7 +633,7 @@
                                                 <br/><br/>                                               
                                                 Refer to section 3 National Historic Preservation Act Requirements - Lease of the lease.
                                             </p>
-                                        </div>
+                                        </div>-->
                                         <br/>
                                         <apex:selectRadio styleClass="custRadio"
                                                           value="{!lopOffer.PBS_RSAP_Bldg_within_a_historic_district__c}"
@@ -647,13 +647,13 @@
                                     <apex:outputPanel >
                                         <apex:outputtext value="{!$Label.LOP_HubZone}"/>
                                         <span class="required">*</span>
-                                        <a class="popup" href="#Modal_Bldg_Ques9"><img src="{!$Resource.Info_Icon}"/></a>
+                                        <!--<a class="popup" href="#Modal_Bldg_Ques9"><img src="{!$Resource.Info_Icon}"/></a>
                                         
                                         <div id="Modal_Bldg_Ques9"
                                              class = "infopopup" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
                                             <p>With regard to HUBZone price evaluation preference:A HUBZone small business concern (SBC) Offeror may elect to waive the price evaluation provided in section 4 of the RLP. In such a case, no price evaluation preference shall apply to the evaluation of the HUBZone SBC, and the performance of work requirements set forth in section 1 of the lease shall not be applicable to a lease awarded to the HUBZone SBC Offeror under this solicitation.
                                             </p>
-                                        </div>
+                                        </div>-->
                                         <br/>
                                         <apex:selectRadio styleClass="custRadio" value="{!hubZoneStr}" id="hubZone"
                                                           layout="pageDirection">

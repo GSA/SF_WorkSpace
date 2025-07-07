@@ -569,7 +569,7 @@ public with sharing class PBS_LOP_BuildingController {
         options.add(new SelectOption('I am a HUBZone small business concern offeror, and do not waive the price evaluation preference.', 'I am a HUBZone small business concern offeror, and do not waive the price evaluation preference.'));
         return options;
     }
-
+    /*
     public void updateOfferDetails(){
         final String chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
         Integer len = Integer.valueOf(Label.PBS_AAAP_KeyLength);
@@ -586,7 +586,7 @@ public with sharing class PBS_LOP_BuildingController {
                 PBS_AAAP_Session_Key__c = randStr);
         update offerRec;
     }
-    
+    */
     /*Ramya added to add 10th question: Aproximate Construction Level Dropdown*/
     public PageReference aslToggleAction() {
         lopOffer.PBS_AAAP_Approximate_Construction_Level__c = selectedASL;

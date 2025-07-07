@@ -14,7 +14,7 @@ global without sharing class LightningSelfRegisterController {
         Auth.AuthConfiguration authConfig = new Auth.AuthConfiguration(communityUrl,'');
         return authConfig.isCommunityUsingSiteAsContainer();
     }
-     
+    
     @TestVisible 
     private static void validatePassword(User u, String password, String confirmPassword) {
         if(!Test.isRunningTest()) {Site.validatePassword(u, password, confirmPassword);}
@@ -22,15 +22,10 @@ global without sharing class LightningSelfRegisterController {
     }
     
     @AuraEnabled
-    public static String selfRegister(String firstname ,String lastname, String email, String password, String confirmPassword, String accountId, String extraFields, String startUrl, Boolean includePassword, String captchaSolve) {
+    public static String selfRegister(String firstname ,String lastname, String email, String password, String confirmPassword, String accountId, String regConfirmUrl,String regConfirmExistingUserUrl, String extraFields, String startUrl, Boolean includePassword, String captchaSolve) {
         Savepoint sp = null;
         boolean strVerifyRecaptcha; 
-        String regConfirmUrl='';
-        String regConfirmExistingUserUrl='';
-        regConfirmUrl = label.regConfirmUrl;
-        regConfirmExistingUserUrl = label.regConfirmExistingUserUrl;
-                             system.debug('****regConfirmUrl'+regConfirmUrl); system.debug('****regConfirmExistingUserUrl:'+regConfirmExistingUserUrl);
-            system.debug('startUrl::'+startUrl);
+              
         try {            
             recaptchaHandler = new RET_reCAPTCHAHandler(RET_Helper.RECAPTCHA_CUSTOM_SETTING_NAME, captchaSolve);
             strVerifyRecaptcha = recaptchaHandler.isVerifiedRecaptcha();            
@@ -88,14 +83,9 @@ global without sharing class LightningSelfRegisterController {
             String userId;
             if(!checkAAAPUser(email)){
                  userId = Site.createPortalUser(u, accountId, password);
-                system.debug('****userId'+userId); 
             }else{
-                system.debug('****regConfirmExistingUserUrl:'+regConfirmExistingUserUrl);
-                 system.debug('****userId'+userId);
                   ApexPages.PageReference confirmRef = new PageReference(regConfirmExistingUserUrl);
-                    if(!Test.isRunningTest()) {
-                        aura.redirect(confirmRef);
-              }
+                    if(!Test.isRunningTest()) {aura.redirect(confirmRef);}
             }
            
             system.debug('****userId'+userId);
@@ -152,7 +142,6 @@ global without sharing class LightningSelfRegisterController {
         Id profileId = [Select Id from Profile where name='AAAP Customer Portal'].Id;
         //query the user matching the email and AAAP Customer Portal profile
         List<User> u = [Select Id, Name, profileId from user where username=:email And ProfileId=:profileId];
-        system.debug('u::'+u);
         //if user found than add permission set.
          if(u.size()>0){
             switchUserToRET(u[0]); addPermissionSet(u[0].Id); return true;

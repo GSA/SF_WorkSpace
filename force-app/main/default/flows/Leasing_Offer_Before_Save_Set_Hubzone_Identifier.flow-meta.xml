@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <description>SFWS-3573: Replaced deactivated workflows HubZone Identifier and HubZone Identifier Revert.
+Updates HubZone Identifier based on values of Hubzone SBC &amp; Hubzone SBC Waiver</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>Sets HubZone Identifier to Yes or No based on values of Hubzone SBC and Hubzone SBC Waiver</description>
+        <name>newHubzoneIdentifier</name>
+        <dataType>String</dataType>
+        <expression>IF(
+   AND(
+     ISPICKVAL({!$Record.PBS_AAAP_HubZone_SBC__c}, &quot;Yes&quot;),
+     ISPICKVAL({!$Record.PBS_AAAP_HubZone_SBC_Preference__c}, &quot;No&quot;)
+   ),
+&quot;Yes&quot;,&quot;No&quot;)</expression>
+    </formulas>
+    <interviewLabel>Leasing : Offer : Before Save : Set Hubzone Identifier {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Leasing : Offer : Before Save : Set Hubzone Identifier</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <description>Set HubZone Identifier to newHubzoneIdentifier value</description>
+        <name>Set_HubZone_Identifier_Value</name>
+        <label>Set HubZone Identifier Value</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <inputAssignments>
+            <field>PBS_AAAP_HUBZONE_IDENTIFIER__c</field>
+            <value>
+                <elementReference>newHubzoneIdentifier</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Set_HubZone_Identifier_Value</targetReference>
+        </connector>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>PBS_AAAP_HubZone_SBC__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>PBS_AAAP_HubZone_SBC_Preference__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>PBS_AAAP_HubZone_SBC__c</field>
+            <operator>EqualTo</operator>
+        </filters>
+        <filters>
+            <field>PBS_AAAP_HubZone_SBC_Preference__c</field>
+            <operator>EqualTo</operator>
+        </filters>
+        <object>PBS_AAAP_Offer__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

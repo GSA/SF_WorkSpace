@@ -69,7 +69,7 @@ IF( TEXT(Project_Name__r.RA_Security__c)== &apos;Upgrade: no blast&apos;,if(Cost
         <criteriaItems>
             <field>User.CreatedDate</field>
             <operation>greaterThan</operation>
-            <value>1/1/1900</value>
+            <value>12/31/1899 9:00 PM</value>
         </criteriaItems>
         <criteriaItems>
             <field>NCMT_Project_Cost_Summary__c.RecordTypeId</field>
@@ -99,7 +99,7 @@ IF( TEXT(Project_Name__r.RA_Security__c)== &apos;Upgrade: no blast&apos;,if(Cost
         <criteriaItems>
             <field>NCMT_Project_Cost_Summary__c.CreatedDate</field>
             <operation>greaterOrEqual</operation>
-            <value>1/1/1900</value>
+            <value>12/31/1899 9:00 PM</value>
         </criteriaItems>
         <criteriaItems>
             <field>NCMT_Project_Cost_Summary__c.RecordTypeId</field>

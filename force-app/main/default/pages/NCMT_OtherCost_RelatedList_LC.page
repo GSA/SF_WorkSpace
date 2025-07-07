@@ -5,7 +5,8 @@
      <script>
     $Lightning.use("c:NCMT_OtherCost_RelatedList_App", function(){
             $Lightning.createComponent("c:NCMT_OtherCost_RelatedList", {
-                "recordId" : "{!$CurrentPage.parameters.id}"
+                "recordId" : "{!JSENCODE(HTMLENCODE($CurrentPage.parameters.id))}",
+                // "recordId" : "{!$CurrentPage.parameters.id}"
                 //"recordId" : "a1C35000001P62u"
             },
             'lightningPage',

@@ -108,7 +108,7 @@ public class Test_PBS_LOP_BuildingController {
             List<SelectOption> EnergyStarMeetsExceptions = obj1.getEnergyStarMeetsExceptions();
             List<SelectOption> EnergyStarCost = obj1.getEnergyStarCost();
 
-            obj1.updateOfferDetails();
+            //obj1.updateOfferDetails();
             obj1.saveBuilding(); 
             
             obj1.hubZoneStr = 'I am a HUBZone small business concern offeror, and I elect to waive the price evaluation preference.';
@@ -190,7 +190,7 @@ public class Test_PBS_LOP_BuildingController {
             obj1.redirectToParking();
             
             obj1.lopOffer = new PBS_AAAP_Offer__c();
-            obj1.updateOfferDetails();
+            //obj1.updateOfferDetails();
             PBS_AAAP_Offer__c offernew4 = new PBS_AAAP_Offer__c();
             offernew4.PBS_AAAP_RLP_Number__c = RLP.id;
             offernew4.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED;
@@ -324,13 +324,13 @@ public class Test_PBS_LOP_BuildingController {
             obj1.lopOffer.PBS_RSAP_Energy_Star_Response_No__c = 'New construction';
             obj1.saveBuilding();
             
-            obj1.updateOfferDetails();
+            //obj1.updateOfferDetails();
             obj1.redirectToParking();
             
             obj1.lopOffer = new PBS_AAAP_Offer__c();
             offernew.PBS_RSAP_Energy_Star_Meets_Exceptions__c = null;
             obj1.saveBuilding();
-            obj1.updateOfferDetails();
+            //obj1.updateOfferDetails();
            
         	obj1.areaTypeAction();
             obj1.aslToggleAction();

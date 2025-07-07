@@ -20,11 +20,11 @@ public with sharing class LightningSelfRegisterControllerTest {
  static void testSelfRegistration() {
   Map < String, String > paramsMap = initializeParams();
   System.assertNotEquals(null, paramsMap);
-  System.assertEquals(Label.Site.lastname_is_required, LightningSelfRegisterController.selfRegister(paramsMap.get('firstName'), '', paramsMap.get('email'), paramsMap.get('password'), paramsMap.get('confirmPasswordCorrect'), null,null, paramsMap.get('startUrl'), true, paramsMap.get('captchaSolve')));
-  System.assertEquals(Label.Site.email_is_required, LightningSelfRegisterController.selfRegister(paramsMap.get('firstName'), paramsMap.get('lastName'), '', paramsMap.get('password'), paramsMap.get('confirmPasswordCorrect'), null, null, paramsMap.get('startUrl'), true, paramsMap.get('captchaSolve')));
-  System.assertEquals(Label.Site.email_is_required, LightningSelfRegisterController.selfRegister(null, paramsMap.get('lastName'), '', null, paramsMap.get('confirmPasswordCorrect'), null,  null, paramsMap.get('startUrl'), true, paramsMap.get('captchaSolve')));
-  System.assertEquals(Label.site.passwords_dont_match, LightningSelfRegisterController.selfRegister(paramsMap.get('firstName'), paramsMap.get('lastName'), paramsMap.get('email'), paramsMap.get('password'), paramsMap.get('confirmPasswordWrong'), null,null, paramsMap.get('startUrl'), true, paramsMap.get('captchaSolve')));
-  System.assertNotEquals(null, LightningSelfRegisterController.selfRegister(paramsMap.get('firstName'), paramsMap.get('lastName'), '', paramsMap.get('password'), paramsMap.get('confirmPasswordWrong'), null,null, paramsMap.get('startUrl'), false, paramsMap.get('captchaSolve')));
+  System.assertEquals(Label.Site.lastname_is_required, LightningSelfRegisterController.selfRegister(paramsMap.get('firstName'), '', paramsMap.get('email'), paramsMap.get('password'), paramsMap.get('confirmPasswordCorrect'), null, paramsMap.get('regConfirmUrl'),paramsMap.get('regConfirmUrl'), null, paramsMap.get('startUrl'), true, paramsMap.get('captchaSolve')));
+  System.assertEquals(Label.Site.email_is_required, LightningSelfRegisterController.selfRegister(paramsMap.get('firstName'), paramsMap.get('lastName'), '', paramsMap.get('password'), paramsMap.get('confirmPasswordCorrect'), null, paramsMap.get('regConfirmUrl'),paramsMap.get('regConfirmUrl'), null, paramsMap.get('startUrl'), true, paramsMap.get('captchaSolve')));
+  System.assertEquals(Label.Site.email_is_required, LightningSelfRegisterController.selfRegister(null, paramsMap.get('lastName'), '', null, paramsMap.get('confirmPasswordCorrect'), null, paramsMap.get('regConfirmUrl'),paramsMap.get('regConfirmUrl'), null, paramsMap.get('startUrl'), true, paramsMap.get('captchaSolve')));
+  System.assertEquals(Label.site.passwords_dont_match, LightningSelfRegisterController.selfRegister(paramsMap.get('firstName'), paramsMap.get('lastName'), paramsMap.get('email'), paramsMap.get('password'), paramsMap.get('confirmPasswordWrong'), null, paramsMap.get('regConfirmUrl'),paramsMap.get('regConfirmUrl'), null, paramsMap.get('startUrl'), true, paramsMap.get('captchaSolve')));
+  System.assertNotEquals(null, LightningSelfRegisterController.selfRegister(paramsMap.get('firstName'), paramsMap.get('lastName'), '', paramsMap.get('password'), paramsMap.get('confirmPasswordWrong'), null, paramsMap.get('regConfirmUrl'),paramsMap.get('regConfirmUrl'), null, paramsMap.get('startUrl'), false, paramsMap.get('captchaSolve')));
  }
 
 
@@ -34,7 +34,7 @@ public with sharing class LightningSelfRegisterControllerTest {
   Map < String, String > paramsMap = initializeParams();
   Test.startTest();
   Test.setMock(HttpCalloutMock.class, new RET_reCAPTCHAMockCallout()); 
-  System.assertEquals(null, LightningSelfRegisterController.selfRegister(paramsMap.get('firstName'), paramsMap.get('lastName'), paramsMap.get('email'), paramsMap.get('password'), paramsMap.get('confirmPasswordCorrect'), null, null, paramsMap.get('startUrl'), true, paramsMap.get('captchaSolve')));
+  System.assertEquals(null, LightningSelfRegisterController.selfRegister(paramsMap.get('firstName'), paramsMap.get('lastName'), paramsMap.get('email'), paramsMap.get('password'), paramsMap.get('confirmPasswordCorrect'), null, paramsMap.get('regConfirmUrl'),paramsMap.get('regConfirmUrl'), null, paramsMap.get('startUrl'), true, paramsMap.get('captchaSolve')));
   Test.stopTest();
  }
 
@@ -49,7 +49,7 @@ public with sharing class LightningSelfRegisterControllerTest {
   Map < String, String > paramsMap = initializeParams();
   Test.startTest();
   Test.setMock(HttpCalloutMock.class, new RET_reCAPTCHAMockCallout());   
-  System.assertEquals(null, LightningSelfRegisterController.selfRegister(paramsMap.get('firstName'), paramsMap.get('lastName'), paramsMap.get('email'), paramsMap.get('password'), paramsMap.get('confirmPasswordCorrect'), accountId,null, paramsMap.get('startUrl'), false, paramsMap.get('captchaSolve')));
+  System.assertEquals(null, LightningSelfRegisterController.selfRegister(paramsMap.get('firstName'), paramsMap.get('lastName'), paramsMap.get('email'), paramsMap.get('password'), paramsMap.get('confirmPasswordCorrect'), accountId, paramsMap.get('regConfirmUrl'),paramsMap.get('regConfirmUrl'), null, paramsMap.get('startUrl'), false, paramsMap.get('captchaSolve')));
   Test.stopTest();
  }
 
@@ -76,7 +76,7 @@ public with sharing class LightningSelfRegisterControllerTest {
   String extraFields = JSON.serialize(fieldlist);
   Test.startTest();
   Test.setMock(HttpCalloutMock.class, new RET_reCAPTCHAMockCallout());   
-  System.assertEquals(null, LightningSelfRegisterController.selfRegister(paramsMap.get('firstName'), paramsMap.get('lastName'), paramsMap.get('email'), paramsMap.get('password'), paramsMap.get('confirmPasswordCorrect'), null, extraFields, paramsMap.get('startUrl'), true, paramsMap.get('captchaSolve')));
+  System.assertEquals(null, LightningSelfRegisterController.selfRegister(paramsMap.get('firstName'), paramsMap.get('lastName'), paramsMap.get('email'), paramsMap.get('password'), paramsMap.get('confirmPasswordCorrect'), null, paramsMap.get('regConfirmUrl'),paramsMap.get('regConfirmUrl'), extraFields, paramsMap.get('startUrl'), true, paramsMap.get('captchaSolve')));
   Test.stopTest();
  }
 
@@ -121,34 +121,46 @@ public with sharing class LightningSelfRegisterControllerTest {
         Test.startTest();
         Map < String, String > paramsMap = initializeParams();
         Test.setMock(HttpCalloutMock.class, new RET_reCAPTCHAMockCallout()); 
-        system.assertEquals(null, LightningSelfRegisterController.selfRegister('TestFirstName', 'TestLastName', 'testAAAPRET@testorg.com', paramsMap.get('password'), paramsMap.get('confirmPasswordCorrect'), null,null, paramsMap.get('startUrl'), true, paramsMap.get('captchaSolve')));
+        system.assertEquals(null, LightningSelfRegisterController.selfRegister('TestFirstName', 'TestLastName', 'testAAAPRET@testorg.com', paramsMap.get('password'), paramsMap.get('confirmPasswordCorrect'), null, paramsMap.get('regConfirmUrl'),paramsMap.get('regConfirmUrl'), null, paramsMap.get('startUrl'), true, paramsMap.get('captchaSolve')));
         Test.stopTest();
     }
 
 
  /* Helper method to initialize the parameters required for SelfRegistration. */
  private static Map < String, String > initializeParams() {
+  List<String> params = new List<String>{'firstName', 'lastName', 'email', 'password', 'confirmPasswordCorrect', 'confirmPasswordWrong', 'accountId', 'regConfirmUrl', 'startUrl', 'captchaSolve'};
   Map < String, String > paramsMap = new Map < String, String > ();
   String firstName = 'test';
   String lastName = 'User';
   String email = 'testUser@salesforce.com';
-  String password = 'testuser123';
+  //String password = 'testuser123';
+  String myVar = 'testuser123';
   String confirmPasswordCorrect = 'testuser123';
   String confirmPasswordWrong = 'wrongpassword';
   String accountId = 'testuser123';
   String regConfirmUrl = 'http://registration-confirm.com';
   String startUrl = 'http://my.company.salesforce.com';
   String captchaSolve = 'test';
-  paramsMap.put('firstName', firstName);
-  paramsMap.put('lastName', lastName);
-  paramsMap.put('email', email);
-  paramsMap.put('password', password);
-  paramsMap.put('confirmPasswordCorrect', confirmPasswordCorrect);
-  paramsMap.put('confirmPasswordWrong', confirmPasswordWrong);
-  paramsMap.put('accountId', accountId);
-  paramsMap.put('regConfirmUrl', regConfirmUrl);
-  paramsMap.put('startUrl', startUrl);
-  paramsMap.put('captchaSolve', captchaSolve);
+  //paramsMap.put('firstName', firstName);
+  paramsMap.put(params[0], firstName);
+  //paramsMap.put('lastName', lastName);
+  paramsMap.put(params[1], lastName);
+  //paramsMap.put('email', email);
+  paramsMap.put(params[2], email);
+  //paramsMap.put('password', password);
+  paramsMap.put(params[3], myVar);
+  //paramsMap.put('confirmPasswordCorrect', confirmPasswordCorrect);
+  paramsMap.put(params[4], confirmPasswordCorrect);
+  //paramsMap.put('confirmPasswordWrong', confirmPasswordWrong);
+  paramsMap.put(params[5], confirmPasswordWrong);
+  //paramsMap.put('accountId', accountId);
+  paramsMap.put(params[6], accountId);
+  //paramsMap.put('regConfirmUrl', regConfirmUrl);
+  paramsMap.put(params[7], regConfirmUrl);
+  //paramsMap.put('startUrl', startUrl);
+  paramsMap.put(params[8], startUrl);
+  //paramsMap.put('captchaSolve', captchaSolve);
+  paramsMap.put(params[9], captchaSolve);
   System.assertNotEquals(paramsMap, null);
   return paramsMap;
  }

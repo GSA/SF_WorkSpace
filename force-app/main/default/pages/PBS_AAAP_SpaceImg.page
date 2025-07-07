@@ -27,7 +27,7 @@
         
         <script type="text/javascript">            
             window.onload = function(){
-                var recId = '{!$CurrentPage.parameters.id}';
+                var recId = '{!HTMLENCODE(JSENCODE($CurrentPage.parameters.id))}';
                 var preFix = recId.substring(0, 3);
                 if(preFix == '{!$Label.PBS_AAAP_OfferKeyPrefix}'){
                     

@@ -59,7 +59,7 @@
             <name>Update_Hubzone_Identifier</name>
             <type>FieldUpdate</type>
         </actions>
-        <active>true</active>
+        <active>false</active>
         <booleanFilter>1 AND 2</booleanFilter>
         <criteriaItems>
             <field>PBS_AAAP_Offer__c.PBS_AAAP_HubZone_SBC__c</field>
@@ -79,7 +79,7 @@
             <name>HubZone_Identifier_Revert</name>
             <type>FieldUpdate</type>
         </actions>
-        <active>true</active>
+        <active>false</active>
         <booleanFilter>NOT(1 AND 2)</booleanFilter>
         <criteriaItems>
             <field>PBS_AAAP_Offer__c.PBS_AAAP_HubZone_SBC__c</field>
@@ -99,7 +99,7 @@
             <name>PBS_AAAP_sendGrexSubmissionConfirmation</name>
             <type>Alert</type>
         </actions>
-        <active>true</active>
+        <active>false</active>
         <description>PBS_AAAP_sendGrexSubmissionConfirmation</description>
         <formula>AND(PBS_AAAP_Status_Code__c != null, PBS_AAAP_Status_Code__c == &apos;200&apos;)</formula>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
@@ -110,7 +110,7 @@
             <name>PBS_AAAP_sendGrexSubmissionFailure</name>
             <type>Alert</type>
         </actions>
-        <active>true</active>
+        <active>false</active>
         <formula>AND(PBS_AAAP_Status_Code__c != null, PBS_AAAP_Status_Code__c != &apos;200&apos;)</formula>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
@@ -120,7 +120,7 @@
             <name>PBS_AAAP_sendGrexSubmissionFailuretoGREX</name>
             <type>Alert</type>
         </actions>
-        <active>true</active>
+        <active>false</active>
         <formula>AND(PBS_AAAP_Status_Code__c != null, PBS_AAAP_Status_Code__c != &apos;200&apos;)</formula>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>

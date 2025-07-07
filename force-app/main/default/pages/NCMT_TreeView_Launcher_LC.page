@@ -52,7 +52,7 @@
         $Lightning.use('c:NCMT_TreeStructure_App_LC', function () {
             $Lightning.createComponent('c:NCMT_TreeView_LC', {
                     //"recordId" : "a2A350000009u2S"
-                    "recordId": "{!$CurrentPage.parameters.id}"
+                    "recordId": "{!HTMLENCODE($CurrentPage.parameters.id)}"
                 },
                 'treeStructure',
                 function (cmp) {
