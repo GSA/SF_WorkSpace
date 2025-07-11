@@ -48,6 +48,13 @@
               margin-top:-350px !important;
             //transform: translate(-50%, -50%); !important;
             }
+        .text {
+             width: 185px !important;
+           
+        }
+        #uniform-j_id0\:registrationPanel\:mstate{
+        margin-left: 4px !important;
+        }
     </style>
     
     <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
@@ -154,8 +161,13 @@
                             <span class="required">*</span></apex:outputPanel>
                         <!-- Todd Brown replaced the following inputText to skip ESRI search logic for story SFWS-2602   -->
                         <!-- <apex:inputText value="{!c.Mailingstate}" id="mstate" onkeydown="if(event.keyCode==13){this.blur();actionFunction();}" /> -->
-                        <apex:inputText value="{!c.Mailingstate}" id="mstate" />
-
+                        <!--<apex:inputText value="{!c.Mailingstate}" id="mstate" />-->
+                       
+                        <apex:selectList value="{!c.Mailingstate}" id="mstate" size="1" style="margin-left:4px !important;">
+                                <apex:selectOptions value="{!states}"></apex:selectOptions>
+                        </apex:selectList>
+                      
+                        
                         <apex:outputPanel >
                             <apex:outputText value="9-Digit Zip Code"/>
                             <span class="required">*</span></apex:outputPanel>

@@ -36,6 +36,16 @@ trigger UserTrigger on User (before insert, before update, before delete, after 
         if (isSetSPHDUserPermissionsActive) {
             UserTriggerHandler.syncForSPHDUser(Trigger.new, Trigger.oldMap);
         }
-    }        
+    }   
+    if(Trigger.isBefore && Trigger.isUpdate) {
+        for (User u: Trigger.new){
+            User oldUser = Trigger.oldMap.get(u.Id);
+            if(u.Email != oldUser.Email)
+            {
+                u.Username = u.Email;
+            }
+        }
+    }
+    
     
 }

@@ -9,7 +9,6 @@
 
 
     <head>
-
         <style type="text/css">
             .hideStepRentSection {
                 visibility: hidden;
@@ -178,21 +177,25 @@
                     margin-top: -20px;
             }
             div.selector span{
-                width: 130px;
+            	width: 130px;
             }
             div.selector {
-                background-position: -28px 0;
+                margin-top: -3px;
+            	background-position: -28px 0;
             }
-            .AmountWillBe input.text{
-                width:90px;
-            }
+            
             div.selector select{
-                min-width: 170px;
+            	min-width: 170px;
             }
             div.selector {
                 width: 180px;
-            top:3px;
+                top:3px;
             }
+            
+            .AmountWillBe input.text{
+            width:90px;
+            }
+            
             #stepRentSpan td, #renewalDiv td{
                 padding-top:0px;
             }
@@ -231,7 +234,7 @@
                 padding-right: 5px;
             }
             .long div.selector select {
-                min-width: 200px;
+                min-width: 199px;
             }
              .infopopup1 {
               position:fixed !important;
@@ -744,6 +747,9 @@
                 <apex:outputPanel rendered="{!viewOnly}">
                     <apex:outputLabel id="msgview" styleClass="errMessage" value="{!viewMsg}"/>
                 </apex:outputPanel>
+                <apex:outputPanel rendered="{!showRentErrorMsg}">
+                    <apex:outputLabel id="rentMsg" styleClass="errMessage" value="{!rentErrorMsg}" escape="false"/>
+                </apex:outputPanel>
                 <apex:outputPanel id="panel_outerspace">
                     
 
@@ -1140,98 +1146,122 @@
 
                     <apex:panelGrid id="pangrid_totalRent" columns="1" style="margin-left:-5px;">
                         <apex:outputPanel >
-                        <div id="stepRentTotal" class="bb" style="padding-right:1px;">
-                            <apex:panelGrid columns="2">
-                                <h4 class="grey">Step rent</h4>
-                                <br/><h5 style="color:blue">Shell rent and parking steps should be detailed if the initial amount stated in the rental rates table above does not remain <br />the same for the full term of the lease.  
-                                Shell rent step amounts should be stated in annual rent for the entire leased space, not as a rate per square foot. Parking step rents should be stated as a dollar amount per space per month.<br /></h5>
-                                <br/>
-                                <apex:outputPanel ></apex:outputPanel>
-                            </apex:panelGrid>
-                            <span id="stepRentSpan">
-                                <apex:outputPanel id="StepRentInformation">
-                                                <table class="StepRentTable">
-                                                    <tr>
-                                                        <td style="min-width: 20px;"></td>
-                                                        <td style="min-width: 200px;"><u>Rent Type</u></td>
-                                                        <td style="min-width: 170px;"><u>Beginning Year</u></td>
-                                                        <td style="min-width: 170px;"><u>Through Year</u></td>
-                                                        <td style="min-width: 90;"><u>Amount Will Be:</u></td>
-                                                        <td style="min-width: 108px;"><u>Per:</u></td>
-                                                        <td style="padding-bottom:10px"><u>Delete</u></td>
-                                                    </tr>
-                                                    <apex:repeat value="{!stepFreeRentRecords}" var="record">
-                                                        <tr class="addTableRows">
-                                                            <td>{!record.PBS_RSAP_Rent_Number__c}.</td>
-                                                            <td style="max-width: 200px;" class="long">
-                                                                <apex:outputPanel rendered="{!!isRendered}">
-                                                                    <apex:inputField value="{!record.PBS_RSAP_Step_Rent_Type__c}" onchange="changeThePerValue(this.value,'PBS_RSAP_Step_Payment_Basis__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Rent_Number__c))}');" />
-                                                                </apex:outputPanel>
-                                                                <apex:outputPanel rendered="{!isRendered}">
-                                                                <div class="selector">
-                                                                    <span id="PBS_RSAP_Step_Rent_Type__c{!record.PBS_RSAP_Rent_Number__c}">{!IF(record.PBS_RSAP_Step_Rent_Type__c != Null , record.PBS_RSAP_Step_Rent_Type__c , '--None--')}</span>
-                                                                    <apex:inputField value="{!record.PBS_RSAP_Step_Rent_Type__c}" onchange="changeThePerValue(this.value,'PBS_RSAP_Step_Payment_Basis__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Rent_Number__c))}');changeThePicklistValue(this.value,'PBS_RSAP_Step_Rent_Type__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Rent_Number__c))}');" />
-                                                                </div>
-                                                                </apex:outputPanel>
-                                                            </td>
-                                                            <td style="max-width: 170px;    padding-right: 7px;">
-                                                                <apex:outputPanel rendered="{!!isRendered}">
-                                                                    <apex:inputField value="{!record.PBS_RSAP_Step_Start__c}" />
-                                                                </apex:outputPanel>
-                                                                <apex:outputPanel rendered="{!isRendered}">
-                                                                <div class="selector">
-                                                                    <span id="PBS_RSAP_Step_Start__c{!record.PBS_RSAP_Rent_Number__c}">{!IF(record.PBS_RSAP_Step_Start__c != Null , record.PBS_RSAP_Step_Start__c , '--None--')}</span>
-                                                                    <apex:inputField value="{!record.PBS_RSAP_Step_Start__c}" onchange="changeThePicklistValue(this.value,'PBS_RSAP_Step_Start__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Rent_Number__c))}');" />
-                                                                </div>
-                                                                </apex:outputPanel>
-                                                            </td>
-                                                            <td style="max-width: 170px;    padding-right: 7px;">
-                                                                <div>
-                                                                    <apex:outputPanel rendered="{!!isRendered}">
-                                                                        <apex:inputField value="{!record.PBS_RSAP_Step_End__c}"/>
-                                                                    </apex:outputPanel>
-                                                                    <apex:outputPanel rendered="{!isRendered}">
-                                                                        <div class="selector">
-                                                                            <span id="PBS_RSAP_Step_End__c{!record.PBS_RSAP_Rent_Number__c}">{!IF(record.PBS_RSAP_Step_End__c != Null , record.PBS_RSAP_Step_End__c , '--None--')}</span>
-                                                                            <apex:inputField value="{!record.PBS_RSAP_Step_End__c}" onchange="changeThePicklistValue(this.value,'PBS_RSAP_Step_End__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Rent_Number__c))}');" />
-                                                                        </div>
-                                                                    </apex:outputPanel>
-                                                                </div>
-                                                                
-                                                            </td>
-                                                            <td class="AmountWillBe">
-                                                                <div>
-                                                                    <apex:inputField value="{!record.PBS_RSAP_Step_Annual_Rent__c}" onkeyup="validate(this)" styleClass="text" />
-                                                                </div>
-                                                            </td>
-                                                            <td style="white-space: nowrap;"><div id="PBS_RSAP_Step_Payment_Basis__c{!record.PBS_RSAP_Rent_Number__c    }">
-                                                                {!record.PBS_RSAP_Step_Payment_Basis__c}
-                                                                </div></td>
-                                                            <td style="text-align: center;">
-                                                                <apex:commandLink action="{!deleteTheRow}" onclick="var con = confirm('Are you sure?');if(con==false)return false;" rendered="{!!viewOnly}" reRender="StepRentInformation"  oncomplete="hideAddRowButton();">
-                                                                    <apex:image url="{!URLFOR($Resource.gsa_common, '/images/delete-icon.png')}"
-                                                                                style="align: right;" alt="delete" title="Delete"/>
-                                                                    <apex:Param assignTo="{!freeRentIndexNumber}" name="attId" value="{!record.PBS_RSAP_Rent_Number__c  }"/>
-                                                                </apex:commandLink>
-                                                            </td>
-                                                        </tr>
-                                                    </apex:repeat>
-                                                </table>
-                                            </apex:outputPanel>
-                                <apex:outputPanel id="addRowButtonContainer" style="{!IF(freeRentLimits == 0 ||  stepFreeRentRecords.size < freeRentLimits,'display:block','display:none')}">
-                                                    <apex:outputPanel >
-                                                    <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                        <div class="button">
-                                                            <!-- J. Rogers - added code to oncomplete to remove scroll bar -->
-                                                            <apex:commandButton value="+ Add Additional Row" styleClass="btnSave Add_Additional_Row" action="{!addRow}" reRender="StepRentInformation" onclick="document.getElementById('SpacesAndRates:spaceAndRatesForm:addRowButtonContainer').style.display = 'none';" 
-                                                                oncomplete="hideAddRowButton();top.postMessage('Page Updated', document.location.origin);" disabled="{!viewOnly}"/> <!--  -->
+                            <div id="stepRentTotal" class="bb" style="padding-right:1px;">
+                                <apex:panelGrid columns="2">
+                                    <h4 class="grey">Step rent</h4>
+                                    <br/><h5 style="color:blue">Shell rent and parking steps should be detailed if the initial amount stated in the rental rates table above does not remain <br />the same for the full term of the lease.  
+                                    Shell rent step amounts should be stated in annual rent for the entire leased space, not as a rate per square foot. Parking step rents should be stated as a dollar amount per space per month.<br /></h5>
+                                    <br/>
+                                    <apex:outputPanel ></apex:outputPanel>
+                                </apex:panelGrid>
+                                <span id="stepRentSpan">
+                                    <apex:outputPanel id="StepRentInformation">
+                                        <table class="StepRentTable">
+                                            <tr>
+                                                <td style="min-width: 20px;"></td>
+                                                <td style="min-width: 200px;"><u>Rent Type</u></td>
+                                                <td style="min-width: 170px;"><u>Beginning Year</u></td>
+                                                <td style="min-width: 170px;"><u>Through Year</u></td>
+                                                <td style="min-width: 90;"><u>Amount Will Be:</u></td>
+                                                <td style="min-width: 108px;"><u>Per:</u></td>
+                                                <td style="padding-bottom:10px"><u>Delete</u></td>
+                                            </tr>
+                                            <apex:repeat value="{!stepFreeRentRecords}" var="record">
+                                                <tr class="addTableRows">
+                                                    <td>{!record.PBS_RSAP_Rent_Number__c}.</td>
+                                                    <td style="max-width: 200px;" class="long">
+                                                        <div class="selector">
+                                                            <apex:inputField style="color: black;opacity: 0.5;-webkit-appearance: none;margin-left: 10px;" value="{!record.PBS_RSAP_Step_Rent_Type__c}"
+                                                                             onchange="changeThePerValue(this.value,'PBS_RSAP_Step_Payment_Basis__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Rent_Number__c))}');" />
                                                         </div>
-                                                    </apex:outputPanel>
-                                            </apex:outputPanel>
-  
-                 </span>
-                        </div>
-                    </apex:outputPanel>
+                                                       
+                                                        <!--  <apex:outputPanel rendered="{!!isRendered}">
+                                                            <apex:inputField value="{!record.PBS_RSAP_Step_Rent_Type__c}"
+                                                                             onchange="changeThePerValue(this.value,'PBS_RSAP_Step_Payment_Basis__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Rent_Number__c))}');" />
+                                                        </apex:outputPanel>
+                                                        <apex:outputPanel rendered="{!isRendered}">
+                                                            <div class="selector">
+                                                                <span id="PBS_RSAP_Step_Rent_Type__c{!record.PBS_RSAP_Rent_Number__c}">{!IF(record.PBS_RSAP_Step_Rent_Type__c != Null , record.PBS_RSAP_Step_Rent_Type__c , '--None--')}</span>
+                                                                <apex:inputField value="{!record.PBS_RSAP_Step_Rent_Type__c}"
+                                                                                 onchange="changeThePerValue(this.value,'PBS_RSAP_Step_Payment_Basis__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Rent_Number__c))}');changeThePicklistValue(this.value,'PBS_RSAP_Step_Rent_Type__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Rent_Number__c))}');" />
+                                                            </div>
+                                                        </apex:outputPanel> -->
+                                                    </td>
+                                                    <td style="max-width: 170px; padding-right: 7px;">
+                                                        <div class="selector">
+                                                            <apex:inputField style="color: black;opacity: 0.5; -webkit-appearance: none;margin-left: 10px;"
+                                                                             value="{!record.PBS_RSAP_Step_Start__c}"
+                                                                             onchange="changeThePicklistValue(this.value,'PBS_RSAP_Step_Start__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Rent_Number__c))}');" />
+                                                        </div>
+                                                       <!--<apex:outputPanel rendered="{!!isRendered}">
+                                                            <apex:inputField value="{!record.PBS_RSAP_Step_Start__c}" />
+                                                        </apex:outputPanel>
+                                                        <apex:outputPanel rendered="{!isRendered}">
+                                                            <div class="selector">
+                                                                <span id="PBS_RSAP_Step_Start__c{!record.PBS_RSAP_Rent_Number__c}">{!IF(record.PBS_RSAP_Step_Start__c != Null , record.PBS_RSAP_Step_Start__c , '--None--')}</span>
+                                                                <apex:inputField value="{!record.PBS_RSAP_Step_Start__c}" onchange="changeThePicklistValue(this.value,'PBS_RSAP_Step_Start__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Rent_Number__c))}');" />
+                                                            </div>
+                                                        </apex:outputPanel>-->
+                                                    </td>
+                                                    <td style="max-width: 170px; padding-right: 7px;">
+                                                        <div class="selector">
+                                                            <apex:inputField style="color: black;opacity: 0.5;-webkit-appearance: none; margin-left: 10px;"
+                                                                             value="{!record.PBS_RSAP_Step_End__c}"
+                                                                             onchange="changeThePicklistValue(this.value,'PBS_RSAP_Step_End__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Rent_Number__c))}');" />
+                                                        </div>
+                                                           
+                                                       <!-- <div>
+                                                            <apex:outputPanel rendered="{!!isRendered}">
+                                                                <apex:inputField value="{!record.PBS_RSAP_Step_End__c}"/>
+                                                            </apex:outputPanel>
+                                                            <apex:outputPanel rendered="{!isRendered}">
+                                                                <div class="selector">
+                                                                    <span id="PBS_RSAP_Step_End__c{!record.PBS_RSAP_Rent_Number__c}">{!IF(record.PBS_RSAP_Step_End__c != Null , record.PBS_RSAP_Step_End__c , '--None--')}</span>
+                                                                    <apex:inputField value="{!record.PBS_RSAP_Step_End__c}" onchange="changeThePicklistValue(this.value,'PBS_RSAP_Step_End__c{!JSINHTMLENCODE(Text(record.PBS_RSAP_Rent_Number__c))}');" />
+                                                                </div>
+                                                            </apex:outputPanel>
+                                                        </div> -->
+                                                    </td>
+                                                    <td class="AmountWillBe">
+                                                        <div>
+                                                            <apex:inputField value="{!record.PBS_RSAP_Step_Annual_Rent__c}" onkeyup="validate(this)" styleClass="text" />
+                                                        </div>
+                                                    </td>
+                                                    <td style="white-space: nowrap;">
+                                                        <div id="PBS_RSAP_Step_Payment_Basis__c{!record.PBS_RSAP_Rent_Number__c    }">
+                                                            {!record.PBS_RSAP_Step_Payment_Basis__c}
+                                                        </div>
+                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        <apex:commandLink action="{!deleteTheRow}" onclick="var con = confirm('Are you sure?');if(con==false)return false;" rendered="{!!viewOnly}" reRender="StepRentInformation"  oncomplete="hideAddRowButton();">
+                                                            <apex:image url="{!URLFOR($Resource.gsa_common, '/images/delete-icon.png')}"
+                                                                        style="align: right;" alt="delete" title="Delete"/>
+                                                            <apex:Param assignTo="{!freeRentIndexNumber}" name="attId" value="{!record.PBS_RSAP_Rent_Number__c  }"/>
+                                                        </apex:commandLink>
+                                                    </td>
+                                                </tr>
+                                            </apex:repeat>
+                                        </table>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel id="addRowButtonContainer" style="{!IF(freeRentLimits == 0 ||  stepFreeRentRecords.size < freeRentLimits,'display:block','display:none')}">
+                                        <apex:outputPanel >
+                                            <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <div class="button">
+                                                <!-- J. Rogers - added code to oncomplete to remove scroll bar -->
+                                                <apex:commandButton value="+ Add Additional Row"
+                                                                    styleClass="btnSave Add_Additional_Row"
+                                                                    action="{!addRow}"
+                                                                    reRender="StepRentInformation"
+                                                                    onclick="document.getElementById('SpacesAndRates:spaceAndRatesForm:addRowButtonContainer').style.display = 'none';" 
+                                                                    oncomplete="hideAddRowButton();
+                                                                                top.postMessage('Page Updated', document.location.origin);"
+                                                                    disabled="{!viewOnly}"/>
+                                            </div>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                </span>
+                            </div>
+                        </apex:outputPanel>
                         <apex:outputPanel id="totalRent">
                             <div id="totalRentDiv" class="bb">
                                 

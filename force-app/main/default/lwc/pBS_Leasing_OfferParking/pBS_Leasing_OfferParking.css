@@ -1,0 +1,130 @@
+:host {
+    display: block;
+    font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+    margin: 20px;
+}
+.input-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    background-color: #ccc;
+}
+.input-container input {
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex: 1;
+}
+@media (max-width: 768px) {
+    .input-container {
+        flex-direction: column;
+    }
+
+    .input-container input {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
+.btn{
+	top:-2px;
+    width: 155px;
+    height: 21px;
+    text-align: center;
+    border:1px solid #a1a1a1;
+	border-radius: 3px !important;
+    font-size:12px;
+    font-family:arial, helvetica, sans-serif;
+    padding: 11px 10px;
+    text-decoration:none;
+    display:inline-block;
+    color: #333333;
+    padding-bottom: 24px; 
+	background-image: linear-gradient(#fcfcfc, #d8d8d8);    
+}
+.btn{
+	margin-right: 10px;
+}
+.btn-container{
+	display: flex;
+    padding-top: 30px;
+}
+.h3 {
+    font-weight: bold;
+    font-size: 28px;
+    border-bottom: 1px solid #cccccc;
+    padding: 0 0 8px;
+	font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+    color: #002BAD;
+}
+.lightning-input {
+    width: 336px;
+    border-radius: 3px;
+    box-shadow: inset 1px 2px 2px #999, inset -1px 2px 2px #999;
+    background-color: grey;
+}
+.single-line {
+    --slds-c-button-line-height: 2.875rem;
+}
+:host {
+    --slds-c-radio-mark-color-foreground: #0075ff;
+}
+.custom-border {
+    border: 1px solid  #999;
+    min-height: 35px;
+    line-height: 1.5;
+    width: 35px;
+    text-align: left;
+    display:inline-block;
+    padding-top: 10px;
+    color: #333333;
+    font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+    font-size:13px;
+    background-color: #eeeeee;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
+    padding-bottom: 10px; 
+    padding-left: 10px;
+    flex-direction: row;
+}
+.custom-input {
+    --slds-c-input-color-background: #eeeeee;
+    --slds-c-input-border-radius: 5px;
+    --lwc-borderWidthThin: 1px;
+    --slds-c-input-color-border: #999;    
+}
+.custom-input textarea{
+    background: #ccc;
+}
+.infoIconImage{
+        cursor: pointer;
+}
+.error{
+    font-size:16px;
+    font-family: serif, Georgia, helvetica;
+    color: red;
+}
+.required-field {
+    color: black;
+}
+.errMessage{
+    font-size:16px;
+    color: red;
+    font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+}
+.row{
+    padding: 0px 20px;
+}
+.row-cell{
+    padding-top: 8px;
+        font-size: 14px;
+}
+.btn:hover{
+             border:1px solid #a1a1a1;
+             background-image: -o-linear-gradient(top, #d8d8d8,#fcfcfc);
+             background-image: linear-gradient(to bottom,  #d8d8d8, #fcfcfc);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#d8d8d8, endColorstr=#fcfcfc);
+}
+label{
+        font-size: 14px;
+}

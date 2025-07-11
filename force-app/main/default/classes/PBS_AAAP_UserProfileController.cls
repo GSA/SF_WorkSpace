@@ -5,6 +5,8 @@ public with sharing class PBS_AAAP_UserProfileController {
     // Variables used for User De-Registration
     public String userid { get; set; }
     public String pin { get; set; }
+    public String statusMessage { get; set; }
+    public String oldEmail { get; set; }
     public boolean isLOP { get; set; }
 
 
@@ -24,14 +26,22 @@ public with sharing class PBS_AAAP_UserProfileController {
                 WHERE id = :UserInfo.getUserId()
         ];
 
-
+        User currentUser = [select id,email from user where Id = :UserInfo.getUserId()];  
+             oldEmail = currentUser.Email;
         for (User u : tempUsrinfo) {
             usrinfo = u;
+            
         }
-
+        
+        
     }
 
     public void save() {
+        
+        
+            if(usrinfo.email != oldEmail){
+            statusMessage = 'To finalize the change of the email address registered to this account, please check your email address and read the instructions for verifying your new email address. Failure to do so will cause access issues.';
+            }
         if (usrinfo.contact != null) {
             usrinfo.contact.title = usrinfo.title;
             usrinfo.contact.firstname = usrinfo.firstname;
@@ -51,15 +61,26 @@ public with sharing class PBS_AAAP_UserProfileController {
             usrinfo.PBS_AAAP_Regions__c = SiteRegisterController.selectRegions(usrinfo.PBS_AAAP_StatesOfInterest__c);
             usrinfo.contact.PBS_AAAP_Regions__c = usrinfo.PBS_AAAP_Regions__c;
         }
-
-        try {
-            update usrinfo;
-            if (usrinfo.contact != null) {
-                update usrinfo.contact;
+        if (usrinfo.email != null && isUsernameTaken(usrinfo.email, usrinfo.Id)) {
+            ApexPages.addMessage(new ApexPages.Message(
+                ApexPages.Severity.ERROR,
+                'The Username for this application is the same as the registered email address, and the new email address you attempted to update already exists in the system for another account. If you have access to the new email address account, please use the \'Forgot your password?\' option on the Log in screen. Otherwise, use a different email address or keep the established one.'
+            ));
+            
+        }
+        else{
+            try {
+                
+                update usrinfo;
+                
+                if (usrinfo.contact != null) {
+                    update usrinfo.contact;
+                }
+                isEdit = false;
+            } catch (DmlException e) {
+                ApexPages.addMessages(e);
+                
             }
-            isEdit = false;
-        } catch (DmlException e) {
-            ApexPages.addMessages(e);
         }
     }
 
@@ -89,7 +110,14 @@ public with sharing class PBS_AAAP_UserProfileController {
     public void edit() {
         isEdit = true;
     }
-
+    public Boolean isUsernameTaken(String username, Id currentUserId) {
+        List<User> users = [
+            SELECT Id FROM User 
+            WHERE Username = :username AND Id != :UserInfo.getUserId()
+            LIMIT 1
+        ];
+        return !users.isEmpty();
+    }
     public PageReference actionDeRegistration() {
         PageReference p = null;
         if (userid != '' && pin != '') {

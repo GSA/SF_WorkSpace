@@ -1,5 +1,7 @@
 public with sharing class PBS_AAAP_ControllerSpacesAndRates {
 
+    public String calcTotMarkup { get; set; }
+
     // public String ratesQBSACPmtNew { get; set; }
 
     /****************************************************************************************************************
@@ -75,7 +77,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
     public String readOnlyScreen { get; set; }
     //added by syam ganna on 12/29/2016 for Census release
     public String regionCode { get; set; }
-	public string pageURLForRedirection {get;set;}
+    public string pageURLForRedirection {get;set;}
 
     /*  SpaceAndRates Details   ***********************************************************
     *   
@@ -258,12 +260,12 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
             offerId = ApexPages.currentPage().getParameters().get('offerId');
             propId = ApexPages.currentPage().getParameters().get('propertyId');
             String isEditable = ApexPages.currentPage().getParameters().get('edit');
-        	if (isEditable == 'false') {
+            if (isEditable == 'false') {
             viewOnly = true;
             viewMsg = 'Offer opened in view mode. Any changes made will not be saved.';
-        	} else {
+            } else {
             viewOnly = false;
-        	}
+            }
             initialised = FALSE;
             newOrCont = '';
             rendOuterSpace = true;
@@ -369,7 +371,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         }
 
     }   // end constructor
-	// Arg constructor
+    // Arg constructor
     public PBS_AAAP_ControllerSpacesAndRates(String offerId) {
         this.offerId = offerId;
     }
@@ -548,7 +550,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         //return null;
     }
 
-	public void backToPreviousPage() {	
+    public void backToPreviousPage() {  
         PageReference pref = new PageReference('/AAAP/spacesAndRates?OfferId='+offerId);
         pref.getParameters().put('offerId', offerId);
         pageURLForRedirection = pref.getUrl();
@@ -556,7 +558,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-M-SpaceRates?edit=true&propertyId='+propId+'&offerId='+offerId;
        
         pref.setRedirect(false);
-        	
+            
     }
 
     // action to add a rate, or to "edit" a rate from the inner space "view"
@@ -854,7 +856,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         //PageReference back = Page.PBS_AAAP_OperatingCosts;
         PageReference back = new PageReference('/AAAP/OperatingCosts');
         back.getParameters().put('offerId', offerId);
-		back.setRedirect(false);
+        back.setRedirect(false);
         pageURLForRedirection = back.getUrl();
     
        
@@ -1025,9 +1027,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         }
 
         //SFWS-1126 03/30/2021 Todd Brown added the validation as stated in requirements for this story
-        
-       //SGanti renumbered question number on error message 8/2/2021
-		if (space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c == 0.00 || space.PBS_AAAP_ARCH_ENG_FEES__c == 0.00 || space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c == Null || space.PBS_AAAP_ARCH_ENG_FEES__c == Null) {
+        if (space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c == 0.00 || space.PBS_AAAP_ARCH_ENG_FEES__c == 0.00 || space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c == Null || space.PBS_AAAP_ARCH_ENG_FEES__c == Null) {
             if (readOnlyScreen != 'true' && regionCode != 'Census') {
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
                         //'Warning Space Page : Data saved with "Lessor PM Fees" and / or "A&E Fees" with a ZERO value. Please make sure you intended a ZERO value. If not, return to space page and update #4 and #5. If so, proceed to Add/Edit Rates for Space.');
@@ -1176,8 +1176,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
                 spRtFlag = TRUE;
             }
         }
-        //SGanti renumbered on 8/2/2021
-
+ 
         if (space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c == 0.00 || space.PBS_AAAP_ARCH_ENG_FEES__c == 0.00 || space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c == Null || space.PBS_AAAP_ARCH_ENG_FEES__c == Null) {
             
             if (readOnlyScreen != 'true' && regionCode != 'Census') {
@@ -1423,10 +1422,10 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
                 System.debug('*****BSACperABOA :  ' + BSACperABOA);
                 System.debug('*****rateE.fiveYrBSACRate:  ' + rateE.fiveYrBSACRate);
                 if (rateE.fiveYrFS > 0) {
-				system.debug('rateE.fiveYrFS 2-- '+rateE.fiveYrFS);
+                system.debug('rateE.fiveYrFS 2-- '+rateE.fiveYrFS);
                     if(regionCode == '10/5 Term - All Regions'){
-                    	leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.FIVEFIVEYRNEW);
-                    	rateE.fiveYrBSAC = PBS_AAAP_CalculationHelper.AmmortizationOfBSAC(rateE.fiveYrBSACRate/100,leaseFirmTermMonths,BSACperABOA);
+                        leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.FIVEFIVEYRNEW);
+                        rateE.fiveYrBSAC = PBS_AAAP_CalculationHelper.AmmortizationOfBSAC(rateE.fiveYrBSACRate/100,leaseFirmTermMonths,BSACperABOA);
                     } else{
                         leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.SEVENTEENYR);
                         rateE.fiveYrBSAC = PBS_AAAP_CalculationHelper.AmmortizationOfBSAC(rateE.fiveYrBSACRate/100,leaseFirmTermMonths,BSACperABOA);
@@ -1472,11 +1471,11 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
                 if (rateE.fiveYrFS > 0) {
                     system.debug('rateE.fiveYrFS 3-- '+rateE.fiveYrFS);
                     if(regionCode == '10/5 Term - All Regions'){
-                    	leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.FIVEFIVEYRNEW);
-                    	rateE.fiveYrBSAC = PBS_AAAP_CalculationHelper.AmmortizationOfBSAC(rateE.fiveYrBSACRate/100,leaseFirmTermMonths,BSACperABOAContinuing);
+                        leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.FIVEFIVEYRNEW);
+                        rateE.fiveYrBSAC = PBS_AAAP_CalculationHelper.AmmortizationOfBSAC(rateE.fiveYrBSACRate/100,leaseFirmTermMonths,BSACperABOAContinuing);
                     } else{
-                    	leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.SEVENTEENYR);
-                    	rateE.fiveYrBSAC = PBS_AAAP_CalculationHelper.AmmortizationOfBSAC(rateE.fiveYrBSACRate/100,leaseFirmTermMonths,BSACperABOAContinuing);
+                        leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.SEVENTEENYR);
+                        rateE.fiveYrBSAC = PBS_AAAP_CalculationHelper.AmmortizationOfBSAC(rateE.fiveYrBSACRate/100,leaseFirmTermMonths,BSACperABOAContinuing);
                     }
                 } else {
                     rateE.fiveYrBSAC = 0.00;
@@ -1504,12 +1503,12 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
                 if (rateE.fiveYrFS > 0) {
                     system.debug('rateE.fiveYrFS 4-- '+rateE.fiveYrFS);
                     if(regionCode == '10/5 Term - All Regions'){
-                    	leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.FIVEFIVEYRNEW);
-                    	rateE.fiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveYrAPR/100,leaseFirmTermMonths,userIputTIA.doubleValue());
+                        leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.FIVEFIVEYRNEW);
+                        rateE.fiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveYrAPR/100,leaseFirmTermMonths,userIputTIA.doubleValue());
                     } else{
-                    	leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.SEVENTEENYR);
-                    	
-                    	rateE.fiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveYrAPR/100,leaseFirmTermMonths,userIputTIA.doubleValue());
+                        leaseFirmTermMonths = calc.getLeaseMonths(PBS_AAAP_CALCULATIONS.SEVENTEENYR);
+                        
+                        rateE.fiveYrTIAmorCosts = PBS_AAAP_CalculationHelper.AmmortizationOfTI(rateE.fiveYrAPR/100,leaseFirmTermMonths,userIputTIA.doubleValue());
                     }
                 } else {
                     rateE.fiveYrTIAmorCosts = 0.00;   // no rate so no calculation
@@ -1687,7 +1686,7 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
                 //return null;
             }
         }
-        //added by syam to show the message when the below validation fails
+
         spaceAndRates = PBS_AAAP_GlobalConstants.getOfferDetail(offerId);
 
         if (space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c == 0.00 || space.PBS_AAAP_ARCH_ENG_FEES__c == 0.00) {
@@ -1823,11 +1822,17 @@ public with sharing class PBS_AAAP_ControllerSpacesAndRates {
         return null;
     }
 
-    public void calcTotMarkup() {
+    //Todd Brown changed 5/22/2025 for SFWS-4613 since the VF page now calls this
+    //method to auto-recalculate any time any of the contributing fields change
+    //and the associated "rerender" commands, to refresh Question 16 area, require
+    //a PageReference be returned even if null.
+    //public void calcTotMarkup() {
+    public PageReference calcTotMarkup() {
         pageURLForRedirection = '-';
         //saveSpace();
         space.PBS_AAAP_TOTAL_MARKUP__c = calc.getTotalMarkup(space, offer, feePrcntgOrDollar, userIputTIA, userInputBSAC);
         //return null;
+        return null;
     }
 
     public PageReference clearSpace() {

@@ -63,3 +63,24 @@ font-size: 12px;
     font-size: 18px;
     cursor: pointer;
 }
+@media screen and (max-width: 1024px) {
+    .custom-table {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    }
+    
+    .custom-table table {
+    /*min-width: 1200px;*/
+    white-space: nowrap;
+    display: block;
+    }
+    
+    .custom-table::-webkit-scrollbar {
+    height: 8px;
+    }
+    
+    .custom-table::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+    }
+}

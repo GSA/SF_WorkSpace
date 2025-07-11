@@ -182,10 +182,10 @@ public with sharing class SiteRegisterController {
     
                 Profile profile = [Select p.name, p.id From Profile p where p.Name like '%AAAP Customer Portal%' limit 1];  
                 selectedProfileId = profile.Id;
-    
+                System.debug('SELECTEDPROFILEID'+selectedProfileId);
                 //Create the User
                 //NOTE - Must invoke a @future method to be able to create Account, Contacts, and Users in the same Apex Transaction             
-                            
+                          
                 SiteRegisterController.createUser((String)contactId, c.Email, c.FirstName, c.LastName, c.email, c.Phone, 
                                                     c.MailingStreet, c.MailingState, c.PBS_AAAP_PIN__c, c.MailingCity, 
                                                     c.MailingCountry, c.MailingPostalCode, c.PBS_AAAP_Company__c, c.PBS_AAAP_StatesOfInterest__c, 
@@ -247,12 +247,13 @@ public with sharing class SiteRegisterController {
             aliasStr = fName.substring(0, 1)+lName;
          }
          User u = new User(alias = aliasStr, email=email, emailencodingkey='UTF-8', firstname=fName, lastname=lName, PBS_AAAP_PIN__c = pin,
-                languagelocalekey='en_US', localesidkey='en_US', profileid = profileId, contactId=conId, timezonesidkey='America/New_York',
+                languagelocalekey='en_US', localesidkey='en_US',profileid = ProfileId,contactId=conId, timezonesidkey='America/New_York',
                 username=username, street=street, city=city, state=state, country=country, postalcode=zip, CompanyName=company,
                 phone=phone, PBS_AAAP_Alternate_Phone__c = altPhone, PBS_AAAP_StatesOfInterest__c=sofi, PBS_AAAP_Regions__c=sofreg, Title = ttl);
     
          u.setOptions(dmo);  
          try{
+            
             insert u;
          }catch(Exception ex){
             System.debug(ex.getMessage());
@@ -287,11 +288,12 @@ public with sharing class SiteRegisterController {
 
          dmo.EmailHeader.triggerUserEmail = true;
          
-         User u = [SELECT Id, email, PBS_AAAP_PIN__c, street, city, state, country, postalcode, CompanyName, phone, PBS_AAAP_Alternate_Phone__c, 
+         User u = [SELECT Id, email, username,PBS_AAAP_PIN__c, street, city, state, country, postalcode, CompanyName, phone, PBS_AAAP_Alternate_Phone__c, 
                           PBS_AAAP_StatesOfInterest__c, PBS_AAAP_Regions__c
                           FROM User 
                           WHERE Id =: uId];
          u.email = email;
+         u.username = email;
          u.PBS_AAAP_PIN__c = pin;
          u.street = street;
          u.city = city; 
@@ -348,4 +350,71 @@ public with sharing class SiteRegisterController {
         }           
         return result;          
      }  
+    
+    public List<SelectOption> getStates() {
+        List<SelectOption> options = new List<SelectOption>();
+        options.add(new SelectOption('', '--None--'));
+        options.add(new SelectOption('Alabama', 'Alabama'));
+        options.add(new SelectOption('Alaska', 'Alaska'));
+        options.add(new SelectOption('Arizona', 'Arizona'));
+        options.add(new SelectOption('Arkansas', 'Arkansas'));
+        options.add(new SelectOption('California', 'California'));
+        options.add(new SelectOption('Colorado', 'Colorado'));
+        options.add(new SelectOption('Connecticut', 'Connecticut'));
+        options.add(new SelectOption('Delaware', 'Delaware'));
+        options.add(new SelectOption('District of Columbia', 'District of Columbia'));
+        options.add(new SelectOption('Florida', 'Florida'));
+        options.add(new SelectOption('Georgia', 'Georgia'));
+        options.add(new SelectOption('Hawaii', 'Hawaii'));
+        options.add(new SelectOption('Idaho', 'Idaho'));
+        options.add(new SelectOption('Illinois', 'Illinois'));
+        options.add(new SelectOption('Indiana', 'Indiana'));
+        options.add(new SelectOption('Iowa', 'Iowa'));
+        options.add(new SelectOption('Kansas', 'Kansas'));
+        options.add(new SelectOption('Kentucky', 'Kentucky'));
+        options.add(new SelectOption('Louisiana', 'Louisiana'));
+        options.add(new SelectOption('Maine', 'Maine'));
+        options.add(new SelectOption('Maryland', 'Maryland'));
+        options.add(new SelectOption('Massachusetts', 'Massachusetts'));
+        options.add(new SelectOption('Michigan', 'Michigan'));
+        options.add(new SelectOption('Minnesota', 'Minnesota'));
+        options.add(new SelectOption('Mississippi', 'Mississippi'));
+        options.add(new SelectOption('Missouri', 'Missouri'));
+        options.add(new SelectOption('Montana', 'Montana'));
+        options.add(new SelectOption('Nebraska', 'Nebraska'));
+        options.add(new SelectOption('Nevada', 'Nevada'));
+        options.add(new SelectOption('New Hampshire', 'New Hampshire'));
+        options.add(new SelectOption('New Jersey', 'New Jersey'));
+        options.add(new SelectOption('New Mexico', 'New Mexico'));
+        options.add(new SelectOption('New York', 'New York'));
+        options.add(new SelectOption('North Carolina', 'North Carolina'));
+        options.add(new SelectOption('North Dakota', 'North Dakota'));
+        options.add(new SelectOption('Ohio', 'Ohio'));
+        options.add(new SelectOption('Oklahoma', 'Oklahoma'));
+        options.add(new SelectOption('Oregon', 'Oregon'));
+        options.add(new SelectOption('Pennsylvania', 'Pennsylvania'));
+        options.add(new SelectOption('Rhode Island', 'Rhode Island'));
+        options.add(new SelectOption('South Carolina', 'South Carolina'));
+        options.add(new SelectOption('South Dakota', 'South Dakota'));
+        options.add(new SelectOption('Tennessee', 'Tennessee'));
+        options.add(new SelectOption('Texas', 'Texas'));
+        options.add(new SelectOption('Utah', 'Utah'));
+        options.add(new SelectOption('Vermont', 'Vermont'));
+        options.add(new SelectOption('Virginia', 'Virginia'));
+        options.add(new SelectOption('Washington', 'Washington'));
+        options.add(new SelectOption('West Virginia','West Virginia'));
+        options.add(new SelectOption('Wisconsin', 'Wisconsin'));
+        options.add(new SelectOption('Wyoming', 'Wyoming'));
+        options.add(new SelectOption('American Samoa', 'American Samoa'));
+        options.add(new SelectOption('Federated States of Micronesia', 'Federated States of Micronesia'));
+        options.add(new SelectOption('Guam', 'Guam'));
+        options.add(new SelectOption('Midway Islands', 'Midway Islands'));
+        options.add(new SelectOption('Northern Mariana Islands', 'Northern Mariana Islands'));
+        options.add(new SelectOption('Puerto Rico', 'Puerto Rico'));
+        options.add(new SelectOption('Republic of the Marshall Islands', 'Republic of the Marshall Islands'));
+        options.add(new SelectOption('Republic of Palau', 'Republic of Palau'));
+        options.add(new SelectOption('U.S. Virgin Islands', 'U.S. Virgin Islands'));
+        return options;
+    }
+
  }

@@ -134,6 +134,7 @@ private class Test_SiteRegisterController {
         cpTest.getReferer();
         ApexPages.currentPage().getHeaders().put('referer','SF');
         cpTest.getReferer();
+        cpTest.getStates();
         System.assert(true);
      }
     //@isTest(SeeAllData=true); 

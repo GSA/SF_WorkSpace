@@ -34,6 +34,8 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
     public String freeRentIndexNumber{ get; set; }
     private boolean isFromOnLoad;
     public String pageURLForRedirection{get;set;}
+    public Boolean showRentErrorMsg { get; set; }
+    public string rentErrorMsg { get; set; }
  
     public PBS_LOP_SpacesAndRatesController() {
         freeRentLimits = 0;
@@ -146,14 +148,151 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
             isValidUser = true;
             lopOffer = new PBS_AAAP_Offer__c();
         }
-
-
-        isRendered = false;
-        isFromOnLoad = false;
+            isRendered = false;
+            isFromOnLoad = false;
         }
     }
+    
+    /*public class StepRentWrapper implements Comparable {
+        public PBS_RSAP_Step_Rent__c step;
+        
+        public StepRentWrapper(PBS_RSAP_Step_Rent__c step) {
+            this.step = step;
+        }
+        
+        public Integer compareTo(Object obj) {
+            StepRentWrapper other = (StepRentWrapper) obj;
+            
+            // Null safety
+            if (this.step.PBS_RSAP_Rent_Number__c == null && other.step.PBS_RSAP_Rent_Number__c == null) {
+                return 0;
+            } else if (this.step.PBS_RSAP_Rent_Number__c == null) {
+                return -1;
+            } else if (other.step.PBS_RSAP_Rent_Number__c == null) {
+                return 1;
+            }
+            
+            return this.step.PBS_RSAP_Rent_Number__c.intValue() - other.step.PBS_RSAP_Rent_Number__c.intValue();
+        }
+    }*/
+    
+    public Boolean validateStepRentRecords(List<PBS_RSAP_Step_Rent__c> stepFreeRentRecords) {
+        List<String> errorMessages = new List<String>();
+        Map<String, List<PBS_RSAP_Step_Rent__c>> rentTypeMap = new Map<String, List<PBS_RSAP_Step_Rent__c>>();
+        
+        // 1. Validate individual row fields
+        for (PBS_RSAP_Step_Rent__c step : stepFreeRentRecords) {
+            
+            if (isBlankOrNone(step.PBS_RSAP_Step_Start__c)) {
+                continue;
+            }
+            
+            List<String> rowErrors = validateStepRow(step);
+            if (!rowErrors.isEmpty()) {
+                for (String msg : rowErrors) {
+                    errorMessages.add('Rent Page: Step Rent- Row ' + step.PBS_RSAP_Rent_Number__c + ': ' + msg);
+                }
+            }
+        }
+        
+        // 2. Group by Rent Type
+        /*for (PBS_RSAP_Step_Rent__c step : stepFreeRentRecords) {
+            if (isBlankOrNone(step.PBS_RSAP_Step_Rent_Type__c) || 
+                String.isBlank(step.PBS_RSAP_Step_Start__c) || 
+                String.isBlank(step.PBS_RSAP_Step_End__c)) {
+                    continue; // Skip invalid rows
+                }
+            
+            String rentType = step.PBS_RSAP_Step_Rent_Type__c;
+            if (!rentTypeMap.containsKey(rentType)) {
+                rentTypeMap.put(rentType, new List<PBS_RSAP_Step_Rent__c>());
+                continue;
+            }
+            rentTypeMap.get(rentType).add(step);
+        }
+        
+         // 2. Check overlapping year ranges for same Rent Type
+        for (String rentType : rentTypeMap.keySet()) {
+            List<PBS_RSAP_Step_Rent__c> steps = rentTypeMap.get(rentType);
+            List<StepRentWrapper> wrappedList = new List<StepRentWrapper>();
+            
+            for (PBS_RSAP_Step_Rent__c step : steps) {
+                wrappedList.add(new StepRentWrapper(step));
+            }
+            
+            wrappedList.sort();
+            
+            for (Integer i = 0; i < wrappedList.size() - 1; i++) {
+                PBS_RSAP_Step_Rent__c current = wrappedList[i].step;
+                PBS_RSAP_Step_Rent__c next = wrappedList[i + 1].step;
+                
+                Integer currentEnd = Integer.valueOf(current.PBS_RSAP_Step_End__c);
+                Integer nextStart = Integer.valueOf(next.PBS_RSAP_Step_Start__c);
+                
+                if (nextStart <= currentEnd) {
+                    errorMessages.add('Rent Page: Step Rent - Rent Type "' + rentType +
+                                      '" has overlapping years between rows ' + current.PBS_RSAP_Rent_Number__c +
+                                      ' and ' + next.PBS_RSAP_Rent_Number__c);
+                }
+            }
+        }*/
 
+        // 3. Show errors on Visualforce
+        if (!errorMessages.isEmpty()) {
+            String fullMessage = String.join(errorMessages, '<br/>');
+            rentErrorMsg = fullMessage; // bind this to the Visualforce page
+            showRentErrorMsg = true;       // ensure the outputPanel is rendered
+            return false;
+        }
+
+        return true;
+    }
+
+    // Returns list of validation errors for a single row
+    public static List<String> validateStepRow(PBS_RSAP_Step_Rent__c step) {
+        List<String> errors = new List<String>();
+
+        // Check for blank or "--None--" fields
+        if (isBlankOrNone(step.PBS_RSAP_Step_Rent_Type__c) ||
+            isBlankOrNone(step.PBS_RSAP_Step_End__c) ||
+            step.PBS_RSAP_Step_Annual_Rent__c == null) {
+            errors.add('All required step rent fields must be filled.');
+            return errors; // skip further checks if core fields are missing
+        }
+
+        // Check that start and end years are valid and in correct order
+        try {
+            Integer startYear = Integer.valueOf(step.PBS_RSAP_Step_Start__c.trim());
+            Integer endYear = Integer.valueOf(step.PBS_RSAP_Step_End__c.trim());
+
+            if (startYear > endYear) {
+                errors.add('The beginning year must be less than or equal to the ending year.');
+            }
+        } catch (Exception e) {
+            errors.add('Start and end year must be valid numbers.');
+        }
+
+        return errors;
+    }
+    
+    private static Boolean isBlankOrNone(String value) {
+        return String.isBlank(value) || value == '--None--';
+    }
+   
+    
     public PageReference actionSaveSpaceRates() {
+       
+        /*if (lopOffer.PBS_RSAP_Shell_Initial_Annual__c == 0) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Rent Page: Shell Rent: Annual Rent is required.'));
+            return null;
+        }*/
+        
+        if (!validateStepRentRecords(stepFreeRentRecords)) {
+            return null;
+        }
+        
+       
+        
         PBS_AAAP_Utility.OfferValidationResponse response  = PBS_AAAP_Utility.validateOffer(lopOffer,new List<String>{'Offer-S-Rent'});
         if (response.errorMessages.size() > 0 ) {
             for(String error : response.errorMessages){
@@ -167,8 +306,8 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
         //addeds
         p.getParameters().put('offerId', offerId);
         p.getParameters().put('draftMsg', draftMsgFlag);
-             
-
+        
+        
         pageURLForRedirection = p.getUrl();
         
         pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-S-Rent?edit=true&offerId='+offerId+'&propertyId='+propId;   
@@ -406,6 +545,9 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
     
 
     public PageReference actionSaveSpaceRatesAndContinue() {
+        if (!validateStepRentRecords(stepFreeRentRecords)) {
+            return null;
+        }
         PBS_AAAP_Utility.OfferValidationResponse response  = PBS_AAAP_Utility.validateOffer(lopOffer,new List<String>{'Offer-S-Rent'});
         if (response.errorMessages.size() > 0 ) {
             for(String error : response.errorMessages){
@@ -492,22 +634,22 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
         return options;
     }
     public void addRow() {
-
-        
         currentIndexForFreeRent++;
         stepFreeRentRecords.add(new PBS_RSAP_Step_Rent__c(PBS_RSAP_Rent_Number__c=currentIndexForFreeRent,PBS_AAAP_Offer__c=offerId));
-        if(stepFreeRentRecords.size() > 0 && !isFromOnLoad){
+       
+        if (stepFreeRentRecords.size() > 0 && !isFromOnLoad) {
             upsert stepFreeRentRecords;
         }
-        if(currentIndexForFreeRent != 1){
-            stepFreeRentRecords = [SELECT Id, PBS_RSAP_Step_Annual_Rent__c, PBS_RSAP_Step_End__c, PBS_RSAP_Step_Payment_Basis__c, PBS_RSAP_Step_Rent_Type__c, PBS_RSAP_Step_Start__c, PBS_AAAP_Offer__c, PBS_RSAP_Rent_Number__c FROM PBS_RSAP_Step_Rent__c Where PBS_AAAP_Offer__c =:string.escapeSingleQuotes(offerId) order by PBS_RSAP_Rent_Number__c];
-        
+
+        if (currentIndexForFreeRent != 1) {
+            stepFreeRentRecords = [SELECT Id, PBS_RSAP_Step_Annual_Rent__c, PBS_RSAP_Step_End__c, PBS_RSAP_Step_Payment_Basis__c, PBS_RSAP_Step_Rent_Type__c, PBS_RSAP_Step_Start__c, PBS_AAAP_Offer__c, PBS_RSAP_Rent_Number__c 
+                                   FROM PBS_RSAP_Step_Rent__c
+                                   WHERE PBS_AAAP_Offer__c =:string.escapeSingleQuotes(offerId) order by PBS_RSAP_Rent_Number__c];
         }
+        
         isRendered = true;
     }
     public void addRenewalRow() {
-
-        
         currentIndexForRenewalOptions++;
         renewalOptionsRecords.add(new PBS_RSAP_Renewal_Options__c(PBS_RSAP_Option_Number__c=currentIndexForRenewalOptions,PBS_AAAP_Offer__c=offerId));
         if(renewalOptionsRecords.size() > 0 && !isFromOnLoad){

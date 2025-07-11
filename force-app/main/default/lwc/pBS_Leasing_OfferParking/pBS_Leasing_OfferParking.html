@@ -1,0 +1,124 @@
+<template>
+    <c-p-b-s_-leasing_-progress-bar progress-bar-name="AAAP_Workflow" onnavigatetopage={handleNavigateToPage}>
+    </c-p-b-s_-leasing_-progress-bar>
+        <ul class='error'>
+            <template for:each={errors} for:item="error">
+                <li key={error}>{error}</li>
+            </template>
+        </ul>
+        <lightning-record-edit-form record-id={offerId} object-api-name="PBS_AAAP_Offer__c" onsubmit={handleAutoSubmit}>
+            <div class="slds-grid">
+                <div class="slds-col slds-order_1 custom-border">
+                    <span style="padding-left: 1px;">Property name: {propertyOfferDetails.PBS_AAAP_Building_Name__c}</span>
+                </div>
+                <div class="slds-col slds-order_2 custom-border">
+                    <span style="padding-left: 5px;">RLP number: <template if:true={propertyOfferDetails.PBS_AAAP_RLP_Number__c}>{propertyOfferDetails.PBS_AAAP_RLP_Number__r.PBS_AAAP_RLP_Number__c}</template></span>
+                </div>
+                <div class="slds-col slds-order_3 custom-border">
+                    <span style="padding-left: 5px;">Offer status: {propertyOfferDetails.PBS_AAAP_Offer_Status__c}</span>
+                </div>
+            </div>
+
+            <h1
+                style="font-weight: bold;font-size: 20px;padding: 0 0 8px;padding-top: 10px;color: #000000;font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;">
+                6. Parking</h1>
+            <template
+                if:false={editMode}><label class="errMessage">Offer opened in view mode. Any changes made will not be saved.</label><br /><br /></template>
+
+            <label>What is the monthly amount ($) charged per parking space type? Put $0.00 if there is no additional charge for parking.</label>
+            <br /> <br /><br />
+            <div class="row">
+                <lightning-layout>
+                    <lightning-layout-item size="1">
+                        <div class="row-cell">1. </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="5">
+                        <div class="row-cell">General surface parking <span class ="required-field">*</span> </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="4">
+                        <div class="custom-box">
+                            <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                                field-name="PBS_AAAP_Monthly_cost_nonres_sur_park__c"
+                                value={propertyOfferDetails.PBS_AAAP_Monthly_cost_nonres_sur_park}
+                                onchange={handleInputChange}>
+                            </lightning-input-field>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="2"></lightning-layout-item>
+                </lightning-layout>
+            </div>
+            <br />
+            <div class="row">
+                <lightning-layout>
+                    <lightning-layout-item size="1">
+                        <div class="row-cell">2. </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="5">
+                        <div class="row-cell">Reserved surface parking <span class ="required-field">*</span> </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="4">
+                        <div class="custom-box">
+                            <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                                field-name="PBS_AAAP_Monthly_cost_res_sur_park__c"
+                                value={propertyOfferDetails.PBS_AAAP_Monthly_cost_res_sur_park}
+                                onchange={handleInputChange}>
+                            </lightning-input-field>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="2"></lightning-layout-item>
+                </lightning-layout>
+            </div>
+            <br />
+            <div class="row">
+                <lightning-layout>
+                    <lightning-layout-item size="1">
+                        <div class="row-cell">3. </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="5">
+                        <div class="row-cell">General structured parking <span class ="required-field">*</span> </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="4">
+                        <div class="custom-box">
+                            <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                                field-name="PBS_AAAP_Monthly_cost_nonres_gar_park__c"
+                                value={propertyOfferDetails.PBS_AAAP_Monthly_cost_nonres_gar_park}
+                                onchange={handleInputChange}>
+                            </lightning-input-field>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="2"></lightning-layout-item>
+                </lightning-layout>
+            </div>
+            <br />
+            <div class="row">
+                <lightning-layout>
+                    <lightning-layout-item size="1">
+                        <div class="row-cell">4. </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="5">
+                        <div class="row-cell">Reserved structured parking <span class ="required-field">*</span> </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="4">
+                        <div class="custom-box">
+                            <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                                field-name="PBS_AAAP_Monthly_cost_res_gar_park__c"
+                                value={propertyOfferDetails.PBS_AAAP_Monthly_cost_res_gar_park}
+                                onchange={handleInputChange}>
+                            </lightning-input-field>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="2"></lightning-layout-item>
+
+                </lightning-layout>
+            </div>
+            <div class="btn-container">
+                <input class="btn" type="button" value="Back"  onclick={handleBack}/>
+                <template if:true={editMode}>
+                    <input class="btn" type="submit" value="Save Page"  onclick={handleSave}/>
+                </template>
+                <input class="btn" type="button" value="Next" onclick={handleNext} />
+                <input class="btn" type="button" value="Exit Offer" onclick ={handleExit} />
+            </div>
+
+        </lightning-record-edit-form>
+</template>

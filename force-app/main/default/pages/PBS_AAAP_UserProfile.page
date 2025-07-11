@@ -197,6 +197,10 @@
                             <apex:outputField id="detailAltphone" value="{!usrinfo.PBS_AAAP_Alternate_Phone__c}"/>
                             <apex:outputText value="Email"/>
                             <apex:outputField id="detailemail" value="{!usrinfo.email}"/>
+                            <apex:outputPanel id="msg">
+                            <apex:outputText value="{!statusMessage}" rendered="{!NOT(ISNULL(statusMessage))}" style="color: red;"/> 
+                            </apex:outputPanel>
+                            
                             <!--apex:outputPanel >
                         <apex:outputText value="PIN* "/>
                         <a class="popup" href="#Modal_UsPro_Pin"><img src="{!$Resource.Info_Icon}"/></a>
@@ -219,6 +223,7 @@
                             <apex:commandButton id="remove" value="De-Register" action="{!actionredirecttoDeregister}"/>
                             <apex:commandButton id="cancelButt" value="Cancel" onClick="cancelButton();return false;"/>
                         </apex:outputPanel>
+                        
                     </apex:outputPanel>
                 </apex:outputPanel>
 
