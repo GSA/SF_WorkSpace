@@ -1,5 +1,34 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
+        <members>LMTUserDataSenderService</members>
+        <members>LMTUserDataSenderService_Test</members>
+        <members>LMTMockHttpResponseSuccess</members>
+        <members>LMTException</members>
+        <members>LMTMockHttpResponseFailure</members>
+        <members>LMTUserDataSenderService_Queueable</members>
+        <members>LMTUserDataSenderService_Queueable_Test</members>
+        <members>LMTUserDataSenderService_Scheduler</members>
+        <members>LMTUserDataSenderService_Chunker</members>
+        <members>LMTUserDataSenderService_Chunker_Test</members>
+        <members>LMT_PermSetAssignmentSenderServiceTest</members>
+        <members>LMT_PermSetAssignmentHandler_Batch</members>
+        <members>LMT_PermSetAssignmentHandler_Scheduler</members>
+        <members>LMT_PermSetAssignmentSenderService</members>
+        <members>BatchProcessLogHandler</members>
+        <members>BatchProcessLogHandler_Test</members>
+        <members>LMT_PermSetInitialSync_Scheduler</members>
+        <members>LMT_PermSetInitialSync_Batch</members>
+        <members>LMT_PermSetInitialSyncSenderService</members>
+        <members>LMT_PermSetInitialSyncSenderServiceTest</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>OrgWide_Batch_Process_Log_System</members>
+        <name>PermissionSet</name>
+    </types>
+    <types>
+        <members>NCMT_DESItemList_LC</members>
+        <members>NCMT_GSAAssemblies_View_Launcher_LC</members>
         <members>Batch_Process_Log__c.Batch_Name__c</members>
         <members>Batch_Process_Log__c.End_Date_Time__c</members>
         <members>Batch_Process_Log__c.Error__c</members>
@@ -23,6 +52,11 @@
     <types>
         <members>Batch_Process_Log__c.All</members>
         <name>ListView</name>
+    </types>
+    <types>
+        <members>NCMT_DES_Markups_Page</members>
+         <members>NCMT_CEW_WorkItems_Launcher</members>
+        <name>ApexPage</name>
     </types>
 <version>62.0</version>
 </Package>
