@@ -37,7 +37,6 @@ public class Test_PBS_LOP_PropertyOwnerController {
             obj.actionSavePropertyOwner2();
             obj.actionSavePropertyOwnerAndContinue();
             obj.actionCancel();
-            //obj.updateAreaType(offernew);
             System.assert(true);
         }
     }
@@ -182,19 +181,8 @@ public class Test_PBS_LOP_PropertyOwnerController {
             offernew.PBS_AAAP_Solicitation_Id__c = RLP.PBS_RSAP_Solicitation_G_REX_ID__c;
             insert offernew;
             
-            //ApexPages.currentPage().getParameters().put('offerId',offernew.Id);
             PBS_LOP_PropertyOwnerController obj = new PBS_LOP_PropertyOwnerController();
-            /**
-            obj.copyUserDetails();
-            obj.showOfferorRelationShipOther();
-            obj.getOtherRelationShip();
-            obj.backToOfrParking();
-            obj.actionSavePropertyOwner();
-            obj.actionSavePropertyOwner2();
-            obj.actionSavePropertyOwnerAndContinue();
-            obj.actionCancel();
-            **/
-            
+           
             PBS_AAAP_RLP__c rlp1 = PBS_AAAP_UtilityTest.createFY19RLP();
             rlp1.PBS_RSAP_Solicitation_Number__c = '123';
             rlp1.PBS_RSAP_Solicitation_Status__c = true;
@@ -273,7 +261,5 @@ public class Test_PBS_LOP_PropertyOwnerController {
             System.assert(true);
         }
 
-        
-        //PBS_LOP_PropertyOwnerController obj1 = new PBS_LOP_PropertyOwnerController();
     }
 }

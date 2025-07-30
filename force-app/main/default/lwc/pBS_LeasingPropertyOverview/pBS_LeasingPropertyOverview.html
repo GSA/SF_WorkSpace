@@ -1,0 +1,283 @@
+<template>
+    <c-p-b-s_-leasing_-progress-bar progress-bar-name="Property_Workflow" onnavigatetopage={handleNavigateToPage}>
+    </c-p-b-s_-leasing_-progress-bar>
+    <form id="newProperty">
+        <ul class='error'>
+            <template for:each={errors} for:item="error">
+                <li key={error}>{error}</li>
+            </template>
+        </ul>
+        <lightning-record-edit-form record-id={propertyId} object-api-name="PBS_AAAP_Property__c">
+            <div class="slds-grid">
+                <div class="slds-col slds-order_1 custom-border">
+                    <table width="100%">
+                        <tr>
+                            <td><span style="padding-left: 1px;">Property name: {offer.PBS_AAAP_Building_Name__c}</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="slds-col slds-order_2 custom-border">
+                    <table width="100%">
+                        <tr>
+                            <td><span style="padding-left: 5px;">RLP number: {offerDetails.PBS_RLPORSolicitation_Number}</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="slds-col slds-order_3 custom-border">
+                    <table width="100%">
+                        <tr>
+                            <td><span style="padding-left: 5px;">Offer status: {offerDetails.PBS_AAAP_Offer_Status__c}</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <h1 style="font-weight: bold;font-size: 20px;padding: 0 0 8px;padding-top: 10px;color: #000000;font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;">2. Property overview</h1>
+            <template if:false={editMode}><span style="margin-bottom: 10px;color:red;font-size: 16px;font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;">Offer opened in view mode. Any changes made will not be saved.</span></template>
+            <table width="100%">
+                <tr>
+                    <td width="70%">
+                        <label>1. Number of floors in the building <span class ="slds-text-color_error">*</span> </label>
+                    </td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_floors_Suites_in_Offered_Space__c" value={offerProp.PBS_AAAP_floors_Suites_in_Offered_Space__c} onchange={handleInputChange}><br />
+                            <br />
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px;">
+                        <label>2. Total rentable square feet (RSF) in Building  <span class ="slds-text-color_error">* </span> <img class="infoIconImage" src={infoIconImage} onclick={openHandleModal} data-infotype="Total rentable square feet" /></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-left: 20px;padding-top: 10px;">
+                        <label> a. General purpose/office  <span class ="slds-text-color_error">*</span> </label></td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_OFFICE_SPACE_RSF__c" value={offerProp.PBS_AAAP_OFFICE_SPACE_RSF__c} data-id="generalPurpose"
+                            onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-left: 20px;padding-top: 10px;">
+                        <label> b. Warehouse  <span class ="slds-text-color_error">*</span> </label></td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_RETAIL_SPACE_RSF__c" value={offerProp.PBS_AAAP_RETAIL_SPACE_RSF__c} data-id="Warehouse" onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-left: 20px;padding-top: 10px;">
+                        <label> c. Other  <span class ="slds-text-color_error">*</span> </label></td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_GARAGE_SPACE_RSF__c" value={offerProp.PBS_AAAP_GARAGE_SPACE_RSF__c} data-id="Other" onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-left: 20px;padding-top: 10px;"><label> d. Total</label></td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" style="color:black;" disabled variant="label-hidden" 
+                            field-name="PBS_AAAP_GEN_PURPOSE_RENTABLE__c" value={total}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px;">3. Total ANSI/BOMA Occupant Area (ABOA) square feet (SF)
+                        in Building <span class ="slds-text-color_error">* </span>
+                        <img class="infoIconImage" src={infoIconImage} onclick={openHandleModal} data-infotype="ABOA" /></label>
+                    </td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c" value={offerProp.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c} data-id="ABOA" onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px;">
+                        <label>4. Building common area factor (CAF)  <span class ="slds-text-color_error">* </span> </label><img class="infoIconImage" src={infoIconImage} onclick={openHandleModal} data-infotype="CAF" />
+                    </td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input class="custom-input" variant="label-hidden" disabled
+                            name="PBS_AAAP_Common_Area_Factor__c" value={commonAreaFactor}>
+                        </lightning-input>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px;">
+                        <label>5. Total building parking under offeror's control  <span class ="slds-text-color_error">*</span> </label>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-left: 20px;padding-top: 10px;">
+                        <label>a. Total surface  <span class ="slds-text-color_error">*</span> </label></td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_Total_Surface_Parking_Spaces__c" value={offerProp.PBS_AAAP_Total_Surface_Parking_Spaces__c} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-left: 20px;padding-top: 10px;">
+                        <label>b. Total structured  <span class ="slds-text-color_error">*</span> </label></td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_Total_Structured_Parking_Spaces__c" value={offerProp.PBS_AAAP_Total_Structured_Parking_Spaces__c} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-left: 20px;padding-top: 10px;">
+                        <label>c. Is all the parking onsite?  <span class ="slds-text-color_error">*</span> </label>
+                    </td>
+                    <td style="padding-top: 10px;">
+                        <div style="margin-left: -10px;">
+                        <lightning-radio-group options={yesNoOptions} value={selectedValue}
+                                            variant="label-hidden" type="radio" class="horizontal-radio" disabled={isDisabled}
+                                            onchange={handleParkingOnsiteChange}>
+                                        </lightning-radio-group>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-left: 20px; padding-top: 10px;">
+                        <label>d. Number of spaces required by local code, if applicable  <span class ="slds-text-color_error">*</span> </label>
+                    </td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_Total_Park_Spaces_Offered__c" value={offerProp.PBS_AAAP_Total_Park_Spaces_Offered__c} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px;">
+                        <label>6. In what year was the original building construction completed and ready for initial occupancy?  <span class ="slds-text-color_error">*</span> </label>
+                    </td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_Year_Built__c" value={offerProp.PBS_AAAP_Year_Built__c} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding-top: 10px;">
+                        <label>7. Provide the year and a brief description of the last major building renovation. If not applicable, enter N/A or state the reason (ex: new building).<span class ="slds-text-color_error">*</span> </label>
+                        <br /> <br />
+                        <div class="textarea" style="padding-left: 10px;">
+                            <textarea class="slds-textarea" field-name="PBS_AAAP_Renovation_Year__c" maxlength="250" autocomplete="off" style="background: #eeeeee;" onkeyup={handleRenovationYearChange} disabled={isDisabled}>{offerProp.PBS_AAAP_Renovation_Year__c}</textarea>
+                        </div>
+                        <div class="character-counter" style="padding-left: 10px;">
+                            {charCount}/{maxCharLimit} Characters Used
+                        </div> 
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px;">
+                        <label>8. What are the building's normal hours of operations for HVAC included in the operating costs?  <span class ="slds-text-color_error">* </span> <img class="infoIconImage" src={infoIconImage} onclick={openHandleModal} data-infotype="Operating Costs" /></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <br />
+                        <table width="100%">
+                            <td width="25%" style="text-align:right;padding-top: 10px;">
+                                <label>Monday - Friday Hours Start:&nbsp;&nbsp;</label>
+                            </td>
+                            <td width="25%" style="padding-top: 10px;">
+                                <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                                    field-name="PBS_AAAP_HVAC_HRS_MON_TO_FRI_START__c" value={offerProp.PBS_AAAP_HVAC_HRS_MON_TO_FRI_START__c} onchange={handleInputChange}>
+                                </lightning-input-field>
+                            </td>
+                            <td width="25%" style="text-align:right;padding-top: 10px;"><label>End:&nbsp;&nbsp;</label>
+                            </td>
+                            <td width="25%" style="padding-top: 10px;">
+                                <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                                    field-name="PBS_AAAP_HVAC_HRS_MON_TO_FRI_END__c" value={offerProp.PBS_AAAP_HVAC_HRS_MON_TO_FRI_END__c} onchange={handleInputChange}>
+                                </lightning-input-field>
+                            </td>
+                        </table>
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <table width="100%">
+                            <td width="25%" style="text-align:right;padding-top: 10px;">
+                                <label>Saturday Hours Start:&nbsp;&nbsp;</label>
+                            </td>
+                            <td width="25%" style="padding-top: 10px;">
+                                <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                                    field-name="PBS_AAAP_HVAC_HRS_ON_SAT_START__c" value={offerProp.PBS_AAAP_HVAC_HRS_ON_SAT_START__c} onchange={handleInputChange}>
+                                </lightning-input-field>
+                            </td>
+                            <td width="25%" style="text-align:right;padding-top: 10px;"><label>End:&nbsp;&nbsp;</label>
+                            </td>
+                            <td width="25%" style="padding-top: 10px;">
+                                <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                                    field-name="PBS_AAAP_HVAC_HRS_ON_SAT_END__c" value={offerProp.PBS_AAAP_HVAC_HRS_ON_SAT_END__c} onchange={handleInputChange}>
+                                </lightning-input-field>
+                            </td>
+                        </table>
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <table width="100%">
+                            <td width="25%" style="text-align:right;padding-top: 10px;">
+                                <label>Sunday Hours Start:&nbsp;&nbsp;</label></td>
+                            <td width="25%" style="padding-top: 10px;">
+                                <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                                    field-name="PBS_AAAP_HVAC_HRS_ON_SUN_START__c" value={offerProp.PBS_AAAP_HVAC_HRS_ON_SUN_START__c} onchange={handleInputChange}>
+                                </lightning-input-field>
+                            </td>
+                            <td width="25%" style="text-align:right;padding-top: 10px;"><label>End:&nbsp;&nbsp;</label>
+                            </td>
+                            <td width="25%" style="padding-top: 10px;">
+                                <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                                    field-name="PBS_AAAP_HVAC_HRS_ON_SUN_END__c" value={offerProp.PBS_AAAP_HVAC_HRS_ON_SUN_END__c} onchange={handleInputChange}>
+                                </lightning-input-field>
+                            </td>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            
+            <div class="btn-container">
+                <input class="btn" type="button" variant="submit" value="Back"  onclick={handleBack}/>                
+                <template if:true={editMode}>
+                <input class="btn" type="submit" variant="submit" value="Save Page"  onclick={handleSave}/>
+                </template>
+                <input class="btn" type="button" variant="submit" value="Next" onclick={handleNext} />   
+                <input class="btn" type="button" variant="submit" value="Exit Offer" onclick ={handleExit} />         
+            </div>
+
+        </lightning-record-edit-form>
+    </form>
+    <template if:true={isShowModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={hideModalBox}>
+                    <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-formatted-rich-text value={infoDetials}></lightning-formatted-rich-text>
+                </div>
+
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" onclick={hideModalBox}>></div>
+    </template>
+</template>

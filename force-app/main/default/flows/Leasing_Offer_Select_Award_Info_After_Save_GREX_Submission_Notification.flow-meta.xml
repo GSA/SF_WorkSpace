@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Notify_Agency_Requirement_Manager</name>
+        <label>Notify Agency Requirement Manager</label>
+        <locationX>182</locationX>
+        <locationY>539</locationY>
+        <actionName>PBS_AAAP_Offer_Select_Award_Info__c.PBS_AAAP_AAAPFailureToManager</actionName>
+        <actionType>emailAlert</actionType>
+        <connector>
+            <targetReference>Email_Alert_to_Record_Owner</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>PBS_AAAP_Offer_Select_Award_Info__c.PBS_AAAP_AAAPFailureToManager</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Notify_Record_Owner</name>
+        <label>Notify Record Owner</label>
+        <locationX>50</locationX>
+        <locationY>755</locationY>
+        <actionName>PBS_AAAP_Offer_Select_Award_Info__c.PBS_AAAP_AAAPFailureToUser</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>PBS_AAAP_Offer_Select_Award_Info__c.PBS_AAAP_AAAPFailureToUser</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Successful_Email_Alert_to_Record_Owner</name>
+        <label>Successful Email Alert to Record Owner</label>
+        <locationX>842</locationX>
+        <locationY>431</locationY>
+        <actionName>PBS_AAAP_Offer_Select_Award_Info__c.PBS_AAAP_AAAPsendGrexSubmissionConfirmation</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>PBS_AAAP_Offer_Select_Award_Info__c.PBS_AAAP_AAAPsendGrexSubmissionConfirmation</nameSegment>
+    </actionCalls>
+    <apiVersion>63.0</apiVersion>
+    <decisions>
+        <name>ARM_Email_Alert</name>
+        <label>ARM Email Alert</label>
+        <locationX>380</locationX>
+        <locationY>431</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Check_if_ARM_Email_Exists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.PBS_AAAP_AGENCY_REQUIREMENT_ID__r.PBS_AAAP_AASN_AAAP_MANAGER__r.Email</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Notify_Agency_Requirement_Manager</targetReference>
+            </connector>
+            <label>Check if ARM Email Exists</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Email_Alert_to_Record_Owner</name>
+        <label>Email Alert to Record Owner</label>
+        <locationX>182</locationX>
+        <locationY>647</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Check_if_Record_Owner_is_Active</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Owner:User.IsActive</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Notify_Record_Owner</targetReference>
+            </connector>
+            <label>Check if Record Owner is Active</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_GREX_submit_successful</name>
+        <label>Is GREX submit successful?</label>
+        <locationX>611</locationX>
+        <locationY>323</locationY>
+        <defaultConnector>
+            <targetReference>Successful_Email_Alert_to_Record_Owner</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Successful</defaultConnectorLabel>
+        <rules>
+            <name>Not_Successful</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.PBS_AAAP_Status_Code__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>200</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>ARM_Email_Alert</targetReference>
+            </connector>
+            <label>Not Successful</label>
+        </rules>
+    </decisions>
+    <description>SFWS-3580 : This flow replaces the WFR, PBS_AAAP_AAAPsendGrexSubmissionConfirmation and PBS_AAAP_AAAPsendGrexSubmissionFailure which are now deactivated. This flow sends emails based on whether the GREX integration call was successful to manager or record owner respectively.</description>
+    <environments>Default</environments>
+    <interviewLabel>Leasing : Offer Select Award Info : After Save : GREX Submission Notification {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Leasing : Offer Select Award Info : After Save : GREX Submission Notification</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>485</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Is_GREX_submit_successful</targetReference>
+        </connector>
+        <filterFormula>AND (
+OR(
+ISCHANGED({!$Record.PBS_AAAP_Status_Code__c}),
+ISCHANGED({!$Record.CreatedDate})
+),
+NOT(ISBLANK({!$Record.PBS_AAAP_Status_Code__c}))
+)</filterFormula>
+        <object>PBS_AAAP_Offer_Select_Award_Info__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

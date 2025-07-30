@@ -20,7 +20,6 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
         Account acc = new Account(RecordTypeId = rec.Id, Name = 'Sample Account');
         insert acc;
         PBS_AAAP_Agency_Requirement__c agency = PBS_AAAP_UtilityTest.createAgencyRequirement();
-        //agency.PBS_AAAP_LEASE_TERM__c = '25 months,16 firm'
         agency.PBS_AAAP_Account_Name__c = acc.Id;
         insert agency;
         
@@ -82,7 +81,6 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
         Account acc = new Account(RecordTypeId = rec.Id, Name = 'Sample Account');
         insert acc;
         PBS_AAAP_Agency_Requirement__c agency = PBS_AAAP_UtilityTest.createAgencyRequirementFY19();
-        //agency.PBS_AAAP_LEASE_TERM__c = '25 months,16 firm'
         agency.PBS_AAAP_Account_Name__c = acc.Id;
         insert agency;
         
@@ -537,7 +535,6 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
         PBS_AAAP_Space__c space = PBS_AAAP_UtilityTest.createSpace();
         space.PBS_AAAP_OFFER_NUMBER__c = offer.Id;
         space.PBS_AAAP_Total_ABOA_Awarded__c = 20000;
-        //space.PBS_AAAP_SF_OFFERED__c = 100000;
         space.PBS_AAAP_Total_ABOA_Selected__c = 100000;
         insert space;
         RecordType rec = [SELECT r.Id, r.Name, r.SobjectType FROM RecordType r WHERE SobjectType = 'Account' LIMIT 1];
@@ -630,8 +627,6 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
         PageReference pref = asoc.prepareDocument();
         system.debug('*****pref'+pref);
         System.assertEquals(pref, null);
-        //system.debug('*****pref'+pref);
-        //System.assertEquals(pref.getUrl(), currentPage.getUrl());
         Test.stopTest();
     }
     
@@ -684,9 +679,7 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
 
         PageReference pref = asoc.prepareDocument();
         system.debug('*****pref'+pref);
-         System.assertEquals(pref, null);
-        //system.debug('*****pref'+pref);
-        //System.assertEquals(pref.getUrl(), currentPage.getUrl());
+        system.assertEquals(pref, null);
         Test.stopTest();
     }
     
@@ -740,8 +733,7 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
 
         PageReference pref = asoc.prepareDocument();
         system.debug('*****pref'+pref);
-         System.assertEquals(pref, null);
-        //System.assertEquals(pref.getUrl(), currentPage.getUrl());
+        system.assertEquals(pref, null);
         Test.stopTest();
     }
      
@@ -796,9 +788,8 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
         asoc.actionMethod();
 
         PageReference pref = asoc.prepareDocument();
-         system.debug('*****pref'+pref);
-        System.assertEquals(pref, null);
-        //System.assertEquals(pref.getUrl(), currentPage.getUrl());     
+        system.debug('*****pref'+pref);
+        system.assertEquals(pref, null);
         Test.stopTest();
     }
      
@@ -861,8 +852,7 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
 
         PageReference pref = asoc.prepareDocument();
         system.debug('*****pref'+pref);
-         System.assertEquals(pref, null);
-        //System.assertEquals(pref.getUrl(), currentPage.getUrl());
+        system.assertEquals(pref, null);
         Test.stopTest();
     }
     
@@ -919,9 +909,7 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
 
         PageReference pref = asoc.prepareDocument();
         system.debug('*****pref'+pref);
-        System.assert(true);
-        //System.assertEquals(pref, null);
-        //System.assertEquals(pref.getUrl(), currentPage.getUrl());
+        system.assert(true);
         Test.stopTest();
     }
     
@@ -986,9 +974,7 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
 
         PageReference pref1 = asoc1.prepareDocument();
         system.debug('*****pref'+pref);
-        System.assert(true);
-         //System.assertEquals(pref, null);
-        //System.assertEquals(pref.getUrl(), currentPage.getUrl());
+        system.assert(true);
         Test.stopTest();
     }
     
@@ -1049,9 +1035,7 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
         asoc.actionMethod();
         PageReference pref = asoc.prepareDocument();
         system.debug('*****pref'+pref);
-        System.assert(true);
-        // System.assertEquals(pref, null);
-        //System.assertEquals(pref.getUrl(), currentPage.getUrl());
+        system.assert(true);
         Test.stopTest();
     }
     
@@ -1110,9 +1094,7 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
         asoc.actionMethod();
         PageReference pref = asoc.prepareDocument();
         system.debug('*****pref'+pref);
-        System.assert(true);
-         //System.assertEquals(pref, null);
-        //System.assertEquals(pref.getUrl(), currentPage.getUrl());
+        system.assert(true);
         Test.stopTest();
     }
     
@@ -1171,8 +1153,6 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
         asoc.actionMethod();
         PageReference pref = asoc.prepareDocument();
         system.debug('*****pref'+pref);
-        //System.assertEquals(pref, null);
-        //System.assertEquals(pref.getUrl(), currentPage.getUrl());
 
         PBS_AAAP_Offer_Select_Award_Info__c osai1 = new PBS_AAAP_Offer_Select_Award_Info__c();
         osai1.PBS_AAAP_Offer_ID__c = offer.Id;
@@ -1226,9 +1206,7 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
         PageReference pref2 = asoc2.prepareDocument();
         system.debug('*****pref'+pref);
         System.assert(true);
-        //System.assertEquals(pref, null);
-        //System.assertEquals(pref.getUrl(), currentPage.getUrl());
-        
+       
         Test.stopTest();
     }
       
@@ -1660,7 +1638,6 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
 
         PBS_AAAP_AwardSelectedOfferController asoc2 = new PBS_AAAP_AwardSelectedOfferController();
         PBS_AAAP_AwardSelectedOfferController.setFields();
-        //asoc2.actionMethod();
         PageReference pref2 = asoc2.prepareDocument();
         System.assertEquals(pref2, null);
         system.debug('****pref2'+pref2);
@@ -1669,8 +1646,7 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
         offeratt.PBS_AAAP_Offer__c = offer.Id;
         offeratt.PBS_AAAP_Sent_to_GREX__c = false;
         insert offeratt;
-        
-        // creating 2 offer
+
         PBS_AAAP_Offer__c offer2 = PBS_AAAP_UtilityTest.createOfferInfo();
         offer2.PBS_AAAP_RLP_Number__c = rlp.Id;
         insert offer2;
@@ -1686,6 +1662,16 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
         offeratt.PBS_AAAP_Sent_to_GREX__c = false; 
         update offeratt;
         PBS_AAAP_SendOfferDetailsAPI.captureLogs(offer.Id, 'response', 'request', '200');
+        
+		PBS_AAAP_Offer__c masterOffer = PBS_AAAP_UtilityTest.createOfferInfo();
+        masterOffer.PBS_AAAP_RLP_Number__c = rlp.Id;
+        insert masterOffer;
+        
+        
+        offer.Master_Offer__c = masterOffer.Id;
+        update offer;
+        
+        PBS_AAAP_SendOfferDetailsAPI.sendOfferDetailsAAAP(offer.Id, agency.Id, osai2.Id, masterOffer.Id, 'P2');
         
         Profile p = [SELECT Id FROM Profile WHERE Name='System Administrator']; 
         User u = new User(Alias = 'standt', Email='standarduser@testorg.com', 
@@ -1715,6 +1701,11 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
         offeratt.PBS_AAAP_Offer__c = offer.Id;
         insert offeratt;
         
+        PBS_AAAP_Submission_Attempt_History__c subAttHistory = new PBS_AAAP_Submission_Attempt_History__c();
+        subAttHistory.Offer__c = offer.Id;
+        subAttHistory.Date__c = System.Today();
+        insert subAttHistory;
+        
         PBS_AAAP_SendOfferDetailsAPI.ContentDocumentWrapper contentDocumentWrapperObj = new PBS_AAAP_SendOfferDetailsAPI.ContentDocumentWrapper('','',System.now(), '');
         
         Test.setMock(HttpCalloutMock.class, new PBS_AAAP_CalloutMockImpl());
@@ -1732,6 +1723,8 @@ private class Test_PBS_AAAP_AwardSelectedOfferContr {
       
        PBS_AAAP_SendOfferDetailsAPI.documents con2 = new PBS_AAAP_SendOfferDetailsAPI.documents();
        con2.documentDescription = 'test description';
+       con2.documentType = '1364 - Proposal to Lease Space';
+       con2.fileName = 'test.text';
        
        PBS_AAAP_SendOfferDetailsAPI.requestWrapper con3 = new PBS_AAAP_SendOfferDetailsAPI.requestWrapper();
        System.assertEquals(1,1);

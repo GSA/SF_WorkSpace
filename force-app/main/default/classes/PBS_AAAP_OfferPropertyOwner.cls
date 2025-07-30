@@ -22,7 +22,7 @@ public with sharing class PBS_AAAP_OfferPropertyOwner {
         if (ApexPages.currentPage().getParameters().get('offerId') != null) {
 
             offerId = ApexPages.currentPage().getParameters().get('offerId');
-            // system.debug('***************offer Parking ID in Constructor:'+offerId);
+            
             offerPropOwner = PBS_AAAP_GlobalConstants.getOfferDetail(offerId);
             //added by syam for offerId validation
             if (offerPropOwner.OwnerId == UserInfo.getUserId()) {
@@ -40,7 +40,7 @@ public with sharing class PBS_AAAP_OfferPropertyOwner {
         System.debug('inside copy User Details !!!');
         if(sameOwner) {
             ownerFullName = userDetail.FirstName + ' ' + userDetail.LastName;
-            //lopOffer.PBS_AAAP_Owner_Name__c = userDetail.CompanyName;
+            
             offerPropOwner.PBS_AAAP_Owner_Name__c = userDetail.FirstName + ' ' + userDetail.LastName;
             offerPropOwner.PBS_AAAP_SIGNATURE_LAST_NAME__c = userDetail.LastName;
             offerPropOwner.PBS_AAAP_Signature_First_Name__c = userDetail.FirstName;
@@ -75,21 +75,14 @@ public with sharing class PBS_AAAP_OfferPropertyOwner {
     }
 
     public PageReference backToOfrParking() {
-
-  /***** j.rogers  12/22/2022  SFWS-2100  
-        //PageReference p = Page.PBS_AAAP_OfferParking;
-        PageReference p = new PageReference('/AAAP/OfferParking');
-        p.getParameters().put('offerId', offerPropOwner.Id);
-        p.setRedirect(true);
-        return p;
-  *****************************/      
+     
   
         PageReference p = new PageReference('/AAAP/OfferParking');
         p.getParameters().put('offerId', offerId);
         p.setRedirect(false);
         
         pageURLForRedirection = p.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferParking', Label.LOP_Community_Base_URL+'AAAP-OfferParking');
+        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferParking', Label.LOP_Community_Base_URL+'Offer-M-Parking');
         return null;
     }
 
@@ -97,10 +90,10 @@ public with sharing class PBS_AAAP_OfferPropertyOwner {
     public PageReference showPropertyOwnerCommonParentSection() {
         if (offerPropOwner.PBS_AAAP_CONTROLLED_BY_PARENT__c == 'Yes') {
             parentName = true;
-            //parentTIN = true;
+            
         } else {
             parentName = false;
-            //parentTIN = false;
+            
             offerPropOwner.PBS_AAAP_PARENT_NAME__c = '';
         }
         return null;
@@ -114,15 +107,11 @@ public with sharing class PBS_AAAP_OfferPropertyOwner {
     }
 
 
-    /*public void backToOfrPropOwnerPage1(){
-        propOwnerPage1 = true;
-        propOwnerPage2 = false;       
-    }*/
+    
 
     public PageReference actionSavePropertyOwnerAndContinue() {   
         
         PageReference p = null;
-        //boolean errorflag = checkOfferPropOwnerValidations();
         boolean flag;
         if (offerPropOwner.PBS_AAAP_Owner_Name__c == null) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '1. Property owner name field is required'));
@@ -150,11 +139,7 @@ public with sharing class PBS_AAAP_OfferPropertyOwner {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '6. Property Owner 9-Digit Zip Code is required'));
             flag = true;
         }
-        /*SGanti commented out on 7/14/2021 
-        if (offerPropOwner.PBS_AAAP_Owner_Main_Phone__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '7. Property owner main phone number field is required'));
-            flag = true;
-        } */ 
+        
         /* SGanti renumbered error message on 7/14/2021 */
         if (offerPropOwner.PBS_AAAP_OFFEROR_INTEREST__c == null) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '7. Property owner relationship to Offeror field is required'));
@@ -165,7 +150,7 @@ public with sharing class PBS_AAAP_OfferPropertyOwner {
         if(offerPropOwner.PBS_AAAP_DUNS_Number__c == null){
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '8. Property owner Unique Entity Identifier (UEI) field is required'));
             flag = true;
-            //return null;
+            
         }
         if (flag == true) {
             return null;
@@ -179,7 +164,7 @@ public with sharing class PBS_AAAP_OfferPropertyOwner {
             
             if(sameOwner) {
                 ownerFullName = userDetail.FirstName + ' ' + userDetail.LastName;
-                //lopOffer.PBS_AAAP_Owner_Name__c = userDetail.CompaPBS_AAAP_OfferBuildingDetailsnyName;
+                
                 offerPropOwner.PBS_AAAP_Owner_Name__c = userDetail.FirstName + ' ' + userDetail.LastName;
                 offerPropOwner.PBS_AAAP_SIGNATURE_LAST_NAME__c = userDetail.LastName;
                 offerPropOwner.PBS_AAAP_Signature_First_Name__c = userDetail.FirstName;
@@ -190,14 +175,14 @@ public with sharing class PBS_AAAP_OfferPropertyOwner {
                 offerPropOwner.PBS_AAAP_Owner_Country__c = userDetail.Country;
                 offerPropOwner.PBS_RSAP_Property_Owner_Same_as_Offeror__c = TRUE;
                 offerPropOwner.PBS_AAAP_OFFEROR_INTEREST__c = 'Owner';
-                //update offerPropOwner;
+                
             } else {
                 offerPropOwner.PBS_RSAP_Property_Owner_Same_as_Offeror__c = FALSE;
-                //update offerPropOwner;
+                
             }
             
             update offerPropOwner;
-            //p = Page.PBS_AAAP_OperatingCosts;
+            
             p = new PageReference('/AAAP/OperatingCosts');
             p.getParameters().put('offerId', offerPropOwner.Id);
             if (draftMsgFlag == 'true') {
@@ -205,9 +190,9 @@ public with sharing class PBS_AAAP_OfferPropertyOwner {
             }
 
             // j.rogers 12/22/2022 SFWS-2100
-             //p.setRedirect(true);
+             
             pageURLForRedirection = p.getUrl();
-            pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OperatingCosts', Label.LOP_Community_Base_URL+'AAAP-OperatingCosts');
+            pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OperatingCosts', Label.LOP_Community_Base_URL+'Offer-M-Costs');
             p.setRedirect(false);
             return null;
             // end SFWS-2011
@@ -220,75 +205,9 @@ public with sharing class PBS_AAAP_OfferPropertyOwner {
         return p;
     }
 
-    /**
-    public boolean checkOfferPropOwnerValidations() {
-
-        boolean flag;
-        if (offerPropOwner.PBS_AAAP_Owner_Name__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.PROP_OWNER_NAME_REQUIRED));
-            flag = true;
-        }
-        if (offerPropOwner.PBS_AAAP_Owner_Address__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.PROP_OWNER_ADDRESS));
-            flag = true;
-        }
-        if (offerPropOwner.PBS_AAAP_Owner_Country__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.PROP_OWNER_COUNTRY));
-            flag = true;
-        }
-        if (offerPropOwner.PBS_AAAP_Owner_City__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.PROP_OWNER_CITY));
-            flag = true;
-        }
-        if (offerPropOwner.PBS_AAAP_Owner_Country__c == 'United States' && offerPropOwner.PBS_AAAP_Owner_State__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.PROP_OWNER_STATE));
-            flag = true;
-        }
-        if (offerPropOwner.PBS_AAAP_Owner_Country__c == 'United States' && offerPropOwner.PBS_AAAP_Owner_Zip__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.PROP_OWNER_ZIP));
-            flag = true;
-        }
-        if (offerPropOwner.PBS_AAAP_Owner_Main_Phone__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.PROP_OWNER_PHONE));
-            flag = true;
-        }
-        if (offerPropOwner.PBS_AAAP_OFFEROR_INTEREST__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.PROP_OWNER_TYPE));
-            flag = true;
-        }
-
-        if (offerPropOwner.PBS_AAAP_CONTROLLED_BY_PARENT__c == 'Yes' && offerPropOwner.PBS_AAAP_Common_Parent_TIN__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.PROP_OWNER_PARENT_TIN));
-            flag = true;
-        }
-        if (offerPropOwner.PBS_AAAP_CONTROLLED_BY_PARENT__c == 'Yes' && offerPropOwner.PBS_AAAP_PARENT_NAME__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.PROP_OWNER_COMMON_PARENT));
-            flag = true;
-        }
-
-
-        if (offerPropOwner.PBS_AAAP_Owner_TIN_Status__c == PBS_AAAP_GlobalConstants.TIN_KNOWN && offerPropOwner.PBS_AAAP_Owner_TIN_Assigned__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.PROP_OWNER_TIN_NUM));
-            flag = true;
-        }
-        if(offerPropOwner.PBS_AAAP_DUNS_Number__c == null){
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '9. Property owner DUNS number field is required');
-            Apexpages.addMessage(myMsg);
-            flag = true;
-            //return null;
-        }
-        return flag;
-    }
-    **/
-
-
+    
     public PageReference actionSavePropertyOwner() {
-        /**
-        if(offerPropOwner.PBS_AAAP_DUNS_Number__c == null){
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, '9. Property owner DUNS number field is required');
-            Apexpages.addMessage(myMsg);
-        }
-        **/
+        
         try {
             draftMsgFlag = '';
             if (offerPropOwner.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED) {
@@ -298,7 +217,6 @@ public with sharing class PBS_AAAP_OfferPropertyOwner {
             
             if(sameOwner) {
                 ownerFullName = userDetail.FirstName + ' ' + userDetail.LastName;
-                //lopOffer.PBS_AAAP_Owner_Name__c = userDetail.CompanyName;
                 offerPropOwner.PBS_AAAP_Owner_Name__c = userDetail.FirstName + ' ' + userDetail.LastName;
                 offerPropOwner.PBS_AAAP_SIGNATURE_LAST_NAME__c = userDetail.LastName;
                 offerPropOwner.PBS_AAAP_Signature_First_Name__c = userDetail.FirstName;
@@ -309,10 +227,10 @@ public with sharing class PBS_AAAP_OfferPropertyOwner {
                 offerPropOwner.PBS_AAAP_Owner_Country__c = userDetail.Country;
                 offerPropOwner.PBS_RSAP_Property_Owner_Same_as_Offeror__c = TRUE;
                 offerPropOwner.PBS_AAAP_OFFEROR_INTEREST__c = 'Owner';
-                //update offerPropOwner;
+                
             } else {
                 offerPropOwner.PBS_RSAP_Property_Owner_Same_as_Offeror__c = FALSE;
-                //update offerPropOwner;
+                
             }
             
             update offerPropOwner;
@@ -325,21 +243,18 @@ public with sharing class PBS_AAAP_OfferPropertyOwner {
                     pageUrl = pageUrl + offerId;   
                 }                
                 PageReference p = new PageReference(pageUrl); 
-                // j.rogers 12/21/2022 SFWS-2100     
-                // return p;
+                
                 pageURLForRedirection = Label.LOP_Community_Base_URL+PBS_AAAP_Utility.getCommunityURL(p.getUrl());
                 return null;  
-                // end SFWS-2100
+                
             }
 
         } catch (Exception ex) {
             Apexpages.addMessages(ex);
         }
-        //return null;
+        
 
-        // J.Rogers 12/22/2022  SFWS-2100
-        //PageReference pref = new PageReference('/AAAP/OfferPropertyOwner?offerId='+offerId);
-        //return pref;
+        
         PageReference pref = new PageReference('/AAAP/OfferPropertyOwner?offerId='+offerId);
         pref.getParameters().put('offerId', offerId);
         pref.getParameters().put('draftMsg', draftMsgFlag);
@@ -348,7 +263,7 @@ public with sharing class PBS_AAAP_OfferPropertyOwner {
         pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferPropertyOwner', Label.LOP_Community_Base_URL+'AAAP-OfferPropertyOwner');
 
         return null;
-        // SfWS-2100 end
+        
     }
 
     public PageReference actionDeleteOffer() {
@@ -356,7 +271,7 @@ public with sharing class PBS_AAAP_OfferPropertyOwner {
 
         if (offerPropOwner.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT || offerPropOwner.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_PENDINGMODIFICATION) {
             delete offerPropOwner;    // Cascade delete - Deletes all Spaces and Othercosts associated with it.
-            //pref = Page.PBS_AAAP_PortalHome;
+            
             pref = new PageReference('/AAAP/PortalHome');
             pref.setRedirect(true);
         } else {
@@ -434,7 +349,6 @@ public with sharing class PBS_AAAP_OfferPropertyOwner {
     }
 
     public PageReference actionCancel() {
-        //PageReference pref = Page.PBS_AAAP_PortalHome;
         PageReference pref = new PageReference('/AAAP/PortalHome');
         pref.setRedirect(true);
         return pref;

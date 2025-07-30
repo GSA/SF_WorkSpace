@@ -1,0 +1,109 @@
+<template>
+    <div class="slds-p-around_medium">
+        <div style="background-color: white !important; background: none; border: none">
+            <span class="header">Offer space</span>
+        </div>
+        <br/><br/><br/>
+        <div>
+        <!-- Add New Property Subheading -->
+        <h2 class="slds-text-heading_medium"><b>Add new property</b></h2>
+        <p class="slds-m-bottom_small">Click the Add button to begin a new offer with new property information.</p>
+    </div>
+        <!-- Add Button -->
+        <input class="btn" type="button" variant="submit" value="Add"  onclick={handleAddProperty}/>
+        <br/><br/>
+        <!-- Add New Property Subheading -->
+        <h2 class="slds-text-heading_medium"><b>Existing properties</b></h2>
+        <p class="slds-m-bottom_large">Click the Select button to use existing property information for a new offer.</p>
+
+        <template if:true={hasPropData}>
+            <div class="custom-table">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="slds-text-align_left">
+                            </th>
+                            <th scope="col" class="slds-text-align_left" onclick={handleSort} data-field-name="PBS_AAAP_Building_Name__c">
+                                Property name
+                                <span class="arrow" data-field-name="PBS_AAAP_Building_Name__c">
+                                    <template if:true={isSortedByPropName}>
+                                        <template if:true={isAscending}>
+                                            &#9650; <!-- Up arrow -->
+                                        </template>
+                                        <template if:false={isAscending}>
+                                            &#9660; <!-- Down arrow -->
+                                        </template>
+                                    </template>
+                                </span>
+                            </th>
+                            <th scope="col" class="slds-text-align_left" onclick={handleSort} data-field-name="PBS_AAAP_Street_Address__c">
+                                Street address
+                                <span class="arrow" data-field-name="PBS_AAAP_Street_Address__c">
+                                    <template if:true={isSortedByStreet}>
+                                        <template if:true={isAscending}>
+                                            &#9650; <!-- Up arrow -->
+                                        </template>
+                                        <template if:false={isAscending}>
+                                            &#9660; <!-- Down arrow -->
+                                        </template>
+                                    </template>
+                                </span>
+                            </th>
+                            <th scope="col" class="slds-text-align_left" onclick={handleSort} data-field-name="PBS_AAAP_City__c">
+                                City
+                                <span class="arrow" data-field-name="PBS_AAAP_City__c">
+                                    <template if:true={isSortedByCity}>
+                                        <template if:true={isAscending}>
+                                            &#9650; <!-- Up arrow -->
+                                        </template>
+                                        <template if:false={isAscending}>
+                                            &#9660; <!-- Down arrow -->
+                                        </template>
+                                    </template>
+                                </span>
+                            </th>
+                            <th scope="col" class="slds-text-align_left" onclick={handleSort} data-field-name="PBS_AAAP_State__c">
+                                State
+                                <span class="arrow" data-field-name="PBS_AAAP_State__c">
+                                    <template if:true={isSortedByState}>
+                                        <template if:true={isAscending}>
+                                            &#9650; <!-- Up arrow -->
+                                        </template>
+                                        <template if:false={isAscending}>
+                                            &#9660; <!-- Down arrow -->
+                                        </template>
+                                    </template>
+                                </span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={propList} for:item="property">
+                            <tr key={property.Id}>
+                                <td>
+                                    <button class="slds-button slds-button_brand" onclick={handleButtonClick} data-id={property.Id}>
+                                        Select
+                                    </button>
+                                </td>
+                                <td>{property.PBS_AAAP_Building_Name__c}</td>
+                                <td>{property.PBS_AAAP_Street_Address__c}</td>
+                                <td>{property.PBS_AAAP_City__c}</td>
+                                <td>{property.PBS_AAAP_State__c}</td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+			<div class="btn-container">
+                <input class="btn" type="button" variant="submit" value="Back"  onclick={handleBack}/>
+            </div>
+        </template>
+
+        <template if:false={hasPropData}>
+            There are no Leasing Properties to display. 
+			<div class="btn-container">
+                <input class="btn" type="button" variant="submit" value="Back"  onclick={handleBack}/>
+            </div>
+        </template>
+    </div>
+</template>

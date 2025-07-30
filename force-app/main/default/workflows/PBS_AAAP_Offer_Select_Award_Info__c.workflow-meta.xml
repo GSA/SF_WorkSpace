@@ -61,7 +61,7 @@
             <name>PBS_AAAP_AAAPsendGrexSubmissionConfirmation</name>
             <type>Alert</type>
         </actions>
-        <active>true</active>
+        <active>false</active>
         <formula>AND(PBS_AAAP_Status_Code__c != null, PBS_AAAP_Status_Code__c == &apos;200&apos;)</formula>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
@@ -75,7 +75,7 @@
             <name>PBS_AAAP_AAAPFailureToUser</name>
             <type>Alert</type>
         </actions>
-        <active>true</active>
+        <active>false</active>
         <formula>AND(PBS_AAAP_Status_Code__c != null, PBS_AAAP_Status_Code__c != &apos;200&apos;)</formula>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
@@ -89,7 +89,7 @@
             <name>setProjectNumber</name>
             <type>FieldUpdate</type>
         </actions>
-        <active>true</active>
+        <active>false</active>
         <formula>NOT(ISNULL(PBS_AAAP_AGENCY_REQUIREMENT_ID__c))</formula>
         <triggerType>onCreateOnly</triggerType>
     </rules>

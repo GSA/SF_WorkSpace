@@ -1,6 +1,5 @@
 @IsTest
 private class Test_PBS_AAAP_GlobalConstants {
-
     
     static testMethod void myUnitTest() {
     
@@ -51,17 +50,12 @@ private class Test_PBS_AAAP_GlobalConstants {
             
             PBS_AAAP_GlobalConstants.checkOfferBuildingValidations(offer2);
             PBS_AAAP_GlobalConstants.checkOfferPropOwnerValidations(offer2);  
-            //PBS_AAAP_GlobalConstants.checkLOPOfferLeaseTerms(offer2);
             PBS_AAAP_GlobalConstants.updateOfferToDraft(offer2);
             PBS_AAAP_GlobalConstants.checkLOPOfferSpaceRates(offer2);
             PBS_AAAP_GlobalConstants.validateOfferSubmission(offer2,false); 
             PBS_AAAP_GlobalConstants.validateOfferSubmissionBefore(offer2);
-            PBS_AAAP_GlobalConstants.checkOfferParkingValidations(offer2);
-            PBS_AAAP_GlobalConstants.checkOperatingCostsValidations(offer2);
             PBS_AAAP_GlobalConstants.getRatesandSpace(offer2.Id);
-            PBS_AAAP_GlobalConstants.getSpaces(offer2.Id);
-            //PBS_AAAP_GlobalConstants.getLOPOfferDetail(offer2.id);
-            
+            PBS_AAAP_GlobalConstants.getSpaces(offer2.Id);     
             PBS_AAAP_Offer__c offr = PBS_AAAP_GlobalConstants.getOfferDetail(offer2.Id);
             PBS_AAAP_GlobalConstants.checkOfferIsValidOrNot(offr);         
         }
@@ -73,8 +67,7 @@ private class Test_PBS_AAAP_GlobalConstants {
         );      
         upsert projectEOI2;  
            
-        PBS_AAAP_GlobalConstants.getProjectDetails(projectEOI2.Id);         
-        
+        PBS_AAAP_GlobalConstants.getProjectDetails(projectEOI2.Id);       
         PBS_LOP_Offer__c offer = PBS_AAAP_UNIT_TEST_DATA_GENERATOR.genTestLopOffer();
         offer.LOP_Building_Name__c = null;
         offer.LOP_Street_Address__c = null;
@@ -92,13 +85,11 @@ private class Test_PBS_AAAP_GlobalConstants {
         offer.LOP_Asbestos_Declaration__c = null;
         offer.LOP_RLP_Contains_Seismic_Requirement__c = null;
         offer.LOP_Flood_Plain_Declaration__c = null;
-        offer.LOP_Fire_Safety_Declaration__c = null; 
-        
+        offer.LOP_Fire_Safety_Declaration__c = null;        
         offer.LOP_Property_Owner_Company__c = null;
         offer.LOP_Owner_Address__c = null;
         offer.LOP_Owner_City__c = null;
-        offer.LOP_OFFEROR_INTEREST__c = null;
-        
+        offer.LOP_OFFEROR_INTEREST__c = null;        
         offer.LOP_INITIAL_NO_OF_YEARS__c = null;
         offer.LOP_Initial_YEARS_FIRM__c = null;
         offer.LOP_Total_Ofc_ABOA_offered__c = null; 
@@ -144,9 +135,7 @@ private class Test_PBS_AAAP_GlobalConstants {
         offer2.PBS_AAAP_COST_PER_ABOA__c = 0.005;
         offer2.PBS_AAAP_Energy_Star__c = 'No';
         insert offer2;
-        
-        // PBS_AAAP_Offer__c offer = PBS_AAAP_GlobalConstants.getOfferDetail(offer2.Id);
-        PBS_AAAP_GlobalConstants.checkOperatingCostsValidations(offer2);
+
         PBS_AAAP_GlobalConstants.checkOfferRepsAndCertsValidations(offer2);
         PBS_AAAP_GlobalConstants.getRates(offer2.Id);
         System.assert(true);

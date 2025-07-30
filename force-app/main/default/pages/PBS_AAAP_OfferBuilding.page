@@ -167,10 +167,10 @@
     </style>
 
     <body onload="init()"/>   
-         
+         <div id="messageContainer"></div>
     <!-- Begin page wrapper -->
     <div id="wrapper">
-        <c:inside_header offerId="{!offerBuilding.Id}" />
+        <!--<c:inside_header offerId="{!offerBuilding.Id}" />-->
         <div id="content" class="building">
             <apex:panelGrid rendered="{!!isValidUser}">
                 <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
@@ -240,7 +240,7 @@
                             </apex:outputPanel>
                             <span class="instructions">
                                 The RLP Package can be found by clicking 
-                                <a href='#' style="display:inline-block;" onclick="window.open('{!$Label.LOP_Community_Base_URL}AAAP-Search-RLP', 'RLP Screen', 'width=900, height=700, scrollbars=yes, resizable=yes, location=no')">
+                                <a href='#' style="display:inline-block;" onclick="window.open('{!$Label.LOP_Community_Base_URL}Offer-M-SearchRLP', 'RLP Screen', 'width=900, height=700, scrollbars=yes, resizable=yes, location=no')">
                                     RLP &amp; LEASE DOCUMENTS
                                 </a>&nbsp;at the top of the page. Please review the RLP Package before
                                 proceeding with offer submission.
@@ -710,7 +710,7 @@
                                             <apex:commandButton id="btnSaveForm" value="Save Page" styleClass="btnSave" style="margin-left:2px" action="{!actionSaveBuildingInfo}" />
                                             <apex:commandButton id="btnSave" value="Next" action="{!saveBuilding}" styleClass="btnJQSubmit" />
                                             <apex:commandButton value="Exit Offer"
-                                                onclick="if(confirm('Please make sure that, you have saved changes to the offer, before leaving from this page.')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}AAAP-PortalHome';return false;} else {return false;}" 
+                                                onclick="if(confirm('Please make sure that, you have saved changes to the offer, before leaving from this page.')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}Offer-Home';return false;} else {return false;}" 
                                              />
                                             <span style="padding-right:250px;">&nbsp;</span>
 

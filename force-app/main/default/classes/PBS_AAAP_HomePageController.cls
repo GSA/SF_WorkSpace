@@ -21,35 +21,14 @@ public with sharing class PBS_AAAP_HomePageController {
     public String pageURLForRedirection{get;set;}
 
     public PBS_AAAP_HomePageController() {
-        Cookie rlpRegionCookie = ApexPages.currentPage().getCookies().get('rlpRegion');
-        Cookie rlpIDCookie = ApexPages.currentPage().getCookies().get('rlpID');
-        if(rlpRegionCookie != Null && rlpRegionCookie.getValue() != 'Null'){
-            selectedRegion= rlpRegionCookie.getValue();
-            actionSearchRLPSite();
-            
-        }else if(rlpIDCookie != Null && rlpIDCookie.getValue() != 'Null'){
-            rlpID = rlpIDCookie.getValue(); 
-            actionShowRLPDetail();
-        }
-        /*
-        if (ApexPages.currentPage().getParameters().get('rlpRegion') != null) {
-            selectedRegion = ApexPages.currentPage().getParameters().get('rlpRegion');
-            system.debug('***************selectedRegion in Constructor:' + selectedRegion);
-            actionSearchRLPSite();
-        }
-        //added by syam ganna 05/19/2016 in case of single rlp directly show the detail page
-        else {
-            rlpID = ApexPages.currentPage().getParameters().get('rlpID'); 
-            actionShowRLPDetail();
-        }
-*/
+        
 
     }
 
     public List<SelectOption> getRegions() {
         List<SelectOption> options = new List<SelectOption>();
         options.add(new SelectOption('', 'Select a Region'));
-        //options.add(new SelectOption('Census', 'Census'));
+      
         options.add(new SelectOption('Region 1', 'Region 1'));
         options.add(new SelectOption('Region 2', 'Region 2'));
         options.add(new SelectOption('Region 3', 'Region 3'));
@@ -81,11 +60,7 @@ public with sharing class PBS_AAAP_HomePageController {
             PBS_AAAP_RLP__c rlpDetails = rlpList.get(0);
             rlpID = rlpDetails.id;
             System.debug('rlpID in actionShowRLPs is **** ' + rlpID);
-            //actionShowRLPDetail();
-           // pref = Page.PBS_AAAP_SitesRLP;
-           // pref.getParameters().put('rlpRegion', null);
-           // pref.getParameters().put('rlpID', rlpID);
-           // pref.setRedirect(true);
+            
            
            PageReference p = new PageReference(Label.LOP_Community_Base_URL+'AAAP-View-RLP');
             p.getParameters().put('rlpRegion', null);
@@ -112,16 +87,9 @@ public with sharing class PBS_AAAP_HomePageController {
             Cookie rlpIDCookie = new Cookie('rlpID','Null',null,-1,true);
             ApexPages.currentPage().setCookies(new Cookie[]{rlpIDCookie});
         
-          //  pref = Page.PBS_AAAP_SitesRLP;
-          //  pref.getParameters().put('rlpRegion', selectedRegion);
-          //  pref.setRedirect(true);
+          
         }
-        /*else{
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Please Select a Region.');
-              ApexPages.addMessage(myMsg);
-        }*/
-             
-       // pageURLForRedirection = p.getUrl();      
+           
         return null;
 
      
@@ -131,8 +99,10 @@ public with sharing class PBS_AAAP_HomePageController {
         rlpList = null;
         rlpList = new List<PBS_AAAP_RLP__c>();
         showSearchForm = true;
+        
 		Cookie rlpRegionCookie = new Cookie('rlpRegion',selectedRegion,null,-1,true);
             ApexPages.currentPage().setCookies(new Cookie[]{rlpRegionCookie});
+       
         rlpList = [
                 SELECT id, CreatedDate, PBS_AAAP_RLP_Number__c, PBS_AAAP_Region__c, PBS_AAAP_Category__c, PBS_AAAP_Title__c, PBS_AAAP_STATUS__c
                 FROM PBS_AAAP_RLP__c
@@ -223,6 +193,11 @@ public with sharing class PBS_AAAP_HomePageController {
     }
     public void backToSearch() {
         showSearchForm = true;
+        showRLPTable = false;
+        if(rlpID!=null)
+        {
+            selectedRegion = null;
+        }
         seqNumListAmendments = null;
         seqNumList = null;
     }

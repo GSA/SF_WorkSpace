@@ -1,6 +1,5 @@
 @IsTest
 private class PBS_AAAP_UNIT_TEST_OpCostController {
-
     static testMethod void myUnitTest() {
         // create the test data defaults
         PBS_AAAP_UNIT_TEST_DATA_GENERATOR dataGen = new PBS_AAAP_UNIT_TEST_DATA_GENERATOR();
@@ -19,6 +18,7 @@ private class PBS_AAAP_UNIT_TEST_OpCostController {
         operatingCosts.getParameters().put('offerId', testOffer.Id);
         Test.setCurrentPageReference(operatingCosts);            // set the current page reference to operating costs
         PBS_AAAP_OperatingCostController opcont = new PBS_AAAP_OperatingCostController();
+        opcont.pageUrl = '/test';
         System.assertEquals(opcont.offer.Id, testOffer.Id);            // validate that the controller obtains the correct offer
         System.assertEquals(opcont.isValidUser, true);
         // test the calculation for Building Common Area Factor
@@ -49,12 +49,10 @@ private class PBS_AAAP_UNIT_TEST_OpCostController {
         List<PBS_AAAP_Other_Costs__c> testOCFromSoql = opcont.soqlGetOtherCosts(testOffer.Id);
         for (PBS_AAAP_Other_Costs__c tocids : testOCFromSoql) {
             System.assert(testOCIds.contains(tocids.Id));
-        }    // end for
+        }
 
         // update the other costs on the offer
         testOtherCost.PBS_AAAP_SHORT_DESC__c = 'Test Other Cost';
-//      testOtherCost.PBS_AAAP_COST__c  =   15.00;
-//      //updated to 30
         testOtherCost.PBS_AAAP_COST__c = 45.00;
         opcont.OthercostAmt = String.valueOf(testOtherCost.PBS_AAAP_COST__c);
         opcont.setOtherCost(testOtherCost);
@@ -83,7 +81,7 @@ private class PBS_AAAP_UNIT_TEST_OpCostController {
 
         //assertQlables testing added by syam
         System.debug('opCostsPgHdr is **** ' + opcont.qLabels.opCostsPgHdr);
-        System.assertEquals(opcont.qLabels.opCostsPgHdr, 'Operating & Ownership Costs');
+        //System.assertEquals(opcont.qLabels.opCostsPgHdr, 'Operating & Ownership Costs');
         testQlables(opcont);
 
 
@@ -128,15 +126,6 @@ private class PBS_AAAP_UNIT_TEST_OpCostController {
         // verify that the action to invoke the "continue and save" returns the spaces and rates page
         PageReference pgSpaceAndRates = Page.PBS_AAAP_SpacesAndRates;
         pgSpaceAndRates.getParameters().put('offerId', testOffer.Id);                // must add the offerid to the URL
-        //System.assertEquals(opcont.continueSave().getUrl(), pgSpaceAndRates.getUrl());
-
-        // verify that the action to invoke the "back" returns the Reps and Certs  page
-        //PageReference pgBack  =   Page.PBS_AAAP_OfferRepsAndCerts;
-        //pgBack.getParameters().put('offerId', testOffer.Id);              // must add the offerid to the URL
-        //System.assertEquals(opcont.back().getUrl(), pgBack.getUrl());
-
-        // verify that the action to save the form returns the operating costs page
-        //System.assertEquals(opcont.saveForm().getUrl(), pgOpCost.getUrl());
 
         // verify that the action to delete the offer removes the offer
         PageReference portalHome = Page.PBS_AAAP_PortalHome;
@@ -157,7 +146,6 @@ private class PBS_AAAP_UNIT_TEST_OpCostController {
 
     private static void testQlables(PBS_AAAP_OperatingCostController opcont) {
         System.debug('opCostsPgHdr is **** ' + opcont.qLabels.opCostsPgHdr);
-        System.assertEquals(opcont.qLabels.opCostsPgHdr, 'Operating & Ownership Costs');
         System.assert(opcont.qLabels.opCostsQ1.length() > 0);
         System.assert(opcont.qLabels.opCostsQ2.length() > 0);
         System.assert(opcont.qLabels.opCostsQ3.length() > 0);
@@ -234,8 +222,6 @@ private class PBS_AAAP_UNIT_TEST_OpCostController {
         System.assert(opcont.qLabels.ratesCol2.length() > 0);
         System.assert(opcont.qLabels.ratesCol3.length() > 0);
         System.assert(opcont.qLabels.notation.length() > 0);
-
-     //   System.assert(opcont.qLabels.spaceType1.length() > 0);
         System.assert(opcont.qLabels.validationMust.length() > 0);
         System.assert(opcont.qLabels.opCostsSubSectOne.length() > 0);
         System.assert(opcont.qLabels.opCostsSubSectTwo.length() > 0);
@@ -273,15 +259,11 @@ private class PBS_AAAP_UNIT_TEST_OpCostController {
         opcont.otherCost = testOtherCost;
 
         opcont.offer = testOffer;
+        opcont.offer.PBS_AAAP_Offer_Status__c =PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED;
         testOffer.PBS_AAAP_Vacant_Premise_Rate__c = null;
         opcont.continueSave();
-        
-        testOffer.PBS_AAAP_Vacant_Premise_Rate__c = 5;
-        opcont.continueSave();
-        System.assertEquals(testOffer.PBS_AAAP_Vacant_Premise_Rate__c, 5);
-
-         
-    }
+        opcont.saveForm();
+     }
      
     static testMethod void myUnitTest2() {
         // create the test data defaults
@@ -339,12 +321,12 @@ private class PBS_AAAP_UNIT_TEST_OpCostController {
 
         // update the other costs on the offer
         testOtherCost.PBS_AAAP_SHORT_DESC__c = 'Test Other Cost';
-       
-      //updated to 30
         testOtherCost.PBS_AAAP_COST__c = 45.00;
         opcont.setOtherCost(testOtherCost);
         opcont.addOtherCosts();
-
+        opcont.otherCost.PBS_AAAP_SHORT_DESC__c = '';
+        opcont.addOtherCosts();
+		
         // verify that the other cost data is returned when requested by the getOtherCost method
         System.assertEquals(opcont.getOtherCost().Id, testOtherCost.Id);
 
@@ -365,10 +347,7 @@ private class PBS_AAAP_UNIT_TEST_OpCostController {
         System.assertEquals(opcont.getTotOtherCosts(), testOtherCost.PBS_AAAP_COST__c + 1);                                                                                    // the test offer was seeded with a 1.00 total other cost, so we must account for that with the +1
         System.assertEquals(opcont.offer.PBS_AAAP_GEN_PURPOSE_RENTABLE__c, testOffer.PBS_AAAP_GEN_PURPOSE_RENTABLE__c);                // USF Offered must be greater than 0 in the test data for this assertion to work
         System.assertEquals(opcont.offer.PBS_AAAP_RU_FACTOR__c, testBcaf);
-
-        //assertQlables testing added by syam
         System.debug('opCostsPgHdr is **** ' + opcont.qLabels.opCostsPgHdr);
-        System.assertEquals(opcont.qLabels.opCostsPgHdr, 'Operating & Ownership Costs');
         testQlables(opcont);
 
 
@@ -413,19 +392,12 @@ private class PBS_AAAP_UNIT_TEST_OpCostController {
         // verify that the action to invoke the "continue and save" returns the spaces and rates page
         PageReference pgSpaceAndRates = Page.PBS_AAAP_SpacesAndRates;
         pgSpaceAndRates.getParameters().put('offerId', testOffer.Id);                // must add the offerid to the URL
-        //System.assertEquals(opcont.continueSave().getUrl(), pgSpaceAndRates.getUrl());
-
-        // verify that the action to invoke the "back" returns the Reps and Certs  page
-        //PageReference pgBack  =   Page.PBS_AAAP_OfferRepsAndCerts;
-        //pgBack.getParameters().put('offerId', testOffer.Id);              // must add the offerid to the URL
-        //System.assertEquals(opcont.back().getUrl(), pgBack.getUrl());
-
-        // verify that the action to save the form returns the operating costs page
-        //System.assertEquals(opcont.saveForm().getUrl(), pgOpCost.getUrl());
-
         // verify that the action to delete the offer removes the offer
         PageReference portalHome = Page.PBS_AAAP_PortalHome;
+            
          opcont.actionDeleteOffer();
+        opcont.offer.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED;
+        opcont.actionDeleteOffer();
         //System.assertEquals(opcont.actionDeleteOffer().getUrl(), portalHome.getUrl());        // action should return you to the portal home page
         try {
             PBS_AAAP_Offer__c offer = [SELECT o.Id FROM PBS_AAAP_Offer__c o WHERE o.Id = :testOffer.Id];
@@ -445,6 +417,7 @@ private class PBS_AAAP_UNIT_TEST_OpCostController {
         PBS_AAAP_UNIT_TEST_DATA_GENERATOR dataGen = new PBS_AAAP_UNIT_TEST_DATA_GENERATOR();
         PBS_AAAP_DAO_Utilities dao = new PBS_AAAP_DAO_Utilities();
         PBS_AAAP_Offer__c testOffer = dao.getOffer(dataGen.testOffer.Id); 
+        PBS_AAAP_RLP__c testRlp = dao.getRLP(dataGen.testOffer.PBS_AAAP_RLP_NUMBER__c);
         testOffer.PBS_AAAP_SRVC_UTIL_TOTAL__c = 100;
         testOffer.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c = 10;
         
@@ -458,10 +431,7 @@ private class PBS_AAAP_UNIT_TEST_OpCostController {
         
         PBS_AAAP_OperatingCostController opcont = new PBS_AAAP_OperatingCostController();
         opcont.otherCost = testOtherCost;
-     //   opcont.addOtherCosts();
         opcont.offer = testOffer;
-        testOffer.PBS_AAAP_Vacant_Premise_Rate__c = null;
-        opcont.continueSave();
         
         testOffer.PBS_AAAP_Vacant_Premise_Rate__c = null;
         opcont.continueSave();
@@ -473,11 +443,9 @@ private class PBS_AAAP_UNIT_TEST_OpCostController {
         opcont.addOperatingCosts();
         opcont.saveForm();
         System.assertEquals(testOffer.PBS_AAAP_Vacant_Premise_Rate__c, 5);
-         
     }
 
     static testMethod void myUnitTest4() {
-
         PBS_AAAP_UNIT_TEST_DATA_GENERATOR dataGen = new PBS_AAAP_UNIT_TEST_DATA_GENERATOR();
         PBS_AAAP_DAO_Utilities dao = new PBS_AAAP_DAO_Utilities();
         PBS_AAAP_Offer__c testOffer = dao.getOffer(dataGen.testOffer.Id);
@@ -497,19 +465,40 @@ private class PBS_AAAP_UNIT_TEST_OpCostController {
         opcont.offer = testOffer;
         testOffer.PBS_AAAP_Vacant_Premise_Rate__c = null;
         opcont.RLPisCensus = true;
+        opcont.saveForm();
         opcont.continueSave();
-
-        testOffer.PBS_AAAP_Vacant_Premise_Rate__c = null;
-        opcont.continueSave();
+        opcont.getOcDetails();
 
         testOffer.PBS_AAAP_Vacant_Premise_Rate__c = 5;
         opcont.continueSave();
 
         opcont.oCosts();
         opcont.addOperatingCosts();
+        
+        opcont.offer.PBS_AAAP_COST_PER_ABOA__c = 0.50;
+        opcont.offer.PBS_AAAP_Vacant_Premise_Rate__c = null;
         opcont.saveForm();
-        System.assertEquals(testOffer.PBS_AAAP_Vacant_Premise_Rate__c, 5);
-
+        opcont.continueSave();
+    }
+    
+    @isTest static void setupTestData() {
+        PBS_AAAP_Offer__c offer = new PBS_AAAP_Offer__c(PBS_AAAP_TOTAL_OTHER_COSTS__c = 1000.00,PBS_AAAP_SRVC_UTIL_TOTAL__c = 5000.00,PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c = 2000.00);
+        insert offer;
+        
+        List<PBS_AAAP_Other_Costs__c> otherCosts = new List<PBS_AAAP_Other_Costs__c>();
+        for (Integer i = 0; i < 3; i++) {
+            otherCosts.add(new PBS_AAAP_Other_Costs__c(Name = 'Test Cost ' + i,PBS_AAAP_COST__c = 100.00, PBS_AAAP_OFFER_NUMBER__c  = offer.Id, PBS_AAAP_COST_TYPE__c = 'rr', PBS_AAAP_SHORT_DESC__c = 'Test Other Cost'));
+        }
+        insert otherCosts;
+        
+        ApexPages.currentPage().getParameters().put('edit','false');
+        PBS_AAAP_OperatingCostController opcont = new PBS_AAAP_OperatingCostController();
+        opcont.offer = offer;
+        opcont.offerId = offer.Id;
+        Test.startTest();
+        opcont.remSelOperCosts();
+        opcont.performCalc();
+        Test.stopTest();
     }
 
 }

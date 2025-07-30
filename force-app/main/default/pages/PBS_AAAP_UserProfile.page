@@ -100,7 +100,7 @@
 
             <div id="nav">
                 <ul>
-                    <li><a id="link1" href="{!$Label.LOP_Community_Base_URL}AAAP-Help" style="">
+                    <li><a id="link1" href="{!$Label.LOP_Community_Base_URL}Offer-Resources" style="">
                         <font class="grey">AAAP Help</font>
                     </a></li>
                     
@@ -197,6 +197,10 @@
                             <apex:outputField id="detailAltphone" value="{!usrinfo.PBS_AAAP_Alternate_Phone__c}"/>
                             <apex:outputText value="Email"/>
                             <apex:outputField id="detailemail" value="{!usrinfo.email}"/>
+                            <apex:outputPanel id="msg">
+                            <apex:outputText value="{!statusMessage}" rendered="{!NOT(ISNULL(statusMessage))}" style="color: red;"/> 
+                            </apex:outputPanel>
+                            
                             <!--apex:outputPanel >
                         <apex:outputText value="PIN* "/>
                         <a class="popup" href="#Modal_UsPro_Pin"><img src="{!$Resource.Info_Icon}"/></a>
@@ -219,6 +223,7 @@
                             <apex:commandButton id="remove" value="De-Register" action="{!actionredirecttoDeregister}"/>
                             <apex:commandButton id="cancelButt" value="Cancel" onClick="cancelButton();return false;"/>
                         </apex:outputPanel>
+                        
                     </apex:outputPanel>
                 </apex:outputPanel>
 
@@ -229,21 +234,13 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-            /* jrogers - Communities rewrite 1/29/2013 
-            var path = window.location.pathname;
-            console.log("path===> " + path);
             
-            if(path == '/RSAP/userprofile'){
-                $('#link1').text('RSAP Help');
-                $('#link1').attr('href','/RSAP/Help');
-            }
-            */
          
            if ({!isLOP}){
                
                 $('#link1').text('RSAP Help');
-               // j.rogers communities upgrade $('#link1').attr('href','/RSAP/Help');
-                 $('#link1').attr('href','{!$Label.LOP_Community_Base_URL}RSAP-Help');
+               
+                 $('#link1').attr('href','{!$Label.LOP_Community_Base_URL}Offer-Resources');
            }
            /*  end Communities rewrite */
         });

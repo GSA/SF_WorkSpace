@@ -126,6 +126,9 @@ private class Test_PBS_AAAP_AgencyRequirement_Ext {
         agencycons.actionReActivateAgencyRequirement();
         agencycons.closePopup2();
         System.assertEquals(PBS_AAAP_GlobalConstants.AGENCYREQSTATUS_PENDING, agency.PBS_AAAP_REQ_STATUS__c);
+        agency.PBS_AAAP_REQ_STATUS__c = PBS_AAAP_GlobalConstants.AGENCYREQSTATUS_PENDING;
+        update agency;
+        agencycons.actionReActivateAgencyRequirement();
 
     }
     static testMethod void actionCancelAgencyRequirementTest1() {
@@ -265,7 +268,42 @@ private class Test_PBS_AAAP_AgencyRequirement_Ext {
         rlp.PBS_AAAP_Year__c = '2020';
         insert rlp;
         obj.getLeaseTermList();
-      	System.assert(true);
+        
+        System.assert(true);
+    }
+    
+     static testMethod void getPVValuesForRLP1_Test(){
+        
+        PBS_AAAP_Agency_Requirement__c agency = PBS_AAAP_UtilityTest.createAgencyRequirement();
+        agency.PBS_AAAP_Region__c = '12-NCR';
+        insert agency;
+        
+        PBS_AAAP_RLP__c rlp = PBS_AAAP_UtilityTest.createRLP();
+        rlp.PBS_AAAP_STATUS__c = PBS_AAAP_GlobalConstants.RLPSTATUS_POSTED_ACTIVE;
+        rlp.PBS_AAAP_Region__c = agency.PBS_AAAP_Region__c;         
+        insert rlp;
+        
+        ApexPages.StandardController s = new ApexPages.StandardController(agency);      
+        PBS_AAAP_AgencyRequirement_Ext obj = new PBS_AAAP_AgencyRequirement_Ext(s);
+        
+        
+        
+        obj.getPVValuesForRLP();
+        
+        rlp.PBS_AAAP_STATUS__c = PBS_AAAP_GlobalConstants.RLPSTATUS_POSTED_ACTIVE;
+        update rlp;
+        
+        obj.getPVValuesForRLP(); 
+        
+        obj.selectedRlpNumber = '12-NCR';
+        obj.getLeaseTermList();
+        
+        rlp = PBS_AAAP_UtilityTest.createRLP();
+        rlp.PBS_AAAP_Year__c = '2024';
+        insert rlp;
+        obj.getLeaseTermList();
+        
+        System.assert(true);
     }
 
     

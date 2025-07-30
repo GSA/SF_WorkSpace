@@ -21,13 +21,15 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
             PBS_AAAP_OfferBuildingDetailsController obc = new PBS_AAAP_OfferBuildingDetailsController();
             List<SelectOption> items = obc.getItems();
             List<SelectOption> partialitems = obc.getPartialItems();
-     //SGanti added 7/26/2021 
+     		//SGanti added 7/26/2021 
         	List<SelectOption> FireLifeMeetsItems = obc.getFireLifeMeetsItems();
             List<SelectOption> FloodPlainsItems = obc.getFloodPlainsItems(); 
             List<SelectOption> AccessibilityItems = obc.getAccessibilityItems();
- //SGanti added 08/2021
+ 			//SGanti added 08/2021
                         
    			List<SelectOption> SeismicSafetyItems = obc.getSeismicSafetyItems();
+            List<SelectOption> getHubZoneItems = obc.getHubZoneItems();
+            List<SelectOption> getYesNoItems = obc.getYesNoItems();
 
 
             PBS_AAAP_RLP__c rlp = PBS_AAAP_UtilityTest.createRLP();
@@ -40,19 +42,21 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
             offer = PBS_AAAP_UtilityTest.createOfferInfo();
             offer.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_PENDINGMODIFICATION;
             offer.PBS_AAAP_RLP_Number__c = rlp.id;
+            offer.PBS_AAAP_HubZone_SBC__c = 'No';
+           	offer.PBS_AAAP_HubZone_SBC_Preference__c = 'Yes';
             upsert offer;
             System.assert(offer.Id != null);
             ApexPages.currentPage().getParameters().put('offerId', offer.id);
             obc = new PBS_AAAP_OfferBuildingDetailsController();
             offer = PBS_AAAP_UtilityTest.createOfferInfo();
-        
+            offer.PBS_AAAP_HubZone_SBC_Preference__c = 'No';
             insert offer;
             
             System.assert(offer.Id != null);
             ApexPages.currentPage().getParameters().put('offerId', oOther.id);
             obc = new PBS_AAAP_OfferBuildingDetailsController();
       
-    //SGanti added 7/26/2021
+    		//SGanti added 7/26/2021
             ApexPages.StandardController stdCtrlTest = new ApexPages.StandardController(offer);
     		PBS_AAAP_OfferBuildingDetailsController scTest = new PBS_AAAP_OfferBuildingDetailsController(stdCtrlTest);
            
@@ -64,8 +68,6 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
 
         User u = PBS_AAAP_UtilityTest.createPortalUser();
         Test.startTest();
-        //PBS_AAAP_RLP__c rlp = PBS_AAAP_UtilityTest.createRLP();
-        //insert rlp;
         System.runAs(u) {
             PBS_AAAP_OfferBuildingDetailsController obc = new PBS_AAAP_OfferBuildingDetailsController();
             PBS_AAAP_Offer__c offerBuilding1 = new PBS_AAAP_Offer__c();
@@ -79,8 +81,15 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
             insert rlp;
             System.assert(rlp.Id != null);
             ApexPages.currentPage().getParameters().put('selectRLP', rlp.id);
-     //SGanti added 7/26/2021
+            //SGanti added 7/26/2021
+      		PBS_AAAP_Property__c property = new PBS_AAAP_Property__c(Name = 'test property',
+                                                               PBS_AAAP_Street_Address__c = 'test Address 123',
+                                                               PBS_AAAP_Parking_Onsite__c = 'Yes',
+                                                               PBS_AAAP_GEN_PURPOSE_RENTABLE__c = 16);
+        	insert property;
+            
             ApexPages.StandardController stdCtrlTest1 = new ApexPages.StandardController(offerBuilding1);
+            
     		PBS_AAAP_OfferBuildingDetailsController scTest1 = new PBS_AAAP_OfferBuildingDetailsController(stdCtrlTest1);  
           
             offerBuilding1.PBS_AAAP_Energy_Star__c = 'No';
@@ -90,14 +99,13 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
             offerBuilding1.PBS_AAAP_BLDG_Wide_Alarm_System__c = null;
             offerBuilding1.PBS_AAAP_Close_To_Metro__c = null;
             offerBuilding1.PBS_AAAP_Energy_Star__c = null;
-            //offerBuilding1.PBS_AAAP_Asbestos__c = 'Undamaged_nonfriable;thermal;ACM_other;ACM_abatement';
-            //offerBuilding1.PBS_AAAP_CERTIFICATION_DATE__c = null;
 
             try {
                 obc.saveBuilding();
             } catch (Exception ex) {
                 System.debug(ex.getMessage());
             }
+            
             offerBuilding1.PBS_AAAP_Energy_Star__c = 'Yes';
             offerBuilding1.PBS_AAAP_CERTIFICATION_DATE__c = null;
             try {
@@ -105,6 +113,15 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
             } catch (Exception ex) {
                 System.debug(ex.getMessage());
             }
+            
+            offerBuilding1.PBS_AAAP_HubZone_SBC__c = 'Yes';
+            offerBuilding1.PBS_AAAP_HubZone_SBC_Preference__c = 'No';
+            try {
+                obc.saveBuilding();
+            } catch (Exception ex) {
+                System.debug(ex.getMessage());
+            }
+            
             PBS_AAAP_Offer__c offerBuilding2 = new PBS_AAAP_Offer__c();
             offerBuilding2 = PBS_AAAP_UtilityTest.createOfferInfo();
             offerBuilding2.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT;
@@ -113,38 +130,39 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
             offerBuilding2.PBS_AAAP_TYPE_OF_CONS_STRUCT__c = 'Steel';
             offerBuilding2.PBS_AAAP_TYPE_OF_CONS_EXTERIOR__c = 'Brick';
             offerBuilding2.PBS_AAAP_TYPE_OF_ROOFING_MATERIAL__c = 'Brick';
-            offerBuilding2.PBS_AAAP_Reconstruction__c = 'Yes';
+            offerBuilding2.PBS_AAAP_Reconstruction__c = 'No';
             offerBuilding2.PBS_AAAP_HubZone_SBC__c = 'Yes';
             offerBuilding2.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c = 'Yes';
-//SGanti added 08/2021
+            offerBuilding2.PBS_AAAP_HubZone_SBC_Preference__c = 'Yes';
+			//SGanti added 08/2021
 
- 			offerBuilding2.PBS_AAAP_Seismic_Statement__c = 'Yes';
-            
+ 			offerBuilding2.PBS_AAAP_Seismic_Statement__c = 'Yes';          
             
             obc.offerBuilding = offerBuilding2;
             obc.displayEnergyStarText();
-            //obc.getCensusCheck();
             obc.displayMetroStation();
             obc.getMetroStation();
-         	 obc.getPartialItems();
+         	obc.getPartialItems();
             obc.getItems();
-       //SGanti added 7/26/2021
          	obc.getFireLifeMeetsItems();
             obc.getFloodPlainsItems();
             obc.getAccessibilityItems();
+            obc.aslToggleAction();
+            obc.isHistoricProperty = true;
+            obc.isInHistoricDistrict = true;
+            obc.isNotHistoric = true;
+            obc.isPendingModfication = true;
+            obc.isCopy = true;
+            obc.isModify = true;
+            obc.propID = property.Id;            
             obc.getAsbestosItems = new List<String>{'Undamaged_nonfriable','thermal','ACM_abatement'};
             List<SelectOption> testAsbestos = obc.getAsbestos;
             List<String> testAsbestosItems = obc.getAsbestosItems;
- //SGanti added 08/2021
-  
-			obc.getSeismicSafetyItems();
-   
-            
+			obc.getSeismicSafetyItems();            
             obc.getStairwellItems();
             obc.displayBuildingTypeCodeyear();
             obc.getBuildingLocated();
             obc.displayreconstructionAcknowledgement();
-            obc.getreconstructionAcknowledgement();
             obc.displayhzone();
             obc.gethzone(); 
             obc.saveBuilding();
@@ -156,7 +174,7 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
             offerBuilding2.PBS_AAAP_TYPE_OF_CONS_STRUCT__c = 'Other';
             offerBuilding2.PBS_AAAP_TYPE_OF_CONS_EXTERIOR__c = 'Other';
             offerBuilding2.PBS_AAAP_TYPE_OF_ROOFING_MATERIAL__c = 'Other';
-            offerBuilding2.PBS_AAAP_HubZone_SBC__c = 'Yes';
+            offerBuilding2.PBS_AAAP_HubZone_SBC__c = 'No';
             offerBuilding2.PBS_AAAP_Reconstruction__c = 'Yes';
             offerBuilding2.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c = 'Yes';
 
@@ -167,11 +185,24 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
             obc.getMetroStation();
             obc.saveBuilding();
             obc.backToOfrBlding();
+            obc.getreconstructionAcknowledgement();
 
 
             offerBuilding2.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED;
             obc.offerBuilding = offerBuilding2;
+            offerBuilding2.PBS_AAAP_Reconstruction__c = 'No';
+            obc.offerBuilding = offerBuilding2;
+            offerBuilding2.PBS_AAAP_HubZone_SBC__c = 'Yes';
+            obc.offerBuilding = offerBuilding2;
+            offerBuilding2.PBS_AAAP_HubZone_SBC_Preference__c = 'No';
+            obc.offerBuilding = offerBuilding2;
+            obc.hubZoneStr = 'I am a HUBZone small business concern offeror, and I elect to waive the price evaluation preference.';
             obc.actionSaveBuildingInfo();
+            offerBuilding2.PBS_AAAP_Reconstruction__c = 'Yes';
+            obc.offerBuilding = offerBuilding2;
+            obc.hubZoneStr = 'I am not a HUBZone small business concern offeror.';
+            obc.actionSaveBuildingInfo();
+            
             offerBuilding2.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_WITHDRAWN;
             obc.offerBuilding = offerBuilding2;
             obc.actionSaveBuildingInfo();
@@ -179,9 +210,8 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
             //added by syam on 10/10/2016 
             offerBuilding2.PBS_AAAP_State__c = 'DC';
             obc.offerBuilding = offerBuilding2;
-
-            //obc.refreshPanel();
-
+			obc.pageUrl = null;
+            obc.actionSaveBuildingInfo(true);
         }
         Test.stopTest();
     }
@@ -191,8 +221,6 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
         System.debug('*** Testing myOfferBuildingValidateTest *** ');
         User u = PBS_AAAP_UtilityTest.createPortalUser();
         Test.startTest();
-        //PBS_AAAP_RLP__c rlp = PBS_AAAP_UtilityTest.createRLP();
-        //insert rlp;
         System.runAs(u) {
             PageReference pageRef = Page.PBS_AAAP_OfferBuildingDetails;
             Test.setCurrentPage(pageRef);
@@ -208,26 +236,19 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
             System.debug('offer id from myOfferBuildingValidateTest is ***' + offerBuilding.id);
             System.assert(offerBuilding.Id != null);
             ApexPages.currentPage().getParameters().put('offerId', offerBuilding.Id);
-            //ApexPages.currentPage().getParameters().put('selectRLP', rlp.id);
-            //obc.saveBuilding();
             System.debug('after first save in myOfferBuildingValidateTest****');
 
             offerBuilding = PBS_AAAP_UtilityTest.createOfferInfo();
             insert offerBuilding;
             obc.offerBuilding = offerBuilding;
-            //obc.saveBuilding();
             offerBuilding.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_WITHDRAWN;
             update offerBuilding;
             obc.offerBuilding = offerBuilding;
-            //obc.saveBuilding();
             offerBuilding.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED;
             update offerBuilding;
             obc.offerBuilding = offerBuilding;
             obc.saveBuilding();
             System.assert(offerBuilding.Id != null);
-
-            //added by syam 
-
             offerBuilding.PBS_AAAP_MetroRail_Station__c = null;
             obc.saveBuilding();
             
@@ -239,7 +260,15 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
             offerBuilding = PBS_AAAP_UtilityTest.createOfferInfo();
             obc.offerBuilding = offerBuilding;
             system.assert(obc.offerBuilding!=null);
-
+            
+			obc.hubZoneStr = 'I am not a HUBZone small business concern offeror.';
+            obc.saveBuilding();
+            
+            obc.hubZoneStr = 'I am a HUBZone small business concern offeror, and I elect to waive the price evaluation preference.';
+            obc.saveBuilding();
+            obc.hubZoneStr = 'I am a HUBZone small business concern offeror, and do not waive the price evaluation preference.';
+            obc.saveBuilding();
+            
             offerBuilding.PBS_AAAP_Building_Name__c = 'school';
             offerBuilding.PBS_AAAP_Street_Address__c = '9525 Main St';//, Fairfax, VA 22031'
             offerBuilding.PBS_AAAP_City__c = 'Fairfax';
@@ -266,23 +295,17 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
             offerBuilding.PBS_AAAP_X_CO_ORD__c = 38;
             offerBuilding.PBS_AAAP_Y_CO_ORD__c = 77;
             offerBuilding.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c = 'No';
-
-
             system.assert(obc.offerBuilding!=null);
-
             obc.saveBuilding();
             system.assert(obc.offerBuilding!=null);
             obc.actionSaveBuildingInfo();
             system.assert(obc.offerBuilding!=null);
-
 
             offerBuilding.PBS_AAAP_Energy_Star__c = 'No';
             offerBuilding.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c = 'No';
             offerBuilding.PBS_AAAP_SITE_AREA_TYPE__c = 'Acres';
             offerBuilding.PBS_AAAP_SITE_SIZE_SQFT__c = 100;
             offerBuilding.PBS_AAAP_HubZone_SBC__c = 'No';
-            //offerBuilding.PBS_AAAP_Energy_Star__c = 'Yes';
-
             insert offerBuilding;
             
             system.assert(obc.offerBuilding!=null);
@@ -291,7 +314,9 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
             obc.offerBuilding = offerBuilding;
 
             system.assert(obc.offerBuilding!=null);
-            obc.actionSaveBuildingInfo(true);
+            obc.offerBuilding.PBS_AAAP_HubZone_SBC__c = 'Yes';
+            obc.offerBuilding.PBS_AAAP_HubZone_SBC_Preference__c = 'No';
+            obc.actionSaveBuildingInfo(false);
             obc.actionDeleteOffer();
         }
         Test.stopTest();
@@ -305,9 +330,18 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
         System.runAs(u) {
             PageReference pageRef = Page.PBS_AAAP_OfferBuildingDetails;
             Test.setCurrentPage(pageRef);
+            
+           
+            PBS_AAAP_Property__c testProperty = new PBS_AAAP_Property__c(PBS_AAAP_County__c = 'Fillmore County', PBS_AAAP_City__c = 'Spring Valley',
+                                                                     PBS_AAAP_State__c = 'MN');
+        	insert testProperty;
+            
+            ApexPages.currentPage().getParameters().put('propertyId', testProperty.Id);
+            ApexPages.currentPage().getParameters().put('edit', 'false');
+
             PBS_AAAP_OfferBuildingDetailsController obc = new PBS_AAAP_OfferBuildingDetailsController();
 			PBS_AAAP_Offer__c offerBuilding = new PBS_AAAP_Offer__c();
-            
+ 
             PBS_AAAP_RLP__c rlp = PBS_AAAP_UtilityTest.createRLP();
             insert rlp;
             offerBuilding.PBS_AAAP_RLP_Number__c = rlp.id;
@@ -317,33 +351,28 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
             System.debug('offer id from myOfferBuildingValidateTest is ***' + offerBuilding.id);
             System.assert(offerBuilding.Id != null);
             ApexPages.currentPage().getParameters().put('offerId', offerBuilding.Id);
+            ApexPages.currentPage().getParameters().put('propertyId', testProperty.Id);
+            ApexPages.currentPage().getParameters().put('edit', 'false');
             System.debug('after first save in myOfferBuildingValidateTest****');
 
             offerBuilding = PBS_AAAP_UtilityTest.createOfferInfo();
             insert offerBuilding;
+            
             obc.offerBuilding = offerBuilding;
-            //obc.saveBuilding();
             offerBuilding.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_WITHDRAWN;
             update offerBuilding;
             obc.offerBuilding = offerBuilding;
-            //obc.saveBuilding();
             offerBuilding.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED;
             update offerBuilding;
             obc.offerBuilding = offerBuilding;
             obc.saveBuilding();
             System.assert(offerBuilding.Id != null);
-
-            //added by syam 
-
             offerBuilding.PBS_AAAP_MetroRail_Station__c = null;
             obc.saveBuilding();
             offerBuilding.PBS_AAAP_SITE_SIZE_SQFT__c = 10;
             offerBuilding.PBS_AAAP_SITE_AREA_TYPE__c = 'Acres';
             obc.saveBuilding();
             obc.actionSaveBuildingInfo();
-            //obc.getSiteSizeItems();
-
-
             offerBuilding = PBS_AAAP_UtilityTest.createOfferInfo();
             obc.offerBuilding = offerBuilding;
             system.assert(obc.offerBuilding!=null);
@@ -356,7 +385,6 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
             offerBuilding.PBS_AAAP_ZipCode__c = '22031';
             offerBuilding.PBS_AAAP_Energy_Star__c = 'Yes';
             offerBuilding.PBS_AAAP_Energy_Star_Reason__c = 'The building is old';
-            //offerBuilding.
             offerBuilding.PBS_AAAP_Building_Sprinklered__c = 'Yes';
             offerBuilding.PBS_AAAP_BLDG_Physical_Remote_Stairwell__c = 'Yes';
             offerBuilding.PBS_AAAP_BLDG_Wide_Alarm_System__c = 'Yes';
@@ -377,7 +405,7 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
             offerBuilding.PBS_AAAP_X_CO_ORD__c = 38;
             offerBuilding.PBS_AAAP_Y_CO_ORD__c = 77;
             offerBuilding.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c = 'Yes';
-
+			offerBuilding.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT;
             
             system.assert(obc.offerBuilding!=null);
 
@@ -385,20 +413,15 @@ public class Test_PBS_AAAP_OfferBuildingDetails {
             system.assert(obc.offerBuilding!=null);
             obc.actionSaveBuildingInfo(true);
             system.assert(obc.offerBuilding!=null);
-
-            insert offerBuilding;
-            
+            insert offerBuilding;            
             system.assert(obc.offerBuilding!=null);
             
             obc.saveBuilding(true);
             obc.offerBuilding = offerBuilding;
-
             system.assert(obc.offerBuilding!=null);
-            obc.actionSaveBuildingInfo(true);
+            obc.actionSaveBuildingInfo(true);            
             obc.actionDeleteOffer();
         }
         Test.stopTest();
     }
-
-
 }

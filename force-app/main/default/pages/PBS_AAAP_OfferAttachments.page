@@ -60,7 +60,7 @@
              padding: 7px 10px;
              text-decoration:none;
              display:inline-block;
-             /*text-shadow: -1px -1px 0 rgba(0,0,0,0.3); */
+            
              color: #333333;
              background-color: #ffff00; background-image: -webkit-gradient(linear, left top, left bottom, from(#ffff00), to(#BFBF00));
              background-image: -webkit-linear-gradient(top, #ffff00, #BFBF00);
@@ -179,10 +179,10 @@
         <apex:stylesheet value="{!$Resource.showpopupcss}"/>
         
         <script type="text/javascript">
-        console.log('{!pageURLForRedirection}');
+        
         if('{!JSENCODE(pageURLForRedirection)}' != ''){
             window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
-			window.parent.document.body = document.createElement('body');            
+            window.parent.document.body = document.createElement('body');            
         }
         else{
             window.parent.document.body.scrollTop = 0;
@@ -274,8 +274,7 @@
                 j$(".fileName1 option[value='Foreign Ownership / Foreign Financing Representation']").remove();
                 j$(".fileName1 option[value='LEED or Green Globes Supporting Documentation']").remove();
                 j$(".fileName1 option[value='Seismic Certificate']").remove();
-                //j$(".fileName1 option[value='Other]").remove();
-                //j$(".fileName1 option[value='Offeror Form 1217- Lessor's Annual Cost Statement Attachment']").remove();
+                
                 
                 }
                 catch(ex){
@@ -400,22 +399,14 @@
                         </tr>
                         <tr>
                             <td  style="width: 40%;">                            
-                                <!-- Henry Dennis replaced the following two lines of code 07/02/2022 for story SFWS-1720 with below modified code
-                                <apex:inputField value="{!offerattachment.PBS_AAAP_Attachment_Type__c}" id="fileName" styleClass="fileName1">
-                                </apex:inputField> -->
                                 
-                                <!--THE MODIFIED CODE-->
+                                
+                                
                                 <apex:inputField value="{!offerattachment.PBS_AAAP_Attachment_Type__c}" id="fileName" styleClass="fileName1" onchange="showOtherDescription('{! $Component.fileName }')">
                                 </apex:inputField>
                             </td>
-                         <!--Commented by Ramya 07/22-->   
-                           <!-- <td style="width: 58%;">
-                                <div id="OtherDescriptionPanel" style="display: none; position: relative; margin-left: -60px;"> 
-                                    <apex:outputText id="otherDescrLabel" value="Other: " />
-                                    <apex:inputField id="otherDescrText" value="{!offerattachment.Document_Description__c}" style="font-size: 14px;" />
-                                </div>
-                            </td> -->                
-                            <!--END OF MODIFIED CODE-->                
+                                      
+                                           
                             
                         </tr>
                         <tr>
@@ -464,27 +455,27 @@
                                 </apex:column>
                                 <apex:column style="width: 21% !important;">
                                     <apex:facet name="header">Attachment Name</apex:facet>
-                                    <!--<apex:repeat value="{!ofratt.offratts.Attachments}" var="a">-->
+                                    
                                         <apex:outputText value="{!ofratt.file.Name}"/>
-                                    <!--</apex:repeat>-->
+                                    
                                 </apex:column>
                                 <apex:column style="width: 17% !important;">
                                     <apex:facet name="header">Date Submitted</apex:facet>
-                                    <!--<apex:repeat value="{!ofratt.offratts.Attachments}" var="a">-->
+                                    
                                         <apex:outputText value="{0,date,MM/dd/yyyy}">
                                             <apex:param value="{!ofratt.file.createddate}"/>
                                         </apex:outputText>
-                                    <!--</apex:repeat>-->
+                                    
                                 </apex:column>
                                 <apex:column style="width: 10% !important;">
                                     <apex:facet name="header">View File</apex:facet>
-                                    <!--<apex:repeat value="{!ofratt.offratts.Attachments}" var="a">-->
+                                    
                                         <apex:outputLink target="_blank"
                                                          value="{!ofratt.file.link}">
                                             <apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
                                                     style="align: right;" alt="Salesforce" title="Salesforce"/>
                                         </apex:outputLink>
-                                    <!--</apex:repeat>-->
+                                    
                                 </apex:column>
                                 <apex:column style="width: 11% !important;">
                                     <apex:facet name="header">Delete File</apex:facet>
@@ -509,7 +500,7 @@
                     <apex:commandButton value="Back" action="{!actionBackToRatesAndSpaces}"/>
                     <apex:commandButton value="Save Page" action="{!actionSavePage}" styleClass="btnJQSubmit" />
                     <apex:commandButton value="Exit Offer" action="{!actionCancel}"
-                                        onclick="if(confirm('Please make sure that, you have saved changes to the offer, before leaving from this page.')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}AAAP-PortalHome';return false;} else return false;"/>
+                                        onclick="if(confirm('Please make sure that, you have saved changes to the offer, before leaving from this page.')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}Offer-Home';return false;} else return false;"/>
                     
                     <span style="padding-right:98px;">&nbsp;</span>
                     <div id="loadingLoading" style="float:right;">
@@ -518,7 +509,7 @@
                     <div id="buttonsToActivate" style="float:right;visibility:hidden;">
                        
                        <apex:commandButton value="View Offer" 
-                                            onclick="window.open('{!$Label.LOP_Community_Base_URL}AAAP-PreviewOfferPage?offerId={!JSENCODE(submitOffer.id)}','View Offer Screen','width=900, height=700,scrollbars=yes,resizable=yes,location=no');return false;"/>
+                                            onclick="window.open('{!$Label.LOP_Community_Base_URL}Offer-M-PreviewOfferPage?offerId={!JSENCODE(submitOffer.id)}','View Offer Screen','width=900, height=700,scrollbars=yes,resizable=yes,location=no');return false;"/>
                         
                         <apex:outputPanel rendered="{!showSubmitOfferButton}">
     
@@ -640,16 +631,7 @@
                             </tr>
                             <tr>
                                 <td width="80%" style="font-size:14px;padding-bottom:5px;">
-           <!-- SGanti changed 7/19/2021 
-                                        <apex:outputText style="font-size:14px;">
-                                        3. I am aware that, in addition to generic specifications and requirements
-                                        outlined in the RLP and attachments, there may be unique agency requirements,
-                                        as identified in a project specific advertisement posted on&nbsp;<apex:outputlink style="font-size:14px;" value="http://beta.sam.gov" target="_blank">beta.sam.gov
-                                        </apex:outputlink>
-                                        , that shall be used in evaluating and determining the eligibility of offers for
-                                        award.
-                                    </apex:outputText>
-                          -->  
+            
                           
                                 
                      <!-- Updated on 6/29/22 by Henry Dennis -->
@@ -707,7 +689,7 @@
                             function callDownloadMethod(){ 
                                
                               if(!{!submitOffererror}){
-                                   // alert('Generate Document');
+                                   
                                     CallWebService_JS();
                                 }else{
                                     
@@ -728,12 +710,12 @@
                         
                     </apex:outputPanel>
                     
-                    <!--<apex:commandButton action="{!actionSubmitOffer}" value="Submit Offer"/>-->
+                    
                     <a href="#" class="buttongreen" id="submitoffer" onclick="$('#submitoffer').hide();submitOffer()" style="margin-right:5px;position:relative;top:-2px;">Submit Offer</a>
                     <apex:commandButton action="{!actionCancelSubmitOffer}" value="Cancel"/>
 
                     <apex:commandButton value="View Offer" 
-                                            onclick="window.open('{!$Label.LOP_Community_Base_URL}AAAP-PreviewOfferPage?offerId={!JSENCODE(submitOffer.id)}','View Offer Screen','width=900, height=700,scrollbars=yes,resizable=yes,location=no');return false;"/>
+                                            onclick="window.open('{!$Label.LOP_Community_Base_URL}Offer-M-PreviewOfferPage?offerId={!JSENCODE(submitOffer.id)}','View Offer Screen','width=900, height=700,scrollbars=yes,resizable=yes,location=no');return false;"/>
                         
                 </apex:outputPanel>
 

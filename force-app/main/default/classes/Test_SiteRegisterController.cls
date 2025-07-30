@@ -76,7 +76,6 @@ private class Test_SiteRegisterController {
                             languagelocalekey='en_US', localesidkey='en_US', profileid = profile.id, timezonesidkey='America/Los_Angeles', 
                             username='test@testorg.com', street='123 street', city='Vienna', state='Virginia', country='USA', postalcode='22102',
                             phone='202-202-2202', PBS_AAAP_StatesOfInterest__c='Virginia;Maryland;');
-        //insert u;
                              
         cpTest.c = new Contact(firstName='TestFirstName', email='test@testorg.com', PBS_AAAP_Terms_and_Conditions__c = true, PBS_AAAP_Company__c = 'Acumen',
                                 MailingStreet = '1660 International Drive', MailingCity = 'McLean', MailingState = 'VA', MailingCountry='USA', MailingPostalCode = '22102',
@@ -86,7 +85,6 @@ private class Test_SiteRegisterController {
         PBS_AAAP_RLP_Regions_Map__c rlps1 = new PBS_AAAP_RLP_Regions_Map__c(PBS_AAAP_Region_Name__c='Region 3', PBS_AAAP_RLP_State_Abbrevation__c='MD', PBS_AAAP_RLP_State__c='Maryland');
         
         Test.startTest(); 
-        //insert u;
         insert rlps1;
         System.assert(rlps1.id!= null);
         insert rlps;
@@ -99,25 +97,7 @@ private class Test_SiteRegisterController {
      }      
      
      static testMethod void validate_UserExist() {  
-        /**
-        UserRole portalRole = [Select Id From UserRole Where PortalType = 'None' Limit 1];
-        Profile adminProfile = [Select Id from Profile where name = 'System Administrator'];
-        User portalAccountOwner1 = new User(
-                                            UserRoleId = portalRole.Id,
-                                            ProfileId = profile1.Id,
-                                            Username = System.now().millisecond() + 'test2@test.com',
-                                            Alias = 'batman',
-                                            Email='bruce.wayne@wayneenterprises.com',
-                                            EmailEncodingKey='UTF-8',
-                                            Firstname='Bruce',
-                                            Lastname='Wayne',
-                                            LanguageLocaleKey='en_US',
-                                            LocaleSidKey='en_US',
-                                            TimeZoneSidKey='America/Chicago'
-                                        );
-        Database.insert(portalAccountOwner1);
-        **/
-        
+ 
         Account portalAccount1 = new Account(Name = 'TestAccount');
         Database.insert(portalAccount1);
 
@@ -154,6 +134,7 @@ private class Test_SiteRegisterController {
         cpTest.getReferer();
         ApexPages.currentPage().getHeaders().put('referer','SF');
         cpTest.getReferer();
+        cpTest.getStates();
         System.assert(true);
      }
     //@isTest(SeeAllData=true); 
@@ -182,8 +163,8 @@ private class Test_SiteRegisterController {
         insert rlps1;
         insert rlps;
         System.assert(rlps1.Id != null);
-Test.setMock(HttpCalloutMock.class, new reCAPTCHACalloutMockImpl());     
-System.currentPageReference().getParameters().put('g-recaptcha-response', 'testGoogleResponse');        
+		Test.setMock(HttpCalloutMock.class, new reCAPTCHACalloutMockImpl());     
+		System.currentPageReference().getParameters().put('g-recaptcha-response', 'testGoogleResponse');        
         PageReference testPageRef= cpTest.createPortaluser(); 
         Test.stopTest();  
 
@@ -220,8 +201,8 @@ System.currentPageReference().getParameters().put('g-recaptcha-response', 'testG
         insert rlps;
         insert rlps2;
         System.assert(rlps1.Id != null);
-Test.setMock(HttpCalloutMock.class, new reCAPTCHACalloutMockImpl());     
-System.currentPageReference().getParameters().put('g-recaptcha-response', 'testGoogleResponse');        
+		Test.setMock(HttpCalloutMock.class, new reCAPTCHACalloutMockImpl());     
+		System.currentPageReference().getParameters().put('g-recaptcha-response', 'testGoogleResponse');        
         PageReference testPageRef= cpTest.createPortaluser();
         
         System.assert(testPageRef == null);
@@ -251,8 +232,7 @@ System.currentPageReference().getParameters().put('g-recaptcha-response', 'testG
                             languagelocalekey='en_US', localesidkey='en_US', profileid = profile.id, timezonesidkey='America/Los_Angeles', 
                             username='sguni@acumensolutions.com', street='123 street', city='Vienna', state='Virginia', country='USA', postalcode='22102',
                             phone='202-202-2202', PBS_AAAP_StatesOfInterest__c='Virginia;Maryland;');
-        //insert u;
-                             
+           
         cpTest.c = new Contact(firstName='TestFirstName', email='test@testorg.com', PBS_AAAP_Terms_and_Conditions__c = true, PBS_AAAP_Company__c = 'Acumen',
                                 MailingStreet = '1660 International Drive', MailingCity = 'McLean', MailingState = 'VA', MailingCountry='USA', MailingPostalCode = '22102',
                                 Phone='202-202-2022', PBS_AAAP_PIN__c='123456', PBS_AAAP_StatesOfInterest__c='Virginia;Maryland;New York;');
@@ -261,12 +241,11 @@ System.currentPageReference().getParameters().put('g-recaptcha-response', 'testG
         PBS_AAAP_RLP_Regions_Map__c rlps1 = new PBS_AAAP_RLP_Regions_Map__c(PBS_AAAP_Region_Name__c='Region 3', PBS_AAAP_RLP_State_Abbrevation__c='MD', PBS_AAAP_RLP_State__c='Maryland');
         
         Test.startTest(); 
-        //insert u;
         insert rlps1;
         System.assert(rlps1.id != null);
         insert rlps;
-Test.setMock(HttpCalloutMock.class, new reCAPTCHACalloutMockImpl());     
-System.currentPageReference().getParameters().put('g-recaptcha-response', 'testGoogleResponse');        
+		Test.setMock(HttpCalloutMock.class, new reCAPTCHACalloutMockImpl());     
+		System.currentPageReference().getParameters().put('g-recaptcha-response', 'testGoogleResponse');        
         PageReference testPageRef= cpTest.createPortaluser();
         System.assert(testPageRef == null);
         Test.stopTest();  
@@ -276,11 +255,6 @@ System.currentPageReference().getParameters().put('g-recaptcha-response', 'testG
      }   
   
      static testMethod void createCustomerPortalUserTest2() {  
-        /**
-        UserLicense lic = [SELECT Id FROM UserLicense WHERE name = 'Customer Community Login'];
-        PermissionSet perm = new PermissionSet(Name='AAAP_User2', userlicenseid=lic.Id);
-        insert perm;
-        **/
         Map<String, Schema.RecordTypeInfo> recordTypes = Schema.SObjectType.Account.getRecordTypeInfosByName();
         Id customRecTypeId = recordTypes.get('AAAP Portal').getRecordTypeId();
         
@@ -312,11 +286,10 @@ System.currentPageReference().getParameters().put('g-recaptcha-response', 'testG
                                 Phone='202-202-2022', PBS_AAAP_PIN__c='123456', PBS_AAAP_StatesOfInterest__c='Virginia;Maryland;');  
 
         
-PageReference pageRef = Page.PBS_AAAP_UserRegistration;
-Test.setCurrentPage(pageRef);
-pageRef.getParameters().put('confirmTempEmail', 'test@testorg.com');
-//System.currentPageReference().getParameters().put('confirmTempEmail', 'test@testorg.com');         
-cpTest.confirmTempEmail = 'test@testorg.com';
+        PageReference pageRef = Page.PBS_AAAP_UserRegistration;
+        Test.setCurrentPage(pageRef);
+        pageRef.getParameters().put('confirmTempEmail', 'test@testorg.com');
+	    cpTest.confirmTempEmail = 'test@testorg.com';
                 
         cpTest.actionChkTermsAndConds();
         cpTest.c = new Contact(firstName='TestFirstName', lastName='TestLastName', email='test@testorg.com', PBS_AAAP_Terms_and_Conditions__c = true, PBS_AAAP_Company__c = 'Acumen',
@@ -328,8 +301,8 @@ cpTest.confirmTempEmail = 'test@testorg.com';
         insert rlps;
         System.assert(rlps1.Id != null);
         
-Test.setMock(HttpCalloutMock.class, new reCAPTCHACalloutMockImpl());     
-System.currentPageReference().getParameters().put('g-recaptcha-response', 'testGoogleResponse');
+		Test.setMock(HttpCalloutMock.class, new reCAPTCHACalloutMockImpl());     
+		System.currentPageReference().getParameters().put('g-recaptcha-response', 'testGoogleResponse');
         PageReference testPageRef= cpTest.createPortaluser(); 
         Test.stopTest();  
         
@@ -346,7 +319,7 @@ System.currentPageReference().getParameters().put('g-recaptcha-response', 'testG
         conUser.accountId = accUser.Id;
         insert conUser;
         
-        User u = new User(
+         User u = new User(
          ProfileId = [Select name, id From Profile where Name like '%GSA RET Community Plus Login User%' limit 1].Id,
          LastName = 'last',
          Email = 'puser000@amamama.com',
@@ -376,8 +349,8 @@ System.currentPageReference().getParameters().put('g-recaptcha-response', 'testG
             Contact con1 =  new Contact();
             con1.email = 'puser000@amamama.com007_';            
             cpTest.c = con1;
-Test.setMock(HttpCalloutMock.class, new reCAPTCHACalloutMockImpl());     
-System.currentPageReference().getParameters().put('g-recaptcha-response', 'testGoogleResponse');           
+            Test.setMock(HttpCalloutMock.class, new reCAPTCHACalloutMockImpl());     
+            System.currentPageReference().getParameters().put('g-recaptcha-response', 'testGoogleResponse');           
             cpTest.createPortaluser();
         }
         

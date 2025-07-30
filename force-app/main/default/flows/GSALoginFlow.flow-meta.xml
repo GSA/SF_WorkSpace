@@ -26,19 +26,19 @@
         <inputParameters>
             <name>senderAddress</name>
             <value>
-                <stringValue>lop.manager@gsa.gov</stringValue>
+                <stringValue>leasing@gsa.gov</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>emailSubject</name>
             <value>
-                <stringValue>One-time Verification Code</stringValue>
+                <stringValue>Leasing Portal verification code</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>emailBody</name>
             <value>
-                <stringValue>&lt;p&gt;&lt;strong&gt;Verify your identity&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;You are attempting to access the Leasing Portal, an official website of the U.S. General Services Administration. Please enter the following code on the Second Level Authentication page to verify your identity.&lt;/p&gt;&lt;p&gt;Your verification code is {!code}&lt;/p&gt;&lt;p&gt;This verification code will expire in one hour, but you can generate a new code by attempting to log in again. For assistance:&lt;ul&gt;&lt;li&gt;AAAP or RSAP help: LOP.Help@gsa.gov or 1-866-450-6588 option 7.&lt;/li&gt;&lt;li&gt;Tax Tool help: BusinessApps@gsa.gov or 1-866-450-6588 option 8.&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;&lt;p&gt;Thank you.&lt;/p&gt;&lt;p&gt;Leasing Portal Support Team&lt;/p&gt;&lt;p&gt;&lt;img src= &quot;https://www.gsa.gov/sites/gsa.gov/themes/custom/gsa/logo.png&quot; width=&quot;50&quot; height=&quot;50&quot;/&gt;&lt;/p&gt;</stringValue>
+                <stringValue>&lt;p&gt;You are attempting to access the Leasing Portal. Enter the following code on the site to verify your identity.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;{!code}&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;This code will expire if you close your web browser or if the code is not used within one hour.&lt;/p&gt;  &lt;p&gt;Login help: businessapps@gsa.gov or 1-866-450-6588 option 7.&lt;/p&gt;&lt;p&gt;&lt;img src= &quot;https://www.gsa.gov/sites/gsa.gov/themes/custom/gsa/logo.png&quot; width=&quot;50&quot; height=&quot;50&quot;/&gt;&lt;/p&gt;</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -402,17 +402,18 @@ This is mainly useful when not running in a login context (e.g. within the desig
         </connector>
         <fields>
             <name>Heading</name>
-            <fieldText>&lt;DIV ALIGN=&quot;LEFT&quot;&gt;&lt;FONT FACE=&quot;Arial&quot; STYLE=&quot;font-size:16px&quot; COLOR=&quot;#000000&quot; LETTERSPACING=&quot;0&quot; KERNING=&quot;0&quot;&gt;&lt;B&gt;Login Step 2:&lt;/B&gt;&lt;FONT STYLE=&quot;font-size:12px&quot;&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/DIV&gt;&lt;DIV ALIGN=&quot;LEFT&quot;&gt;&lt;FONT FACE=&quot;Arial&quot; STYLE=&quot;font-size:16px&quot; COLOR=&quot;#000000&quot; LETTERSPACING=&quot;0&quot; KERNING=&quot;0&quot;&gt;&lt;B&gt;Second Level Authentication &lt;/B&gt;&lt;/FONT&gt;&lt;/DIV&gt;</fieldText>
+            <fieldText>&lt;p style=&quot;text-align: left;&quot;&gt;&lt;strong style=&quot;color: rgb(0, 0, 0); font-family: sans-serif; font-size: 16px;&quot;&gt;Second Level Authentication &lt;/strong&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <fields>
             <name>Instructions</name>
-            <fieldText>&lt;p&gt;&lt;strong style=&quot;color: rgb(0, 0, 0); font-family: Arial, sans-serif; font-size: 18pt; background-color: transparent;&quot;&gt;Do not close this page&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Arial, sans-serif; font-size: 11pt; background-color: transparent;&quot;&gt;We emailed a verification code to&lt;/span&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);&quot;&gt; {!UserObject.Email}. &lt;/span&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Arial, sans-serif; font-size: 11pt; background-color: transparent;&quot;&gt;Check your email without closing this page. Once received, enter your verification code in the box below then click the Next button in the bottom right corner of the page.&lt;/span&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);&quot;&gt; &lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;background-color: transparent; font-size: 18pt; font-family: Arial, sans-serif; color: rgb(0, 0, 0);&quot;&gt;Do not close this page&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 14px; font-family: sans-serif; color: rgb(0, 0, 0);&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: transparent; font-size: 11pt; font-family: Arial, sans-serif; color: rgb(0, 0, 0);&quot;&gt;We emailed a verification code to&lt;/span&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 14px; font-family: sans-serif; color: rgb(0, 0, 0);&quot;&gt; {!UserObject.Email}. &lt;/span&gt;&lt;span style=&quot;background-color: transparent; font-size: 11pt; font-family: Arial, sans-serif; color: rgb(0, 0, 0);&quot;&gt;Check your email without closing this page. Enter the verification code in the field below then click the Next button in the bottom right corner of the page.&lt;/span&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 14px; font-family: sans-serif; color: rgb(0, 0, 0);&quot;&gt; &lt;/span&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <fields>
             <name>CodeInput</name>
             <dataType>String</dataType>
+            <fieldText>One time code</fieldText>
             <fieldType>InputField</fieldType>
             <isRequired>true</isRequired>
         </fields>
@@ -428,7 +429,7 @@ This is mainly useful when not running in a login context (e.g. within the desig
         </fields>
         <fields>
             <name>troubleTitle</name>
-            <fieldText>&lt;p&gt;&lt;strong style=&quot;background-color: transparent; color: rgb(0, 0, 0); font-size: 11pt; font-family: Arial, sans-serif;&quot;&gt;Troubleshooting&lt;/strong&gt;&lt;strong style=&quot;color: rgb(0, 0, 0); font-size: 14px; font-family: sans-serif;&quot;&gt; &lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: transparent; color: rgb(0, 0, 0); font-size: 11pt; font-family: Arial, sans-serif;&quot;&gt;You will need to restart the login process if you close this page.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: transparent; color: rgb(0, 0, 0); font-size: 11pt; font-family: Arial, sans-serif;&quot;&gt;Verification codes expire one hour after delivery.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: transparent; color: rgb(0, 0, 0); font-size: 11pt; font-family: Arial, sans-serif;&quot;&gt;Check your email spam if you cannot locate the email.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: transparent; color: rgb(0, 0, 0); font-size: 11pt; font-family: Arial, sans-serif;&quot;&gt;AAAP or RSAP help: LOP.Help@gsa.gov or 1-866-450-6588 option 7.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: transparent; color: rgb(0, 0, 0); font-family: Arial, sans-serif; font-size: 11pt;&quot;&gt;Tax Tool help: BusinessApps@gsa.gov or 1-866-450-6588 option 8.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;font-family: Arial, sans-serif; font-size: 14.6667px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);&quot;&gt;The login process will restart if you close this page, make five invalid attempts, or fail to enter the verification code within one hour. Check your email spam if you cannot locate the verification code email.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-family: Arial, sans-serif; font-size: 11pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);&quot;&gt;Offer space login help&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; font-size: 8pt; color: rgb(0, 0, 0); background-color: transparent;&quot;&gt;:&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; font-size: 11pt; color: rgb(0, 0, 0); background-color: transparent;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;mailto:leasing@gsa.gov&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-family: Arial, sans-serif; font-size: 11pt; color: rgb(17, 85, 204);&quot;&gt;&lt;u&gt;leasing@gsa.gov&lt;/u&gt;&lt;/a&gt;&lt;span style=&quot;font-family: Arial, sans-serif; font-size: 11pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);&quot;&gt; or 1-866-450-6588 option 7.&amp;nbsp;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-family: Arial, sans-serif; font-size: 11pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);&quot;&gt;Manage lease login help&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; font-size: 8pt; color: rgb(0, 0, 0); background-color: transparent;&quot;&gt;: &lt;/span&gt;&lt;a href=&quot;mailto:BusinessApps@gsa.gov&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-family: Arial, sans-serif; font-size: 11pt; color: rgb(17, 85, 204);&quot;&gt;&lt;u&gt;businessapps@gsa.gov&lt;/u&gt;&lt;/a&gt;&lt;span style=&quot;font-family: Arial, sans-serif; font-size: 11pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);&quot;&gt; or 1-866-450-6588 option 8.&lt;/span&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>

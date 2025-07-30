@@ -1,0 +1,84 @@
+<template>
+	<template if:true={isNewProgressBar}>
+		<div style="background-color: white !important; background: none; border: none">
+			<span class="header">Offer space</span>
+		</div>
+		<br /><br />
+		<div class="usa-step-indicator" aria-label="progress">
+			<ol class="usa-step-indicator__segments">
+				<template for:each={steps} for:item="step">
+					<li class={step.DeveloperName} key={step.Id} data-url={step.Page_URL__c} href="javascript:void(0);"
+						data-message={step.Label} onclick={handleClick}>
+						<span class="usa-step-indicator__segment-label">
+							{step.Label} <span class="usa-sr-only">completed</span>
+						</span>
+					</li>
+				</template>
+			</ol>
+		</div>
+	</template>
+	<!--
+	<template if:true={isAAAPOfferAttachmentPage}>
+		<div style="background-color: white !important; background: none; border: none">
+			<span class="header">GSA's Automated Advanced Acquisition Program</span><br /><br />
+		</div>
+		<br /><br />
+		<div class="usa-step-indicator" aria-label="progress">
+			<ol class="usa-step-indicator__segments">
+				<template for:each={steps} for:item="step">
+					<li class={step.DeveloperName} key={step.Id} data-url={step.Page_URL__c} href="javascript:void(0);"
+						data-message={step.Label} onclick={handleClick}>
+						<span class="usa-step-indicator__segment-label">
+							{step.Label} <span class="usa-sr-only">completed</span>
+						</span>
+					</li>
+				</template>
+			</ol>
+		</div>
+	</template>-->
+	
+	<template if:true={isRSAPAttachmentsPage}>
+		<!--
+		<div style="background-color: white !important; background: none; border:none">
+			<span class="header">GSA's Requirement Specific Acquisition Platform</span><br /><br />
+		</div>
+		<br /><br />
+		<div class="usa-step-indicator" aria-label="progress">
+			<ol class="usa-step-indicator__segments">
+				<template for:each={steps} for:item="step">
+					<li class={step.DeveloperName} key={step.Id} data-url={step.Page_URL__c} href="javascript:void(0);"
+						data-message={step.Label} onclick={handleClick}>
+						<span class="usa-step-indicator__segment-label">
+							{step.Label} <span class="usa-sr-only">completed</span>
+						</span>
+					</li>
+				</template>
+			</ol>
+		</div>-->
+		
+		<!--<template if:true={pbsAAAPRLPRecords}>
+				<table cellpadding="0" cellspacing="0" width = "95%" class="table">
+					<tbody>
+						<tr>
+							<td><label>&nbsp;<strong>GSA Solicitation Number:</strong></label></td>
+							<td>{pbsAAAPRLPRecords.PBS_RSAP_Solicitation_Number__c}</td>
+							<td><label>&nbsp;<strong>Project City:</strong></label></td>
+							<td>{pbsAAAPRLPRecords.PBS_RSAP_City__c}</td>
+						</tr>
+						<tr>
+							<td><label>&nbsp;<strong>GSA Broker:</strong></label></td>
+							<td>{pbsAAAPRLPRecords.PBS_RSAP_Broker__c}</td>
+							<td><label>&nbsp;<strong>Project State:</strong></label></td>
+							<td>{pbsAAAPRLPRecords.PBS_RSAP_State__c}</td>
+						</tr>
+						<tr>
+							<td><label>&nbsp;<strong>GSA Leasing Specialist:</strong></label></td>
+							<td>{pbsAAAPRLPRecords.PBS_RSAP_Leasing_Specialist__c}</td>
+							<td><label>&nbsp;<strong>GSA Lease Contracting Officer:</strong></label></td>
+							<td>{pbsAAAPRLPRecords.PBS_RSAP_Lease_Contracting_Officer__c}</td>
+						</tr>
+					</tbody>
+				</table>
+			</template>-->
+	</template>
+</template>

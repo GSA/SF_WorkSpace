@@ -5,10 +5,8 @@ public with sharing class PBS_AAAP_OfferPreviewPageController extends PBS_AAAP_P
     public List<PageWrapper> lstPageWrapper { get; set; }
     public String formName { get; set; }
     public Boolean displayLink { get; set; }
-    //updates by Snehith - 03/13/2018 to avoid Form 1217 links to Census Offers 
     public Boolean displayform1217link { get; set; }
     public Boolean displayform1364_2019link {get; set;}
-    //SGanti added 8/2021
     public Boolean displayform1364_2022link {get; set;}
     public string pageURLForRedirection {get;set;}
     
@@ -42,6 +40,13 @@ public with sharing class PBS_AAAP_OfferPreviewPageController extends PBS_AAAP_P
     public PBS_AAAP_OfferPreviewPageController() {
         logConstructorStart('PBS_AAAP_OfferPreviewPageController');
         lstPageWrapper = new List<PageWrapper>();
+        //Santhosh Changes Started
+        if (ApexPages.currentPage().getParameters().get('id') != null) {
+            offerId = ApexPages.currentPage().getParameters().get('id');
+            Cookie offerIdCookie = new Cookie('offerId',offerId,null,-1,true);
+            ApexPages.currentPage().setCookies(new Cookie[]{offerIdCookie});
+        }
+        //Santhosh Changes Ended
         Cookie offerIdCookie = ApexPages.currentPage().getCookies().get('offerId');
         if(offerIdCookie != Null){
             ApexPages.currentPage().getParameters().put('offerId', offerIdCookie.getValue());
@@ -54,13 +59,13 @@ public with sharing class PBS_AAAP_OfferPreviewPageController extends PBS_AAAP_P
                 SELECT o.id, o.Name, o.PBS_AAAP_Building_Name__c, o.PBS_AAAP_Street_Address__c, o.PBS_AAAP_Country__c,
                 o.PBS_AAAP_City__c, o.PBS_AAAP_State__c, o.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c,
                 o.PBS_AAAP_RLP_Number__c, o.PBS_AAAP_ZipCode__c, o.LastModifiedDate, o.Formula_RLP_Region__c,
-                o.CREATEDBYID
+                o.CREATEDBYID, o.PBS_AAAP_RLP_Number__r.PBS_AAAP_RLP_Number__c, PBS_AAAP_Offer_Status__c 
                 FROM PBS_AAAP_Offer__c o
                 WHERE o.id = :offerId
             ];
             
             List<PBS_AAAP_Offer_Attachments__c>  attachmentsList = [
-                SELECT Name, PBS_AAAP_Attachment_Type__c
+                SELECT Name, PBS_AAAP_Attachment_Type__c, Document_Description__c 
                 FROM PBS_AAAP_Offer_Attachments__c p
                 WHERE p.PBS_AAAP_Offer__c = :offerId
                 AND p.PBS_AAAP_Attachment_Type__c != 'Lessors Annual Cost Statement (Form 1217)'
@@ -92,7 +97,7 @@ public with sharing class PBS_AAAP_OfferPreviewPageController extends PBS_AAAP_P
             
             
             displayLink = false;
-            //Boolean to set false if RLP region is Census - Snehith
+            
             displayform1217link = true;
             displayform1364_2019link = false;
             //SGanti added 8/2021
@@ -101,13 +106,7 @@ public with sharing class PBS_AAAP_OfferPreviewPageController extends PBS_AAAP_P
             system.debug('***'+offerpdf);
             system.debug('***'+offerpdf.PBS_AAAP_RLP_Number__c);
             system.debug('***'+offerpdf.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c);
-            //SGanti commented out to update conditions for displayform1364_2019link.          
-            /*  if(Integer.valueOf(offerpdf.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c) > 2018){
-displayform1364_2019link = true;
-}else{
-displayform1364_2019link = false;
-}
-*/
+            
             
             if(Integer.valueOf(offerpdf.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c) > 2018 && Integer.valueOf(offerpdf.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c) <= 2021){
                 displayform1364_2019link = true;
@@ -162,83 +161,19 @@ displayform1364_2019link = false;
             lstPageWrapper.add(pgObj1);
         }
         //SGanti commented out 8/2021
-        /*       if(displayform1364_2019link == false){
-PageWrapper pgObj2 = new PageWrapper();
-PageReference p2 = Page.OfferForm1364;
-p2.getParameters().put('offerId', offerId);
-p2.getParameters().put('formtype', 'OfferForm1364');
-p2.setRedirect(true);
-pgObj2.pgRefObj = p2;
-pgObj2.formName = 'OfferForm1364';
-//pgObj2.linkName = 'GSA Form 1364C - STANDARD';
-pgObj2.linkName = 'Form 1364 AAAP';
-pgObj2.clicked = false;
-lstPageWrapper.add(pgObj2);
-
-PageWrapper pgObj3 = new PageWrapper();
-PageReference p3 = Page.OfferForm1364RateStructure;
-p3.getParameters().put('offerId', offerId);
-p3.getParameters().put('formtype', 'offerform1364ratestructure');
-p3.setRedirect(true);
-pgObj3.pgRefObj = p3;
-pgObj3.formName = 'offerform1364ratestructure';
-pgObj3.linkName = 'Attachment #1 - Rate Structure (Attachment to GSA Form 1364-A)';
-pgObj3.clicked = false;
-lstPageWrapper.add(pgObj3);                      
-}else{
-
-PageWrapper pgObj2 = new PageWrapper();
-PageReference p2 = Page.Offerform1364_2019;
-p2.getParameters().put('offerId', offerId);
-p2.getParameters().put('formtype', 'OfferForm1364');
-p2.setRedirect(true);
-pgObj2.pgRefObj = p2;
-pgObj2.formName = 'OfferForm1364';
-//pgObj2.linkName = 'GSA Form 1364C - STANDARD';
-pgObj2.linkName = 'Form 1364 AAAP (OfferForm1364_2019)';
-pgObj2.clicked = false;
-lstPageWrapper.add(pgObj2);              
-}    
-*/
-        //SGanti added on 8/2021   
-        /*       if(displayform1364_2021link == false) {      
-PageWrapper pgObj5 = new PageWrapper();
-PageReference p5 = Page.Offerform1364_2019;
-p5.getParameters().put('offerId', offerId);
-p5.getParameters().put('formtype', 'OfferForm1364');
-p5.setRedirect(true);
-pgObj5.pgRefObj = p5;
-pgObj5.formName = 'OfferForm1364';
-pgObj5.linkName = 'Form 1364 AAAP (OfferForm1364_2019)';
-pgObj5.clicked = false;
-lstPageWrapper.add(pgObj5);  
-}else{
-PageWrapper pgObj6 = new PageWrapper();
-PageReference p6 = Page.PBS_AAAP_NewOfferForm1364;
-//ToddBrown testing while Santhosh is developing in PBS_AAAP_NewOfferForm1364 VF page
-//PageReference p5 = Page.OfferForm1364_2021;
-p6.getParameters().put('offerId', offerId);
-p6.getParameters().put('formtype', 'NewOfferForm1364');
-p6.setRedirect(true);
-pgObj6.pgRefObj = p6;
-pgObj6.formName = 'NewOfferForm1364';
-pgObj6.linkName = 'Form 1364 AAAP (NewOfferForm1364)';
-pgObj6.clicked = false;
-lstPageWrapper.add(pgObj6);
-}
-*/       
+        
         
         if(displayform1364_2022link == true){
             PageWrapper pgObj6 = new PageWrapper();
             PageReference p6 = Page.PBS_AAAP_NewOfferForm1364;
-            //ToddBrown testing while Santhosh is developing in PBS_AAAP_NewOfferForm1364 VF page
-            //PageReference p5 = Page.OfferForm1364_2021;
+            
+           
             p6.getParameters().put('offerId', offerId);
             p6.getParameters().put('formtype', 'OfferForm1364_2022');
             p6.setRedirect(true);
             pgObj6.pgRefObj = p6;
             pgObj6.formName = 'OfferForm1364_2022';
-            // pgObj6.linkName = 'Form 1364 AAAP (OfferForm1364_2022)';
+            
             pgObj6.linkName = 'Form 1364 AAAP';
             pgObj6.clicked = false;
             lstPageWrapper.add(pgObj6);
@@ -276,8 +211,6 @@ lstPageWrapper.add(pgObj6);
                 p2.setRedirect(true);
                 pgObj2.pgRefObj = p2;
                 pgObj2.formName = 'OfferForm1364';
-                //pgObj2.linkName = 'GSA Form 1364C - STANDARD';
-                //pgObj2.linkName = 'Form 1364 AAAP (OfferForm1364_2019)';
                 pgObj2.linkName = 'Form 1364 AAAP';
                 pgObj2.clicked = false;
                 lstPageWrapper.add(pgObj2);              
@@ -357,8 +290,7 @@ lstPageWrapper.add(pgObj6);
                 
                 return pgWrapObj.pgRefObj;
                 
-                //attachment att = [SELECT Id FROM Attachment WHERE Name = :param AND parentId IN :offAttIds ORDER BY CreatedDate DESC LIMIT 1];                
-                //return new pageReference('/servlet/servlet.FileDownload?file='+att.Id);
+
                 
             }
         }       
@@ -391,348 +323,7 @@ lstPageWrapper.add(pgObj6);
         Boolean displayform1364_2019link = false;
         Boolean displayform1364_2022link = false;
         //SGanti commented out 8/2021 to update conditions for displayform1364_2019link
-        /*   if(Integer.valueOf(offerpdf.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c) > 2018){
-displayform1364_2019link = true;
-}else{
-displayform1364_2019link = false;
-}
-*/
-        /*
-        if(Integer.valueOf(offerpdf.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c) > 2018 && Integer.valueOf(offerpdf.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c) <= 2021){
-            displayform1364_2019link = true;
-        }else{
-            displayform1364_2019link = false;
-        }                                     
-        //SGanti added 8/2021 condition for displayform1364_2022link         
-        if(Integer.valueOf(offerpdf.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c) > 2021){
-            displayform1364_2022link = true;
-        }else{
-            displayform1364_2022link = false;
-        }      
         
-        DateTime dt = offerpdf.LastModifiedDate;
-        Date modDate = dt.date();
-        Date checkDate = date.valueOf(CurrentCheckDate);
-        if (modDate > checkDate) {
-            displayLink = false;
-        } else {
-            displayLink = true;
-        }
-        
-        System.debug('---------------OfferId is: ' + offerId + '--------------------------------');
-        List<Attachment> lstAttachments = new List<Attachment>();
-        List <AttachmentWrapper> lstAttachmentWrapper = new List <AttachmentWrapper>();
-        // Add Attachment
-        if (displayform1217link == true) {
-            system.debug('#######1');
-            addAttachementToOffer(offerId, 'Form1217', 'Form1217.pdf');
-            addAttachementToOffer(offerId, 'Form1217Attachment', 'Form1217Attachment.pdf');
-            system.debug('#######2');
-        }
-        //SGanti added logic for OfferForm1364_2022
-        
-        if(displayform1364_2022link == true){
-            System.debug('---------------ABOUT TO ADD New Offer Form 1364_2022-------------');  
-            addAttachementToOffer(offerId, 'OfferForm1364_2022', 'OfferForm1364.pdf');
-            
-            //addAttachementToOffer(offerId, 'OfferForm1364RateStructure', 'OfferForm1364RateStructure.pdf');
-            if (displayLink == true && displayform1217link == true) {
-                system.debug('#######3');
-                addAttachementToOffer(offerId, 'OfferForm3518', 'OfferForm3518.pdf');
-                lstAttachments = [
-                    SELECT Id, Name, ParentId, ContentType, Body
-                    FROM Attachment
-                    WHERE ParentId = :offerId
-                    //(Name = 'Form1217.pdf' OR Name = 'Form1217Attachment.pdf' OR Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf' OR Name = 'OfferForm3518.pdf')
-                    AND Name IN ('Form1217.pdf','Form1217Attachment.pdf','OfferForm1364.pdf','OfferForm3518.pdf')
-                ];
-                system.debug('#######4');
-            } else if (displayLink == true && displayform1217link != true) {
-                system.debug('#######5');
-                addAttachementToOffer(offerId, 'OfferForm3518', 'OfferForm3518.pdf');
-                lstAttachments = [
-                    SELECT Id, Name, ParentId, ContentType, Body
-                    FROM Attachment
-                    WHERE ParentId = :offerId AND
-                    //(Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf' OR Name = 'OfferForm3518.pdf')
-                    Name IN ('OfferForm1364.pdf','OfferForm3518.pdf')
-                ];
-                system.debug('#######6');
-            } else if (displayLink != true && displayform1217link == true) {
-                system.debug('#######7');
-                lstAttachments = [
-                    SELECT Id, Name, ParentId, ContentType, Body
-                    FROM Attachment
-                    WHERE ParentId = :offerId AND
-                    //(Name = 'Form1217.pdf' OR Name = 'Form1217Attachment.pdf' OR Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf')
-                    Name IN ('Form1217.pdf','Form1217Attachment.pdf','OfferForm1364.pdf')
-                ];
-                system.debug('#######8');
-            } else if (displayLink != true && displayform1217link != true) {
-                system.debug('#######9');
-                lstAttachments = [
-                    SELECT Id, Name, ParentId, ContentType, Body
-                    FROM Attachment
-                    WHERE ParentId = :offerId AND
-                    //(Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf')
-                    Name IN ('OfferForm1364.pdf')
-                ];
-                system.debug('#######10');
-            }
-        }
-        else{
-            if(displayform1364_2019link == true){
-                system.debug('#######11');
-                System.debug('---------------ABOUT TO ADD offerForm1364-------------');
-                addAttachementToOffer(offerId, 'Offerform1364_2019', 'OfferForm1364.pdf');                      
-                //addAttachementToOffer(offerId, 'OfferForm1364RateStructure', 'OfferForm1364RateStructure.pdf');
-                if (displayLink == true && displayform1217link == true) {
-                    system.debug('#######12');
-                    addAttachementToOffer(offerId, 'OfferForm3518', 'OfferForm3518.pdf');
-                    lstAttachments = [
-                        SELECT Id, Name, ParentId, ContentType, Body
-                        FROM Attachment
-                        WHERE ParentId = :offerId
-                        //(Name = 'Form1217.pdf' OR Name = 'Form1217Attachment.pdf' OR Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf' OR Name = 'OfferForm3518.pdf')
-                        //SGanti added 8/2021   
-                        AND Name IN ('Form1217.pdf','Form1217Attachment.pdf','OfferForm1364.pdf','OfferForm3518.pdf')
-                    ];
-                    system.debug('#######13');
-                } else if (displayLink == true && displayform1217link != true) {
-                    system.debug('#######14');
-                    addAttachementToOffer(offerId, 'OfferForm3518', 'OfferForm3518.pdf');
-                    lstAttachments = [
-                        SELECT Id, Name, ParentId, ContentType, Body
-                        FROM Attachment
-                        WHERE ParentId = :offerId AND
-                        //(Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf' OR Name = 'OfferForm3518.pdf')
-                        //SGanti added 8/2021                          
-                        Name IN ('OfferForm1364.pdf','OfferForm3518.pdf')
-                    ];
-                    system.debug('#######15');
-                } else if (displayLink != true && displayform1217link == true) {
-                    system.debug('#######16');
-                    lstAttachments = [
-                        SELECT Id, Name, ParentId, ContentType, Body
-                        FROM Attachment
-                        WHERE ParentId = :offerId AND
-                        //(Name = 'Form1217.pdf' OR Name = 'Form1217Attachment.pdf' OR Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf')
-                        //SGanti added 8/2021                                                 
-                        Name IN ('Form1217.pdf','Form1217Attachment.pdf','OfferForm1364.pdf')
-                    ];
-                    system.debug('#######17');
-                } else if (displayLink != true && displayform1217link != true) {
-                    system.debug('#######18');
-                    lstAttachments = [
-                        SELECT Id, Name, ParentId, ContentType, Body
-                        FROM Attachment
-                        WHERE ParentId = :offerId AND
-                        //(Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf')
-                        //SGanti added 8/2021                                                 
-                        Name IN ('OfferForm1364.pdf')
-                    ];
-                    system.debug('#######19');
-                }
-            }    
-            else{
-                system.debug('#######20');
-                //SGanti commented out 8/2021. Added back again.
-                addAttachementToOffer(offerId, 'OfferForm1364', 'OfferForm1364.pdf');          
-                //addAttachementToOffer(offerId,'OfferForm1364Attachment','OfferForm1364Attachment.pdf');
-                addAttachementToOffer(offerId, 'OfferForm1364RateStructure', 'OfferForm1364RateStructure.pdf');
-                if (displayLink == true && displayform1217link == true) {
-                    system.debug('#######21');
-                    addAttachementToOffer(offerId, 'OfferForm3518', 'OfferForm3518.pdf');
-                    lstAttachments = [
-                        SELECT Id, Name, ParentId, ContentType, Body
-                        FROM Attachment
-                        WHERE ParentId = :offerId
-                        //(Name = 'Form1217.pdf' OR Name = 'Form1217Attachment.pdf' OR Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf' OR Name = 'OfferForm3518.pdf')
-                        //SGanti added 8/2021                       
-                        AND Name IN ('Form1217.pdf','Form1217Attachment.pdf','OfferForm1364.pdf','OfferForm1364RateStructure.pdf','OfferForm3518.pdf')
-                    ];
-                    system.debug('#######22');
-                } else if (displayLink == true && displayform1217link != true) {
-                    addAttachementToOffer(offerId, 'OfferForm3518', 'OfferForm3518.pdf');
-                    lstAttachments = [
-                        SELECT Id, Name, ParentId, ContentType, Body
-                        FROM Attachment
-                        WHERE ParentId = :offerId AND
-                        //(Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf' OR Name = 'OfferForm3518.pdf')
-                        //SGanti added 8/2011                        
-                        Name IN ('OfferForm1364.pdf','OfferForm1364RateStructure.pdf','OfferForm3518.pdf')
-                    ];
-                    system.debug('#######23');
-                } else if (displayLink != true && displayform1217link == true) {
-                    lstAttachments = [
-                        SELECT Id, Name, ParentId, ContentType, Body
-                        FROM Attachment
-                        WHERE ParentId = :offerId AND
-                        //(Name = 'Form1217.pdf' OR Name = 'Form1217Attachment.pdf' OR Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf')
-                        //SGanti added 8/2021                        
-                        Name IN ('Form1217.pdf','Form1217Attachment.pdf','OfferForm1364.pdf','OfferForm1364RateStructure.pdf')
-                    ];
-                    system.debug('#######24');
-                } else if (displayLink != true && displayform1217link != true) {
-                    system.debug('#######25');
-                    lstAttachments = [
-                        SELECT Id, Name, ParentId, ContentType, Body
-                        FROM Attachment
-                        WHERE ParentId = :offerId AND
-                        //(Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf')
-                        //SGanti added 8/2021                        
-                        Name IN ('OfferForm1364.pdf','OfferForm1364RateStructure.pdf')
-                    ];
-                    system.debug('#######26');
-                }
-            }
-        }
-        
-        //SGanti commented out 8/2021        
-        /*   if(displayform1364_2019link == true){
-system.debug('#######3');
-System.debug('---------------ABOUT TO ADD offerForm1364-------------');
-addAttachementToOffer(offerId, 'Offerform1364_2019', 'OfferForm1364.pdf');
-
-//SGanti added 8/2021 for OfferForm1364_2022
-System.debug('---------------ABOUT TO ADD New Offer Form 1364-------------');  
-addAttachementToOffer(offerId, 'OfferForm1364_2022', 'OfferForm1364_2022.pdf');
-
-//addAttachementToOffer(offerId, 'OfferForm1364RateStructure', 'OfferForm1364RateStructure.pdf');
-if (displayLink == true && displayform1217link == true) {
-system.debug('#######4');
-addAttachementToOffer(offerId, 'OfferForm3518', 'OfferForm3518.pdf');
-lstAttachments = [
-SELECT Id, Name, ParentId, ContentType, Body
-FROM Attachment
-WHERE ParentId = :offerId
-//(Name = 'Form1217.pdf' OR Name = 'Form1217Attachment.pdf' OR Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf' OR Name = 'OfferForm3518.pdf')
-//SGanti added 8/2021   
-AND Name IN ('Form1217.pdf','Form1217Attachment.pdf','OfferForm1364.pdf','OfferForm1364_2022.pdf','OfferForm3518.pdf')
-];
-system.debug('#######5');
-} else if (displayLink == true && displayform1217link != true) {
-system.debug('#######6');
-addAttachementToOffer(offerId, 'OfferForm3518', 'OfferForm3518.pdf');
-lstAttachments = [
-SELECT Id, Name, ParentId, ContentType, Body
-FROM Attachment
-WHERE ParentId = :offerId AND
-//(Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf' OR Name = 'OfferForm3518.pdf')
-//SGanti added 8/2021                          
-Name IN ('OfferForm1364.pdf','OfferForm3518.pdf','OfferForm1364_2022.pdf')
-];
-system.debug('#######7');
-} else if (displayLink != true && displayform1217link == true) {
-system.debug('#######8');
-lstAttachments = [
-SELECT Id, Name, ParentId, ContentType, Body
-FROM Attachment
-WHERE ParentId = :offerId AND
-//(Name = 'Form1217.pdf' OR Name = 'Form1217Attachment.pdf' OR Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf')
-//SGanti added 8/2021                                                 
-Name IN ('Form1217.pdf','Form1217Attachment.pdf','OfferForm1364.pdf','OfferForm1364_2022.pdf')
-];
-system.debug('#######9');
-} else if (displayLink != true && displayform1217link != true) {
-system.debug('#######10');
-lstAttachments = [
-SELECT Id, Name, ParentId, ContentType, Body
-FROM Attachment
-WHERE ParentId = :offerId AND
-//(Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf')
-//SGanti added 8/2021                                                 
-Name IN ('OfferForm1364.pdf','OfferForm1364_2022.pdf')
-];
-system.debug('#######11');
-}
-}
-else{
-system.debug('#######12');
-//SGanti commented out 8/2021. Added back again.
-addAttachementToOffer(offerId, 'OfferForm1364', 'OfferForm1364.pdf');
-
-//SGanti added 8/2021 OfferForm1364_2022
-addAttachementToOffer(offerId, 'OfferForm1364_2022', 'OfferForm1364_2022.pdf');
-
-//addAttachementToOffer(offerId,'OfferForm1364Attachment','OfferForm1364Attachment.pdf');
-addAttachementToOffer(offerId, 'OfferForm1364RateStructure', 'OfferForm1364RateStructure.pdf');
-if (displayLink == true && displayform1217link == true) {
-system.debug('#######13');
-addAttachementToOffer(offerId, 'OfferForm3518', 'OfferForm3518.pdf');
-lstAttachments = [
-SELECT Id, Name, ParentId, ContentType, Body
-FROM Attachment
-WHERE ParentId = :offerId
-//(Name = 'Form1217.pdf' OR Name = 'Form1217Attachment.pdf' OR Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf' OR Name = 'OfferForm3518.pdf')
-//SGanti added 8/2021                       
-AND Name IN ('Form1217.pdf','Form1217Attachment.pdf','OfferForm1364.pdf','OfferForm1364_2022.pdf','OfferForm1364RateStructure.pdf','OfferForm3518.pdf')
-];
-system.debug('#######14');
-} else if (displayLink == true && displayform1217link != true) {
-addAttachementToOffer(offerId, 'OfferForm3518', 'OfferForm3518.pdf');
-lstAttachments = [
-SELECT Id, Name, ParentId, ContentType, Body
-FROM Attachment
-WHERE ParentId = :offerId AND
-//(Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf' OR Name = 'OfferForm3518.pdf')
-//SGanti added 8/2011                        
-Name IN ('OfferForm1364_2022.pdf','OfferForm1364.pdf','OfferForm1364RateStructure.pdf','OfferForm3518.pdf')
-];
-system.debug('#######15');
-} else if (displayLink != true && displayform1217link == true) {
-lstAttachments = [
-SELECT Id, Name, ParentId, ContentType, Body
-FROM Attachment
-WHERE ParentId = :offerId AND
-//(Name = 'Form1217.pdf' OR Name = 'Form1217Attachment.pdf' OR Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf')
-//SGanti added 8/2021                        
-Name IN ('Form1217.pdf','Form1217Attachment.pdf','OfferForm1364.pdf','OfferForm1364_2022.pdf','OfferForm1364RateStructure.pdf')
-];
-system.debug('#######16');
-} else if (displayLink != true && displayform1217link != true) {
-system.debug('#######17');
-lstAttachments = [
-SELECT Id, Name, ParentId, ContentType, Body
-FROM Attachment
-WHERE ParentId = :offerId AND
-//(Name = 'OfferForm1364.pdf' OR Name = 'OfferForm1364RateStructure.pdf')
-//SGanti added 8/2021                        
-Name IN ('OfferForm1364_2022.pdf','OfferForm1364.pdf','OfferForm1364RateStructure.pdf')
-];
-system.debug('#######18');
-}
-
-}
-        for (Attachment att : lstAttachments) {
-            AttachmentWrapper wrapper = new AttachmentWrapper();
-            wrapper.attName = att.Name;
-            wrapper.attEncodedBody = EncodingUtil.base64Encode(att.Body);
-            lstAttachmentWrapper.add(wrapper);
-        }
-        System.debug('display 1217 Boolean ' + displayform1217link + displayLink);
-        System.debug('Offer detail' + offerpdf);
-        System.debug('List of Attachments ' + lstAttachments);
-        delete lstAttachments;
-        System.debug('Wrapper before ATT'+lstAttachmentWrapper);
-        List<PBS_AAAP_Offer_Attachments__c> offerattachment = new List<PBS_AAAP_Offer_Attachments__c>();
-        offerattachment = [SELECT Id
-                           FROM PBS_AAAP_Offer_Attachments__c p
-                           WHERE p.PBS_AAAP_Offer__c = :offerId
-                          ];
-        
-        System.debug('OFFER Attachment '+offerattachment);
-        lstAttachments = [SELECT Id, Name, ParentId, ContentType, Body
-                          FROM Attachment
-                          WHERE ParentId = :offerattachment
-                         ];
-        for (Attachment att : lstAttachments) {
-            AttachmentWrapper wrapper = new AttachmentWrapper();
-            wrapper.attName = att.Name;
-            wrapper.attEncodedBody = EncodingUtil.base64Encode(att.Body);
-            lstAttachmentWrapper.add(wrapper);
-        }
-        */
         List<AttachmentWrapper> lstAttachmentWrapper = new List<AttachmentWrapper>();
         List<PBS_AAAP_Offer_Attachments__c> offerattachment = [SELECT Id
                            FROM PBS_AAAP_Offer_Attachments__c p
@@ -800,155 +391,7 @@ system.debug('#######18');
         }
         return [select PBS_AAAP_Session_Key__c FROM PBS_AAAP_Offer__c WHERE Id=: ofId].PBS_AAAP_Session_Key__c;
     }
-    /*
-    //SGanti - method to add attachment to offer    
-    @RemoteAction
-    public static void addAttachementToOffer(string offerId, string formType, string fileName) {
-        remoteOfferId = offerId;
-        PBS_AAAP_Utility.logMethodStart('addAttachementToOffer');
-        
-        PBS_AAAP_Offer__c offerpdf = [
-            SELECT o.id, o.Name, o.PBS_AAAP_Building_Name__c, o.PBS_AAAP_Street_Address__c, o.PBS_AAAP_Country__c,
-            o.PBS_AAAP_City__c, o.PBS_AAAP_State__c,o.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c,
-            o.PBS_AAAP_RLP_Number__c, o.PBS_AAAP_ZipCode__c, o.LastModifiedDate, o.Formula_RLP_Region__c
-            FROM PBS_AAAP_Offer__c o
-            WHERE o.id = :offerId
-        ];
-        Boolean displayLink = false;
-        DateTime dt = offerpdf.LastModifiedDate;
-        Date modDate = dt.date();
-        Date checkDate = date.valueOf('2017-09-25');
-        if (modDate > checkDate) {
-            displayLink = false;
-        } else {
-            displayLink = true;
-        }
-        system.debug('&&&&&&1'+displayLink);
-        Boolean displayform1217link = true;
-        if (offerpdf.Formula_RLP_Region__c == 'Census') {
-            displayform1217link = false;
-        }
-        system.debug('&&&&&&2'+displayform1217link);
-        Boolean displayform1364_2019link = false;
-        //SGanti added 8/2021
-        Boolean displayform1364_2022link = false;        
-        //SGanti commented out 8/2021        
-        /*  //if(Integer.valueOf(offerpdf.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c) > 2018){
-            //displayform1364_2019link = true;
-            //}else{
-            //displayform1364_2019link = false;
-            //}
-
-        //SGanti added 8/2021. Updated conditions for displayform1364_2019link.
-        
-        if(Integer.valueOf(offerpdf.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c) > 2018 && Integer.valueOf(offerpdf.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c) <= 2021){
-            displayform1364_2019link = true;
-        }else{
-            displayform1364_2019link = false;
-        } 
-        
-        //SGanti added 8/2021. Set conditions for displayform1364_2022link          
-        if(Integer.valueOf(offerpdf.PBS_AAAP_RLP_Number__r.PBS_AAAP_Year__c) > 2021){
-            displayform1364_2022link = true;
-        }else{
-            displayform1364_2022link = false;
-        }                     
-        system.debug('&&&&&&2'+displayform1364_2019link);
-        PageReference pageRef;
-        
-        // getting offer key
-        string sesid = fetchOfferKey();
-        
-        if (formType == 'Form1217' && displayform1217link == true) {
-            system.debug('&&&&&&3');
-            pageRef = Page.OfferForm1217;
-            pageRef.getParameters().put('formtype', 'offerform1217');
-            system.debug('&&&&&&4');
-        }
-        if (formType == 'Form1217Attachment' && displayform1217link == true) {
-            system.debug('&&&&&&5');
-            pageRef = Page.Offerform1217Attachment;
-            pageRef.getParameters().put('formtype', 'offerform1217Attachment');
-            system.debug('&&&&&&6');
-        }
-        
-        if(formtype == 'Offerform1364_2019' && displayform1364_2019link == true){
-            system.debug('&&&&&&7');
-            pageRef = Page.Offerform1364_2019;    //NIK
-            pageRef.getParameters().put('formtype', 'offerform1364');
-            system.debug('&&&&&&8');
-        }          
-        if (formType == 'OfferForm1364' && displayform1364_2019link == false) {
-            system.debug('&&&&&&9');
-            pageRef = Page.OfferForm1364;
-            pageRef.getParameters().put('formtype', 'offerform1364');
-            pageRef.getParameters().put('offerid', offerId);
-            system.debug('&&&&&&10');
-        }
-        
-        //SGanti added 08/2021.
-        
-        if(formtype == 'OfferForm1364_2022' && displayform1364_2022link == true){
-            system.debug('&&&&&&new1364');
-            pageRef = Page.PBS_AAAP_NewOfferForm1364;
-            //Todd Brown testing since Santhosh is developing in PBS_AAAP_NewOfferForm1364
-            //pageRef = Page.OfferForm1364_2021;
-            pageRef.getParameters().put('formtype', 'OfferForm1364_2022');
-            system.debug('&&&&&&new1364');
-        }         
-        /*     if (formType == 'OfferForm1364_2022' && displayform1364_2022link == false) {
-system.debug('&&&&&&new1364');
-pageRef = Page.PBS_AAAP_NewOfferForm1364;
-//Todd Brown testing since Santhosh is developing in PBS_AAAP_NewOfferForm1364
-//pageRef = Page.OfferForm1364_2021;
-pageRef.getParameters().put('formtype', 'OfferForm1364_2022');
-pageRef.getParameters().put('offerid', offerId);
-system.debug('&&&&&&new1364');
-}
-*/    
-        /*  
-        //if (formType == 'OfferForm1364Attachment') {
-        //pageRef = Page.OfferForm1364Attachment;
-        //pageRef.getParameters().put('formtype', 'offerform1364Attachment');
-        //} 
-        if (formType == 'OfferForm1364RateStructure') {
-            system.debug('&&&&&&11');
-            pageRef = Page.OfferForm1364RateStructure;
-            pageRef.getParameters().put('formtype', 'offerform1364ratestructure');
-            system.debug('&&&&&&12');
-        }
-        if (formType == 'OfferForm3518' && displayLink == true) {
-            system.debug('&&&&&&13');
-            pageRef = Page.OfferForm3518;
-            pageRef.getParameters().put('formtype', 'offerform3518');
-            system.debug('&&&&&&14');
-        }
-        system.debug('&&&&&&15'+pageRef);
-        pageRef.getParameters().put('offerId', offerId);
-        Blob pdfPageBlob;
-        if (!Test.isRunningTest()) {
-            pageRef.getParameters().put('sesid', sesid);
-            system.debug('&&&&&&17'+pageRef.getContentAsPDF());
-            pdfPageBlob = pageRef.getContentAsPDF();
-        } else {
-            pdfPageBlob = Blob.valueOf('TEST');
-        }
-        system.debug('&&&&&&16'+pdfPageBlob);
-        //-- create a corresponding record on Attachment std object.
-        Attachment a = new Attachment();
-        a.Body = pdfPageBlob;
-        a.ParentID = offerId;
-        a.Name = fileName;
-        insert a;
-        system.debug('\n-a--'+a.Id);
-        PBS_AAAP_Utility.logMethodEnd('addAttachementToOffer');
-        
-        
-        
-    }
-    */
-    
-    
+      
    
     public class sequenceNumber {
         public integer i { get; set; }

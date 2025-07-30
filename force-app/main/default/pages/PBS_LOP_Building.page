@@ -1,1135 +1,940 @@
 <apex:page Controller="PBS_LOP_BuildingController" sidebar="false" showHeader="false" standardStylesheets="false"
            cache="true">
     <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
-    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
-
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>    
     <apex:includescript value="{!$Resource.showpopup}"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="{!URLFOR($Resource.modaljquery)}"></script>    
     <apex:stylesheet value="{!$Resource.showpopupcss}"/>
     
     <script type="text/javascript">
-            // j.rogers 12/21/2022  SFWS-2105
-            if('{!JSENCODE(pageURLForRedirection)}' != ''){
-                window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}'; //Todd Brown added JSENCODE to resolve Reflected XSS vulnerability
-            	window.parent.document.body = document.createElement('body');
-            }
-    		else{
-        	window.parent.document.body.scrollTop = 0;
-  			window.parent.document.documentElement.scrollTop = 0;
-       		}
+    // j.rogers 12/21/2022  SFWS-2105
+    if('{!JSENCODE(pageURLForRedirection)}' != ''){
+        window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}'; //Todd Brown added JSENCODE to resolve Reflected XSS vulnerability
+        window.parent.document.body = document.createElement('body');
+    }
+    else{
+        window.parent.document.body.scrollTop = 0;
+        window.parent.document.documentElement.scrollTop = 0;
+    }
     </script>
     <head>
         <style type="text/css">
-
+            
             .ui-dialog {
-                background: #fff;
-                padding: 10px;
-                border: 1px solid #999;
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #999;
             }
-
+            
             .ui-dialog a {
-                float: right;
-                font-weight: bold;
-                padding: 3px;
-                color: #999;
-                text-transform: uppercase;
-                font-size: 10px;
+            float: right;
+            font-weight: bold;
+            padding: 3px;
+            color: #999;
+            text-transform: uppercase;
+            font-size: 10px;
             }
-
+            
             .myButton {
-                color: white !important;
-                background: red !important;
-                border-left: 0px !important;
-                border-top: 0px !important;
-                border-bottom: 0px !important;
-                border-right: 0px !important;
-                width: 60px !important;
-                height: 22px !important;
+            color: white !important;
+            background: red !important;
+            border-left: 0px !important;
+            border-top: 0px !important;
+            border-bottom: 0px !important;
+            border-right: 0px !important;
+            width: 60px !important;
+            height: 22px !important;
             }
             
             .labelCls {
-              position: relative;
-              display: block;
-              
+            position: relative;
+            display: block;
+            
             }
-
+            
             .radioInput {
-              position: absolute;
-              top: 0;
-              left: 0;
+            top: 0;
+            left: 0;
             }
-
-            .spanClass {
-              display: block;
-              margin-left: 25px;
-            }
-
+            
+            
             .errMessage {
-                color: red;
+            color: red;
             }
             .errorMsg {
             color: red !important;
             }
-
+            
             body .bPageBlock, body #bodyCell .bResource .secondaryPalette, body .secondaryPalette.bPageBlock, body .individualPalette .secondaryPalette.bPageBlock, body .bodyDiv .genericTable, body .genericPageBlockTable, body .bodyDiv .bSubBlock, body .bComponentBlock .bPageBlock, body .bMyDashboard .bPageBlock, body.rlHoverFrame .bPageBlock, body.subjectSelectionPopup div.choicesBox, body.lookupTab .secondaryPalette.bPageBlock, body.popupTab .secondaryPalette.bPageBlock, body.UserTagStatsPage .secondaryPalette.bPageBlock {
-                border-bottom: #fff;
+            border-bottom: #fff;
             }
-
+            
             body .pbBody table.list tr.headerRow td, body .pbBody table.list tr.headerRow th {
-                background: #999;
+            background: #999;
             }
-
+            
             body .pbBody table.list tr th, body .pbBody table.list tr td {
-                border: 1px solid rgb(200, 200, 200);
+            border: 1px solid rgb(200, 200, 200);
             }
-
+            
             body .pbBody table.list tr.headerRow th:first-child, body .pbBody table.list tr.dataRow td:first-child {
-                border-left-width: 1px;
+            border-left-width: 1px;
             }
-
+            
             body .pbBody table.list tr.headerRow td, body .pbBody table.list tr.headerRow th {
-                border: 0px;
+            border: 0px;
             }
-
+            
             ul li, ol li {
-                margin-left: 0em;
+            margin-left: 0em;
             }
-
+            
             .message {
-                background-color: #fff;
-                border-style: solid;
-                border-width: 0px;
-                color: #000;
-                padding: 6px 8px 6px 6px;
-                margin: 4px;
+            background-color: #fff;
+            border-style: solid;
+            border-width: 0px;
+            color: #000;
+            padding: 6px 8px 6px 6px;
+            margin: 4px;
             }
-
+            
             .col1 {
-                text-align: left;
-                width: 400px;
+            text-align: left;
+            width: 400px;
             }
-
+            
             .col2 {
-                text-align: center;
-                width: 230px;
+            text-align: center;
+            width: 230px;
             }
-
+            
             .col3 {
-                text-align: center;
-                width: 230px;
+            text-align: center;
+            width: 230px;
             }
-
+            
             .col4 {
-                text-align: center;
-                width: 230px;
+            text-align: center;
+            width: 230px;
             }
-
+            
             .tabbed-table table td {
-                background: #fff;
+            background: #fff;
             }
-
+            
             h2 {
-                color: #fff;
-                font-size: 80%;
-                font-weight: bold;
-                padding-left: 40px;
-                width: 80%;
+            color: #fff;
+            font-size: 80%;
+            font-weight: bold;
+            padding-left: 40px;
+            width: 80%;
             }
-
+            
             .tabbed-table table th {
-                padding-left: 3px;
-                padding-right: 3px;
-                font-size: 12px important !;
+            padding-left: 3px;
+            padding-right: 3px;
+            font-size: 12px important !;
             }
-
+            
             .hr {
-                font-weight: bold;
-                font-size: 28px;
-                border-bottom: 1px solid #cccccc;
-                padding: 0 0 8px;
-                color: #002BAD;
-                padding-top: 15px;
+            font-weight: bold;
+            font-size: 20px;
+            padding: 0 0 8px;
+            padding-top: 15px;
+            padding-bottom: 5px;
             }
-
+            
             menu.table-options {
-                top: 40px;
-                left: -350px;
+            top: 40px;
+            left: -350px;
             }
-
+            
             .custRadio tr td{
-                padding-top:0px;
+            padding-top:0px;
             }
-<!-- SGanti added 10/2021 -->            
+            <!-- SGanti added 10/2021 -->            
             .custRadio1 tr td{
-                padding-top:0px;
-                padding-bottom:0px;
-                
+            padding-top:0px;
+            padding-bottom:0px;
+            
             }
             .custRadio2 tr td{
-                padding-top:0px;
-                text-indent: 40px;
-                margin-left: 30px;
-                text-align: justify;
-                padding-bottom:0px;
+            padding-top:0px;
+            text-indent: 40px;
+            margin-left: 30px;
+            text-align: justify;
+            padding-bottom:0px;
             }
-<!-- SGanti added 11/2021 -->            
+            <!-- SGanti added 11/2021 -->            
             
             .custRadio3 tr td{
-                padding-top:0px;
-                text-indent:40px;
-                margin-left: 30px;
-                text-align: justify;
-                padding-bottom:0px;
-                float:left;
+            padding-top:0px;
+            text-indent:40px;
+            margin-left: 30px;
+            text-align: justify;
+            padding-bottom:0px;
+            float:left;
             }
-<!--Ramya added 07/2022-->            
-             .custRadio4 tr td{
-                padding-top:0px;
-                margin-left:30px;
-                text-align: justify;
-                padding-bottom:0px;
-                padding-left:70px;
-                text-indent:-25px;
-                float:left;
+            <!--Ramya added 07/2022-->            
+            .custRadio4 tr td{
+            padding-top:0px;
+            margin-left:30px;
+            text-align: justify;
+            padding-bottom:0px;
+            padding-left:70px;
+            text-indent:-25px;
+            float:left;
             }
             
-           .formwrap1 td {ul.process
-                padding-top:0px;
+            .formwrap1 td {ul.process
+            padding-top:0px;
             }
-              .infopopup {
-              position:fixed !important;
-              display:inline-block;
-              top:20% !important;
-              left:50% !important;
-              //width:700px !important;
-              //height 800px !important;
-              margin-left:-350px !important;
-              margin-top:-350px !important;
+            .infopopup {
+            position:fixed !important;
+            display:inline-block;
+            top:75% !important;
+            left:50% !important;
+            //width:700px !important;
+            //height 800px !important;
+            margin-left:-350px !important;
+            margin-top:-350px !important;
             //transform: translate(-50%, -50%); !important;
             }
             .infopopup1 {
-              position:fixed !important;
-              display:inline-block;
-              top:32% !important;
-              left:50% !important;
-              //width:700px !important;
-              //height 800px !important;
-              margin-left:-350px !important;
-              margin-top:-350px !important;
+            position:fixed !important;
+            display:inline-block;
+            top:70% !important;
+            left:50% !important;
+            //width:700px !important;
+            //height 800px !important;
+            margin-left:-350px !important;
+            margin-top:-350px !important;
             //transform: translate(-50%, -50%); !important;
             }
             .infopopup2 {
-              position:fixed !important;
-              display:inline-block;
-              top:45% !important;
-              left:50% !important;
-              //width:700px !important;
-              //height 800px !important;
-              margin-left:-350px !important;
-              margin-top:-350px !important;
+            position:fixed !important;
+            display:inline-block;
+            top:45% !important;
+            left:50% !important;
+            //width:700px !important;
+            //height 800px !important;
+            margin-left:-350px !important;
+            margin-top:-350px !important;
             //transform: translate(-50%, -50%); !important;
             }
             .infopopup3 {
-              position:fixed !important;
-              display:inline-block;
-              top:56% !important;
-              left:50% !important;
-              //width:700px !important;
-              //height 800px !mportant;
-              margin-left:-350px !important;
-              margin-top:-350px !important;
+            position:fixed !important;
+            display:inline-block;
+            top:90% !important;
+            left:50% !important;
+            //width:700px !important;
+            //height 800px !mportant;
+            margin-left:-350px !important;
+            margin-top:-350px !important;
             //transform: translate(-50%, -50%); !important;
+            }
+            .noPadding td {
+            padding-top:0px
+            }
+            .custom-border {
+            border: 1px solid  #999;
+            padding-top: 30px;
+            color: #333333;
+            font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+            font-size:13px;
+            background-color: #eeeeee;
             }
         </style>
         
         <script type="text/javascript">
-            $j = jQuery.noConflict();
-            $j(document).ready(function(){
-                updateOffer(); 
-                
-                switch("{!JSENCODE(selectedASL)}"){
-                    case "Improvements Needed":
-                        $j("#aslImprNeeded").attr('checked', 'true');
-                        break;
-                    case "Already Meets":
-                        $j("#aslAlrMeets").attr('checked', 'true');
-                        break;
-                    case "New Construction":
-                        $j("#aslNewConst").attr('checked', 'true');
-                        break;
-                }
-                
-                switch("{!JSENCODE(selectedAreaType)}"){
-                    case "Square Feet":
-                        $j("#atSqFeet").attr('checked', 'true');
-                        break;
-                    case "Acres":
-                        $j("#atAcres").attr('checked', 'true');
-                        break;
-                }
-            });
+        $j = jQuery.noConflict();
+        $j(document).ready(function(){
+            //updateOffer(); 
             
-            function aslToggle(value) {
-                aslToggleMethod(value);
+            switch("{!JSENCODE(selectedASL)}"){
+                case "Improvements Needed":
+                    $j("#aslImprNeeded").attr('checked', 'true');
+                    break;
+                case "Already Meets":
+                    $j("#aslAlrMeets").attr('checked', 'true');
+                    break;
+                case "New Construction":
+                    $j("#aslNewConst").attr('checked', 'true');
+                    break;
             }
             
-            function areaTypeToggle(value) {
-               areaTypeToggleMethod(value);  
+            switch("{!JSENCODE(selectedAreaType)}"){
+                case "Square Feet":
+                    $j("#atSqFeet").attr('checked', 'true');
+                    break;
+                case "Acres":
+                    $j("#atAcres").attr('checked', 'true');
+                    break;
             }
-            var validate = function(e) {
-              var t = e.value;
-              e.value = (t.indexOf(".") >= 0) ? (t.substr(0, t.indexOf(".")) + t.substr(t.indexOf("."), 3)) : t;
-            }        
+        });
+        
+        function aslToggle(value) {
+            aslToggleMethod(value);
+        }
+        
+        function areaTypeToggle(value) {
+            areaTypeToggleMethod(value);  
+        }
+        var validate = function(e) {
+            var t = e.value;
+            e.value = (t.indexOf(".") >= 0) ? (t.substr(0, t.indexOf(".")) + t.substr(t.indexOf("."), 3)) : t;
+        }  
+        function handleEnergyRadioChange(){
+            var selectedRadioId = document.querySelector('input[name="energyRadio"]:checked').id;
+            document.getElementById('j_id0:newOffer:EnergyStar').value = document.querySelector('input[name="energyRadio"]:checked').placeholder;
+            
+            if(selectedRadioId == 'energyStarReasonNeeded'){
+                
+                document.querySelectorAll('input[name="j_id0:newOffer:noenergystar"]').forEach(element => { element.disabled = false; });
+                var selectedRadioValue = document.querySelector('input[name="j_id0:newOffer:noenergystar"]:checked').value;
+                                                                                                           
+				if(selectedRadioValue == 'Statutory Exception'){
+                   document.querySelectorAll('input[name="j_id0:newOffer:eStarMeetException1"]').forEach(element => { element.disabled = false; });
+                   document.querySelectorAll('input[name="j_id0:newOffer:eStarMeetException2"]').forEach(element => { element.disabled = false; });                                                                                            
+               }else{
+                   document.querySelectorAll('input[name="j_id0:newOffer:eStarMeetException1"]').forEach(element => { element.disabled = true; element.checked = false;});
+                   document.querySelectorAll('input[name="j_id0:newOffer:eStarMeetException2"]').forEach(element => { element.disabled = true; element.checked = false;});                                                                                            
+               }                                                                                       
+				document.getElementById('j_id0:newOffer:CERTIFICATION_DATE').disabled = true;
+                document.getElementById('j_id0:newOffer:CERTIFICATION_DATE').value = '';
+            }else{
+                
+                document.querySelectorAll('input[name="j_id0:newOffer:noenergystar"]').forEach(element => { element.disabled = true;element.checked = false;});
+                document.querySelectorAll('input[name="j_id0:newOffer:eStarMeetException1"]').forEach(element => { element.disabled = true; element.checked = false;});
+				document.querySelectorAll('input[name="j_id0:newOffer:eStarMeetException2"]').forEach(element => { element.disabled = true; element.checked = false;});
+                
+                document.getElementById('j_id0:newOffer:CERTIFICATION_DATE').disabled = false;
+            }
+            console.log('handleEnergyRadioChange ', selectedRadioId);
+        }
+        function handleStarReasonNeededDetialsRadioChange(){
+           var selectedRadioValue = document.querySelector('input[name="j_id0:newOffer:noenergystar"]:checked').value;
+           console.log('handleStarReasonNeededDetialsRadioChange ', selectedRadioValue);                                                                                                
+           if(selectedRadioValue == 'Statutory Exception'){
+               document.querySelectorAll('input[name="j_id0:newOffer:eStarMeetException1"]').forEach(element => { element.disabled = false; });
+			   document.querySelectorAll('input[name="j_id0:newOffer:eStarMeetException2"]').forEach(element => { element.disabled = false; });                                                                                            
+           }else{
+               document.querySelectorAll('input[name="j_id0:newOffer:eStarMeetException1"]').forEach(element => { element.disabled = true; element.checked = false;});
+			   document.querySelectorAll('input[name="j_id0:newOffer:eStarMeetException2"]').forEach(element => { element.disabled = true; element.checked = false;});                                                                                            
+           }                                                                                                
+        }
         </script>
     </head>
     <body onload="init()">
-    
-<!-- J. Rogers  Eliminate Headers
-<div id="login">
-        <ul>
-            <li><a href="/RSAP/portalHome">RSAP Home</a> </li>
-            <li>|</li>
-            <li><a href="/AAAP/portalHome">AAAP</a></li>
-            <li>|</li>
-            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
-                <apex:outputLink value="/AAAP/home/home.jsp">
-                    <li>{!$Label.site.login_button}</li>
-                </apex:outputLink>
-                <li> |</li>
-                <apex:outputLink value="/AAAP/ForgotPassword">
-                    <li>{!$Label.site.forgot_your_password_q}</li>
-                </apex:outputLink>
-                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
-                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
-                    <li>{!$Label.site.new_user_q}</li>
-                </apex:outputLink>
-            </apex:panelGroup>
-            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
-                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
-                <li>{!$Label.site.logout}</li>
-            </apex:outputLink>
-        </ul>
-    </div  -->
- 
-    <div id="wrapper" style="overflow:none;height:auto !Important">
-        <c:lop_inside_header />
-        <div id="content" class="building" style="overflow:none;height:auto !Important"><!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
-            <apex:panelGrid rendered="{!!isValidUser}">
-                <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
-                <apex:messages styleClass="errMessage" id="errmessage"/>
-            </apex:panelGrid>
-            <apex:panelGroup rendered="{!isValidUser}">
-                <apex:panelGrid columns="2" style="float:right"><a href="#" onclick="window.print();"></a>
-                    <apex:outputLabel style="padding-right:47px"></apex:outputLabel>
+        
+        <div id="wrapper" style="overflow:none;height:auto !Important">
+            
+            <div id="content" class="building" style="overflow:none;height:auto !Important"><!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
+                <apex:panelGrid rendered="{!!isValidUser}">
+                    <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
+                    <apex:messages styleClass="errMessage" id="errmessage"/>
                 </apex:panelGrid>
-                <br/>
-
-                <c:lopHeader myOffer="{!lopOffer}" myProject="{!rlp}" offerDueDate=""/>
-                <!--<c:lopProgressBar myValue="{!lopOffer.Id}" myEdit="{!isEditable}"/>-->
-                <c:PBS_LOP_ProgressBar myValue="{!lopOffer.Id}" step="0" linksToViewModePage="{!isEditable}"/>
-
-            </apex:panelGroup>
-            <apex:form id="newOffer" style="height: auto !important;overflow:hidden">
-                <apex:actionRegion rendered="{!isValidUser}">
-                    <apex:actionFunction name="deleteOffer" action="{!actionDeleteOffer}"></apex:actionFunction>
-                    <apex:actionFunction name="updateOffer" action="{!updateOfferDetails}" oncomplete=""/>
-                       <apex:actionFunction name="aslToggleMethod" rerender="aslVal1" action="{!aslToggleAction}">
-                                    <apex:param name="sRadio" assignTo="{!selectedASL}" value="" />
-                                </apex:actionFunction>
-                                <apex:actionFunction name="areaTypeToggleMethod" rerender="aslVal1" action="{!areaTypeAction}">
-                                    <apex:param name="sRadio" assignTo="{!selectedAreaType}" value="" />
-                                </apex:actionFunction>
-                    <apex:outputPanel id="thePanelform1" layout="block" styleClass="formwrap">
-                        <div class="hr">Building Information</div>
-
-                        <apex:messages styleClass="errMessage" id="message"/>
-                        <apex:inputHidden id="draftMsgFlag" value="{!draftMsgFlag}"/>
-                        <apex:inputHidden value="{!pageURL}" id="pgUrl"/>
-                        <apex:outputPanel >
-                            <apex:outputLabel id="msgErr02" styleClass="errMessage" value=""/>
-                        </apex:outputPanel>
-                        <apex:outputPanel rendered="{!viewOnly}">
-                            <apex:outputLabel id="msgview" styleClass="errMessage" value="{!viewMsg}"/>
-                        </apex:outputPanel>
-
-                        <apex:panelGrid columns="2" id="bld_addr_fields">
-
+                <apex:panelGroup rendered="{!isValidUser}">
+                    <apex:panelGrid columns="2" style="float:right"><a href="#" onclick="window.print();"></a>
+                        <apex:outputLabel style="padding-right:47px"></apex:outputLabel>
+                    </apex:panelGrid>
+                    
+                    <c:lopHeader myOffer="{!lopOffer}" myProject="{!rlp}" offerDueDate=""/>
+                    
+                    <c:PBS_LOP_ProgressBar myValue="{!lopOffer.Id}" step="0" linksToViewModePage="{!isEditable}"/>
+                    
+                </apex:panelGroup>
+                <apex:form id="newOffer" style="height: auto !important;overflow:hidden">
+                    <apex:actionRegion rendered="{!isValidUser}">
+                        <!--<apex:actionFunction name="deleteOffer" action="{!actionDeleteOffer}"></apex:actionFunction>  -->                      
+                        <!--<apex:actionFunction name="updateOffer" action="{!updateOfferDetails}" oncomplete=""/>-->
+                        <apex:actionFunction name="aslToggleMethod" rerender="aslVal1" action="{!aslToggleAction}">
+                            <apex:param name="sRadio" assignTo="{!selectedASL}" value="" />
+                        </apex:actionFunction>
+                        <apex:actionFunction name="areaTypeToggleMethod" rerender="aslVal1" action="{!areaTypeAction}">
+                            <apex:param name="sRadio" assignTo="{!selectedAreaType}" value="" />
+                        </apex:actionFunction>                                                 
+                        
+                        <!-- Grid to display three columns -->
+                       
+                   <div style="display: flex; flex-direction: row; justify-content: space-between; padding: 1px; margin-top: -1px;">
+                            <!-- Column 1: Property Name -->
+                       <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999;padding-bottom: 10px;padding-left: 10px; padding-top: 10px;">
+                                <span>Property name:</span>
+                                <span>
+                                    <apex:outputText value="{!lopOffer.PBS_AAAP_Building_Name__c}" />
+                                </span>
+                            </div>
+                            <!-- Column 2: RLP Number -->
+                          <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999;padding-bottom: 10px;padding-left: 10px; padding-top: 10px;">
+                                <span>RLP number:</span>
+                                <span>
+                                  <apex:outputText value="{!rlp.PBS_RSAP_Solicitation_Number__c}" /> 
+                                </span>
+                            </div>
+                            <!-- Column 3: Offer Status -->
+                          <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999;padding-bottom: 10px;padding-left: 10px; padding-top: 10px;">
+                                <span>Offer status:</span>
+                                <span>
+                                    <apex:outputText value="{!lopOffer.PBS_AAAP_Offer_Status__c}" />
+                                </span>
+                            </div>
+                        </div>
+                            
+                        <apex:outputPanel id="thePanelform1" layout="block" styleClass="formwrap">  
+                            <apex:includeLightning />
+                            <div class="hr" style="margin-left:0px;"> <h1>
+                                5. Eligibility
+                                </h1>
+                            </div>
+                            
+                            <apex:messages styleClass="errMessage" id="message"/>
+                            <apex:inputHidden id="draftMsgFlag" value="{!draftMsgFlag}"/>
+                            <apex:inputHidden value="{!pageURL}" id="pgUrl"/>
                             <apex:outputPanel >
-                                <apex:outputtext value="1. Building Name"/>
-                                <span class="required">*</span></apex:outputPanel>
-                            <apex:inputText value="{!lopOffer.PBS_AAAP_Building_Name__c}" id="bname"/>
-
-
-                            <apex:outputPanel >2. Building Street Address<span class="required">*</span><a class="popup"
-                                                                                                 href="#Modal_Bldg_Ques3"><img
-                                    src="{!$Resource.Info_Icon}"/></a>
-                                <div id="Modal_Bldg_Ques3" class = "infopopup"
-                                     style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
-                                    <p>Report the offered building street address in geo-codable format, i.e., an
-                                        address that can be mapped by <br/>
-                                        geographic information system software or used by an overnight delivery service
-                                        to deliver packages. <br/>
-                                        An example of a geo-codable address is 1800 F Street. Do NOT use the following:
-                                        <br/>
-                                        - Mailing address that is different than the locations address,<br/>
-                                        - Building name, <br/>- Street corner (e.g., 18th &amp; F Streets), <br/>
-                                        - Other description (such as a Post Office Box number), or <br/>
-                                        - Symbols such as double quote ("), underline (_), plus (+), percent (%), and
-                                        ampersand (&amp;).</p>
-                                </div>
+                                <apex:outputLabel id="msgErr02" styleClass="errMessage" value=""/>
                             </apex:outputPanel>
-                            <apex:inputText value="{!lopOffer.PBS_AAAP_Street_Address__c}" id="bstreet"/>
-
-
-                            <apex:outputPanel >
-                                <apex:outputtext value="3. City"/>
-                                <span class="required">*</span></apex:outputPanel>
-                            <apex:inputText value="{!lopOffer.PBS_AAAP_City__c}" id="bcity"/>
-
-
-                            <apex:outputPanel >
-                                <apex:outputtext value="4. State"/>
-                                <span class="required">*</span></apex:outputPanel>
-
-                            <apex:selectList value="{!lopOffer.PBS_AAAP_State__c}" id="bstate" size="1">
-                                <apex:selectOptions value="{!states}"></apex:selectOptions>
-                            </apex:selectList>
-
-
-                            <apex:outputPanel >
-                                <apex:outputtext value="5. 9-Digit ZIP Code"/>
-                                <span class="required">*</span></apex:outputPanel>
-                            <apex:inputText value="{!lopOffer.PBS_AAAP_ZipCode__c}" id="bzip" onblur="validateZip();"/>
-                        </apex:panelGrid>
-                        <apex:outputPanel id="other_bldg_data" layout="block">
-                            <apex:panelGrid columns="1" id="theGridsection2">
-<!--SGanti reworded question 6. 10/2021-->
-                                <apex:outputPanel >
-                                    <apex:outputtext value="6.  Number of Floors in Building:"/>
-                                    <span class="required">*</span><br/>
-                                    <apex:inputField value="{!lopOffer.PBS_AAAP_floors_Suites_in_Offered_Space__c}"
-                                                     id="bnumfloors"/>
-
-                                </apex:outputPanel>
-
-                                <apex:outputPanel >
-<!--SGanti reworded question 7. 10/2021-->
+                            <apex:outputPanel rendered="{!viewOnly}">
+                                <apex:outputLabel id="msgview" styleClass="errMessage" value="{!viewMsg}"/>
+                            </apex:outputPanel>
+                            <apex:outputPanel id="other_bldg_data" layout="block">
+                                
+                                <apex:panelGrid columns="1">
                                     
-                                    <apex:outputtext value="7.  Total Rentable Square Feet (RSF) in Building:"/>
-                                    <span class="required">*</span>
-                                    <a class="popup" href="#Modal_Bldg_Ques13"><img src="{!$Resource.Info_Icon}"/></a>
-                                    <div id="Modal_Bldg_Ques13" class = "infopopup1"
-                                         style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
-                                        <p>Rentable square feet is the area for which a tenant is charged rent. It is determined by the building owner<br/>
-                                            and may vary by city or by building within the same city. The rentable space may include a share of building<br/>
-                                            support/common areas such as elevator lobbies, building corridors, and floor service areas. <br/>
-                                            Floor service areas typically include restrooms, janitor rooms, telephone closets, electrical closets,  <br/>
-                                            and mechanical rooms. The rentable space does not include vertical building penetrations and their <br/>
-                                            enclosing walls, such as stairs, elevator shafts, and vertical ducts.
-                                        </p>
-                                    </div>
-                                    <br/>
-                                    <apex:inputField value="{!lopOffer.PBS_AAAP_GEN_PURPOSE_RENTABLE__c}" id="brsf" onkeyup="validate(this)"/>
-
-                                </apex:outputPanel>
-
-                                <apex:outputPanel id="BuildingSpace">
-                                    <table>
-                                        <tr>
-                                            <th style="text-align:center">&nbsp;</th>
-                                            <th style="text-align:center">RSF</th>
-                                        </tr>
-                                        <tr>
-                                            <td align="left">
-                                                <apex:outputText value="a. General Purpose (Office): "/>
-                                                <span class="required">*</span></td>
-                                            <td>
-                                                <apex:inputField value="{!lopOffer.PBS_AAAP_OFFICE_SPACE_RSF__c}" onkeyup="validate(this)"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="left">
-                                                <apex:outputText value="b. Warehouse: "/>
-                                            </td>
-                                            <td>
-                                                <apex:inputField value="{!lopOffer.PBS_AAAP_RETAIL_SPACE_RSF__c}" onkeyup="validate(this)"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="left">
-                                                <apex:outputText value="c. Other: "/>
-                                            </td>
-                                            <td>
-                                                <apex:inputField value="{!lopOffer.PBS_AAAP_GARAGE_SPACE_RSF__c}" onkeyup="validate(this)"/>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </apex:outputPanel>
-<!--SGanti added 10/2021 -->
-                            </apex:panelGrid>
-
-<!--SGanti commented out 10/2021
-                                
-                                <apex:outputPanel >
-                                    <apex:outputtext value="8.  What is the live floor load (pounds per square feet) for the building?"/>
-                                    <a class="popup" href="#Modal_Bldg_Ques15"><img src="{!$Resource.Info_Icon}"/></a>
-                                    <div id="Modal_Bldg_Ques15"
-                                         style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
-                                        <p>Office areas shall have a minimum live load capacity of 50 pounds per<br/>
-                                            ANSI/BOMA Office Area square foot plus 20 pounds per ANSI/BOMA Office <br/>
-                                            Area square foot for moveable partitions. Storage areas shall have<br/>
-                                            a minimum live load capacity of 100 pounds per ANSI/BOMA Office Area <br/>
-                                            square foot including moveable partitions. A report showing the floor <br/>
-                                            load capacity, at no cost to the Government, by a registered professional<br/>
-                                            engineer may be required. Calculations and structural drawings may also be <br/>
-                                            required.
-                                        </p>
-                                    </div>
-
-                                    <br/>
-                                    <apex:inputField Id="liveflrLoad" value="{!lopOffer.PBS_AAAP_LIVE_FLOOR_LOAD__c}" onkeydown="limitfieldvalue('{!$Component.liveflrLoad}');" onkeyup="limitfieldvalue('{!$Component.liveflrLoad}');"/>
-                                </apex:outputPanel>
-
-                            </apex:panelGrid>
-
-                            <br/>
-                            <apex:outputtext value="{!$Label.LOP_site_size}" style="margin-left:5px;font-size:10pt;"/><br/>
-                            <table style="margin-top: -20px;">
-                                <td >
-                                    <apex:inputField value="{!lopOffer.PBS_AAAP_SITE_SIZE_SQFT__c}" id="siteSize"/>
-                                </td>
-                                <td>
-                                    <apex:selectRadio styleClass="radioCell" value="{!lopOffer.PBS_AAAP_SITE_AREA_TYPE__c}"
-                                                      id="siteSizeOption">
-                                        <apex:selectOptions value="{!siteSizeItems}"/>
-                                    </apex:selectRadio>
-                                </td>
-                            </table>
--->
-<!--SGanti reworded question 10. 10/2021-->                                    
-
-                            <apex:panelGrid columns="1">
-                                
-                                <apex:outputPanel >
-                                    <apex:outputtext value="8. In what year was the original building construction completed and ready for initial occupancy?"/>
-                                    <span class="required">*</span>
-                                    <a class="popup" href="#Modal_Bldg_Ques80"><img src="{!$Resource.Info_Icon}"/></a>
-                                    <div id="Modal_Bldg_Ques80" class = "infopopup2"
-                                         style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
-                                        <p>If new construction is proposed, enter the projected year the space will be ready for occupancy.
-                                        </p>
-                                    </div>
-                                    <br/>
-                                    
-                                    <apex:inputField value="{!lopOffer.PBS_RSAP_Year_Built__c}" id="yearconstructed"/>
-                                    <apex:outputText id="q1years" style="font-weight: !bold;"
-                                                     value=""></apex:outputText>
-                                </apex:outputPanel>
-
-
-                                <apex:outputPanel >
-<!--SGanti reworded question 10 and changed input text area size. 10/2021-->                                    
-                                   
-                                    <apex:outputtext value="9. Provide the year and a brief description of the last major building renovation, if applicable:"/>
-                                    <br/>
-                                <!--    <apex:inputField value="{!lopOffer.PBS_AAAP_Renovation_Year__c}"/> -->
-                                    <apex:inputTextarea id="renoYearTA" value="{!lopOffer.PBS_RSAP_Renovation_Year__c}" styleClass="aaapTextArea" html-maxlength="128" onkeyup="updateRenoYearTACounter()"/><br/>
-                                    <apex:outputText id="renoYearTACounter" />&#160;Characters Used
-                                </apex:outputPanel>
-                            
-                                <!-- Ramya added question 10.  06/22022 -->
-                                <apex:outputPanel >
-                                  <apex:outputtext value="10. Select the approximate level of construction necessary to meet the building shell requirements:"/>
-                                       <span class="required">*</span><br/>
-                                        <label class="labelCls">
-                                            <input type="radio" class="radioInput" name="aslRadio" id="aslImprNeeded" value="Improvements needed" onclick="aslToggle(this.value); "/>
-                                            <span class="spanClass">
-                                                Improvements to the existing Building will be required to meet the building shell requirements.
-                                                The approximate construction cost to achieve Lease shell standards is: 
-                                                $<apex:inputField value="{!lopOffer.PBS_AAAP_SHELL_Build_out_Costs__c}" onkeyup="validate(this)"/>
-                                            </span>
-                                        </label>
-                                       
-                                        <label class="labelCls">
-                                            <input type="radio" class="radioInput" name="aslRadio" id="aslAlrMeets" value="Already Meets" onclick="aslToggle(this.value); "/>
-                                            <span class="spanClass">
-                                                The Building already meets all the Lease shell requirements; no improvements are necessary.
-                                            </span>
-                                        </label>
-                                        
-                                       
-                                        <label class="labelCls">
-                                            <input type="radio" class="radioInput" name="aslRadio" id="aslNewConst" value="New Construction"  onclick="aslToggle(this.value); "/>
-                                            <span class="spanClass">
-                                                The requirements of the Lease will be satisfied through the construction of a new building.
-                                            </span>
-                                        </label>
-                                        
-                                        
-                                        <apex:outputPanel id="aslVal2" >
-                                            
-                                            <table width="100%">
-                                            <tr width="100%">
-                                                <td width="60%">
-                                                    <label class="labelCls" style="padding-left: 25px;">
-                                                    Land Site Size: <apex:inputField value="{!lopOffer.PBS_AAAP_SITE_SIZE_SQFT__c}" onkeyup="validate(this)"/>
-                                                    <input type="radio" name="lssMeasurment" id="atSqFeet" value="Square Feet" onclick="areaTypeToggle(this.value); ">
-                                                        Square Feet
-                                                    </input>
-                                                    <input type="radio" name="lssMeasurment" id="atAcres" value="Acres" onclick="areaTypeToggle(this.value); ">
-                                                        Acres
-                                                    </input>
-                                                    </label>
-                                                </td>
-                                                
-                                                <td width="40%">
-                                                    Total Land Costs:
-                                                    <a class="popup" href="#Modal_Bldg_Ques81"><img src="{!$Resource.Info_Icon}"/></a>
-                                                    <div id="Modal_Bldg_Ques81" class = "infopopup3"
-                                                    style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
-                                                    <p>This is the total cost to the offeror to purchase land as a means to construct the proposed building, if applicable.
-                                                    </p>
-                                                    </div>
-                                                    
-                                                    $<apex:inputField value="{!lopOffer.PBS_AAAP_Total_Land_Cost__c}" onkeyup="validate(this)"/>
-                                                </td>
-                                            </tr>
-                                            </table>
-                                            
-                                        </apex:outputPanel>       
-                                    </apex:outputPanel>
-                                    
-                                                    
-                                <!--SGanti reworded question 11. 10/2021-->                                    
-
-                                <apex:outputPanel id="HVAC" layout="block">
-                                    <apex:outputtext value="11. What are the Building’s normal hours of operations for HVAC included in the Operating Costs?"/>
-                                    <span class="required">*</span>
-                                    <table>
-                                        <tr>
-                                            <td align="right">
-                                                <apex:outputText value="{!$Label.PBS_AAAP_Mon_Fri_Hours_Start}"/>
-                                            </td>
-                                            <td>
-                                                <apex:inputField value="{!lopOffer.PBS_AAAP_HVAC_HRS_MON_TO_FRI_START__c}"
-                                                        id="hvachrs"/>
-                                            </td>
-                                            <td align="right">
-                                                <apex:outputText value="{!$Label.PBS_AAAP_Building_Hours_End}"/>
-                                            </td>
-                                            <td>
-                                                <apex:inputField value="{!lopOffer.PBS_AAAP_HVAC_HRS_MON_TO_FRI_END__c}"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right">
-                                                <apex:outputText value="{!$Label.PBS_AAAP_SAT_Hours_Start}"/>
-                                            </td>
-                                            <td>
-                                                <apex:inputField value="{!lopOffer.PBS_AAAP_HVAC_HRS_ON_SAT_START__c}"/>
-                                            </td>
-                                            <td align="right">
-                                                <apex:outputText value="{!$Label.PBS_AAAP_Building_Hours_End}"/>
-                                            </td>
-                                            <td>
-                                                <apex:inputField value="{!lopOffer.PBS_AAAP_HVAC_HRS_ON_SAT_END__c}"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right">
-                                                <apex:outputText value="{!$Label.PBS_AAAP_SUN_Hours_Start}"/>
-                                            </td>
-                                            <td>
-                                                <apex:inputField value="{!lopOffer.PBS_AAAP_HVAC_HRS_ON_SUN_START__c}"/>
-                                            </td>
-                                            <td align="right">
-                                                <apex:outputText value="{!$Label.PBS_AAAP_Building_Hours_End}"/>
-                                            </td>
-                                            <td>
-                                                <apex:inputField value="{!lopOffer.PBS_AAAP_HVAC_HRS_ON_SUN_END__c}"/>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </apex:outputPanel>
-<!--SGanti replaced PBS_AAAP_FIRE_SAFETY_CERT__c with PBS_AAAP_Fire_Life_Meets__c 10/2021-->
-                                                                                                     
-                                 <apex:outputPanel >
-                                    <apex:outputtext value="{!$Label.LOP_Fire_Protection_and_Life_Safety}"/>
-                                    <span class="required">*</span><br/>
-                               
-                                     <apex:selectRadio styleClass="custRadio"
-                                                      value="{!lopOffer.PBS_AAAP_FIRE_SAFETY_CERT__c}"
-                                                      id="fireProtection" layout="pageDirection">
-                                        <apex:selectOptions value="{!fireProtectionItems}"></apex:selectOptions>
-                                    </apex:selectRadio>
-                                </apex:outputPanel>
-                            
-<!--SGanti 10/2021-->
-
-                                <apex:outputPanel >
-                                    <apex:outputtext value="{!$Label.LOP_Lease_Accessibility_Standards}"/>
-                                    <span class="required">*</span><br/>
-                                
-                                    <apex:selectRadio styleClass="custRadio"
-                                                      value="{!lopOffer.PBS_RSAP_Accessibility_Standards_Met__c}"
-                                                      id="standardMet" layout="pageDirection">
-                                        <apex:selectOptions value="{!accessibilityItems}"></apex:selectOptions>
-                                    </apex:selectRadio>
-                                </apex:outputPanel>
-                                
-<!--SGanti added 10/2021-->
-                                
-                               <apex:outputPanel >
-                                    <apex:outputtext value="{!$Label.LOP_RLP_Asbestos}"/>
+                                    <apex:outputPanel >
+                                        <apex:outputtext value="{!$Label.LOP_Fire_Protection_and_Life_Safety}"/>
                                         <span class="required">*</span><br/>
-                                            <apex:selectCheckboxes styleClass="custRadio" value="{!getAsbestosItems}" layout="pageDirection">
-                                        <apex:selectOptions value="{!getAsbestos}"/>
-                                            </apex:selectCheckboxes>
-                                </apex:outputPanel> 
-                                
-                                <apex:outputPanel >
-<!--SGanti reworded custom label for LOP_Flood_Plains. 10/2021-->                                    
-                                    
-                                    <apex:outputtext value="{!$Label.LOP_Flood_Plains}"/>
-                                    <span class="required">*</span><br/>
-                                    <apex:selectRadio styleClass="custRadio"
-                                                      value="{!lopOffer.PBS_RSAP_Flood_Plain_Declaration__c}"
-                                                      id="floodPlains" layout="pageDirection">
-                                        <apex:selectOptions value="{!floodPlainItems}"></apex:selectOptions>
-                                    </apex:selectRadio>
-                                </apex:outputPanel>
-                        <apex:outputPanel >
-<!--SGanti reworded . 10/2021-->                                    
-                                    
-                                    <apex:outputtext value="16. With regard to Seismic Safety of the Building, does the RLP contain seismic requirements?"/>
-                                    <span class="required">*</span><br/>
-                                    <apex:selectRadio styleClass="custRadio"
-                                                      value="{!lopOffer.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c}"
-                                                      id="seismicOptions" onchange="resetSeismicFields();"
-                                                      >
-                                        <apex:selectOptions value="{!seismicOptions}"></apex:selectOptions>
-                                    </apex:selectRadio>                               
-                                                                      
-                                                                
-<!--SGanti reworded . 10/2021-->                                    
-                                    <apex:outputPanel id="seismicPanel">
-                                        <br/>                                        
-                                        <apex:outputtext value="16a. Since the RLP contains seismic requirements, select one of the following and attach appropriate documentation in the Attachments section:"/>
-                                        <span class="required">*</span><br/>
+                                        
                                         <apex:selectRadio styleClass="custRadio"
-                                                          value="{!lopOffer.PBS_RSAP_Offeror_Seismic_Declaration__c}"
-                                                          id="seismic" layout="pageDirection">
-                                            <apex:selectOptions value="{!seismicItems}"></apex:selectOptions>
+                                                          value="{!lopOffer.PBS_AAAP_FIRE_SAFETY_CERT__c}"
+                                                          id="fireProtection" layout="pageDirection">
+                                            <apex:selectOptions value="{!fireProtectionItems}"></apex:selectOptions>
                                         </apex:selectRadio>
                                     </apex:outputPanel>
-                         </apex:outputPanel> 
-<!--SGanti commented out 10/2021
-                                <apex:outputPanel >
-                                    <apex:outputtext value="{!$Label.LOP_Historic_Tier_Of_The_Building_Property}"/>
-                                    <span class="required">*</span><br/>
-                                    <apex:selectRadio styleClass="custRadio" value="{!hisString}" layout="pageDirection"
-                                                      id="historicTier">
-                                        <apex:selectOptions value="{!historicTierOptions}"></apex:selectOptions>
-                                    </apex:selectRadio>
-                                </apex:outputPanel>
--->
-<!--SGanti commented out 10/2021
- 
-                                <apex:outputPanel >
                                     
-                                    <apex:outputtext value="{!$Label.LOP_RLP_Asbestos}"/>
-                                    <span class="required">*</span><br/>
-                                    <apex:selectRadio styleClass="custRadio"
-                                                      value="{!lopOffer.PBS_RSAP_Asbestos_Declaration__c}" id="asbestos"
-                                                      layout="pageDirection">
-                                        <apex:selectOptions value="{!asbestosItems}"></apex:selectOptions>
-                                    </apex:selectRadio>
-                                </apex:outputPanel>
--->
-
-
-
-                            
-<!--SGanti reworded the question 17 and 17a. 10/2021 -->
-                                <apex:outputPanel id="energyStarSection" layout="block" style="width: 812px;">
-                                     <label class="labelCls">
-                                       <span class="radioInput">17.</span>
+                                    <!--SGanti 10/2021-->
+                                    
+                                    <apex:outputPanel >
+                                        <apex:outputtext value="{!$Label.LOP_Lease_Accessibility_Standards}"/>
+                                        <span class="required">*</span><br/>
+                                        
+                                        <apex:selectRadio styleClass="custRadio"
+                                                          value="{!lopOffer.PBS_RSAP_Accessibility_Standards_Met__c}"
+                                                          id="standardMet" layout="pageDirection">
+                                            <apex:selectOptions value="{!accessibilityItems}"></apex:selectOptions>
+                                        </apex:selectRadio>
+                                    </apex:outputPanel>
+                                    
+                                    <!--SGanti added 10/2021-->
+                                    
+                                    <apex:outputPanel >
+                                        <apex:outputtext value="{!$Label.LOP_RLP_Asbestos}"/>
+                                        <span class="required">*</span><br/>
+                                        <apex:selectCheckboxes styleClass="custRadio" value="{!getAsbestosItems}" layout="pageDirection">
+                                            <apex:selectOptions value="{!getAsbestos}"/>
+                                        </apex:selectCheckboxes>
+                                    </apex:outputPanel> 
+                                    
+                                    <apex:outputPanel >
+                                        <!--SGanti reworded custom label for LOP_Flood_Plains. 10/2021-->                                    
+                                        
+                                        <apex:outputtext value="{!$Label.LOP_Flood_Plains}"/>
+                                        <span class="required">*</span><br/>
+                                        <apex:selectRadio styleClass="custRadio"
+                                                          value="{!lopOffer.PBS_RSAP_Flood_Plain_Declaration__c}"
+                                                          id="floodPlains" layout="pageDirection">
+                                            <apex:selectOptions value="{!floodPlainItems}"></apex:selectOptions>
+                                        </apex:selectRadio>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel >
+                                        <!--SGanti reworded . 10/2021--> 
+                                        <apex:outputPanel id="buildinglocated">
+                                            <!-- Todd Brown added following Seismic question 11a 08/2021 for SFWS-1313 -->
+                                            
+                                            <apex:outputtext value="5. The RLP may contain seismic requirements. Refer to the "/> 
+                                            
+                                            <apex:outputLink style="color:#005ea2;" value="{!$Resource.SeismicMap}" target="_blank">Seismic Map
+                                            </apex:outputLink>                           
+                                            <apex:outputtext value=" to determine if you are in a medium or high risk seismic zone."/>
+                                            <br/>&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <apex:outputtext value="With regard to seismic safety:"/> 
+                                            
+                                            
+                                            
+                                            <span class="required">*</span>
+                                            <br/>
+                                            <apex:selectRadio styleClass="noPadding"
+                                                              value="{!lopOffer.PBS_AAAP_Seismic_Statement__c}"
+                                                              layout="pageDirection">
+                                                <apex:selectOptions value="{!SeismicSafetyItems}"/>
+                                            </apex:selectRadio>
+                                            <br/>
+                                            
+                                            <apex:outputtext value="5a. Please select the appropriate option for each category. Consult your building manager, engineer, or
+                                                                    architect for assistance if you are unsure."/>
+                                            <span class="required">*</span>
+                                            <br/>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<apex:outputtext value="{!$Label.PBS_AAAP_Building_Type} "/>
+                                                    </td>
+                                                    <td>
+                                                        <apex:outputtext value="{!$Label.PBS_AAAP_Building_Code} "/>
+                                                    </td>
+                                                    <td>
+                                                        <apex:outputtext value="{!$Label.PBS_AAAP_Building_Code_year} "/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<apex:inputField value="{!lopOffer.PBS_AAAP_BUILDING_TYPE__c}"
+                                                                         id="buildingType"/>
+                                                    </td>
+                                                    <td>
+                                                        <apex:inputField value="{!lopOffer.PBS_AAAP_BUILDING_CODE__c}"
+                                                                         id="buildingCode"/>
+                                                    </td>
+                                                    <td>
+                                                        <apex:inputField value="{!lopOffer.PBS_AAAP_BUILDING_CODE_YEAR__c}"
+                                                                         id="buildingCodeYear"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </apex:outputPanel>
+                                        
+                                        
+                                    </apex:outputPanel> 
+                                    <apex:outputPanel id="energyStarSection" style="display: block; width: 812px;">
+                                        <apex:outputtext value="{!$Label.PBS_AAAP_Building_Energy_Star_New}"/>
+                                        <span class="required">*</span>
+                                        <a class="popup" href="#Modal_Bldg_Ques6"><img src="{!$Resource.Info_Icon}"/></a>
+                                        
+                                        <div id="Modal_Bldg_Ques6"
+                                             class = "infopopup" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                            <p>Refer to section 2 Energy Independence and Security Act of the RLP
+                                                <br/><br/>
+                                                Refer to section 3 Energy Independence and Security Act of the lease
+                                            </p>
+                                        </div>
+                                        
+                                        <br/>
+                                        <apex:outputPanel id="energyStarCertDate">
+                                            <br/>
+                                            <apex:inputHidden id="EnergyStar" value="{!lopOffer.PBS_AAAP_Energy_Star__c}" />
+                                            <!-- Added new for Radiobuttons-->
+                                            <apex:outputPanel rendered="{!lopOffer.PBS_AAAP_Energy_Star__c == 'Yes'}">
+                                            	<input type="radio" class="radioInput" placeholder="Yes" checked="true" onchange="handleEnergyRadioChange(); return false;" name="energyRadio" id="energyStarNeeded"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!lopOffer.PBS_AAAP_Energy_Star__c != 'Yes'}">
+                                            	<input type="radio" class="radioInput" placeholder="Yes" onchange="handleEnergyRadioChange(); return false;" name="energyRadio" id="energyStarNeeded"/>
+                                            </apex:outputPanel>
+                                            <span class="spanClass">
+                                                The property has received the ENERGY STAR® label conferred by the Environmental Protection Agency
+                                                (EPA) within the past &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;twelve months.                                                
+                                            </span><br/>                                        
+                                            <apex:outputtext style="margin-left: 60px; margin-top: 10px;" value="{!$Label.PBS_AAAP_Date_of_certification}"/>
+                                            <br/>
+                                            <apex:inputField style="margin-left: 60px;" value="{!lopOffer.PBS_AAAP_CERTIFICATION_DATE__c}" id="CERTIFICATION_DATE" />
+                                            
+                                            
+                                        </apex:outputPanel>  
+                                        
+                                    </apex:outputPanel>
+                                    
+                                    <!--SGanti reworded the question 17 and 17a. 10/2021 -->
+                                    <apex:outputPanel id="energyStarSection1" layout="block" style="width: 812px;">                                    
+                                        <apex:outputPanel id="noEnergyStarPanel1" >
+                                            <apex:outputPanel rendered="{!lopOffer.PBS_AAAP_Energy_Star__c == 'No'}">
+                                            <input type="radio" class="radioInput" placeholder="No" checked="true" name="energyRadio" id="energyStarReasonNeeded" onchange="handleEnergyRadioChange(); return false;" />
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!lopOffer.PBS_AAAP_Energy_Star__c != 'No'}">
+                                                <input type="radio" class="radioInput" placeholder="No" name="energyRadio" id="energyStarReasonNeeded" onchange="handleEnergyRadioChange(); return false;" />
+                                            </apex:outputPanel>
+                                            
+                                               
+                                            <span class="spanClass">
+                                                The property has not received the ENERGY STAR® label conferred by the Environmental Protection Agency (EPA) within the &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;past twelve months because:
+                                            </span>
+                                            <br/>
+                                            <div id="energyStarReasonNeededDetials" style="margin-top: 10px; margin-bottom: 10px; margin-left: 35px"><!-- style="display:none;" -->
+                                                <apex:selectRadio styleClass="custRadio1"
+                                                                  value="{!lopOffer.PBS_RSAP_Energy_Star_Response_No__c}" id="noenergystar"
+                                                                  layout="pageDirection">
+                                                    <apex:actionSupport event="onchange" oncomplete="handleStarReasonNeededDetialsRadioChange(); return false;" reRender="eStar"/>
+                                                    <apex:selectOptions value="{!energyStarResponseNo}"/>
+                                                </apex:selectRadio>  
+                                                
+                                            </div>
+                                        </apex:outputPanel>
+                                        
+                                        <apex:outputPanel id="eStarException1">
+                                            <div style="float:right;position:relative;">
+                                                
+                                                <apex:selectRadio styleClass="custRadio4"
+                                                                  value="{!lopOffer.PBS_RSAP_Energy_Star_Meets_Exceptions__c}" 
+                                                                  id="eStarMeetException1" layout="pageDirection">
+                                                    <apex:actionSupport event="onchange" rerender="eStarExcep1"/>
+                                                    <apex:selectOptions value="{!energyStarMeetsExceptions}"/>
+                                                </apex:selectRadio>   
+                                            </div>  
+                                            
+                                        </apex:outputPanel>
+                                        
+                                        <apex:outputPanel id="eStarException2" >
+                                            <br/>
+                                            <apex:outputtext style="display: inline-block;margin-top: 10px;margin-bottom: 10px; margin-left: 75px" value="The offeror has evaluated energy efficiency and conservation improvements and has determined:">
+                                            </apex:outputtext> 
+                                            <br/>
+                                            <apex:selectRadio styleClass="custRadio3"
+                                                              
+                                                              value="{!lopOffer.PBS_AAAP_Energy_Star_Evaluation__c}" 
+                                                              id="eStarMeetException2" layout="pageDirection">
+                                                <apex:actionSupport event="onchange" rerender="eStarExcep2"/>
+                                                <apex:selectOptions value="{!energyStarCost}"/>
+                                            </apex:selectRadio>
+                                        </apex:outputPanel>                                                                     
+                                    </apex:outputPanel>                                    
+                                    
+                                    
+                                    <!--SGanti added new question 18 on 10/2021 -->
+                                    <apex:outputPanel id="historic1" >
+                                        <apex:outputtext value="7. Is the building a historic property?"/>
+                                        <span class="required">*</span>
+                                        <!--<a class="popup" href="#Modal_Bldg_Ques7"><img src="{!$Resource.Info_Icon}"/></a>
+                                        
+                                        <div id="Modal_Bldg_Ques7"
+                                             class = "infopopup" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                            <p>Refer to section 2 GSAR 552.270-1 Historic Preference (Deviation) and National Historic Preservation Act Requirements in the RLP.
+                                                <br/><br/>                                               
+                                                Refer to section 3 National Historic Preservation Act Requirements - Lease of the lease.
+                                            </p>
+                                        </div>-->
+                                        <br/>
+                                        <apex:selectRadio styleClass="custRadio"
+                                                          value="{!lopOffer.PBS_RSAP_Building_is_a_historic_property__c}"
+                                                          layout="pageDirection"
+                                                          id="historicBldg1">
+                                            <apex:selectOptions value="{!items}">
+                                            </apex:selectOptions>
+                                        </apex:selectRadio>
+                                    </apex:outputPanel>                                                             
+                                    
+                                    <!--SGanti added new question 19 on 10/2021 -->
+                                    <apex:outputPanel id="historic2" >
+                                        <apex:outputtext value="8. Is the building within a historic district?"/>
+                                        <span class="required">*</span>
+                                        <!--<a class="popup" href="#Modal_Bldg_Ques8"><img src="{!$Resource.Info_Icon}"/></a>
+                                        
+                                        <div id="Modal_Bldg_Ques8"
+                                             class = "infopopup" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                            <p>Refer to section 2 GSAR 552.270-1 Historic Preference (Deviation) and National Historic Preservation Act Requirements in the RLP.
+                                                <br/><br/>                                               
+                                                Refer to section 3 National Historic Preservation Act Requirements - Lease of the lease.
+                                            </p>
+                                        </div>-->
+                                        <br/>
+                                        <apex:selectRadio styleClass="custRadio"
+                                                          value="{!lopOffer.PBS_RSAP_Bldg_within_a_historic_district__c}"
+                                                          layout="pageDirection"
+                                                          id="historicBldg2">
+                                            <apex:selectOptions value="{!items}">
+                                            </apex:selectOptions>
+                                        </apex:selectRadio>    
+                                    </apex:outputPanel>     
+                                    
+                                    <apex:outputPanel >
+                                        <apex:outputtext value="{!$Label.LOP_HubZone}"/>
+                                        <span class="required">*</span>
+                                        <!--<a class="popup" href="#Modal_Bldg_Ques9"><img src="{!$Resource.Info_Icon}"/></a>
+                                        
+                                        <div id="Modal_Bldg_Ques9"
+                                             class = "infopopup" style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
+                                            <p>With regard to HUBZone price evaluation preference:A HUBZone small business concern (SBC) Offeror may elect to waive the price evaluation provided in section 4 of the RLP. In such a case, no price evaluation preference shall apply to the evaluation of the HUBZone SBC, and the performance of work requirements set forth in section 1 of the lease shall not be applicable to a lease awarded to the HUBZone SBC Offeror under this solicitation.
+                                            </p>
+                                        </div>-->
+                                        <br/>
+                                        <apex:selectRadio styleClass="custRadio" value="{!hubZoneStr}" id="hubZone"
+                                                          layout="pageDirection">
+                                            <apex:selectOptions value="{!hubZoneItems}"></apex:selectOptions>
+                                        </apex:selectRadio>
+                                    </apex:outputPanel>
+                                    
+                                    
+                                        10. With regard to building shell requirements:<span class="required"> *</span><br/>
+                                    <label class="labelCls" style="padding-left: 5px;">
+                                        <input type="radio" class="radioInput" name="aslRadio" id="aslImprNeeded" value="Improvements needed" onclick="aslToggle(this.value); "/>
+                                            Improvements to the existing building will be required to meet the lease shell requirements.<br/>
+                                        <label style="padding-left: 62px;"> The total approximate construction cost to achieve lease shell standards is:  </label><br/>
+                                    </label>
+                                    <apex:outputPanel >
+                                       <div style="padding-left: 62px;">
+                                           $<apex:inputField value="{!lopOffer.PBS_AAAP_SHELL_Build_out_Costs__c}" onkeyup="validate(this)"/>
+                                    </div> 
+                                    </apex:outputPanel>
+                                    
+                                    <label class="labelCls" style="padding-left: 5px;">
+                                        <input type="radio" class="radioInput" name="aslRadio" id="aslAlrMeets" value="Already Meets" onclick="aslToggle(this.value); "/>
                                         <span class="spanClass">
-                                          Has the Property received the ENERGY STAR® Label conferred by the Environmental Protection Agency (EPA) within the past twelve months?
-                                           <span class="required">*</span>
-                                            <!-- <a class="popup" href="#Modal_Bldg_Ques8"><img src="{!$Resource.Info_Icon}"/></a> -->
+                                            The building already meets all the lease shell requirements. No improvements are necessary.
                                         </span>
                                     </label>
                                     
-                                    <!-- <div id="Modal_Bldg_Ques8"
-                                         style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
-                                        <p>Existing buildings must have earned the Energy Star label in the most recent year or
-                                            will have obtained it prior to lease award, <br/>unless the offered space meets one of the
-                                            statutory exceptions as described in the RLP. All new construction shall achieve an<br/>
-                                            Energy Star label within 18 months after occupancy by the Government. The  offeror is
-                                            encouraged to include shared savings in<br/> the offer as a result of the energy upgrades
-                                            where applicable. ENERGY STAR tools and resources can be found at the <br/>www.energystar.gov
-                                            Web site. The term "most recent year" means that the date of the award of the Energy Star
-                                            label by EPA <br/>must not be more than 1 year prior to the lease award date. To earn the Energy
-                                            Star label, a building owner or representative <br/>must follow the instructions on the Energy
-                                            Star website.</p>
-                                    </div> -->
                                     
-                                    <apex:actionRegion >
-                                        <apex:selectRadio styleClass="custRadio"
-                                                          value="{!lopOffer.PBS_AAAP_Energy_Star__c}" id="benergystar"
-                                                          onchange="resetEnergyStarFields();">
-                                                 <!--<apex:actionSupport event="onchange" action="{!displayEnergyStarText}" reRender="eStar"/> -->
-                                                 <apex:actionSupport event="onchange" reRender="eStar"/>
-
-                                            <apex:selectOptions value="{!items}"/>
-                                        </apex:selectRadio>
-                                    </apex:actionRegion>
-<!--SGanti added 11/2021 -->
-                                  <br/>   
-<!--SGanti reworded 17a. and added logic for energy star response = "No". 10/2021 
+                                    <label class="labelCls" style="padding-left: 5px;">
+                                        <input type="radio" class="radioInput" name="aslRadio" id="aslNewConst" value="New Construction"  onclick="aslToggle(this.value); "/>
+                                        <span class="spanClass">
+                                            The requirements of the lease will be satisfied through the construction of a new building:
+                                        </span>
+                                    </label>
                                     
-                                    <apex:outputPanel id="noEnergyStarPanel" >
-                                        <apex:outputtext >17a.  The Property has not received the ENERGY STAR Label within the past twelve months but falls into one of the following categories:</apex:outputtext>
-                                        <br/>
-                                        <apex:selectRadio styleClass="custRadio"
-                                                          value="{!lopOffer.PBS_RSAP_Energy_Star_Response_No__c}" id="noenergystar" 
-                                                          layout="pageDirection">
-                                            <apex:actionSupport event="onchange" reRender="eStar"/>
-                                            <apex:selectOptions value="{!energyStarResponseNo}"/>
-                                        </apex:selectRadio>
-                                        </apex:outputPanel>
--->
-<!--SGanti reworded 17a. 10/2021 -->
-                                            
-                                    <apex:outputPanel id="certificationDatePanel" >
-                                       <apex:outputtext value="17a. Date of Certification (MM/DD/YYYY)"/>
-                                        <br/>
-                                        <apex:outputLabel id="startdate">
-                                            <apex:inputField value="{!lopOffer.PBS_AAAP_CERTIFICATION_DATE__c}"
-                                                             id="certificationDate"/>
-                                            <apex:outputLabel id="dateFormat"></apex:outputLabel>
-                                        </apex:outputLabel>
-                                    </apex:outputPanel>
-<!--SGanti added logic for energy star response = "No", "statutory exceptions" and Cost Effective or not. 10/2021 -->
                                     
-                            <apex:outputPanel id="noEnergyStarPanel" >
-                                    <apex:outputtext style="display: inline-block;margin-left:25px; text-indent: -30px" value="17a.  The Property has not received the ENERGY STAR Label within the past twelve months, but falls into one of the following categories:"></apex:outputtext>
-                                        <br/>
-                                     <apex:selectRadio styleClass="custRadio1"
-                                                          value="{!lopOffer.PBS_RSAP_Energy_Star_Response_No__c}" id="noenergystar" onchange="resetEnergyStarMeetExceptions();"
-                                                          layout="pageDirection">
-                                            <apex:actionSupport event="onchange" reRender="eStar"/>
-                                            <apex:selectOptions value="{!energyStarResponseNo}"/>
-                                        </apex:selectRadio>                                                                         
-                             </apex:outputPanel>
-                         
-                            <apex:outputPanel id="eStarException1">
-                                      <!-- SGanti: display options for "Meets exceptions" -->                                        
-                                <!-- <apex:selectRadio styleClass="custRadio2"
-                                                          value="{!lopOffer.PBS_RSAP_Energy_Star_Meets_Exceptions__c}" 
-                                                        id="eStarMeetException1" layout="pageDirection">
-                                            <apex:actionSupport event="onchange" rerender="eStarExcep1"/>
-                                            <apex:selectOptions value="{!energyStarMeetsExceptions}"/>
-                                        </apex:selectRadio>
-                                -->    
-                               <div style="float:right;position:relative">
-                                                                  
-                                <apex:selectRadio styleClass="custRadio4"
-                                                          value="{!lopOffer.PBS_RSAP_Energy_Star_Meets_Exceptions__c}" 
-                                                        id="eStarMeetException1" layout="pageDirection">
-                                            <apex:actionSupport event="onchange" rerender="eStarExcep1"/>
-                                            <apex:selectOptions value="{!energyStarMeetsExceptions}"/>
-                                        </apex:selectRadio>   
-                              </div>  
-                            
-                               </apex:outputPanel>
-
-                        <apex:outputPanel id="eStarException2" >
-                            <br/>
-                              <!--<apex:outputtext style="display: inline-block; margin-left: 25px" value="With regard to offers falling into a statutory exception category above, the Offeror has evaluated energy efficiency and conservation improvements and has determined:">
-                                    </apex:outputtext>-->
-  <!--ramya: aligned statements for userstory SFWS-1483-->  
-                                  <apex:outputtext style="display: inline-block;margin-top: 10px; margin-left: 75px" value="With regard to offers falling into a statutory exception category above, the Offeror has evaluated energy efficiency and conservation improvements and has determined:">
-                                    </apex:outputtext>  
-                                  <br/>   
-                                <!--       <apex:selectRadio styleClass="custRadio2"
-                                                          value="{!lopOffer.PBS_AAAP_Energy_Star_Evaluation__c}" 
-                                                        id="eStarMeetException2" layout="pageDirection">
-                                            <apex:actionSupport event="onchange" rerender="eStarExcep2"/>
-                                            <apex:selectOptions value="{!energyStarCost}"/>
-                                        </apex:selectRadio>
-                                -->
-                                            <apex:selectRadio styleClass="custRadio3"
-                                            
-                                                  value="{!lopOffer.PBS_AAAP_Energy_Star_Evaluation__c}" 
-                                                        id="eStarMeetException2" layout="pageDirection">
-                                            <apex:actionSupport event="onchange" rerender="eStarExcep2"/>
-                                            <apex:selectOptions value="{!energyStarCost}"/>
-                                        </apex:selectRadio>
-                            </apex:outputPanel>                                                                     
-                     </apex:outputPanel>                                    
-
-                                
-<!--SGanti added new question 18 on 10/2021 -->
-                                <apex:outputPanel id="historic1" >
-                                       <apex:outputtext value="18. Is the Building a historic property?"/>
-                                        <span class="required">*</span>                                        
-                                        <br/>
-                                        <apex:selectRadio styleClass="custRadio"
-                                                      value="{!lopOffer.PBS_RSAP_Building_is_a_historic_property__c}"
-                                                      id="historicBldg1">
-                                        <apex:selectOptions value="{!items}">
-                                            </apex:selectOptions>
-                                    </apex:selectRadio>
-                                    </apex:outputPanel>                                                             
-                                
-<!--SGanti added new question 19 on 10/2021 -->
-                                <apex:outputPanel id="historic2" >
-                                       <apex:outputtext value="19. Is the Building within a historic district?"/>
-                                        <span class="required">*</span>                                        
-                                        <br/>
-                                        <apex:selectRadio styleClass="custRadio"
-                                                      value="{!lopOffer.PBS_RSAP_Bldg_within_a_historic_district__c}"
-                                                      id="historicBldg2">
-                                        <apex:selectOptions value="{!items}">
-                                            </apex:selectOptions>
-                                    </apex:selectRadio>    
-                                    </apex:outputPanel>                                                                                                                        
-                                
-
-                                <apex:outputPanel >
-                                    <apex:outputtext value="{!$Label.LOP_HubZone}"/>
-                                    <span class="required">*</span><br/>
-                                    <apex:selectRadio styleClass="custRadio" value="{!hubZoneStr}" id="hubZone"
-                                                      layout="pageDirection">
-                                        <apex:selectOptions value="{!hubZoneItems}"></apex:selectOptions>
-                                    </apex:selectRadio>
-                                </apex:outputPanel>
-
-                                <apex:panelGrid columns="1">
-                                <!--   <apex:actionFunction name="btnJQSubmit" action="{!redirectToParking}"></apex:actionFunction> -->
-                                   
-                                    
-                                    <apex:outputPanel rendered="{!!viewOnly}">
-
-                                        <apex:commandButton id="btnSaveForm" value="Save Page" styleClass="btnSave"
-                                                            action="{!saveBuilding}" onclick="return validateZip();"/>
-                                        <apex:commandButton id="btnSave" value="Next" action="{!redirectToParking}"
-                                                            onclick="return validateZip();" styleClass="btnJQSubmit"/>
-                                        <!--   SFWS 2105  j.rogers 1/18/2023
-                                        <apex:commandButton value="Exit Offer" action="{!actionCancel}"
-                                                            onclick="if(confirm('Please make sure to hit save page before exiting your offer.  Changes will not be saved unless you hit Save Page.')){return true;} else return false;"/>
-                                        -->
-                                        <apex:commandButton value="Exit Offer"
-                                            onclick="if(confirm('Are you sure you want to cancel editing this record without saving changes?')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}RSAP-PortalHome';return false;} else {return false;}"/>
-
-                                        <span style="padding-right:250px;">&nbsp;</span>
-                                        <!-- SFWS 2107 j.rogers 1/18/2023
-                                         <a href="#" class="buttonred" id="view"
-                                           onclick="if(confirm('Are you sure you want to permanently delete your offer?  If so, click OK.  Click Cancel to return to the page.')){deleteOffer(); return true;} else return false;">Delete
-                                            Offer</a>
-                                        -->
+                                    <apex:outputPanel id="aslVal2" >
                                         
-                                        <a href="#" class="buttonred" id="view"
-                                            onclick="if(confirm('Are you sure you want to permanently delete your offer?  If so, click OK.  Click Cancel to return to the page.')){deleteOffer();window.parent.location.href = '{!$Label.LOP_Community_Base_URL}RSAP-PortalHome';return false;} else return false;">Delete
-                                             Offer</a>
-
+                                        <div>
+                                            
+                                            <label class="labelCls" style="padding-left: 30px;">
+                                                Land Site Size: <apex:inputField value="{!lopOffer.PBS_AAAP_SITE_SIZE_SQFT__c}" onkeyup="validate(this)"/>
+                                                <input type="radio" name="lssMeasurment" id="atSqFeet" value="Square Feet" onclick="areaTypeToggle(this.value); ">
+                                                Square Feet
+                                            </input>
+                                            <input type="radio" name="lssMeasurment" id="atAcres" value="Acres" onclick="areaTypeToggle(this.value); ">
+                                            Acres
+                                        </input>
+                                    </label>
+                                    
+                                </div>
+                                <div>
+                                    <span class="spanClass" style="padding-left: 30px;">
+                                            Total Land Costs:
+                                        </span>                                                                          
+                                    <div id="Modal_Bldg_Ques10" class = "infopopup3"
+                                         style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;">
+                                        <p>This is the total cost to the offeror to purchase land as a means to construct the proposed building, if applicable.
+                                        </p>
+                                    </div>
+                                    
+                                    $<apex:inputField value="{!lopOffer.PBS_AAAP_Total_Land_Cost__c}" onkeyup="validate(this)"/>
+                                    <a class="popup" href="#Modal_Bldg_Ques10"><img src="{!$Resource.Info_Icon}"/></a>
+                                </div>
+                                
+                            </apex:outputPanel>    
+                            
+                            <apex:panelGrid columns="1">
+                                
+                                
+                                
+                                <apex:outputPanel >
+                  
+                                    <apex:commandButton id="btnBackForm" value="Back" onclick="window.parent.location = '{!$Label.LOP_Community_Base_URL}Offer-RLP'+window.parent.location.search;" styleClass="btnSave" />
+                                    <apex:outputPanel rendered="{!!viewOnly}">
+                                    <apex:commandButton id="btnSaveForm" value="Save Page" styleClass="btnSave"
+                                                        action="{!saveBuilding}" />
+                                    <apex:commandButton id="btnSave" value="Next" action="{!redirectToParking}"
+                                                        styleClass="btnJQSubmit"/>  
                                     </apex:outputPanel>
-                                </apex:panelGrid>
+                                     <apex:outputPanel rendered="{!viewOnly}"> 
+                                            <apex:commandButton value="Next" onclick="window.parent.location = '{!$Label.LOP_Community_Base_URL}Offer-S-SpaceParking'+window.parent.location.search;"></apex:commandButton>
+                                     </apex:outputPanel>            
+                                    <apex:commandButton value="Exit Offer"
+                                                        onclick="if(confirm('Are you sure you want to cancel editing this record without saving changes?')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}Offer-Home';return false;} else {return false;}"/>
+                                    
+                                    <span style="padding-right:250px;">&nbsp;</span>
+                                    
+                                    
+                                    
+                                </apex:outputPanel>
                             </apex:panelGrid>
-                        </apex:outputPanel>
+                        </apex:panelGrid>
                     </apex:outputPanel>
+                </apex:outputPanel>
+                
+                <script type="text/javascript"
+                src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+                <script type="text/javascript"
+                src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+                
+                <script type='text/javascript'>
+                
+                </script>
+                
+            </apex:actionRegion>
+        </apex:form>
+    </div><!--/content-->
+</div><!-- /Wrapper -->
 
-                    <script type="text/javascript"
-                            src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-                    <script type="text/javascript"
-                            src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
-
-                    <script type='text/javascript'>
-
-                    </script>
-
-                </apex:actionRegion>
-            </apex:form>
-        </div><!--/content-->
-    </div><!-- /Wrapper -->
-
-    </body>
-    <script src="{!URLFOR($Resource.modaljquery)}"></script>
-    <script type="text/javascript">
-        //alert('test');
-        JY = jQuery.noConflict();
-        JY(document).ready(function () {
-            console.log('here');
-            resetEnergyStarFields();
-            resetSeismicFields();
-            resetEnergyStarMeetExceptions();
-            bldMsg = JY('input[id=' + "'{!$Component.newOffer.bldMsg}'" + ']').val();
-            if (bldMsg == '')
-                addrFlag = false;
-            else addrFlag = true;
-            sessionStorage.setItem("addrFlag", addrFlag);
-
-            //added by syam display msg when submitted offer is saved.
-            draftMsgFlag = JY('input[id=' + "'{!$Component.newOffer.draftMsgFlag}'" + ']').val();
-            
-            if (draftMsgFlag == 'true') {
-				
-                var confirm1  =  JY('<div></div>').html("Your offer is no longer submitted. Offer status is updated to 'Draft' status and needs to be submitted again.").dialog({
-                    autoOpen: false,
-                    title: '',
-                    modal: true,
-                    position: ['center', 'top center'],
-                    buttons: {
-                        'OK': function () {
-                            JY(this).dialog('close'); 
-                            top.postMessage('Page Updated', document.location.origin);
-
-
-                        }
-                    }
-                });
-
-              confirm1.dialog('open');
-             
+</body>
+<script src="{!URLFOR($Resource.modaljquery)}"></script>
+<script type="text/javascript">
+    //alert('test');
+    JY = jQuery.noConflict();
+JY(document).ready(function () {
+    console.log('here');
+    resetEnergyStarFields();
+    resetSeismicFields();
+    bldMsg = JY('input[id=' + "'{!$Component.newOffer.bldMsg}'" + ']').val();
+    if (bldMsg == '')
+        addrFlag = false;
+    else addrFlag = true;
+    sessionStorage.setItem("addrFlag", addrFlag);
+    
+    //added by syam display msg when submitted offer is saved.
+    draftMsgFlag = JY('input[id=' + "'{!$Component.newOffer.draftMsgFlag}'" + ']').val();
+    
+    if (draftMsgFlag == 'true') {
+        
+        var confirm1  =  JY('<div></div>').html("Your offer is no longer submitted. Offer status is updated to 'Draft' status and needs to be submitted again.").dialog({
+            autoOpen: false,
+            title: '',
+            modal: true,
+            position: ['center', 'top center'],
+            buttons: {
+                'OK': function () {
+                    JY(this).dialog('close'); 
+                    top.postMessage('Page Updated', document.location.origin);
+                    
+                    
+                }
             }
         });
-
-        function limitfieldvalue(field){
-            console.log('***Called');
-            if(document.getElementById(field).value.length > 7){
-                document.getElementById(field).value = document.getElementById(field).value.substring(0, 7);
-            }
-        }
-
-        function validateZip() {
-            var flag = true;
-            var postalCodeRegex = /^([0-9]{5})(?:[-\s]*([0-9]{4}))?$/;
-            var zipCd = JY('input[id=' + "'{!$Component.newOffer.bzip}'" + ']').val();
-            if (zipCd != '') {
-                flag = postalCodeRegex.test(zipCd);
-                if (!flag) {
-                    //alert('Please enter valid ZIP code in either 5-digit or 9-digit format, for example 12345 or 12345-6789.');
-                    var confirm1 = JY('<div></div>').html("Please enter valid ZIP code in either 5-digit or 9-digit format, for example 12345 or 12345-6789.").dialog({
-                        autoOpen: false,
-                        title: '',
-                        modal: true,
-                        position: ['center', 'center'],
-                        buttons: {
-                            'OK': function () {
-                                JY(this).dialog('close');
-                                JY('input[id=' + "'{!$Component.newOffer.bzip}'" + ']').val("");
-                                JY('input[id=' + "'{!$Component.newOffer.bzip}'" + ']').focus();
-                            }
-                        }
-                    });
-
-                    confirm1.dialog('open');
-                }
-
-            }
-            return flag;
-        }
-
-        function resetSeismicFields() {
-            console.log('Seismic');
-            var flag = JY('input[name=' + "'{!$Component.newOffer.seismicOptions}'" + ']:checked').val();
-            var seismicPanel = document.getElementById('{!$Component.newOffer.seismicPanel}');
-            console.log('*** SGanti Seismic' + flag);
-            console.log('*** SGanti Seismic' + seismicPanel);
-            if (flag == "Yes") {
-                JY(seismicPanel).show();
-            }
-            else {
-                JY(seismicPanel).hide();
-            }            
-            
-            /* J. Rogers - Fix scroll bar */
-            top.postMessage('Page Updated', document.location.origin);
-        }
-//SGanti modified 10/2021
-        function resetEnergyStarFields() {
-            var flag = JY('input[name=' + "'{!$Component.newOffer.benergystar}'" + ']:checked').val();
-            console.log('***SGanti '+flag);
-           var noEnergyStarPanel = document.getElementById('{!$Component.newOffer.noEnergyStarPanel}');
-            console.log('***SGanti '+noEnergyStarPanel);
-            var certificationDatePanel = document.getElementById('{!$Component.newOffer.certificationDatePanel}');
-            console.log('***SGanti '+certificationDatePanel);
-            var eStarException1 = document.getElementById('{!$Component.newOffer.eStarException1}');
-            console.log('***SGanti '+eStarException1);
-            var eStarException2 = document.getElementById('{!$Component.newOffer.eStarException2}');
-            console.log('***SGanti '+eStarException2);
-
-            if (flag == "Yes") {
-                
-                JY(certificationDatePanel).show();
-                JY(noEnergyStarPanel).hide();
-                JY(eStarException1).hide();
-                JY(eStarException2).hide();
-            }
-            else if (flag == "No") {
-                JY(certificationDatePanel).hide();
-                JY(noEnergyStarPanel).show();
-            } else {
-                JY(certificationDatePanel).hide();
-                JY(noEnergyStarPanel).hide();
-                JY(eStarException1).hide();
-                JY(eStarException2).hide();
-
-            }  
-            
-            /* J. Rogers - Fix scroll bar */
-            top.postMessage('Page Updated', document.location.origin);
-        }
-    //SGanti added 10/2021    
-      function resetEnergyStarMeetExceptions() {
-            var flag = JY('input[name=' + "'{!$Component.newOffer.noenergystar}'" + ']:checked').val();
-            console.log('***SGanti flag'+flag);
-            var eStarException1 = document.getElementById('{!$Component.newOffer.eStarException1}');
-            console.log('***SGanti exception1 '+eStarException1);
-            var eStarException2 = document.getElementById('{!$Component.newOffer.eStarException2}');
-            console.log('***SGanti exception2 '+eStarException2);
-            if (flag == "Statutory Exception") {
-                JY(eStarException1).show();
-                JY(eStarException2).show();
-             }
-            else if (flag == "New construction") {
-                JY(eStarException1).hide();
-                JY(eStarException2).hide();
-            } 
-            else if (flag == "Insufficient Occupancy") {
-                JY(eStarException1).hide();
-                JY(eStarException2).hide();
-            }
-            else {
-                JY(eStarException1).hide();
-                JY(eStarException2).hide();
-            }  
-            
-            /* J. Rogers - Fix scroll bar */
-            top.postMessage('Page Updated', document.location.origin);
-        }
-//SGanti added 10/2021
-     function init() {
         
-            updateRenoYearTACounter();  
-                  
+        confirm1.dialog('open');
+        
+    }
+});
+
+function limitfieldvalue(field){
+    console.log('***Called');
+    if(document.getElementById(field).value.length > 7){
+        document.getElementById(field).value = document.getElementById(field).value.substring(0, 7);
+    }
+}
+
+function validateZip() {
+    var flag = true;
+    var postalCodeRegex = /^([0-9]{5})(?:[-\s]*([0-9]{4}))?$/;
+    var zipCd = JY('input[id=' + "'{!$Component.newOffer.bzip}'" + ']').val();
+    if (zipCd != '') {
+        flag = postalCodeRegex.test(zipCd);
+        if (!flag) {
+            
+            var confirm1 = JY('<div></div>').html("Please enter valid ZIP code in either 5-digit or 9-digit format, for example 12345 or 12345-6789.").dialog({
+                autoOpen: false,
+                title: '',
+                modal: true,
+                position: ['center', 'center'],
+                buttons: {
+                    'OK': function () {
+                        JY(this).dialog('close');
+                        JY('input[id=' + "'{!$Component.newOffer.bzip}'" + ']').val("");
+                        JY('input[id=' + "'{!$Component.newOffer.bzip}'" + ']').focus();
+                    }
+                }
+            });
+            
+            confirm1.dialog('open');
         }
+        
+    }
+    return flag;
+}
 
-        function updateRenoYearTACounter() {
-            var cnt = document.getElementById('{!$Component.newOffer.renoYearTA}').value.length;
-            console.log('SGanti***'+cnt);
-            var c = cnt + '/128';
-            console.log('SGanti ***'+c);
-
-            document.getElementById('{!$Component.newOffer.renoYearTACounter}').innerText = c;
-            console.log('SGanti***'+document.getElementById('{!$Component.newOffer.renoYearTACounter}').innerText);
-
-
-        }       
+function resetSeismicFields() {
+    console.log('Seismic');
+    var flag = JY('input[name=' + "'{!$Component.newOffer.seismicOptions}'" + ']:checked').val();
+    var seismicPanel = document.getElementById('{!$Component.newOffer.seismicPanel}');
+    console.log('*** SGanti Seismic' + flag);
+    console.log('*** SGanti Seismic' + seismicPanel);
+    if (flag == "Yes") {
+        JY(seismicPanel).show();
+    }
+    else {
+        JY(seismicPanel).hide();
+    }            
     
-    </script>
-    <c:SiteFooterUX />
+    /* J. Rogers - Fix scroll bar */
+    top.postMessage('Page Updated', document.location.origin);
+}
+//SGanti modified 10/2021
+function resetEnergyStarFields() {
+    var flag = JY('input[name=' + "'{!$Component.newOffer.benergystar}'" + ']:checked').val();
+    console.log('***SGanti '+flag);
+    var noEnergyStarPanel = document.getElementById('{!$Component.newOffer.noEnergyStarPanel}');
+    console.log('***SGanti '+noEnergyStarPanel);
+    var certificationDatePanel = document.getElementById('{!$Component.newOffer.certificationDatePanel}');
+    console.log('***SGanti '+certificationDatePanel);
+    var eStarException1 = document.getElementById('{!$Component.newOffer.eStarException1}');
+    console.log('***SGanti '+eStarException1);
+    var eStarException2 = document.getElementById('{!$Component.newOffer.eStarException2}');
+    console.log('***SGanti '+eStarException2);
+    
+    if (flag == "Yes") {
+        
+        JY(certificationDatePanel).show();
+        JY(noEnergyStarPanel).hide();
+        
+    }
+    else if (flag == "No") {
+        JY(certificationDatePanel).hide();
+        JY(noEnergyStarPanel).show();
+    } else {
+        JY(certificationDatePanel).hide();
+        JY(noEnergyStarPanel).hide();
+        
+        
+    }  
+    
+    /* J. Rogers - Fix scroll bar */
+    top.postMessage('Page Updated', document.location.origin);
+}
+//SGanti added 10/2021    
+function resetEnergyStarMeetExceptions() {
+    var flag = JY('input[name=' + "'{!$Component.newOffer.noenergystar}'" + ']:checked').val();
+    console.log('***SGanti flag'+flag);
+    var eStarException1 = document.getElementById('{!$Component.newOffer.eStarException1}');
+    console.log('***SGanti exception1 '+eStarException1);
+    var eStarException2 = document.getElementById('{!$Component.newOffer.eStarException2}');
+    console.log('***SGanti exception2 '+eStarException2);
+    if (flag == "Statutory Exception") {
+        JY(eStarException1).show();
+        JY(eStarException2).show();
+    }
+    else if (flag == "New construction") {
+        JY(eStarException1).hide();
+        JY(eStarException2).hide();
+    } 
+        else if (flag == "Insufficient Occupancy") {
+            JY(eStarException1).hide();
+            JY(eStarException2).hide();
+        }
+            else {
+                JY(eStarException1).hide();
+                JY(eStarException2).hide();
+            }  
+    
+    /* J. Rogers - Fix scroll bar */
+    top.postMessage('Page Updated', document.location.origin);
+}
+//SGanti added 10/2021
+function init() {
+    handleEnergyRadioChange();
+    updateRenoYearTACounter();
+    
+}
+
+function updateRenoYearTACounter() {
+    var cnt = document.getElementById('{!$Component.newOffer.renoYearTA}').value.length;
+    console.log('SGanti***'+cnt);
+    var c = cnt + '/128';
+    console.log('SGanti ***'+c);
+    
+    document.getElementById('{!$Component.newOffer.renoYearTACounter}').innerText = c;
+    console.log('SGanti***'+document.getElementById('{!$Component.newOffer.renoYearTACounter}').innerText);
+    
+    
+}       
+
+</script>
+<c:SiteFooterUX />
 </apex:page>

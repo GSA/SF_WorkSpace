@@ -1,38 +1,7 @@
 <apex:component allowDML="true">
-    <apex:attribute name="offerId" type="String" description="Offer Id" required="false" assignTo="{!offerId}"/>
   <style>
         #nav ul{
     	    padding-bottom: 14px;
         }
   </style>
-  
-  <!--  J. Rogers - Remover headers
-  <h1 class="logo">GSA</h1>
-      <apex:form >
-      <div id="nav" class="interior" style="vertical-align:middle">
-          <apex:outputPanel rendered="{!IF($CurrentPage.Name != 'PBS_AAAP_portalHome', true, false)}">
-            <ul style="position:relative;">
-                <li><a href="#" onclick="window.parent.location.href = '{!$Label.LOP_Community_Base_URL}AAAP-PortalHome'">AAAP OFFER HOME PAGE</a></li>
-                <li style="position:relative;left:150px;"><a href="#" onclick="window.parent.location.href = '{!$Label.LOP_Community_Base_URL}AAAP-Search-RLP'">AAAP RLP &amp; Lease Documents</a></li>
-                <li style="position:relative;left:150px;"><a href="#" onclick="window.parent.location.href = '{!$Label.LOP_Community_Base_URL}AAAP-UserProfile'">Profile</a></li>
-                <li style="position:relative;left:150px;"><a href="#" onclick="window.parent.location.href = '{!$Label.LOP_Community_Base_URL}AAAP-Help'">AAAP Help</a></li>
-            </ul>
-          </apex:outputPanel>
-          <apex:outputPanel rendered="{!IF($CurrentPage.Name == 'PBS_AAAP_portalHome', true, false)}">
-              <ul style="left:400px;position:relative;">
-                  <li><a href="/AAAP/Search_RLP">AAAP RLP &amp; Lease Documents</a></li>
-                  <li><a href="/AAAP/userprofile">Profile</a></li>
-                  <li><a href="/AAAP/Help">AAAP Help</a></li>
-              </ul>
-          </apex:outputPanel>
-      </div>
-      </apex:form>
-   
-    <!--<div style=" margin-top: 14px !important;"/>->
-    <div id="hero-int" style="margin-left: 0px;"/  --> 
-   <!-- J. Rogers - adding banner html rather than using image from static resource -->   
-  <div style="background-color: white !important; background: none; border:none">
-    <span style="top:10px;position: relative;font-size: 18pt;font-weight: 650;color: #002bac;">GSA's Automated Advanced Acquisition Program</span>
-  </div>
- 
 </apex:component>

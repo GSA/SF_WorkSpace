@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Attachments Ready for Submission</label>
+    <protected>false</protected>
+    <values>
+        <field>Filter__c</field>
+        <value xsi:type="xsd:string">PBS_AAAP_Attachment_Type__c != &apos;Offeror Form 1217- Lessors Annual Cost Statement&apos;
+AND PBS_AAAP_Attachment_Type__c != &apos;Offeror Form 1217- Lessor\&apos;s Annual Cost Statement&apos;
+AND PBS_AAAP_Attachment_Type__c != &apos;Offeror GSA Form 1364&apos;
+AND PBS_AAAP_Attachment_Type__c != &apos;Form 1364 AAAP&apos;
+AND PBS_AAAP_Attachment_Type__c != &apos;Lessors Annual Cost Statement (Form 1217)&apos;
+AND PBS_AAAP_Attachment_Type__c != &apos;Lessors Annual Cost Statement (Form 1217 attachment)&apos; AND PBS_AAAP_Sent_to_GREX__c = FALSE</value>
+    </values>
+    <values>
+        <field>PBS_Leasing_Object_API_Name__c</field>
+        <value xsi:type="xsd:string">PBS_AAAP_Offer_Attachments__c</value>
+    </values>
+    <values>
+        <field>PBS_Leasing_Related_Field_API_Name__c</field>
+        <value xsi:type="xsd:string">PBS_AAAP_Offer__c</value>
+    </values>
+</CustomMetadata>

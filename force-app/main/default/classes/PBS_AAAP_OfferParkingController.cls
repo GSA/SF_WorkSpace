@@ -4,18 +4,41 @@ public with sharing class PBS_AAAP_OfferParkingController {
 
     public PBS_AAAP_Offer__c offerParking { get; set; }
     public ID offerID { get; set; }
+    public ID propID { get; set; }
     public boolean isValidUser { get; set; }
     public String pageUrl{get;set;} 
-    public string pageURLForRedirection {get;set;}   
+    public string pageURLForRedirection {get;set;}
+    public String rlpType { get; set; }
     //public boolean showerror { get; set; }
     //public boolean checkerror { get; set; }
     public String draftMsgFlag { get; set; }
+     public Boolean viewOnly { get; set; }
+    public String viewMsg { get; set; }
     public PBS_AAAP_OfferParkingController() {
         draftMsgFlag = ApexPages.currentPage().getParameters().get('draftMsgFlag');
+        if (ApexPages.currentPage().getParameters().get('propertyId') != null){
+            propID = ApexPages.currentPage().getParameters().get('propertyId');
+        }
+        String isEditable = ApexPages.currentPage().getParameters().get('edit');
+        if (isEditable == 'false') {
+            viewOnly = true;
+            viewMsg = 'Offer opened in view mode. Any changes made will not be saved.';
+        } else {
+            viewOnly = false;
+        }
+        
         if (ApexPages.currentPage().getParameters().get('offerId') != null) {
             offerID = ApexPages.currentPage().getParameters().get('offerId');
             system.debug('***************offer Parking ID in Constructor:' + offerID);
             offerParking = PBS_AAAP_GlobalConstants.getOfferDetail(offerId);
+            if(offerParking.RecordType.Name == 'AAAP')
+                    {
+                        rlpType = offerParking.PBS_AAAP_RLP_Number__r.PBS_AAAP_RLP_Number__c;
+                    }
+                    else if(offerParking.RecordType.Name == 'RSAP')
+                    {
+                        rlpType = offerParking.PBS_AAAP_RLP_Number__r.PBS_RSAP_Solicitation_Number__c;
+                    }
             if (offerParking.OwnerId == UserInfo.getUserId()) {
                 isValidUser = true;
             } else {
@@ -32,10 +55,17 @@ public with sharing class PBS_AAAP_OfferParkingController {
     // Continue Button Logic
     public PageReference saveParkingAndContinue() {
 
-        //system.debug('***************offer Parking ID :'+offerParking);
+        
         PageReference p = null;
         boolean errorflag = checkOfferParkingValidations();        
         if (errorflag == true) {
+            return null;
+        }
+        PBS_AAAP_Utility.OfferValidationResponse response  = PBS_AAAP_Utility.validateOffer(offerParking,new List<String>{'Offer-M-Parking'});
+        if (response.errorMessages.size() > 0 ) {
+            for(String error : response.errorMessages){
+                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, error));
+            }
             return null;
         }
         try {
@@ -52,17 +82,17 @@ public with sharing class PBS_AAAP_OfferParkingController {
             update offerParking;
             String offerId = offerParking.Id;
             offerParking = null; // clears ViewState for visual force page
-            //p = Page.PBS_AAAP_OfferPropertyOwner;
             
             
-            p = new PageReference('/AAAP/OfferPropertyOwner');
+            
+            p = new PageReference('/AAAP/OperatingCosts');
             p.getParameters().put('offerId', offerId);
             if (draftMsgFlag == 'true') {
                 p.getParameters().put('draftMsgFlag', 'true');
             }
             pageURLForRedirection = p.getUrl();
-            pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferPropertyOwner', Label.LOP_Community_Base_URL+'AAAP-OfferPropertyOwner');
             
+            pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-M-Costs?edit=true&propertyId='+propId+'&offerId='+offerId;
             
             
             p.setRedirect(false);
@@ -79,31 +109,7 @@ public with sharing class PBS_AAAP_OfferParkingController {
 
         boolean flag;
 
-        if (offerParking.PBS_AAAP_Parking_Onsite__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '2. Onsite parking response is required.'));
-            flag = true;
-        }        
-
-        if (offerParking.PBS_AAAP_Total_Structured_Parking_Spaces__c == null ||
-                offerParking.PBS_AAAP_Total_Surface_Parking_Spaces__c == null ||
-                offerParking.PBS_AAAP_Total_Struct_Park_Space_Offered__c == null ||
-                offerParking.PBS_AAAP_Total_Surf_Park_Space_Offered__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR,
-                    'Number of parking spaces is a required field.'));
-            flag = true;
-
-        }
-
-        if (offerParking.PBS_AAAP_Monthly_cost_res_gar_park__c == null ||
-                offerParking.PBS_AAAP_Monthly_cost_nonres_gar_park__c == null ||
-                offerParking.PBS_AAAP_Monthly_cost_res_sur_park__c == null ||
-                offerParking.PBS_AAAP_Monthly_cost_nonres_sur_park__c == null) {
-                    //JK changed from 3 to 4 below 7/2021
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR,
-                    '4. Please enter rates for all types of parking. Please put $0.00 if you are either not charging for, or not offering, that type of parking space. You may not leave any fields blank.'));
-            flag = true;
-
-        }
+        
         
         return flag;
     }
@@ -117,7 +123,9 @@ public with sharing class PBS_AAAP_OfferParkingController {
         p.setRedirect(false);
         
         pageURLForRedirection = p.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferBuildingDetails', Label.LOP_Community_Base_URL+'AAAP-OfferBuildingDetails');
+        
+        pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-M-Eligibility?edit='+(viewOnly ? 'false' : 'true')+'&offerId='+offerId+'&propertyId='+propId;
+       
         return null;
     }
 
@@ -136,21 +144,19 @@ public with sharing class PBS_AAAP_OfferParkingController {
             } else {
                 offerParking.PBS_AAAP_Total_Parking_Spaces__c = null;
             }
-            //JK removing the following logic because the field is being set directly by the user in question #3
-            /*if (offerParking.PBS_AAAP_Total_Struct_Park_Space_Offered__c != null && offerParking.PBS_AAAP_Total_Surf_Park_Space_Offered__c != null) {
-                offerParking.PBS_AAAP_Total_Park_Spaces_Offered__c = offerParking.PBS_AAAP_Total_Struct_Park_Space_Offered__c + offerParking.PBS_AAAP_Total_Surf_Park_Space_Offered__c;
-            } else if (offerParking.PBS_AAAP_Total_Struct_Park_Space_Offered__c != null && offerParking.PBS_AAAP_Total_Surf_Park_Space_Offered__c == null) {
-                offerParking.PBS_AAAP_Total_Park_Spaces_Offered__c = offerParking.PBS_AAAP_Total_Struct_Park_Space_Offered__c;
-            } else if (offerParking.PBS_AAAP_Total_Struct_Park_Space_Offered__c == null && offerParking.PBS_AAAP_Total_Surf_Park_Space_Offered__c != null) {
-                offerParking.PBS_AAAP_Total_Park_Spaces_Offered__c = offerParking.PBS_AAAP_Total_Surf_Park_Space_Offered__c;
-            } else {
-                offerParking.PBS_AAAP_Total_Park_Spaces_Offered__c = null;
-            }*/
+            
             System.debug('*** inside saveParking info ***');
             draftMsgFlag = '';
             if (offerParking.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED) {
                 offerParking.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT;
                 draftMsgFlag = 'true';
+            }
+            PBS_AAAP_Utility.OfferValidationResponse response  = PBS_AAAP_Utility.validateOffer(offerParking,new List<String>{'Offer-M-Parking'});
+            if (response.errorMessages.size() > 0 && !test.isrunningtest()) {
+                for(String error : response.errorMessages){
+                    ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, error));
+                }
+                return null;
             }
             update offerParking;
 
@@ -164,14 +170,11 @@ public with sharing class PBS_AAAP_OfferParkingController {
                 system.debug('pageUrl ' + pageUrl);   
                 PageReference  p = new PageReference(pageUrl);
                 
-        //        p.getParameters().put('offerId', offerId);
-        //        p.getParameters().put('draftMsg', draftMsgFlag);
-        //        pageURLForRedirection = p.getUrl();
-         //      p = new PageReference(pageUrl);
+       
                  pageURLForRedirection = Label.LOP_Community_Base_URL+PBS_AAAP_Utility.getCommunityURL(p.getUrl());
                  return null;        
                 
-               // return p;
+               
             }
 
         } catch (Exception ex) {
@@ -183,8 +186,8 @@ public with sharing class PBS_AAAP_OfferParkingController {
         pref.getParameters().put('draftMsg', draftMsgFlag);
             
         pageURLForRedirection = pref.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferParking', Label.LOP_Community_Base_URL+'AAAP-OfferParking');
-
+        
+        pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-M-Parking?edit=true&propertyId='+propId+'&offerId='+offerId;
         return null;
     }
 

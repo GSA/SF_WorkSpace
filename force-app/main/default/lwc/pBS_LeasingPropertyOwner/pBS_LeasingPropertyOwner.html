@@ -1,0 +1,289 @@
+<template>
+  <template if:true={isForPropertyId}>
+    <c-p-b-s_-leasing_-progress-bar progress-bar-name="Property_Workflow" onnavigatetopage={handleNavigateToPage}>
+    </c-p-b-s_-leasing_-progress-bar>
+    <form id="propertyForm">
+        <ul class='error'>
+            <template for:each={errors} for:item="error">
+                <li key={error}>{error}</li>
+            </template>
+        </ul>
+        <lightning-record-edit-form record-id={propertyId} object-api-name="PBS_AAAP_Property__c">
+            <div class="slds-grid">
+ 				<div class="slds-col slds-order_1 custom-border">
+				    <table width="100%">
+					    <tr>
+					        <td><span style="padding-left: 1px;">Property name:&nbsp;&nbsp;{offer.PBS_AAAP_Building_Name}</span></td>
+						</tr>
+					</table>
+				</div>
+				<div class="slds-col slds-order_2 custom-border">
+				    <table width="100%">
+					    <tr>
+							<td><span style="padding-left: 5px;">{rlpOrSolicitationLabel}:&nbsp;&nbsp;{offer.PBS_RLPORSolicitation_Number}</span></td>
+						</tr>
+					</table>
+				</div>
+				<div class="slds-col slds-order_3 custom-border">
+				    <table width="100%">
+					    <tr>
+							<td><span style="padding-left: 5px;">Offer status:&nbsp;&nbsp;{offer.PBS_AAAP_Offer_Status}</span></td>
+						</tr>
+					</table>
+				</div>
+            </div>
+            <h1 style="font-weight: bold;font-size: 20px;padding: 0 0 8px;padding-top: 10px;color: #000000;font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;">3. Property owner</h1>
+            disabled={isDisabled}
+            <template if:false={editMode}><span style="color:red;font-size: 16px;font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;">Offer opened in view mode. Any changes made will not be saved.</span></template>
+            <table width="100%">
+                <tr>
+                    <td width="70%"><label>1. What is the name of the property's recorded owner? <span class ="required-field">*</span> </label></td>
+                    <td>
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_Owner_Name__c" value={offer.PBS_AAAP_Owner_Name} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px; padding-bottom: 10px;"></td>
+                    <td width="30%" style="padding-top: 10px; padding-bottom: 10px;">
+						<table>
+							<tr>
+								<td width="1%">
+									<lightning-input-field class="custom-input" variant="label-hidden"  disabled={isDisabled}
+										field-name="PBS_RSAP_Property_Owner_Same_as_Offeror__c" value={offer.PBS_RSAP_Property_Owner_Same_as_Offeror} onchange={handleInputChange}>
+									</lightning-input-field>
+								</td>
+								<td width="29%">
+									<span style="text-align: left;">Check if same as offeror</span>
+								</td>
+							</tr>
+						</table>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px;"><label>2. Street address: <span class ="required-field">*</span> </label></td>
+                    <td style="padding-top: 0px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_Owner_Address__c" value={offer.PBS_AAAP_Owner_Address} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px;">3. City: <span class ="required-field">*</span></label></td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_Owner_City__c" value={offer.PBS_AAAP_Owner_City} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px;"><label>4. State: <span class ="required-field">*</span> </label></td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden"  disabled={isDisabled}
+							field-name="PBS_AAAP_Owner_State__c" value={offer.PBS_AAAP_Owner_State} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px;"><label>5. 9-Digit zip code: <span class ="required-field">*</span> </label></td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+							field-name="PBS_AAAP_Owner_Zip__c" value={offer.PBS_AAAP_Owner_Zip} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px;"><label>6. What is your relationship as the offeror, to the property owner? <span class ="required-field">*</span>&nbsp;&nbsp;<img class="infoIconImage" src={infoIconImage} onclick={openHandleModal} data-infotype="OfferorInterest" /> </label>
+                    </td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_OFFEROR_INTEREST__c" value={offer.PBS_AAAP_OFFEROR_INTEREST} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+				<tr class={offerorInterestOther}>
+				    <td width="70%">
+					</td>
+                    <td style="padding-top: 10px;">
+					    Other:&nbsp;&nbsp;
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_OFFEROR_INTEREST_OTHER__c" value={offer.PBS_AAAP_OFFEROR_INTEREST_OTHER} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+				</tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px;"><label>7. What is the property owner’s unique entity identifier (UEI)?&nbsp;&nbsp;<img class="infoIconImage" src={infoIconImage} onclick={openHandleModal} data-infotype="UEINumber" /> </label>
+                    </td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}    
+                            field-name="PBS_AAAP_DUNS_Number__c" value={offer.PBS_AAAP_DUNS_Number} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+            </table>
+            <div class="btn-container">
+                <input class="btn" type="button" variant="submit" value="Back"  onclick={handleBack}/>
+                <template if:true={editMode}>
+                <input class="btn" type="submit" variant="submit" value="Save Page"  onclick={handleSave}/>
+                </template>
+                <input class="btn" type="button" variant="submit" value="Next" onclick={handleNext} />
+                <input class="btn" type="button" variant="submit" value="Exit Offer" onclick ={handleExit} />
+            </div>
+        </lightning-record-edit-form>
+    </form>
+  </template>
+  <template if:true={isForOfferId}>
+    <c-p-b-s_-leasing_-progress-bar progress-bar-name="Property_Workflow" onnavigatetopage={handleNavigateToPage}>
+    </c-p-b-s_-leasing_-progress-bar>
+    <form id="offerForm">
+        <ul class='error'>
+            <template for:each={errors} for:item="error">
+                <li key={error}>{error}</li>
+            </template>
+        </ul>
+        <lightning-record-edit-form record-id={offerId} object-api-name="PBS_AAAP_Offer__c">
+            <div class="slds-grid">
+ 				<div class="slds-col slds-order_1 custom-border">
+				    <table width="100%">
+					    <tr>
+					        <td><span style="padding-left: 1px;">Property name:&nbsp;&nbsp;{offer.PBS_AAAP_Building_Name}</span></td>
+						</tr>
+					</table>
+				</div>
+				<div class="slds-col slds-order_2 custom-border">
+				    <table width="100%">
+					    <tr>
+							<td><span style="padding-left: 5px;">{rlpOrSolicitationLabel}:&nbsp;&nbsp;{offer.PBS_RLPORSolicitation_Number}</span></td>
+						</tr>
+					</table>
+				</div>
+				<div class="slds-col slds-order_3 custom-border">
+				    <table width="100%">
+					    <tr>
+							<td><span style="padding-left: 5px;">Offer status:&nbsp;&nbsp;{offer.PBS_AAAP_Offer_Status}</span></td>
+						</tr>
+					</table>
+				</div>
+            </div>
+            <h1 style="font-weight: bold;font-size: 20px;padding: 0 0 8px;padding-top: 10px;color: #000000;font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;">3. Property owner</h1>
+            <template if:false={editMode}><span style="color:red;font-size: 16px;font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;">Offer opened in view mode. Any changes made will not be saved.</span></template>
+            <table width="100%">
+                <tr>
+                    <td width="70%"><label>1. What is the name of the property's recorded owner? <span class ="required-field">*</span> </label></td>
+                    <td>
+                        <lightning-input-field class="custom-input" variant="label-hidden"
+                            field-name="PBS_AAAP_Owner_Name__c" value={offer.PBS_AAAP_Owner_Name} onchange={handleInputChange} disabled={isDisabled}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px; padding-bottom: 10px;"></td>
+                    <td width="30%" style="padding-top: 10px; padding-bottom: 10px;">
+						<table>
+							<tr>
+								<td width="1%">
+									<lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+										field-name="PBS_RSAP_Property_Owner_Same_as_Offeror__c" value={offer.PBS_RSAP_Property_Owner_Same_as_Offeror} onchange={handleInputChange}>
+									</lightning-input-field>
+								</td>
+								<td width="29%">
+									<span style="text-align: left;">Check if same as offeror</span>
+								</td>
+							</tr>
+						</table>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px;"><label>2. Street address: <span class ="required-field">*</span> </label></td>
+                    <td style="padding-top: 0px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_Owner_Address__c" value={offer.PBS_AAAP_Owner_Address} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px;">3. City: <span class ="required-field">*</span></label></td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_Owner_City__c" value={offer.PBS_AAAP_Owner_City} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px;"><label>4. State: <span class ="required-field">*</span> </label></td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+							field-name="PBS_AAAP_Owner_State__c" value={offer.PBS_AAAP_Owner_State} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px;"><label>5. 9-Digit zip code: <span class ="required-field">*</span> </label></td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden"  disabled={isDisabled}
+							field-name="PBS_AAAP_Owner_Zip__c" value={offer.PBS_AAAP_Owner_Zip} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px;"><label>6. What is your relationship as the offeror, to the property owner? <span class ="required-field">*</span>&nbsp;&nbsp;<img class="infoIconImage" src={infoIconImage} onclick={openHandleModal} data-infotype="OfferorInterest" /> </label>
+                    </td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_OFFEROR_INTEREST__c" value={offer.PBS_AAAP_OFFEROR_INTEREST} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+				<tr class={offerorInterestOther}>
+				    <td width="70%">
+					</td>
+                    <td style="padding-top: 10px;">
+					    Other:&nbsp;&nbsp;
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_OFFEROR_INTEREST_OTHER__c" value={offer.PBS_AAAP_OFFEROR_INTEREST_OTHER} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+				</tr>
+                <tr>
+                    <td width="70%" style="padding-top: 10px;"><label>7. What is the property owner’s unique entity identifier (UEI)?&nbsp;&nbsp;<img class="infoIconImage" src={infoIconImage} onclick={openHandleModal} data-infotype="UEINumber" /> </label>
+                    </td>
+                    <td style="padding-top: 10px;">
+                        <lightning-input-field class="custom-input" variant="label-hidden" disabled={isDisabled}
+                            field-name="PBS_AAAP_DUNS_Number__c" value={offer.PBS_AAAP_DUNS_Number} onchange={handleInputChange}>
+                        </lightning-input-field>
+                    </td>
+                </tr>
+            </table>
+            <div class="btn-container">
+                <input class="btn" type="button" variant="submit" value="Back"  onclick={handleBack}/>
+                <template if:true={editMode}>
+                <input class="btn" type="submit" variant="submit" value="Save Page"  onclick={handleSave}/>
+                </template>
+                <input class="btn" type="button" variant="submit" value="Next" onclick={handleNext} />
+                <input class="btn" type="button" variant="submit" value="Exit Offer" onclick ={handleExit} />
+            </div>
+        </lightning-record-edit-form>
+    </form>
+    <template if:true={isShowModal}>
+      <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+        aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+        <div class="slds-modal__container">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={hideModalBox}>
+                    <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+
+          <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <lightning-formatted-rich-text
+                value={infoDetails}
+            ></lightning-formatted-rich-text>
+          </div>
+
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open" onclick={hideModalBox}>></div>
+    </template>
+  </template>
+</template>

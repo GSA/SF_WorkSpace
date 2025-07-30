@@ -5,31 +5,25 @@ public with sharing class PBS_LOP_AttachmentsController {
     public List<PBS_AAAP_Offer_Attachments__c> attachmentsList { get; set; }
     public List<PBS_AAAP_Offer_Attachments__c> formAttachmentsList { get; set; }
     public PBS_AAAP_RLP__c project { get; set; }
-    //public List<Attachment> attList { get; set; }
     public Attachment att { get; set; }
     public String attName{ get; set; }
     public Blob attBody{ get; set; }
     public ID ofrID { get; set; }
+    public String propId { get; set; }
     public boolean showAttachmentsPage { get; set; }
     public PBS_AAAP_Offer__c submitOffer { get; set; }
     public PBS_AAAP_Offer__c submitedOffer { get; set; } // Vaishali 01/11/2016
     public List<sequenceNumber> seqNumList { get; set; }
     public List<sequenceNumber> formSeqNumList { get; set; }
     public List<sequenceNumber> previousSubmissionAttachments { get; set; }
-    // public boolean showSubmitOfferButton                        {get;set;}
-    // public PBS_AAAP_RLP__c rlpInfo                              {get;set;}
-    //public string termsandconditons { get; set; }
     public string submissionDate { get; set; }
     public string DateSubmitted { get; set; }  //Vaishali 01/11/2016
-    // public date rlpPostDate                                     {get;set;}
     public String attachmentId { get; set; }
     public String lopAttachmentId { get; set; }
     public Boolean isValidUser { get; set; }
-    // public String buildingPageAddrFlag                        {get;set;}
     public String addrFlag { get; set; }
     public String draftMsgFlag { get; set; }
     public Boolean offerSubmitFlag { get; set; }
-    // public String spaceIdToReport                                {get;set;}
     private PBS_AAAP_DAO_Utilities dao = new PBS_AAAP_DAO_Utilities();
     public string isEditable { get; set; }
     public Boolean viewOnly { get; set; }
@@ -87,10 +81,11 @@ public with sharing class PBS_LOP_AttachmentsController {
         }
         if (ApexPages.currentPage().getParameters().get('offerId') != null) {
             ofrID = ApexPages.currentPage().getParameters().get('offerId');
-            // buildingPageAddrFlag = ApexPages.currentPage().getParameters().get('addrFlag');
+            propId = ApexPages.currentPage().getParameters().get('propertyId');
+            
             submitOffer = PBS_AAAP_GlobalConstants.getOfferDetail(ofrID);
             String projectEOI = submitOffer.PBS_AAAP_RLP_Number__c;
-            //project = PBS_AAAP_GlobalConstants.getProjectDetails(projectEOI);
+            
             project = [
                     SELECT Id,
                             Name,
@@ -108,13 +103,7 @@ public with sharing class PBS_LOP_AttachmentsController {
                     AND PBS_RSAP_Solicitation_Status__c = TRUE
             ];
             submitedOffer = PBS_AAAP_GlobalConstants.getOfferDetail(ofrID);
-            /**
-            if (project.Project_Offer_Due_Date__c != null) {
-                DateTime dt = project.Project_Offer_Due_Date__c;
-                // offerDueDate = dt.format('MM/dd/yyyy HH:mm:ss','America/New_York');
-                offerDueDate = PBS_AAAP_GlobalConstants.convertToTimeZone(project);
-            }
-            **/
+            
             //Vaishali 01/11/2016
             System.debug('submit offer offer Id is' + submitOffer.id);
             //added by syam for offerId validation
@@ -137,44 +126,23 @@ public with sharing class PBS_LOP_AttachmentsController {
             isEditable = ApexPages.currentPage().getParameters().get('edit');
             if (isEditable == 'false') {
                 viewOnly = true;
-                viewMsg = 'Offer opened in a View mode';
+                viewMsg = 'Offer opened in view mode. Any changes made will not be saved.';
             } else {
                 viewOnly = false;
             }
             if (!submitOffer.PBS_AAAP_RLP_Number__r.PBS_RSAP_Solicitation_Status__c) {
                 viewOnly = true;
             }
-            /**
-            if (submitOffer.Project_Offer_Due_Date__c < datetime.now()) {
-                pastDueDate = true;
-            } else {
-                pastDueDate = false;
-            }
-            **/
+            
             if ((!viewOnly) && (submitOffer.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED)) {
                 viewOnly = false;
                 submitOffer.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT;
             }
             // User has to always accept the terms & Conditions before submitting the Offer each time.
-            if (submitOffer.PBS_AAAP_ACCEPTED_TERMS_AND_COND__c == TRUE) {
-                termsAndConditions = 'Yes';
-            } else {
-                termsAndConditions = NULL;
-            }
+            
             system.debug('***NIK***' + submitedOffer);
             system.debug('***NIK***' + submitOffer.PBS_AAAP_ACCEPTED_TERMS_AND_COND__c);
-            //termsandconditons = 'No';
-            /*  submitOffer.PBS_AAAP_SIGNATURE_PIN__c = null;
-              submitOffer.PBS_AAAP_FIRE_SAFETY_CERT__c = 'No';
-              submitOffer.PBS_AAAP_ACK_REPRESENT_MULT_OWNERS__c = 'No';
-              submitOffer.PBS_AAAP_ACK_LTR_COMPLETED__c = 'No';
-              submitOffer.PBS_AAAP_ACK_REPRESENT_OTHERS__c = 'No';
-              submitOffer.PBS_AAAP_ACK_LTR_COMPLETED__c = 'No';
-              submitOffer.PBS_AAAP_FIRE_SAFETY_REQ_FLOORS1TO6__c = 'No';
-              submitOffer.PBS_AAAP_ACCEPTED_PROV_FORM_3516__c = 'No';
-              submitOffer.PBS_AAAP_ACCEPTED_GEN_FORM_3517__c = 'No';
-              submitOffer.PBS_AAAP_ACCEPTED_REP_CERT_FORM_3518__c = 'No';
-              */
+            
             system.debug('***************offer ID in Constructor:' + ofrID);
             offerattachment = new PBS_AAAP_Offer_Attachments__c();
 
@@ -182,7 +150,7 @@ public with sharing class PBS_LOP_AttachmentsController {
             attachmentsList = [
                     SELECT Id, Name, PBS_AAAP_Attachment_Type__c, PBS_AAAP_Date_sent_to_GREX__c,Submitted_Date__c /*, (SELECT Id, Name, Description, ParentId, createdDate FROM Attachments)*/ 
                     FROM PBS_AAAP_Offer_Attachments__c p
-                    WHERE p.PBS_AAAP_Offer__c = :ofrID AND p.PBS_AAAP_Attachment_Type__c NOT IN ('Offeror Form 1217- Lessor\'s Annual Cost Statement', 'Offeror GSA Form 1364', 'SAM Registration')
+                    WHERE p.PBS_AAAP_Offer__c = :ofrID AND p.PBS_AAAP_Attachment_Type__c NOT IN ('Offeror Form 1217- Lessor\'s Annual Cost Statement', 'Offeror GSA Form 1364')
                     AND PBS_AAAP_Sent_to_GREX__c = FALSE
             ];
             System.debug('::::::::::: Attachments List ::::::::::: ' + attachmentsList);
@@ -190,14 +158,14 @@ public with sharing class PBS_LOP_AttachmentsController {
                 formAttachmentsList = [
                         SELECT Id, Name, PBS_AAAP_Attachment_Type__c, PBS_AAAP_Date_sent_to_GREX__c,Submitted_Date__c /*, (SELECT Id, Name, Description, ParentId, createdDate FROM Attachments)*/
                         FROM PBS_AAAP_Offer_Attachments__c p
-                        WHERE p.PBS_AAAP_Offer__c = :ofrID AND p.PBS_AAAP_Attachment_Type__c IN ('Offeror Form 1217- Lessor\'s Annual Cost Statement', 'Offeror GSA Form 1364', 'SAM Registration')
+                        WHERE p.PBS_AAAP_Offer__c = :ofrID AND p.PBS_AAAP_Attachment_Type__c IN ('Offeror Form 1217- Lessor\'s Annual Cost Statement', 'Offeror GSA Form 1364')
                         AND PBS_AAAP_Sent_to_GREX__c = true
                 ];
             }else{
                 formAttachmentsList = [
                         SELECT Id, Name, PBS_AAAP_Attachment_Type__c, PBS_AAAP_Date_sent_to_GREX__c,Submitted_Date__c /*, (SELECT Id, Name, Description, ParentId, createdDate FROM Attachments)*/
                         FROM PBS_AAAP_Offer_Attachments__c p
-                        WHERE p.PBS_AAAP_Offer__c = :ofrID AND p.PBS_AAAP_Attachment_Type__c IN ('Offeror Form 1217- Lessor\'s Annual Cost Statement', 'Offeror GSA Form 1364', 'SAM Registration')
+                        WHERE p.PBS_AAAP_Offer__c = :ofrID AND p.PBS_AAAP_Attachment_Type__c IN ('Offeror Form 1217- Lessor\'s Annual Cost Statement', 'Offeror GSA Form 1364')
                         AND PBS_AAAP_Sent_to_GREX__c = false
                 ];
             }
@@ -218,7 +186,7 @@ public with sharing class PBS_LOP_AttachmentsController {
             seqNumList = new List<sequenceNumber>();
             integer jIndex = 1;
             for (integer i = 0; i < formAttachmentsList.size(); i++) {
-                //formSeqNumList.add(new sequenceNumber(i + 1, formAttachmentsList[i]));
+                
                 if(contentDocumentMap.containsKey(formAttachmentsList[i].Id)){
                     formSeqNumList.add(new sequenceNumber(jIndex, formAttachmentsList[i], contentDocumentMap.get(formAttachmentsList[i].Id)));
                     jIndex++;
@@ -228,37 +196,24 @@ public with sharing class PBS_LOP_AttachmentsController {
             fillAttachmentList();
 
             attachmentsList2 = [
-                    SELECT Id, Name, PBS_AAAP_Attachment_Type__c, PBS_AAAP_Date_sent_to_GREX__c,Submitted_Date__c /*, (SELECT Id, Name, Description, ParentId, createdDate FROM Attachments)*/,createdDate
+                    SELECT Id, Name, PBS_AAAP_Attachment_Type__c, PBS_AAAP_Date_sent_to_GREX__c,Submitted_Date__c ,createdDate
                     FROM PBS_AAAP_Offer_Attachments__c p
-                    WHERE p.PBS_AAAP_Offer__c = :ofrID //AND p.PBS_AAAP_Attachment_Type__c NOT IN ('Offeror Form 1217- Lessor\'s Annual Cost Statement', 'Offeror GSA Form 1364', 'SAM Registration')
+                    WHERE p.PBS_AAAP_Offer__c = :ofrID 
                     AND PBS_AAAP_Sent_to_GREX__c = TRUE
             ];
             system.debug('***DATE***'+attachmentsList2);
 
             formAttachmentsList2 = [
-                    SELECT Id, Name, PBS_AAAP_Attachment_Type__c, PBS_AAAP_Date_sent_to_GREX__c,Submitted_Date__c /*, (SELECT Id, Name, Description, ParentId, createdDate FROM Attachments)*/
+                    SELECT Id, Name, PBS_AAAP_Attachment_Type__c, PBS_AAAP_Date_sent_to_GREX__c,Submitted_Date__c
                     FROM PBS_AAAP_Offer_Attachments__c p
-                    WHERE p.PBS_AAAP_Offer__c = :ofrID //AND p.PBS_AAAP_Attachment_Type__c IN ('Offeror Form 1217- Lessor\'s Annual Cost Statement', 'Offeror GSA Form 1364', 'SAM Registration')
+                    WHERE p.PBS_AAAP_Offer__c = :ofrID 
                     AND PBS_AAAP_Sent_to_GREX__c = TRUE
             ];
-            /*
-            formSeqNumList2 = new List<sequenceNumber2>();
-            seqNumList2 = new List<sequenceNumber2>();
-            for (integer j = 0; j < formAttachmentsList2.size(); j++) {
-                formSeqNumList2.add(new sequenceNumber2(j + 1, formAttachmentsList2[j]));
-            }
-            */
+            
 
-            //Map<String, List<Attachment>> attMap2 = getAttachmentMapByType2();
+            
             Integer j = 0;
-            /**
-            // @Added by Nik
-            for (PBS_AAAP_Offer_Attachments__c attachment : attachmentsList2) {
-                List<Attachment> atts = (List<Attachment>) attMap2.get(attachment.PBS_AAAP_Attachment_Type__c);
-                seqNumList2.add(new sequenceNumber2(j+1,attachment.PBS_AAAP_Date_sent_to_GREX__c, attachment.PBS_AAAP_Attachment_Type__c, (List<Attachment>) attMap2.get(attachment.PBS_AAAP_Attachment_Type__c)));
-                j++;
-            }
-            **/
+            
 
             // this will be used the save the type and the its attachment
             mapType_attachment = new map<string,List<sequenceNumber>>();
@@ -278,12 +233,10 @@ public with sharing class PBS_LOP_AttachmentsController {
             for(PBS_AAAP_Offer_Attachments__c attachment : attachmentsList2) {
                 if(contentDocumentMap.containsKey(attachment.Id)){
                     tempsequenceNumberList.add(new sequenceNumber(attachment, contentDocumentMap.get(attachment.Id)));
-                    //if(attachment.PBS_AAAP_Sent_to_GREX__c == true){
-                        //previousSubmissionAttachments.add(new sequenceNumber(attachment, contentDocumentMap.get(attachment.Id)));
-                    //}
+                   
                 }
             }
-            //formSeqNumList = tempsequenceNumberList;
+            
             // for each record
             for(PBS_AAAP_Offer_Attachments__c attachment : attachmentsList2) {
 
@@ -294,16 +247,16 @@ public with sharing class PBS_LOP_AttachmentsController {
                      && attachment.PBS_AAAP_Attachment_Type__c != 'Offeror Form 1217- Lessor\'s Annual Cost Statement' 
                      && attachment.PBS_AAAP_Attachment_Type__c != 'Offeror GSA Form 1364')) {
                     List<sequenceNumber> lstTemp = new List<sequenceNumber>();
-//if(attachment.PBS_AAAP_Sent_to_GREX__c == true){
+
                         previousSubmissionAttachments.add(new sequenceNumber(attachment, contentDocumentMap.get(attachment.Id)));
-                    //}
+                   
                     // if map already have the type
                     if (mapType_attachment.containsKey(attachment.PBS_AAAP_Attachment_Type__c)) {
                         lstTemp.addAll(mapType_attachment.get(attachment.PBS_AAAP_Attachment_Type__c));
                     }
 
                     // adding current record
-                    //lstTemp.add(new sequenceNumber(attachment, attachment.Attachments));
+                    
                     if(contentDocumentMap.containsKey(attachment.Id)){
                         lstTemp.add(new sequenceNumber(attachment, contentDocumentMap.get(attachment.Id)));
                     }
@@ -315,37 +268,14 @@ public with sharing class PBS_LOP_AttachmentsController {
             }
             system.debug('\n--mapType_attachment--'+mapType_attachment+'\n--mapType_attachmentDate--'+mapType_attachmentDate);
 
-            /*System.debug('Map size is' + attMap2.size());
-            System.debug('Map is ' + attMap2);
-            Integer j = 0;
-            for (String key : attMap2.keySet()) {
-                System.debug('key is ' + key);
-                List<Attachment> atts = (List<Attachment>) attMap2.get(key);
-                System.debug('actual attachments are' + atts);
-                System.debug('actual attachments size is' + atts.size());
-
-                seqNumList2.add(new sequenceNumber2(j + 1, key, (List<Attachment>) attMap2.get(key)));
-                j++;
-            }*/
+            
         getAndAddAttachmentMapByType();
 
         }
 
 
 
-        /**
-        Date dToday = Date.today();
-        DateTime dt1 = null;
-        if (submitOffer != null) {
-            dt1 = submitOffer.LOP_Offer_Submission_Date__c;
-        }
-        System.debug('dt1 before format is ' + dt1);
-        if (dt1 == null) {
-            DateSubmitted = (Date.newInstance(dToday.year(), dToday.month(), dToday.day())).format();
-        } else {
-            DateSubmitted = (Date.newInstance(dt1.year(), dt1.month(), dt1.day())).format();
-        }
-        **/
+        
 
     }
     public Map<String,List<sequenceNumber>> getPreviousSubmissionAttachmentsMap(){
@@ -364,7 +294,7 @@ public with sharing class PBS_LOP_AttachmentsController {
         attachmentsList = [
                     SELECT Id, Name, PBS_AAAP_Attachment_Type__c, PBS_AAAP_Date_sent_to_GREX__c,Submitted_Date__c /*, (SELECT Id, Name, Description, ParentId, createdDate FROM Attachments)*/ 
                     FROM PBS_AAAP_Offer_Attachments__c p
-                    WHERE p.PBS_AAAP_Offer__c = :ofrID AND p.PBS_AAAP_Attachment_Type__c NOT IN ('Offeror Form 1217- Lessor\'s Annual Cost Statement', 'Offeror GSA Form 1364', 'SAM Registration')
+                    WHERE p.PBS_AAAP_Offer__c = :ofrID AND p.PBS_AAAP_Attachment_Type__c NOT IN ('Offeror Form 1217- Lessor\'s Annual Cost Statement', 'Offeror GSA Form 1364')
                     AND PBS_AAAP_Sent_to_GREX__c = FALSE
             ];
         
@@ -390,10 +320,8 @@ public with sharing class PBS_LOP_AttachmentsController {
         public integer i { get; set; }
         public PBS_AAAP_Offer_Attachments__c offratts { get; set; }
         public ContentDocumentWrapper file { get; set; }
-        public boolean isDisplay { get; set; }
-        //public List<Attachment> attachmentsList { get; set; }
-        public boolean isAttachmentPresent { get; set; }
-        //public Attachment attachmentRec { get; set; }
+        public boolean isDisplay { get; set; }        
+        public boolean isAttachmentPresent { get; set; }        
         public string creatDate { get; set; }
 
         public sequenceNumber(PBS_AAAP_Offer_Attachments__c offratts, ContentDocumentWrapper file){
@@ -420,21 +348,7 @@ public with sharing class PBS_LOP_AttachmentsController {
                 this.file.name  = '1217 - Lessor\'s Annual Cost Statement';
             }
         }
-        /*public sequenceNumber(integer j, String attachmentType, List<Attachment> attachments) {
-            i = j;
-            PBS_AAAP_Offer_Attachments__c att = new PBS_AAAP_Offer_Attachments__c();
-            att.PBS_AAAP_Attachment_Type__c = attachmentType;
-            offratts = att;
-            attachmentsList = attachments;
-            isDisplay = true;
-            
-        }*/
-        /* public sequenceNumber(integer j, PBS_LOP_Offer_Attachment__c att,List<Attachment> attachments){
-             i=j;
-             offratts = att;
-             attachmentsList = attachments;
-
-         }*/
+        
     }
     public class ContentDocumentWrapper {
         public String id { get; set; }
@@ -454,40 +368,7 @@ public with sharing class PBS_LOP_AttachmentsController {
         public PBS_AAAP_Offer_Attachments__c offratts { get; set; }
         public boolean isDisplay { get; set; }
 
-        /*public List<Attachment> attachmentsList2 { get; set; }
-        public sequenceNumber2(integer j, PBS_AAAP_Offer_Attachments__c att) {
-            k = j;
-            offratts = att;
-            
-            for(attachment at : att.Attachments){
-                isDisplay = true;
-                if( at.Name == 'Form1364.pdf'){
-                    at.Name = '1364 - Proposal to Lease Space';
-                }
-                if( at.Name == 'Form1217.pdf'){
-                    at.Name = '1217 - Lessor\'s Annual Cost Statement';
-                }
-
-                if( at.Name == 'form3518.pdf'){
-                    isDisplay = false;
-                }
-            }
-            
-        }
-        public sequenceNumber2(integer j,DateTime submittedDate, String attachmentType, List<Attachment> attachments) {
-            k = j;
-            PBS_AAAP_Offer_Attachments__c att = new PBS_AAAP_Offer_Attachments__c();
-            att.PBS_AAAP_Attachment_Type__c = attachmentType;
-            att.PBS_AAAP_Date_sent_to_GREX__c = submittedDate;
-            offratts = att;
-            attachmentsList2 = attachments;
-        }*/
-        /* public sequenceNumber(integer j, PBS_LOP_Offer_Attachment__c att,List<Attachment> attachments){
-             i=j;
-             offratts = att;
-             attachmentsList = attachments;
-
-         }*/
+        
     }
 
 
@@ -509,7 +390,7 @@ public with sharing class PBS_LOP_AttachmentsController {
         attachmentsList = [
                     SELECT Id, Name, PBS_AAAP_Attachment_Type__c, PBS_AAAP_Date_sent_to_GREX__c,Submitted_Date__c /*, (SELECT Id, Name, Description, ParentId, createdDate FROM Attachments)*/ 
                     FROM PBS_AAAP_Offer_Attachments__c p
-                    WHERE p.PBS_AAAP_Offer__c = :ofrID AND p.PBS_AAAP_Attachment_Type__c NOT IN ('Offeror Form 1217- Lessor\'s Annual Cost Statement', 'Offeror GSA Form 1364', 'SAM Registration')
+                    WHERE p.PBS_AAAP_Offer__c = :ofrID AND p.PBS_AAAP_Attachment_Type__c NOT IN ('Offeror Form 1217- Lessor\'s Annual Cost Statement', 'Offeror GSA Form 1364')
                     AND PBS_AAAP_Sent_to_GREX__c = FALSE
             ];
         seqNumList = new List<sequenceNumber>();
@@ -527,61 +408,13 @@ public with sharing class PBS_LOP_AttachmentsController {
             seqNumList = new List<sequenceNumber>();
             integer jIndex = 1;
             for (integer i = 0; i < attachmentsList.size(); i++) {
-                //formSeqNumList.add(new sequenceNumber(i + 1, formAttachmentsList[i]));
+                
                 if(contentDocumentMap.containsKey(attachmentsList[i].Id)){
                     seqNumList.add(new sequenceNumber(jIndex, attachmentsList[i], contentDocumentMap.get(attachmentsList[i].Id)));
                     jIndex++;
                 }
             }
-    }
-    /*public Map<String, List<Attachment>> getAttachmentMapByType() {
-        
-        Map<String, List<Attachment>> map1 = new Map<String, List<Attachment>>();
-        //System.debug('attachmentsList size in getAttachmentMapByType' + attachmentsList.size());
-        List<String> attachmentTypes = getAttachmentTypeList();
-        for (String attachmentType : attachmentTypes) {
-            for (PBS_AAAP_Offer_Attachments__c attachment : attachmentsList) {
-                if (attachment.PBS_AAAP_Attachment_Type__c == attachmentType) {
-                    if (map1.containsKey(attachment.PBS_AAAP_Attachment_Type__c)) {
-                        System.debug('inside contains key');
-                        List<Attachment> tempAtts = map1.get(attachment.PBS_AAAP_Attachment_Type__c);
-                        //tempAtts.add(attachment.Attachments);
-                        System.debug('tempAtts size is' + tempAtts.size());
-                        System.debug('tempAtts is' + tempAtts);
-                        map1.put(attachment.PBS_AAAP_Attachment_Type__c, tempAtts);
-                    } /*else {
-                        map1.put(attachment.PBS_AAAP_Attachment_Type__c, attachment.Attachments);
-                    }
-                }
-            }
-        }
-        return map1;
-    }*/
-/*
-    public Map<String, List<Attachment>> getAttachmentMapByType2() {
-
-        Map<String, List<Attachment>> map1 = new Map<String, List<Attachment>>();
-        System.debug('attachmentsList size in getAttachmentMapByType' + attachmentsList2.size());
-        List<String> attachmentTypes = getAttachmentTypeList();
-        for (String attachmentType : attachmentTypes) {
-            for (PBS_AAAP_Offer_Attachments__c attachment : attachmentsList2) {
-                if (attachment.PBS_AAAP_Attachment_Type__c == attachmentType) {
-                    if (map1.containsKey(attachment.PBS_AAAP_Attachment_Type__c)) {
-                        System.debug('inside contains key');
-                        //List<Attachment> tempAtts = map1.get(attachment.PBS_AAAP_Attachment_Type__c);
-                        //tempAtts.add(attachment.Attachments);
-                        //System.debug('tempAtts size is' + tempAtts.size());
-                        //System.debug('tempAtts is' + tempAtts);
-                        //map1.put(attachment.PBS_AAAP_Attachment_Type__c, tempAtts);
-                    } /*else {
-                        map1.put(attachment.PBS_AAAP_Attachment_Type__c, attachment.Attachments);
-                    }
-                }
-            }
-        }
-        return map1;
-    }*/
-
+    }    
 
     public PageReference upload() {
         uploadAttachment();
@@ -611,10 +444,7 @@ public with sharing class PBS_LOP_AttachmentsController {
         }
         try {
 
-            insert offerattachment;
-            //System.debug('After Attachment Type:::::::::::::: '+offerattachment.id);
-
-            //att.ParentId = offerattachment.id;
+            insert offerattachment;                     
             ContentVersion ContVerFile = new ContentVersion();
             ContVerFile.VersionData = attBody;//Blob.valueOf('string');
             ContVerFile.Title = attName; 
@@ -646,68 +476,12 @@ public with sharing class PBS_LOP_AttachmentsController {
             contentDocumentObj.Description  = cd.DistributionPublicUrl;
             update contentDocumentObj;
 
-            //insert att;
+            
             attBody = null;// clears the viewstate
             offerattachment = new PBS_AAAP_Offer_Attachments__c();
             attName = '';
             fillAttachmentList();
-            //att = new Attachment();
-            // logic for displaying the attachments on the vf page.
-            /*
-            attachmentsList = [
-                    SELECT Name, PBS_AAAP_Attachment_Type__c,PBS_AAAP_Date_sent_to_GREX__c,Submitted_Date__c, (SELECT Id, Name, Description, ParentId, createdDate FROM Attachments)
-                    FROM PBS_AAAP_Offer_Attachments__c p
-                    WHERE p.PBS_AAAP_Offer__c = :ofrID AND p.PBS_AAAP_Attachment_Type__c NOT IN ('Offeror Form 1217- Lessor\'s Annual Cost Statement', 'Offeror GSA Form 1364', 'SAM Registration')
-                    AND PBS_AAAP_Sent_to_GREX__c = FALSE
-                    ORDER BY p.CreatedDate
-            ];
-            List<Id> attOfferIds = new List<Id>();
-            Map<Id, ContentDocumentWrapper> contentDocumentMap = new Map<Id, ContentDocumentWrapper>();
-            for(PBS_AAAP_Offer_Attachments__c attachmentRecord : attachmentsList){
-                attOfferIds.add(attachmentRecord.Id);
-            }
             
-            List<ContentDocumentLink> ContentDocumentLinks = [SELECT Id, LinkedEntityId, ContentDocumentId, ContentDocument.Title, ContentDocument.LatestPublishedVersionId, ContentDocument.LatestPublishedVersion.VersionData, ContentDocument.CreatedDate, ContentDocument.Description  FROM ContentDocumentLink Where LinkedEntityId IN :attOfferIds];
-            for(ContentDocumentLink contentDocumentLinkRecord : ContentDocumentLinks){
-                contentDocumentMap.put(contentDocumentLinkRecord.LinkedEntityId,new ContentDocumentWrapper(contentDocumentLinkRecord.ContentDocumentId, contentDocumentLinkRecord.ContentDocument.Title, contentDocumentLinkRecord.ContentDocument.CreatedDate, contentDocumentLinkRecord.ContentDocument.Description));
-            }
-            /*
-            for(PBS_AAAP_Offer_Attachments__c attachmentRecord : attachmentsList){
-                for(ContentDocumentLink contentDocumentLinkRecord : ContentDocumentLinks){
-                    if(contentDocumentLinkRecord.LinkedEntityId == attachmentRecord.Id){
-                        attachmentRecord.Attachments.add(new Attachment(Id=contentDocumentLinkRecord.ContentDocumentId, Name=contentDocumentLinkRecord.ContentDocument.Title));
-                    }
-                }
-            }
-            */
-            /*
-            integer jIndex = 1;
-            seqNumList = new List<sequenceNumber>();
-            
-            
-            Map<String, List<Attachment>> attMap = getAttachmentMapByType();
-            System.debug('Map size is' + attMap.size());
-            System.debug('Map is ' + attMap);
-            Integer i = 0;
-            for (String key : attMap.keySet()) {
-                System.debug('key is ' + key);
-                List<Attachment> atts = (List<Attachment>) attMap.get(key);
-                System.debug('actual attachments are' + atts);
-                System.debug('actual attachments size is' + atts.size());
-
-                seqNumList.add(new sequenceNumber(i + 1, key, (List<Attachment>) attMap.get(key)));
-                i++;                
-                
-            }
-            getAndAddAttachmentMapByType();
-            */
-            /*for (integer i = 0; i < attachmentsList.size(); i++) {
-                if(contentDocumentMap.containsKey(attachmentsList[i].Id)){
-                    seqNumList.add(new sequenceNumber(jIndex, attachmentsList[i], contentDocumentMap.get(attachmentsList[i].Id)));
-                    jIndex++;
-                }
-            }*/
-
 
         } catch (DMLException e) {
             System.debug('DMLException::::::::' + e);
@@ -718,7 +492,7 @@ public with sharing class PBS_LOP_AttachmentsController {
 
             attBody = null;// clears the viewstate
             attName = '';
-            //att = new Attachment();
+            
 
         }
 
@@ -738,21 +512,15 @@ public with sharing class PBS_LOP_AttachmentsController {
             System.debug('*** inside usercheck');
             string sesid = fetchOfferKey();
 
-            //PageReference pdf = new PageReference('/AAAP/LOP_offerform1364?offerId=' + ofrID+'&sesid='+sesid); //Changes URL to '/PBS_LOP_NewOfferForm1364...' in URLRewriter Apex class
+
             PageReference pdf = new PageReference( '/PBS_LOP_NewOfferForm1364?offerId=' + ofrID+'&sesid='+sesid); //Changes URL to '/PBS_LOP_NewOfferForm1364...' in URLRewriter Apex class
             System.debug('*** pdfUrl-- ' + pdf.getUrl());
             PageReference pdf1 = new PageReference('/AAAP/LOP_offerform1217?offerId=' + ofrID+'&sesid='+sesid); //Changes URL to '/LOP_offerform1217...' in URLRewriter Apex class
-            System.debug('\n--pdf1--');
-            
-            //Todd Brown removing logic that creates and sends Property Valuation doc to GREX for RSAP '22 Surge story SFWS-1896
-            //PageReference pdf2 = new PageReference('/PBS_LOP_RSAPpv?offerId=' + ofrID);
-            //System.debug('\n--pdf2--'+pdf2);
+            System.debug('\n--pdf1--');     
             
             offerattachment = new PBS_AAAP_Offer_Attachments__c();
 
-            //Attachment att = new Attachment();
-            //Attachment att1 = new Attachment();
-            //Attachment att2 = new Attachment();
+            
 
             try {
                 offerattachment.PBS_AAAP_Offer__c = ofrID;
@@ -761,12 +529,11 @@ public with sharing class PBS_LOP_AttachmentsController {
                 if (Test.isRunningTest()) {
                     attBody = Blob.valueOf('UNIT.TEST');
                     att1Body = Blob.valueOf('UNIT.TEST');
-                    //att2.Body = Blob.valueOf('UNIT.TEST');
+                   
                 } else {
                     attBody = pdf.getContentAsPDF();
                     att1Body = pdf1.getContentAsPDF();
-                    //Blob b = pdf2.getContent();
-                    //att2.Body = b;
+                   
                 }
                 offerattachment.PBS_AAAP_Attachment_Type__c = 'Offeror GSA Form 1364';
 
@@ -775,7 +542,7 @@ public with sharing class PBS_LOP_AttachmentsController {
                 insert offerattachment;
                 
                PBS_AAAP_Offer_Attachments__c offerattachment1 = new PBS_AAAP_Offer_Attachments__c();
-                //att = new Attachment();
+               
 
                 //upload form 1217
                 offerattachment1.PBS_AAAP_Offer__c = ofrID;
@@ -784,9 +551,9 @@ public with sharing class PBS_LOP_AttachmentsController {
                 system.debug('\n--offerattachment--'+offerattachment1);
                 
                 ContentVersion ContVerFile = new ContentVersion();
-                ContVerFile.VersionData = attBody;//Blob.valueOf('string');
-                ContVerFile.Title = 'Form1364.pdf'; 
-                ContVerFile.PathOnClient= 'Form1364.pdf';
+                ContVerFile.VersionData = attBody;
+                ContVerFile.Title = '1364 - Proposal to Lease Space.pdf'; 
+                ContVerFile.PathOnClient= '1364 - Proposal to Lease Space.pdf';
                 insert ContVerFile;
                 
                 Id conDoc = [SELECT ContentDocumentId FROM ContentVersion WHERE Id =:ContVerFile.Id].ContentDocumentId;
@@ -814,12 +581,12 @@ public with sharing class PBS_LOP_AttachmentsController {
                 contentDocumentObj.Description  = cd.DistributionPublicUrl;
                 update contentDocumentObj;
                 
-                //system.debug('\n--att1--'+att1);
+                
                 
                 ContentVersion ContVerFile1 = new ContentVersion();
-                ContVerFile1.VersionData = att1Body;//Blob.valueOf('string');
-                ContVerFile1.Title = 'Form1217.pdf'; 
-                ContVerFile1.PathOnClient= 'Form1217.pdf';
+                ContVerFile1.VersionData = att1Body;
+                ContVerFile1.Title = '1217 - Lessor\'s Annual Cost Statement.pdf'; 
+                ContVerFile1.PathOnClient= '1217 - Lessor\'s Annual Cost Statement.pdf';
                 insert ContVerFile1;
                 
                 Id conDoc1 = [SELECT ContentDocumentId FROM ContentVersion WHERE Id =:ContVerFile1.Id].ContentDocumentId;
@@ -847,23 +614,8 @@ public with sharing class PBS_LOP_AttachmentsController {
                 contentDocumentObj1.Description  = cd1.DistributionPublicUrl;
                 update contentDocumentObj1;
                 
-                //att1.Body = null;// clears the viewstate
+                
                 offerattachment = new PBS_AAAP_Offer_Attachments__c();
-                //att1 = new Attachment();
-
-                //offerattachment = new PBS_AAAP_Offer_Attachments__c();
-                //offerattachment.PBS_AAAP_Offer__c = ofrID;
-                //offerattachment.PBS_AAAP_Attachment_Type__c = 'Present Value Analysis (PVA) Evaluation';
-                //insert offerattachment;
-
-                //att2.Name = 'GeneratedPVCalculation.xml';
-                //att2.ParentId = offerattachment.id;
-                //insert att2;
-                //att2.Body = null;// clears the viewstate
-                //offerattachment = new PBS_AAAP_Offer_Attachments__c();
-                //att2 = new Attachment();
-
-                // updating new id
                 Integer len = 5;
                 String str = string.valueof(Math.abs(Crypto.getRandomLong()));
                 string randomNumber = str.substring(0, len);
@@ -878,12 +630,6 @@ public with sharing class PBS_LOP_AttachmentsController {
                 ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'Error uploading file'));
             } finally {
 
-                ///att.Body = null;// clears the viewstate
-                //att = new Attachment();
-                //att1.Body = null;// clears the viewstate
-                //att1 = new Attachment();
-                //att2.Body = null;// clears the viewstate
-                //att2 = new Attachment();
             }
 
         }
@@ -901,7 +647,7 @@ public with sharing class PBS_LOP_AttachmentsController {
         formAttachmentsList = [
                 SELECT Id, Name, PBS_AAAP_Attachment_Type__c,PBS_AAAP_Date_sent_to_GREX__c,Submitted_Date__c /*, (SELECT Id, Name, Description, ParentId, createdDate FROM Attachments)*/
                 FROM PBS_AAAP_Offer_Attachments__c p
-                WHERE p.PBS_AAAP_Offer__c = :ofrID AND p.PBS_AAAP_Attachment_Type__c IN ('Offeror Form 1217- Lessor\'s Annual Cost Statement', 'Offeror GSA Form 1364', 'SAM Registration')
+                WHERE p.PBS_AAAP_Offer__c = :ofrID AND p.PBS_AAAP_Attachment_Type__c IN ('Offeror Form 1217- Lessor\'s Annual Cost Statement', 'Offeror GSA Form 1364')
                 AND PBS_AAAP_Sent_to_GREX__c = FALSE
         ];
         formSeqNumList = new List<sequenceNumber>();
@@ -923,47 +669,36 @@ public with sharing class PBS_LOP_AttachmentsController {
                 formSeqNumList.add(new sequenceNumber(i + 1, formAttachmentsList[i], contentDocumentMap.get(formAttachmentsList[i].Id)));
             }
         }
-		getAndAddAttachmentMapByType();
-        /*
-        Map<String, List<Attachment>> attMap = getAttachmentMapByType();
-        System.debug('Map size is' + attMap.size());
-        System.debug('Map is ' + attMap);
-        Integer i = 0;
-        for (String key : attMap.keySet()) {
-            System.debug('key is ' + key);
-            List<Attachment> atts = (List<Attachment>) attMap.get(key);
-            System.debug('actual attachments are' + atts);
-            System.debug('actual attachments size is' + atts.size());
-
-            seqNumList.add(new sequenceNumber(i + 1, key, (List<Attachment>) attMap.get(key)));
-            i++;
-        }
-        */
-
-
-
+        getAndAddAttachmentMapByType();
         system.debug('%%%NIK%%%' + submitOffer);
-        //PageReference pref = Page.PBS_LOP_Attachments;
-        //PageReference pref = new PageReference('/RSAP/Attachments');
-        //pref.getParameters().put('offerId', submitOffer.Id);
-        //pref.setRedirect(true);
-
         return null;
 
     }
 
     public PageReference refreshForms2() {
+        
         system.debug('**NIK**FINAL***');
         uploadForms();
         submitOffer.PBS_AAAP_Time_Offer_Submitted__c = system.now();
         submitOffer.PBS_AAAP_Offer_Status__c = 'Submitted';
-        update submitOffer;
-        //PageReference pref = Page.PBS_LOP_OfferSubmitConfirmation;
+        submitOffer.PBS_AAAP_SIGNATURE_LAST_NAME__c = usrinfo.lastName;
+        submitOffer.PBS_AAAP_Signature_First_Name__c = usrinfo.firstName;
+        submitOffer.PBS_AAAP_Solicitation_Number__c = project.PBS_RSAP_Solicitation_Number__c;
+        submitOffer.PBS_AAAP_Solicitation_Id__c = project.PBS_RSAP_Solicitation_G_REX_ID__c;
+        submitOffer.PBS_AAAP_ACCEPTED_TERMS_AND_COND__c=termsAndConditions == 'Yes' ? true  : false; //rlpCheckBox !=null && rlpCheckBox ==true ? true : false;
+           
+            Date dToday = Date.today();
+            Datetime dt = datetime.newInstance(dToday.year(), dToday.month(), dToday.day());
+            submitOffer.PBS_AAAP_Offer_Submission_Date__c = dToday;
+            update submitOffer;
+            
+            insertHistroy(submitOffer.Id);
+            
         PageReference pref = new PageReference('/RSAP/OfferSubmitConfirmation');
         pref.getParameters().put('offerId', submitOffer.Id);
         pref.setRedirect(false);
         pageURLForRedirection = pref.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/OfferSubmitConfirmation', Label.LOP_Community_Base_URL+'RSAP-OfferSubmitConfirmation');
+        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/OfferSubmitConfirmation', Label.LOP_Community_Base_URL+'OfferSubmitConfirmation');
         return null;
     }
 
@@ -981,10 +716,9 @@ public with sharing class PBS_LOP_AttachmentsController {
         System.debug('******* AttachmentsId::::::::::::::' + attachmentId);
         System.debug('******* AttachmentsId::::::::::::::' + lopAttachmentId);
         try {
-            //Attachment attToDelete = [SELECT id,parentid,name FROM Attachment WHERE id = :attachmentId];
-            //String parentId = attToDelete.ParentId;
+            
             PBS_AAAP_Offer_Attachments__c delOfrAtt = [SELECT id, name FROM PBS_AAAP_Offer_Attachments__c WHERE id = :attachmentId];
-            //delete attToDelete;
+            
             delete delOfrAtt;
             for(Integer i = 0; i < seqNumList.size(); i++){
                 if(seqNumList[i].offratts.Id == attachmentId){
@@ -999,16 +733,16 @@ public with sharing class PBS_LOP_AttachmentsController {
             System.debug(seqNumList);
         } catch (Exception ex) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, ex.getMessage()));
-            //return null;
+            
         }
 
-        //PageReference pref = Page.PBS_LOP_Attachments;
+        
         PageReference pref = new PageReference('/RSAP/Attachments');
         pref.getParameters().put('offerId', submitOffer.Id);
         pref.setRedirect(false);
         pageURLForRedirection = pref.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/Attachments', Label.LOP_Community_Base_URL+'RSAP-Attachments');
-        //return null;
+        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/Attachments', Label.LOP_Community_Base_URL+'Offer-S-Attachments');
+        
     }
 
     public void actionDeleteFormsAttachment() {
@@ -1017,7 +751,7 @@ public with sharing class PBS_LOP_AttachmentsController {
         System.debug('******* We are here inside deleteforms attachment::::::::::::::');
 
         try {
-            List<PBS_AAAP_Offer_Attachments__c> delOfrAtt = [SELECT id, name FROM PBS_AAAP_Offer_Attachments__c WHERE PBS_AAAP_Attachment_Type__c IN ('Offeror Form 1217- Lessor\'s Annual Cost Statement', 'Offeror GSA Form 1364', 'SAM Registration', 'Present Value Analysis (PVA) Evaluation') AND PBS_AAAP_Offer__c = :ofrID and PBS_AAAP_Sent_to_GREX__c != true];
+            List<PBS_AAAP_Offer_Attachments__c> delOfrAtt = [SELECT id, name FROM PBS_AAAP_Offer_Attachments__c WHERE PBS_AAAP_Attachment_Type__c IN ('Offeror Form 1217- Lessor\'s Annual Cost Statement', 'Offeror GSA Form 1364', 'Present Value Analysis (PVA) Evaluation') AND PBS_AAAP_Offer__c = :ofrID and PBS_AAAP_Sent_to_GREX__c != true];
             delete delOfrAtt;
             for(Integer i = 0; i < seqNumList.size(); i++){
                 if(seqNumList[i].offratts.Id == attachmentId){
@@ -1031,7 +765,7 @@ public with sharing class PBS_LOP_AttachmentsController {
             seqNumList = seqNumListTemp;
         } catch (Exception ex) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, ex.getMessage()));
-            //return null;
+            
         }
 
 
@@ -1039,20 +773,20 @@ public with sharing class PBS_LOP_AttachmentsController {
 
 
     public PageReference actionCancel() {
-        //PageReference pref = Page.PBS_LOP_PortalHome;
+        
         PageReference pref = new PageReference('/RSAP/PortalHome');
         pref.setRedirect(false);
         pageURLForRedirection = pref.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/PortalHome', Label.LOP_Community_Base_URL+'RSAP-PortalHome');
+        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/PortalHome', Label.LOP_Community_Base_URL+'Offer-Home');
         return null;
     }
 
     public PageReference actionBackToRatesAndSpaces() {
-        PageReference pref = new PageReference('/RSAP/PropertyOwner');
+        PageReference pref = new PageReference('/RSAP/Rates');
         pref.getParameters().put('offerId', submitOffer.Id);
         pref.setRedirect(false);
         pageURLForRedirection = pref.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/PropertyOwner', Label.LOP_Community_Base_URL+'RSAP-PropertyOwner');
+        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/Rates', Label.LOP_Community_Base_URL+'Offer-S-Rent');
         return null;
     }
 
@@ -1068,25 +802,19 @@ public with sharing class PBS_LOP_AttachmentsController {
             draftMsgFlag = 'true';
         }
 
-		p = new PageReference('/RSAP/Attachments');	
+        p = new PageReference('/RSAP/Attachments'); 
         p.getParameters().put('offerId', submitOffer.Id);
         update submitOffer;
         
        if(pageURL == NULL || pageURL == ''){
                 pageURLForRedirection = p.getUrl();
-                pageURLForRedirection = pageURLForRedirection.replace('/RSAP/Attachments', Label.LOP_Community_Base_URL+'RSAP-Attachments');
+                pageURLForRedirection = pageURLForRedirection.replace('/RSAP/Attachments', Label.LOP_Community_Base_URL+'Offer-S-Attachments');
                 p.setRedirect(false);
             } else {
                  p = new PageReference(pageURL);
                 pageURLForRedirection = Label.LOP_Community_Base_URL+PBS_AAAP_Utility.getCommunityURL(p.getUrl());
                 p.setRedirect(false);
               }  
-              
-       /* PageReference pref = new PageReference('/RSAP/Attachments');
-        pref.getParameters().put('offerId', submitOffer.Id);
-        pref.setRedirect(false);
-        pageURLForRedirection = pref.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/Attachments', Label.LOP_Community_Base_URL+'RSAP-Attachments');*/
         return null;
     }
 
@@ -1095,16 +823,14 @@ public with sharing class PBS_LOP_AttachmentsController {
         Boolean flag = PBS_AAAP_GlobalConstants.validateOfferSubmissionBefore(submitOffer);
         if (!flag || Test.isRunningTest()) {
             actionSavePage();
-            //PageReference pref = Page.PBS_LOP_AttachmentAck;
+            
             PageReference pref = new PageReference('/RSAP/AttachmentAck');
             pref.getParameters().put('offerId', submitOffer.Id);
 
-            // J. Rogers 2/18/23  Communities Upgrade497394
-            //pref.setRedirect(true);
-            //return pref;
+            
             pref.setRedirect(false);
             pageURLForRedirection = pref.getUrl();
-            pageURLForRedirection = pageURLForRedirection.replace('/RSAP/AttachmentAck', Label.LOP_Community_Base_URL+'RSAP-AttachmentAck');
+            pageURLForRedirection = pageURLForRedirection.replace('/RSAP/AttachmentAck', Label.LOP_Community_Base_URL+'Offer-S-AttachmentAck');
             return null;
         } else {
             return null;
@@ -1119,12 +845,20 @@ public with sharing class PBS_LOP_AttachmentsController {
         if(termsAndConditions == NULL ){
             err = TRUE;
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'You must confirm you have read the RLP and declare your deviation intentions.'));
-            //ApexPages.addMessage(myMsg);
+            
         }
         
-        if (submitOffer.PBS_AAAP_ACCEPTED_TERMS_AND_COND__c == TRUE) {
-            rlpCheckBox = false;
+        PBS_AAAP_Offer__c lopOffer = PBS_AAAP_GlobalConstants.getOfferDetail(ofrID);
+        PBS_AAAP_Utility.OfferValidationResponse response  = PBS_AAAP_Utility.validateOffer(lopOffer,new List<String>{'Offer-S-Eligibility','Offer-S-SpaceParking','Offer-S-TermsFinancials','Offer-S-Rent'});
+        if (response.errorMessages.size() > 0 ) {
+            for(String error : response.errorMessages){
+               ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR,  error));
+            }
+            
         }
+        
+        lopOffer.PBS_AAAP_Offer_Submission_Date__c = Date.today();
+        update lopOffer;
 
         system.debug('***NIK***'+submitOffer.PBS_AAAP_ACCEPTED_TERMS_AND_COND__c);
         system.debug('***NIK***'+rlpCheckBox);
@@ -1132,25 +866,12 @@ public with sharing class PBS_LOP_AttachmentsController {
         Boolean flag = PBS_AAAP_GlobalConstants.validateOfferSubmission(submitOffer, rlpCheckBox);
         system.debug('***NIK***Method Called' + flag);
         if ((!flag && !err) || Test.isRunningTest()) {
-
-            //submitOffer.PBS_AAAP_Offer_Status__c = 'Submitted';
-            
-             submitOffer.PBS_AAAP_ACCEPTED_TERMS_AND_COND__c=rlpCheckBox !=null && rlpCheckBox ==true ? true : false;
            
-            Date dToday = Date.today();
-            Datetime dt = datetime.newInstance(dToday.year(), dToday.month(), dToday.day());
-            submitOffer.PBS_AAAP_Offer_Submission_Date__c = dToday;
-            update submitOffer;
-            insertHistroy(submitOffer.Id);
-            //refreshForms();
-            //submitOffer.PBS_AAAP_Offer_Status__c = 'Submitted';
-            //update submitOffer;
-            //PageReference pref = Page.PBS_LOP_OfferSubmitConfirmation;
-            //pref.getParameters().put('offerId', submitOffer.Id);
-            //ref.setRedirect(true);
-            //return null;
+            
+            
+             
         } else {
-            //return null;
+            
         }
 
     }
@@ -1164,65 +885,58 @@ public with sharing class PBS_LOP_AttachmentsController {
 
 
     public PageReference actionCancelSubmitOffer() {
-        //PageReference pref = Page.PBS_LOP_Attachments;sites
+        
         PageReference pref = new PageReference('/RSAP/Attachments');
         pref.getParameters().put('offerId', submitOffer.Id);
         pref.setRedirect(false);
         pageURLForRedirection = pref.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/Attachments', Label.LOP_Community_Base_URL+'RSAP-Attachments');
+       
+        pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-S-Attachments?edit=true&offerId='+ofrID+'&propertyId='+propId;
         return null;
     }
 
     public PageReference redirectToHome() {
-        //PageReference pref = Page.PBS_LOP_portalHome;
+       
         PageReference pref = new PageReference('/RSAP/PortalHome');
         pref.setRedirect(false);
         pageURLForRedirection = pref.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/PortalHome', Label.LOP_Community_Base_URL+'RSAP-PortalHome');
+        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/PortalHome', Label.LOP_Community_Base_URL+'Offer-Home');
         return null;
     }
 
     public PageReference renderRLPSection() {
         System.debug('inside renderRLPSection');
-        if (termsAndConditions == 'Yes') {
-            rlpCheckBox = FALSE;
-            showSection = FALSE;
-            submitOffer.PBS_AAAP_ACCEPTED_TERMS_AND_COND__c = TRUE;
-        } else {
-            showSection = TRUE;
-            submitOffer.PBS_AAAP_ACCEPTED_TERMS_AND_COND__c = FALSE;
-        }
+        submitOffer.PBS_AAAP_ACCEPTED_TERMS_AND_COND__c = termsAndConditions == 'Yes' ? true : false;
+        
         update submitOffer;
-        //PageReference pref = Page.PBS_LOP_AttachmentAck;
-        //pref.getParameters().put('offerId', submitOffer.Id);
-        //pref.setRedirect(true);
         return null;
     }
 
     public PageReference uploadFormsOnFinalSubmit() {
+        
         Boolean err = FALSE;
         if(termsAndConditions == NULL ){
             err = TRUE;
             ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, 'You must confirm you have read the RLP and declare your deviation intentions.'));
-            //ApexPages.addMessage(myMsg);
+            
         }
         if (submitOffer.PBS_AAAP_ACCEPTED_TERMS_AND_COND__c == TRUE) {
             rlpCheckBox = true;
         }
+        
         Boolean flag = PBS_AAAP_GlobalConstants.validateOfferSubmission(submitOffer, rlpCheckBox);
         if ((!flag && !err) || Test.isRunningTest()) {
-
             uploadForms();
-            //PageReference pref = Page.PBS_LOP_OfferSubmitConfirmation;
+            
             PageReference pref = new PageReference('/RSAP/OfferSubmitConfirmation');
             pref.getParameters().put('offerId', submitOffer.Id);
             pref.setRedirect(false);
             pageURLForRedirection = pref.getUrl();
-            pageURLForRedirection = pageURLForRedirection.replace('/RSAP/OfferSubmitConfirmation', Label.LOP_Community_Base_URL+'RSAP-OfferSubmitConfirmation');
+            pageURLForRedirection = pageURLForRedirection.replace('/RSAP/OfferSubmitConfirmation', Label.LOP_Community_Base_URL+'OfferSubmitConfirmation');
             return null;
         } else {
             return null;
-        }
+        } 
     }
 
     // getting randon key and update on Offer
@@ -1263,7 +977,7 @@ public with sharing class PBS_LOP_AttachmentsController {
         pref = new PageReference('/RSAP/PortalHome');
         pref.setRedirect(false);
         pageURLForRedirection = pref.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/PortalHome', Label.LOP_Community_Base_URL+'RSAP-PortalHome');
+        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/PortalHome', Label.LOP_Community_Base_URL+'Offer-Home');
         
     }
 

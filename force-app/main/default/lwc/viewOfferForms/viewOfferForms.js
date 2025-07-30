@@ -10,24 +10,7 @@ export default class ViewOfferForms extends NavigationMixin(LightningElement) {
     currentPageReference;
 
     connectedCallback() {
-        
-        console.log( 'Param===> ' + this.currentPageReference.state.recordId );
-        
-         let url =  '/apex/PBS_AAAP_PreviewOfferPage?offerId=' + this.currentPageReference.state.recordId;
-      
-         console.log('URL===> ' + url);   
-         
-          this[NavigationMixin.GenerateUrl]({
-              type: 'standard__webPage',
-              attributes: {
-                  url: url
-              }
-          }).then(vfURL => {
-              window.open(vfURL);
-              this.dispatchEvent(new CloseActionScreenEvent());
-          });
-          
-    
+        this.recordId = this.currentPageReference.state.recordId;
     }
 
 }

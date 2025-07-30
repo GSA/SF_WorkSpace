@@ -1,0 +1,104 @@
+<template>
+	<h3 class="heading">Submit offer</h3>
+	<div class="error">
+		<ul>
+			<template for:each={errors} for:item="error">
+				<li key={error}>{error}</li>
+			</template>
+		</ul>
+	</div>
+	<h3 class="offerTitle">Offered spaces</h3>
+	<lightning-datatable class="slds-table slds-table_bordered slds-table_col-bordered" key-field="Id" data={data}
+		columns={columns} hide-checkbox-column></lightning-datatable>
+	<table class="table1" width="90%">
+		<tr>
+			<td colspan="2" class="one">The fully serviced rate(s) in the table (above) reflect an
+				estimated Tenant Improvement
+				Allowance (TIA). Note that the TI rent to be used in the evaluation of offers
+				and resulting Lease contract will be based on the actual TIA for the specific
+				requirement.
+				Reference section 3 of the RLP.</td>
+		</tr>
+		<tr>
+			<td colspan="2" class="comman">1. By submitting this offer, the offeror agrees to lease the
+				premises described within the offer to the United States of America upon the Lease 
+				Contracting Officer’s acceptance of the offer. The offeror acknowledges they have read 
+				and fully understand the Request for Lease Proposals and agrees (1) to honor the terms 
+				and conditions specified in their offer and (2) to full compliance with and acceptance 
+				of the Request for Lease Proposals and its attachments with NO DEVIATIONS.</td>
+		</tr>
+		<tr>
+			<td class="comman">
+				I have read the RLP, lease, and all attachments in their entirety and am
+				requesting no deviations.</td>
+			<td width="10%">
+				<lightning-radio-group name="termsandconditons" label="" options={options} value={termsandconditons}
+					variant="label-inline" type="radio" class="single-line" onchange={handleChange}>
+				</lightning-radio-group>
+			</td>
+		</tr><br />
+		<tr>
+			<td class="comman">
+				2. I am aware that, in order for my offer to be considered eligible for award, I
+				may
+				be required to provide further due diligence submittals as required in the RLP
+				(e.g. evidence of ownership, test fit layout, flood plains, seismic safety,
+				historic preference, asbestos-containing material, fire protection and life
+				safety evaluation, accessibility, Energy Star, etc.).</td>
+			<td width="10%">
+				<lightning-radio-group name="ackLTRCompleted" label="" options={options} value={ackLTRCompleted}
+					variant="label-inline" type="radio" class="single-line" onchange={handleChange}>
+				</lightning-radio-group>
+			</td>
+		</tr>
+		<tr>
+			<td class="comman">
+				3. I am aware that, in addition to generic specifications and requirements
+				outlined
+				in the RLP and attachments, there may be unique agency requirements, as
+				identified in a project specific advertisement posted on <a href="https://sam.gov" target="_blank">
+					sam.gov</a>, that shall be used in
+				evaluating and determining the eligibility of offers for award.</td>
+			<td width="10%">
+				<lightning-radio-group name="ackRepresentOthers" label="" options={options} value={ackRepresentOthers}
+					variant="label-inline" type="radio" class="single-line" onchange={handleChange}>
+				</lightning-radio-group>
+			</td>
+		</tr>
+		<tr>
+			<td class="submit">By submitting this offer to the GSA, I certify to the best of my
+				knowledge that the information
+				contained in my offer is accurate and complete.
+			</td>
+		</tr>
+	</table>
+	 <div class="slds-form slds-form_horizontal slds-m-around_medium" style="font-weight: bold; font-size: 12px; color: #000000">
+                    <!-- First Name -->
+                    <div class="slds-form-element slds-size_1-of-2">
+                        <label class="slds-form-element__label slds-text-heading_small" style="line-height: 30px;" for="first-name">First Name</label>
+                        <div class="slds-form-element__control">
+                            <lightning-input  value={offerInfo.firstName} disabled></lightning-input>
+                        </div>
+                    </div>
+
+                    <!-- Last Name -->
+                    <div class="slds-form-element slds-size_1-of-2">
+                        <label class="slds-form-element__label slds-text-heading_small" style="line-height: 30px;" for="last-name">Last Name</label>
+                        <div class="slds-form-element__control">
+                            <lightning-input value={offerInfo.lastName} disabled></lightning-input>
+                        </div>
+                    </div>
+
+                 <!-- Submission Date -->
+                    <div class="slds-form-element slds-size_1-of-2">
+                        <label class="slds-form-element__label slds-text-heading_small" style="line-height: 30px;" for="submission-date">Submission Date</label>
+                        <div class="slds-form-element__control" style="padding-left: 17px;">
+                            <lightning-input value={offerInfo.submissionDate} disabled></lightning-input>
+                        </div>
+                    </div>
+                </div>
+
+	<input class="offer" type="button" varient="View Offer" value="View Offer" onclick={handleViewOffer}/>
+	<input class="offer" type="button" varient="Back" value="Back" onclick={handleCancel}/>
+	<input class="submitofferbgcolor" type="button" varient="Submit" value="Submit" onclick={handleSubmit}/>
+</template>

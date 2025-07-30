@@ -1,0 +1,261 @@
+<template>
+    <c-p-b-s_-leasing_-progress-bar progress-bar-name="Property_Workflow" onnavigatetopage={handleNavigateToPage}>
+	</c-p-b-s_-leasing_-progress-bar>
+    <form id = "newProperty">
+        <ul class='error'>
+            <template for:each={errors} for:item="error">
+                <li key={error}>{error}</li>
+            </template>
+        </ul>
+    <lightning-record-edit-form record-id={propertyId} object-api-name="PBS_AAAP_Property__c" onsubmit={handleAutoSubmit}>
+    <div class="slds-grid">
+        <div class="slds-col slds-order_1 custom-border">
+            
+          <span style="padding-left: 1px;">Property name: {propertyName}</span>
+        </div>
+        <div class="slds-col slds-order_2 custom-border">
+            
+            <span style="padding-left: 5px;">RLP number: {rlpType}</span>
+        </div>
+        <div class="slds-col slds-order_3 custom-border">
+           
+            <span style="padding-left: 5px;">Offer status: {offerStatus}</span>
+        </div>
+    </div>
+
+    
+        
+    
+  <div class="slds-m-top_medium slds-m-bottom_x-large">
+    <h1 style="font-weight: bold;font-size: 20px;padding: 0 0 8px;padding-top: 10px;color: #000000;font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;">1. Property location</h1>
+     <template if:false={editMode}><span style="color:red;font-size: 16px;font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;">Offer opened in view mode. Any changes made will not be saved.</span></template>
+    </div>
+    
+    
+    <div id="newOffer" class="slds-grid slds-gutters slds-wrap">
+        <div class="slds-col slds-size_1-of-3 form-row" >
+            <p class="required-field" id="propertynamelabel1">1. Property name
+                <span class ="slds-text-color_error">*</span>
+            </p>
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <div class="suggestive-search1">
+            <lightning-input
+            data-id="propertynamevalue"
+            variant="label-hidden"
+            type = "text"
+            value={propertyName}
+            name = "propertyName"
+            field-name="PBS_AAAP_Building_Name__c"
+            disabled={isDisabled}
+            onchange ={handleInputChange}
+            max-length="50"
+            class="input text input-short"
+            ></lightning-input>
+            </div>
+        </div>
+    </div>
+      <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-3 form-row custom-spacing">
+            
+                <p class="required-field" id="propertynamelabel2">
+                    <span class="label-with-icon">2. Property address
+                <span class ="slds-text-color_error">*</span>&nbsp;
+                <img class="infoIconImage" src={infoIconImage} onclick={openHandleModal} data-infotype="Property Address"/></span> 
+                </p>
+        </div>
+
+        <div class="slds-col slds-size_1-of-3 form-row">
+            <div class="suggestive-search">
+                <lightning-input
+                disabled={isDisabled}
+                value={address}
+                label="Full Address (street, city, state, zip)" 
+                onchange={handleInputChange}
+                type="text"
+                name="propertyAddress"
+                field-name="PBS_AAAP_Street_Address__c"
+                onkeydown={handleKeyDown}
+                addresslookupplaceholder="Search for address"
+                showaddresslookup="true"
+                max-length="75"
+                class="suggestive-search--input address input-short"
+                ></lightning-input>
+                
+            </div>
+            <template if:true={showSuggestions}>
+            <ul class="suggestive-search--results suggestive-search--address-results">
+                <template for:each={FormatedSuggestions}
+                  for:item="address">
+                <li key={address.id} data-label={address} onclick={handleSelect}>{address}</li>
+                </template>
+            </ul>
+        </template>
+        </div>
+        
+                 
+        <div class="slds-col slds-size_1-of-3 submitclass">
+                <template if:true={editMode}>
+                    <a id="submit-address" href="javascript:void(0);" onclick={handleMap} style="color: black;">Submit</a>
+                </template>
+               </div>
+            <template if:true={editMode}>
+               <div if:true ={showmapHide} class="slds-col showmap">
+                <a id="show-map" href="javascript:void(0);" onclick ={handleShowMap} style="color:black;">Show map</a>
+                </div>
+            </template>
+    </div>
+    
+    <div if:true={showlatitude} id="coordinate-container" class="latitude-wrapper"> 
+        <div>
+            <div class="suggestive-search">
+                <lightning-input
+                    type="text"
+                    class="suggestive-search--input--latitude input-long"
+                    onchange={handleLatChange}
+                    label="Latitude"
+                    name="latitude"
+                    field-name="PBS_AAAP_X_CO_ORD__c"
+                    value={latitude}
+                    data-id="blat">
+                </lightning-input>
+            </div>
+
+        </div>
+        <div>
+            <div class="suggestive-search">
+                <lightning-input
+                    type="text"
+                    class="suggestive-search--input--longitude input-long"
+                    onchange={handleLongChange}
+                    label="Longitude"
+                    field-name="PBS_AAAP_Y_CO_ORD__c"
+                    name="longitude"
+                    value={longitude}
+                    data-id="blon">
+                </lightning-input>
+            </div>
+       </div>
+
+<div class="slds-col submitlat">
+<a id="submit-coordinates" href="javascript:void(0);" onclick={showLocation} style="color:black;">Submit</a>
+
+</div>
+<div class="slds-col submitcancel">
+<a id="cancel-coordinates" href="javascript:void(0);" onclick ={handleCancel} style="color:black;">Cancel</a>
+</div>
+
+</div>
+
+
+<div if:false={showlatitude} onclick={handlePageUpdate}>
+    <template if:true={editMode}>
+    <div>Address not showing in the correct location?</div>
+    <a id="show-latlon" href="javascript:void(0);">
+        Click here to enter Latitude/Longitude.
+    </a>
+    </template>
+    
+</div>
+
+<template if:true={isaddrdata}>
+<div class="slds-scrollable_x custom-table">
+    <table class="slds-table slds-table_cell-buffer">
+        <thead>
+            <tr>
+                <th scope="col" class="slds-text-align_left">
+                    Street
+                </th>
+                <th scope="col" class="slds-text-align_left">
+                    City
+                </th>
+                <th scope="col" class="slds-text-align_left">
+                    State
+                </th>
+                <th scope="col" class="slds-text-align_left">
+                    Zipcode
+                </th>
+                <th scope="col" class="slds-text-align_left">
+                    County
+                </th>
+                <th scope="col" class="slds-text-align_left">
+                    Latitude
+                </th>
+                <th scope="col" class="slds-text-align_left">
+                    Longitude
+                </th>
+                <th scope="col" class="slds-text-align_left">
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <template for:each={addrdata} for:item="addr">
+                <tr key={addr.Id}>
+                    
+                    <td>{addr.street}</td>
+                    <td>{addr.city}</td>
+                    <td>{addr.state}</td>
+                    <td>{addr.zipCode}</td>
+                    <td>{addr.county}</td>
+                    <td>{addr.latitude}</td>
+                    <td>{addr.longitude}</td>
+                    <template if:true={editMode}>
+                    <td>
+                        <button class="slds-button slds-button_brand blue" onclick={confirmAddr}>
+                            Confirm Address
+                        </button>
+                    </td>
+                    </template>
+                </tr>
+                
+            </template>
+        </tbody>
+    </table>
+    </div>
+</template>
+<div if:true={showMap} id="map" class="map">
+
+
+    <table class="map--view-menu">
+        <tr>
+            <td id="view-street" class="map--view-item table-td highlight" data-view = "street" onclick={handleStreetView}>Street</td>
+            <td id="view-satellite" class="map--view-item table-td" data-view = "satellite" onclick={handleSatelliteView}>Satellite</td>
+        </tr>
+    </table>
+    <table class="map--layer-menu">
+        <tr>
+            <td id="layer-flood" class="map--layer-item table-td" data-layer = "flood" onclick={handleFloodLayer}>Flood Plain Layer</td>
+            <td id="layer-seismic" class="map--layer-item table-td" data-layer = "seismic" onclick={handleSeismicLayer}>Seismic Layer</td>
+        </tr>
+    </table>
+
+
+
+</div>
+
+<div class="btn-container">
+    <input class="btn" type="button" variant="submit" value="Next" onclick={handleNext} />
+    <input class="btn" type="button" variant="submit" value="Exit Offer" onclick ={handleExit} />
+</div>
+
+</lightning-record-edit-form>
+    </form>  
+    <template if:true={isShowModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+          aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+          <div class="slds-modal__container">
+                  <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                          title="Close" onclick={hideModalBox}>
+                      <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                      <span class="slds-assistive-text">Close</span>
+                  </button>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+              <lightning-formatted-rich-text
+                  value={infoDetials}
+              ></lightning-formatted-rich-text>
+            </div>  
+          </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" onclick={hideModalBox}>></div>
+      </template>
+</template>

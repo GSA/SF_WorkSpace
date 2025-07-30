@@ -1,0 +1,702 @@
+.submitclass{
+    margin-top:30px;
+    margin-left: 55px;
+    
+ }
+ .showmap{
+    margin-top:30px;
+    margin-left: -260px;
+ }
+ .slds-input{
+    position:relative;
+    width:135%;
+ }
+ .lgc-bg {
+    background-color: rgb(242 242 242);
+}
+.help-icon{
+    --slds-c-tooltip-text-color: #000;
+    --slds-c-tooltip-background-color:#f4f6f9;
+}
+
+
+
+
+
+.address-label,
+.cordinate-label{
+    display:block;
+    padding: 3px;
+}
+
+
+
+.coordinate-label-latitude{
+    
+    margin-left: 300px;
+}
+.coordinate-label-longitude{
+    
+    margin-left: 25px;
+}
+.suggestive-search--input--latitude{
+    margin-left: 300px;
+    
+}
+.suggestive-search--input--longitude{
+    margin-left: 25px;
+    
+}
+.submitlat{
+    margin-left: 10px;
+    margin-top:30px;
+}
+.submitcancel{
+    margin-left: -145px;
+    margin-top:30px;
+}
+.latitude-wrapper{
+    display:flex;
+}
+.table-container {
+    margin-top: 20px;
+}
+
+table td{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+.formwrap td {
+	color:#666666;
+	font-size:14px;
+	line-height:145%;
+	padding-top:20px;
+	letter-spacing:.01em;
+}
+.form-row{
+    display:flex;
+    flex-direction:column;
+    margin-bottom: 25px;
+}
+
+th {
+    text-align: left;
+    padding-left: 11px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+:host {
+    display: block;
+    margin: 20px;
+}
+
+/* Style for input fields */
+.input-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.input-container input {
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex: 1;
+}
+
+/* Style for submit link */
+.submit-link {
+    cursor: pointer;
+    color: #0070d2;
+    text-decoration: underline;
+    margin-left: 10px;
+}
+
+.submit-link:hover {
+    color: #005fb2; /* Darker blue on hover */
+}
+
+/* Style for address suggestions */
+.suggestions-container {
+    position: relative;
+    margin-top: 5px;
+}
+
+.suggestions-list {
+    position: absolute;
+    width: 100%;
+    max-height: 100px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    z-index: 1000;
+}
+.suggestive-search--results {
+    position: absolute;
+    box-shadow: rgb(68, 68, 68) 2px 2px 5px;
+    background-color: white;
+    padding: 5px 0px;
+    z-index: 9999;
+    margin-top: 53px;
+    width: 28%;
+}
+.suggestive-search--results li {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+}
+
+
+
+/* Responsive design adjustments */
+@media (max-width: 1050px) {
+    .input-container {
+        flex-direction: column;
+    }
+
+    .input-container input {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
+
+.btn{
+	top:-2px;
+    width: 155px;
+    height: 21px;
+    text-align: center;
+    border:1px solid #a1a1a1;
+	border-radius: 3px !important;
+    font-size:12px;
+    font-family:arial, helvetica, sans-serif;
+    padding: 11px 10px;
+    text-decoration:none;
+    display:inline-block;
+    color: #333333;
+    padding-bottom: 24px; 
+	background-image: linear-gradient(#fcfcfc, #d8d8d8);    
+}
+.btn{
+	margin-right: 10px;
+}
+.btn-container{
+	display: flex;
+    padding-top: 30px;
+}
+.myTable::part(td):hover{
+background-color: yellow;
+}
+
+.h3 {
+    font-weight: bold;
+    font-size: 28px;
+    border-bottom: 1px solid #cccccc;
+    padding: 0 0 8px;
+	font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+    color: #002BAD;
+}
+.lightning-input {
+    width: 336px;
+    border-radius: 3px;
+    box-shadow: inset 1px 2px 2px #999, inset -1px 2px 2px #999;
+    background-color: grey;
+}
+.suggestive-search1 {
+    --slds-c-input-color-background: #eeeeee;
+    --slds-c-input-border-radius: 5px;
+    --lwc-borderWidthThin: 1px;
+    --slds-c-input-color-border: #999;
+    --slds-form-element__label: black;
+    
+}
+.suggestive-search {
+    --slds-c-input-color-background: #eeeeee;
+    --slds-c-input-border-radius: 5px;
+    --lwc-borderWidthThin: 1px;
+    --slds-c-input-color-border: #999;
+    position: relative;
+    /*margin-bottom: 20px;*/
+}
+.my-icon{
+    --slds-c-icon-color-background: blue;
+}
+.custom-border {
+    border: 1px solid  #999;
+    min-height: 35px;
+    line-height: 1.5;
+    width: 35px;
+    text-align: left;
+    display:inline-block;
+    padding-top: 10px;
+    color: #333333;
+    font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+    font-size:13px;
+    background-color: #eeeeee;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
+    padding-bottom: 10px; 
+    padding-left: 10px;
+    flex-direction: row;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  li {
+    /*padding: 8px;
+    cursor: pointer;*/
+    padding: 5px 10px;
+    cursor: pointer;
+    
+  }
+  
+  li:hover {
+    background-color: #f0f0f0;
+  }
+  .address-list{
+    scrollbar-width: none;
+    top: 103%;
+    width: 28%;
+    position: absolute;
+    padding: 5px 0px;
+    z-index: 9999;
+    
+    
+  }
+  .address-list.normal{
+    scrollbar-width: none;
+    top: 103%;
+    width: 28%;
+    position: absolute;
+    padding: 5px 0px;
+    z-index: 9999;
+   }
+  .address-list.error{
+    scrollbar-width: none;
+    top: 108%;
+    width: 28%;
+    position: absolute;
+    padding: 5px 0px;
+    z-index: 9999;
+ }
+.active-button{
+    font-weight: bold;
+}
+
+
+  .address-list::-webkit-scrollbar{
+    display: none;
+  }
+
+  .address-list{
+    overflow-y: hidden;
+  }
+
+.btn-dt{
+    font-size: 5px;
+    
+    }
+
+.map {
+    padding: 0;
+    position: relative;
+    width: 100%;
+    height: 500px;
+    
+    margin: 20px 0 0 0;
+}
+.map:focus {
+    outline: none;
+    border: none;
+}
+
+
+.map--view-menu{
+    margin-bottom: 20px;
+    width: 20%;
+    text-align: left; 
+    table-layout: fixed;
+    
+    z-index: 5;
+    top: 20px;
+}
+
+.map--layer-menu {
+    margin-bottom: 20px;
+    width: 30%;
+    text-align: left; 
+    table-layout: fixed;
+    
+    z-index: 5;
+    top: 20px;
+}
+
+.map--view-menu {
+    position: absolute;
+    left: 60px;
+    
+}
+
+.map--view-menu td{
+    
+    border: 1px solid #C0C0C0;
+}
+
+.map--layer-menu {
+    position: absolute;
+    right: 30px;
+    
+}
+
+.map--layer-menu td{
+    border: 1px solid #C0C0C0;
+    
+}
+.map--view-item.highlight {
+    border: 2px solid #000;
+    background-color: #d3d3d3;
+    color: #000;
+    font-weight: bold;
+}
+
+.map--layer-item.highlight {
+    border: 2px solid #000;
+    background-color: #d3d3d3;
+    color: #000;
+    font-weight: bold;
+}
+
+.table-td{
+    
+    border: 2px solid black; 
+    
+}
+
+.map--view-item,.map--layer-item {
+    
+    border: 2px solid #000000;
+    
+    padding: 10px 10px !important;
+    cursor: pointer;
+    
+    background-color: white;
+    text-align: center;
+    width: -10px;
+    height: 30px;
+    
+}
+.streetViewClass, .satelliteViewClass {
+    border: 1px solid #C0C0C0;
+    border-collapse: collapse;
+    padding: 5px 10px !important;
+    cursor: pointer;
+    background-color: white;
+    border: 1px solid #ccc;
+    text-align: center;
+    width: -10px;
+    height: 30px;
+    
+}
+
+.map--view-item:hover, .map--layer-item:hover {
+    background-color: #e0e0e0;
+}
+
+.custom-table tr:hover{
+    background-color: yellow;
+    
+}
+.custom-table tr {
+    padding: 10px;
+    text-align: left;  
+}
+.slds-table thead th {
+    padding: 8px;
+    text-align: left;
+    color:black;
+    font-weight: bold;
+    border-bottom: 2px solid black; /* Optional: add a border for better visibility */
+}
+
+.slds-table tbody td {
+    
+    border-bottom: 2px solid black; /* Optional: add a border for better visibility */
+}
+.infoIconImage{
+    cursor: pointer;
+}
+.custom-spacing{
+    margin-top: 25px;
+}
+.suggestive-search--input address{
+    width: 80%;
+}
+.input-short {
+    width: 350px;
+    
+}
+.input-long{
+    width: 165px;
+    
+}
+.input-long .slds-form-element__label{
+    color: black !important;
+}
+
+.label-with-icon{
+    display: inline-block;
+    margin-right: 10px;
+}
+.info-icon{
+    vertical-align: middle;
+    margin-left: 1px;
+    display: inline-block;
+}
+.error{
+    font-size:16px;
+    font-family: serif, Georgia, helvetica;
+    color: red;
+    border: 0;
+    
+    
+}
+.slds-button_brand, .slds-button--brand  {
+   
+    border-radius: -3px;
+    display: inline-block;
+    color: #ffffff;
+    background-position: -30px;
+    
+    font-size: .9em;
+    background: #e8e8e9 url(/img/alohaSkin/btn_sprite.png) repeat-x right top;
+    
+    
+}
+.blue{
+   background: #2574a9;
+   color: #ffffff;
+}
+.blue:hover, .blue:focus {
+    background: #1c577f;
+    color: #ffffff;
+}
+.slds-text-color_error{
+    color :#000;
+}
+.page-content{
+    margin-top: 3rem;
+}
+
+
+@media (min-width: 400px) and (max-width:500px) {
+    .submitclass{
+        margin-top:80px;
+        margin-left: -110px;
+        
+     }
+     .showmap{
+        margin-top:80px;
+        margin-left:0px;
+     }
+     
+    .input-short {
+        width: 200px;
+        
+    }
+    .input-long{
+        width: 100px;
+    }
+    .suggestive-search--input--latitude{
+        margin-left: 20px;
+        
+    }
+    .suggestive-search--input--longitude{
+        margin-left: 25px;
+        
+    }
+    .submitcancel{
+        margin-left: 10px;
+        margin-top:30px;
+    }
+    
+}
+
+
+
+.custom-input {
+    --slds-c-input-color-background: #eeeeee;
+    --slds-c-input-border-radius: 5px;
+    --lwc-borderWidthThin: 1px;
+    --slds-c-input-color-border: #999;    
+}
+.custom-input textarea{
+    background: #ccc;
+}
+
+
+@media (min-width: 600px) and (max-width:700px) {
+
+    .submitclass{
+        margin-top:80px;
+        margin-left: -170px;
+        
+     }
+     .showmap{
+        margin-top:80px;
+        margin-left:-120px;
+     }
+     
+    .input-short {
+        width: 200px;
+        
+    }
+    .input-long{
+        width: 100px;
+    }
+    .suggestive-search--input--latitude{
+        margin-left: 20px;
+        
+    }
+    .suggestive-search--input--longitude{
+        margin-left: 25px;
+        
+    }
+    .submitcancel{
+        margin-left: -150px;
+        margin-top:30px;
+    }
+    
+
+}
+
+
+@media (min-width: 300px) and (max-width:390px) {
+
+    .submitclass{
+        margin-top:80px;
+        margin-left: -90px;
+        
+     }
+     .showmap{
+        margin-top:80px;
+        margin-left:-30px;
+     }
+     
+    .input-short {
+        width: 200px;
+        
+    }
+    .input-long{
+        width: 100px;
+    }
+    .suggestive-search--input--latitude{
+        margin-left: -30px;
+        
+    }
+    .suggestive-search--input--longitude{
+        margin-left: 25px;
+        
+    }
+    .submitcancel{
+        margin-left: 10px;
+        margin-top:30px;
+    }
+    
+
+}
+
+
+@media (min-width: 510px) and (max-width:590px) {
+
+    .submitclass{
+        margin-top:80px;
+        margin-left: -170px;
+        
+     }
+     .showmap{
+        margin-top:80px;
+        margin-left:-120px;
+     }
+     
+    .input-short {
+        width: 200px;
+        
+    }
+    .input-long{
+        width: 100px;
+    }
+    .suggestive-search--input--latitude{
+        margin-left: 20px;
+        
+    }
+    .suggestive-search--input--longitude{
+        margin-left: 25px;
+        
+    }
+    .submitcancel{
+        margin-left: -150px;
+        margin-top:30px;
+    }
+    
+
+}
+
+
+@media (min-width: 750px) and (max-width:1010px) {
+
+    .submitclass{
+        margin-top:60px;
+        margin-left: -220px;
+        
+     }
+     .showmap{
+        margin-top:60px;
+        margin-left:-120px;
+     }
+     
+    .input-short {
+        width: 200px;
+        
+    }
+    .input-long{
+        width: 100px;
+    }
+    .suggestive-search--input--latitude{
+        margin-left: 10px;
+        
+    }
+    .suggestive-search--input--longitude{
+        margin-left: 25px;
+        
+    }
+    .submitcancel{
+        margin-left: -190px;
+        margin-top:30px;
+    }
+    
+
+}

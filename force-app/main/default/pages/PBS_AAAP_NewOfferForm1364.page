@@ -187,7 +187,7 @@
         <tr>
             <td colspan="6" style="font-size:11.6px;border-left:1px solid black;border-right:1px solid black;vertical-align: top;"><b>13. Full Term of the Lease</b></td>
             <td colspan="4" style="font-size:11.6px;border-right:1px solid black;vertical-align: top;"><b>14. Firm Term of the Lease</b></td>
-            <td colspan="9" rowspan="2" style="font-size:11.6px;width:500px;">After the Firm Term, the Government may terminate the Lease by providing advanced written notice to the Lessor. Indicate the minimum number of days the Government <br/>must provide prior written notice by.</td>
+            <td colspan="9" rowspan="2" style="font-size:11.6px;width:500px;">After the Firm Term, the Government may terminate the Lease by providing advanced written notice to the Lessor. Indicate the minimum number of days the Government must provide prior written notice by.</td>
             <td colspan="5" style="font-size:11.3px;border-right:1px solid black;"><b>15. Number of Days Notice</b></td>
         </tr>
          <tr>
@@ -197,7 +197,7 @@
          </tr>
         <tr>
             <td rowspan="2" colspan="4" style="text-align:center;border-top:1px solid black;border-left:1px solid black;border-bottom:1px solid black;font-size:14.3px;"><b>RENT TABLE</b></td>
-            <td rowspan="2" colspan="8" style="border-right:1px solid black;font-size:11.6px;border-top:1px solid black;border-bottom:1px solid black;">&#160;&#160;&#160;&#160;AAAP Offers: Rates displayed are per ABOA SF. Final &#160;&#160;&#160;&#160;annual rent amounts depend on the lease duration and <br/>&#160;&#160;&#160;&#160;amount of ABOA SF the Government selects from your &#160;&#160;&#160;&#160;offered range.</td>
+            <td rowspan="2" colspan="8" style="border-right:1px solid black;font-size:11.6px;border-top:1px solid black;border-bottom:1px solid black;">AAAP Offers: Rates displayed are per ABOA SF. Final annual rent amounts depend on the lease duration and amount of ABOA SF the Government selects from your offered range.</td>
             <td colspan="4" style="text-align:center; font-size:11.6px;border-top:1px solid black;border-right:1px solid black;"><b>X.</b></td>
             <td colspan="4" style="text-align:center; font-size:11.6px;border-top:1px solid black;border-right:1px solid black;"><b>Y.</b></td>
             <td colspan="4" style="border-right:1px solid black;text-align:center; font-size:11.6px;border-top:1px solid black;"><b>Z.</b></td>
@@ -502,8 +502,12 @@
         </tr>
         <tr>
             <td colspan="24" style="font-size:11.6px;border-right:1px solid black;border-left:1px solid black;"><b>34. </b>Select the approximate level of construction necessary to meet the building shell requirements:
-                <br/>&#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(False, $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />a. Improvements to the existing Building will be required to meet the Lease shell requirements.<br/>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;The total approximate construction cost to achieve Lease shell standards is:&#160;&#160;&#160;&#160;&#160;&#160; $ <span  style="font-size:13.5px; border-bottom:1px solid black;color:red;height:20px;padding:1px;width:50px;">TBD</span>
-                <br/>&#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(True, $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />b. The Building already meets all the Lease shell requirements; no improvements are necessary.
+
+                <br/>&#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(offer.PBS_AAAP_Approximate_Construction_Level__c == 'Improvements Needed', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />a. Improvements to the existing Building will be required to meet the Lease shell requirements.<br/>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;The total approximate construction cost to achieve Lease shell standards is:&#160;&#160;&#160;&#160;&#160;&#160; $ <span  style="font-size:13.5px; border-bottom:1px solid black;color:red;height:20px;padding:1px;width:50px;"> <apex:outputText value="{0,number,currency}">
+                                    <apex:param value="{!offer.PBS_AAAP_SHELL_Build_out_Costs__c}"/>
+                                </apex:outputText></span>
+               
+                <br/>&#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(offer.PBS_AAAP_Approximate_Construction_Level__c == 'Already Meets', $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />b. The Building already meets all the Lease shell requirements; no improvements are necessary.
                 <br/>&#160;&#160;&#160;&#160;&#160;&#160;<img src="{!IF(False, $Resource.AAAPcheckbox_checked,$Resource.AAAPcheckbox_unchecked)}" />c. The requirements of the Lease will be satisifed through the construction of a new building.<br/>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Land Site Size: <span style="font-size:13.5px;border-bottom:1px solid black;color:red;height:25px;">&#160;&#160;&#160;&#160;&#160;N/A&#160;&#160;&#160;&#160;&#160;</span><span style="font-size:13.5px;color:red;height:20px;">&#160;&#160;SF / Acres</span>&#160;&#160;&#160;(select one)&#160;&#160;&#160;&#160;Total Land Costs: $ <span  style="font-size:13.5px;border-bottom:1px solid black;color:red;height:20px;">&#160;&#160;&#160;&#160;&#160;N/A&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span><br/><br/></td>
         </tr>
         <tr>

@@ -642,7 +642,17 @@ public with sharing class PBS_AAAP_AgencyRequirement_Ext extends PBS_AAAP_PageBa
     //THIS WILL END THE PAGE SAVE.
     
     
-    
+    private String sanitizeRexusProjectId(String value) {
+        if (value != null) {
+            // Pattern: exactly 7 alphanumeric characters (letters and numbers only)
+            Pattern pattern = Pattern.compile('^[a-zA-Z0-9]{7}$');
+            Matcher matcher = pattern.matcher(value.trim());
+            if (matcher.matches()) {
+                return value.trim();
+            }
+        }
+        return null; // return null if invalid
+    }
 
     //Julia Kantarovsky changes 11/2020 start here
     public void getRexusData() {
@@ -656,9 +666,13 @@ public with sharing class PBS_AAAP_AgencyRequirement_Ext extends PBS_AAAP_PageBa
 
         //If not test, set rexusProjectId to user input
         if (!Test.isRunningTest()) {
-            rexusProjectId = Apexpages.currentPage().getParameters().get('firstParam');
+            Map<String, String> params = System.currentPageReference().getParameters();
+            if (params.get('firstParam') != null) {
+                rexusProjectId = sanitizeRexusProjectId(params.get('firstParam'));
+            }
+            //rexusProjectId = Apexpages.currentPage().getParameters().get('firstParam');
         }
-        
+        System.debug('jmd rexusProjectId '+rexusProjectId);
         //Error message to end user
         if(rexusProjectId == '' || rexusProjectId == null){
             redErrorOnly = true;

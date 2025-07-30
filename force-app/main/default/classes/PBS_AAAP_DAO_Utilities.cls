@@ -21,7 +21,7 @@ public with sharing class PBS_AAAP_DAO_Utilities {
             returnVal = [
                     SELECT p.PBS_AAAP_OFFICE_SF_OFFERED_MIN__c, p.PBS_AAAP_OFFICE_SF_OFFERED_MAX__c,
                             p.PBS_AAAP_MAX_CONT_ABOA_AVAIL__c, p.Id, PBS_AAAP_Offer_Status__c,
-                            p.PBS_AAAP_RU_FACTOR__c, p.PBS_AAAP_COST_PER_ABOA__c,
+                            p.PBS_AAAP_RU_FACTOR__c, p.PBS_AAAP_COST_PER_ABOA__c,p.PBS_AAAP_Building_Name__c,
                             p.PBS_AAAP_TOTAL_BOMA_USF_OFFERED__c, p.PBS_AAAP_OFFICE_SPACE_RSF__c,
                             p.PBS_AAAP_CLEANING_SALARIES__c, p.PBS_AAAP_CLEANING_SUPPLIES__c,
                             p.PBS_AAAP_CLEANING_CONTRACT_SERVICES__c, p.PBS_AAAP_HEATING_SALARIES__c,
@@ -58,22 +58,7 @@ public with sharing class PBS_AAAP_DAO_Utilities {
     public List<PBS_AAAP_Rate__c> getRates(String pOfferId) {
         List<PBS_AAAP_Rate__c> returnVal = new List<PBS_AAAP_Rate__c>();
         try {
-//-------RITM0021675, RITM002167, RITM0021677-----------------------------------------------------------------------
-// added a new field PBS_AAAP_BSAC__c to the return Query        
-//             returnVal  =   [Select p.PBS_AAAP_TWO_YEAR_EXTENSION__c, p.PBS_AAAP_SPACE__c,
-//                                    p.PBS_AAAP_OT_RATE_COOLING_HEAT__c, p.PBS_AAAP_ONE_YEAR_EXTENSION__c, 
-//                                    p.PBS_AAAP_OFFER_NUMBER__c, p.PBS_AAAP_NO_OF_MONTHS_FREE_OPTION_TERM__c, 
-//                                    p.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c, p.PBS_AAAP_LEASE_TERM__c, 
-//                                    p.PBS_AAAP_IDENTIFIER_ID__c, p.PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c, 
-//                                    p.PBS_AAAP_COST_FOR_TI__c, p.PBS_AAAP_COOP_COMM_TOGSA_FIRM_TERM__c, 
-//                                    p.PBS_AAAP_BASE_RATE__c, p.PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c, 
-//                                    p.PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c, p.PBS_AAAP_AMORTIZ_RATE_T1_ABOVE_20__c, 
-//                                    p.PBS_AAAP_ADDTL_AMT_FOR_GOVT_OWNED_EQUIP__c, p.PBS_AAAP_ADDTL_AMT_DAY_CLEANING__c, 
-//                                    p.Id,  p.PBS_AAAP_SPACE__r.PBS_AAAP_OFFER_NUMBER__c, 
-//                                    p.PBS_AAAP_FULLY_SRVC_FIRM_TERM__c, p.PBS_AAAP_ANNUAL_AMORT_TI_COSTS__c,
-//                                    p.PBS_AAAP_PV_Value__c, p.PBS_AAAP_PV_Value_Blended__c
-//                             From PBS_AAAP_Rate__c p
-//                             Where p.PBS_AAAP_SPACE__r.PBS_AAAP_OFFER_NUMBER__c =: pOfferId ];
+
             returnVal = [
                     SELECT p.PBS_AAAP_TWO_YEAR_EXTENSION__c, p.PBS_AAAP_SPACE__c,
                             p.PBS_AAAP_OT_RATE_COOLING_HEAT__c, p.PBS_AAAP_ONE_YEAR_EXTENSION__c,
@@ -95,9 +80,9 @@ public with sharing class PBS_AAAP_DAO_Utilities {
 
 
         } catch (QueryException e) {
-//            Apexpages.addMessages(e);
+            
             System.debug('##### getRates Error: ' + e);
-            //return returnVal;
+            
         }   // end try  
 
         return returnVal;
@@ -107,22 +92,7 @@ public with sharing class PBS_AAAP_DAO_Utilities {
     // method to obtain the Rates with a Space ID
     public List<PBS_AAAP_Rate__c> getRatesFromSpace(String pSpaceId) {
         List<PBS_AAAP_Rate__c> returnVal = new List<PBS_AAAP_Rate__c>();
-//-------RITM0021675, RITM002167, RITM0021677-----------------------------------------------------------------------
-// added BSAC to the query
-//             returnVal  =   [Select p.PBS_AAAP_TWO_YEAR_EXTENSION__c, p.PBS_AAAP_SPACE__c,
-//                                    p.PBS_AAAP_OT_RATE_COOLING_HEAT__c, p.PBS_AAAP_ONE_YEAR_EXTENSION__c, 
-//                                    p.PBS_AAAP_OFFER_NUMBER__c, p.PBS_AAAP_NO_OF_MONTHS_FREE_OPTION_TERM__c, 
-//                                    p.PBS_AAAP_NO_OF_MONTHS_FREE_FIRM_TERM__c, p.PBS_AAAP_LEASE_TERM__c, 
-//                                    p.PBS_AAAP_IDENTIFIER_ID__c, p.PBS_AAAP_FULL_SERV_RENT_OPTION_TERM__c, 
-//                                    p.PBS_AAAP_COST_FOR_TI__c, p.PBS_AAAP_COOP_COMM_TOGSA_FIRM_TERM__c, 
-//                                    p.PBS_AAAP_BASE_RATE__c, p.PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c, 
-//                                    p.PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c, p.PBS_AAAP_AMORTIZ_RATE_T1_ABOVE_20__c, 
-//                                    p.PBS_AAAP_ADDTL_AMT_FOR_GOVT_OWNED_EQUIP__c, p.PBS_AAAP_ADDTL_AMT_DAY_CLEANING__c, 
-//                                    p.PBS_AAAP_FULLY_SRVC_FIRM_TERM__c, p.PBS_AAAP_ANNUAL_AMORT_TI_COSTS__c,
-//                                    p.PBS_AAAP_PV_Value__c, p.PBS_AAAP_PV_Value_Blended__c,
-//                                    p.Id
-//                            From PBS_AAAP_Rate__c p
-//                             Where p.PBS_AAAP_SPACE__c =: pSpaceId ];
+
         returnVal = [
                 SELECT p.PBS_AAAP_TWO_YEAR_EXTENSION__c, p.PBS_AAAP_SPACE__c,
                         p.PBS_AAAP_OT_RATE_COOLING_HEAT__c, p.PBS_AAAP_ONE_YEAR_EXTENSION__c,
@@ -168,9 +138,9 @@ public with sharing class PBS_AAAP_DAO_Utilities {
             ];
 
         } catch (QueryException e) {
-//            Apexpages.addMessages(e);
+
             System.debug('##### getSpaces Error: ' + e);
-            //return returnVal;
+            
         }   // end try  
 
         return returnVal;
@@ -181,15 +151,7 @@ public with sharing class PBS_AAAP_DAO_Utilities {
     public PBS_AAAP_RLP__c getRLP(String pId) {
         PBS_AAAP_RLP__c returnVal = new PBS_AAAP_RLP__c();
         try {
-//-------RITM0021675, RITM002167, RITM0021677-----------------------------------------------------------------------
-// added a new field PBS_AAAP_BSAC_per_ABOA__c to the return Query        
-//            returnVal   =   [Select p.PBS_AAAP_RLP_Number__c, p.PBS_AAAP_ESCALATION_RATE_PERCENT__c, 
-//                                    p.PBS_AAAP_DISCOUNT_RATE__c, p.PBS_AAAP_MAX_TIUSED__c, 
-//                                    p.PBS_AAAP_TIUSED_FOR_FIRM_TERM_NEW__c, p.PBS_AAAP_TIUSED_FOR_FIRM_TERM_SUCC__c  
-//                               From PBS_AAAP_RLP__c p
-//                              Where p.Id =: pId];
-//Vaishali RLP FY 14 Change Added PBS_AAAP_ALLOW_TIER2_AMMORT__c to the selection
-//Vaishali RLP FY 15 Change Added PBS_AAAP_Allow_10_5_Term__c to the selection
+
             returnVal = [
                     SELECT p.PBS_AAAP_RLP_Number__c, p.PBS_AAAP_ESCALATION_RATE_PERCENT__c,
                             p.PBS_AAAP_DISCOUNT_RATE__c, p.PBS_AAAP_MAX_TIUSED__c, p.PBS_AAAP_Region__c,
@@ -198,7 +160,7 @@ public with sharing class PBS_AAAP_DAO_Utilities {
                     FROM PBS_AAAP_RLP__c p
                     WHERE p.Id = :pId
             ];
-//-------RITM0021675, RITM002167, RITM0021677-----------------------------------------------------------------------        
+       
 
         } catch (QueryException e) {
             Apexpages.addMessages(e);

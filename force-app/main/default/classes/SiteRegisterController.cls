@@ -43,7 +43,7 @@ public with sharing class SiteRegisterController {
         isDisabled=false;     
         System.debug('inside constructor'); 
         isNewUserFound=false;  
-        //clickedButton = false;  
+          
 
         captcha = new reCAPTCHA();
         publicKey = captcha.publicKey;    
@@ -51,10 +51,7 @@ public with sharing class SiteRegisterController {
      
      public PageReference actionChkTermsAndConds(){         
         chkTerms = c.PBS_AAAP_Terms_and_Conditions__c;
-        /*if(!chkTerms){
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Please accept the terms and conditions');
-            ApexPages.addMessage(myMsg);            
-        }  */   
+        
         //added by syam ganna on 07/25/2016 to validate email fields
         actionChkConfirmEmail();
         return null;
@@ -95,7 +92,7 @@ public with sharing class SiteRegisterController {
         String soqlQuery = 'Select PBS_AAAP_Region_Name__c from PBS_AAAP_RLP_Regions_Map__c where PBS_AAAP_RLP_State__c in '+states;
         system.debug('::::::::::soqlQuery:::::: '+soqlQuery);
          
-        //regionsList = database.Query(soqlQuery);
+        
         
         regionsList = [Select PBS_AAAP_Region_Name__c from PBS_AAAP_RLP_Regions_Map__c where PBS_AAAP_RLP_State__c in :states];    
         System.debug ('*****Regions List ::::::::' + regionsList);
@@ -170,7 +167,7 @@ public with sharing class SiteRegisterController {
         if(isNewUserFound != true){
             try{  
                 //  Setting up the account Id to AAAP Customer Portal Account.  
-                String accountId = null;//PBS_AAAP_GlobalConstants.PORTAL_ACCOUNT_ID;
+                String accountId = null;
                 accountId = [Select Id from Account 
                                 Where recordType.Name =: PBS_AAAP_GlobalConstants.CUSTOMER_PORTAL_ACCOUNT 
                                 and Name = :PBS_AAAP_GlobalConstants.CUSTOMER_PORTAL_ACCOUNT_NAME limit 1].Id;
@@ -185,10 +182,10 @@ public with sharing class SiteRegisterController {
     
                 Profile profile = [Select p.name, p.id From Profile p where p.Name like '%AAAP Customer Portal%' limit 1];  
                 selectedProfileId = profile.Id;
-    
+                System.debug('SELECTEDPROFILEID'+selectedProfileId);
                 //Create the User
                 //NOTE - Must invoke a @future method to be able to create Account, Contacts, and Users in the same Apex Transaction             
-                            
+                          
                 SiteRegisterController.createUser((String)contactId, c.Email, c.FirstName, c.LastName, c.email, c.Phone, 
                                                     c.MailingStreet, c.MailingState, c.PBS_AAAP_PIN__c, c.MailingCity, 
                                                     c.MailingCountry, c.MailingPostalCode, c.PBS_AAAP_Company__c, c.PBS_AAAP_StatesOfInterest__c, 
@@ -207,126 +204,7 @@ public with sharing class SiteRegisterController {
         return null; 
     }
     
-    /* New method with Salesforce Identity Embedded Login functionality for Communities conversion 
-    public PageReference createPortaluser(){             
-       
-        boolean strVerifyRecaptcha; 
-        strVerifyRecaptcha = captcha.verify();
-             
-        if(!strVerifyRecaptcha) {
-            ApexPages.Message msg = new ApexPages.Message(ApexPages.Severity.ERROR, System.Label.AAAP_Captcha_Validation_Failed);
-            ApexPages.addMessage(msg);            
-        }
- 
-        if(ApexPages.getMessages().size() > 0) {
-            return null;
-        }
-         
-        boolean isRegisteringUserAlreadyInSystem = false;                            
-        try{  
-            System.debug('checking if the registering user is already in the system with username: ' + u.username);  
-             
-            User usr = [select id, name, username, profileId, contactId from User where username= :c.Email LIMIT 1]; 
-
-            if(usr!=null && usr.username == c.Email){  
-                newUser = usr;  
-                isRegisteringUserAlreadyInSystem = true;  
-                System.debug('User with email '+ c.Email +' already exists in the system so checking to see if it is an RET user and if so update contact and user record with data entered on register page and assign AAAP Permission set. Otherwise display error.');  
-                Profile[] profiles = [Select name, id From Profile where Name like '%GSA RET Community Plus Login User%' limit 1];
-                system.debug('****'+usr.profileId);
-                if(usr.profileId == profiles[0].Id){
-                    Boolean flag;
-                    String accId = null;
-                    accId = [Select Id from Account 
-                                    Where recordType.Name =: PBS_AAAP_GlobalConstants.CUSTOMER_PORTAL_ACCOUNT 
-                                    and Name = :PBS_AAAP_GlobalConstants.CUSTOMER_PORTAL_ACCOUNT_NAME limit 1].Id;
-                    Id cId = usr.contactId;  
-                    updateContact(cId, c.PBS_AAAP_StatesOfInterest__c, c.Phone, c.PBS_AAAP_Alternate_Phone__c, c.MailingStreet, c.MailingState, c.MailingCity, 
-                                                    c.MailingCountry, c.MailingPostalCode, c.PBS_AAAP_Company__c, c.Title, c.PBS_AAAP_Website__c);
-        
-                    SiteRegisterController.updateUser(usr.Id, c.Email, c.Phone, 
-                                                    c.MailingStreet, c.MailingState, c.PBS_AAAP_PIN__c, c.MailingCity, 
-                                                    c.MailingCountry, c.MailingPostalCode, c.PBS_AAAP_Company__c, c.PBS_AAAP_StatesOfInterest__c, 
-                                                    c.PBS_AAAP_Regions__c, c.PBS_AAAP_Alternate_Phone__c, c.Title);
-                    flag = assignPermissionSet(usr.Id);                    
-                    if(flag){
-                        conf1 = false; conf2 = true; showRegistrationForm = false;
-                    } 
-                } else {
-                    ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, PBS_AAAP_GlobalConstants.ERROR_DUPLICATE_USER);
-                    ApexPages.addMessage(myMsg); 
-                }
-                return null;  
-            }               
-
-        }catch(Exception ex){  
-            System.debug('...did not find user pre-existing in system so proceeding to set up new user and log them in...');
-        }  
-            
-        Savepoint sp0 = Database.setSavepoint();
-        
-        if (isRegisteringUserAlreadyInSystem == false){
-            try{  
-                // Setting up the account Id to AAAP Customer Portal Account.  
-                String accountId = null;
-                accountId = [Select Id from Account 
-                                Where recordType.Name =: PBS_AAAP_GlobalConstants.CUSTOMER_PORTAL_ACCOUNT 
-                                and Name = :PBS_AAAP_GlobalConstants.CUSTOMER_PORTAL_ACCOUNT_NAME limit 1].Id;
-                System.debug('Account Id: '+accountId);
-                Id contactId = null;
-                 
-                //Create the Contact associated to the Portal Account.  
-                contactId = createContact(accountId); 
-              
-                Profile profile = [Select p.name, p.id From Profile p where p.Name like '%AAAP Customer Portal%' limit 1];  
-                selectedProfileId = profile.Id;
     
-                String aliasStr;  
-                if(c.LastName.length()>6){
-                    aliasStr = c.FirstName.substring(0, 1)+c.LastName.substring(0, 5);
-                }
-                else{
-                    aliasStr = c.FirstName.substring(0, 1)+c.LastName;
-                }
-                User u = new User(alias = aliasStr, email=c.Email, emailencodingkey='UTF-8', firstname=c.FirstName, lastname=c.LastName, PBS_AAAP_PIN__c = c.PBS_AAAP_PIN__c,
-                        languagelocalekey='en_US', localesidkey='en_US', profileid = selectedProfileId, contactId=c.Id, timezonesidkey='America/New_York',
-                        username=c.Email, street=c.MailingStreet, city=c.MailingCity, state=c.MailingState, country=c.MailingCountry, postalcode=c.MailingPostalCode, CompanyName=c.PBS_AAAP_COMPANY__c,
-                        phone=c.Phone, PBS_AAAP_Alternate_Phone__c = c.PBS_AAAP_Alternate_Phone__c, PBS_AAAP_StatesOfInterest__c=c.PBS_AAAP_StatesOfInterest__c, PBS_AAAP_Regions__c=c.PBS_AAAP_Regions__c, Title = c.Title);
-
-                String userId;
-                String password; //null - Salesforce login process will prompt user for password reset since password is not provided by our registration form currently like is done on RealEstateTaxes registration
-                try {
-                    userId = Site.createExternalUser(u, accountId, password);
-                } catch(Site.ExternalUserCreateException ex) {
-                    List<String> errors = ex.getDisplayMessages();
-                    for (String error : errors)  {
-                        ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, error));
-                    }
-                    System.debug(ex.getMessage());
-                }
-        
-                if (userId != null) { 
-                    if (password != null && password.length() > 1) {
-                        return Site.login(c.Email, password, ApexPages.currentPage().getParameters().get('startURL'));
-                    }
-                    else {
-                        PageReference page = System.Page.CommunitiesSelfRegConfirm;
-                        page.setRedirect(true);
-                        return page;
-                    }
-                }
-                             
-                //showRegistrationForm = false; conf1 = true; conf2 = false; 
-    
-             }catch(Exception ex){  
-                 //Display error message to VF page  
-                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, ex.getMessage());  
-                 ApexPages.addMessage(myMsg);          
-                 Database.rollback(sp0);
-             } 
-        } 
-        return null; 
-    } */
     
     public static boolean assignPermissionSet(Id usrId){   
         Boolean success = FALSE;     
@@ -338,7 +216,7 @@ public with sharing class SiteRegisterController {
             success = TRUE;
         } else {
             //Julia Kantarovsky changed typo here 9.15.20   
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'A registered account has already been created using this email address.  Use the links at the top of the page to navigate to the AAAP or RSAP home page, where you can log-in or use the \'Forgot Your Password?\' feature.');   
+            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'A registered account has already been created using this email address. Click the Login/Reset Password link at the top of the page where you can sign in or use the \'Forgot Your Password?\' feature.');   
             //Typo changes to here
             ApexPages.addMessage(myMsg);
         }
@@ -369,12 +247,13 @@ public with sharing class SiteRegisterController {
             aliasStr = fName.substring(0, 1)+lName;
          }
          User u = new User(alias = aliasStr, email=email, emailencodingkey='UTF-8', firstname=fName, lastname=lName, PBS_AAAP_PIN__c = pin,
-                languagelocalekey='en_US', localesidkey='en_US', profileid = profileId, contactId=conId, timezonesidkey='America/New_York',
+                languagelocalekey='en_US', localesidkey='en_US',profileid = ProfileId,contactId=conId, timezonesidkey='America/New_York',
                 username=username, street=street, city=city, state=state, country=country, postalcode=zip, CompanyName=company,
                 phone=phone, PBS_AAAP_Alternate_Phone__c = altPhone, PBS_AAAP_StatesOfInterest__c=sofi, PBS_AAAP_Regions__c=sofreg, Title = ttl);
     
          u.setOptions(dmo);  
          try{
+            
             insert u;
          }catch(Exception ex){
             System.debug(ex.getMessage());
@@ -409,11 +288,12 @@ public with sharing class SiteRegisterController {
 
          dmo.EmailHeader.triggerUserEmail = true;
          
-         User u = [SELECT Id, email, PBS_AAAP_PIN__c, street, city, state, country, postalcode, CompanyName, phone, PBS_AAAP_Alternate_Phone__c, 
+         User u = [SELECT Id, email, username,PBS_AAAP_PIN__c, street, city, state, country, postalcode, CompanyName, phone, PBS_AAAP_Alternate_Phone__c, 
                           PBS_AAAP_StatesOfInterest__c, PBS_AAAP_Regions__c
                           FROM User 
                           WHERE Id =: uId];
          u.email = email;
+         u.username = email;
          u.PBS_AAAP_PIN__c = pin;
          u.street = street;
          u.city = city; 
@@ -470,4 +350,71 @@ public with sharing class SiteRegisterController {
         }           
         return result;          
      }  
+    
+    public List<SelectOption> getStates() {
+        List<SelectOption> options = new List<SelectOption>();
+        options.add(new SelectOption('', '--None--'));
+        options.add(new SelectOption('Alabama', 'Alabama'));
+        options.add(new SelectOption('Alaska', 'Alaska'));
+        options.add(new SelectOption('Arizona', 'Arizona'));
+        options.add(new SelectOption('Arkansas', 'Arkansas'));
+        options.add(new SelectOption('California', 'California'));
+        options.add(new SelectOption('Colorado', 'Colorado'));
+        options.add(new SelectOption('Connecticut', 'Connecticut'));
+        options.add(new SelectOption('Delaware', 'Delaware'));
+        options.add(new SelectOption('District of Columbia', 'District of Columbia'));
+        options.add(new SelectOption('Florida', 'Florida'));
+        options.add(new SelectOption('Georgia', 'Georgia'));
+        options.add(new SelectOption('Hawaii', 'Hawaii'));
+        options.add(new SelectOption('Idaho', 'Idaho'));
+        options.add(new SelectOption('Illinois', 'Illinois'));
+        options.add(new SelectOption('Indiana', 'Indiana'));
+        options.add(new SelectOption('Iowa', 'Iowa'));
+        options.add(new SelectOption('Kansas', 'Kansas'));
+        options.add(new SelectOption('Kentucky', 'Kentucky'));
+        options.add(new SelectOption('Louisiana', 'Louisiana'));
+        options.add(new SelectOption('Maine', 'Maine'));
+        options.add(new SelectOption('Maryland', 'Maryland'));
+        options.add(new SelectOption('Massachusetts', 'Massachusetts'));
+        options.add(new SelectOption('Michigan', 'Michigan'));
+        options.add(new SelectOption('Minnesota', 'Minnesota'));
+        options.add(new SelectOption('Mississippi', 'Mississippi'));
+        options.add(new SelectOption('Missouri', 'Missouri'));
+        options.add(new SelectOption('Montana', 'Montana'));
+        options.add(new SelectOption('Nebraska', 'Nebraska'));
+        options.add(new SelectOption('Nevada', 'Nevada'));
+        options.add(new SelectOption('New Hampshire', 'New Hampshire'));
+        options.add(new SelectOption('New Jersey', 'New Jersey'));
+        options.add(new SelectOption('New Mexico', 'New Mexico'));
+        options.add(new SelectOption('New York', 'New York'));
+        options.add(new SelectOption('North Carolina', 'North Carolina'));
+        options.add(new SelectOption('North Dakota', 'North Dakota'));
+        options.add(new SelectOption('Ohio', 'Ohio'));
+        options.add(new SelectOption('Oklahoma', 'Oklahoma'));
+        options.add(new SelectOption('Oregon', 'Oregon'));
+        options.add(new SelectOption('Pennsylvania', 'Pennsylvania'));
+        options.add(new SelectOption('Rhode Island', 'Rhode Island'));
+        options.add(new SelectOption('South Carolina', 'South Carolina'));
+        options.add(new SelectOption('South Dakota', 'South Dakota'));
+        options.add(new SelectOption('Tennessee', 'Tennessee'));
+        options.add(new SelectOption('Texas', 'Texas'));
+        options.add(new SelectOption('Utah', 'Utah'));
+        options.add(new SelectOption('Vermont', 'Vermont'));
+        options.add(new SelectOption('Virginia', 'Virginia'));
+        options.add(new SelectOption('Washington', 'Washington'));
+        options.add(new SelectOption('West Virginia','West Virginia'));
+        options.add(new SelectOption('Wisconsin', 'Wisconsin'));
+        options.add(new SelectOption('Wyoming', 'Wyoming'));
+        options.add(new SelectOption('American Samoa', 'American Samoa'));
+        options.add(new SelectOption('Federated States of Micronesia', 'Federated States of Micronesia'));
+        options.add(new SelectOption('Guam', 'Guam'));
+        options.add(new SelectOption('Midway Islands', 'Midway Islands'));
+        options.add(new SelectOption('Northern Mariana Islands', 'Northern Mariana Islands'));
+        options.add(new SelectOption('Puerto Rico', 'Puerto Rico'));
+        options.add(new SelectOption('Republic of the Marshall Islands', 'Republic of the Marshall Islands'));
+        options.add(new SelectOption('Republic of Palau', 'Republic of Palau'));
+        options.add(new SelectOption('U.S. Virgin Islands', 'U.S. Virgin Islands'));
+        return options;
+    }
+
  }

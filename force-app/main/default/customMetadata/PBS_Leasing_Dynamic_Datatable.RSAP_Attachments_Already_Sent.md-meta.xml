@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Attachments Already Sent in Previous Sub</label>
+    <protected>false</protected>
+    <values>
+        <field>Filter__c</field>
+        <value xsi:type="xsd:string">PBS_AAAP_Sent_to_GREX__c = TRUE AND PBS_AAAP_Attachment_Type__c != &apos;Offeror GSA Form 1364&apos; AND PBS_AAAP_Attachment_Type__c != &apos;Offeror Form 1217- Lessor\&apos;s Annual Cost Statement&apos; AND PBS_AAAP_Attachment_Type__c != &apos;Present Value Analysis (PVA) Evaluationt&apos;</value>
+    </values>
+    <values>
+        <field>PBS_Leasing_Object_API_Name__c</field>
+        <value xsi:type="xsd:string">PBS_AAAP_Offer_Attachments__c</value>
+    </values>
+    <values>
+        <field>PBS_Leasing_Related_Field_API_Name__c</field>
+        <value xsi:type="xsd:string">PBS_AAAP_Offer__c</value>
+    </values>
+</CustomMetadata>

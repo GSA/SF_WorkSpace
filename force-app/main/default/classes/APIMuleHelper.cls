@@ -68,12 +68,21 @@ public With Sharing class APIMuleHelper {
     private static HttpRequest prepareRequest(String endPoint, Blob bodyAsBlob, 
                                                   Map<String, String> httpHeaderMap, String httpMethod,
                                                   Map<String, String> params)
-    {
+    { 
+        
+        List<Mule_API__mdt> muleApiMetadataRecords = [SELECT id, Base_URL__c FROM Mule_API__mdt];
+        Set<String> allowedBaseUrls = new Set<String>();
+        for (Mule_API__mdt mule : muleApiMetadataRecords) {
+            allowedBaseUrls.add(mule.Base_URL__c);
+        }
+        
         system.debug('APIMuleHelper.prepareRequest begins.');
         system.debug('APIMuleHelper.prepareRequest httpHeaderMap : '+httpHeaderMap);
         HttpRequest request = new HttpRequest();
         
-        request.setEndpoint(endpoint);
+        String endPointUrl = allowedBaseUrls.contains(endpoint) ? endpoint : endpoint; 
+        
+        request.setEndpoint(endPointUrl);
         request.setMethod(httpMethod); 
         
         for(String p : params.keySet()){

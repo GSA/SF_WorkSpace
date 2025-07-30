@@ -2,6 +2,7 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
 
     public boolean isValidUser { get; set; }
     public String offerId { get; set; }
+    public String propId { get; set; }
     public String isNew { get; set; }
     public String action { get; set; }
     public string isEditable { get; set; }
@@ -33,6 +34,8 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
     public String freeRentIndexNumber{ get; set; }
     private boolean isFromOnLoad;
     public String pageURLForRedirection{get;set;}
+    public Boolean showRentErrorMsg { get; set; }
+    public string rentErrorMsg { get; set; }
  
     public PBS_LOP_SpacesAndRatesController() {
         freeRentLimits = 0;
@@ -52,6 +55,7 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
         userDetail = [SELECT u.Username, u.ProfileId,u.CompanyName, u.Name, u.Id, u.ContactId, u.LastName, u.FirstName, u.Street, u.City, u.State, u.PostalCode FROM User u WHERE u.Id = :UserInfo.getUserId()];
         action = ApexPages.currentPage().getParameters().get('action');
         offerId = ApexPages.currentPage().getParameters().get('offerId');
+        propId = ApexPages.currentPage().getParameters().get('propertyId');
         if(validateId(offerId)){
         isNew = ApexPages.currentPage().getParameters().get('isNew');
         isEditable = ApexPages.currentPage().getParameters().get('edit');
@@ -61,7 +65,7 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
 
         if (isEditable == 'false') {
             viewOnly = true;
-            viewMsg = 'Offer opened in a View mode';
+            viewMsg = 'Offer opened in view mode. Any changes made will not be saved.';
         } else {
             viewOnly = false;
         }
@@ -120,20 +124,20 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
             TICheck = lopOffer.PBS_RSAP_Free_TI_Is_Offered__c == 'Yes' ? true : false;
             BSACCheck = lopOffer.PBS_RSAP_Free_BSAC_Is_Offered__c == 'Yes' ? true : false;
             ParkingCheck = lopOffer.PBS_RSAP_Free_Parking_Is_Offered__c == 'Yes' ? true : false;
-            if (lopOffer.OwnerId == UserInfo.getUserId()) {
+            if (this.lopoffer.OwnerId == UserInfo.getUserId()) {
                 isValidUser = true;
-                if (!lopOffer.PBS_AAAP_RLP_Number__r.PBS_RSAP_Solicitation_Status__c) {
+                if (lopOffer.PBS_AAAP_RLP_Number__r.PBS_RSAP_Solicitation_Status__c) {
                     isTerminated = false;
                 } else {
                     isTerminated = true;
                 }
                 if (isTerminated) {
-                    //viewOnly = true;
-                    //viewMsg = 'Project is terminated. Offer opened in a view mode';
+                    viewOnly = true;
+                    viewMsg = 'Project is terminated. Offer opened in view mode. Any changes made will not be saved.';
                     System.debug('*** isEditable ***' + isEditable);
-                } else if (lopOffer.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED) {
-                    //viewOnly = false;
-                    //viewMsg = 'Project due date has elapsed. Offer opened in a view mode';
+                } else if (lopOffer.PBS_AAAP_Offer_Status__c == 'Closed') {
+                    viewOnly = true;
+                    viewMsg = 'Project due date has elapsed. Offer opened in view mode. Any changes made will not be saved.';
                 }
             } else {
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, PBS_AAAP_GlobalConstants.ERROR_INAVLID_ACCESS_OWNERSHIP);
@@ -144,33 +148,169 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
             isValidUser = true;
             lopOffer = new PBS_AAAP_Offer__c();
         }
-
-
-        isRendered = false;
-        isFromOnLoad = false;
+            isRendered = false;
+            isFromOnLoad = false;
         }
     }
+    
+    /*public class StepRentWrapper implements Comparable {
+        public PBS_RSAP_Step_Rent__c step;
+        
+        public StepRentWrapper(PBS_RSAP_Step_Rent__c step) {
+            this.step = step;
+        }
+        
+        public Integer compareTo(Object obj) {
+            StepRentWrapper other = (StepRentWrapper) obj;
+            
+            // Null safety
+            if (this.step.PBS_RSAP_Rent_Number__c == null && other.step.PBS_RSAP_Rent_Number__c == null) {
+                return 0;
+            } else if (this.step.PBS_RSAP_Rent_Number__c == null) {
+                return -1;
+            } else if (other.step.PBS_RSAP_Rent_Number__c == null) {
+                return 1;
+            }
+            
+            return this.step.PBS_RSAP_Rent_Number__c.intValue() - other.step.PBS_RSAP_Rent_Number__c.intValue();
+        }
+    }*/
+    
+    public Boolean validateStepRentRecords(List<PBS_RSAP_Step_Rent__c> stepFreeRentRecords) {
+        List<String> errorMessages = new List<String>();
+        Map<String, List<PBS_RSAP_Step_Rent__c>> rentTypeMap = new Map<String, List<PBS_RSAP_Step_Rent__c>>();
+        
+        // 1. Validate individual row fields
+        for (PBS_RSAP_Step_Rent__c step : stepFreeRentRecords) {
+            
+            if (isBlankOrNone(step.PBS_RSAP_Step_Start__c)) {
+                continue;
+            }
+            
+            List<String> rowErrors = validateStepRow(step);
+            if (!rowErrors.isEmpty()) {
+                for (String msg : rowErrors) {
+                    errorMessages.add('Rent Page: Step Rent- Row ' + step.PBS_RSAP_Rent_Number__c + ': ' + msg);
+                }
+            }
+        }
+        
+        // 2. Group by Rent Type
+        /*for (PBS_RSAP_Step_Rent__c step : stepFreeRentRecords) {
+            if (isBlankOrNone(step.PBS_RSAP_Step_Rent_Type__c) || 
+                String.isBlank(step.PBS_RSAP_Step_Start__c) || 
+                String.isBlank(step.PBS_RSAP_Step_End__c)) {
+                    continue; // Skip invalid rows
+                }
+            
+            String rentType = step.PBS_RSAP_Step_Rent_Type__c;
+            if (!rentTypeMap.containsKey(rentType)) {
+                rentTypeMap.put(rentType, new List<PBS_RSAP_Step_Rent__c>());
+                continue;
+            }
+            rentTypeMap.get(rentType).add(step);
+        }
+        
+         // 2. Check overlapping year ranges for same Rent Type
+        for (String rentType : rentTypeMap.keySet()) {
+            List<PBS_RSAP_Step_Rent__c> steps = rentTypeMap.get(rentType);
+            List<StepRentWrapper> wrappedList = new List<StepRentWrapper>();
+            
+            for (PBS_RSAP_Step_Rent__c step : steps) {
+                wrappedList.add(new StepRentWrapper(step));
+            }
+            
+            wrappedList.sort();
+            
+            for (Integer i = 0; i < wrappedList.size() - 1; i++) {
+                PBS_RSAP_Step_Rent__c current = wrappedList[i].step;
+                PBS_RSAP_Step_Rent__c next = wrappedList[i + 1].step;
+                
+                Integer currentEnd = Integer.valueOf(current.PBS_RSAP_Step_End__c);
+                Integer nextStart = Integer.valueOf(next.PBS_RSAP_Step_Start__c);
+                
+                if (nextStart <= currentEnd) {
+                    errorMessages.add('Rent Page: Step Rent - Rent Type "' + rentType +
+                                      '" has overlapping years between rows ' + current.PBS_RSAP_Rent_Number__c +
+                                      ' and ' + next.PBS_RSAP_Rent_Number__c);
+                }
+            }
+        }*/
 
+        // 3. Show errors on Visualforce
+        if (!errorMessages.isEmpty()) {
+            String fullMessage = String.join(errorMessages, '<br/>');
+            rentErrorMsg = fullMessage; // bind this to the Visualforce page
+            showRentErrorMsg = true;       // ensure the outputPanel is rendered
+            return false;
+        }
+
+        return true;
+    }
+
+    // Returns list of validation errors for a single row
+    public static List<String> validateStepRow(PBS_RSAP_Step_Rent__c step) {
+        List<String> errors = new List<String>();
+
+        // Check for blank or "--None--" fields
+        if (isBlankOrNone(step.PBS_RSAP_Step_Rent_Type__c) ||
+            isBlankOrNone(step.PBS_RSAP_Step_End__c) ||
+            step.PBS_RSAP_Step_Annual_Rent__c == null) {
+            errors.add('All required step rent fields must be filled.');
+            return errors; // skip further checks if core fields are missing
+        }
+
+        // Check that start and end years are valid and in correct order
+        try {
+            Integer startYear = Integer.valueOf(step.PBS_RSAP_Step_Start__c.trim());
+            Integer endYear = Integer.valueOf(step.PBS_RSAP_Step_End__c.trim());
+
+            if (startYear > endYear) {
+                errors.add('The beginning year must be less than or equal to the ending year.');
+            }
+        } catch (Exception e) {
+            errors.add('Start and end year must be valid numbers.');
+        }
+
+        return errors;
+    }
+    
+    private static Boolean isBlankOrNone(String value) {
+        return String.isBlank(value) || value == '--None--';
+    }
+   
+    
     public PageReference actionSaveSpaceRates() {
+       
+        /*if (lopOffer.PBS_RSAP_Shell_Initial_Annual__c == 0) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Rent Page: Shell Rent: Annual Rent is required.'));
+            return null;
+        }*/
+        
+        if (!validateStepRentRecords(stepFreeRentRecords)) {
+            return null;
+        }
+        
+       
+        
+        PBS_AAAP_Utility.OfferValidationResponse response  = PBS_AAAP_Utility.validateOffer(lopOffer,new List<String>{'Offer-S-Rent'});
+        if (response.errorMessages.size() > 0 ) {
+            for(String error : response.errorMessages){
+                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, error));
+            }
+            return null;
+        }
         saveSpaceRates();
         PageReference p = new PageReference('/RSAP/Rates');
-        /*p.getParameters().put('offerId', lopOffer.Id);
-        if (isEditable == 'true') {
-            p.getParameters().put('edit', 'true');
-        } else {
-            isEditable = 'false';
-        }
-        p.setRedirect(true);
-        return p;*/
+        
         //addeds
         p.getParameters().put('offerId', offerId);
         p.getParameters().put('draftMsg', draftMsgFlag);
-            // p.setRedirect(true);
-            // return p;   
-
+        
+        
         pageURLForRedirection = p.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/Rates', Label.LOP_Community_Base_URL+'RSAP-Rates');
-   
+        
+        pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-S-Rent?edit=true&offerId='+offerId+'&propertyId='+propId;   
         return null;
         //addeds
     }
@@ -201,24 +341,18 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
             lopOffer.PBS_AAAP_Rental_Concessions__c = this.rentalConcessions;
             lopOffer.PBS_AAAP_Common_Area_Factor__c = (lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c > 0) ? (100 * (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c - lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c) / lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c).setScale(2) : 0.00;
 //Op Cost
-            //Commented these fields to handle null values
-            //lopOffer.PBS_AAAP_Op_Cost_Years_Effective__c = lopOffer.PBS_AAAP_INITIAL_NO_OF_YEARS__c;
+            
             lopOffer.PBS_AAAP_OP_COST_COST_PER_ABOA__c = (lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c > 0) ? (lopoffer.PBS_AAAP_SRVC_UTIL_TOTAL_GOV__c / lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c).setScale(2) : 0;
             lopOffer.PBS_AAAP_OP_COST_COST_PER_RSF__c = (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c > 0) ? (lopoffer.PBS_AAAP_SRVC_UTIL_TOTAL_GOV__c / lopOffer.PBS_AAAP_Office_RSF_OFFERED__c).setScale(2) : 0;
 //Shell Rent
-//commented these fields to handle null values
-            //lopOffer.PBS_AAAP_Shell_Rent_Per_ABOA__c = (lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c > 0) ? ((lopOffer.PBS_AAAP_Shell_Rent_Per_RSF__c * lopOffer.PBS_AAAP_Office_RSF_OFFERED__c) / lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c).setScale(2) : 0;
-            //System.debug('lopOffer.PBS_AAAP_Shell_Rent_Per_RSF__c:' + lopOffer.);
-            //System.debug('lopOffer.PBS_AAAP_Shell_Rent_Per_ABOA__c:' + lopOffer.PBS_AAAP_Shell_Rent_Per_ABOA__c);
-            //Parking
+
             lopOffer.PBS_RSAP_Total_Parking_Annual_Amount__c = (((lopOffer.PBS_AAAP_Monthly_cost_res_gar_park__c*lopOffer.PBS_RSAP_Struct_Resv_Parking__c)
                                                                  +(lopOffer.PBS_AAAP_Monthly_cost_res_sur_park__c*lopOffer.PBS_RSAP_Surf_Resv_Parking__c)
                                                                  +(lopOffer.PBS_AAAP_Monthly_cost_nonres_gar_park__c*lopOffer.PBS_RSAP_Struct_NonResv_Parking__c)
                                                                  +(lopOffer.PBS_AAAP_Monthly_cost_nonres_sur_park__c*lopOffer.PBS_RSAP_Surf_NonResv_Parking__c))*12).setScale(2);
             
             
-            //TI
-            //PBS_AAAP_Annual_TI_Rent__c ,  PBS_AAAP_Anual_BSAC_Rent__c , PBS_AAAP_TI_Buildout_as_in_RLP__c
+            
             lopOffer.PBS_AAAP_TI_Total_Build_out_Costs__c = (lopOffer.PBS_AAAP_TI_Buildout_as_in_RLP__c == null) ? 0.00 : (lopOffer.PBS_AAAP_TI_Buildout_as_in_RLP__c * lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c).setScale(2);
             lopOffer.PBS_AAAP_TI_Amorti_Interest_Rate__c = (lopOffer.PBS_AAAP_TI_Amorti_Interest_Rate__c == null) ? 0 : lopOffer.PBS_AAAP_TI_Amorti_Interest_Rate__c;
             lopOffer.PBS_AAAP_TI_Amorization_in_Years__c = (lopOffer.PBS_AAAP_TI_Amorization_in_Years__c == null) ? 0 : lopOffer.PBS_AAAP_TI_Amorization_in_Years__c;
@@ -288,17 +422,7 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
             
             lopOffer.PBS_AAAP_BSAC_Years_Rate_Effective__c = (lopOffer.PBS_AAAP_BSAC_Amorization_in_Years__c == null) ? 0 : (lopOffer.PBS_AAAP_BSAC_Amorization_in_Years__c / 12).setScale(2);
 
-//Annual Rent
-            /*lopOffer.PBS_AAAP_Lease_Annual_Rent_Per_RSF__c = lopOffer.PBS_AAAP_OP_COST_COST_PER_RSF__c + lopOffer.PBS_AAAP_BSAC_Annual_Rent_Per_RSF__c + lopOffer.PBS_AAAP_TI_Annual_Rent_Per_RSF__c + lopOffer.PBS_AAAP_Shell_Rent_Per_RSF__c;
-            System.debug('in lopOffer.PBS_AAAP_Lease_Annual_Rent_Per_RSF__c fields' + lopOffer.PBS_AAAP_Lease_Annual_Rent_Per_RSF__c);
-            lopOffer.PBS_AAAP_Lease_Annual_Rent_Per_ABOA__c = lopOffer.PBS_AAAP_OP_COST_COST_PER_ABOA__c + lopOffer.PBS_AAAP_BSAC_Annual_Rent_Per_ABOA__c + lopOffer.PBS_AAAP_TI_Annual_Rent_Per_ABOA__c + lopOffer.PBS_AAAP_Shell_Rent_Per_ABOA__c;
-            System.debug('in lopOffer.PBS_AAAP_Lease_Annual_Rent_Per_ABOA__c fields' + lopOffer.PBS_AAAP_Lease_Annual_Rent_Per_ABOA__c);*/
-//Total Annual Rent
 
-            /*lopOffer.PBS_AAAP_Lease_Annual_Rent_Per_RSF__c = lopOffer.PBS_AAAP_OP_COST_COST_PER_RSF__c + lopOffer.PBS_AAAP_BSAC_Annual_Rent_Per_RSF__c + lopOffer.PBS_AAAP_TI_Annual_Rent_Per_RSF__c + lopOffer.PBS_AAAP_Shell_Rent_Per_RSF__c;
-            System.debug('in lopOffer.PBS_AAAP_Lease_Annual_Rent_Per_RSF__c fields' + lopOffer.PBS_AAAP_Lease_Annual_Rent_Per_RSF__c);
-            lopOffer.PBS_AAAP_Lease_Annual_Rent_Per_ABOA__c = lopOffer.PBS_AAAP_OP_COST_COST_PER_ABOA__c + lopOffer.PBS_AAAP_BSAC_Annual_Rent_Per_ABOA__c + lopOffer.PBS_AAAP_TI_Annual_Rent_Per_ABOA__c + lopOffer.PBS_AAAP_Shell_Rent_Per_ABOA__c;
-            System.debug('in lopOffer.PBS_AAAP_Lease_Annual_Rent_Per_ABOA__c fields' + lopOffer.PBS_AAAP_Lease_Annual_Rent_Per_ABOA__c);*/
             
             //Total Initial Rent
             lopOffer.PBS_RSAP_Lease_Annual_Rent__c = (lopOffer.PBS_RSAP_Total_Parking_Annual_Amount__c + lopOffer.PBS_RSAP_Shell_Initial_Annual__c + lopOffer.PBS_AAAP_SRVC_UTIL_TOTAL_GOV__c + lopOffer.PBS_AAAP_Annual_TI_Rent__c+lopOffer.PBS_AAAP_Anual_BSAC_Rent__c).setScale(2);
@@ -309,59 +433,20 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
             totalAnnualRentAmt = lopOffer.PBS_AAAP_Lease_Annual_Rent_Per_RSF__c * lopOffer.PBS_AAAP_Office_RSF_OFFERED__c;
             System.debug('in totalAnnualRentAmt fields' + totalAnnualRentAmt);
 //Step Rent
-            //Commented these fields to handle null values
-            /*
-            lopOffer.PBS_AAAP_Step_1_Rent_Per_ABOA__c = (lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c == 0) ? 0 : (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c * lopOffer.PBS_AAAP_Step_1_Rent_Per_RSF__c / lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c).setScale(2);
-            lopOffer.PBS_AAAP_Step_2_Rent_Per_ABOA__c = (lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c == 0) ? 0 : (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c * lopOffer.PBS_AAAP_Step_2_Rent_Per_RSF__c / lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c).setScale(2);
-            lopOffer.PBS_AAAP_Step_3_Rent_Per_ABOA__c = (lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c == 0) ? 0 : (lopOffer.PBS_AAAP_Office_RSF_OFFERED__c * lopOffer.PBS_AAAP_Step_3_Rent_Per_RSF__c / lopOffer.PBS_AAAP_Total_Ofc_ABOA_offered__c).setScale(2);
-            */
+
             draftMsgFlag = '';
             if (lopOffer.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED) {
                 PBS_AAAP_GlobalConstants.updateOfferToDraft(lopOffer);
                 draftMsgFlag = 'true';
             }
-            //Commented these fields to handle null values
-            /*if (lopOffer.PBS_AAAP_Renewal_Shell_Rate__c > 0)
-                lopOffer.PBS_AAAP_Lease_Has_Renewal_Options__c = 'Yes'; else {
-                lopOffer.PBS_AAAP_Lease_Has_Renewal_Options__c = 'No';
-            }
-            */
-            //lopOffer.PBS_AAAP_Years_Annual_Rate_Effective__c = getMinimum(
-                //lopOffer.PBS_AAAP_BSAC_Years_Rate_Effective__c, lopOffer.PBS_AAAP_TI_Years_Rate_Effective__c, lopOffer.PBS_AAAP_Shell_Rate_Years_Effective__c);
-            //System.debug('lopOffer.PBS_AAAP_Years_Annual_Rate_Effective__c is *** ' + lopOffer.PBS_AAAP_Years_Annual_Rate_Effective__c);
-
-            //added by syam on 12/08/2016 for steprent changes
-            /*
-            if (lopOffer.PBS_AAAP_Is_Shell_Rent_Stepped__c == 'Yes') {
-                lopOffer.PBS_AAAP_Step_1_Start__c = 1;
-                //Commented these fields to handle null values
-                //lopOffer.PBS_AAAP_Step_1_End__c = lopOffer.PBS_AAAP_Shell_Rate_Years_Effective__c;
-                lopOffer.PBS_AAAP_Step_1_Rent_Per_RSF__c = lopOffer.PBS_AAAP_Shell_Rent_Per_RSF__c;
-                //lopOffer.PBS_AAAP_Step_1_Rent_Per_ABOA__c = lopOffer.PBS_AAAP_Shell_Rent_Per_ABOA__c;
-            } else {
-                lopOffer.PBS_AAAP_Step_1_Start__c = 0;
-                lopOffer.PBS_AAAP_Step_1_End__c = 0;
-                lopOffer.PBS_AAAP_Step_1_Rent_Per_RSF__c = 0;
-                lopOffer.PBS_AAAP_Step_1_Rent_Per_ABOA__c = 0;
-
-                lopOffer.PBS_AAAP_Step_2_Start__c = 0;
-                lopOffer.PBS_AAAP_Step_2_End__c = 0;
-                lopOffer.PBS_AAAP_Step_2_Rent_Per_RSF__c = 0;
-                lopOffer.PBS_AAAP_Step_2_Rent_Per_ABOA__c = 0;
-
-                lopOffer.PBS_AAAP_Step_3_Start__c = 0;
-                lopOffer.PBS_AAAP_Step_3_End__c = 0;
-                lopOffer.PBS_AAAP_Step_3_Rent_Per_RSF__c = 0;
-                lopOffer.PBS_AAAP_Step_3_Rent_Per_ABOA__c = 0;
-
-
-            }*/
+            
             lopOffer.PBS_RSAP_Free_Shell_Is_Offered__c = ShellCheck ? 'Yes' : 'No';
             lopOffer.PBS_RSAP_Free_Operating_Is_Offered__c = OperatingCheck ? 'Yes' : 'No';
             lopOffer.PBS_RSAP_Free_TI_Is_Offered__c = TICheck ? 'Yes' : 'No';
             lopOffer.PBS_RSAP_Free_BSAC_Is_Offered__c = BSACCheck ? 'Yes' : 'No';
             lopOffer.PBS_RSAP_Free_Parking_Is_Offered__c = ParkingCheck ? 'Yes' : 'No';
-            //updateAreaType(lopOffer);
+            
+            
             System.debug(stepFreeRentRecords);
             if(stepFreeRentRecords.size() > 0){
                 upsert stepFreeRentRecords;
@@ -439,28 +524,37 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
 
     public PageReference backToLeaseTerms() {
 
-        //PageReference p = Page.PBS_LOP_LeaseTerms;
+        
         PageReference p = new PageReference('/RSAP/LeaseTerms');
-        //p.getParameters().put('offerId', lopOffer.Id);
+        
         p.getParameters().put('offerId', offerId);
         if (isEditable == 'true') {
             p.getParameters().put('edit', 'true');
         } else {
             isEditable = 'false';
         }
-        //p.setRedirect(true);
-       // return p;
-       // addeds
+        
           p.setRedirect(false);
         
         pageURLForRedirection = p.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/LeaseTerms', Label.LOP_Community_Base_URL+'RSAP-LeaseTerms');
+      
+         pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-S-TermsFinancials?edit='+(viewOnly ? 'false' : 'true')+'&offerId='+offerId+'&propertyId='+propId;
         return null;
-        //addeds
+        
     }
     
 
     public PageReference actionSaveSpaceRatesAndContinue() {
+        if (!validateStepRentRecords(stepFreeRentRecords)) {
+            return null;
+        }
+        PBS_AAAP_Utility.OfferValidationResponse response  = PBS_AAAP_Utility.validateOffer(lopOffer,new List<String>{'Offer-S-Rent'});
+        if (response.errorMessages.size() > 0 ) {
+            for(String error : response.errorMessages){
+                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, error));
+            }
+            return null;
+        }
         PageReference p = null;
     
         try {
@@ -475,7 +569,7 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
                 draftMsgFlag = 'true';
             }
             saveSpaceRates();
-            p = new PageReference('/RSAP/PropertyOwner');
+            p = new PageReference('/RSAP/Attachments');
             p.getParameters().put('offerId', lopOffer.Id);
             if (draftMsgFlag == 'true') {
                 p.getParameters().put('draftMsgFlag', 'true');
@@ -488,7 +582,8 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
             p.setRedirect(true);
            if(pageURL == NULL || pageURL == ''){
                 pageURLForRedirection = p.getUrl();
-                pageURLForRedirection = pageURLForRedirection.replace('/RSAP/PropertyOwner', Label.LOP_Community_Base_URL+'RSAP-PropertyOwner');
+
+                pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-S-Attachments?edit=true&offerId='+offerId+'&propertyId='+propId;
                 p.setRedirect(false);
             } else {
                  p = new PageReference(pageURL);
@@ -511,7 +606,7 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
     }
 
     public PageReference actionCancel() {
-        //PageReference pref = Page.PBS_LOP_PortalHome;
+        
         PageReference pref = new PageReference('/RSAP/PortalHome');
         pref.setRedirect(true);
         return pref;
@@ -539,22 +634,22 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
         return options;
     }
     public void addRow() {
-        //stepFreeRentRecords = [SELECT Id, PBS_RSAP_Step_Annual_Rent__c, PBS_RSAP_Step_End__c, PBS_RSAP_Step_Payment_Basis__c, PBS_RSAP_Step_Rent_Type__c, PBS_RSAP_Step_Start__c, PBS_AAAP_Offer__c, PBS_RSAP_Rent_Number__c FROM PBS_RSAP_Step_Rent__c Where PBS_AAAP_Offer__c =:offerId order by PBS_RSAP_Rent_Number__c];
-        
         currentIndexForFreeRent++;
         stepFreeRentRecords.add(new PBS_RSAP_Step_Rent__c(PBS_RSAP_Rent_Number__c=currentIndexForFreeRent,PBS_AAAP_Offer__c=offerId));
-        if(stepFreeRentRecords.size() > 0 && !isFromOnLoad){
+       
+        if (stepFreeRentRecords.size() > 0 && !isFromOnLoad) {
             upsert stepFreeRentRecords;
         }
-        if(currentIndexForFreeRent != 1){
-            stepFreeRentRecords = [SELECT Id, PBS_RSAP_Step_Annual_Rent__c, PBS_RSAP_Step_End__c, PBS_RSAP_Step_Payment_Basis__c, PBS_RSAP_Step_Rent_Type__c, PBS_RSAP_Step_Start__c, PBS_AAAP_Offer__c, PBS_RSAP_Rent_Number__c FROM PBS_RSAP_Step_Rent__c Where PBS_AAAP_Offer__c =:string.escapeSingleQuotes(offerId) order by PBS_RSAP_Rent_Number__c];
-        
+
+        if (currentIndexForFreeRent != 1) {
+            stepFreeRentRecords = [SELECT Id, PBS_RSAP_Step_Annual_Rent__c, PBS_RSAP_Step_End__c, PBS_RSAP_Step_Payment_Basis__c, PBS_RSAP_Step_Rent_Type__c, PBS_RSAP_Step_Start__c, PBS_AAAP_Offer__c, PBS_RSAP_Rent_Number__c 
+                                   FROM PBS_RSAP_Step_Rent__c
+                                   WHERE PBS_AAAP_Offer__c =:string.escapeSingleQuotes(offerId) order by PBS_RSAP_Rent_Number__c];
         }
+        
         isRendered = true;
     }
     public void addRenewalRow() {
-        //renewalOptionsRecords = [SELECT Id,PBS_RSAP_Option_Duration__c, PBS_RSAP_Option_RSF_Rate__c, PBS_RSAP_Option_Days_Notice_to_Exercise__c, PBS_RSAP_Option_Number__c      FROM PBS_RSAP_Renewal_Options__c Where PBS_AAAP_Offer__c =:offerId order by PBS_RSAP_Option_Number__c];
-        
         currentIndexForRenewalOptions++;
         renewalOptionsRecords.add(new PBS_RSAP_Renewal_Options__c(PBS_RSAP_Option_Number__c=currentIndexForRenewalOptions,PBS_AAAP_Offer__c=offerId));
         if(renewalOptionsRecords.size() > 0 && !isFromOnLoad){
@@ -621,11 +716,11 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
         String areaType = lopOffer.PBS_AAAP_SITE_AREA_TYPE__c;
         System.debug('*** areaType is ' + areaType);
         Decimal siteSize = lopOffer.PBS_AAAP_SITE_SIZE_SQFT__c;
-        //siteSize.setScale(2, RoundingMode.HALF_UP);
+        
         System.debug('*** siteSize is ' + siteSize);
         if (lopOffer.PBS_AAAP_SITE_SIZE_SQFT__c != null && areaType == 'Acres') {
             siteSize = siteSize * 43560;
-            //siteSize.setScale(2, RoundingMode.HALF_UP);
+            
 
             System.debug('*** siteSize inside is ' + siteSize);
             lopOffer.PBS_AAAP_SITE_SIZE_SQFT__c = siteSize;
@@ -634,31 +729,7 @@ public with sharing class PBS_LOP_SpacesAndRatesController {
     }
 
     public void updateStepRents(){
-        /*
-        if (lopOffer.PBS_AAAP_Is_Shell_Rent_Stepped__c == 'Yes') {
-            lopOffer.PBS_AAAP_Step_1_Start__c = 1;
-            //lopOffer.PBS_AAAP_Step_1_End__c = lopOffer.PBS_AAAP_Shell_Rate_Years_Effective__c;
-            lopOffer.PBS_AAAP_Step_1_Rent_Per_RSF__c = lopOffer.PBS_AAAP_Shell_Rent_Per_RSF__c;
-            lopOffer.PBS_AAAP_Step_1_Rent_Per_ABOA__c = lopOffer.PBS_AAAP_Shell_Rent_Per_ABOA__c;
-        } else {
-            lopOffer.PBS_AAAP_Step_1_Start__c = 0;
-            lopOffer.PBS_AAAP_Step_1_End__c = 0;
-            lopOffer.PBS_AAAP_Step_1_Rent_Per_RSF__c = 0;
-            lopOffer.PBS_AAAP_Step_1_Rent_Per_ABOA__c = 0;
-
-            lopOffer.PBS_AAAP_Step_2_Start__c = 0;
-            lopOffer.PBS_AAAP_Step_2_End__c = 0;
-            lopOffer.PBS_AAAP_Step_2_Rent_Per_RSF__c = 0;
-            lopOffer.PBS_AAAP_Step_2_Rent_Per_ABOA__c = 0;
-
-            lopOffer.PBS_AAAP_Step_3_Start__c = 0;
-            lopOffer.PBS_AAAP_Step_3_End__c = 0;
-            lopOffer.PBS_AAAP_Step_3_Rent_Per_RSF__c = 0;
-            lopOffer.PBS_AAAP_Step_3_Rent_Per_ABOA__c = 0;
-
-
-        }
-        */
+        
     }
     static public Boolean validateId(String Idparam) {
         String id = String.escapeSingleQuotes(Idparam);

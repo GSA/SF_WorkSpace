@@ -35,6 +35,20 @@
             text-transform:uppercase;
             font-size:10px;
         } 
+            
+            .h3{
+            //border-bottom: none;
+            }
+            .hr {
+                font-weight: bold;
+                font-size: 20px;
+                //border-bottom: 1px solid #cccccc;
+                padding: 0 0 8px;
+                color: #000000;
+                //color: #002BAD;
+                padding-top: 40px;
+                margin-left : 170px;
+            }
     
         .col1   {text-align: left;
                  width: 400px;}
@@ -42,7 +56,7 @@
                  width: 230px;}
         .tabbed-table table td {
                 background:#fff;}
-        h2        {color:#fff; font-size:80%; font-weight:bold; padding-left:40px; width:80%;}                 
+        h2        {color:#fff; font-size:80%; font-weight:bold; padding-left:40px; margin-left: 40px; width:80%;}                 
 
         </style>
 
@@ -55,8 +69,8 @@
         #searchTable.tabbed-table table tr {height:20px !important;}
         #searchTable.tabbed-table table td.labelCol {background:#ccc; font-weight:bold;}
         #searchTable.tabbed-table table td {width:25%;}
-        .tabbed-table table {width:800px !important;}
-        .tabbed-table {width:800px !important;}
+        .tabbed-table table {width:900px !important;}
+        .tabbed-table {width:900px !important;}
             
 
         </style>
@@ -116,7 +130,7 @@ var j$ = jQuery.noConflict();
                 this page unless it is submitted.</font></b></apex:outputPanel>
     <apex:outputPanel rendered="{!offerSubmitFlag}">
         <div id="wrapper">
-            <!--<c:inside_header />-->
+            
             <div id="content" class="attachments">
                 <!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
 
@@ -235,7 +249,7 @@ var j$ = jQuery.noConflict();
                                 <apex:outputLabel value="{!submitedOffer.PBS_AAAP_FIRE_SAFETY_REQ_FLOORS1TO6__c}"/>
                             </apex:panelGrid>
                             <br/>
-                            <!-- <h1><b><apex:outputText value="Electronic Signature"/></b></h1> <br/> -->
+                            
                             <apex:panelGrid columns="1">
                                 <apex:outputText value="First Name"/>
                                 <apex:inputText value="{!submitedOffer.PBS_AAAP_Signature_First_Name__c }"
@@ -253,11 +267,11 @@ var j$ = jQuery.noConflict();
                     </apex:outputPanel>
                     <apex:outputPanel rendered="{!!offerFY}">
                         <apex:outputPanel >
-                            <h3 class="blue">Submit Offer</h3>
+                            <h2 class="hr">Submit offer</h2>
                         </apex:outputPanel>
                         <apex:pageBlock id="pblck_detail">
                             <div class="tabbed-table"><br/>
-                                <div class="offerTitle">Offered Spaces</div>
+                                <div class="offerTitle">Offered spaces</div>
                                 <div id="example_wrapper" style="margin-top:5px;" class="dataTables_wrapper"
                                      role="grid">
                                     <apex:pageBlockTable id="space_rates_table" var="detail" value="{!Details}">

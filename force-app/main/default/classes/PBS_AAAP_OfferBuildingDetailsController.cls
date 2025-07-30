@@ -1,14 +1,26 @@
 public with sharing class PBS_AAAP_OfferBuildingDetailsController extends PBS_AAAP_PageBaseController{
     public PBS_AAAP_Offer__c offerBuilding { get; set; }
     public ID offerID { get; set; }
+    public ID propID { get; set; }
     public boolean isValidUser { get; set; }
     public String draftMsgFlag { get; set; }
+     public String rlpType { get; set; }
+    public String action { get; set; }
+    public Boolean isPendingModfication { get; set; }
+    public Boolean isCopy { get; set; }
+    public Boolean isModify { get; set; }
+    public boolean showSubmitMesg { get; set; }
     public String pageUrl{get;set;}
     public string pageURLForRedirection {get;set;}
+    public String hubZoneStr { get; set; }
     public Boolean reconstructionAcknowledgement = false;
-    //SGanti commented out 7/21/2021
-    //public String selectedEnergyStar {get; set;}
-    //SGanti commented out 7/21/2021
+    public Boolean isHistoricProperty { get; set; }
+    public Boolean isInHistoricDistrict { get; set; }
+    public Boolean isNotHistoric { get; set; }
+    public String selectedASL {get; set;}
+    public Boolean viewOnly { get; set; }
+    public String viewMsg { get; set; }
+    
     
     public PBS_AAAP_OfferBuildingDetailsController(ApexPages.StandardController stdCtrl)
     {
@@ -19,22 +31,63 @@ public with sharing class PBS_AAAP_OfferBuildingDetailsController extends PBS_AA
     
     public PBS_AAAP_OfferBuildingDetailsController() {
                System.debug('Offer Building Details start');
-
+        
+        action = getQueryParamAsString('action');
+        showSubmitMesg = false;
         draftMsgFlag = ApexPages.currentPage().getParameters().get('draftMsgFlag');
+        if (ApexPages.currentPage().getParameters().get('propertyId') != null){
+            propID = ApexPages.currentPage().getParameters().get('propertyId');
+        }
+        String isEditable = ApexPages.currentPage().getParameters().get('edit');
+        if (isEditable == 'false') {
+            viewOnly = true;
+            viewMsg = 'Offer opened in view mode. Any changes made will not be saved.';
+        } else {
+            viewOnly = false;
+        }
+        	
         if (ApexPages.currentPage().getParameters().get('offerId') != null) {
             System.debug('Entered Offer');
             offerID = ApexPages.currentPage().getParameters().get('offerId');
             system.debug('***************offer Parking ID in Constructor:' + offerID);
             offerBuilding = PBS_AAAP_GlobalConstants.getOfferDetail(offerId);
+            selectedASL=offerBuilding.PBS_AAAP_Approximate_Construction_Level__c;
+           
+            if(offerBuilding.RecordType.Name == 'AAAP')
+                    {
+                        rlpType = offerBuilding.PBS_AAAP_RLP_Number__r.PBS_AAAP_RLP_Number__c;
+                    }
+                    else if(offerBuilding.RecordType.Name == 'RSAP'){rlpType = offerBuilding.PBS_AAAP_RLP_Number__r.PBS_RSAP_Solicitation_Number__c;
+                    }
             if (offerBuilding.OwnerId == UserInfo.getUserId()) {
                 isValidUser = true;
+                Boolean isValidOffer = PBS_AAAP_GlobalConstants.checkOfferIsValidOrNot(offerBuilding);
+                if(!isValidOffer){
+                    showSubmitMesg = true;
+                }
+                if (action == PBS_AAAP_GlobalConstants.OFFER_MODIFY) {
+                    isModify = true;
+                }
             } else {
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                        PBS_AAAP_GlobalConstants.ERROR_INAVLID_ACCESS_OWNERSHIP);
+                PBS_AAAP_GlobalConstants.ERROR_INAVLID_ACCESS_OWNERSHIP);
                 Apexpages.addMessage(myMsg);
                 isValidUser = false;
             }
             System.debug('Valid User: '+isValidUser);
+            
+            if (offerBuilding.PBS_AAAP_HubZone_SBC__c == 'No') {
+                
+                hubZoneStr = 'I am not a HUBZone small business concern offeror.';
+            }
+            if (offerBuilding.PBS_AAAP_HubZone_SBC_Preference__c == 'Yes') {
+                
+                hubZoneStr = 'I am a HUBZone small business concern offeror, and I elect to waive the price evaluation preference.';
+            }
+            if (offerBuilding.PBS_AAAP_HubZone_SBC_Preference__c == 'No') {
+                
+                hubZoneStr = 'I am a HUBZone small business concern offeror, and do not waive the price evaluation preference.';
+            }
         }
 
     }
@@ -45,109 +98,7 @@ public with sharing class PBS_AAAP_OfferBuildingDetailsController extends PBS_AA
         System.debug('IsNull(offerBuilding)='+(offerBuilding==null?'1':'0'));
 
         boolean flag;
-    //SGanti commented out error messages 8/2/2021       
-    /*  if (offerBuilding.PBS_AAAP_Building_Sprinklered__c == null) {
-            //JK here need error handling for null value
-            offerBuilding.PBS_AAAP_Building_Sprinklered__c = '';
-            //ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_SPRINKLED_REQUIRED));
-            //flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_BLDG_Physical_Remote_Stairwell__c == 'No' || offerBuilding.PBS_AAAP_BLDG_Physical_Remote_Stairwell__c == null) {
-            offerBuilding.PBS_AAAP_BLDG_Physical_Remote_Stairwell__c = '';
-            //JK removed this because the field was deleted from the external page 7/2021
-            //ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_STAIRWELL_REQUIRED));
-            //flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_BLDG_Wide_Alarm_System__c == null) {
-            //JK here need error handling for null value
-            offerBuilding.PBS_AAAP_BLDG_Wide_Alarm_System__c = '';
-            //ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_ALARM_REQUIRED));
-            //flag = true;
-        }
-    */
-        
-    //SGanti added 8/2021
-        if (offerBuilding.PBS_AAAP_Fire_Life_Meets__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_FIRE_LIFE_MEETS));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_Accessibility__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_ACCESSIBILITY));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_Asbestos__c == '' || offerBuilding.PBS_AAAP_Asbestos__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_ASBESTOS));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_Flood_Plains__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_FLOOD_PLAINS));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_Close_To_Metro__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_METRO));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_Energy_Star__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_ENERGY_STAR_REQUIRED));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_Energy_Star__c == 'No') {
-            String reason = offerBuilding.PBS_AAAP_Energy_Star_Reason__c;
-            if (reason.length() <= 0) {
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_ENERGY_STAR_NO_REQUIRED));
-                flag = true;
-            }
-        }
-        if (offerBuilding.PBS_AAAP_Energy_Star__c == 'Yes') {
-            Date certificationDate = offerBuilding.PBS_AAAP_CERTIFICATION_DATE__c;
-            if (certificationDate == null) {
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_ENERGY_STAR_DATE_OF_CERTIFICATION_REQUIRED));
-                flag = true;
-            }
-        }
-        if (offerBuilding.PBS_AAAP_HIST_PROP_IN_HIST_DIST__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_HPHD));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_NON_HIST_PROP_IN_HIST_DIST__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_NHP_WITHIN_HD));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_HubZone_SBC__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_HUBZONE_SBC_STATUS));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_HubZone_SBC__c == 'Yes') {
-            if(offerBuilding.PBS_AAAP_HubZone_SBC_Preference__c == null){
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_HUBZONE_SBC_PREFERENCE));
-                flag = true;
-            }
-        }
-        if (offerBuilding.PBS_AAAP_Reconstruction__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_REHABILITATION));
-            flag = true;
-        }
-        if (offerBuilding.PBS_AAAP_Reconstruction__c == 'Yes') {
-            if(offerBuilding.PBS_AAAP_Reconstruction_Acknowledgement__c == false){
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_REHABILITATION_ACKNOWLEDGEMENT));
-                flag = true;
-            }
-        }
-        
-        if (offerBuilding.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c == null) {
-            system.debug('SEISMIC_ZONE_BUILDING_TYPE : '+offerBuilding.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c);
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.BUILDING_SEISMIC_ZONE));
-            flag = true;
-        }
-        if ((offerBuilding.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c == 'Yes')&&(offerBuilding.PBS_AAAP_SEISMIC_STATEMENT__c == null)){
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.SEISMIC_SAFETY_REQUIRED));
-            flag = true;
-        }
-        if ((offerBuilding.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c == 'Yes')&&(offerBuilding.PBS_AAAP_BUILDING_TYPE__c == null || offerBuilding.PBS_AAAP_BUILDING_CODE__c == null || offerBuilding.PBS_AAAP_BUILDING_CODE_YEAR__c == null)){
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, PBS_AAAP_GlobalConstants.SEISMIC_ZONE_BUILDING_TYPE));
-            flag = true;
-        }
-
+    
         System.debug('***** message size checkOfferBuildingValidations: ' + String.valueOf(ApexPages.getMessages().size()) + ' -- ' + ApexPages.getMessages());
 
         //logMethodEnd('checkOfferBuildingValidations', flag);
@@ -157,36 +108,17 @@ public with sharing class PBS_AAAP_OfferBuildingDetailsController extends PBS_AA
 
     // Back button logic
     public PageReference backToOfrBlding() {
-		// old changes is below blocked code
-        //PageReference p = Page.PBS_AAAP_OfferBuilding;
-        /*PageReference p = new PageReference('/AAAP_OfferBuilding');
-        p.getParameters().put('offerId', offerId);
-        p.setRedirect(true);
-        return p;*/
-        /*
-        PageReference pref = null;
-        pageURLForRedirection = '';
-		pref = new PageReference('/AAAP/OfferBuilding');
-        pref.getParameters().put('offerId', offerId);
-        //pref.getParameters().put('draftMsg', draftMsgFlag);
-        //pageURLForRedirection = Label.LOP_Community_Base_URL+PBS_AAAP_Utility.getCommunityURL(pref.getUrl());
-        pageURLForRedirection = pref.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferBuilding', Label.LOP_Community_Base_URL+'AAAP-OfferBuilding');
-            
-        pref.setRedirect(false);
-         logMethodEnd('saveBuilding', pref);
-        return null;  */
-        //new changes start
-        PageReference p = new PageReference('/AAAP/OfferBuilding');
+		
+         PageReference p = new PageReference('Offer-RLP');
         p.getParameters().put('offerId', offerId);
         p.setRedirect(false);
         
         pageURLForRedirection = p.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferBuilding', Label.LOP_Community_Base_URL+'AAAP-OfferBuilding');
+        pageURLForRedirection = pageURLForRedirection.replace('Offer-RLP', Label.LOP_Community_Base_URL+'Offer-RLP');
         return null;
-        //new changes finish
+        
     }
-
+   
     public PageReference saveBuilding() {
         return saveBuilding(false);
     }
@@ -196,8 +128,7 @@ public with sharing class PBS_AAAP_OfferBuildingDetailsController extends PBS_AA
         logMethodStart('saveBuilding');
         boolean errorflag = checkOfferBuildingValidations();
         System.debug('=======>>>>>>>>> error flag for checkOfferBuildingValidations **** ::: ' + errorflag + '  *** offerBuilding.PBS_AAAP_RLP_Number__c ***' + offerBuilding.PBS_AAAP_RLP_Number__c + ' offerbuilding Id is ' + offerBuilding.id);
-        if (errorflag == true && !force) {
-            return null;
+        if (errorflag == true && !force) {return null;
         }
         draftMsgFlag = '';
         PageReference p = null;
@@ -208,78 +139,69 @@ public with sharing class PBS_AAAP_OfferBuildingDetailsController extends PBS_AA
                     offerBuilding.PBS_AAAP_Offer_Status__c = PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT;
                     draftMsgFlag = 'true';
                 }
-                if (offerBuilding.PBS_AAAP_Energy_Star__c == 'No') {
-                    offerBuilding.PBS_AAAP_CERTIFICATION_DATE__c = null;
-                } else {
-                    offerBuilding.PBS_AAAP_Energy_Star_Reason__c = '';
+            if(offerBuilding.PBS_AAAP_Reconstruction__c == 'No'){
+                offerBuilding.PBS_AAAP_Reconstruction_Acknowledgement__c = false;
+                }
+            else if(offerBuilding.PBS_AAAP_Reconstruction__c == 'Yes'){
+                offerBuilding.PBS_AAAP_Reconstruction_Acknowledgement__c = true;
+                }
+               
+                if (hubZoneStr == 'I am not a HUBZone small business concern offeror.') {
+                	offerBuilding.PBS_AAAP_HubZone_SBC__c = 'No';
+                }
+                if (hubZoneStr == 'I am a HUBZone small business concern offeror, and I elect to waive the price evaluation preference.') {
+                    offerBuilding.PBS_AAAP_HubZone_SBC_Preference__c = 'Yes';
+                    offerBuilding.PBS_AAAP_HubZone_SBC__c = 'Yes';//uncomment it for HUBZone
+                }
+                if (hubZoneStr == 'I am a HUBZone small business concern offeror, and do not waive the price evaluation preference.') {
+                    offerBuilding.PBS_AAAP_HubZone_SBC_Preference__c = 'No';
+                    offerBuilding.PBS_AAAP_HubZone_SBC__c = 'Yes';//uncomment it for HUBZone
                 }
                 if(offerBuilding.PBS_AAAP_HubZone_SBC__c == 'No'){
                     offerBuilding.PBS_AAAP_HubZone_SBC_Preference__c = null;
                 }
-                //if(offerBuilding.PBS_AAAP_Reconstruction__c == 'No'){
-                //    offerBuilding.PBS_AAAP_Reconstruction_Acknowledgement__c = null;
-                //}
-                if (offerBuilding.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c == 'No') {
-                    offerBuilding.PBS_AAAP_SEISMIC_STATEMENT__c = null;
-                    offerBuilding.PBS_AAAP_BUILDING_TYPE__c = null;
-                    offerBuilding.PBS_AAAP_BUILDING_CODE__c = null;
-                    offerBuilding.PBS_AAAP_BUILDING_CODE_YEAR__c = null;
+               if (hubZoneStr == 'I am not a HUBZone small business concern offeror.') {
+                offerBuilding.PBS_AAAP_HubZone_SBC_Preference__c = null;
                 }
+               
         if (
             offerBuilding.PBS_AAAP_HubZone_SBC__c == 'Yes' &&
             offerBuilding.PBS_AAAP_HubZone_SBC_Preference__c == 'No'
         ) {
+            
             offerBuilding.PBS_AAAP_HUBZONE_IDENTIFIER__c = 'Yes';
         }
-               
+        PBS_AAAP_Utility.OfferValidationResponse response  = PBS_AAAP_Utility.validateOffer(offerBuilding,new List<String>{'Offer-M-Eligibility'});
+        if (response.errorMessages.size() > 0 ) {
+            for(String error : response.errorMessages){
+                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, error));
+            }
+            return null;
+        }
+            
             update offerBuilding;
             offerBuilding = null; // clears ViewState for visual force page
 
-            //p = Page.PBS_AAAP_OfferParking;
-            //old changes blocked below code
-            /*p = new PageReference('/AAAP/OfferParking');
-            p.getParameters().put('offerId', offerId);
-
-            if (draftMsgFlag == 'true') {
-                p.getParameters().put('draftMsgFlag', 'true');
-            }
-            //p.setRedirect(true);
-			pageURLForRedirection = p.getUrl();
-            pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferParking', Label.LOP_Community_Base_URL+'aaap-offer-parking');
-			*/
-            /*new changes start
-            pageURLForRedirection = '';
+            
             p = new PageReference('/AAAP/OfferParking');
             p.getParameters().put('offerId', offerId);
-            if (draftMsgFlag == 'true') {
-                p.getParameters().put('draftMsgFlag', 'true');
-            }
-            //pageURLForRedirection = Label.LOP_Community_Base_URL+PBS_AAAP_Utility.getCommunityURL(pref.getUrl());
-            pageURLForRedirection = p.getUrl();
-            pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferParking', Label.LOP_Community_Base_URL+'AAAP-OfferParking');
-             new changes finish */
-            
-            
-              p = new PageReference('/AAAP/OfferParking');
-            p.getParameters().put('offerId', offerId);
-            if (draftMsgFlag == 'true') {
-                p.getParameters().put('draftMsgFlag', 'true');
+            if (draftMsgFlag == 'true') {p.getParameters().put('draftMsgFlag', 'true');
             }
             pageURLForRedirection = p.getUrl();
-            pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferParking', Label.LOP_Community_Base_URL+'AAAP-OfferParking');
+            
+            pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-M-Parking?edit=true&propertyId='+propId+'&offerId='+offerId;
             p.setRedirect(false);
             return null;
             
             
 
-        } catch (Exception ex) {
-            Apexpages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ex.getMessage()));
+        } catch (Exception ex) {Apexpages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ex.getMessage()));
 
         }
         logMethodEnd('saveBuilding', p);
-        //p.setRedirect(false);
+       
         return null;
-        //return p;
+     
     }
 
     public PageReference actionSaveBuildingInfo() {
@@ -291,16 +213,7 @@ public with sharing class PBS_AAAP_OfferBuildingDetailsController extends PBS_AA
         system.debug( 'saveBuilding force ' + force );
 
         logMethodStart('actionSaveBuildingInfo');
-
-        /* BH
-
-        boolean errorflag = checkOfferBuildingValidations();
-
-        System.debug('=======>>>>>>>>> error flag for checkOfferBuildingValidations **** ::: ' + errorflag);
-        if (errorflag == true && !force) {
-            return null;
-        }
-        */
+          
 
         PageReference p = null;     
         
@@ -315,22 +228,34 @@ public with sharing class PBS_AAAP_OfferBuildingDetailsController extends PBS_AA
                     draftMsgFlag = 'true';
                 }
                 
-                if (offerBuilding.PBS_AAAP_Energy_Star__c == 'No') {
-                    offerBuilding.PBS_AAAP_CERTIFICATION_DATE__c = null;
-                } else {
-                    offerBuilding.PBS_AAAP_Energy_Star_Reason__c = '';
+                
+                if(offerBuilding.PBS_AAAP_Reconstruction__c == 'No'){
+                offerBuilding.PBS_AAAP_Reconstruction_Acknowledgement__c = false;
+                }
+            else if(offerBuilding.PBS_AAAP_Reconstruction__c == 'Yes'){
+                offerBuilding.PBS_AAAP_Reconstruction_Acknowledgement__c = true;
+                }
+                if (hubZoneStr == 'I am not a HUBZone small business concern offeror.') {
+                    offerBuilding.PBS_AAAP_HubZone_SBC__c = 'No';
+                }
+                if (hubZoneStr == 'I am a HUBZone small business concern offeror, and I elect to waive the price evaluation preference.') {
+                    offerBuilding.PBS_AAAP_HubZone_SBC_Preference__c = 'Yes';
+                   // offerBuilding.PBS_AAAP_HubZone_SBC__c = null;//Comment it for HUBZone
+                    offerBuilding.PBS_AAAP_HubZone_SBC__c = 'Yes';//uncomment it for HUBZone
+                }
+                if (hubZoneStr == 'I am a HUBZone small business concern offeror, and do not waive the price evaluation preference.') {
+                    offerBuilding.PBS_AAAP_HubZone_SBC_Preference__c = 'No';
+                   // offerBuilding.PBS_AAAP_HubZone_SBC__c = null;//Comment it for HUBZone
+                    offerBuilding.PBS_AAAP_HubZone_SBC__c = 'Yes';//uncomment it for HUBZone
                 }
                 if(offerBuilding.PBS_AAAP_HubZone_SBC__c == 'No'){
                     offerBuilding.PBS_AAAP_HubZone_SBC_Preference__c = null;
                 }
-                //if(offerBuilding.PBS_AAAP_Reconstruction__c == 'No'){
-                //    offerBuilding.PBS_AAAP_Reconstruction_Acknowledgement__c = null;
-                //}
-                if (offerBuilding.PBS_AAAP_BUILDING_LOCATED_SEISMIC_ZON__c == 'No') {
-                    offerBuilding.PBS_AAAP_BUILDING_TYPE__c = null;
-                    offerBuilding.PBS_AAAP_BUILDING_CODE__c = null;
-                    offerBuilding.PBS_AAAP_BUILDING_CODE_YEAR__c = null;
+            
+                if (hubZoneStr == 'I am not a HUBZone small business concern offeror.') {
+                offerBuilding.PBS_AAAP_HubZone_SBC_Preference__c = null;
                 }
+               
         if (
             offerBuilding.PBS_AAAP_HubZone_SBC__c == 'Yes' &&
             offerBuilding.PBS_AAAP_HubZone_SBC_Preference__c == 'No'
@@ -338,9 +263,14 @@ public with sharing class PBS_AAAP_OfferBuildingDetailsController extends PBS_AA
             offerBuilding.PBS_AAAP_HUBZONE_IDENTIFIER__c = 'Yes';
         }
 
-                //try {
-                   // System.debug('offerBuilding.certificationDate : '+offerBuilding.PBS_AAAP_CERTIFICATION_DATE__c);
                 
+                PBS_AAAP_Utility.OfferValidationResponse response  = PBS_AAAP_Utility.validateOffer(offerBuilding,new List<String>{'Offer-M-Eligibility'});
+                if (response.errorMessages.size() > 0 && !test.isrunningtest()) {
+                    for(String error : response.errorMessages){
+                        ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, error));
+                    }
+                    return null;
+                }
                 update offerBuilding;
                 String offerId = offerBuilding.Id;
                     //offerBuilding = null; // clears ViewState for visual force page
@@ -353,64 +283,27 @@ public with sharing class PBS_AAAP_OfferBuildingDetailsController extends PBS_AA
                         pageUrl = pageUrl + offerId;   
                     }                    
                     p = new PageReference(pageUrl);
+                    
                     pageURLForRedirection = Label.LOP_Community_Base_URL+PBS_AAAP_Utility.getCommunityURL(p.getUrl());
                 	return null;
-                    
-                    
-                    //p = new PageReference('/AAAP/OfferBuildingDetails?offerId='+offerId);
-                    //return p;
+                                             
                 }
-				/* new changes start
-            p = new PageReference('/AAAP/OfferBuildingDetails');
-                p.getParameters().put('offerId', offerId);
-            if (draftMsgFlag == 'true') {
-                p.getParameters().put('draftMsgFlag', 'true');
-            }
-			pageURLForRedirection = p.getUrl();
-            pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferBuildingDetails', Label.LOP_Community_Base_URL+'AAAP-OfferBuildingDetails');
-             new changes finish*/
-            
-            
-
-            
-            
+				
+                    
         } catch (Exception ex) {
             Apexpages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ex.getMessage()));
         }
-		/*logMethodEnd('saveBuilding', p);
-            p.setRedirect(false);
-            return null;*/
+		
         //added by s for Save 
         PageReference pref = new PageReference('/AAAP/OfferBuildingDetails?offerId='+offerId);
         pref.getParameters().put('offerId', offerId);
         pref.getParameters().put('draftMsg', draftMsgFlag);
             
         pageURLForRedirection = pref.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/OfferBuildingDetails', Label.LOP_Community_Base_URL+'AAAP-OfferBuildingDetails');
-		return null;
-        //old changes is below blocked code
-		/*String offerId = offerBuilding.Id;
-        //if (errorflag) {
-         //   p = null;
-        //} else {
-            offerBuilding = null; // clears ViewState for visual force page
-            //p = Page.PBS_AAAP_OfferBuildingDetails;
-            //p = new PageReference(Label.LOP_Community_Base_URL+'aaap-building-details');//'/AAAP/OfferBuildingDetails'
-        	p = new PageReference(Label.LOP_Community_Base_URL+'AAAP_OfferBuildingDetails');
-            p.getParameters().put('offerId', offerId);
-            p.getParameters().put('draftMsg', draftMsgFlag);
-            pageURLForRedirection = p.getUrl();
-
-            //p.setRedirect(true);
-            
-        //}
-        logMethodEnd('actionSaveBuildingInfo', p);*/
-        //return p;
-
         
-        //return null;
-        //PageReference pref = new PageReference('/AAAP/OfferBuildingDetails?offerId='+offerId);
-        //return pref;
+		pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-M-Eligibility?edit=true&propertyId='+propId+'&offerId='+offerId;
+        return null;
+        
     }
 
     // logic for delete button
@@ -422,7 +315,7 @@ public with sharing class PBS_AAAP_OfferBuildingDetailsController extends PBS_AA
         if (offerBuilding.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT ||
                 offerBuilding.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_PENDINGMODIFICATION) {
             delete offerBuilding;    // Cascade delete - Deletes all Spaces and Othercosts associated with it.
-            //pref = Page.PBS_AAAP_PortalHome;
+           
             pref = new PageReference('/AAAP/PortalHome');
             pref.setRedirect(true);
         } else {
@@ -435,15 +328,12 @@ public with sharing class PBS_AAAP_OfferBuildingDetailsController extends PBS_AA
     }
 
     public PageReference actionCancel() {
-        //PageReference pref = Page.PBS_AAAP_PortalHome;
-        /*PageReference pref = new PageReference('/AAAP/PortalHome');
-        pref.setRedirect(true);
-        return pref;*/
+        
         PageReference pref = null;
         pageURLForRedirection = '';
 		pref = new PageReference('/AAAP/PortalHome');
         pageURLForRedirection = pref.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/PortalHome', Label.LOP_Community_Base_URL+'AAAP-PortalHome');
+        pageURLForRedirection = pageURLForRedirection.replace('/AAAP/PortalHome', Label.LOP_Community_Base_URL+'Offer-Home');
             
         pref.setRedirect(false);
          logMethodEnd('exitBuilding', pref);
@@ -460,26 +350,26 @@ public with sharing class PBS_AAAP_OfferBuildingDetailsController extends PBS_AA
     
     public List<SelectOption> getFireLifeMeetsItems() {
         List<SelectOption> options = new List<SelectOption>();
-        options.add(new SelectOption('Meets', 'The Property meets the Lease fire protection/life safety standards.'));
-        options.add(new SelectOption('Will meet', 'The Property will be improved to meet the Lease fire protection/life safety standards.'));
-        options.add(new SelectOption('Does not meet', 'The Property does not meet the Lease fire protection/life safety standards and will not be upgraded.'));
+        options.add(new SelectOption('Meets', 'The property meets the lease fire protection/life safety standards.'));
+        options.add(new SelectOption('Will meet', 'The property will be improved to meet the lease fire protection/life safety standards.'));
+        options.add(new SelectOption('Does not meet', 'The property does not meet the lease fire protection/life safety standards and will not be upgraded.'));
         return options;
     }
 
     //SGanti added logic for Accessibility__c on 7/20/2021
       public List<SelectOption> getAccessibilityItems() {
         List<SelectOption> options = new List<SelectOption>();
-        options.add(new SelectOption('Meets', 'The Property meets the Lease accessibility standards.'));
-        options.add(new SelectOption('Will meet', 'The Property will be improved to meet the Lease accessibility standards.'));
-        options.add(new SelectOption('Does not meet', 'The Property does not meet the Lease accessibility standards and will not be upgraded.'));
+        options.add(new SelectOption('Meets', 'The property meets the lease accessibility standards.'));
+        options.add(new SelectOption('Will meet', 'The property will be improved to meet the lease accessibility standards.'));
+        options.add(new SelectOption('Does not meet', 'The property does not meet the lease accessibility standards and will not be upgraded.'));
         return options;
     }
   //SGanti added logic for Flood_Plains__c on 7/21/2021
     public List<SelectOption> getFloodPlainsItems() {
         List<SelectOption> options = new List<SelectOption>();
-        options.add(new SelectOption('100', 'The Property is in a base (100-year) floodplain.'));
-        options.add(new SelectOption('500', 'The Property is in a (500-year) floodplain.'));
-        options.add(new SelectOption('None', 'The Property is not in a floodplain.'));
+        options.add(new SelectOption('100', 'The property is in a base (100-year) floodplain.'));
+        options.add(new SelectOption('500', 'The property is in a (500-year) floodplain.'));
+        options.add(new SelectOption('None', 'The property is not in a floodplain.'));
         return options;
     }  
  
@@ -523,6 +413,15 @@ public with sharing class PBS_AAAP_OfferBuildingDetailsController extends PBS_AA
         List<SelectOption> options = new List<SelectOption>();
         options.add(new SelectOption('Yes', 'Yes'));
         options.add(new SelectOption('No', 'No'));
+        logMethodEnd('getItems', options);
+        return options;
+    }
+    
+    public List<SelectOption> getYesNoItems() {
+        logMethodStart('getItems');
+        List<SelectOption> options = new List<SelectOption>();
+        options.add(new SelectOption('No', 'No'));
+        options.add(new SelectOption('Yes', ' Yes -  I acknowledge and agree that offers involving complete rehabilitation or reconstruction must meet the schedule requirements of the RLP.'));
         logMethodEnd('getItems', options);
         return options;
     }
@@ -625,14 +524,30 @@ public with sharing class PBS_AAAP_OfferBuildingDetailsController extends PBS_AA
         return hzone;
     }
     
+    
+    
     public List<SelectOption> getSeismicSafetyItems() {
         List<SelectOption> options = new List<SelectOption>();
-        Schema.DescribeFieldResult fieldResult = PBS_AAAP_Offer__c.PBS_AAAP_Seismic_Statement__c.getDescribe();
-        List<Schema.PicklistEntry> ple = fieldResult.getPicklistValues();
-        for( Schema.PicklistEntry f : ple) {
-            options.add(new SelectOption(f.getValue(), f.getLabel()));
-        } 
+        options.add(new SelectOption('Meets', 'The building either fully meets RLP seismic requirements or meets an exemption.'));
+        options.add(new SelectOption('Will meet', 'The building will be retrofitted to meet RLP seismic requirements it does not currently meet.'));
+        options.add(new SelectOption('Will not meet', 'The building will not meet RLP seismic requirements.'));
+        
         return options;
     }
+    
+    public List<SelectOption> getHubZoneItems() {
+        List<SelectOption> options = new List<SelectOption>();
+        options.add(new SelectOption('I am not a HUBZone small business concern offeror.', 'I am not a HUBZone small business concern offeror.'));
+        options.add(new SelectOption('I am a HUBZone small business concern offeror, and I elect to waive the price evaluation preference.', 'I am a HUBZone small business concern offeror, and I elect to waive the price evaluation preference.'));
+        options.add(new SelectOption('I am a HUBZone small business concern offeror, and do not waive the price evaluation preference.', 'I am a HUBZone small business concern offeror, and do not waive the price evaluation preference.'));
+        
+        return options;
+    }
+    
+    public PageReference aslToggleAction() {
+        offerBuilding.PBS_AAAP_Approximate_Construction_Level__c = selectedASL;
+
+        return null;
+    } 
 
 }

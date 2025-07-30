@@ -29,7 +29,6 @@
     
 
         // j. rogers - Communities Upgrade
-        console.log('pageURLForRedirection from portalHomePage ===> {!pageURLForRedirection}' );
         if('{!JSENCODE(pageURLForRedirection)}' != ''){
             window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
         }
@@ -317,7 +316,7 @@
                 <apex:actionFunction name="actionOfferViewOnly" action="{!actionLOPViewOnly}" rerender="offersTable, redirectionPanel">
                     <apex:param name="viewofferIdParam" value=""/>
                 </apex:actionFunction>
-                <apex:actionFunction name="actionOfferEdit" action="{!actionlopOfferEdit}"
+                <apex:actionFunction name="actionOfferEdit" action="{!actionLopOfferEdit}"
                                      rerender="offersTable,jspanel,redirectionPanel" oncomplete="onControllerReturn();">
                     <apex:param name="editofferIdParam" value=""/>
                 </apex:actionFunction>

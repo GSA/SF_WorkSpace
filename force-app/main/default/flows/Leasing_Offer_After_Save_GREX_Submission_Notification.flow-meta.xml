@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>When Status = 200, the PBS_AAAP_sendGrexSubmissionConfirmationEmail alert is sent</description>
+        <name>Send_PBS_AAAP_sendGrexSubmissionConfirmation</name>
+        <label>Send PBS_AAAP_sendGrexSubmissionConfirmation</label>
+        <locationX>314</locationX>
+        <locationY>431</locationY>
+        <actionName>PBS_AAAP_Offer__c.PBS_AAAP_sendGrexSubmissionConfirmation</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>PBS_AAAP_Offer__c.PBS_AAAP_sendGrexSubmissionConfirmation</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <description>When Status &lt;&gt; 200, the PBS_AAAP_sendGrexSubmissionFailure Email alert is sent</description>
+        <name>Send_PBS_AAAP_sendGrexSubmissionFailure</name>
+        <label>Send PBS_AAAP_sendGrexSubmissionFailure</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <actionName>PBS_AAAP_Offer__c.PBS_AAAP_sendGrexSubmissionFailure</actionName>
+        <actionType>emailAlert</actionType>
+        <connector>
+            <targetReference>Send_PBS_AAAP_sendGrexSubmissionFailuretoGREX</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>PBS_AAAP_Offer__c.PBS_AAAP_sendGrexSubmissionFailure</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <description>When Status &lt;&gt; 200, thePBS_AAAP_sendGrexSubmissionFailuretoGREX Email Alert is sent</description>
+        <name>Send_PBS_AAAP_sendGrexSubmissionFailuretoGREX</name>
+        <label>Send PBS_AAAP_sendGrexSubmissionFailuretoGREX</label>
+        <locationX>50</locationX>
+        <locationY>539</locationY>
+        <actionName>PBS_AAAP_Offer__c.PBS_AAAP_sendGrexSubmissionFailuretoGREX</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>PBS_AAAP_Offer__c.PBS_AAAP_sendGrexSubmissionFailuretoGREX</nameSegment>
+    </actionCalls>
+    <apiVersion>63.0</apiVersion>
+    <decisions>
+        <description>GREX Submission Success/Failure Email Alerts are sent based on the Status Code of the triggering record</description>
+        <name>Is_GREX_submit_successful</name>
+        <label>Is GREX submit successful?</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <defaultConnector>
+            <targetReference>Send_PBS_AAAP_sendGrexSubmissionConfirmation</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Successful</defaultConnectorLabel>
+        <rules>
+            <name>Not_Successful</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.PBS_AAAP_Status_Code__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>200</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_PBS_AAAP_sendGrexSubmissionFailure</targetReference>
+            </connector>
+            <label>Not Successful</label>
+        </rules>
+    </decisions>
+    <description>SFWS-3573: Replaces deactivated workflows PBS_AAAP_sendGrexSubmissionConfirmation, PBS_AAAP_sendGrexSubmissionFailure, &amp; PBS_AAAP_sendGrexSubmissionFailuretoGREX. 
+Sends different Email Alerts to Offeror Email based on value of Status Code field</description>
+    <environments>Default</environments>
+    <interviewLabel>{!$Record.PBS_AAAP_Status_Code__c} {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Leasing : Offer : After Save : GREX Submission Notification</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Is_GREX_submit_successful</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>PBS_AAAP_Status_Code__c</field>
+            <operator>IsChanged</operator>
+        </filters>
+        <filters>
+            <field>PBS_AAAP_Status_Code__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue></stringValue>
+            </value>
+        </filters>
+        <object>PBS_AAAP_Offer__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

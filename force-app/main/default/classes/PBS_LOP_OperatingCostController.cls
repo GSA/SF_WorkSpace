@@ -1,6 +1,7 @@
 public with sharing class PBS_LOP_OperatingCostController {
 
     public String lopofferId = ApexPages.currentPage().getParameters().get('offerId');    // offer id
+    public String propId = ApexPages.currentPage().getParameters().get('propertyId');
     public PBS_AAAP_Offer__c lopoffer = new PBS_AAAP_Offer__c();                                                        // offer
     public PBS_AAAP_QuestionLabels qLabels { get; set; }                                                                                            // question labels
     public String fuelType = '';                                                                                                        // fuel type
@@ -17,10 +18,11 @@ public with sharing class PBS_LOP_OperatingCostController {
     private Map<String, String> fieldsMap;
     //Prorate change end
     //Julia change start
-     public String selectedOption { get; set; }
+    public String selectedOption { get; set; }
     public Boolean isShowError {get; set; }
     public String prorateOption {get; set;} {prorateOption = 'No';}
     public String pageURLForRedirection{get;set;}    // j.rogers 2/14/2023  SFWS-2105
+    public Boolean isTerminated { get; set; }
 
     //Julia change end
 
@@ -42,16 +44,10 @@ public with sharing class PBS_LOP_OperatingCostController {
                     LIMIT 1
             ];
             isEditable = ApexPages.currentPage().getParameters().get('edit');
-            /**
-            if (project.Project_Offer_Due_Date__c != null) {
-                DateTime dt = project.Project_Offer_Due_Date__c;
-                //  offerDueDate = dt.format('MM/dd/yyyy HH:mm:ss','America/New_York');
-                offerDueDate = PBS_AAAP_GlobalConstants.convertToTimeZone(project);
-            }
-            **/
+            
             if (isEditable == 'false') {
                 viewOnly = true;
-                viewMsg = 'Offer opened in a View mode';
+                viewMsg = 'Offer opened in view mode. Any changes made will not be saved.';
             } else {
                 viewOnly = false;
             }
@@ -63,6 +59,19 @@ public with sharing class PBS_LOP_OperatingCostController {
             }
             if (this.lopoffer.OwnerId == UserInfo.getUserId()) {
                 isValidUser = true;
+                if (lopOffer.PBS_AAAP_RLP_Number__r.PBS_RSAP_Solicitation_Status__c) {
+                    isTerminated = false;
+                } else {
+                    isTerminated = true;
+                }
+                if (isTerminated) {
+                    viewOnly = true;
+                    viewMsg = 'Project is terminated. Offer opened in view mode. Any changes made will not be saved.';
+                    System.debug('*** isEditable ***' + isEditable);
+                } else if (lopOffer.PBS_AAAP_Offer_Status__c == 'Closed') {
+                    viewOnly = true;
+                    viewMsg = 'Project due date has elapsed. Offer opened in view mode. Any changes made will not be saved.';
+                }
             } else {
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, PBS_AAAP_GlobalConstants.ERROR_INAVLID_ACCESS_OWNERSHIP);
                 Apexpages.addMessage(myMsg);
@@ -231,7 +240,7 @@ public with sharing class PBS_LOP_OperatingCostController {
 
     // Invoke operating costs page 
     public PageReference addOperatingCosts() {
-        //PageReference pgOperatingCosts = Page.PBS_LOP_OperatingCost;
+        
         PageReference pgOperatingCosts = new PageReference('/RSAP/OperatingCost');
         pgOperatingCosts.getParameters().put('offerId', lopoffer.Id);
         pgOperatingCosts.setRedirect(true);
@@ -242,8 +251,14 @@ public with sharing class PBS_LOP_OperatingCostController {
     // "Continue" action
     public PageReference continueSave() {
         // TODO logic for updating operating costs
-
-        //PageReference pgLeaseTerms = Page.PBS_LOP_LeaseTerms;
+		PBS_AAAP_Utility.OfferValidationResponse response  = PBS_AAAP_Utility.validateOffer(lopoffer,new List<String>{'Offer-S-Costs'});
+        if (response.errorMessages.size() > 0 ) {
+            for(String error : response.errorMessages){
+                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, error));
+            }
+            return null;
+        }
+        
         PageReference p = new PageReference('/RSAP/LeaseTerms');
                 this.saveData();    // save the page data
         p.getParameters().put('offerId', lopofferId);
@@ -259,8 +274,9 @@ public with sharing class PBS_LOP_OperatingCostController {
         p.setRedirect(false);
            if(pageURL == NULL || pageURL == ''){
                 pageURLForRedirection = p.getUrl();
-                pageURLForRedirection = pageURLForRedirection.replace('/RSAP/LeaseTerms', Label.LOP_Community_Base_URL+'RSAP-LeaseTerms');
-                p.setRedirect(false);
+                
+                pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-S-TermsFinancials?edit=true&offerId='+lopofferId+'&propertyId='+propId;
+               p.setRedirect(false);
             } else {
                 p = new PageReference(pageURL);
                 pageURLForRedirection = Label.LOP_Community_Base_URL+PBS_AAAP_Utility.getCommunityURL(pageURL);
@@ -268,16 +284,8 @@ public with sharing class PBS_LOP_OperatingCostController {
               } 
               return null; 
 
-     /*   //J.Rogers
-        if(pageURL == NULL || pageURL == ''){
-            return pgLeaseTerms;
-        } else {
-            PageReference pr = new PageReference(pageURL);
-            return pr;
-        }
-        */
-       // pageURLForRedirection = pgLeaseTerms.getUrl();
-      //  pageURLForRedirection = pageURLForRedirection.replace('/RSAP/LeaseTerms', Label.LOP_Community_Base_URL+'RSAP-LeaseTerms');
+     
+       
        
 
     }    // end continueSave
@@ -289,28 +297,40 @@ public with sharing class PBS_LOP_OperatingCostController {
         
         back.getParameters().put('offerId', lopofferId);
         //J. Rogers   2/14/2023 - Communities Upgrade
-       // back.setRedirect(true);
+       
         this.saveData();    // save the page data
-       // return back;
+       
 
         pageURLForRedirection = back.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/SpacesAndParking', Label.LOP_Community_Base_URL+'RSAP-SpacesAndParking');
+
+         pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-S-SpaceParking?edit='+(viewOnly ? 'false' : 'true')+'&offerId='+lopofferId+'&propertyId='+propId;
+        
         return null;
     }    // end back
 
 
     // "Save Form" button
     public PageReference saveForm() {
-        //PageReference saveForm = Apexpages.currentPage();
+        
         PageReference saveForm = new PageReference('/RSAP/OperatingCost');
         saveForm.getParameters().put('offerId', lopofferId);
+        
+        PBS_AAAP_Utility.OfferValidationResponse response  = PBS_AAAP_Utility.validateOffer(lopoffer,new List<String>{'Offer-S-Costs'});
+        if (response.errorMessages.size() > 0 ) {
+            for(String error : response.errorMessages){
+                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, error));
+            }
+            return null;
+        }
+        
         this.saveData();
 
-        //saveForm.setRedirect(true);
+        
         //J. Rogers   2/14/2023 - Communities Upgrade
-        //return saveForm;
+       
         pageURLForRedirection = saveForm.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/OperatingCost', Label.LOP_Community_Base_URL+'RSAP-OperatingCost');
+       
+        pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-S-Costs?edit=true&offerId='+lopofferId+'&propertyId='+propId;
         return null;
 
     }    // end saveForm
@@ -475,7 +495,7 @@ public with sharing class PBS_LOP_OperatingCostController {
             //added by syam for submit offer to save as draft when it is saved.
             draftMsgFlag = '';
             if (tmplopoffer.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED) {
-                //PBS_AAAP_GlobalConstants.updateOfferToDraft(tmplopoffer);
+                
                 draftMsgFlag = 'true';
             }
 
@@ -495,10 +515,7 @@ public with sharing class PBS_LOP_OperatingCostController {
             tmplopOffer.PBS_AAAP_OP_COST_COST_PER_RSF__c = (tmplopOffer.PBS_AAAP_Office_RSF_OFFERED__c > 0) ? (tmplopOffer.PBS_AAAP_SRVC_UTIL_TOTAL_GOV__c / tmplopOffer.PBS_AAAP_Office_RSF_OFFERED__c) : 0;
             //SFWS-847
             
-            //SFWS-2385
-            /*tmplopOffer.PBS_AAAP_Lease_Annual_Rent_Per_RSF__c = tmplopOffer.PBS_AAAP_OP_COST_COST_PER_RSF__c + tmplopOffer.PBS_AAAP_BSAC_Annual_Rent_Per_RSF__c + tmplopOffer.PBS_AAAP_TI_Annual_Rent_Per_RSF__c + tmplopOffer.PBS_AAAP_Shell_Rent_Per_RSF__c;
-            tmplopOffer.PBS_AAAP_Lease_Annual_Rent_Per_ABOA__c = tmplopOffer.PBS_AAAP_OP_COST_COST_PER_ABOA__c + tmplopOffer.PBS_AAAP_BSAC_Annual_Rent_Per_ABOA__c + tmplopOffer.PBS_AAAP_TI_Annual_Rent_Per_ABOA__c + tmplopOffer.PBS_AAAP_Shell_Rent_Per_ABOA__c;*/
-            //SFWS-2385
+           
             
             upsert tmplopOffer;
         } catch (DMLException e) {
@@ -514,7 +531,7 @@ public with sharing class PBS_LOP_OperatingCostController {
         System.debug('************* lopoffer.LOP_Offer_Status__c ::: ' + PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT);
         if (lopoffer.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_DRAFT) {
             delete lopoffer;    // Cascade delete - Deletes all Spaces and Othercosts associated with it.
-            //pref = Page.PBS_LOP_PortalHome;
+            
             pref = new PageReference('/RSAP/PortalHome');
             pref.setRedirect(true);
         } else {
@@ -529,7 +546,7 @@ public with sharing class PBS_LOP_OperatingCostController {
     /** added by syam 03/22 as part of the cancel operation addition */
     public PageReference actionCancel() {
         PageReference pref = new PageReference('/RSAP/PortalHome');
-        //PageReference pref = Page.PBS_LOP_PortalHome;
+        
         pref.setRedirect(true);
         return pref;
     }
@@ -542,7 +559,7 @@ public with sharing class PBS_LOP_OperatingCostController {
               System.debug('JK a field is null or 0');
         }
         if(isShowError){
-           ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '#7 Rentable Square Feet of Building on the Building Information section and #2 Rentable Square Feet of Offered Space on the Space and Parking section must be populated for the Prorate function to work.'));
+           ApexPages.addMessage(new ApexPages.Message(ApexPages.severity.ERROR, '2d. Total rentable square feet (RSF) in Building on the Property overview page and 2. What is the amount of Rentable Square Feet (RSF) offered on the Space and parking page must be populated for the Prorate function to work.'));
         }else{
             //Prorate modal only opens if visualforce page flag is false
         }

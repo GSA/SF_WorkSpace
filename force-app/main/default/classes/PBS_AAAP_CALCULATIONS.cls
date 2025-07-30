@@ -134,12 +134,7 @@ public with sharing class PBS_AAAP_CALCULATIONS {
     public Decimal getNewConstrMarkups(PBS_AAAP_Space__c pSpace, PBS_AAAP_Offer__c pOffer) {
         Decimal returnVal = 0.00;   // default return value
         Double ti = pOffer.PBS_AAAP_RLP_TI_New_Space__c;    // TI for new spaces
-
-        // formula for calculation
-        //Vaishali RLP FY14 code change
-//        Decimal temp    =   ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100)) + (ti * (pSpace.PBS_AAAP_GC_CONDITIONS__c / 100)) + (ti * (pSpace.PBS_AAAP_MANAGEMENT_COORD_FEES__c /100)) + pSpace.PBS_AAAP_ARCH_ENG_FEES__c);
         Decimal temp = ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100)) + pSpace.PBS_AAAP_ARCH_ENG_FEES__c);
-        //Vaishali RLP FY14 code change
         returnVal = temp.doubleValue();
         return returnVal;
     }   // end getNewConstrMarkups
@@ -150,12 +145,7 @@ public with sharing class PBS_AAAP_CALCULATIONS {
     public Decimal getNewConstrMarkupsPrctg(PBS_AAAP_Space__c pSpace, PBS_AAAP_Offer__c pOffer) {
         Decimal returnVal = 0.00;   // default return value
         Double ti = pOffer.PBS_AAAP_RLP_TI_New_Space__c;    // TI for new spaces
-
-        // formula for calculation -- have to convert the rates to decimals
-        //Vaishali RLP FY14 code change
-//        Decimal temp    =   ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100)) + (ti * (pSpace.PBS_AAAP_GC_CONDITIONS__c / 100)) + (ti * (pSpace.PBS_AAAP_MANAGEMENT_COORD_FEES__c /100)) + ( ti * (pSpace.PBS_AAAP_ARCH_ENG_FEES__c / 100)));
         Decimal temp = ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100)) + (ti * (pSpace.PBS_AAAP_ARCH_ENG_FEES__c / (pSpace.PBS_AAAP_ARCH_ENG_FEES__c + 100))));
-        //Vaishali RLP FY14 code change
         returnVal = temp.doubleValue();
         return returnVal;
     }   // end getNewConstrMarkupsPrctg
@@ -166,12 +156,7 @@ public with sharing class PBS_AAAP_CALCULATIONS {
     public Decimal getSuccConstrMarkups(PBS_AAAP_Space__c pSpace, PBS_AAAP_Offer__c pOffer) {
         Decimal returnVal = 0.00;   // default return value
         Double ti = pOffer.PBS_AAAP_RLP_TI_Additional_Space__c; // TI for new spaces
-
-        // formula for calculation
-        //Vaishali RLP FY14 code change
-//        Decimal temp    =   ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100)) + (ti * (pSpace.PBS_AAAP_GC_CONDITIONS__c / 100)) + (ti * (pSpace.PBS_AAAP_MANAGEMENT_COORD_FEES__c /100)) + pSpace.PBS_AAAP_ARCH_ENG_FEES__c);
         Decimal temp = ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100)) + pSpace.PBS_AAAP_ARCH_ENG_FEES__c);
-        //Vaishali RLP FY14 code change
         returnVal = temp.doubleValue();
         return returnVal;
     }   // end getSuccConstrMarkups
@@ -188,12 +173,7 @@ public with sharing class PBS_AAAP_CALCULATIONS {
         System.debug('***** formula terms :: pSpace.PBS_AAAP_GC_CONDITIONS__c = ' + pSpace.PBS_AAAP_GC_CONDITIONS__c);
         System.debug('***** formula terms :: pSpace.PBS_AAAP_MANAGEMENT_COORD_FEES__c = ' + pSpace.PBS_AAAP_MANAGEMENT_COORD_FEES__c);
         System.debug('***** formula terms :: pSpace.PBS_AAAP_ARCH_ENG_FEES__c = ' + pSpace.PBS_AAAP_ARCH_ENG_FEES__c);
-
-        // formula for calculation -- have to convert the rates to decimals
-        //Vaishali RLP FY14 code change
-//        Decimal temp    =   ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100)) + (ti * (pSpace.PBS_AAAP_GC_CONDITIONS__c / 100)) + (ti * (pSpace.PBS_AAAP_MANAGEMENT_COORD_FEES__c /100)) + ( ti * (pSpace.PBS_AAAP_ARCH_ENG_FEES__c / 100)));
         Decimal temp = ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100)) + (ti * (pSpace.PBS_AAAP_ARCH_ENG_FEES__c / (pSpace.PBS_AAAP_ARCH_ENG_FEES__c + 100))));
-        //Vaishali RLP FY14 code change
         System.debug('***** formula terms :: temp = ' + temp);
         System.debug('##### End - getSuccConstrMarkupsPrctg ');
         returnVal = temp.doubleValue();
@@ -207,10 +187,6 @@ public with sharing class PBS_AAAP_CALCULATIONS {
     public Decimal getNewConstrMarkupsNoAEFee(PBS_AAAP_Space__c pSpace, PBS_AAAP_Offer__c pOffer) {
         Decimal returnVal = 0.00;   // default return value
         Double ti = pOffer.PBS_AAAP_RLP_TI_New_Space__c;    // TI for new spaces
-
-        // formula for calculation
-        //Vaishali RLP FY14 Change
-//        Decimal temp    =   ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100)) + (ti * (pSpace.PBS_AAAP_GC_CONDITIONS__c / 100)) + (ti * (pSpace.PBS_AAAP_MANAGEMENT_COORD_FEES__c /100)));
         Decimal temp = ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100)));
         returnVal = temp.doubleValue();
         return returnVal;
@@ -222,10 +198,6 @@ public with sharing class PBS_AAAP_CALCULATIONS {
     public Decimal getSuccConstrMarkupsNoAEFee(PBS_AAAP_Space__c pSpace, PBS_AAAP_Offer__c pOffer) {
         Decimal returnVal = 0.00;   // default return value
         Double ti = pOffer.PBS_AAAP_RLP_TI_Additional_Space__c; // TI for new spaces
-
-        // formula for calculation
-        //Vaishali RLP FY14 Change
-//        Decimal temp    =   ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100)) + (ti * (pSpace.PBS_AAAP_GC_CONDITIONS__c / 100)) + (ti * (pSpace.PBS_AAAP_MANAGEMENT_COORD_FEES__c /100)));
         Decimal temp = ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100)));
         returnVal = temp.doubleValue();
         return returnVal;
@@ -237,13 +209,7 @@ public with sharing class PBS_AAAP_CALCULATIONS {
     public Decimal get2ndNewConstrMarkups(PBS_AAAP_Space__c pSpace, PBS_AAAP_Offer__c pOffer, Double pMaxFund) {
         Decimal returnVal = 0.00;   // default return value
         Double ti = pMaxFund - pOffer.PBS_AAAP_RLP_TI_New_Space__c; // TI for new spaces
-
-        // formula for calculation
-        //Vaishali RLP FY14 code change
-//        Decimal temp    =   ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100)) + (ti * (pSpace.PBS_AAAP_GC_CONDITIONS__c / 100)) + (ti * (pSpace.PBS_AAAP_MANAGEMENT_COORD_FEES__c /100)) + pSpace.PBS_AAAP_ARCH_ENG_FEES__c);
-// Vaishali       Decimal temp    =   ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100))  + pSpace.PBS_AAAP_ARCH_ENG_FEES__c);
         Decimal temp = ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100)));
-        //Vaishali RLP FY14 code change
         returnVal = temp.doubleValue();
         return returnVal;
     }   // end get2ndNewConstrMarkups
@@ -254,12 +220,7 @@ public with sharing class PBS_AAAP_CALCULATIONS {
     public Decimal get2ndNewConstrMarkupsPrctg(PBS_AAAP_Space__c pSpace, PBS_AAAP_Offer__c pOffer, Double pMaxFund) {
         Decimal returnVal = 0.00;   // default return value
         Double ti = pMaxFund - pOffer.PBS_AAAP_RLP_TI_New_Space__c; // TI for new spaces
-
-        // formula for calculation -- have to convert the rates to decimals
-        //Vaishali RLP FY14 code change
-//        Decimal temp    =   ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100)) + (ti * (pSpace.PBS_AAAP_GC_CONDITIONS__c / 100)) + (ti * (pSpace.PBS_AAAP_MANAGEMENT_COORD_FEES__c /100)) + ( ti * (pSpace.PBS_AAAP_ARCH_ENG_FEES__c / 100)));
         Decimal temp = ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100)) + (ti * (pSpace.PBS_AAAP_ARCH_ENG_FEES__c / (pSpace.PBS_AAAP_ARCH_ENG_FEES__c + 100))));
-        //Vaishali RLP FY14 code change
         returnVal = temp.doubleValue();
         return 0; // returnVal;
     }   // end get2ndNewConstrMarkupsPrctg
@@ -270,15 +231,10 @@ public with sharing class PBS_AAAP_CALCULATIONS {
     public Decimal get2ndNewConstrMarkupsNoAEFee(PBS_AAAP_Space__c pSpace, PBS_AAAP_Offer__c pOffer, Double pMaxFund) {
         Decimal returnVal = 0.00;   // default return value
         Double ti = pMaxFund - pOffer.PBS_AAAP_RLP_TI_New_Space__c; // TI for new spaces
-
-        // formula for calculation
-        //RLP FY14 Vaishali
-//        Decimal temp    =   ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100)) + (ti * (pSpace.PBS_AAAP_GC_CONDITIONS__c / 100)) + (ti * (pSpace.PBS_AAAP_MANAGEMENT_COORD_FEES__c /100)));
         Decimal temp = ((ti * (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100)));
         returnVal = temp.doubleValue();
         return 0; // returnVal;
     }   // end get2ndNewConstrMarkupsNoAEFee
-
 
     // calculate the fully serviced lease rate
     // formula: f(x) = (Base Rent) + (Base year operating cost) + (Annual TI amortized pmt.)
@@ -1165,29 +1121,31 @@ public with sharing class PBS_AAAP_CALCULATIONS {
         System.debug('Arch and Eng fees : '+feePrcntgOrDollar);
         Decimal returnVal = 0.00;
         System.debug('------- MAXTITEST0814: ' + pOffer.PBS_AAAP_RLP_MAX_TIA__c);
-        if (feePrcntgOrDollar == '%') {
+        // Todd Brown replaced the Total Mark-ups calculations 5/19/2025 for SFWS-4613.  Please see the text
+        // file attachment in that user-story for more details for change requirements.
+        /*if (feePrcntgOrDollar == '%') {
             System.debug('-------%: ');
             if (pSpace.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c) {
-                //returnVal = (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100 + pSpace.PBS_AAAP_ARCH_ENG_FEES__c / (pSpace.PBS_AAAP_ARCH_ENG_FEES__c + 100)) * pOffer.PBS_AAAP_RLP_TI_New_Space__c;
                 returnVal = (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100 + pSpace.PBS_AAAP_ARCH_ENG_FEES__c / (pSpace.PBS_AAAP_ARCH_ENG_FEES__c + 100)) * uTI;
             } else {
-                //returnVal = pSpace.PBS_AAAP_ARCH_ENG_FEES__c/100*(pOffer.PBS_AAAP_RLP_TI_Additional_Space__c/(1+pSpace.PBS_AAAP_ARCH_ENG_FEES__c/100))+(pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c*pOffer.PBS_AAAP_RLP_TI_Additional_Space__c/100);
                 returnVal = pSpace.PBS_AAAP_ARCH_ENG_FEES__c/100*(uTI/(1+pSpace.PBS_AAAP_ARCH_ENG_FEES__c/100))+(pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c*uTI/100);
                 System.debug('Succeeding lease markup with % : '+returnVal);
             }
-
         } else {
             System.debug('-------$: ');
             if (pSpace.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c) {   // New Space
-                //returnVal = (((pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c) / 100) * pOffer.PBS_AAAP_RLP_TI_New_Space__c + pSpace.PBS_AAAP_ARCH_ENG_FEES__c);
                 returnVal = (((pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c) / 100) * uTI + pSpace.PBS_AAAP_ARCH_ENG_FEES__c);
             } else {
-                //returnVal = pSpace.PBS_AAAP_ARCH_ENG_FEES__c + (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c*pOffer.PBS_AAAP_RLP_TI_Additional_Space__c/100);
                 returnVal = pSpace.PBS_AAAP_ARCH_ENG_FEES__c + (pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c*uTI/100);
                 System.debug('Succeeding lease markup with $ : '+returnVal);
             }
-
-
+        } */
+        if (feePrcntgOrDollar == '%') {
+            System.debug('-------%: ');
+            returnVal = (((pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100) * (uTI + uBSAC)) + ((pSpace.PBS_AAAP_ARCH_ENG_FEES__c / 100) * (uTI + uBSAC)));
+        } else { 
+            System.debug('-------$: ');
+            returnVal = (((pSpace.PBS_AAAP_GC_OVERHEAD_AND_PROF__c / 100) * (uTI + uBSAC)) + pSpace.PBS_AAAP_ARCH_ENG_FEES__c);
         }
         System.debug('##### End -- getTotalMarkup : '+returnVal);
         return returnVal;
@@ -2877,35 +2835,6 @@ public with sharing class PBS_AAAP_CALCULATIONS {
         System.debug('PBS_AAAP_TELCOMM_DEFAULT_OVERRIDE ' + PBS_AAAP_TELCOMM_DEFAULT_OVERRIDE);
         System.debug('PBS_AAAP_PV_OTHER_UPFRONT_COSTS_OVERRIDE' + PBS_AAAP_PV_OTHER_UPFRONT_COSTS_OVERRIDE);
 
-/*
-        PBS_AAAP_Space__c space =[select PBS_AAAP_RLP__c,
-        PBS_AAAP_TOTAL_MARKUP__c, PBS_AAAP_GC_OVERHEAD_AND_PROF__c, PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c,
-         PBS_AAAP_ARCH_ENG_FEES__c from PBS_AAAP_Space__c where Id =: spaceId];
-*/
-        //System.debug('this space provided % or $? ' + space.PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c);
-
-/*
-        PBS_AAAP_Offer__c offer = [ select PBS_AAAP_Monthly_cost_nonres_gar_park__c,
-        PBS_AAAP_Monthly_cost_res_gar_park__c,PBS_AAAP_Monthly_cost_nonres_sur_park__c,
-        PBS_AAAP_Monthly_cost_res_sur_park__c,PBS_AAAP_COST_PER_ABOA__c from PBS_AAAP_Offer__c  where Id=: offerId];
-
-*/
-        //System.debug('##### Begin -- space.PBS_AAAP_RLP__c'+space.PBS_AAAP_RLP__c);
-        /*
-        PBS_AAAP_RLP__c rlp= [select Id,PBS_AAAP_PV_OTHER_UPFRONT_COSTS__c,PBS_AAAP_DISCOUNT_RATE__c,PBS_AAAP_RLP_Number__c,
-        PBS_AAAP_TIUSED_FOR_FIRM_TERM_NEW__c,PBS_AAAP_TIUSED_FOR_FIRM_TERM_SUCC__c,PBS_AAAP_MOVE_DEFAULT__c,PBS_AAAP_TELCOMM_DEFAULT__c
-         from PBS_AAAP_RLP__c where Id=:space.PBS_AAAP_RLP__c ];
-        //weston PBS_AAAP_GC_OVERHEAD_AND_PROF__c
-
-
-
-         PBS_AAAP_Agency_Requirement__c agncy=[select PBS_AAAP_TOT_RESEV_PARK_SPACES_SUR_LOT__c,
-         PBS_AAAP_TOT_NONRESV_PARK_SPACES_SURLOT__c,PBS_AAAP_TOT_RESV_PARKING_SPACES_GARAGE__c,
-         PBS_AAAP_TOT_NONRESV_PARK_SPACES_GARAGE__c,PBS_AAAP_USF_REQ_MIN__c,PBS_AAAP_USF_REQ_MAX__c,
-         PBS_AAAP_LEASE_TERM__c from PBS_AAAP_Agency_Requirement__c  where Id=:agencyId];
-*/
-        //PBS_AAAP_Rate__c rate= null;
-
         Decimal term = 0.0;
         Decimal firmtermc = 0;
         Double k = 0.0;
@@ -3464,9 +3393,9 @@ public with sharing class PBS_AAAP_CALCULATIONS {
                 sId.add(val.spaceId);
                 oId.add(val.offerId);
                 //rateSOId.add(String.valueOf(val.spaceId).substring(0, 15) + '' + String.valueOf(val.offerId).substring(0, 15));
-				rateSOId.add(String.valueOf(val.spaceId).substring(0, 15));
+                rateSOId.add(String.valueOf(val.spaceId).substring(0, 15));
             
-			}   // end for
+            }   // end for
             List<PBS_AAAP_Space__c> spaceLst = [
                     SELECT PBS_AAAP_RLP__c, PBS_AAAP_TOTAL_MARKUP__c,
                             PBS_AAAP_GC_OVERHEAD_AND_PROF__c, PBS_AAAP_ARCHITECTURAL_AND_ENG_FEES_UOM__c,
@@ -3508,7 +3437,7 @@ public with sharing class PBS_AAAP_CALCULATIONS {
                             PBS_AAAP_TOT_NONRESV_PARK_SPACES_GARAGE__c,PBS_AAAP_USF_REQ_MIN__c,PBS_AAAP_USF_REQ_MAX__c,PBS_AAAP_CURRENT_GSA_LEASE_NUM__c,
                             PBS_AAAP_LEASE_TERM__c, PBS_AAAP_TIUSED_FOR_FIRM_TERM_NEW__c, PBS_AAAP_MOVE_DEFAULT__c, PBS_AAAP_TELCOMM_DEFAULT__c,
                             PBS_AAAP_BSAC_per_ABOA__c, PBS_AAAP_PV_OTHER_UPFRONT_COSTS__c, PBS_AAAP_TIUSED_FOR_FIRM_TERM_SUCC__c, BSAC_for_Continuing_Space_per_ABOA_SF__c,
-                			PBS_AAAP_Region__c
+                            PBS_AAAP_Region__c
                     FROM PBS_AAAP_Agency_Requirement__c
                     WHERE Id = :agencyId
             ];
@@ -3518,7 +3447,7 @@ public with sharing class PBS_AAAP_CALCULATIONS {
                             PBS_AAAP_AMORTIZ_RATE_T1_UPTO_20__c,PBS_AAAP_BSAC_RATE__c,PBS_AAAP_BASE_COST_SRVC_UTIL_PER_ABOA__c,PBS_AAAP_LEASE_TERM__c,PBS_AAAP_SPACE__c,PBS_AAAP_OFFER_NUMBER__c
                     FROM PBS_AAAP_Rate__c
                     //WHERE Space_Offer__c IN :rateSOId
-					WHERE PBS_AAAP_SPACE__c IN :rateSOId
+                    WHERE PBS_AAAP_SPACE__c IN :rateSOId
                     //AND PBS_AAAP_LEASE_TERM__c = '19 Months,11 Firm'
             ];
             system.debug('!!!! ' + rateLst19);
@@ -3541,8 +3470,8 @@ public with sharing class PBS_AAAP_CALCULATIONS {
             }
             for (PBS_AAAP_Rate__c r19 : rateLst19) {
                 //rateKey = (r19.Space_Offer__c+(r19.PBS_AAAP_LEASE_TERM__c).toLowercase()).trim();
-				rateKey = String.valueOf(r19.PBS_AAAP_SPACE__c).substring(0, 15) +/** '' + String.valueOf(r19.PBS_AAAP_OFFER_NUMBER__c).substring(0, 15)+**/((r19.PBS_AAAP_LEASE_TERM__c).toLowercase()).trim();
-				
+                rateKey = String.valueOf(r19.PBS_AAAP_SPACE__c).substring(0, 15) +/** '' + String.valueOf(r19.PBS_AAAP_OFFER_NUMBER__c).substring(0, 15)+**/((r19.PBS_AAAP_LEASE_TERM__c).toLowercase()).trim();
+                
                 mapRate19.put(rateKey,r19);
                 system.debug('Maprate19 key:' +rateKey+' MapRate19 value: ' + r19);
             }
@@ -3626,7 +3555,7 @@ public with sharing class PBS_AAAP_CALCULATIONS {
                     
                     
                     system.debug('@@@@ ' + rlp + ' #### ' + sp.PBS_AAAP_RLP__c);
-				//This if block will only execute the PV calculation for later 2020 RLP years otherwise the old calculation will work.
+                //This if block will only execute the PV calculation for later 2020 RLP years otherwise the old calculation will work.
                 if(rlpYearValue > 2020){
                     if(agency.PBS_AAAP_Region__c =='10/5 Term - All Regions'){
                         /*

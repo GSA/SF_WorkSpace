@@ -1,4 +1,4 @@
-<apex:component controller="PBS_LOP_ProgressBarController" >
+<apex:component controller="PBS_LOP_ProgressBarController" > 
     <script type="text/javascript">
         
           if('{!JSENCODE(pageURLForRedirection)}' != ''){
@@ -8,38 +8,30 @@
         function saveThenGotoPage(url)
         {
             console.log('called**'+url);
-          
-            //alert('saveThenGotoPage');
             $('[id*="pgUrl"]').val(url);
             
             if('{!linksToViewModePage}' == 'false') {   
                 btnJQSubmit1(url);
             }
-            else{              
-                 
+            else{         
                  $("input[type='submit'].btnJQSubmit:first").click();
-               // window.parent.location.href = url;
-               //  setTimeout(window.location.replace(url), 1000);
-            }  
-            //alert($('[id*="pgUrl"]').val(url));
-
-            /*  if ($("input[type='submit'].btnJQSubmit").val()  == undefined)
-            {
-                alert($("input[type='submit'].btnJQSubmit").val() );
-                $( "input[name*='btn_newspace_save_spc']" ).click();
-                console.log('undefined');
-                window.location.replace(url);
-            }
-            else
-            {
-                console.log('defined');
-             
-                 $("input[type='submit'].btnJQSubmit:first").click();
-                    window.parent.location.href = url;
-                   setTimeout(window.location.replace(url), 1000);
-            }*/
+            }            
         }
 
+    </script>
+    
+    <script>
+        window.addEventListener('message', function(event) {
+            // Ensure the message is coming from the correct origin
+            if (event.origin !== window.location.origin) {
+                return;
+            }
+            saveThenGotoPage(event.data.message);
+            // Process the message
+            var message = event.data.message;
+            console.log('Message received from LWC: ', message); 
+            // You can perform any action based on the received message
+        }, false);
     </script>
 
     <apex:attribute name="myValue" description="This is the value for the component." type="String" />
@@ -47,9 +39,6 @@
     <apex:attribute name="linksToViewModePage" description="When true, links will direct to viewonly pages.  Otherwise, the destination pages may be editable." type="String" required="false" />
     <apex:attribute name="step" description="0 based index to state which step is the current" type="Integer" required="false" default="-1" />
     <apex:attribute name="saveActionToInvoke" type="apexpages.action" description="Action to be invoked in the controller" required="false" />
-    <!-- <apex:attribute name="act" description="the action" type="apexpages.action"/>
-    <apex:attribute name="PageUrl" type="String" required="false" description="value to set"/> -->
-
     <apex:outputPanel rendered="{!myValue == null || true}">
 
         <style>
@@ -175,13 +164,9 @@
             /* Below Added by Bobby */
 
         </style>
-
-
         <apex:form id="frmId"> 
             <script type="text/javascript">
             console.log('{!pageURLForRedirection}');
-           // alert('{!pageURLForRedirection}');
-          //  alert('hi');
             if('{!pageURLForRedirection}' != ''){
                 window.parent.location.href = '{!pageURLForRedirection}';
             }
@@ -190,70 +175,11 @@
             <apex:actionFunction name="btnJQSubmit1"  reRender="frmId" action="{!redirectPage}">
                 <apex:param name="firstParam" assignTo="{!pageURL}" value="" />
             </apex:actionFunction>
-
-
-       <!-- J. Rogers - Commented out center tab
-            <center -->
-                <ul class="steps steps-7">
-                    <li id="building-fundamentals-nav" class="{!if(step==0,'current', '')}">
-                        <span onclick="saveThenGotoPage('{!if(linksToViewModePage=="false",'/RSAP/Building?edit=false&offerId='+myValue,'/RSAP/Building?edit=true&offerId='+myValue)}');">
-                            <div>
-                                <p>Building Information</p>
-                            </div>
-                        </span>
-                    </li>
-                    <li id="building-details-nav" class="{!if(step==1,'current', '')}">
-                        <span onclick="saveThenGotoPage('{!if(linksToViewModePage=="false",'/RSAP/SpacesAndParking?edit=false&offerId='+myValue,'/RSAP/SpacesAndParking?edit=true&offerId='+myValue)}');">
-                            <div>
-                                <p>Space &amp; Parking</p>
-                            </div>
-                        </span>
-                    </li>
-                    <li id="property-owner-nav" class="{!if(step==2,'current', '')}">
-                        <span onclick="saveThenGotoPage('{!if(linksToViewModePage=="false",'/RSAP/OperatingCost?edit=false&offerId='+myValue,'/RSAP/OperatingCost?edit=true&offerId='+myValue)}');">
-                            <div>
-                                <p>Operating &amp; Ownership Costs</p>
-                            </div>
-                        </span>
-                    </li>
-                    <li id="operating-cost-nav" class="{!if(step==3,'current', '')}">
-                        <span onclick="saveThenGotoPage('{!if(linksToViewModePage=="false",'/RSAP/LeaseTerms?edit=false&offerId='+myValue,'/RSAP/LeaseTerms?edit=true&offerId='+myValue)}');">
-                            <div>
-                                <p>Lease Terms &amp; Conditions</p>
-                            </div>
-                        </span>
-                    </li>
-                    <li id="space-rates-nav" class="{!if(step==4,'current', '')}">
-                        <span onclick="saveThenGotoPage('{!if(linksToViewModePage=="false",'/RSAP/Rates?edit=false&offerId='+myValue,'/RSAP/Rates?edit=true&offerId='+myValue)}');">
-                            <div>
-                                <p>Rates</p>
-                            </div>
-                        </span>
-                    </li>
-                    <li id="parking-nav" class="{!if(step==5,'current','')}">
-                        <span onclick="saveThenGotoPage('{!if(linksToViewModePage=="false",'/RSAP/PropertyOwner?edit=false&offerId='+myValue,'/RSAP/PropertyOwner?edit=true&offerId='+myValue)}');">
-                            <div>
-                                <p>Property Owner &amp; Remarks</p>
-                            </div>
-                        </span>
-                    </li>
-                    <li id="attachments-nav" class="{!if(step==6,'current', '')}">
-                        <span onclick="saveThenGotoPage('{!if(linksToViewModePage=="false",'/RSAP/Attachments?edit=false&offerId='+myValue,'/RSAP/Attachments?edit=true&offerId='+myValue)}');">
-                            <div>
-                                <p>Attachments</p>
-                            </div>
-                        </span>
-                    </li>
-                </ul>
-                <!-- J. Rogers - Commented out center tab
-            </center  -->
-
         </apex:form>
 
     </apex:outputPanel>
     <apex:outputPanel rendered="{false}">
         BBBBBBBBBBBBBBBBBBBB
-        <!--  https://css-tricks.com/triangle-breadcrumbs/ -->
 
         In chrome on zoom, there is a 1 pixel bar 1 cant kill.  So we will use this code to create the background image...
 
@@ -399,7 +325,7 @@
        
        <!-- J. Rogers - Commented out center tab
         <center  -->
-           
+          
             <ul class="steps steps-7">
                 <li id="building-fundamentals-nav" class="{!if(step==0,'current', '')}">
                     <a href="{!if(myValue==null,'#',if(linksToViewModePage=="false",'/AAAP/pbs_lop_building?edit=false&offerId='+myValue,'/AAAP/pbs_lop_building?edit=true&offerId='+myValue))}">

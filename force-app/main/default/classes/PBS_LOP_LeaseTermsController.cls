@@ -6,6 +6,7 @@ public with sharing class PBS_LOP_LeaseTermsController {
 
     public boolean isValidUser { get; set; }
     public String offerId { get; set; }
+    public String propId { get; set;}
     public String isNew { get; set; }
     public String action { get; set; }
     public string isEditable { get; set; }
@@ -35,6 +36,7 @@ public with sharing class PBS_LOP_LeaseTermsController {
         userDetail = [SELECT u.Username, u.ProfileId,u.CompanyName, u.Name, u.Id, u.ContactId, u.LastName, u.FirstName, u.Street, u.City, u.State, u.PostalCode FROM User u WHERE u.Id = :UserInfo.getUserId()];
         action = ApexPages.currentPage().getParameters().get('action');
         offerId = ApexPages.currentPage().getParameters().get('offerId');
+        propId = ApexPages.currentPage().getParameters().get('propertyId');
         if(validateId(offerId)){
         isNew = ApexPages.currentPage().getParameters().get('isNew');
         isEditable = ApexPages.currentPage().getParameters().get('edit');
@@ -42,7 +44,7 @@ public with sharing class PBS_LOP_LeaseTermsController {
 
         if (isEditable == 'false') {
             viewOnly = true;
-            viewMsg = 'Offer opened in a View mode';
+            viewMsg = 'Offer opened in view mode. Any changes made will not be saved.';
         } else {
             viewOnly = false;
         }
@@ -73,11 +75,11 @@ public with sharing class PBS_LOP_LeaseTermsController {
                 }
                 if (isTerminated) {
                     viewOnly = true;
-                    viewMsg = 'Project is terminated. Offer opened in a view mode';
+                    viewMsg = 'Project is terminated. Offer opened in view mode. Any changes made will not be saved.';
                     System.debug('*** isEditable ***' + isEditable);
-                } else if (lopOffer.PBS_AAAP_Offer_Status__c == PBS_AAAP_GlobalConstants.OFFERSTATUS_SUBMITTED) {
+                } else if (lopOffer.PBS_AAAP_Offer_Status__c == 'Closed') {
                     viewOnly = true;
-                    viewMsg = 'Project due date has elapsed. Offer opened in a view mode';
+                    viewMsg = 'Project due date has elapsed. Offer opened in view mode. Any changes made will not be saved.';
                 }
             } else {
                 ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, PBS_AAAP_GlobalConstants.ERROR_INAVLID_ACCESS_OWNERSHIP);
@@ -173,21 +175,24 @@ public with sharing class PBS_LOP_LeaseTermsController {
 
     public PageReference backToOperatingCostTab() {
 
-        //PageReference p = Page.PBS_LOP_OperatingCost;
+        
         PageReference p = new PageReference('/RSAP/OperatingCost');
-       // p.getParameters().put('offerId', lopOffer.Id);
+      
         p.getParameters().put('offerId', offerId);
         if (isEditable == 'true') {
             p.getParameters().put('edit', 'true');
         } else {
             isEditable = 'false';
         }
-        //p.setRedirect(true);
-        //return p;
+        
          p.setRedirect(false);
         
         pageURLForRedirection = p.getUrl();
-        pageURLForRedirection = pageURLForRedirection.replace('/RSAP/OperatingCost', Label.LOP_Community_Base_URL+'RSAP-OperatingCost');
+        
+        pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-S-Costs?edit=true&offerId='+offerId+'&propertyId='+propId;
+         pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-S-Costs?edit='+(viewOnly ? 'false' : 'true')+'&offerId='+offerId+'&propertyId='+propId;
+        
+        
         return null;
     }
     public static Boolean isNumeric(String s){
@@ -206,39 +211,17 @@ public with sharing class PBS_LOP_LeaseTermsController {
         try {
             draftMsgFlag = '';
             System.debug('PBS_LOP_LeaseTermsController.saveLeaseTermsInfo(), validating Confirm_Full_Term_Lease_Months__c value of ' + lopOffer.Confirm_Full_Term_Lease_Months__c + '...');
-            if (lopOffer.Confirm_Full_Term_Lease_Months__c == null || lopOffer.Confirm_Full_Term_Lease_Months__c == 0) {
-                System.debug('...value was null or 0 so setting error message...');
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                        'Initial Lease Term section is incomplete.  1. Confirm the full term of the lease, in months.');
-                Apexpages.addMessage(myMsg);
-            }
-            System.debug('PBS_LOP_LeaseTermsController.saveLeaseTermsInfo(), validating Confirm_Firm_Term_Lease_Months__c value of ' + lopOffer.Confirm_Firm_Term_Lease_Months__c + '...');
-            if (lopOffer.Confirm_Firm_Term_Lease_Months__c == null || lopOffer.Confirm_Firm_Term_Lease_Months__c == 0) {
-                System.debug('...value was null or 0 so setting error message...');
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                        'Initial Lease Term section is incomplete.  2. Confirm the firm term of the lease, in months.');
-                Apexpages.addMessage(myMsg);
-            }
+            
             archEnggFee = archEnggFee.replace(',','');
-            if(lopOffer.PBS_AAAP_ARCHITECTURAL_ENG_FEES_UOM__c == NULL || archEnggFee == NULL || archEnggFee == ''){
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                        'Offeror\'s Fee Schedule section is incomplete.  1. Make sure an Architectural/Engineering Unit of Measure is selected and if there are no A/E Fees put 0 for the amount.');
-                Apexpages.addMessage(myMsg);
+            
+            if (lopOffer.PBS_AAAP_ARCHITECTURAL_ENG_FEES_UOM__c != '' && archEnggFee == '') {
+                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Term and other financials Page: Offeror\'s Fee Schedule: 1. Make sure there are no A/E Fees put 0 for the amount.'));
             }
-            if(lopOffer.PBS_AAAP_ARCHITECTURAL_ENG_FEES_UOM__c == 'Percent of Total Construction Costs (%)' && archEnggFee != null && archEnggFee != '' && Decimal.valueOf(archEnggFee) > 100){
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                        'Offeror\'s Fee Schedule section is incomplete.  1. Offeror\'s Tenant Improvement Fee Schedule #1: Percent of Total TI Construction Costs (%) cannot be over 100%');
-                Apexpages.addMessage(myMsg);
-            }
-            if (archEnggFee != null && archEnggFee != '' && !isNumeric(archEnggFee.replaceAll(',', ''))) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                        'Offeror\'s Fee Schedule section is incomplete. 1. Architectural/Engineering Fees: is Invalid number');
-                Apexpages.addMessage(myMsg);
-            }
-            if (lopOffer.PBS_AAAP_Lessor_Prj_Fees__c == null) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                        'Offeror\'s Fee Schedule section is incomplete. 2. Lessor\'s Project Management Fee is required.');
-                Apexpages.addMessage(myMsg);
+            PBS_AAAP_Utility.OfferValidationResponse response  = PBS_AAAP_Utility.validateOffer(lopOffer,new List<String>{'Offer-S-TermsFinancials'});
+            if (response.errorMessages.size() > 0 ) {
+                for(String error : response.errorMessages){
+                    ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, error));
+                }
             }
             if (Apexpages.hasMessages(ApexPages.Severity.ERROR)) return null;
             
@@ -272,7 +255,8 @@ public with sharing class PBS_LOP_LeaseTermsController {
                 }
                 lopOffer.PBS_AAAP_Architectural_Fees_Percent__c = null;
             }
-            //updateAreaType(lopOffer);
+            
+            
             resetOrder();
             if(lopOffer.PBS_AAAP_Offered_Space_Mul_Tax_Bills__c == 'Yes'){
                 if(additionalTaxParcelInfoRecords.size() > 0){
@@ -287,77 +271,34 @@ public with sharing class PBS_LOP_LeaseTermsController {
             System.debug('testadditionalTaxParcelInfoRecords '+additionalTaxParcelInfoRecords);
             update lopOffer;
              p = new PageReference('/RSAP/LeaseTerms');
-        /*p.getParameters().put('offerId', offerId);
-        if (draftMsgFlag == 'true') {
-            p.getParameters().put('draftMsgFlag', 'true');
-        }
-        if (isEditable == 'true') {
-            p.getParameters().put('edit', 'true');
-        } else {
-            isEditable = 'false';
-        }
-        p.setRedirect(true);
-        return p;*/
+        
         p.getParameters().put('offerId', offerId);
         p.getParameters().put('draftMsg', draftMsgFlag);
          pageURLForRedirection = p.getUrl();
-         pageURLForRedirection = pageURLForRedirection.replace('/RSAP/LeaseTerms', Label.LOP_Community_Base_URL+'RSAP-LeaseTerms');
-        
+         
+        pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-S-TermsFinancials?edit=true&offerId='+offerId+'&propertyId='+propId;
         } catch (Exception ex) {
             Apexpages.addMessages(ex);
         }
-        /*p = new PageReference('/RSAP/LeaseTerms');
-        /*p.getParameters().put('offerId', offerId);
-        if (draftMsgFlag == 'true') {
-            p.getParameters().put('draftMsgFlag', 'true');
-        }
-        if (isEditable == 'true') {
-            p.getParameters().put('edit', 'true');
-        } else {
-            isEditable = 'false';
-        }
-        p.setRedirect(true);
-        return p;
-        p.getParameters().put('offerId', offerId);
-        p.getParameters().put('draftMsg', draftMsgFlag);
-         pageURLForRedirection = p.getUrl();
-         pageURLForRedirection = pageURLForRedirection.replace('/RSAP/Rates', Label.LOP_Community_Base_URL+'RSAP-LeaseTerms');
-        return null;*/
+        
       return null;
     }
 
     public PageReference saveLeaseTermsandContinue() {
         PageReference p = null;
-        if (lopOffer.Confirm_Full_Term_Lease_Months__c == null || lopOffer.Confirm_Full_Term_Lease_Months__c == 0) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    'Initial Lease Term section is incomplete.  1. Confirm Full Term Lease Months.');
-            Apexpages.addMessage(myMsg);
+        
+        
+        if (lopOffer.PBS_AAAP_ARCHITECTURAL_ENG_FEES_UOM__c != '' && archEnggFee == '') {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Term and other financials Page: Offeror\'s Fee Schedule: 1. Make sure there are no A/E Fees put 0 for the amount.'));
         }
-        if (lopOffer.Confirm_Firm_Term_Lease_Months__c == null || lopOffer.Confirm_Firm_Term_Lease_Months__c == 0) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    'Initial Lease Term section is incomplete.  2. Confirm Firm Term Lease Months.');
-            Apexpages.addMessage(myMsg);
+        PBS_AAAP_Utility.OfferValidationResponse response  = PBS_AAAP_Utility.validateOffer(lopOffer,new List<String>{'Offer-S-TermsFinancials'});
+        if (response.errorMessages.size() > 0 ) {
+            for(String error : response.errorMessages){
+                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, error));
+            }
+            return null;
         }
-        if(lopOffer.PBS_AAAP_ARCHITECTURAL_ENG_FEES_UOM__c == NULL || archEnggFee == NULL || archEnggFee == ''){
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    'Offeror\'s Fee Schedule section is incomplete.  1. Make sure an Architectural/Engineering Unit of Measure is selected and if there are no A/E Fees put 0 for the amount.');
-            Apexpages.addMessage(myMsg);
-        }
-        if(lopOffer.PBS_AAAP_ARCHITECTURAL_ENG_FEES_UOM__c == 'Percent of Total Construction Costs (%)' && archEnggFee != null && archEnggFee != '' && Decimal.valueOf(archEnggFee) > 100){
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    'Offeror\'s Fee Schedule section is incomplete.  1. Offeror\'s Tenant Improvement Fee Schedule #1: Percent of Total TI Construction Costs (%) cannot be over 100%');
-            Apexpages.addMessage(myMsg);
-        }
-        if (archEnggFee != null && archEnggFee != '' && !isNumeric(archEnggFee.replaceAll(',', ''))) {
-                ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                        'Offeror\'s Fee Schedule section is incomplete. 1. Architectural/Engineering Fees: is Invalid number');
-                Apexpages.addMessage(myMsg);
-        }
-        if (lopOffer.PBS_AAAP_Lessor_Prj_Fees__c == null) {
-            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,
-                    'Offeror\'s Fee Schedule section is incomplete. 2. Lessor\'s Project Management Fee is required.');
-            Apexpages.addMessage(myMsg);
-        }
+        
         if ( Apexpages.hasMessages(ApexPages.Severity.ERROR)) {
             return null;
         }
@@ -395,7 +336,7 @@ public with sharing class PBS_LOP_LeaseTermsController {
                 PBS_AAAP_GlobalConstants.updateOfferToDraft(lopOffer);
                 draftMsgFlag = 'true';
             }
-            //updateAreaType(lopOffer);
+            
             resetOrder();
             if(additionalTaxParcelInfoRecords.size() > 0){
                 upsert additionalTaxParcelInfoRecords;
@@ -418,7 +359,8 @@ public with sharing class PBS_LOP_LeaseTermsController {
             p.setRedirect(true);
             if(pageURL == NULL || pageURL == ''){
                 pageURLForRedirection = p.getUrl();
-                pageURLForRedirection = pageURLForRedirection.replace('/RSAP/Rates', Label.LOP_Community_Base_URL+'RSAP-Rates');
+                
+                pageURLForRedirection = Label.LOP_Community_Base_URL+'Offer-S-Rent?edit=true&offerId='+offerId+'&propertyId='+propId;
                 p.setRedirect(false);
             }
             else {
@@ -441,7 +383,7 @@ public with sharing class PBS_LOP_LeaseTermsController {
     }
 
     public PageReference actionCancel() {
-        //PageReference pref = Page.PBS_LOP_PortalHome;
+        
         PageReference pref = new PageReference('/RSAP/PortalHome');
         pref.setRedirect(true);
         return pref;
@@ -479,11 +421,11 @@ public with sharing class PBS_LOP_LeaseTermsController {
         String areaType = lopOffer.PBS_AAAP_SITE_AREA_TYPE__c;
         System.debug('*** areaType is ' + areaType);
         Decimal siteSize = lopOffer.PBS_AAAP_SITE_SIZE_SQFT__c;
-        //siteSize.setScale(2, RoundingMode.HALF_UP);
+        
         System.debug('*** siteSize is ' + siteSize);
         if (lopOffer.PBS_AAAP_SITE_SIZE_SQFT__c != null && areaType == 'Acres') {
             siteSize = siteSize * 43560;
-            //siteSize.setScale(2, RoundingMode.HALF_UP);
+            
 
             System.debug('*** siteSize inside is ' + siteSize);
             lopOffer.PBS_AAAP_SITE_SIZE_SQFT__c = siteSize;

@@ -4,54 +4,24 @@
     <containerType>Network</containerType>
     <label>Default Navigation</label>
     <navigationMenuItem>
-        <label>AAAP</label>
+        <label>Offer space</label>
         <position>1</position>
         <publiclyAvailable>true</publiclyAvailable>
-        <subMenu>
-            <navigationMenuItem>
-                <label>Home</label>
-                <position>0</position>
-                <publiclyAvailable>true</publiclyAvailable>
-                <target>/AAAP-PortalHome</target>
-                <type>InternalLink</type>
-            </navigationMenuItem>
-            <navigationMenuItem>
-                <label>RLP and Lease Documents</label>
-                <position>1</position>
-                <publiclyAvailable>false</publiclyAvailable>
-                <target>/AAAP-Search-RLP</target>
-                <type>InternalLink</type>
-            </navigationMenuItem>
-            <navigationMenuItem>
-                <label>Help</label>
-                <position>2</position>
-                <publiclyAvailable>true</publiclyAvailable>
-                <target>/AAAP-Help</target>
-                <type>InternalLink</type>
-            </navigationMenuItem>
-        </subMenu>
-        <type>MenuLabel</type>
+        <target>/Offer-Home</target>
+        <type>InternalLink</type>
     </navigationMenuItem>
     <navigationMenuItem>
-        <label>RSAP</label>
+        <label>Manage lease</label>
         <position>2</position>
         <publiclyAvailable>true</publiclyAvailable>
-        <subMenu>
-            <navigationMenuItem>
-                <label>Home</label>
-                <position>0</position>
-                <publiclyAvailable>true</publiclyAvailable>
-                <target>/RSAP-PortalHome</target>
-                <type>InternalLink</type>
-            </navigationMenuItem>
-            <navigationMenuItem>
-                <label>Help</label>
-                <position>1</position>
-                <publiclyAvailable>true</publiclyAvailable>
-                <target>/RSAP-Help</target>
-                <type>InternalLink</type>
-            </navigationMenuItem>
-        </subMenu>
-        <type>MenuLabel</type>
+        <target>https://ret.gsa.gov/realestatetaxes/s/</target>
+        <type>ExternalLink</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <label>Resources</label>
+        <position>3</position>
+        <publiclyAvailable>true</publiclyAvailable>
+        <target>/Offer-Resources</target>
+        <type>InternalLink</type>
     </navigationMenuItem>
 </NavigationMenu>

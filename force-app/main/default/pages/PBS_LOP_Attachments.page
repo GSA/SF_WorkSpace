@@ -13,7 +13,7 @@
         }
     </style>
     <script type="text/javascript">
-            console.log('**** pageUrlForRedirection: {!pageURLForRedirection}');
+            
             if('{!JSENCODE(pageURLForRedirection)}' != ''){
                 window.parent.location.href = '{!JSENCODE(pageURLForRedirection)}';
                 window.parent.document.body = document.createElement('body');
@@ -355,34 +355,9 @@
     </head>
 
     
-<!-- J. Rogers  Eliminate Headers
-<div id="login">
-        <ul>
-            <li><a href="/RSAP/portalHome">RSAP Home</a> </li>
-            <li>|</li>
-            <li><a href="/AAAP/portalHome">AAAP</a></li>
-            <li>|</li>
-            <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
-                <apex:outputLink value="/AAAP/home/home.jsp">
-                    <li>{!$Label.site.login_button}</li>
-                </apex:outputLink>
-                <li> |</li>
-                <apex:outputLink value="/AAAP/ForgotPassword">
-                    <li>{!$Label.site.forgot_your_password_q}</li>
-                </apex:outputLink>
-                <apex:outputText value="<li> | </li>" rendered="{!$Site.RegistrationEnabled}"/>
-                <apex:outputLink value="/AAAP/SiteRegister" rendered="{!$Site.RegistrationEnabled}">
-                    <li>{!$Label.site.new_user_q}</li>
-                </apex:outputLink>
-            </apex:panelGroup>
-            <apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp"
-                             rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">
-                <li>{!$Label.site.logout}</li>
-            </apex:outputLink>
-        </ul>
-    </div -->
+
     <div id="wrapper">
-        <c:lop_inside_header />
+        
         <div id="content" class="attachments-lop">
             <!-- CLASS SHOULD BE CHANGED TO CURENT PAGE SEE LINE 331 of STYLES.CSS -->
             <apex:panelGrid rendered="{!!isValidUser}">
@@ -401,8 +376,7 @@
 
 
             <apex:form id="offerattachmentsform" styleClass="formwrap" style="height: auto !important;" rendered="{!isValidUser}">
-                <!--<apex:actionFunction name="upload" action="{!upload}">
-        </apex:actionFunction>  -->
+                
                 <apex:actionFunction name="submitOffer" action="{!actionSaveAndSubmitOffer}">
                 </apex:actionFunction>
 
@@ -426,10 +400,10 @@
                     <!-- NEW TABLE-->
                     <div style="overflow: auto;">
                     <apex:pageBlock >
-                        <!--<apex:pageBlockSection  columns="1">-->
+                        
 
                         <div id="searchTable" class="tabbed-table">
-                            <!--<apex:outputPanel rendered="{!seqNumList2.size>0}">-->
+                            
                             <apex:outputPanel rendered="{!displayattachment}">
                                 <div style="float: left;margin-left:0px">
                                     <h3>Attachments Already Sent in Previous Submissions</h3>
@@ -496,7 +470,7 @@
                             <br/>
                             </apex:outputPanel>
                         </div>
-                        <!--</apex:pageBlockSection>-->
+                        
                     </apex:pageBlock>
                     </div>
 
@@ -504,26 +478,14 @@
                     <div style="overflow: auto;">
                     <apex:pageBlock html-style="margin-left:0px">   <!-- J. Rogers added margin-left for alignment -->
 
-                        <!--
-                        <Table id="form2">
-                            <tr>
-                                <td><font class="h33">Auto Generated Forms</font></td>
-                                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                <td>
-                                    <apex:commandButton value="{!if(formSeqNumList.size > 0,'Refresh Forms','Generate Forms')}"
-                                                        action="{!refreshForms}"/>
-                                    <br/><br/></td>
-                            </tr>
-                        </Table>
-                        -->
+                        
 
                         <div id="formTable" class="tabbed-table" style="padding-bottom:0px">
                             <div style="float: left;margin-left:0px">
                             <h3>Auto Generated Forms</h3> 
                             </div>
                             <div>
-                            <!--<apex:commandButton value="{!if(formSeqNumList.size > 0,'Refresh Forms','Generate Forms')}"
-                                                                             action="{!refreshForms}"/>--></div>
+                            </div>
                             <apex:pageBlockTable value="{!formSeqNumList}" border="1" var="ofratt" id="theTable"
                                                  width="100%" rowClasses="odd,even" >
                                 <apex:column value="{!ofratt.i}" rendered="{!ofratt.isDisplay}" width="8%">
@@ -596,7 +558,7 @@
 
                     <div style="overflow: auto;">
                     <apex:pageBlock id="last" html-style="margin-left:0px"> <!-- J. Rogers added margin-left for alignment -->
-                        <!--<apex:pageBlockSection  columns="1">-->
+                        
 
                         <div id="searchTable" class="tabbed-table" style="padding-bottom:0px">
 
@@ -612,14 +574,7 @@
                                 <apex:column style="width: 38% !important;" styleClass="attach">
                                     <apex:facet name="header">Attachment Name</apex:facet>
                                     <apex:outputPanel >{!ofratt.file.Name}</apex:outputPanel>
-                                    <!--
-                                    <apex:pageBlockTable value="{!ofratt.attachmentsList}" var="a" rowClasses="odd,even"
-                             columnsWidth=""                            headerClass="hiddenHeader">
-                                        <apex:column >
-                                            <apex:outputText value="{!ofratt.file.Name}"/>
-                                        </apex:column>
-                                    </apex:pageBlockTable>
-                                    -->
+                                    
                                 </apex:column>
                                 <apex:column style="width: 10% !important;">
                                     <apex:facet name="header">View File</apex:facet>
@@ -628,17 +583,7 @@
                                             <apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
                                                     style="align: right;" alt="Salesforce" title="Salesforce"/>
                                         </apex:outputLink>
-                                    <!--
-                                    <apex:pageBlockTable value="{!ofratt.attachmentsList}" var="a" columns="1"
-                                                         rowClasses="odd,even" headerClass="hiddenHeader">
-                                        <apex:column >
-                                            <apex:outputLink target="_blank"
-                                                         value="{!ofratt.file.link}">
-                                                <apex:image url="{!URLFOR($Resource.resources_Master, '/custom/images/magnifyingGlass.png')}"
-                                                        style="align: right;" alt="Salesforce" title="Salesforce"/>
-                                            </apex:outputLink>
-                                        </apex:column>
-                                    </apex:pageBlockTable>-->
+                                    
                                 </apex:column>
                                 <apex:column style="width: 6% !important;" rendered="{!!viewOnly}">
                                     <apex:facet name="header">Delete</apex:facet>
@@ -650,19 +595,7 @@
                                         <apex:Param assignTo="{!attachmentId}" name="attId"
                                                     value="{!ofratt.offratts.Id}"/>
                                     </apex:commandLink>
-                                    <!--
-                                    <apex:pageBlockTable value="{!ofratt.attachmentsList}" var="a" rowClasses="odd,even"
-                                                         headerClass="hiddenHeader">
-                                        <apex:column >
-                                            <apex:commandLink action="{!actionDeleteAttachment}"
-                                                              onclick="var con = confirm('Are you sure?');if(con==false)return false;"
-                                                              rendered="{!!viewOnly}">
-                                                <apex:image url="{!URLFOR($Resource.gsa_common, '/images/delete-icon.png')}"
-                                                        style="align: right;" alt="delete" title="Delete"/>
-                                                <apex:Param assignTo="{!attachmentId}" name="attId" value="{!a.Id}"/>
-                                                </apex:commandLink>
-                                        </apex:column>
-                                    </apex:pageBlockTable> -->
+                                    
                                 </apex:column>
                                     
 
@@ -672,28 +605,19 @@
                                     <apex:outputText value="{0,date,MM/dd/yyyy}">
                                                 <apex:param value="{!ofratt.file.createddate}"/>
                                             </apex:outputText>
-                                    <!--
-                                    <apex:pageBlockTable value="{!ofratt.attachmentsList}" var="a" rowClasses="odd,even"
-                                                         headerClass="hiddenHeader">
-                                        <apex:column >
-                                            <apex:outputText value="{0,date,MM/dd/yyyy}">
-                                                <apex:param value="{!a.createddate}"/>
-                                            </apex:outputText>
-                                        </apex:column>
-                                    </apex:pageBlockTable>
-                                    -->
+                                    
                                 </apex:column>
                             </apex:pageBlockTable>
                             <br/>
                         </div>
-                        <!--</apex:pageBlockSection>-->
+                        
                     </apex:pageBlock>
                     </div>
                     </apex:outputPanel>
                 </div>
 
                 <div>
-                <apex:outputPanel rendered="{!!viewOnly}"><!--{!!viewOnly}-->
+                <apex:outputPanel rendered="{!!viewOnly}">
                     <apex:commandButton value="Back" action="{!actionBackToRatesAndSpaces}"/>
                     <apex:commandButton value="Save Page" action="{!actionSavePage}" styleClass="btnJQSubmit"/>
                     <apex:commandButton value="Exit Offer" onclick="exitOffer();return false;"/>

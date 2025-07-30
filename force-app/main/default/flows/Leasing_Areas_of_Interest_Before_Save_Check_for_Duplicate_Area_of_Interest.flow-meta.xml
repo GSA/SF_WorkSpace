@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <description>SFWS-3471 - Replaced deactivated workflow for AAAP LOP CRM Area of Interest Dupe
+Stops duplicate Areas of Interest based on the Area of Interest field</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>dupeCheckAreaOfInterest</name>
+        <dataType>String</dataType>
+        <expression>{!$Record.Lead__c}+{!$Record.City_Of_Interest__c}+TEXT({!$Record.State_of_Interest__c})</expression>
+    </formulas>
+    <interviewLabel>Leasing : Areas of Interest : Before Save : Check for Duplicate Area of Interest {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Leasing : Areas of Interest : Before Save : Check for Duplicate Area of Interest</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Area_of_Interest</name>
+        <label>Update Area of Interest</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <inputAssignments>
+            <field>Area_Of_Interest_Dupe__c</field>
+            <value>
+                <elementReference>dupeCheckAreaOfInterest</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Area_of_Interest</targetReference>
+        </connector>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Lead__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>City_Of_Interest__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>State_of_Interest__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Areas_of_Interest__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

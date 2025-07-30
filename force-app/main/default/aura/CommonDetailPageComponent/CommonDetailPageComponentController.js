@@ -7,9 +7,9 @@
             if (state === "SUCCESS") {
                 var recordInfo = response.getReturnValue();
                 if(recordInfo.RecordType.Name == 'AAAP'){
-                    window.location = '/leasing/s/AAAP-PortalHome'
+                    window.location = '/leasing/s/Offer-Home'
                 }else{
-                    window.location = '/leasing/s/RSAP-PortalHome'
+                    window.location = '/leasing/s/Offer-Home'
                 }
             }
             else if (state === "INCOMPLETE") {

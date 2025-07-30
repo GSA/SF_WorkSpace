@@ -1,12 +1,13 @@
 <apex:page controller="PBS_AAAP_ControllerSpacesAndRates" showHeader="false" sidebar="false" docType="html-5.0"  standardStylesheets="true">
+ 
     <c:PBS_AAAP_PortalPage_Begin ></c:PBS_AAAP_PortalPage_Begin>
     <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/styles.css')}"/>
-    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.gsa_common, 'css/uniform.default.css')}"/> 
     <script type="text/javascript" src="{!$Label.AAAP_JQUERY_URL}"></script>
     <script type="text/javascript" src="{!$Label.AAAP_JQUERYUI_URL}"></script>
     <script src="{!URLFOR($Resource.modaljquery)}"></script>
     <apex:includescript value="{!$Resource.showpopup}"/>
-    <apex:stylesheet value="{!$Resource.showpopupcss}"/>
+    <apex:stylesheet value="{!$Resource.showpopupcss}"/> 
 
     <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
     <script async="async" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&pua=ua-33523145-2" id="_fed_an_ua_tag"></script>
@@ -33,9 +34,7 @@
             var newspace_min_in = $('[id*="q4_newspace_min_in"]').val();
             var newspace_max_in = $('[id*="q4_newspace_max_in"]').val();
 
-            //alert(cont_aboa);
-
-            //if(maxvalue == ''null || maxvalue == undefined'') 
+             
             if (newspace_min_in == '' || newspace_min_in == null) {
                 $('[id*="q4_newspace_min_in"]').val('0.0');
             }
@@ -52,7 +51,7 @@
                 $('[id*="outerspace_max"]').val('0.0');
             }
 
-            //if(cont_aboa == null || cont_aboa == undefined) 
+             
             if (cont_aboa == '' || cont_aboa == null) {
                 $('[id*="cont_aboa"]').val('0.0');
             }
@@ -328,12 +327,15 @@
                 font-size: 12px important !;
             }
 
+            
+            
             .hr {
                 font-weight: bold;
-                font-size: 28px;
-                border-bottom: 1px solid #cccccc;
+                font-size: 20px;
+                //border-bottom: 1px solid #cccccc;
                 padding: 0 0 8px;
-                color: #002BAD;
+                color: #000000;
+                //color: #002BAD;
                 padding-top: 15px;
             }
 
@@ -447,6 +449,15 @@
                 text-align: center;
             }
             
+            .custom-border {
+            border: 1px solid  #999;
+            padding-top: 30px;
+            color: #333333;
+            font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+            font-size:13px;
+            background-color: #eeeeee;
+        }
+            
             .infopopup {
               position:fixed !important;
               display:inline-block;
@@ -550,7 +561,7 @@
     <body>
 
     <div id="wrapper">   
-        <c:inside_header offerId="{!offer.Id}"/>
+        
         <div id="content" class="space-rates">
             <apex:panelGrid rendered="{!!isValidUser}">
                 <apex:outputLabel styleClass="errMessage">ERROR:</apex:outputLabel>
@@ -564,38 +575,75 @@
                        style="margin-right: 50px;">
                 <apex:inputHidden id="draftMsgFlag" value="{!draftMsgFlag}"/>
                 <apex:inputHidden value="{!pageUrl}" id="pgUrl"/>
+                <!-- Grid to display three columns -->
+            <div style="display: flex; flex-direction: row; justify-content: space-between; padding: 1px;margin-top: -1px;">
+                <!-- Column 1: Property Name -->
+                <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999;padding-bottom: 10px;padding-left: 10px; padding-top: 10px;">
+                    <span>Property name:</span>
+                    <span>
+                        <apex:outputText value="{!spaceAndRates.PBS_AAAP_Building_Name__c}" />
+                    </span>
+                </div>
+                <!-- Column 2: RLP Number -->
+                <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999;padding-bottom: 10px;padding-left: 10px; padding-top: 10px;">
+                    <span>RLP number:</span> 
+                     <span>
+                        <apex:outputText value="{!rlpType}" />
+                    </span>
+                </div>
+                <!-- Column 3: Offer Status -->
+                <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999;padding-bottom: 10px;padding-left: 10px; padding-top: 10px;">
+                    <span>Offer status:</span> 
+                     <span>
+                        <apex:outputText value="{!spaceAndRates.PBS_AAAP_Offer_Status__c}" />
+                    </span>
+                </div>
+            </div>
+        
 
-                <div class="hr">Space and Rates</div>
+        <!-- Added new End-->
+                <div class="hr" style="margin-left:0px;">8. Space and rates</div>
+                <apex:outputPanel rendered="{!viewOnly}">
+                                <apex:outputLabel id="msgview" styleClass="errMessage" value="{!viewMsg}"/>
+                    </apex:outputPanel>
                 <apex:messages styleClass="errMessage"/>
  
 
                 <apex:outputPanel id="panel_outerspace" rendered="{!rendOuterSpace}">
 
                     <apex:panelGrid id="pangrid_header" columns="1">
-                        <h4 class="grey">Space &amp; Rates Summary Page</h4>
+                        <h4 class="grey">Space and rates summary page</h4>
 
                     </apex:panelGrid>
 
-                    <!--<div class="clearfix">&nbsp;</div>-->
+                    
                     <p style="padding-left: 7px;">
                         <B>
                             <apex:outputText id="txt_explain_buttons2" style="color:#002bad;"
                                              value="{!QLabels.spaceType2}"></apex:outputText>
                         </B>
                     </p>
-                    <menu class="table-options" style="left:-710px !important;top: 20px !important;">
-                        <apex:commandLink id="btn_new_space" action="{!addNewSpace}" style="padding-left:56.5px;padding-right:56.5px;padding-top:7px;padding-bottom:7px;">Add Space</apex:commandLink>
-                    </menu>
-                    <br/>
-                    <br/>
-                    <menu class="table-options">
-                        <apex:commandLink id="act_edit_space" action="{!editSpace}" onclick="return checkSpaceSelected()" style="padding-left: 30px;padding-right: 30px;left: 42px;position: relative;">Edit</apex:commandLink>&nbsp;
-                        <apex:commandLink id="act_delete_space" action="{!deleteSpace}" onclick="return checkSpaceSelected()" style="position: relative;left: 42px;">Delete Space</apex:commandLink>
-                    </menu>
-
+                    <apex:outputPanel rendered="{!!viewOnly}"> 
+                        <menu class="table-options" style="left:-710px !important;top: 20px !important;">
+                            <apex:commandLink id="btn_new_space" action="{!addNewSpace}" style="padding-left:56.5px;padding-right:56.5px;padding-top:7px;padding-bottom:7px;">Add Space</apex:commandLink>
+                        </menu>
+                        <br/>
+                        <br/>
+                        <menu class="table-options">
+                            <apex:commandLink id="act_edit_space" action="{!editSpace}" onclick="return checkSpaceSelected()" style="padding-left: 30px;padding-right: 30px;left: 42px;position: relative;">Edit</apex:commandLink>&nbsp;
+                            <apex:commandLink id="act_delete_space" action="{!deleteSpace}" onclick="return checkSpaceSelected()" style="position: relative;left: 42px;">Delete Space</apex:commandLink>
+                        </menu>
+                        <div style="float:right;position:relative;top:40px;left:140px;padding-bottom:10px;">&#9989; = Rates Entered</div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!viewOnly}"> 
+                        <menu class="table-options" style="top: 40px !important;">
+                            <apex:commandLink id="act_edit_space1" action="{!editSpace}" style="padding-left:56.5px;padding-right:56.5px;padding-top:7px;padding-bottom:7px;">Edit</apex:commandLink>
+                        </menu>
+                        <div style="float:right;position:relative;top:40px;padding-bottom:10px;">&#9989; = Rates Entered</div>
+                    </apex:outputPanel>
                     <apex:actionFunction name="doInit" action="{!refreshNumbers}"/>
 
-                    <div style="float:right;position:relative;top:40px;left:140px;padding-bottom:10px;">&#9989; = Rates Entered</div>
+                    
                     <apex:panelGrid id="pangrid_detail" columns="1" width="500px">
 
 
@@ -676,19 +724,25 @@
 
                         </apex:panelGroup>
                     </apex:panelGrid>
-                    <apex:commandButton id="btn_back" action="{!back}" value="Back" onclick="MakeNullToZero();"/>
-
+                    <apex:outputPanel > 
+                    
+                    
+                    <apex:commandButton id="btn_back" value="Back" onclick="window.parent.location = '{!$Label.LOP_Community_Base_URL}Offer-M-Costs'+window.parent.location.search;" />
+                    <apex:outputPanel rendered="{!!viewOnly}">
                     <apex:commandButton id="btn_continue" action="{!continueSave}" value="Next"
                                         onclick="MakeNullToZero();" styleClass="btnJQSubmit"/>
-
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!viewOnly}"> 
+                    <apex:commandButton value="Next" onclick="window.parent.location = '{!$Label.LOP_Community_Base_URL}Offer-M-Attachments'+window.parent.location.search;"></apex:commandButton>
+                    </apex:outputPanel>
                     <apex:commandButton value="Exit Offer" action="{!actionCancel}"
-                                        onclick="if(confirm('Please make sure that, you have saved changes to the offer, before leaving from this page.')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}AAAP-PortalHome';return false;} else return false;"/>
-
+                                        onclick="if(confirm('Please make sure that, you have saved changes to the offer, before leaving from this page.')){window.parent.location.href = '{!$Label.LOP_Community_Base_URL}Offer-Home';return false;} else return false;"/>
+                    </apex:outputPanel>
                 </apex:outputPanel>
 
                 <apex:outputPanel id="panel_NewSpace" rendered="{!rendAddSpace}">
                     <br/>
-                    <h4 class="grey">Space Information</h4>
+                    <h4 class="grey">Space information</h4>
                     <apex:panelGrid id="pangrid_newSpace" columns="1">
                         <apex:outputPanel id="pgrp_newspace_q0">
                             <apex:actionRegion >
@@ -767,7 +821,7 @@
                                     src="{!$Resource.Info_Icon}"/></a>
                             <div id="txt_newspace_q4_pop" class="infopopup6"
                                  style="display:none;background:#eee;border:1px solid #666;border-radius:5px;padding:15px;margin-left:-191px;">
-                                <p>The AAAP defines contiguous as multiple suites/spaces within the same
+                                <p>Contiguous here is defined as multiple suites/spaces within the same
                                     building and on the same floor which can be combined and rented to a single tenant.
                                 </p>
                             </div>
@@ -855,8 +909,10 @@
 
                         <apex:commandButton value="Back" action="{!returnToSpaceRates}"
                                             onclick="if(confirm('Please make sure that, you have saved changes to the offer, before leaving from this page.')){return true;} else return false;"/>
+                        <apex:outputPanel rendered="{!!viewOnly}"> 
                         <apex:commandButton id="btn_succspace_save_spc" action="{!saveSpace}"
                                             value="Save Page"></apex:commandButton>
+                        </apex:outputPanel>
                         <apex:commandButton id="btn_succspace_add_rates_spc" action="{!addRateAddSpace}"
                                             value="Next to Enter Rates"></apex:commandButton>
 
@@ -867,7 +923,7 @@
 
                 <apex:outputPanel id="panel_Rates" rendered="{!rendRates}">
                     <br></br>
-                    <h4 class="grey">Rate Information</h4>
+                    <h4 class="grey">Rate information</h4>
                     <br></br>
                     <apex:outputText value="6. The Tenant Improvement Allowance and Building Specific Amortized Capital figures auto populated below are placeholder values so that offerors can see how rate components, like Amortization Rate and Tenant Improvement Mark-ups, impact this figure and ultimately the calculation of the fully serviced rate. Offerors can override these placeholder figures with the actual  amounts published in a Project Specific Advertisement. When overriding these figures, be sure to pay close attention to the amounts for incumbent and new lessors, and enter the amount that applies to you."
                             style="color:#002bad; font-size:14px"/>
@@ -882,7 +938,9 @@
                             <tr>
                                 <td><span style="color:#002bad;">Placeholder or enter actual figure from Ad</span></td>
                                 <td>
-                                    <apex:inputText id="uTI" styleClass="text" value="{!userIputTIA}">$</apex:inputText>
+                                    <apex:inputText id="uTI" styleClass="text" value="{!userIputTIA}">$
+                                        <apex:actionSupport event="onchange" action="{!calcTotMarkup}" rerender="q16_tablePanel"  />
+                                    </apex:inputText>
                                     <script>
                                         if($('[id*=uTI]').val() != null) {
                                             if ($('[id*=uTI]').val().split('.')[1].length == 1) {
@@ -893,7 +951,9 @@
                                     </script>
                                 </td>
                                 <td>
-                                    <apex:inputText id="uBSAC" styleClass="text" value="{!userInputBSAC}">$</apex:inputText>
+                                    <apex:inputText id="uBSAC" styleClass="text" value="{!userInputBSAC}">$
+                                        <apex:actionSupport event="onchange" action="{!calcTotMarkup}" rerender="q16_tablePanel" />
+                                    </apex:inputText>
                                     <script>
                                         if($('[id*=uTI]').val() != null) {
                                             if ($('[id*=uBSAC]').val().split('.')[1].length == 1) {
@@ -2314,60 +2374,10 @@
                         <apex:outputText rendered="{!regionCode == 'Census'}"></apex:outputText>
                     </apex:panelGrid>
                     
-                    <!-- 03/02/2020 Todd Brown  SFWS-1126 Add Rate For Enhanced Cleaning -->
-                   <!-- SGanti changed 7/15/2021
-                        <apex:panelGrid id="pangrid_q14">
-                        <apex:outputPanel rendered="{!regionCode != 'Census'}">
-                            <br/>
-                            <h4 class="grey">Rate for Routine Cleaning and Disinfection Requirements</h4>
-                            
-                            <br/>
-                            <br/>
-                     <!-- SGanti changed 7/15/2021  
-
-                            <apex:outputText rendered="{!regionCode != 'Census'}" id="txt_succspace_q14"
-                                             value="{!QLabels.spaceQ14}"></apex:outputText>
-                            <span class="required">*</span>
-                      
-                                <apex:outputText rendered="{!regionCode != 'Census'}" id="txt_ratesQ14popup"/>
-                                <a class="popup" href="#ratesQ14popup"
-                                   style="float:center;position:relative;left:0px;top:0px"><img src="{!$Resource.Info_Icon}"/></a>
-                                <div id="ratesQ14popup" class="showPopup"
-                                    style="display:none; background:#eee; border:1px solid #666; border-radius:5px; padding:15px;width:700px;">
-                                    <p> Do not include costs for this requirement in the operating rent. This rent component is not subject to 
-                                        CPI operating costs adjustments. The Government reserves the right to cancel these services and reduce 
-                                        the rent accordingly.<br/><br/>
-    
-                                        Refer to Section 3.03 Pricing Terms, sub-paragraph B. 2. of the RLP and Section 6.06 Janitorial Services, 
-                                        sub-paragraph N of the Lease.<br/><br/>
-                                    </p>
-                                </div>
-                            
-                            <br/>
-                            <br/>
-
-                            <apex:outputPanel rendered="{!regionCode != 'Census'}">
-                                $&nbsp;&nbsp;<apex:inputField id="q14_succspace"
-                                                 value="{!space.PBS_AAAP_Enhanced_Clean_Disinfect_Rate__c}">&nbsp;/ABOA&nbsp;SF</apex:inputField>
-                            </apex:outputPanel>
-                            
-                        </apex:outputPanel>
-                    </apex:panelGrid>
-                   -->
-                    <!--HEEERE-->
+                    
                     <apex:panelGrid id="pangrid_SuccSpace_2" columns="2">
                         <apex:outputPanel rendered="{!regionCode != 'Census'}">
-           <!-- SGanti updated 7/15/2021  
-                            <br></br>
-                            <h4 class="grey">Tenant Improvement Allowance - Mark Ups</h4>
-                            <br></br>
-                
-                            <apex:outputText rendered="{!regionCode != 'Census'}" id="txt_succspace_note"
-                                             value="{!IF(space.PBS_AAAP_NEW_SUCCEED_LEASE_IND__c,  QLabels.notation, QLabels.notationSucc)}"
-                                             style="font-style: italic;color:#002bad"></apex:outputText>
-                            <br></br>
-                            <br/>
-               -->  
+            
                             <apex:outputText rendered="{!regionCode != 'Census'}" id="txt_succspace_q6"
                                              value="{!QLabels.spaceQ6}"></apex:outputText>
                             <span class="required">*</span>
@@ -2376,7 +2386,9 @@
 
                             <apex:outputPanel rendered="{!regionCode != 'Census'}">
                                 <apex:inputField id="q6_succspace"
-                                                 value="{!space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c}">&nbsp;%</apex:inputField>
+                                    value="{!space.PBS_AAAP_GC_OVERHEAD_AND_PROF__c}">&nbsp;%
+                                        <apex:actionSupport event="onchange" action="{!calcTotMarkup}" rerender="q16_tablePanel" />
+                                </apex:inputField>
                             </apex:outputPanel>
 
                             <br/>
@@ -2387,26 +2399,30 @@
                                 <apex:selectRadio styleClass="radioCell" id="q9_succspace_opts"
                                                   value="{!FeePrcntgOrDollar}">
                                     <apex:selectOptions id="sopts_succspace_q9" value="{!FeeOpts}"></apex:selectOptions>
+                                    <apex:actionSupport event="onchange" action="{!calcTotMarkup}" rerender="q16_tablePanel" />
                                 </apex:selectRadio>
                                 <apex:inputField id="q9_succspace"
-                                                 value="{!space.PBS_AAAP_ARCH_ENG_FEES__c}"></apex:inputField>
+                                                 value="{!space.PBS_AAAP_ARCH_ENG_FEES__c}">
+                                    <apex:actionSupport event="onchange" action="{!calcTotMarkup}" rerender="q16_tablePanel" />
+                                </apex:inputField>
                             </apex:panelGroup>
                             <br></br>
                             <br/>
 
                             <br/>
-        <!-- SGanti updated 7/15/2021-->  
+                            <!-- Todd Brown commented out 5/19/2025 for SFWS-4613 
                             <apex:panelGroup rendered="{!regionCode != 'Census'}">16. &nbsp;
                                 <apex:commandButton id="btn_calc_succ_total_markup" action="{!calcTotMarkup}"
-                                                    value="Calculate Mark-ups"></apex:commandButton>
-                            </apex:panelGroup>
+                                                    value="Calculate Mark-ups" disabled="{!viewOnly}"></apex:commandButton>
+                            </apex:panelGroup> -->
                         </apex:outputPanel>
                     </apex:panelGrid>
                     <br/>
+					<apex:outputPanel id="q16_tablePanel">
                     <table style="background-color: #cee5e8; border-width: thin; border-style: solid;">
                         <tr>
                             <td>
-                                <u>&nbsp;&nbsp;&nbsp;
+                                16. <u>&nbsp;&nbsp;&nbsp;
                                 <apex:outputText id="q10_succspace" value="{0, number, $#,##0.00}"
                                                  style="font-weight:bold;">
                                     <apex:param id="q10_succspace_val"
@@ -2415,14 +2431,15 @@
                                 <apex:outputText id="q10_succspace_02" value="{0, number, $#,##0.00}"
                                                  style="font-weight:bold;">
                                     <apex:param id="q10_succspace_val_02"
-                                                value="{!userIputTIA}"></apex:param>
-                                </apex:outputText>&nbsp;&nbsp;&nbsp;</u>/ABOA SF will be used for architectural and engineering design (A/E) services and the Offeror’s project management fees associated with Tenant Improvements.
+                                                value="{!(userIputTIA+userInputBSAC)}"></apex:param>
+                                </apex:outputText>&nbsp;&nbsp;&nbsp;</u>/ABOA SF will be used for architectural and engineering design (A/E) services and the Offeror’s project management fees associated with Tenant Improvements and Building Specific Amortized Capital.
                                 <br/>
                                 <br/>
-                                <span style="color:#002bad">If using the placeholder figure, the total mark-ups calculation  (#16) will not reflect the amounts used in the actual lease document.</span>
+                                <span style="color:#002bad">If using the placeholder figure, the total mark-ups calculation (#16) will not reflect the amounts used in the actual lease document.</span>
                             </td>
                         </tr>
                     </table>
+					</apex:outputPanel>
                     <apex:panelGroup >
                         <apex:panelGrid columns="1">
                             <apex:outputLabel id="warningMessageCensus" styleClass="blueMessage"
@@ -2431,12 +2448,21 @@
                             <apex:outputLabel id="warningMessage" styleClass="blueMessage"
                                               value="Note: Refer to section 4 PRESENT VALUE EVALUATION of the AAAP Request for Lease Proposals (RLP) for a description of the present value price evaluation."
                                               rendered="{!regionCode != 'Census'}"/>
-                            <apex:outputPanel >
-                                <apex:commandButton id="btn_backToSpace" action="{!backToPreviousPage}"
-                                                    value="Back"></apex:commandButton>
+                           
+                               <!-- <apex:commandButton id="btn_backToSpace" action="{!backToPreviousPage}"
+                                                    value="Back"></apex:commandButton> -->
+                             <apex:outputPanel rendered="{!!viewOnly}"> 
+                            <apex:commandButton id="btn_backToSpace" onclick="window.parent.location = '{!$Label.LOP_Community_Base_URL}Offer-M-SpaceRates'+window.parent.location.search;"
+                                                value="Back"></apex:commandButton>
                                 <apex:commandButton id="btn_saveRates" action="{!redirectToSpaceandRatesOnly}"
                                                     value="Save Page" styleClass="btnJQSubmit"></apex:commandButton>
                                 <apex:commandButton id="btn_backToSpaceRates" action="{!redirectToSpaceandRates}"
+                                                    value="Next"></apex:commandButton>
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!viewOnly}"> 
+                                <apex:commandButton id="btn_backToSpace1" onclick="window.parent.location = '{!$Label.LOP_Community_Base_URL}Offer-M-SpaceRates'+window.parent.location.search;"
+                                                value="Back"></apex:commandButton>
+                                <apex:commandButton id="btn_backToSpaceRates1" onclick="window.parent.location.reload();"
                                                     value="Next"></apex:commandButton>
                             </apex:outputPanel>
                         </apex:panelGrid>

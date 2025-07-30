@@ -52,7 +52,7 @@ public with sharing class PBS_LOP_OfferLandingController {
         } catch (Exception ex) {
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR, 'Solicitation Number is incorrect or the window for offering submissions has expired.  Please try again or contact RSAP.Manager@gsa.gov for more assistance.');
             ApexPages.addMessage(myMsg);
-            //return ApexPages.currentPage();
+            
         }
 
 
@@ -76,24 +76,13 @@ public with sharing class PBS_LOP_OfferLandingController {
             p = Page.PBS_LOP_Building;
             p.getParameters().put('offerId', newOfferID);
             pageURLForRedirection = p.getUrl();
-            pageURLForRedirection = pageURLForRedirection.replace('/apex/pbs_lop_building', Label.LOP_Community_Base_URL+'RSAP-Building');
+            pageURLForRedirection = pageURLForRedirection.replace('/apex/pbs_lop_building', Label.LOP_Community_Base_URL+'Offer-S-Eligibility');
             System.debug('*****'+pageURLForRedirection);
             p.setRedirect(true);
             displayPopUp = false;
-          /*  p.getParameters().put('offerId', newOfferID);
-            system.debug('I am here' + p);
-            displayPopUp = false;
-            p.setRedirect(true); */
-           // return p;
+          
         } else {
-            /**
-            newOfferID = offer1[0].Id;
-            system.debug('****');
-            PageReference p = Page.PBS_LOP_Building;
-            p.getParameters().put('offerId', newOfferID);
-            p.setRedirect(true);
-            return p;
-            **/
+            
             offernew.PBS_AAAP_RLP_Number__c = grexProject.id;
             offernew.PBS_AAAP_Offer_Status__c = 'Draft';
             offernew.RecordTypeId = RSAPRecTypeId;
@@ -103,17 +92,14 @@ public with sharing class PBS_LOP_OfferLandingController {
             newOfferID = offernew.id;
             system.debug('Create / Edit Offer : Tempworkclass_VSS: Offer1' + offer1);
              p = Page.pbs_lop_building;
-           /* p.getParameters().put('offerId', newOfferID);
-            p.setRedirect(true); 
-            System.debug('print' +p);
-            return p; */
+           
             p.getParameters().put('offerId', newOfferID);
             pageURLForRedirection = p.getUrl();
-            pageURLForRedirection = pageURLForRedirection.replace('/apex/pbs_lop_building', Label.LOP_Community_Base_URL+'RSAP-Building');
+            pageURLForRedirection = pageURLForRedirection.replace('/apex/pbs_lop_building', Label.LOP_Community_Base_URL+'Offer-S-Eligibility');
             System.debug('*****'+pageURLForRedirection);
             p.setRedirect(true);
             displayPopUp = false;
-        //return p; 
+        
         }
 
 

@@ -224,13 +224,26 @@ float:right;
                 background:#fff;}
         h2 {color:#fff; font-size:80%; font-weight:bold; padding-left:40px; width:80%;} 
         .tabbed-table table th {padding-left:3px;padding-right:3px; font-size:12px important!;}
-    .hr { 
-    font-weight:bold;
-    font-size:28px;
-    border-bottom: 1px solid #cccccc;
-    padding: 0 0 8px;
-    color:#002BAD;  padding-top:15px;
-    }
+            
+            .hr {
+                font-weight: bold;
+                font-size: 20px;
+                //border-bottom: 1px solid #cccccc;
+                padding: 0 0 8px;
+                color: #000000;
+                //color: #002BAD;
+                padding-top: 15px;
+            }
+            
+            .custom-border {
+            border: 1px solid  #999;
+            height: 35px;
+            padding-top: 30px;
+            color: #333333;
+            font-family: Segoe UI, Trebuchet, Arial, Sans-Serif;
+            font-size:13px;
+            background-color: #eeeeee;
+        }
             .covid .col1 {
             width: 400px;
             }
@@ -240,26 +253,8 @@ float:right;
 
         </style>
         <script>
-        /*
-var j$ = jQuery.noConflict();  
- j$(document).ready(function() {
- j$(".tablesorter").dataTable( {
-        "sScrollY": "400px",
-        "bAutoWidth": true,
-        "bPaginate": true,
-        "bJQueryUI": true,
-        "bScrollCollapse": true
         
-     } );
-     j$('.dataTables_length').css("display", "none");
-      j$('.myAppTable').find('.dataTables_filter').css("display", "none");
-      j$('.myAppTab').find('.dataTables_filter').css("display", "none");
-    j$(".tablesorter tr:odd").css("background-color", "#CFEEF8");
-    j$(".tablesorter tr:even").css("background-color", "#F3F3EC");
-});
-        */
-
-var JQ  =   jQuery;///.noConflict();
+var JQ  =   jQuery;
 function checkSpaceSelected() {
        var checkedLen = JQ("input[type='checkbox']:checked").length;
   
@@ -320,6 +315,30 @@ function checkSpaceSelected() {
             </apex:panelGroup>
             <apex:form id="spaceAndRatesForm" styleClass="formwrap" rendered="{!isValidUser}"
                        style="margin-right: 50px;">
+                <!-- Grid to display three columns -->
+            <div style="display: flex; flex-direction: row; justify-content: space-between; padding: 1px;">
+                <!-- Column 1: Property Name -->
+                <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999; padding: 1px;">
+                    <span>Property name: 
+                        <apex:outputText value="{!spaceAndRates.PBS_AAAP_Building_Name__c}" />
+                    </span>
+                </div>
+                <!-- Column 2: RLP Number -->
+                <div class = "custom-border" style="flex: 1; text-align: left; border-right: 1px solid #999; padding: 1px;">
+                    <span>RLP number: 
+                        <apex:outputText value="{!rlpType}" />
+                    </span>
+                </div>
+                <!-- Column 3: Offer Status -->
+                <div class = "custom-border" style="flex: 1; text-align: left; padding: 1px;">
+                    <span>Offer status: 
+                        <apex:outputText value="{!spaceAndRates.PBS_AAAP_Offer_Status__c}" />
+                    </span>
+                </div>
+            </div>
+        
+
+        <!-- Added new End-->
                 <div class="hr">Space and Rates</div>
                 <apex:pageMessages ></apex:pageMessages>
                 <apex:actionFunction name="Cancel" action="{!actionBackSpaceView}">
@@ -1373,83 +1392,7 @@ function checkSpaceSelected() {
                 JQ("<span>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:q6_rates_5_5"]'));
                 JQ("<span>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:q6_rates_10_8"]'));
         }
-        // if(region != 'Census') { 
-        //         f1 = document.getElementById('j_id0:spaceAndRatesForm:q1_rates_5').value;
-        //         f2 = document.getElementById('j_id0:spaceAndRatesForm:q1_rates_5_5').value;
-        //         f3 = document.getElementById('j_id0:spaceAndRatesForm:q1_rates_10').value;
-        //         f4 = document.getElementById('j_id0:spaceAndRatesForm:q3_rates_5').value;
-        //         f5 = document.getElementById('j_id0:spaceAndRatesForm:q3_rates_5_5').value;
-        //         f6 = document.getElementById('j_id0:spaceAndRatesForm:q3_rates_10').value;
-        //         f7 = document.getElementById('j_id0:spaceAndRatesForm:q6_rates_5').value;
-        //         f8 = document.getElementById('j_id0:spaceAndRatesForm:q6_rates_5_5').value;
-        //         f9 = document.getElementById('j_id0:spaceAndRatesForm:q8_rates_5').value;
-        //         f10 = document.getElementById('j_id0:spaceAndRatesForm:q8_rates_5_5').value;
-        //         f11 = document.getElementById('j_id0:spaceAndRatesForm:q8_rates_10').value;
-        //         f12= document.getElementById('j_id0:spaceAndRatesForm:q10a_rates_5').value;
-        //         f13 = document.getElementById('j_id0:spaceAndRatesForm:q10a_rates_5_5').value;  
-        //         f14 = document.getElementById('j_id0:spaceAndRatesForm:q10a_rates_10').value;               
-        //         if(f1.split(".")[1].length == 1) {
-        //             document.getElementById('j_id0:spaceAndRatesForm:q1_rates_5').value = f1+0.00;          
-        //         }
-        //         if(f2.split(".")[1].length == 1) {
-        //             document.getElementById('j_id0:spaceAndRatesForm:q1_rates_5_5').value = f2+0.00;            
-        //         }
-        //         if(f3.split(".")[1].length == 1) {
-        //             document.getElementById('j_id0:spaceAndRatesForm:q1_rates_10').value = f3+0.00;         
-        //         }
-        //         if(f4.split(".")[1].length == 1) {
-        //             document.getElementById('j_id0:spaceAndRatesForm:q3_rates_5').value = f4+0.00;          
-        //         }
-        //         if(f5.split(".")[1].length == 1) {
-        //             document.getElementById('j_id0:spaceAndRatesForm:q3_rates_5_5').value = f5+0.00;            
-        //         }
-        //         if(f6.split(".")[1].length == 1) {
-        //             document.getElementById('j_id0:spaceAndRatesForm:q3_rates_10').value = f6+0.00;         
-        //         }               
-        //         if(f7.split(".")[1].length == 1) {
-        //             document.getElementById('j_id0:spaceAndRatesForm:q6_rates_5').value = f7+0.00;          
-        //         }
-        //         if(f8.split(".")[1].length == 1) {
-        //             document.getElementById('j_id0:spaceAndRatesForm:q6_rates_5_5').value = f8+0.00;            
-        //         }
-        //         if(f9.split(".")[1].length == 1) {
-        //             document.getElementById('j_id0:spaceAndRatesForm:q8_rates_5').value = f9+0.00;          
-        //         }
-        //         if(f10.split(".")[1].length == 1) {
-        //             document.getElementById('j_id0:spaceAndRatesForm:q8_rates_5_5').value = f10+0.00;           
-        //         }
-        //         if(f11.split(".")[1].length == 1) {
-        //             document.getElementById('j_id0:spaceAndRatesForm:q8_rates_10').value = f11+0.00;            
-        //         }
-        //         if(f12.split(".")[1].length == 1) {
-        //             document.getElementById('j_id0:spaceAndRatesForm:q10a_rates_5').value = f12+0.00;           
-        //         }
-        //         if(f13.split(".")[1].length == 1) {
-        //             document.getElementById('j_id0:spaceAndRatesForm:q10a_rates_5_5').value = f13+0.00;         
-        //         }
-        //         if(f14.split(".")[1].length == 1) {
-        //             document.getElementById('j_id0:spaceAndRatesForm:q10a_rates_10').value = f14+0.00;          
-        //         }
-                
-        //         JQ("<span>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:q1_rates_5"]'));
-        //         JQ("<span>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:q1_rates_5_5"]'));
-        //         JQ("<span>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:q1_rates_10"]'));
-        //         JQ("<span>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:q2_rates_5"]'));
-        //         JQ("<span>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:q2_rates_5_5"]'));
-        //         JQ("<span>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:q2_rates_10"]'));
-        //         JQ("<span>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:q4_rates_5"]'));
-        //         JQ("<span>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:q4_rates_5_5"]'));
-        //         JQ("<span>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:q4_rates_10"]'));
-        //         JQ("<span>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:qBSAC_PMT_5"]'));
-        //         JQ('<span>&nbsp;/ABOA SF</span>').insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:qBSAC_PMT_5_5"]'));
-        //         JQ("<span>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:qBSAC_PMT_10"]'));
-        //         JQ("<span style='font-weight:bold;'>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:q5_rates_5"]'));
-        //         JQ("<span style='font-weight:bold;'>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:q5_rates_5_5"]'));
-        //         JQ("<span style='font-weight:bold;'>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:q5_rates_10"]'));
-        //         JQ("<span>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:q6_rates_5"]'));
-        //         JQ("<span>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:q6_rates_5_5"]'));
-        //         JQ("<span>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:q6_rates_10"]'));
-        // } 
+        
         
         if(region == 'Census') {
                 JQ("<span>&nbsp;/ABOA SF</span>").insertAfter(JQ('span[id="j_id0:spaceAndRatesForm:q1_rates_5_1"]'));

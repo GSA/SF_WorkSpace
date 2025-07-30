@@ -1,0 +1,9 @@
+<template>
+<div class="slds-grid">
+    <img src={spinnerImage}  style="width: 30px;" lwc:if={loadingDownload}>    
+    <div class="slds-col" style={customStyle}>
+        <input class="btn" type="button" varient="submit" value="Download All Files" onclick={handleDownload} />
+    </div>
+ </div>
+   
+</template>
